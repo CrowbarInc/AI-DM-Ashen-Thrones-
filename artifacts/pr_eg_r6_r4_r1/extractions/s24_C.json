@@ -1,0 +1,83 @@
+{
+  "family": "s24",
+  "architecture": "C",
+  "source_ids": [
+    "s24"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f1",
+        "source_id": "s24",
+        "relationship": "delegated",
+        "roles": [
+          {
+            "name": "delegator",
+            "value": "Abbess Irra",
+            "evidence": "Abbess Irra delegated the ringing of the storm bell"
+          },
+          {
+            "name": "delegatee",
+            "value": "novice Pell",
+            "evidence": "Abbess Irra delegated the ringing of the storm bell to novice Pell"
+          },
+          {
+            "name": "task",
+            "value": "ringing of the storm bell",
+            "evidence": "Abbess Irra delegated the ringing of the storm bell to novice Pell"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Abbess Irra delegated the ringing of the storm bell to novice Pell"
+      },
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    },
+    {
+      "fact": {
+        "fact_id": "f2",
+        "source_id": "s24",
+        "relationship": "retained authority",
+        "roles": [
+          {
+            "name": "person",
+            "value": "Abbess Irra",
+            "evidence": "Abbess Irra retained authority to close the shrine"
+          },
+          {
+            "name": "authority",
+            "value": "close the shrine",
+            "evidence": "Abbess Irra retained authority to close the shrine"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Abbess Irra retained authority to close the shrine"
+      },
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "evidence_span_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

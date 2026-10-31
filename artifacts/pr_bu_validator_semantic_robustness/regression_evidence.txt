@@ -1,0 +1,31 @@
+PR-BU qualified-inference complement authorization. Deterministic pytest. Model/API calls: 0.
+
+Focused:
+python -m pytest tests/test_pr_bu_narration_claim_composition.py tests/test_pr_bs_decision_facing_answer_recipe.py --override-ini="addopts=" -q --tb=short
+
+Result: 71 passed in 1.17s
+Composition file: 62 passed, including all 41 matrix cases. 0 xfailed.
+PR-BS answer-recipe file: 9 passed. Useful A1 still passes. "might point to neglect" and "harsh conditions" still fail.
+
+Broader:
+python -m pytest tests/test_pr_bu_narration_claim_composition.py tests/test_pr_bs_decision_facing_answer_recipe.py tests/test_pr_bt_selective_epistemic_guidance.py tests/test_pr_bt_policy_instruction_deduplication.py tests/test_pr_br_authority_reconciliation.py tests/test_pr_br_structured_chat_path.py tests/test_pr_br_structured_realization_envelope.py tests/test_pr_br_decision_owned_realization_claims.py tests/test_pr_br_continuation18_immutable_boundary.py tests/test_pr_br_localized_live_defects.py tests/test_pr_br_continuation19_hard_authority.py tests/test_pr_br_c19_free_text_authority.py tests/test_pr_br_claim_control_regex_bound.py tests/test_pr_br_claim_control_slice1.py tests/test_pr_br_claim_control_slice2.py tests/test_pr_br_qualifier_movement_mixed_intent.py tests/test_pr_br_gm_resolution_decision.py tests/test_pr_br_decision_semantic_fidelity_slice3.py tests/test_pr_br_decision_ownership_slice2.py tests/test_pr_br_continuation20_incidental_entity.py tests/test_narrative_mode_output_validator.py tests/test_prompt_and_guard.py tests/test_live_model_guard.py --override-ini="addopts=" --basetemp=development/tmp/pytest_pr_bu_complement -q --tb=line
+
+Result: 1 failed, 313 passed in 20.97s
+
+Failure outside this repair:
+tests/test_pr_bt_policy_instruction_deduplication.py::test_pr_bt_provider_requests_remove_at_least_12000_chars_each
+assert (121438 - 110405) >= 12000
+Savings on the current tree: 11033 characters.
+Same measurement as the claim-composition cycle. The test measures provider prompt size. It does not call the narration validator. This repair did not edit prompts.
+
+C18:
+tests/test_pr_br_structured_chat_path.py passed, including accepted == sealed == emitted.
+tests/test_pr_br_continuation18_immutable_boundary.py passed.
+
+Matrix:
+python artifacts/pr_bu_validator_semantic_robustness/build_complement_matrix.py
+41 cases. Expected outcomes matched: 41.
+Discovery false accepts 9, false rejects 5.
+Post-composition false accepts 1, false rejects 0.
+Post-complement false accepts 0, false rejects 0.
+Correct accepts 18. Correct rejects 23.

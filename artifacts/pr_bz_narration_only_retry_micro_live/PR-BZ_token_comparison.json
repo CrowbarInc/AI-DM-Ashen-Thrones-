@@ -1,0 +1,30 @@
+{
+  "pr_bx_p2": {
+    "attempt_1_input": 23413,
+    "attempt_2_input": 24881,
+    "total_input": 48294,
+    "total_output": 209,
+    "total_tokens": 48503,
+    "provider_attempts": 2,
+    "retry_reason": "narration validation rejected attempt 1; retry feedback reintroduced structured declarations",
+    "final_outcome": "safe_nonresolution"
+  },
+  "pr_bz_p2": {
+    "attempt_tokens": [
+      {
+        "attempt": 1,
+        "input_tokens": 23413,
+        "output_tokens": 85,
+        "total_tokens": 23498,
+        "response_id": "resp_036b3829385bdcad006ac828ae977087d29808874f9edbe63c"
+      }
+    ],
+    "input_tokens": 23413,
+    "output_tokens": 85,
+    "total_tokens": 23498,
+    "provider_attempts": 1,
+    "retry_reason": null,
+    "final_outcome": "accepted_initial_generation"
+  },
+  "comparison_note": "Single-sample live cost only. PR-BZ did not exercise retry, so this must not be generalized as a retry cost improvement."
+}

@@ -1,0 +1,26 @@
+# 01 — Baseline and Contract Inventory
+
+ATGB-R2-04; bounded instruction repair; implementation authority limited, live provider authority none. Entry HEAD `b012c3d7e5887fdfb09d10bb9cc0f0220de09df9`, branch `feature/product-realization`. Extensive preexisting modifications include the target production file, other production, governance, data and generated artifacts. Full status: `artifacts/atgb/atgb_r2_04/repository_status_before.txt`. Entry source and canonical orientation were copied before editing; this pass is compared with working-tree entry bytes, not HEAD. No unrelated entry modifications were overwritten.
+
+Read the four required authorities: DEVELOPMENT_CONSTITUTION, canonical docs/NEXT_SESSION.md, validation_evidence_standard and product_realization_validation; also review_handoff_standard. Requested support/docs/NEXT_SESSION.md is absent. The Constitution identifies docs/NEXT_SESSION.md as canonical, so that file supplied orientation. Reviewed R2-01 original trace extraction/PR-EG rows, R2-02 production replay and tests, R2-03 original-log contexts, controls and reports, R1-07 request construction/correction tests and PR-EG R6-R5 / R6-R4-R1 verdicts. Prior repair decisions remain settled.
+
+## Existing production contract
+
+`interpret_production_turn` obtains a catalog and two recent player-visible turns from the established contract builder, specializes legacy communication-mode text in the user message, appends communication/evidence/correction guidance to the system message, then appends the public evidence projection and ownership context to the user message. The sole changed surface is the existing system-message instruction literal. Effective pre-change requests for the four cases are in effective_before.json; full appended guidance is in instruction_before.txt. These are current-source reconstructions, not recovered original provider requests.
+
+Existing instructions already distinguish conversational correction from eligible pending mechanical revision, permit zero-operation interpreted GM communication, prohibit hidden/unsupported evidence, ask targeted clarification for meaningful ambiguity, and require unique demonstrative referents. Evidence wording referred broadly to supporting a corrected question without spelling out requested detail versus topic. Missing-answer guidance did not clearly separate unavailable facts from unresolved player intent. R1-07's correction path is retained.
+
+Schema required top-level fields: `['action_components', 'asserted_premises', 'clarification_question', 'communication_mode', 'correction', 'interpretation_status', 'player_intent', 'references', 'requested_outcomes', 'communication']`. Optional top-level fields: `[]`. `communication` requires recipient, purpose, subject (string), evidence_refs (array of supplied string IDs). Full nested structure, required/optional fields and enums are recorded in schema_before.json and schema_inventory.json. Recipient/purpose descriptions, all fields/enums, parser, validation, unresolved references and mode representation remain unchanged.
+
+## Historical causal baseline
+
+| Turn | Exact player input | Model subject / selected evidence | Historical final output |
+|---|---|---|---|
+| S02.2 | When does the curfew start? | curfew start time / visible:0 | The notice board lists taxes, curfew rules, and a warning about a missing patrol. |
+| S02.3 | I wasn't asking where the patrol went. I asked when it starts. | Timing of the missing patrol start / reply:1 | The notice board lists taxes, curfew rules, and a warning about a missing patrol. |
+| S02.4 | All right. What did the warning say about where they were last seen? | Content of the warning about where the missing patrol was last seen / visible:0 | The notice board lists taxes, curfew rules, and a warning about a missing patrol. |
+| S05.3 | Tell me more about that. | More information about the patrol rumor from the Tavern Runner / npc:tavern_runner:patrol_rumor | Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted. |
+
+Original result/log hashes were verified against the R2-03 extraction provenance in historical_provenance_verification.json. Original logs and selected trace payloads are packaged. S02.4's actual input includes “All right.” R2-03 established that curfew hours are unauthored and the posted last-seen clue remains gated. R2-02 already repaired recipient grounding; S05.3 still has competing runner/board accounts after an intervening failed reply. PR-EG's request/source and referent-binding failures support the discrimination hypothesis but authorize no experimental integration. The earliest wrong historical decision is semantic interpretation selection; wording causality is unproven.
+
+Existing deterministic coverage: R1-07 effective request/correction/evidence tests, R1-02 pending revision tests and R2-02 speech-participant tests passed before editing (180 cases). Broader completed entry slice: 314 passed / 39 HTTP tests explicitly deselected after documented transport stalls. Prompt baseline: appended instruction 4,660 characters, approximate chars/4 1,165 tokens. Scope excludes schema, parser, host, state, providers, gameplay, frozen inputs and experiments.

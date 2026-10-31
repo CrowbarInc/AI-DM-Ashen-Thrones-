@@ -1,0 +1,40 @@
+{
+  "case_id": "s11q3",
+  "family": "s11",
+  "partition": "holdout",
+  "architecture": "A",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": null,
+  "answer": {
+    "response_class": "RELATED_NONANSWER",
+    "values": [],
+    "qualifiers": [],
+    "selected_source_ids": [],
+    "selected_fact_ids": [],
+    "answered_arguments": [],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "production coverage ['related_but_nonanswer']",
+    "delivery_authorized": false
+  },
+  "gate": {
+    "delivery_authorized": false,
+    "canonical": false,
+    "candidate_eligible": null,
+    "reasons": [
+      "baseline_diagnostic_only"
+    ]
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

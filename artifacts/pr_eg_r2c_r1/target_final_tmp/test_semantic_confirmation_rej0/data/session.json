@@ -1,0 +1,85 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:21:25.918094Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:21:25.918094Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "pending_clarification": null,
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I inspect the courtyard lantern, then I walk through the courtyard gate.",
+          "delivered_text": "You asked to inspect the courtyard lantern, then walk through the courtyard gate. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorization_source": "conversational_decision:compound_intention_needs_confirmation",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Please carry it out.",
+          "delivered_text": "That earlier clarification no longer applies here. What are you trying to do now?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:pending_clarification_expired_scene_changed",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Please carry it out.",
+        "response": "That earlier clarification no longer applies here. What are you trying to do now?",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "7f5774ea8fe07d45e3a56f03466250ed9719f6dbd5e120deec7695323fe4a700",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

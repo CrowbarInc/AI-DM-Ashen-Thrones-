@@ -1,0 +1,75 @@
+{
+  "response_id": "resp_045335714fad1cbf006ac59c3d6a2487d2ae77415ba9b651ab",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 22084,
+    "output_tokens": 477,
+    "total_tokens": 22561,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 5.342,
+  "input_chars": 95041,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "provider_response_contract": "structured_realization",
+  "declared_claims_in_system_prompt": true,
+  "api_response_schema_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The split wooden yoke and torn leather hanger on the bell might indicate that it has undergone significant stress or strain. This could be the result of prolonged heavy use or perhaps a sudden forceful impact. However, without additional evidence, the exact cause remains uncertain.",
+    "declared_claims": [
+      {
+        "declaration_id": "inference_1",
+        "declaration_mode": "propose",
+        "source_claim_id": null,
+        "premise_claim_ids": [
+          "rc_db5ec0aa65c3",
+          "rc_b31ecb1fd1c7"
+        ],
+        "semantic_identity": {},
+        "provenance_requested": "gm_inference",
+        "epistemic_status": "inferred",
+        "modality": "possible",
+        "realization_role": "MUST_STATE",
+        "relation_kind": "epistemic_status",
+        "text": "The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact."
+      }
+    ],
+    "normalized_empty_declarations": null,
+    "declaration_authorship": null,
+    "structured_contract_failure": null,
+    "structured_contract_reason": null,
+    "provider_response_contract": "structured_realization",
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "metadata_keys": [
+      "output_form",
+      "provider_response_contract",
+      "realization_envelope"
+    ],
+    "structural_shape": {
+      "json_object": true,
+      "keys": [
+        "activate_scene_id",
+        "debug_notes",
+        "declared_claims",
+        "improvisation_proposals",
+        "narration",
+        "new_scene_draft",
+        "player_facing_text",
+        "scene_update",
+        "suggested_action",
+        "tags",
+        "world_updates"
+      ]
+    },
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"inference_1\",\n      \"declaration_mode\": \"propose\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [\"rc_db5ec0aa65c3\", \"rc_b31ecb1fd1c7\"],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"gm_inference\",\n      \"epistemic_status\": \"inferred\",\n      \"modality\": \"possible\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"epistemic_status\",\n      \"text\": \"The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact.\"\n    }\n  ],\n  \"narration\": \"The split wooden yoke and torn leather hanger on the bell might indicate that it has undergone significant stress or strain. This could be the result of prolonged heavy use or perhaps a sudden forceful impact. However, without additional evidence, the exact cause remains uncertain.\",\n  \"player_facing_text\": \"The split wooden yoke and torn leather hanger on the bell might indicate that it has undergone significant stress or strain. This could be the result of prolonged heavy use or perhaps a sudden forceful impact. However, without additional evidence, the exact cause remains uncertain.\",\n  \"tags\": [\"scene_momentum:consequence_or_opportunity\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"sensory_detail\",\n      \"content\": \"The wood around the split shows slight discoloration and fraying, and the leather edges are rough and faded from wear.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": null,\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Provided a bounded interpretation emphasizing stress or strain as possible causes of the observed damage without assuming specific historical or causal details.\"\n}"
+  }
+}

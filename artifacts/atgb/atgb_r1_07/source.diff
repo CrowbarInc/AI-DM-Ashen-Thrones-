@@ -1,0 +1,124 @@
+--- entry/game/live_chat_interpretation.py
++++ current/game/live_chat_interpretation.py
+@@ -56,8 +56,11 @@
+         "MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+     )
+     schema["properties"]["communication"]["properties"]["purpose"]["description"] = (
+-        "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION revises "
+-        "unexecuted intent; WITHDRAWAL cancels it; RULES asks play procedure; EXPLANATION asks cause or meaning. "
++        "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects "
++        "conversational meaning, subject, referent or description, or revises an actual unexecuted intention. "
++        "Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's "
++        "request for explanation; it does not by itself mean the AI-DM needs more information. "
++        "WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. "
+         "These control acts are never ACTION, even when mentioning a physical operation."
+     )
+     return schema
+@@ -317,6 +320,15 @@
+         catalog=catalog,
+         recent_visible=recent or None,
+     )
++    # Specialize the legacy mode guidance on the production request only.
++    messages[1]["content"] = "\n".join(
++        "Communication modes: IN_WORLD_ACTION=character action or NPC speech; "
++        "OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; "
++        "RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; "
++        "OTHER for resolved GM conversation, including ordinary conversational correction."
++        if line.startswith("Communication modes:") else line
++        for line in messages[1]["content"].splitlines()
++    )
+     from game.conversational_orchestration import public_conversation_evidence
+     evidence = public_conversation_evidence(scene, log)
+     messages[0]["content"] += (
+@@ -329,8 +341,23 @@
+         "CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. "
+         "For GM/session communication leave action_components empty unless a NEW observation is requested; "
+         "use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. "
+-        "Select evidence_refs only when the supplied PUBLIC passage actually answers the question. "
+-        "No evidence means unknown. Subject describes the question, never a new fact. "
++        "Ordinary conversational correction supplies corrected meaning, subject, referent or description. "
++        "Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. "
++        "When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; "
++        "continue the corrected conversation without asking confirmation merely because it is corrective. "
++        "Use correction.subject REFERENT for a conversational subject, referent or description correction. "
++        "This does not itself revise a gameplay action; leave action_components empty. "
++        "Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; "
++        "never invent pending work, revise executed actions or execute from a correction alone. "
++        "Recover the underlying question or request from available conversation context using the corrected meaning. "
++        "Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; "
++        "prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. "
++        "Restricted or unestablished information in internal world state is not disclosure authority; "
++        "do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. "
++        "With insufficient evidence, state the limitation or continue with established information only. "
++        "Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing "
++        "interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. "
++        "Acknowledgments asserting no world facts may use empty evidence_refs. "
+         "Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation."
+         " A declaration of what I/we do is CHARACTER/ACTION, including inspection; "
+         "a request to describe already visible information is GM/DESCRIPTION. "
+@@ -339,7 +366,8 @@
+         "For GM recall of NPC speech, prefer that same established NPC answer passage."
+         " For clarification of the most recent NPC statement, npc_latest_reply is the actual latest "
+         "utterance, including inability or refusal. Do not substitute an earlier topic for it. "
+-        " Communication is the primary contract; legacy communication_mode describes the same speech act. "
++        " Communication is the primary contract; legacy communication_mode describes execution disposition. "
++        "A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. "
+         "Third-person description of a person does not speak to them. A question about what their expression "
+         "implies is GM/EXPLANATION; do not ask the person on the player's behalf. "
+         "A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. "
+--- entry/game/conversational_orchestration.py
++++ current/game/conversational_orchestration.py
+@@ -584,6 +584,14 @@
+         if evidence_refs:
+             evidence = {key: evidence[key] for key in evidence_refs if key in evidence}
+         answer = " ".join(dict.fromkeys(str(value) for value in evidence.values()))
++        # Receipt only for a resolved conversational correction with a grounded
++        # answer. Mechanical revisions returned above; no semantic reclassification.
++        if (answer and owner == "GM" and purpose == "CORRECTION"
++                and status == "INTERPRETED" and not components
++                and not (record.get("references") or {}).get("unresolved_references")
++                and (record.get("correction") or {}).get("subject") == "REFERENT"
++                and evidence_refs and all(ref in evidence for ref in evidence_refs)):
++            answer = "Understood. " + answer
+         if purpose == "EXPLANATION" and answer and _CAUSE_QUESTION_RE.search(text) and not any(str(ref).startswith("cause:") for ref in evidence):
+             answer += " That establishes the observation or result; its cause has not been established."
+         if not answer:
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -1,10 +1,35 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-19 / ATGB-R1-06.
++Ashen Thrones — Product Realization. Updated 2026-10-19 / ATGB-R1-07.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
+ 
+ ## Current position
++
++ATGB-R1-07 bounded contract/evidence repair is implemented; **B — Conditional**
++pending external review. Eight reports: `development/reports/atgb_r1_07/`;
++evidence: `artifacts/atgb/atgb_r1_07/`; current review export:
++`handoff/CURRENT_REVIEW.zip` and timestamped ZIP. Existing interpretation owner
++now distinguishes conversational correction, GM clarification need and mechanical
++revision, and selects public evidence for the corrected underlying question.
++Existing answer branch adds a receipt only for resolved REFERENT corrections with
++selected evidence and no operations. Schema shape, provider dispatch and revision
++guard unchanged. No experimental integration or live calls.
++
++Main deterministic slice: 238 passed (209 existing + 29 new). Broader slice:
++23 passed / 1 failed; the same provider-metadata/live-guard failure reproduces
++with entry source (23/1). Two attempts stalled and were interrupted, including
++HTTP TestClient coverage; neither is a completed result. Saved L1/L2/L3 replayed
++offline: old interpretations still clarify; explicit substituted interpretations
++answer with acknowledgment and public facts. This does not prove live selection,
++semantic repair, benchmark improvement or independent generalization. Protected
++data/experiments/prior ATGB artifacts match entry hashes; readiness test's generated
++pending_control.json was restored byte-for-byte from the prior review ZIP.
++
++Stop after review packaging. Await external review before separately authorized
++ATGB-R1-08 live validation. Proposed scope is in report 08; no live authority
++carries forward. Earlier R1-06 stop/authorization language below is historical;
++the user's explicit R1-07 request authorized this bounded implementation.
+ 
+ Reconciliation architecture is closed (AR-CA). Product Realization progressed
+ beyond PR-BL through PR-EF integration and PR-EG discovery. PR-EG-R6-R4-R1

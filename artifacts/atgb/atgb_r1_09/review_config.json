@@ -1,0 +1,873 @@
+{
+  "campaign_id": "atgb_r1_09",
+  "campaign_name": "ATGB-R1-09 Provider Readiness and Deferred Live Validation",
+  "campaign_date": "2026-10-19",
+  "purpose": "Non-billable readiness verification with fail-closed deferred validation.",
+  "objective_status": "D — Inconclusive; DEFER; Phase A BLOCKED",
+  "executive_summary": "DNS resolution for api.openai.com fails (11001). Phase B not started: 0/4 admissions. Reviewed production baseline preserved. No live repair claim.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Non-billable local configuration/DNS/TCP/TLS diagnostics; mandatory Phase A stop."
+    ],
+    "tooling": [
+      "Evidence-local diagnostic and offline packaging scripts only."
+    ],
+    "documentation": [
+      "Eight reports and canonical session orientation."
+    ],
+    "generated_artifacts": [
+      "Readiness, authoritative zero-admission ledger, protected hashes, historical metadata and review ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "Baseline comparison, pinned corpus verification, local configuration and network diagnostics.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "No gameplay or inference; Phase A BLOCKED.",
+    "model_runtime_boundary": "OpenAI Responses/gpt-4.1-mini configured; credential present; validity/inference untested.",
+    "new_regressions": "No semantic result; protected files unchanged.",
+    "pre_existing_failures": "Historical clarification/evidence-selection failures remain historical; R1-07 live effect unknown."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "DNS resolution blocker; no valid live trials or per-trial preflight."
+    ],
+    "pre_existing": [
+      "Prior connection causes unresolved; authenticated human review and conversational competence unestablished."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review D/DEFER recommendation and route provider-resolution prerequisite to environment owner. Do not accept repair as live-validated."
+  ],
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Live improvement, ineffectiveness, regression, L4 preservation, provider authentication, model access, broad reliability, generalization or benchmark performance."
+  ],
+  "recommended_next_step": "External review; environment owner to restore/verify provider-host resolution before considering separately authorized live validation. Stop; no automatic continuation.",
+  "primary_report": "development/reports/atgb_r1_09/08_final_verdict_and_closure_recommendation.md",
+  "evidence_packets": [],
+  "self_contained_review_test": "Eight reports, diagnostics, no-call ledger, historical source traces/state/accounting and hash provenance; no current live transcript exists.",
+  "configuration_source": "artifacts/atgb/atgb_r1_09/review_config.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/trace.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/trace.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/trace.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/configuration.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/inherited_environment_names.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/normalized.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/preflight.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/state_integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/timing.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/traces.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/transcript.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/configuration.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/inherited_environment_names.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/normalized.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/preflight.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/state_integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/timing.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/traces.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/transcript.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/configuration.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/inherited_environment_names.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/normalized.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/preflight.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/setup_before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/setup_response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/state_integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/timing.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/traces.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/transcript.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/after.txt",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/integrity_verification.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/configuration.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/evidence_selection.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/inherited_environment_names.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/preflight.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/request_messages.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/state_integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/timing.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/traces.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/transcript.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/admission_ledger.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/available_live_evidence.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/baseline.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/entry_hashes.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/historical_provider_failures.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/NEXT_SESSION_before.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/package_review.py",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/packaging_notes.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/provider_configuration.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/readiness_diagnostics.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/readiness_diagnostics.py",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/repository_status_after.txt",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_09/repository_status_before.txt",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/08_final_verdict.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/07_provider_accounting.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/08_final_verdict.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/08_final_verdict.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/01_baseline_and_readiness.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/02_historical_provider_failures.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/03_live_trial_results.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/04_conversational_adequacy.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/05_mechanical_revision_and_authority.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/06_historical_comparison.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/07_provider_accounting.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_09/08_final_verdict_and_closure_recommendation.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/baseline.py",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/readiness.py",
+      "role": "validation_evidence",
+      "why": "Explicit current readiness or historical comparison source; original pass paths preserve provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

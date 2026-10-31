@@ -459,10 +459,11 @@ def _provider_context(context: Mapping[str, Any]) -> dict[str, Any]:
 
 def _invoke_provider(payload: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:
     from openai import OpenAI
+    from game.provider_budget import sdk_retry_options
 
     from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
     from game.gm import provider_timeout_seconds
-    from game.provider_budget import begin_request, finish_request
+    from game.provider_budget import admit_request
 
     messages = [
         {
@@ -475,16 +476,17 @@ def _invoke_provider(payload: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:
     ]
     blob = json.dumps(messages, ensure_ascii=False)
     estimated = max(1, len(blob) // 4)
-    refusal = begin_request(purpose="semantic_plan", estimated_input=estimated, max_output=1800)
+    attempt = admit_request(owner="unified_semantic_planning._invoke_provider", model=DEFAULT_MODEL_NAME, purpose="semantic_plan", estimated_input=estimated, max_output=1800)
+    refusal = attempt.refusal
     if refusal:
-        usage = finish_request({
+        usage = attempt.finish({
             "purpose": "semantic_plan", "sent": False, "model": DEFAULT_MODEL_NAME,
             "input_tokens": None, "output_tokens": None, "total_tokens": None, "refusal": refusal,
         })
         raise RuntimeError(refusal or "provider_budget")
     started = time.perf_counter()
-    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
-    response = client.responses.create(
+    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+    response = attempt.dispatch(client.responses.create,
         model=DEFAULT_MODEL_NAME,
         input=messages,
         temperature=0,
@@ -502,7 +504,7 @@ def _invoke_provider(payload: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:
     incoming = getattr(usage_obj, "input_tokens", None) if usage_obj is not None else None
     outgoing = getattr(usage_obj, "output_tokens", None) if usage_obj is not None else None
     total = getattr(usage_obj, "total_tokens", None) if usage_obj is not None else None
-    record = finish_request({
+    record = attempt.finish({
         "purpose": "semantic_plan",
         "sent": True,
         "configured_model": DEFAULT_MODEL_NAME,

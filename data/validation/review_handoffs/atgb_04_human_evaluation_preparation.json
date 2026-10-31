@@ -1,0 +1,761 @@
+{
+  "campaign_id": "atgb_04_human_evaluation_preparation",
+  "campaign_name": "ATGB-04 Independent Human Evaluation Preparation",
+  "campaign_date": "2026-10-18",
+  "purpose": "Prepare the preserved conversational baseline for independent human judgment without gameplay changes or provider requests.",
+  "objective_status": "REVIEW PACKAGE PREPARED; HUMAN EVALUATION PENDING",
+  "executive_summary": "37 unique turns indexed exactly once: original S01–S03, S04 full trial 2, S05–S10 trial 1. Original partial S04 trial 1 remains separate. Extract the ZIP and open support/artifacts/atgb/atgb_04/README.md, then review.html or conversational_review.md. All human judgments are blank. S07/S09 opening delivery limits require special review. No gameplay-performance baseline is claimed. Existing packet empty outcome categories mean unmeasured, never zero failures.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "No scenario, expectation, rubric, partition or benchmark version changes. Ten offline integrity/aggregation tests added."
+    ],
+    "tooling": [
+      "Two offline review preparation/aggregation tools; no gameplay imports or provider calls."
+    ],
+    "documentation": [
+      "ATGB-04 preparation report and current session orientation."
+    ],
+    "generated_artifacts": [
+      "37-turn index; complete HTML/Markdown conversations; blank forms; pending report; scenario qualifications; source hashes and standard ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "10 tests passed. Offline JavaScript form collect/export/import and wrong-trial rejection passed. Exact source text, prior context, blank fields and null rates verified.",
+    "broader": "Not run; no gameplay code changed.",
+    "full_suite": "Not run.",
+    "runtime_validation": "No new gameplay execution or provider requests. Reuses preserved 37-turn evidence. HTML browser preview blocked by file: URL policy; rendered layout unverified.",
+    "model_runtime_boundary": "Original live-enabled production API evidence, gpt-4.1-mini, sampling uncontrolled; host-owned responses possible. ATGB-04 runs offline only.",
+    "new_regressions": "No gameplay regression claim. Protected sources are byte-identical.",
+    "pre_existing_failures": "Original infrastructure stop, missing telemetry, S07/S09 opening delivery limits and extensive dirty worktree retained."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "All human judgments pending; no evaluated performance rates.",
+      "Rendered HTML layout unverified; full Markdown review available."
+    ],
+    "pre_existing": [
+      "S07/S09 opening not delivered before first turn; unsupported criteria require uncertain/not_evaluated.",
+      "Held-out previously exposed; single environment and selected trials; bounded state evidence."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Independently enter interpretation, response, authority, severity, clarification, continuity and reviewer explanations. Retain separate reviewer exports and disagreements.",
+    "Assess criterion support under S07/S09 opening limitations; never score missing setup automatically as gameplay failure."
+  ],
+  "missing_concepts": [
+    "No opening injection, automated eligibility decision, LLM judge, new universal score or gameplay repair is implemented."
+  ],
+  "does_not_prove": [
+    "Completed gameplay-performance baseline, gameplay improvement, independent unseen generalization, stable multi-trial performance, browser rendering, broad regression or SDK request bounds."
+  ],
+  "recommended_next_step": "Stop and await independent human evaluation. Open support/artifacts/atgb/atgb_04/review.html or conversational_review.md, save the human export, then use the packaged reporting tool per README.md. No provider requests, reruns or new Product Realization campaign.",
+  "primary_report": "development/reports/atgb_04_human_evaluation_preparation.md",
+  "evidence_packets": [
+    "artifacts/atgb/atgb_03c/behavioral_evidence"
+  ],
+  "self_contained_review_test": "verify_package.py checks ZIP CRC, required standard sections, source hashes, exact 37-turn/trial selection, prior context, blank form structure and null rates, and executes reporting from an isolated extraction. Existing outcome categories remain unmeasured.",
+  "configuration_source": "data/validation/review_handoffs/atgb_04_human_evaluation_preparation.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_03/S01/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/configuration_and_provenance.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/scenario_status.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/result.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/baseline_coverage.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_review_source.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_worksheet.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/opening_context.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/provenance_before.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/provider_accounting.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/scenario_readiness.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/README.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/approved_rubric_excerpt.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/blank_judgments.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/blank_scoring_forms.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/check_form.cjs",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/conversational_review.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/evidence_provenance.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/evidence_sources.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/focused_tests.txt",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/historical_S04_trial_1.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/package_review.py",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/pending_report.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/preservation_before.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/preservation_checks.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/review.html",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/review_index.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/review_index.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/scenario_qualifications.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/validation_results.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/verify_package.py",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/review_handoffs/atgb_04_human_evaluation_preparation.json",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_02a_readiness.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_03_initial_live_baseline.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_03c_live_baseline_continuation.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_human_review.py",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/prepare_human_review.py",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/report_human_review.py",
+      "role": "independent_human_review_material",
+      "why": "Explicitly selected authority, evidence, provenance or offline human-review tool; all judgments pending.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

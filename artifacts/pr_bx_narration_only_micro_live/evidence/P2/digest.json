@@ -1,0 +1,185 @@
+{
+  "probe": "P2",
+  "player": "Baker, which loaf do you usually keep for yourself?",
+  "scene": "baker",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "No one here can answer that from what is settled here.",
+  "sealed": "No one here can answer that from what is settled here.",
+  "accepted": "No one here can answer that from what is settled here.",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "safe_nonresolution",
+  "attempt": 2,
+  "acceptance": {
+    "why": "safe_nonresolution",
+    "text": "No one here can answer that from what is settled here."
+  },
+  "selected_envelope": "narration_only",
+  "response_operation": "incidental_dialogue",
+  "declaration_expectation": "reply_not_required",
+  "consequential_realization_required": false,
+  "declaration_channel_exposed": false,
+  "selector_projection_only": true,
+  "selector_authority_owner": "gm_resolution_decision",
+  "selector_reason": "ordinary_incidental_dialogue_reply_requires_no_declaration",
+  "provider_response_contracts": [
+    "narration_only",
+    "narration_only"
+  ],
+  "declared_claims_in_any_generation_system_prompt": false,
+  "api_response_schema_present": false,
+  "normalized_declared_claims": null,
+  "normalized_empty_declarations": null,
+  "declaration_authorship": null,
+  "accepted_model_authored_declarations": false,
+  "provider_attempts": 2,
+  "retry": true,
+  "input_tokens": 48294,
+  "output_tokens": 209,
+  "total_tokens": 48503,
+  "initial_player_facing_text": "The baker glances around briefly before muttering, “I’m afraid that’s not something I share lightly. Best you choose your own favorites from the loaves here.” Their tone holds a guarded edge, unwilling to reveal personal preference.",
+  "initial_structural_shape": {
+    "json_object": true,
+    "keys": [
+      "narration"
+    ]
+  },
+  "initial_declared_claims": [],
+  "initial_contract_failure": null,
+  "initial_contract_reason": null,
+  "retry_player_facing_text": "",
+  "retry_structural_shape": {
+    "json_object": true,
+    "keys": [
+      "declared_claims",
+      "narration"
+    ]
+  },
+  "retry_declared_claims": null,
+  "validation_attempt_1_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "validation_attempt_2_reasons": [
+    "malformed_or_truncated",
+    "structured_contract_failure"
+  ],
+  "regeneration_feedback": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again as the same structured envelope with declared_claims plus narration. Do not repeat rejected declarations or their prose realization. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"ask\", \"target\": \"baker\", \"interlocutor\": \"baker\", \"subject\": \"baker\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve ask for baker (ask). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That interlocutor is Baker. Do not deny that they exist. Have them answer, refuse, admit they do not know, or ask a clarifying question. Do not narrate that nobody steps forward. Do not answer as a different person. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_d4c97cad4722\", \"outcome_classification\": \"epistemically_qualified\", \"proposed_facts\": [{\"text\": \"A baker stands beside loaves at a bread stall.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Baker exists\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"baker\", \"subject_aliases\": [\"Baker\"], \"relation\": \"exists\", \"value\": \"present\", \"authority\": \"world_truth\"}}], \"realization_claims\": [{\"claim_id\": \"rc_9ab69105465f\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"A baker stands beside loaves at a bread stall.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_2bb408577206\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"baker\", \"subject_aliases\": [\"Baker\"], \"relation\": \"exists\", \"value\": \"present\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Baker exists\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"baker\", \"subject_aliases\": [\"Baker\"], \"relation\": \"exists\", \"value\": \"present\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"accepted_realization_claims\": [{\"claim_id\": \"rc_9ab69105465f\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"A baker stands beside loaves at a bread stall.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_2bb408577206\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"baker\", \"subject_aliases\": [\"Baker\"], \"relation\": \"exists\", \"value\": \"present\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Baker exists\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"rejected_declarations\": [], \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unowned_stateful_world_assertion\"], \"text\": \"Best you choose your own favorites from the loaves here.\"}, {\"reason_codes\": [\"unauthorized_evidential_relation\"], \"text\": \"” Their tone holds a guarded edge, unwilling to reveal personal preference.\"}]}, \"structured_envelope_schema\": {\"declared_claims\": [{\"declaration_mode\": \"realize|propose\", \"source_claim_id\": \"claim_id_from_gm_resolution_decision or null\", \"premise_claim_ids\": [\"claim ids of propositions this epistemic claim depends on\"], \"text\": \"short internal claim\", \"relation_kind\": \"observation|causal|evidential|epistemic_status|ordinary_predicate|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}",
+  "player_facing_leakage": [],
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {},
+        "text": "Best you choose your own favorites from the loaves here.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "ordinary_predicate",
+        "scene_id": "bread_stall",
+        "source_turn": 2,
+        "reason_codes": [
+          "unowned_stateful_world_assertion"
+        ]
+      },
+      {
+        "semantic_identity": {
+          "relation_kind": "evidential"
+        },
+        "text": "” Their tone holds a guarded edge, unwilling to reveal personal preference.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "evidential",
+        "scene_id": "bread_stall",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_evidential_relation"
+        ]
+      }
+    ],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "bread_stall",
+      "active_interlocutor": {
+        "id": "baker",
+        "label": "Baker",
+        "kind": "interlocutor",
+        "scene_id": "bread_stall",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_d4c97cad4722"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "bread_stall"
+  },
+  "calls": [
+    {
+      "index": 4,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_013b7995f617f56f006ac59c4591ec87d2b1a54d576492d109",
+      "input_chars": 100313,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "provider_response_contract": "narration_only",
+      "exact_narration_only_contract_present": true,
+      "declared_claims_in_system_prompt": false,
+      "api_response_schema_present": false,
+      "create_kwarg_keys": [],
+      "input_tokens": 23413,
+      "output_tokens": 55,
+      "total_tokens": 23468,
+      "latency_seconds": 1.706,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    },
+    {
+      "index": 5,
+      "kind": "generation",
+      "retry_attempt": 1,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_03105564a0fa5d4a006ac59c47aeb087d291df51ac335d216b",
+      "input_chars": 106602,
+      "recipe_present": true,
+      "retry_context_present": true,
+      "provider_response_contract": "narration_only",
+      "exact_narration_only_contract_present": true,
+      "declared_claims_in_system_prompt": false,
+      "api_response_schema_present": false,
+      "create_kwarg_keys": [],
+      "input_tokens": 24881,
+      "output_tokens": 154,
+      "total_tokens": 25035,
+      "latency_seconds": 3.47,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_d4c97cad4722",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_turn_operation": {
+    "projection_only": true,
+    "authority_owner": "gm_resolution_decision",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "semantic_ceiling": "transient_dialogue_not_durable_fact",
+    "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+  }
+}

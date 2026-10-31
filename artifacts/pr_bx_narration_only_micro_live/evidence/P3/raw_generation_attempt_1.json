@@ -1,0 +1,83 @@
+{
+  "response_id": "resp_01e1f1777dec2f7b006ac59c4b9ecc87d29ded565563d5fa56",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 22108,
+    "output_tokens": 458,
+    "total_tokens": 22566,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 6.259,
+  "input_chars": 95263,
+  "recipe_present": true,
+  "retry_context_present": false,
+  "provider_response_contract": "structured_realization",
+  "declared_claims_in_system_prompt": true,
+  "api_response_schema_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The chapel bell's wooden yoke is visibly split, and its leather hanger is torn. Although these damages could suggest deliberate cutting, the evidence at hand does not confirm whether this was caused intentionally or by accident. The exact circumstances behind these breaks remain unclear.",
+    "declared_claims": [
+      {
+        "declaration_id": "claim_split_yoke",
+        "declaration_mode": "realize",
+        "source_claim_id": "rc_db5ec0aa65c3",
+        "premise_claim_ids": [],
+        "semantic_identity": {},
+        "provenance_requested": "authored_world_fact",
+        "epistemic_status": "established",
+        "modality": "established",
+        "realization_role": "MUST_STATE",
+        "relation_kind": "ordinary_predicate",
+        "text": "The bell's wooden yoke is split."
+      },
+      {
+        "declaration_id": "claim_torn_hanger",
+        "declaration_mode": "realize",
+        "source_claim_id": "rc_b31ecb1fd1c7",
+        "premise_claim_ids": [],
+        "semantic_identity": {},
+        "provenance_requested": "authored_world_fact",
+        "epistemic_status": "established",
+        "modality": "established",
+        "realization_role": "MUST_STATE",
+        "relation_kind": "ordinary_predicate",
+        "text": "The bell's leather hanger is torn."
+      }
+    ],
+    "normalized_empty_declarations": null,
+    "declaration_authorship": null,
+    "structured_contract_failure": null,
+    "structured_contract_reason": null,
+    "provider_response_contract": "structured_realization",
+    "tags": [],
+    "metadata_keys": [
+      "output_form",
+      "provider_response_contract",
+      "realization_envelope"
+    ],
+    "structural_shape": {
+      "json_object": true,
+      "keys": [
+        "activate_scene_id",
+        "debug_notes",
+        "declared_claims",
+        "improvisation_proposals",
+        "narration",
+        "new_scene_draft",
+        "player_facing_text",
+        "scene_update",
+        "suggested_action",
+        "tags",
+        "world_updates"
+      ]
+    },
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"claim_split_yoke\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_db5ec0aa65c3\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's wooden yoke is split.\"\n    },\n    {\n      \"declaration_id\": \"claim_torn_hanger\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_b31ecb1fd1c7\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's leather hanger is torn.\"\n    }\n  ],\n  \"narration\": \"The chapel bell's wooden yoke is visibly split, and its leather hanger is torn. Although these damages could suggest deliberate cutting, the evidence at hand does not confirm whether this was caused intentionally or by accident. The exact circumstances behind these breaks remain unclear.\",\n  \"player_facing_text\": \"The chapel bell's wooden yoke is visibly split, and its leather hanger is torn. Although these damages could suggest deliberate cutting, the evidence at hand does not confirm whether this was caused intentionally or by accident. The exact circumstances behind these breaks remain unclear.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Established visible facts realized; player's hypothesis discussed conditionally without asserting intent or cause.\"\n}"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "campaign_id": "pr_br_continuation6_20260928",
+  "campaign_name": "PR-BR Continuation 6 — Contract Satisfaction Semantics",
+  "campaign_date": "2026-09-28",
+  "purpose": "Repair contract satisfaction semantics and validate them under a capped live budget. PR-BR remains open.",
+  "objective_status": "NOT ACHIEVED",
+  "executive_summary": "Satisfaction now distinguishes answers, tied inabilities, and unrelated lines for dimensionless asks, repeats, and inspections. Deterministic coverage is 180 passed. Focused live play (5 turns) still marked a non-answer as a satisfied rumor and replaced one satisfied sheet-content answer with an inability. Inspection target compatibility and the wear/use follow-up held. Smoke and the 4x10 gate were not run. READY FOR FULL SYNTHETIC GATE: NO.",
+  "changes": {
+    "production": [
+      "Operation-level satisfaction for dimensionless asks, repeat, and target-aware inspection, reusing existing statuses plus resolution_kind.",
+      "Content follow-ups inherit an unambiguous active_inspected object.",
+      "Fallbacks and the evaluator use the same satisfaction assessment. Authority overrides for abstract, hidden, and unsupported surfaces still win over invented content."
+    ],
+    "validation": [
+      "Added the Continuation 6 matrix, including a five-turn /api/chat path."
+    ],
+    "tooling": [
+      "Added tools/run_pr_br_continuation6_probes.py."
+    ],
+    "documentation": [
+      "Appended Continuation 6 to docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md."
+    ],
+    "generated_artifacts": [
+      "Focused live transcript, turns, summary, and provenance under artifacts/pr_br_continuation6/20260928T224142Z."
+    ]
+  },
+  "testing": {
+    "focused": "180 passed, 0 failed across the resolution-contract file and the Continuation 5 regression band.",
+    "broader": "Not expanded past that band.",
+    "full_suite": "Not run.",
+    "runtime_validation": "5 completed focused turns, 0 aborted, 5 model calls. Smoke not run. 4x10 gate not run.",
+    "model_runtime_boundary": "gpt-4.1-mini. Token telemetry unavailable.",
+    "new_regressions": "None in the deterministic band. Live turn 1 misclassified a non-answer as satisfied. Live turn 4 replaced a satisfied content answer.",
+    "pre_existing_failures": "Scene-momentum splicing still breaks repeat prose."
+  },
+  "decisions_requiring_human_review": [
+    "Whether to authorize another satisfaction pass for the dimensionless non-answer and paragraph-staging cases before the full synthetic gate."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Dimensionless non-answers with leftover words can score inquiry_answered.",
+      "A good first sentence followed by scene staging can score unrelated_fact.",
+      "A satisfied content follow-up can still be replaced by a target-specific inability."
+    ],
+    "pre_existing": [
+      "Scene-momentum appends can splice onto an otherwise matching repeat."
+    ]
+  },
+  "missing_concepts": [
+    "Smoke gate and the 4x10 full synthetic gate were not authorized to run after the focused result."
+  ],
+  "does_not_prove": [
+    "That dimensionless satisfaction is healthy in ordinary play.",
+    "That every satisfied content answer survives emission.",
+    "That the full synthetic gate would pass."
+  ],
+  "recommended_next_step": "Review the focused transcript before any further live spend. Do not start PR-BS and do not run the 4x10 gate.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "artifacts/pr_br_continuation6/20260928T224142Z/transcript.md", "role": "focused_transcript", "why": "Player, model, and final text for the five focused turns.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_br_continuation6/20260928T224142Z/turns.json", "role": "focused_traces", "why": "Contract, satisfaction, and evaluator fields per turn.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_br_continuation6/20260928T224142Z/summary.json", "role": "focused_summary", "why": "Turn and model-call accounting.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_br_continuation6/20260928T224142Z/provenance.json", "role": "provenance", "why": "HEAD, test count, and gate decision.", "behavioral_evidence": false, "human_review_required": true}
+  ],
+  "self_contained_review_test": "PASS: the bundle contains the Continuation 6 report section, the focused transcript, per-turn satisfaction traces, cost summary, and HEAD provenance. It does not contain the repository."
+}

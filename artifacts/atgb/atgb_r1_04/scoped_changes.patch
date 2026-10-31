@@ -1,0 +1,528 @@
+--- /dev/null
++++ b/tools/atgb/readiness.py
+@@ -0,0 +1,174 @@
++"""Validation-only configuration gate. Never dispatches a provider request.
++
++Use a fresh process/store per future live trial. Old R1-03 execute_trial.py is
++historical evidence and must not be reused. No test or experiment imports here.
++"""
++from __future__ import annotations
++
++import copy
++import importlib
++import os
++from contextlib import contextmanager
++from pathlib import Path
++
++FLAG = "ASHEN_DISABLE_LIVE_INTERPRETATION"
++FLAGS = (FLAG, "ASHEN_DISABLE_PROVIDER_CALLS", "ASHEN_DISABLE_PROVIDER_RETRIES",
++         "ASHEN_DISABLE_EXPRESSION_GENERATION", "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT")
++
++
++def flag_snapshot():
++    return {key: os.environ.get(key) for key in FLAGS}
++
++
++@contextmanager
++def execution_mode(live: bool):
++    """Same scoped MonkeyPatch convention as repository fixtures; restores on error."""
++    from pytest import MonkeyPatch
++    with MonkeyPatch.context() as patch:
++        patch.setenv(FLAG, "0" if live else "1")
++        yield
++
++
++def import_fixture(module: str):
++    """Reject and restore observable import configuration changes, including errors."""
++    before = dict(os.environ)
++    try:
++        result = importlib.import_module(module)
++        if dict(os.environ) != before:
++            raise RuntimeError("validation_fixture_import_side_effect")
++        return result
++    finally:
++        # Only undo differences; do not dump environment values into evidence.
++        for key in set(os.environ) - set(before):
++            del os.environ[key]
++        for key, value in before.items():
++            if os.environ.get(key) != value:
++                os.environ[key] = value
++
++
++def pending_errors(session, scene, world, character):
++    """Validate an existing intention; never constructs or blesses a proposed action."""
++    pending = (session.get("conversational_context") or {}).get("pending_intention") or {}
++    scene_id = (scene.get("scene") or scene).get("id")
++    npcs = {row["id"] for row in world.get("npcs", []) if row.get("location") == scene_id}
++    choices = pending.get("choices") or []
++    checks = {
++        "pending_exists": bool(pending),
++        "pending_unexecuted": pending.get("status") == "pending" and not
++            (session.get("conversational_context") or {}).get("last_executed_intention"),
++        "pending_scene": pending.get("scene_id") == scene_id == session.get("active_scene_id"),
++        "pending_operation": pending.get("operation") == "ASK",
++        "pending_actor": bool(character.get("name") or character.get("id")),
++        "pending_targets": bool(choices) and all(c.get("entity_id") in npcs for c in choices),
++        "pending_ambiguous": pending.get("target_resolution") == "ambiguous",
++    }
++    return [name for name, ok in checks.items() if not ok]
++
++
++def preflight(*, live, model, limit, store, session, scene, world, character,
++              imports_before, require_pending=True):
++    """Nonsecret local readiness evidence; availability means configured, not reachable."""
++    from game import config, storage
++    from game.live_chat_interpretation import production_live_interpretation_enabled, _contract
++    from game.provider_budget import snapshot, accounting_active, limits
++    from tools.atgb.isolation import assert_safe_benchmark_data_dir
++
++    effective = production_live_interpretation_enabled()
++    # _contract already restores legacy experimental import flags, caches schema/model.
++    selected_model = _contract()[4]
++    flags = flag_snapshot()
++    accounting = snapshot()
++    try:
++        provider_configured = bool(config.get_openai_api_key())
++    except RuntimeError:
++        provider_configured = False
++    try:
++        bounds = limits()
++    except (ValueError, TypeError):
++        bounds = None
++    try:
++        safe = assert_safe_benchmark_data_dir(Path(store)) == Path(storage.DATA_DIR).resolve()
++    except RuntimeError:
++        safe = False
++    failures = []
++    checks = {
++        "execution_mode": effective == live,
++        "provider_configured": not live or provider_configured,
++        "provider_sdk": importlib.util.find_spec("openai") is not None,
++        "selected_model": selected_model == model and config.DEFAULT_MODEL_NAME == model,
++        "routing_models": config.HIGH_PRECISION_MODEL_NAME == model and
++            config.RETRY_ESCALATION_MODEL_NAME == model,
++        "fixture_import_flags": imports_before == flags,
++        "isolated_store": safe,
++        "fixture_matches_store": safe and session == storage.load_session() and
++            scene == storage.load_active_scene() and world == storage.load_world() and
++            character == storage.load_character(),
++        "admission_limit": accounting_active() and bool(bounds) and bounds[0] == limit and 0 < limit <= 2,
++        "token_limits": bool(bounds) and all(n > 0 for n in bounds),
++        "durable_ledger": accounting.get("request_upper_bound") == 0,
++        "fresh_accounting": accounting.get("requests") == 0 and not accounting.get("stopped"),
++        "retries_disabled": flags["ASHEN_DISABLE_PROVIDER_RETRIES"] == "1",
++        "startup_preflight_skipped": flags["ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT"] == "1",
++    }
++    failures.extend(name for name, ok in checks.items() if not ok)
++    if require_pending:
++        failures.extend(pending_errors(session, scene, world, character))
++    return {
++        "evidence_scope": "structural_only", "classification": "validation_setup_failure" if failures else "ready",
++        "failed_assertions": failures, "requested_live": live, "effective_live": effective,
++        "provider_configured": provider_configured, "provider_reachability": "unprobed",
++        "model": selected_model, "flags": flags, "admission_limit": bounds[0] if bounds else None,
++        "model_routing_enabled": config.ENABLE_MODEL_ROUTING,
++        "routing_models": [config.DEFAULT_MODEL_NAME, config.HIGH_PRECISION_MODEL_NAME,
++                           config.RETRY_ESCALATION_MODEL_NAME],
++        "provider_admissions": accounting.get("requests"), "gameplay_state_changed": False,
++    }
++
++
++def guarded_trial(*, evidence_path, execute, **configuration):
++    """Mandatory gate before a future caller can invoke chat or admit a request."""
++    import json
++    try:
++        result = preflight(**configuration)
++    except Exception as error:
++        from game.provider_budget import snapshot
++        result = {"classification": "validation_setup_failure",
++                  "failed_assertions": ["preflight_configuration_exception"],
++                  "exception_type": type(error).__name__, "flags": flag_snapshot(),
++                  "provider_admissions": snapshot().get("requests"),
++                  "gameplay_state_changed": False}
++    Path(evidence_path).write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
++    if result["failed_assertions"]:
++        return result
++    return execute()
++
++
++def seed_control(path, patch):
++    """Replay only captured base world; production chat must create the pending ask.
++
++    Uses R1-03 L4's preserved pre-execution content, never imports its experimental
++    fixture. Clears its manually seeded intention so tests can establish provenance.
++    """
++    from game import storage
++    import json
++    root = Path(__file__).resolve().parents[2]
++    base = json.loads((root / "artifacts/atgb/atgb_r1_03/L4/before.json").read_text(encoding="utf-8"))
++    data = Path(path) / "data"
++    data.mkdir(parents=True, exist_ok=False)
++    patch.setattr(storage, "DATA_DIR", data)
++    patch.setattr(storage, "BASE_DIR", Path(path))
++    patch.setattr(storage, "SCENES_DIR", data / "scenes")
++    storage.SCENES_DIR.mkdir()
++    for name in ("WORLD", "CHARACTER", "SESSION", "COMBAT", "CAMPAIGN", "CONDITIONS"):
++        patch.setattr(storage, name + "_PATH", data / (name.lower() + ".json"))
++    patch.setattr(storage, "SESSION_LOG_PATH", data / "session_log.jsonl")
++    session = copy.deepcopy(base["session"])
++    session["conversational_context"] = {}
++    for key in ("world", "character", "combat"):
++        storage._save_json(getattr(storage, key.upper() + "_PATH"), base[key])
++    storage.save_session(session)
++    storage.save_scene(base["scene"])
++    storage._save_json(storage.CAMPAIGN_PATH, {"title": "ATGB revision control"})
++    storage._save_json(storage.CONDITIONS_PATH, {"conditions": []})
++    storage.SESSION_LOG_PATH.write_text("", encoding="utf-8")
++    return data
+--- /dev/null
++++ b/tests/test_atgb_r1_04_readiness.py
+@@ -0,0 +1,252 @@
++"""Offline readiness recovery; no experimental/test-module fixture imports."""
++import copy
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++
++import pytest
++
++from tools.atgb import readiness as r
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / "artifacts/atgb/atgb_r1_04"
++
++
++@pytest.mark.parametrize("value", [None, "0", "1"])
++@pytest.mark.parametrize("order", [
++    ["tools.atgb.readiness", "game.live_chat_interpretation"],
++    ["game.live_chat_interpretation", "tools.atgb.readiness"],
++])
++def test_fresh_import_safety(value, order):
++    env = dict(os.environ)
++    if value is None:
++        env.pop(r.FLAG, None)
++    else:
++        env[r.FLAG] = value
++    script = "import importlib,os; " + "; ".join(f"importlib.import_module({m!r})" for m in order)
++    script += f"; assert os.environ.get({r.FLAG!r}) == {value!r}"
++    result = subprocess.run([sys.executable, "-c", script], env=env, cwd=ROOT,
++                            capture_output=True, text=True, timeout=30)
++    assert result.returncode == 0, result.stderr
++
++
++def test_legacy_import_is_detected_and_restored():
++    script = """
++import os
++from tools.atgb.readiness import import_fixture, FLAG
++os.environ.pop(FLAG, None)
++try:
++    import_fixture('tests.test_pr_ef_r4_authorization')
++except RuntimeError as error:
++    assert str(error) == 'validation_fixture_import_side_effect'
++else:
++    raise AssertionError('legacy leak undetected')
++assert FLAG not in os.environ
++"""
++    result = subprocess.run([sys.executable, "-c", script], cwd=ROOT,
++                            capture_output=True, text=True, timeout=30)
++    assert result.returncode == 0, result.stderr
++
++
++@pytest.mark.parametrize("original", [None, "0", "1"])
++def test_sequential_modes_and_failure_restoration(monkeypatch, original):
++    if original is None:
++        monkeypatch.delenv(r.FLAG, raising=False)
++    else:
++        monkeypatch.setenv(r.FLAG, original)
++    for live in (False, True, False, True):
++        with r.execution_mode(live):
++            assert os.environ[r.FLAG] == ("0" if live else "1")
++        assert os.environ.get(r.FLAG) == original
++    with pytest.raises(ValueError):
++        with r.execution_mode(True):
++            raise ValueError("controlled fixture failure")
++    assert os.environ.get(r.FLAG) == original
++
++
++def test_failed_import_restores_configuration(monkeypatch):
++    before = dict(os.environ)
++    def broken_import(_name):
++        os.environ[r.FLAG] = "1"
++        raise ValueError("controlled import failure")
++    monkeypatch.setattr(r.importlib, "import_module", broken_import)
++    with pytest.raises(ValueError):
++        r.import_fixture("controlled_failure")
++    assert dict(os.environ) == before
++
++
++def record(purpose="QUESTION"):
++    return {
++        "communication_mode": "OTHER", "interpretation_status": "INTERPRETED",
++        "player_intent": {"summary": "Revise pending ask"}, "asserted_premises": [],
++        "requested_outcomes": [], "action_components": [],
++        "references": {"permitted_entity_ids": [], "unresolved_references": []},
++        "clarification_question": "", "correction": {"subject": "NONE", "note": ""},
++        "communication": {"recipient": "GM", "purpose": purpose, "subject": "pending ask", "evidence_refs": []},
++    }
++
++
++def snapshot():
++    from game import storage
++    return copy.deepcopy(dict(session=storage.load_session(), world=storage.load_world(),
++        scene=storage.load_active_scene(), character=storage.load_character(), combat=storage.load_combat()))
++
++
++@pytest.fixture
++def control(tmp_path, monkeypatch):
++    from game import storage, provider_budget as budget
++    from game.api import chat
++    from game.models import ChatRequest
++    from game.live_chat_interpretation import _contract
++    data = r.seed_control(tmp_path / "control", monkeypatch)
++    monkeypatch.setenv(r.FLAG, "0")
++    monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_CALLS", "0")
++    monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_RETRIES", "1")
++    monkeypatch.setenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", "1")
++    monkeypatch.setenv("ASHEN_PROVIDER_REQUEST_LIMIT", "2")
++    monkeypatch.setenv("ASHEN_PROVIDER_USAGE_PATH", str(tmp_path / "usage.jsonl"))
++    # Each deterministic test gets isolated accounting globals, as well as its store.
++    for name, value in {"_INITIALIZED": False, "_LEDGER_PATH": None, "_REQUESTS": 0,
++                        "_STOPPED": False, "_STOP_REASON": None, "_EVENTS": [],
++                        "_RECORDS": [], "_ATTEMPTS": {}}.items():
++        monkeypatch.setattr(budget, name, value)
++    budget.initialize_accounting()
++    _contract()
++    before = snapshot()
++    ask = record()
++    ask["communication"] = {"recipient": "NPC", "purpose": "QUESTION", "subject": "road", "evidence_refs": []}
++    ask["action_components"] = [{"order": 1, "description": "Ask one of them", "operation_class": "ASK", "target_ref": "sergeant_mara"}]
++    ask["references"]["permitted_entity_ids"] = ["sergeant_mara"]
++    monkeypatch.setattr("game.live_chat_interpretation.request_interpretation",
++        lambda *a, **k: {"ok": True, "sent": False, "text": json.dumps(ask)})
++    chat(ChatRequest(text="I ask one of them what happened."))
++    after = snapshot()
++    assert before["world"] == after["world"]
++    assert before["session"]["turn_counter"] == after["session"]["turn_counter"]
++    assert not r.pending_errors(after["session"], after["scene"], after["world"], after["character"])
++    yield dict(live=True, model="gpt-4.1-mini", limit=2, store=data,
++        **after, imports_before=r.flag_snapshot())
++
++
++def config(control):
++    return {key: value for key, value in control.items() if key != "combat"}
++
++
++def test_genuine_pending_revision(control, monkeypatch):
++    from game.api import chat
++    from game.models import ChatRequest
++    before = snapshot()
++    monkeypatch.setattr("game.live_chat_interpretation.request_interpretation",
++        lambda *a, **k: {"ok": True, "sent": False, "text": json.dumps(record("CORRECTION"))})
++    text = "Instead, make that a question about the lamp."
++    preflight = r.preflight(**config(control))
++    assert preflight["failed_assertions"] == []
++    response = r.guarded_trial(evidence_path=OUT / "preflight_valid.json", **config(control),
++        execute=lambda: chat(ChatRequest(text=text)))
++    after = snapshot()
++    assert "revised" in response["gm_output"]["player_facing_text"].lower()
++    for key in ("world", "scene", "character", "combat"):
++        assert before[key] == after[key]
++    assert before["session"]["turn_counter"] == after["session"]["turn_counter"]
++    assert before["session"]["clocks"] == after["session"]["clocks"]
++    pending = after["session"]["conversational_context"]["pending_intention"]
++    assert pending["status"] == "pending" and pending["revised_text"] == text
++    assert not r.pending_errors(after["session"], after["scene"], after["world"], after["character"])
++    (OUT / "pending_control.json").write_text(json.dumps({"evidence_scope": "structural_only",
++        "input_classification": "synthetic_positive_control", "before": before, "after": after,
++        "response": response, "provider_admissions": 0}, indent=2), encoding="utf-8")
++
++
++@pytest.mark.parametrize("fault", ["mode", "provider", "model", "import", "store", "limit", "ledger", "pending", "target", "actor", "scene", "executed", "retries", "tokens", "provider_disabled", "startup", "stale", "used_budget"])
++def test_preflight_abort_has_no_dispatch_or_state_mutation(control, monkeypatch, fault):
++    before = snapshot()
++    options = config(control)
++    if fault == "mode": monkeypatch.setenv(r.FLAG, "1")
++    if fault == "provider": monkeypatch.delenv("OPENAI_API_KEY", raising=False)
++    if fault == "model": options["model"] = "unrequested-model"
++    if fault == "import": options["imports_before"] = {}
++    if fault == "store": options["store"] = ROOT / "data"
++    if fault == "limit": monkeypatch.setenv("ASHEN_PROVIDER_REQUEST_LIMIT", "3")
++    if fault == "ledger":
++        from game import provider_budget
++        monkeypatch.setattr(provider_budget, "_INITIALIZED", False)
++    if fault == "pending": options["session"] = {}
++    if fault == "target": options["world"] = {"npcs": []}
++    if fault == "actor": options["character"] = {}
++    if fault == "scene": options["scene"] = {"scene": {"id": "elsewhere"}}
++    if fault == "executed":
++        options["session"] = copy.deepcopy(options["session"])
++        options["session"]["conversational_context"]["pending_intention"]["status"] = "executed"
++    if fault == "retries": monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_RETRIES", "0")
++    if fault == "tokens": monkeypatch.setenv("ASHEN_PROVIDER_TOTAL_TOKEN_LIMIT", "invalid")
++    if fault == "provider_disabled": monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_CALLS", "1")
++    if fault == "startup": monkeypatch.setenv("ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT", "0")
++    if fault == "stale":
++        from game import storage
++        session = storage.load_session()
++        session["turn_counter"] += 1
++        storage.save_session(session)
++        before = snapshot()
++    if fault == "used_budget":
++        from game import provider_budget
++        monkeypatch.setattr(provider_budget, "_REQUESTS", 1)
++    result = r.guarded_trial(evidence_path=OUT / f"preflight_failure_{fault}.json", **options,
++        execute=lambda: pytest.fail("trial executed after failed preflight"))
++    assert result["classification"] == "validation_setup_failure"
++    assert result["failed_assertions"]
++    assert result["provider_admissions"] == (1 if fault == "used_budget" else 0)
++    assert snapshot() == before
++
++
++def test_disabled_mode_is_explicit(control, monkeypatch):
++    options = config(control)
++    with r.execution_mode(False):
++        options.update(live=False, imports_before=r.flag_snapshot())
++        assert r.preflight(**options)["classification"] == "ready"
++    assert os.environ[r.FLAG] == "0"
++
++
++@pytest.mark.parametrize("error", ["APIConnectionError", "InternalServerError"])
++def test_failed_provider_does_not_execute_pending(control, monkeypatch, error):
++    from game.api import chat
++    from game.models import ChatRequest
++    before = snapshot()
++    monkeypatch.setattr("game.live_chat_interpretation.request_interpretation",
++        lambda *a, **k: {"ok": False, "sent": True, "error": error})
++    response = chat(ChatRequest(text="Instead, make that a question about the lamp."))
++    assert "no gameplay action" in response["gm_output"]["player_facing_text"]
++    assert snapshot() == before
++
++
++@pytest.mark.parametrize("case_id", ["correction_pending", "correction_already_executed", "correction_nothing_pending"])
++def test_frozen_revision_authority_through_direct_chat(control, monkeypatch, case_id):
++    from game import storage
++    from game.api import chat
++    from game.models import ChatRequest
++    cases = json.loads((ROOT / "tests/fixtures/pr_ef_r4_holdouts.json").read_text(encoding="utf-8"))["cases"]
++    case = next(c for c in cases if c["id"] == case_id)
++    session = storage.load_session()
++    context = session["conversational_context"]
++    if case_id != "correction_pending":
++        previous = context.pop("pending_intention")
++        context.pop("pending_clarification", None)
++        if case_id == "correction_already_executed":
++            # Synthetic executed-state negative control; does not execute the ask.
++            previous["status"] = "executed"
++            context["last_executed_intention"] = previous
++        storage.save_session(session)
++    monkeypatch.setattr("game.live_chat_interpretation.request_interpretation",
++        lambda *a, **k: {"ok": True, "sent": False, "text": json.dumps(record("CORRECTION"))})
++    before = snapshot()
++    response = chat(ChatRequest(text=case["player"]))
++    after = snapshot()
++    assert not response["resolution"].get("social")
++    phrase = {"correction_pending": "revised", "correction_already_executed": "cannot undo",
++              "correction_nothing_pending": "what do you want to change"}[case_id]
++    assert phrase in response["gm_output"]["player_facing_text"].lower()
++    for key in ("world", "scene", "character", "combat"):
++        assert before[key] == after[key]
++    for key in ("turn_counter", "clocks"):
++        assert before["session"][key] == after["session"][key]
+--- a/docs/NEXT_SESSION.md
++++ b/docs/NEXT_SESSION.md
+@@ -1,6 +1,6 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones â€” Product Realization. Updated 2026-10-19 / ATGB-R1-03.
++Ashen Thrones — Product Realization. Updated 2026-10-19 / ATGB-R1-04.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
+ 
+@@ -8,22 +8,22 @@
+ 
+ Reconciliation architecture is closed (AR-CA). Product Realization progressed
+ beyond PR-BL through PR-EF integration and PR-EG discovery. PR-EG-R6-R4-R1
+-remains **C â€” inconclusive / below acceptance; do not integrate**. Caching reuse
++remains **C — inconclusive / below acceptance; do not integrate**. Caching reuse
+ does not establish semantic support. No migration or PR-EH follows automatically.
+ 
+ PR-EG-R6-R5 is a later diagnostic, not an integration acceptance. Its verdict is
+-**B â€” diagnosis supported with limitations**
++**B — diagnosis supported with limitations**
+ (`artifacts/pr_eg_r6_r5/36_FINAL_VERDICT.md`). Production success is 59/164,
+ validation 18/54, correction tag 0/25 on the full corpus. Authorized-plan
+ substitution reaches 44/54 on validation and 45/54 with expression disabled.
+ Those arms are interventions, not a production forecast. R1, R2, and R3 are
+-unimplemented pending review. ATGB-05Aâ€™s orientation named only R4-R1; that
+-omission was staleness. R5 does not replace R4-R1â€™s integration ban.
++unimplemented pending review. ATGB-05A’s orientation named only R4-R1; that
++omission was staleness. R5 does not replace R4-R1’s integration ban.
+ 
+ ATGB v1 is operationally established: adopted corpus, frozen reproducible start,
+ scenario isolation, provider accounting, complete 37-turn live capture, preserved
+ transcripts/telemetry, rubric and human-review tools. Selection is original
+-S01â€“S03; continuation S04 full trial 2 and S05â€“S10 trial 1. Original partial S04
++S01–S03; continuation S04 full trial 2 and S05–S10 trial 1. Original partial S04
+ trial 1 remains separate historical evidence.
+ 
+ The independent ChatGPT (GPT-6) provisional assessment is imported and verified:
+@@ -42,7 +42,23 @@
+ 
+ ## Last work and recommended next action
+ 
+-ATGB-R1-03 controlled live validation completed on 2026-10-19 with **D â€” Inconclusive**.
++ATGB-R1-04 validation-readiness recovery completed: **B — Conditionally ready**.
++No live authority/calls. New import-safe gate/control: `tools/atgb/readiness.py`;
++167 targeted deterministic tests pass (36 new, 105 R1-02, 26 state authority).
++Pending ASK is generated by production chat with stubbed interpretation, then
++revised without gameplay advancement. Preflight failures abort before callback.
++Report: `development/reports/atgb_r1_04_validation_readiness_recovery.md`;
++eight reports and exact commands/preflight/state evidence under their R1-04 owners.
++Provider root causes remain unresolved. HTTP authorization slice interrupted at
++existing TestClient boundary; no full-suite claim. Legacy experiment initializer
++and R1-03 runner preserved; **do not reuse that runner**. Future isolated runner
++must adopt the new gate/control, zero SDK retries and durable per-trial budget.
++Await external review before ATGB-R1-05; live continuation requires separate explicit
++authority. No semantic repair, frozen baseline edit or experimental integration.
++
++### Prior R1-03 evidence (preserved historical context)
++
++ATGB-R1-03 controlled live validation completed on 2026-10-19 with **D — Inconclusive**.
+ Report: `development/reports/atgb_r1_03_controlled_live_validation.md`; eight reports
+ under `development/reports/atgb_r1_03/`; raw/normalized traces and accounting under
+ `artifacts/atgb/atgb_r1_03/`. Production R1-02 repair matches its reviewed ZIP;
+@@ -59,9 +75,9 @@
+ continuations, failed-call usage unavailable. Production/prompts/models unchanged.
+ 
+ ATGB-R1-02 remains a deterministic routing repair, not demonstrated live adequacy.
+-No experimental integration. External review required before ATGB-R1-04. Proposed
+-R1-04 is bounded validation-readiness recovery and missing original/control trials
+-only after renewed live authorization; no semantic repair authorized here.
++No experimental integration. R1-04 recovery is now completed without live calls;
++original/control live trials remain deferred pending R1-05 external review and
++explicit live authorization. No semantic repair is authorized.
+ 
+ ATGB-05A remains the assessment-import closeout. Its review and hashes stay at
+ `development/reports/atgb_05_baseline_preservation.md` and
+@@ -75,7 +91,7 @@
+ 
+ ## Remaining investigations and validation baseline
+ 
+-- S02.2â€“S02.4, S03.3/S05.3, S01.4/S07.2, S06.4, and S04.2 were compared only as
++- S02.2–S02.4, S03.3/S05.3, S01.4/S07.2, S06.4, and S04.2 were compared only as
+   controls. Their earliest decisions differ from S08.2. No repair is authorized
+   for them.
+ - S03.4/S05.4 faction agenda flags: unresolved authority candidates, not confirmed
+@@ -119,6 +135,7 @@
+ play-session data, governance and generated evidence. Preserve it. Do not revert
+ human play data or alter the protected latest human-playtest folder. No commit
+ or push requested. ATGB-05/05A change documentation/evidence/export only.
+-Stop for external review of ATGB-R1-03. This pass changed evidence/documentation
+-only. No frozen-baseline edit, added model authority, commit or push. Do not begin
+-ATGB-R1-04 without external review and renewed bounded live authorization.
++Stop for external review of ATGB-R1-04. This pass changed validation tooling,
++tests, documentation and evidence only. No production or frozen-baseline edit,
++added model authority, commit or push. Do not begin ATGB-R1-05 or make live calls
++without external review and explicit bounded live authorization.

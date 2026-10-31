@@ -1,0 +1,14 @@
+................F....................................................... [ 80%]
+...........F.....                                                        [100%]
+================================== FAILURES ===================================
+______ test_each_production_path_rejects_seventh_before_sdk[expression] _______
+tests\test_pr_play_02_controls.py:91: in test_each_production_path_rejects_seventh_before_sdk
+    assert len(calls) == snap["requests"] == snap["dispatched_requests"] == 6
+E   assert 1 == 6
+_______________ test_readiness_acceptance_is_not_live_execution _______________
+tests\test_provider_accounting_integrity.py:308: in test_readiness_acceptance_is_not_live_execution
+    assert live_accounting_readiness(ROOT)["ok"]
+E   assert False
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_02_controls.py::test_each_production_path_rejects_seventh_before_sdk[expression]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution

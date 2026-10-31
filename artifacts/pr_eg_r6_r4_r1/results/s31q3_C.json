@@ -1,0 +1,48 @@
+{
+  "case_id": "s31q3",
+  "family": "s31",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "b9c4893abdecdc6d7219fdb6fd732ed7cdb36e0178e0e33c47519c15ee8c1ac2",
+  "answer": {
+    "response_class": "UNKNOWN",
+    "values": [],
+    "qualifiers": [],
+    "selected_fact_ids": [
+      "f1",
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s31"
+    ],
+    "answered_arguments": [
+      "theme",
+      "location"
+    ],
+    "missing_arguments": [
+      "agent"
+    ],
+    "conflict": false,
+    "reason": "The facts indicate that the miller stores winter flour in the upper loft and that wet sacks remain on the ground floor, but there is no information about who carried the flour upstairs."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": "F11"
+  },
+  "provider_error": null
+}

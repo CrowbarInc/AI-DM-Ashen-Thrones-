@@ -1,0 +1,1917 @@
+--- entry/tools/playtest/runner.py
++++ current/tools/playtest/runner.py
+@@ -27,6 +27,7 @@
+ OUTPUT = ROOT/'artifacts/atgb/automated_playtests'
+ CASES = ('success', 'truncation', 'invalid_json', 'envelope', 'semantic', 'safe_nonresolution',
+          'exception', 'admission', 'empty', 'incomplete')
++GAMEPLAY_CASES = ('turn2_exception', 'turn3_invalid_json')
+ CAPS = {'input': 200000, 'output': 20000, 'total': 220000}
+ TIMEOUT_CAPS = {'preflight': 30, 'startup': 30, 'request': 90, 'scenario': 180, 'evidence': 30, 'shutdown': 5}
+ 
+@@ -36,7 +37,7 @@
+ 
+ 
+ def load_scenario(name):
+-    if name not in {'CampaignOpening', 'ScriptedObservation'}:
++    if name not in {'CampaignOpening', 'ScriptedObservation', 'FiveTurnGameplay'}:
+         raise ValueError('Unknown scenario')
+     path = ROOT/'tools/playtest/scenarios'/f'{name}.json'
+     value = json.loads(path.read_text(encoding='utf-8'))
+@@ -56,9 +57,20 @@
+     if kinds[:3] != ['initialize_campaign', 'capture_baseline', 'start_campaign'] or kinds.count('start_campaign') != 1 or kinds.count('initialize_campaign') != 1:
+         raise ValueError('One New Campaign and one Start Campaign required')
+     allowed = {'initialize_campaign', 'capture_baseline', 'start_campaign', 'capture_final_state',
+-               'observe_scene', 'verify_state', 'npc_interaction', 'examine_object', 'rules_action', 'movement'}
++               'observe_scene', 'verify_state', 'npc_interaction', 'examine_object', 'rules_action', 'movement', 'player_turn'}
+     if any(k not in allowed for k in kinds):
+         raise ValueError('Unknown step')
++    turns = [a for a in s['actions'] if a['kind'] == 'player_turn']
++    if turns:
++        if len(turns) != 5 or len({a.get('step_id') for a in turns}) != 5:
++            raise ValueError('Five unique ordered turns required')
++        for a in turns:
++            if not {'step_id', 'player_input', 'interaction_category', 'expected_response_properties',
++                    'allowed_state_changes', 'forbidden_state_changes', 'evaluation_criteria',
++                    'timeout', 'stop_conditions', 'subject_terms', 'required_scene'} <= a.keys():
++                raise ValueError('Incomplete player-turn contract')
++            if not 0 < a['timeout'] <= s['timeouts']['request']:
++                raise ValueError('Unbounded turn timeout')
+     if not 1 <= s['provider_request_ceiling'] <= 6:
+         raise ValueError('Request ceiling exceeds established controlled scope')
+     for k, cap in CAPS.items():
+@@ -67,6 +79,25 @@
+     for k, cap in TIMEOUT_CAPS.items():
+         if not 0 < s['timeouts'][k] <= cap:
+             raise ValueError('Timeout must be positive and bounded')
++
++
++def verify_gameplay_grounding(s):
++    if s['id'] != 'FiveTurnGameplay':
++        return None
++    from tools.atgb.baseline import load_baseline
++    source, _ = load_baseline(ROOT)
++    world = json.loads((source/'world.json').read_text(encoding='utf-8'))
++    for action in s['actions']:
++        if action['kind'] != 'player_turn':
++            continue
++        scene = json.loads((source/'scenes'/f"{action['required_scene']}.json").read_text(encoding='utf-8'))['scene']
++        if action.get('required_npc') and not any(n.get('id') == action['required_npc'] and n.get('location') == action['required_scene'] for n in world['npcs']):
++            raise ValueError('NPC fixture grounding missing')
++        if action.get('required_object') and not any(o.get('id') == action['required_object'] for o in scene['interactables']):
++            raise ValueError('Object fixture grounding missing')
++        if not set(action.get('allowed_destinations', [])) <= {e['target_scene_id'] for e in scene['exits']}:
++            raise ValueError('Movement fixture grounding missing')
++    return True
+ 
+ 
+ def child_environment(run, scenario, mode, case, inherited=None):
+@@ -179,7 +210,7 @@
+ 
+ def export(run, timeout=30):
+     started = time.monotonic()
+-    selected = [p for folder in ('configuration', 'baseline', 'after', 'diagnostics', 'reports', 'screenshots')
++    selected = [p for folder in ('configuration', 'baseline', 'after', 'diagnostics', 'reports', 'screenshots', 'turns', 'opening')
+                 for p in (run/folder).rglob('*') if p.is_file()]
+     total = sum(p.stat().st_size for p in selected)
+     if total > 32*1024*1024:
+@@ -243,14 +274,19 @@
+     started = time.monotonic()
+     try:
+         s = load_scenario(scenario)
++        grounded = verify_gameplay_grounding(s)
+         result['scenario'] = s
+-        if mode not in s['execution_modes'] or case not in CASES:
++        if mode not in s['execution_modes'] or case not in (*CASES, *(GAMEPLAY_CASES if scenario == 'FiveTurnGameplay' else ())):
+             raise ValueError('Unsupported mode or synthetic fixture')
+-        if mode == 'Live' and (not authorize_live or scenario != 'CampaignOpening' or case != 'success'):
+-            raise PermissionError('Live requires invocation authorization and opening-only scenario')
++        if mode == 'Live' and (not authorize_live or scenario not in {'CampaignOpening', 'FiveTurnGameplay'} or case != 'success'):
++            raise PermissionError('Live requires invocation authorization and reviewed scenario')
++        if mode == 'Live' and scenario == 'FiveTurnGameplay' and not capture_response:
++            raise PermissionError('Five-turn Live requires response capture')
+         if not 0 <= port <= 65535:
+             raise ValueError('Invalid port')
+         env = child_environment(run, s, mode, case)
++        if mode == 'Live' and scenario == 'FiveTurnGameplay' and any(env.get(k, '').lower() in {'1', 'true', 'yes', 'on'} for k in ('ASHEN_DISABLE_LIVE_INTERPRETATION', 'ASHEN_DISABLE_EXPRESSION_GENERATION')):
++            raise ValueError('Five-turn Live requires normal interpretation and expression configuration')
+         if mode == 'Live' and not env.get('OPENAI_API_KEY', '').strip():
+             raise ValueError('Live credentials unavailable')
+         env['ASHEN_OPENING_RESPONSE_CAPTURE'] = '1' if capture_response else '0'
+@@ -263,10 +299,13 @@
+         write(run/'configuration/run.json', cfg)
+         result['environment_verification'] = {'repository_root': str(ROOT), 'python': sys.executable,
+             'python_version': sys.version.split()[0], 'fixture_hash_verified': True,
++            'five_actions_fixture_grounded': grounded,
+             'provider_request_ceiling': int(env['ASHEN_PROVIDER_REQUEST_LIMIT']),
+             'token_allowances': {k: int(env[f'ASHEN_PROVIDER_{k.upper()}_TOKEN_LIMIT']) for k in CAPS},
+             'live_authorization': authorize_live and mode == 'Live', 'retry_configuration': 'SDK=0, host=0',
+             'response_capture_opt_in': capture_response}
++        print('Configured ceilings:', result['environment_verification']['provider_request_ceiling'],
++              'requests;', result['environment_verification']['token_allowances'], 'tokens; retries=0', flush=True)
+         if time.monotonic()-started > s['timeouts']['preflight']:
+             raise TimeoutError('Preflight deadline')
+         infrastructure = 'application_startup_failure'
+@@ -307,14 +346,35 @@
+         scenario_deadline = time.monotonic()+s['timeouts']['scenario']
+         for action in s['actions']:
+             kind = action['kind']
+-            timeout = min(s['timeouts']['request'], scenario_deadline-time.monotonic())
++            timeout = min(action.get('timeout', s['timeouts']['request']), scenario_deadline-time.monotonic())
+             if timeout <= 0:
+                 infrastructure = 'api_transport_failure'
+                 raise TimeoutError('Scenario deadline')
+             row = {'action': kind, 'ok': False}
+             result['steps'].append(row)
+             try:
+-                if kind in {'capture_baseline', 'capture_final_state'}:
++                if kind == 'player_turn':
++                    from tools.playtest.gameplay import execute_turn, prerequisite_failure
++                    usage_path = run/'diagnostics/budget_snapshot.json'
++                    current_usage = json.loads(usage_path.read_text(encoding='utf-8')) if usage_path.exists() else {}
++                    if current_usage.get('dispatched_requests', 0) >= int(env['ASHEN_PROVIDER_REQUEST_LIMIT']):
++                        result['steps'].pop()
++                        result['stop_reason'] = 'provider_budget_exhaustion'
++                        break
++                    state = snapshot_files(run, 'after')
++                    divergence = prerequisite_failure(action, state)
++                    if divergence:
++                        result['steps'].pop()
++                        result['divergence'] = {'step_id': action['step_id'], 'kind': 'scenario_limitation',
++                                               'reason': divergence}
++                        result['stop_reason'] = 'scenario_divergence'
++                        break
++                    row.update(step_id=action['step_id'], player_input=action['player_input'])
++                    row.update(execute_turn(run, action, base, timeout, request, snapshot,
++                                            [r.get('dm_response', '') for r in result['steps'][:-1] if r['action'] == 'player_turn']))
++                    if row['stop']:
++                        result['stop_reason'] = row['findings'][0]['category'] if row['findings'] else 'turn_stopped'
++                elif kind in {'capture_baseline', 'capture_final_state'}:
+                     docs = snapshot(run, 'baseline' if kind == 'capture_baseline' else 'after', base, timeout)
+                     if kind == 'capture_baseline':
+                         before = docs
+@@ -342,6 +402,11 @@
+                     row['ok'] = status == 200 and body.get('ok', body.get('status') == 'ok') is True
+                     if kind == 'start_campaign':
+                         row['narration_present'] = bool((body.get('gm_output') or {}).get('player_facing_text'))
++                        if scenario == 'FiveTurnGameplay':
++                            (run/'opening').mkdir()
++                            opening_state = snapshot(run, 'opening', base, min(timeout, 10))
++                            result['opening_state_comparison'] = compare(before, opening_state, accepted=row['ok'])
++                            row['ok'] = row['ok'] and result['opening_state_comparison']['integrity']
+                 if not row['ok']:
+                     break
+             except (OSError, URLError, ValueError):
+@@ -358,6 +423,8 @@
+         if infrastructure is None:
+             infrastructure = 'environment_preflight_failure'
+         result['failure'] = {'type': type(exc).__name__, 'stage': infrastructure}
++        if scenario == 'FiveTurnGameplay':
++            result['stop_reason'] = 'timeout' if isinstance(exc, (TimeoutError, socket.timeout)) else infrastructure
+         # Never write exception strings, which may contain sensitive external data.
+     finally:
+         result['process_cleanup'] = stop_owned(process, s['timeouts']['shutdown'] if s else 5)
+@@ -369,6 +436,15 @@
+                 result['uncertainties'].append('Final API capture unavailable; persistent state collected after owned-process shutdown')
+             except (OSError, ValueError):
+                 result['uncertainties'].append('Final persistent snapshot unavailable')
++        if scenario == 'FiveTurnGameplay' and result['steps'] and result['steps'][-1]['action'] == 'player_turn' and not result['steps'][-1]['ok'] and 'mechanical' not in result['steps'][-1]:
++            row = result['steps'][-1]
++            if row.get('step_id') and (run/'turns'/row['step_id']).exists():
++                try:
++                    snapshot_files(run, f"turns/{row['step_id']}/after")
++                    row['state_after'] = f"turns/{row['step_id']}/after/documents.json"
++                    row['mechanical'] = {'status': 'INCONCLUSIVE', 'completed_interaction': False}
++                except (OSError, ValueError):
++                    pass
+         events = []
+         ledger = run/'diagnostics/provider_usage.jsonl'
+         if ledger.exists():
+@@ -404,7 +480,7 @@
+             start_rows = [r for r in result['steps'] if r['action'] == 'start_campaign']
+             api_accepted = bool(start_rows and start_rows[0].get('response', {}).get('ok') is True and
+                                 start_rows[0].get('response', {}).get('session', {}).get('campaign_started') is True)
+-            result['state_comparison'] = compare(before, after, accepted=accepted if outcomes else api_accepted)
++            result['state_comparison'] = result.get('opening_state_comparison') or compare(before, after, accepted=accepted if outcomes else api_accepted)
+         result['provider_response_evidence'] = ['diagnostics/'+p.name for p in (run/'opening_response_evidence').glob('*.json')]
+         for p in (run/'opening_response_evidence').glob('*.json'):
+             shutil.copy2(p, run/'diagnostics'/p.name)
+@@ -433,6 +509,9 @@
+         result['failure_classification'] = None if result['verdict'] == 'PASS' else classify(events, infrastructure=infrastructure, integrity=integrity)
+         result['uncertainties'].append('Rendered UI, live adequacy, and gameplay quality not established by deterministic API execution')
+         result['elapsed_seconds'] = round(time.monotonic()-started, 3)
++        if scenario == 'FiveTurnGameplay' and s:
++            from tools.playtest.gameplay import finalize
++            (run/'reports/GAMEPLAY_REPORT.md').write_text(finalize(result), encoding='utf-8')
+         write(run/'reports/result.json', result)
+         (run/'reports/SUMMARY.md').write_text(summarize(result), encoding='utf-8')
+         write(run/'diagnostics/execution_log.json', {'steps': [{'action': r['action'], 'ok': r['ok'], 'http_status': r.get('http_status')} for r in result['steps']], 'cleanup': result['process_cleanup']})
+@@ -448,10 +527,10 @@
+ 
+ def main(argv=None):
+     parser = argparse.ArgumentParser(description=__doc__)
+-    parser.add_argument('--scenario', choices=['CampaignOpening', 'ScriptedObservation'], default='CampaignOpening')
++    parser.add_argument('--scenario', choices=['CampaignOpening', 'ScriptedObservation', 'FiveTurnGameplay'], default='CampaignOpening')
+     parser.add_argument('--mode', choices=['Deterministic', 'Live', 'ScriptedGameplay'], default='Deterministic')
+     parser.add_argument('--authorize-live-provider', action='store_true')
+-    parser.add_argument('--fixture-response', choices=CASES, default='success')
++    parser.add_argument('--fixture-response', choices=(*CASES, *GAMEPLAY_CASES), default='success')
+     parser.add_argument('--port', type=int, default=0)
+     parser.add_argument('--capture-response', action='store_true')
+     parser.add_argument('--latest', action='store_true')
+--- entry/tools/playtest/worker.py
++++ current/tools/playtest/worker.py
+@@ -24,7 +24,36 @@
+ )
+ 
+ 
+-def install_transport(case):
++CURRENT_TURN = 0
++
++
++def gameplay_fixture(turn, interpretation):
++    """Synthetic SDK output only. The normal host validates and resolves it."""
++    if not interpretation:
++        lines = {1: 'Rain falls over the gate district and the crowded muddy approach.',
++                 2: 'The gate serjeant says, "The patrol route changed after the Ash Compact census choke worsened."',
++                 3: 'The notice board lists taxes, curfew rules, and a warning about a missing patrol.',
++                 4: 'You can examine the notice board or ask the gate serjeant about the missing patrol.',
++                 5: 'You approach the gate to enter Cinderwatch.'}
++        return json.dumps({'declared_claims': [], 'narration': lines[turn]})
++    operation, target = {1: (None, None), 2: ('ASK', 'gate_serjeant'), 3: ('INSPECT', 'notice_board'),
++                         4: (None, None), 5: ('MOVE', 'market_quarter')}[turn]
++    return json.dumps({
++        'communication_mode': 'IN_WORLD_ACTION' if operation else 'OTHER', 'interpretation_status': 'INTERPRETED',
++        'player_intent': {'summary': {1: 'Look around the gate district', 2: 'Ask gate serjeant about missing patrol',
++                          3: 'Inspect notice board', 4: 'Ask for available missing patrol leads', 5: 'Enter Cinderwatch'}[turn]},
++        'asserted_premises': [], 'requested_outcomes': [],
++        'action_components': [{'order': 1, 'operation_class': operation, 'target_ref': target,
++                               'description': 'Attempt the requested interaction'}] if operation else [],
++        'references': {'permitted_entity_ids': [target] if target else [], 'unresolved_references': []},
++        'clarification_question': '', 'correction': {'subject': 'NONE', 'note': ''},
++        'communication': {'recipient': 'NPC' if turn == 2 else 'CHARACTER' if operation else 'GM',
++                          'purpose': 'QUESTION' if turn == 2 else 'ACTION' if operation else 'DESCRIPTION',
++                          'subject': 'missing patrol' if turn in (2, 4) else 'surroundings',
++                          'evidence_refs': ['visible:0', 'visible:1'] if not operation else []}})
++
++
++def install_transport(case, gameplay=False):
+     import openai
+     real_connect = socket.socket.connect
+     real_connect_ex = socket.socket.connect_ex
+@@ -50,9 +79,12 @@
+     }.get(case, text)
+ 
+     def create(**kwargs):
+-        if case == 'exception':
++        if case == 'exception' or (case == 'turn2_exception' and CURRENT_TURN == 2):
+             raise RuntimeError('Synthetic provider exception')
+-        value = NS(output_text=text, id='synthetic-response', model=kwargs['model'],
++        content = gameplay_fixture(CURRENT_TURN, (kwargs.get('text', {}).get('format', {}).get('name') == 'pr_dr_interpretation')) if gameplay and CURRENT_TURN else text
++        if case == 'turn3_invalid_json' and CURRENT_TURN == 3:
++            content = '{broken'
++        value = NS(output_text=content, id='synthetic-response', model=kwargs['model'],
+                    status='completed', usage=NS(input_tokens=20, output_tokens=10, total_tokens=30))
+         if case == 'truncation':
+             value.status = 'incomplete'
+@@ -86,7 +118,7 @@
+     assert_imported_data_dir(st.DATA_DIR, run/'data', player_campaign_dir=Path(cfg['player_data']))
+     if cfg['mode'] != 'Live':
+         os.environ['OPENAI_API_KEY'] = 'offline-placeholder'
+-        install_transport(cfg['fixture_response'])
++        install_transport(cfg['fixture_response'], cfg['scenario_id'] == 'FiveTurnGameplay')
+     from game import api, gm, provider_budget as budget
+     from game.config import get_openai_api_key, DEFAULT_MODEL_NAME
+     if cfg['mode'] == 'Live':
+@@ -113,6 +145,9 @@
+           'credentials_present': cfg['mode'] == 'Live', 'connectivity_diagnostics': False})
+ 
+     async def application(scope, receive, send):
++        global CURRENT_TURN
++        if scope['type'] == 'http' and scope.get('path') == '/api/chat':
++            CURRENT_TURN += 1
+         try:
+             await api.app(scope, receive, send)
+         finally:
+--- entry/tools/playtest/gameplay.py
++++ current/tools/playtest/gameplay.py
+@@ -0,0 +1,294 @@
++"""Bounded observation/evaluation of production turns; never a gameplay authority.
++
++Missing native evidence stays unknown. Quality probes are not semantic validators.
++Future offline judges may implement QualityReviewer; no provider client belongs here.
++"""
++from __future__ import annotations
++
++import json
++import hashlib
++import time
++from typing import Protocol
++
++from tools.playtest.analysis import normalized_document, classify
++
++
++class QualityReviewer(Protocol):
++    def review(self, action: dict, text: str, prior: list[str]) -> dict: ...
++
++
++def document(docs, name):
++    return normalized_document(name, docs.get(name, {}))[0]
++
++
++def prerequisite_failure(action, state):
++    scene_id = document(state, 'session.json').get('active_scene_id')
++    if scene_id != action['required_scene']:
++        return 'Required scene no longer active'
++    if action.get('required_npc'):
++        npc = next((n for n in document(state, 'world.json').get('npcs', []) if n.get('id') == action['required_npc']), None)
++        if not npc or npc.get('location') != scene_id:
++            return 'Required NPC no longer present'
++    if action.get('required_object'):
++        scene = document(state, 'scenes/'+scene_id+'.json').get('scene', {})
++        if not any(o.get('id') == action['required_object'] for o in scene.get('interactables', [])):
++            return 'Required object no longer present'
++    return None
++
++
++def diff(before, after, path=''):
++    if isinstance(before, dict) and isinstance(after, dict):
++        return [item for key in sorted(before.keys() | after.keys())
++                for item in diff(before.get(key), after.get(key), path+'/'+key)]
++    def bounded(value):
++        raw = json.dumps(value, ensure_ascii=True)
++        return value if len(raw) <= 2048 else {'preview': raw[:2048], 'truncated': True,
++                                             'characters': len(raw), 'sha256': hashlib.sha256(raw.encode()).hexdigest()}
++    return [] if before == after else [{'path': path, 'before': bounded(before), 'after': bounded(after)}]
++
++
++def quality(action, text, prior):
++    probes = {'response_exists': bool(text.strip()),
++              'requested_subject_mentioned': any(w.casefold() in text.casefold() for w in action['subject_terms']),
++              'repeated_exact_response': bool(text and text in prior),
++              'generic_marker': 'No one here can answer that from what is settled here.' in text}
++    concerns = []
++    if not text:
++        concerns.append('insufficient_response_evidence')
++    if text and not probes['requested_subject_mentioned']:
++        concerns.append('possibly_irrelevant_response')
++    if probes['repeated_exact_response']:
++        concerns.append('repetitive_narration')
++    if probes['generic_marker']:
++        concerns.append('generic_nonresolution')
++    dimensions = {}
++    for key, label in [('Q1', 'Responsiveness'), ('Q2', 'Grounding'), ('Q3', 'Continuity'),
++                       ('Q4', 'Actionability'), ('Q5', 'Narrative quality'), ('Q6', 'Agency and consequences')]:
++        na = key in action.get('inapplicable_dimensions', [])
++        dimensions[key] = {'dimension': label, 'score': None,
++                           'status': 'N/A' if na else 'REQUIRES_HUMAN_REVIEW',
++                           'evidence': text[:2000], 'method': 'human_review_pending',
++                           'confidence': 'not_assessed',
++                           'explanation': 'No immediate consequence required.' if na else
++                           'Automated presence/subject/repetition probes cannot establish this 0–4 judgment.'}
++    return {'rubric_version': 'pr-play-09-quality-v1', 'scale': {'0': 'Complete failure', '1': 'Major deficiency',
++            '2': 'Partially adequate', '3': 'Good', '4': 'Strong'},
++            'dimensions': dimensions, 'probes': probes, 'concerns': concerns,
++            'method': 'deterministic presence and exact markers; heuristic relevance and repetition',
++            'status': 'REQUIRES_HUMAN_REVIEW'}
++
++
++def accounting(events):
++    dispatched = [e for e in events if e.get('event') == 'dispatch_attempted']
++    completions = [e for e in events if e.get('event') == 'completed']
++    totals = {}
++    for key in ('input_tokens', 'output_tokens', 'total_tokens'):
++        values = [e.get(key) for e in completions]
++        totals[key] = sum(values) if len(values) == len(dispatched) and all(isinstance(v, int) for v in values) else None
++    return {'request_count': len(dispatched), **totals, 'retry_count': 0,
++            'operations': [{k: e.get(k) for k in ('attempt_id', 'owner', 'purpose', 'configured_model',
++                           'model', 'input_tokens', 'output_tokens', 'total_tokens', 'latency_ms',
++                           'completion_status')} for e in completions],
++            'provider_latency_ms': sum(e['latency_ms'] for e in completions) if all(isinstance(e.get('latency_ms'), (int, float)) for e in completions) else None,
++            'provider_latency_status': 'native latency_ms only; unavailable remains null'}
++
++
++def evaluate(action, status, body, before, after, events, prior=()):
++    gm = body.get('gm_output') or {}
++    text = gm.get('player_facing_text') or ''
++    metadata = gm.get('metadata') or {}
++    session_before, session_after = (document(d, 'session.json') for d in (before, after))
++    changes = diff({k: document(before, k) for k in before}, {k: document(after, k) for k in after})
++    resolution = body.get('resolution') or {}
++    findings = []
++    def finding(category, kind, evidence, source):
++        findings.append({'category': category, 'kind': kind, 'evidence': evidence, 'source': source,
++                         'step_id': action['step_id'], 'player_input': action['player_input'],
++                         'dm_response': text[:8192], 'diagnostics': f"turns/{action['step_id']}/evaluation.json#diagnostics",
++                         'state_comparison': f"turns/{action['step_id']}/evaluation.json#state_diff"})
++    if status != 200:
++        finding('http_failure', 'confirmed_mechanical_failure', status, 'production HTTP outcome')
++    if session_after.get('campaign_started') is not True:
++        finding('campaign_not_started', 'confirmed_mechanical_failure', session_after.get('campaign_started'), 'game.api.start_campaign')
++    scene_before, scene_after = session_before.get('active_scene_id'), session_after.get('active_scene_id')
++    if scene_after != scene_before and (action['interaction_category'] != 'movement' or scene_after not in action.get('allowed_destinations', [])):
++        finding('unauthorized_scene_transition', 'confirmed_mechanical_failure', [scene_before, scene_after], 'pinned scene exits and player intent')
++    for change in changes:
++        path = change['path']
++        if any(path == p or path.startswith(p+'/') for p in action['forbidden_state_changes']):
++            finding('unauthorized_state_mutation', 'confirmed_mechanical_failure', change, 'scenario forbidden changes; docs/state_authority_model.md')
++    turn_delta = int(session_after.get('turn_counter') or 0)-int(session_before.get('turn_counter') or 0)
++    log_delta = len(after.get('session_log.jsonl') or [])-len(before.get('session_log.jsonl') or [])
++    if turn_delta not in (0, 1) or log_delta not in (0, 1) or (turn_delta == 1 and log_delta != 1):
++        finding('invalid_progression', 'confirmed_mechanical_failure', [turn_delta, log_delta], 'game.api chat nonmutating/resolved turn contracts')
++    old_world, new_world = (document(d, 'world.json') for d in (before, after))
++    unknown_world_roots = set(new_world)-set(old_world)
++    if unknown_world_roots:
++        finding('unauthorized_state_mutation', 'confirmed_mechanical_failure', sorted(unknown_world_roots), 'pinned world schema; no new persistent gameplay structures')
++    # Observe authoritative validations, including original rejected candidates, separately from final recovery.
++    validations = {k: metadata.get(k) for k in ('hard_validation_attempt_1', 'hard_validation_attempt_2', 'accepted_response') if k in metadata}
++    for key, value in validations.items():
++        if isinstance(value, dict) and value.get('hard_valid') is False:
++            finding('semantic_validation_failure', 'confirmed_semantic_failure', {key: value}, 'game.immutable_valid_response native validation')
++    bad = [e for e in events if e.get('classification') in {'provider_error', 'json_parse_failure', 'missing_structured_envelope', 'structured_validation_failure', 'empty_provider_content'} or e.get('provider_status') in {'incomplete', 'failed', 'cancelled'}]
++    if bad:
++        finding(classify(bad)['category'], 'confirmed_mechanical_failure', bad, 'native provider/parser diagnostic')
++    if any(e.get('event') == 'rejected' for e in events):
++        finding('provider_budget_exhaustion', 'scenario_limitation', accounting(events), 'game.provider_budget admission')
++    accepted = metadata.get('accepted_response') or {}
++    hard_validation = accepted.get('hard_validation') or {}
++    if hard_validation.get('hard_valid') is False:
++        finding('semantic_validation_failure', 'confirmed_semantic_failure', hard_validation, 'native accepted_response.hard_validation')
++    # No reconstruction of dice/rules. Compare only explicit native resolution and emission evidence.
++    rules = {'status': 'uncertain', 'evidence': resolution, 'source': 'production resolution; no independent adjudication'}
++    if resolution:
++        rules['status'] = 'recorded_requires_review'
++    # This is the engine's canonical noncombat contract, not a narration-quality audit.
++    nc = resolution.get('noncombat_resolution') or {}
++    if nc:
++        contradictions = []
++        if nc.get('requires_check') is True and not nc.get('check_request'):
++            contradictions.append('required_check_request_missing')
++        expected = {'success': True, 'failure': False}.get(nc.get('success_state'))
++        if expected is not None and isinstance(resolution.get('success'), bool) and resolution['success'] != expected:
++            contradictions.append('success_disagrees_with_engine_contract')
++        if contradictions:
++            finding('invalid_rules_adjudication', 'confirmed_mechanical_failure', contradictions, 'game.noncombat_resolution canonical engine contract')
++            rules['status'] = 'FAIL'
++        elif nc.get('deterministic_resolved') is True or nc.get('outcome_type') == 'pending_check':
++            rules['status'] = 'PASS'
++        rules['canonical_contract'] = nc
++    if scene_after != scene_before and resolution and (resolution.get('resolved_transition') is not True or resolution.get('target_scene_id') != scene_after):
++        finding('invalid_movement_resolution', 'confirmed_mechanical_failure', resolution, 'native resolved_transition/target_scene_id')
++    if any(e.get('event') == 'completed' and (e.get('error') or e.get('completion_status') in {'failed', 'interrupted'}) for e in events):
++        finding('provider_transport_failure', 'confirmed_mechanical_failure', events, 'native completed ledger record')
++    tags = gm.get('tags') or []
++    if 'provider_budget_refused' in tags:
++        finding('provider_budget_exhaustion', 'scenario_limitation', tags, 'native provider_budget_refused tag')
++    live = (resolution.get('metadata') or {}).get('live_chat_interpretation') or {}
++    if live.get('reason') in {'malformed_json', 'invalid_json', 'malformed_response', 'malformed_interpretation', 'malformed_communication'}:
++        finding('invalid_interpretation_response', 'confirmed_mechanical_failure', live, 'production interpretation validation')
++    if (resolution.get('metadata') or {}).get('authoritative_mutation') is False:
++        # Conversation bookkeeping/logging may change, but explicit nonmutating responses cannot alter world truth.
++        if old_world != new_world or scene_before != scene_after or turn_delta:
++            finding('nonmutating_contract_violation', 'confirmed_mechanical_failure', changes, 'resolution.metadata.authoritative_mutation=false')
++    if scene_after != scene_before and not resolution:
++        finding('movement_authority_unavailable', 'unknown', [scene_before, scene_after], 'resolution absent from response')
++    q = quality(action, text, list(prior))
++    for concern in q['concerns']:
++        finding(concern, 'unknown' if not text else 'heuristic_quality_concern', q['probes'], 'pr-play-09-quality-v1')
++    provider_records = [e for e in events if e.get('stage') == 'provider_response']
++    technical = [f for f in findings if f['kind'] == 'confirmed_mechanical_failure']
++    semantic = [f for f in findings if f['kind'] == 'confirmed_semantic_failure']
++    completion = not technical and not any(f['category'] == 'provider_budget_exhaustion' for f in findings) and bool(text)
++    return {'step_id': action['step_id'], 'player_input': action['player_input'], 'dm_response': text[:8192],
++            'response_truncated': len(text) > 8192, 'http_status': status,
++            'outcome_classification': {'kind': 'legitimate_gameplay_outcome' if hard_validation.get('hard_valid') is True and resolution.get('success') is False and not technical else 'unknown',
++                                       'evidence': 'native accepted response and resolution; no invented success condition'},
++            'state_diff': changes, 'state_before': f"turns/{action['step_id']}/before/documents.json",
++            'state_after': f"turns/{action['step_id']}/after/documents.json",
++            'diagnostics': events, 'provider_usage': accounting(events),
++            'mechanical': {'status': 'FAIL' if technical else 'PASS' if text else 'INCONCLUSIVE',
++                           'completed_interaction': completion,
++                           'turn_delta': turn_delta, 'log_delta': log_delta, 'scene_before': scene_before,
++                           'scene_after': scene_after, 'rules': rules,
++                           'mutation_authority': 'REQUIRES_HUMAN_REVIEW for changes not covered by explicit invariants'},
++            'semantic': {'status': 'FAIL' if semantic else 'RECORDED' if validations else 'UNKNOWN',
++                         'final_hard_validation': hard_validation.get('hard_valid'),
++                         'native_validation': validations, 'nonresolution': accepted.get('provenance'),
++                         'gameplay_acceptance': body.get('ok', body.get('status') == 'ok'),
++                         'provider_stages': provider_records,
++                         'extraction': [e.get('extraction_succeeded') for e in provider_records],
++                         'json_parsing': [e.get('json_parsing_succeeded') for e in provider_records],
++                         'structured_validation': [e.get('structured_validation_result') for e in provider_records]},
++            'quality': q, 'findings': findings,
++            'stop': bool(technical or semantic or any(f['category'] == 'provider_budget_exhaustion' for f in findings))}
++
++
++def read_events(run):
++    path = run/'diagnostics/provider_usage.jsonl'
++    return [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()] if path.exists() else []
++
++
++def execute_turn(run, action, base, timeout, request, snapshot, prior):
++    deadline = time.monotonic()+timeout
++    def remaining():
++        value = deadline-time.monotonic()
++        if value <= 0:
++            raise TimeoutError('Turn deadline')
++        return value
++    folder = run/'turns'/action['step_id']
++    folder.mkdir(parents=True)
++    (folder/'before').mkdir()
++    (folder/'after').mkdir()
++    before = snapshot(run, f"turns/{action['step_id']}/before", base, remaining())
++    offset = len(read_events(run))
++    started = time.monotonic()
++    try:
++        status, body = request(base, 'POST', '/api/chat', remaining(), {'text': action['player_input'], 'ui_mode': 'player'})
++    except Exception as exc:
++        # Controller finally shuts down worker before preserving interrupted state.
++        (folder/'interruption.json').write_text(json.dumps({'step_id': action['step_id'], 'player_input': action['player_input'],
++            'error_type': type(exc).__name__, 'elapsed_seconds': time.monotonic()-started, 'stop': True}), encoding='utf-8')
++        raise
++    after = snapshot(run, f"turns/{action['step_id']}/after", base, min(remaining(), 10))
++    row = evaluate(action, status, body, before, after, read_events(run)[offset:], prior)
++    row['application_latency_seconds'] = round(time.monotonic()-started, 4)
++    row['ok'] = not row['stop']
++    row['action'] = 'player_turn'
++    (folder/'api_response.json').write_text(json.dumps(body, indent=2), encoding='utf-8')
++    (folder/'evaluation.json').write_text(json.dumps(row, indent=2), encoding='utf-8')
++    return row
++
++
++def finalize(result):
++    turns = [r for r in result['steps'] if r['action'] == 'player_turn']
++    findings = [f for t in turns for f in t.get('findings', [])]
++    result.update(attempted_turns=len(turns), completed_turns=sum(t.get('mechanical', {}).get('status') == 'PASS' for t in turns),
++                  gameplay_turns=turns, state_integrity_findings=[f for f in findings if f['kind'] == 'confirmed_mechanical_failure'])
++    result['completed_turns'] = sum(t.get('mechanical', {}).get('completed_interaction', False) for t in turns)
++    result['earliest'] = {name: next((f for f in findings if f['kind'] == kind), None)
++                          for name, kind in [('mechanical_failure', 'confirmed_mechanical_failure'),
++                                             ('semantic_failure', 'confirmed_semantic_failure'), ('quality_concern', 'heuristic_quality_concern')]}
++    if result['opening_acceptance'] is False or result.get('opening_state_comparison', {}).get('integrity') is False:
++        row = next((r for r in result['steps'] if r['action'] == 'start_campaign'), {})
++        evidence = {'step_id': 'opening', 'player_input': '[Start Campaign]',
++                    'dm_response': ((row.get('response') or {}).get('gm_output') or {}).get('player_facing_text'),
++                    'category': (result.get('failure_classification') or {}).get('category', 'opening_rejected'),
++                    'source': 'native opening acceptance/state comparison', 'diagnostics': 'diagnostics/provider_usage.jsonl',
++                    'state_comparison': result['state_comparison']}
++        result['earliest']['mechanical_failure'] = evidence
++        if evidence['category'] == 'semantic_validation_failure':
++            result['earliest']['semantic_failure'] = evidence
++    if result['verdict'] != 'BLOCKED':
++        if result['opening_acceptance'] is False or any(f['kind'].startswith('confirmed_') for f in findings):
++            result['verdict'] = 'FAIL'
++        elif result.get('stop_reason') == 'provider_budget_exhaustion' or any(f['category'] == 'provider_budget_exhaustion' for f in findings):
++            result['verdict'] = 'BLOCKED'
++        elif result.get('stop_reason') == 'scenario_divergence':
++            result['verdict'] = 'PARTIAL'
++        elif len(turns) != 5 or any(t.get('semantic', {}).get('status') == 'UNKNOWN' for t in turns):
++            result['verdict'] = 'INCONCLUSIVE'
++    result['stop_reason'] = result.get('stop_reason') or ('completed' if len(turns) == 5 and all(t.get('ok') for t in turns) else (result.get('failure_classification') or {}).get('category') or 'opening_or_execution_stopped')
++    result['skipped_turns'] = [{'step_id': a['step_id'], 'reason': result['stop_reason']} for a in result['scenario']['actions']
++                             if a['kind'] == 'player_turn' and a['step_id'] not in {t.get('step_id') for t in turns}]
++    result['five_meaningful_interactions'] = 'REQUIRES_HUMAN_REVIEW' if result['completed_turns'] == 5 and result['stop_reason'] == 'completed' else 'NOT_ESTABLISHED'
++    usage = result['provider_usage']
++    lines = ['# GAMEPLAY REPORT', '', f"Scenario: {result['scenario']['id']} v{result['scenario']['version']}; mode: {result['mode']}",
++             f"Opening: {result['opening_acceptance']}; turns completed: {result['completed_turns']}/5; mechanical verdict: {result['verdict']}",
++             f"Usage: {usage.get('dispatched_requests')} requests; input/output/total {usage.get('input_tokens')}/{usage.get('output_tokens')}/{usage.get('total_tokens')}; cumulative application time {result['elapsed_seconds']} seconds.",
++             'Narrative quality: REQUIRES_HUMAN_REVIEW; no authoritative automatic scores.', '']
++    for t in turns:
++        lines += [f"## {t.get('step_id', 'Interrupted turn')}", '', 'Player: '+t.get('player_input', ''), '',
++                  'DM: '+t.get('dm_response', '[response unavailable]'), '',
++                  'Changed paths: '+', '.join(c['path'] for c in t.get('state_diff', [])),
++                  'Mechanical: '+str(t.get('mechanical', {}).get('status'))+'; semantic: '+str(t.get('semantic', {}).get('status')),
++                  'Quality concerns: '+', '.join(t.get('quality', {}).get('concerns', []))+'; dimensions require human review.',
++                  f"Performance: {t.get('application_latency_seconds')} application seconds; {json.dumps(t.get('provider_usage'))}",
++                  f"Evidence: turns/{t.get('step_id')}/evaluation.json; before/; after/; api_response.json", '']
++    lines += ['## Failure analysis', '', json.dumps({k: {'step_id': v['step_id'], 'category': v['category'], 'source': v['source']} if v else None for k, v in result['earliest'].items()}, indent=2),
++              'Root cause: not established. Evidence paths: turns/<step>/; diagnostics/provider_usage.jsonl.',
++              '## Final assessment', '', 'Did the game sustain five meaningful interactions? '+result['five_meaningful_interactions'],
++              'Synthetic transport validates instrumentation, not live AI-DM competence. Unknown native rules/state authority requires review.',
++              'Stop: '+str(result['stop_reason']), '']
++    return '\n'.join(lines)
+--- entry/tools/playtest/scenarios/FiveTurnGameplay.json
++++ current/tools/playtest/scenarios/FiveTurnGameplay.json
+@@ -0,0 +1,302 @@
++{
++  "id": "FiveTurnGameplay",
++  "version": "1.0.0",
++  "description": "Opening followed by five production chat intents; bounded at six provider requests",
++  "fixture": "frontier-gate-v1",
++  "execution_modes": [
++    "Deterministic",
++    "Live",
++    "ScriptedGameplay"
++  ],
++  "actions": [
++    {
++      "kind": "initialize_campaign"
++    },
++    {
++      "kind": "capture_baseline"
++    },
++    {
++      "kind": "start_campaign"
++    },
++    {
++      "kind": "player_turn",
++      "step_id": "T1",
++      "interaction_category": "observation",
++      "player_input": "I take a moment to look around the gate district. What do I notice?",
++      "subject_terms": [
++        "gate",
++        "rain",
++        "crowd"
++      ],
++      "required_scene": "frontier_gate",
++      "expected_response_properties": [
++        "addresses intent",
++        "grounded facts",
++        "legitimate refusal/check/obstacle permitted"
++      ],
++      "allowed_state_changes": [
++        "engine-owned bookkeeping",
++        "authorized resolution effects only"
++      ],
++      "forbidden_state_changes": [
++        "/character.json",
++        "/campaign.json",
++        "/conditions.json",
++        "/combat.json",
++        "/scenes"
++      ],
++      "evaluation_criteria": [
++        "native validation",
++        "scene and progression invariants",
++        "Q1-Q6 human review"
++      ],
++      "timeout": 90,
++      "stop_conditions": [
++        "budget",
++        "transport",
++        "invalid_structure",
++        "state_integrity",
++        "timeout",
++        "scenario_invalidation"
++      ],
++      "allowed_destinations": [],
++      "inapplicable_dimensions": [
++        "Q6"
++      ]
++    },
++    {
++      "kind": "player_turn",
++      "step_id": "T2",
++      "interaction_category": "conversation",
++      "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
++      "subject_terms": [
++        "serjeant",
++        "patrol"
++      ],
++      "required_scene": "frontier_gate",
++      "expected_response_properties": [
++        "addresses intent",
++        "grounded facts",
++        "legitimate refusal/check/obstacle permitted"
++      ],
++      "allowed_state_changes": [
++        "engine-owned bookkeeping",
++        "authorized resolution effects only"
++      ],
++      "forbidden_state_changes": [
++        "/character.json",
++        "/campaign.json",
++        "/conditions.json",
++        "/combat.json",
++        "/scenes"
++      ],
++      "evaluation_criteria": [
++        "native validation",
++        "scene and progression invariants",
++        "Q1-Q6 human review"
++      ],
++      "timeout": 90,
++      "stop_conditions": [
++        "budget",
++        "transport",
++        "invalid_structure",
++        "state_integrity",
++        "timeout",
++        "scenario_invalidation"
++      ],
++      "allowed_destinations": [],
++      "inapplicable_dimensions": [],
++      "required_npc": "gate_serjeant"
++    },
++    {
++      "kind": "player_turn",
++      "step_id": "T3",
++      "interaction_category": "environment",
++      "player_input": "I examine the notice board carefully. What notices are posted?",
++      "subject_terms": [
++        "notice",
++        "board",
++        "tax",
++        "curfew"
++      ],
++      "required_scene": "frontier_gate",
++      "expected_response_properties": [
++        "addresses intent",
++        "grounded facts",
++        "legitimate refusal/check/obstacle permitted"
++      ],
++      "allowed_state_changes": [
++        "engine-owned bookkeeping",
++        "authorized resolution effects only"
++      ],
++      "forbidden_state_changes": [
++        "/character.json",
++        "/campaign.json",
++        "/conditions.json",
++        "/combat.json",
++        "/scenes"
++      ],
++      "evaluation_criteria": [
++        "native validation",
++        "scene and progression invariants",
++        "Q1-Q6 human review"
++      ],
++      "timeout": 90,
++      "stop_conditions": [
++        "budget",
++        "transport",
++        "invalid_structure",
++        "state_integrity",
++        "timeout",
++        "scenario_invalidation"
++      ],
++      "allowed_destinations": [],
++      "inapplicable_dimensions": [
++        "Q6"
++      ],
++      "required_object": "notice_board"
++    },
++    {
++      "kind": "player_turn",
++      "step_id": "T4",
++      "interaction_category": "investigation",
++      "player_input": "I want to investigate the missing patrol. What leads can I pursue from here?",
++      "subject_terms": [
++        "patrol",
++        "track",
++        "board",
++        "lead"
++      ],
++      "required_scene": "frontier_gate",
++      "expected_response_properties": [
++        "addresses intent",
++        "grounded facts",
++        "legitimate refusal/check/obstacle permitted"
++      ],
++      "allowed_state_changes": [
++        "engine-owned bookkeeping",
++        "authorized resolution effects only"
++      ],
++      "forbidden_state_changes": [
++        "/character.json",
++        "/campaign.json",
++        "/conditions.json",
++        "/combat.json",
++        "/scenes"
++      ],
++      "evaluation_criteria": [
++        "native validation",
++        "scene and progression invariants",
++        "Q1-Q6 human review"
++      ],
++      "timeout": 90,
++      "stop_conditions": [
++        "budget",
++        "transport",
++        "invalid_structure",
++        "state_integrity",
++        "timeout",
++        "scenario_invalidation"
++      ],
++      "allowed_destinations": [],
++      "inapplicable_dimensions": []
++    },
++    {
++      "kind": "player_turn",
++      "step_id": "T5",
++      "interaction_category": "movement",
++      "player_input": "I approach the gate and try to enter the city.",
++      "subject_terms": [
++        "gate",
++        "city",
++        "market",
++        "Cinderwatch"
++      ],
++      "required_scene": "frontier_gate",
++      "expected_response_properties": [
++        "addresses intent",
++        "grounded facts",
++        "legitimate refusal/check/obstacle permitted"
++      ],
++      "allowed_state_changes": [
++        "engine-owned bookkeeping",
++        "authorized resolution effects only"
++      ],
++      "forbidden_state_changes": [
++        "/character.json",
++        "/campaign.json",
++        "/conditions.json",
++        "/combat.json",
++        "/scenes"
++      ],
++      "evaluation_criteria": [
++        "native validation",
++        "scene and progression invariants",
++        "Q1-Q6 human review"
++      ],
++      "timeout": 90,
++      "stop_conditions": [
++        "budget",
++        "transport",
++        "invalid_structure",
++        "state_integrity",
++        "timeout",
++        "scenario_invalidation"
++      ],
++      "allowed_destinations": [
++        "market_quarter"
++      ],
++      "inapplicable_dimensions": []
++    },
++    {
++      "kind": "capture_final_state"
++    }
++  ],
++  "expected_invariants": {
++    "campaign_started": true,
++    "opening_commits": 1,
++    "turn_delta": 1,
++    "log_delta": 1
++  },
++  "maximum_action_count": 9,
++  "provider_request_ceiling": 6,
++  "token_budgets": {
++    "input": 200000,
++    "output": 20000,
++    "total": 220000
++  },
++  "timeouts": {
++    "preflight": 30,
++    "startup": 30,
++    "request": 90,
++    "scenario": 180,
++    "evidence": 30,
++    "shutdown": 5
++  },
++  "evidence_requirements": [
++    "provider_usage.jsonl",
++    "baseline",
++    "after",
++    "result.json",
++    "SUMMARY.md"
++  ],
++  "stop_conditions": [
++    "first_failed_step",
++    "budget_exhaustion",
++    "timeout",
++    "interruption"
++  ],
++  "budget_feasibility": {
++    "readiness": "B_CONDITIONAL",
++    "six_requests_guarantee": "Ceiling enforced; completion of five turns cannot be guaranteed",
++    "expected_exposure": "Opening 1; informational turns may use 1 interpretation; resolved actions may add narration. A normal two-operation path for all five actions would require 11; SDK/host retries disabled. Six-request run stops before unfinished turns.",
++    "alternative": "Review six-request diagnostic run with possible partial completion; authorize any larger scope separately."
++  },
++  "opening_prerequisite": {
++    "required": true,
++    "endpoint": "/api/start_campaign",
++    "accepted": true,
++    "authorized_commits": 1,
++    "counts_as_player_turn": false
++  }
++}
+--- entry/scripts/run_live_playtest.ps1
++++ current/scripts/run_live_playtest.ps1
+@@ -1,6 +1,6 @@
+ [CmdletBinding()]
+ param(
+-    [ValidateSet('CampaignOpening','ScriptedObservation')][string]$Scenario = 'CampaignOpening',
++    [ValidateSet('CampaignOpening','ScriptedObservation','FiveTurnGameplay')][string]$Scenario = 'CampaignOpening',
+     [ValidateSet('Deterministic','Live','ScriptedGameplay')][string]$Mode = 'Deterministic',
+     [switch]$AuthorizeLiveProvider,
+     [switch]$CaptureResponse,
+--- entry/tests/test_five_turn_gameplay.py
++++ current/tests/test_five_turn_gameplay.py
+@@ -0,0 +1,299 @@
++"""G1–G25 instrumentation controls. Synthetic contracts are not gameplay scores."""
++import copy
++import json
++import socket
++import zipfile
++from pathlib import Path
++
++import pytest
++
++from tools.playtest import gameplay as g, runner
++
++
++@pytest.fixture(autouse=True, scope='module')
++def production_pipeline_configuration():
++    # conftest disables these for in-process unit tests. Owned SDK-stubbed workers
++    # must exercise the normal interpretation/expression pipeline instead.
++    with pytest.MonkeyPatch.context() as patch:
++        patch.setenv('ASHEN_DISABLE_LIVE_INTERPRETATION', '0')
++        patch.setenv('ASHEN_DISABLE_EXPRESSION_GENERATION', '0')
++        yield
++
++
++def action(index=0):
++    return runner.load_scenario('FiveTurnGameplay')['actions'][3+index]
++
++
++def state():
++    return {'session.json': {'campaign_started': True, 'active_scene_id': 'frontier_gate', 'turn_counter': 1},
++            'world.json': {'world_state': {'flags': {}}}, 'character.json': {'hp': 10}, 'session_log.jsonl': []}
++
++
++def response(text='Rain falls over the gate district.', *, hard_valid=True):
++    return {'ok': True, 'gm_output': {'player_facing_text': text, 'metadata': {'accepted_response': {
++        'provenance': 'initial_generation', 'hard_validation': {'hard_valid': hard_valid, 'reasons': []}}}}}
++
++
++def evaluate(index=0, body=None, before=None, after=None, events=None, prior=()):
++    before = before or state()
++    return g.evaluate(action(index), 200, body if body is not None else response(), before,
++                      after if after is not None else copy.deepcopy(before), events or [], prior)
++
++
++def categories(row):
++    return {f['category'] for f in row['findings']}
++
++
++def test_G1_five_turn_successful_instrument_contract():
++    """Full evaluator positive control; no assertion about model interpretation."""
++    rows = [evaluate(i, response(t)) for i, t in enumerate([
++        'Rain falls over the gate district.', 'The gate serjeant declines to discuss the patrol.',
++        'The notice board lists taxes and curfew rules.', 'The notice board and serjeant are available patrol leads.',
++        'The gate remains closed; permission to enter the city is required.'])]
++    assert len(rows) == 5 and all(r['mechanical']['status'] == 'PASS' and r['semantic']['status'] == 'RECORDED' for r in rows)
++    for row in rows:
++        row.update(action='player_turn', ok=True)
++    result = {'scenario': runner.load_scenario('FiveTurnGameplay'), 'mode': 'Deterministic',
++              'steps': rows, 'opening_acceptance': True, 'verdict': 'PASS', 'provider_usage': {}, 'elapsed_seconds': 0}
++    report = g.finalize(result)
++    assert result['verdict'] == 'PASS' and result['completed_turns'] == 5
++    assert 'REQUIRES_HUMAN_REVIEW' in report
++
++
++@pytest.fixture(scope='module')
++def opening_failure():
++    return runner.run_playtest(scenario='FiveTurnGameplay', case='invalid_json', capture_response=True)
++
++
++def test_G2_opening_failure(opening_failure):
++    _, result = opening_failure
++    assert result['verdict'] == 'FAIL' and result['attempted_turns'] == 0
++    assert len(result['skipped_turns']) == 5
++
++
++def test_G3_provider_failure_turn2():
++    row = evaluate(1, events=[{'event': 'completed', 'error': 'provider_error', 'completion_status': 'failed'}])
++    assert row['stop'] and 'provider_transport_failure' in categories(row)
++
++
++def test_G4_invalid_structure_turn3():
++    row = evaluate(2, events=[{'stage': 'provider_response', 'classification': 'structured_validation_failure'}])
++    assert row['stop'] and 'structured_envelope_failure' in categories(row)
++
++
++@pytest.mark.parametrize('case,turn,category', [('turn2_exception', 'T2', 'provider_transport_failure'),
++                                             ('turn3_invalid_json', 'T3', 'invalid_interpretation_response')])
++def test_real_http_turn_failures(case, turn, category):
++    _, result = runner.run_playtest(scenario='FiveTurnGameplay', case=case, capture_response=True)
++    assert result['verdict'] == 'FAIL'
++    assert result['gameplay_turns'][-1]['step_id'] == turn
++    assert category in categories(result['gameplay_turns'][-1])
++    assert len(result['gameplay_turns']) == int(turn[1:])
++
++
++def test_G5_semantic_nonresolution():
++    body = response('No one here can answer that from what is settled here.')
++    body['gm_output']['metadata']['accepted_response']['provenance'] = 'safe_nonresolution'
++    row = evaluate(body=body)
++    assert 'generic_nonresolution' in categories(row)
++    assert row['semantic']['nonresolution'] == 'safe_nonresolution'
++    assert row['mechanical']['status'] == 'PASS'
++
++
++def test_G6_legitimate_refusal():
++    row = evaluate(1, response('The serjeant refuses to discuss the patrol while managing this crowd.'))
++    assert not row['stop'] and row['mechanical']['status'] == 'PASS'
++
++
++def test_G7_unsupported_world_claim_native_authority():
++    body = response('The patrol is dead.', hard_valid=False)
++    body['gm_output']['metadata']['accepted_response']['hard_validation']['reasons'] = ['unsupported_world_claim']
++    row = evaluate(body=body)
++    assert row['semantic']['status'] == 'FAIL' and row['stop']
++    assert row['findings'][0]['source'] == 'native accepted_response.hard_validation'
++
++
++def test_G8_unauthorized_state_mutation():
++    after = state(); after['character.json']['hp'] = 50
++    row = evaluate(after=after)
++    assert 'unauthorized_state_mutation' in categories(row) and row['stop']
++    after = state(); after['world.json']['invented_persistent_structure'] = True
++    assert 'unauthorized_state_mutation' in categories(evaluate(after=after))
++
++
++def test_G9_legitimate_movement():
++    after = state(); after['session.json']['active_scene_id'] = 'market_quarter'
++    body = response('You enter the city market.'); body['resolution'] = {'kind': 'travel', 'resolved_transition': True, 'target_scene_id': 'market_quarter'}
++    row = evaluate(4, body, after=after)
++    assert row['mechanical']['status'] == 'PASS' and not row['stop']
++
++
++def test_G10_blocked_movement():
++    body = response('The gate guard blocks your entry to the city.')
++    body['resolution'] = {'kind': 'travel', 'success': False, 'resolved_transition': False}
++    assert not evaluate(4, body)['stop']
++
++
++def test_G11_divergence(monkeypatch):
++    real = runner.snapshot_files
++    def diverged(run, label):
++        value = real(run, label)
++        if label == 'after':
++            # Fault the read-side observation, never persistent gameplay state.
++            value = copy.deepcopy(value)
++            value['session.json']['payload']['active_scene_id'] = 'market_quarter'
++        return value
++    monkeypatch.setattr(runner, 'snapshot_files', diverged)
++    _, result = runner.run_playtest(scenario='FiveTurnGameplay', capture_response=True)
++    assert result['stop_reason'] == 'scenario_divergence' and result['verdict'] == 'PARTIAL'
++    assert result['attempted_turns'] == 0 and len(result['skipped_turns']) == 5
++
++
++@pytest.fixture(scope='module')
++def sequence():
++    return runner.run_playtest(scenario='FiveTurnGameplay', capture_response=True)
++
++
++def test_G12_budget_exhaustion(sequence):
++    _, result = sequence
++    assert result['provider_usage']['dispatched_requests'] == 6
++    assert result['stop_reason'] == 'provider_budget_exhaustion'
++    assert result['attempted_turns'] == 4 and result['skipped_turns'][0]['step_id'] == 'T5'
++    assert result['process_cleanup']['stopped']
++
++
++def test_G13_turn_timeout(monkeypatch):
++    real = runner.request
++    def timeout(base, method, path, *args, **kwargs):
++        if path == '/api/chat':
++            raise socket.timeout()
++        return real(base, method, path, *args, **kwargs)
++    monkeypatch.setattr(runner, 'request', timeout)
++    run, result = runner.run_playtest(scenario='FiveTurnGameplay', capture_response=True)
++    assert result['stop_reason'] == 'timeout' and result['process_cleanup']['stopped']
++    assert (run/'turns/T1/interruption.json').is_file()
++    assert (run/'after/documents.json').is_file()
++
++
++def test_G14_missing_response_evidence():
++    row = evaluate(body={'ok': True})
++    assert row['mechanical']['status'] == 'INCONCLUSIVE'
++    assert row['semantic']['status'] == 'UNKNOWN'
++    assert 'insufficient_response_evidence' in categories(row)
++
++
++def test_G15_irrelevance():
++    row = evaluate(1, response('Purple clouds dance over distant mountains.'))
++    assert 'possibly_irrelevant_response' in categories(row)
++    assert all(f['kind'] == 'heuristic_quality_concern' for f in row['findings'])
++
++
++def test_G16_repetition():
++    text = 'Rain falls over the gate district.'
++    assert 'repetitive_narration' in categories(evaluate(body=response(text), prior=[text]))
++
++
++def test_G17_state_consistent_description():
++    row = evaluate()
++    assert not row['state_diff'] and row['mechanical']['turn_delta'] == 0
++
++
++@pytest.mark.parametrize('valid', [True, False], ids=['G18_correct_rules', 'G19_incorrect_rules'])
++def test_native_rules_audit(valid):
++    from game.noncombat_resolution import resolve_noncombat_action
++    body = response()
++    body['resolution'] = resolve_noncombat_action({'scene': {'id': 'plain_yard', 'visible_facts': ['Rain falls.']}}, {}, {},
++        {'id': 'look', 'type': 'observe', 'label': 'Look around', 'prompt': 'Look around'}, raw_player_text='Look around')
++    if not valid:
++        # Contradict an engine-owned contract; never compute our own dice result.
++        body['resolution']['success'] = False
++        body['resolution']['noncombat_resolution']['success_state'] = 'success'
++    row = evaluate(body=body)
++    assert row['mechanical']['rules']['status'] == ('PASS' if valid else 'FAIL')
++    assert ('invalid_rules_adjudication' in categories(row)) is (not valid)
++
++
++def test_G20_inapplicable_dimension():
++    d = evaluate()['quality']['dimensions']['Q6']
++    assert d['status'] == 'N/A' and d['score'] is None
++
++
++def test_G21_human_review():
++    d = evaluate()['quality']['dimensions']['Q5']
++    assert d['status'] == 'REQUIRES_HUMAN_REVIEW' and d['score'] is None
++    assert {'evidence', 'method', 'confidence', 'explanation'} <= d.keys()
++
++
++def test_G22_exact_accounting(sequence):
++    run, result = sequence
++    events = g.read_events(run)
++    usage = g.accounting(events)
++    assert usage['request_count'] == result['provider_usage']['dispatched_requests'] == 6
++    assert usage['input_tokens'] == 120 and usage['output_tokens'] == 60
++    assert usage['total_tokens'] == 180
++    assert sum(t['provider_usage']['request_count'] for t in result['gameplay_turns']) == 5  # opening is separate
++
++
++def test_G23_zero_live(sequence):
++    assert sequence[1]['provider_exposure']['live_calls'] == 0
++    # Existing H15 additionally proves external socket refusal in a separate worker.
++    code = "from tools.playtest.worker import install_transport; import socket; install_transport('success', True); socket.socket().connect(('192.0.2.1',443))"
++    proc = runner.subprocess.run([runner.sys.executable, '-c', code], capture_output=True, timeout=10)
++    assert proc.returncode != 0 and b'external network access refused' in proc.stderr
++
++
++def test_G24_unauthorized_live():
++    _, result = runner.run_playtest(scenario='FiveTurnGameplay', mode='Live', capture_response=True)
++    assert result['verdict'] == 'BLOCKED' and not result['steps'] and not result['process_cleanup']['owned']
++
++
++def test_G25_complete_export(sequence):
++    run, result = sequence
++    with zipfile.ZipFile(result['evidence_zip']) as archive:
++        assert archive.testzip() is None
++        names = set(archive.namelist())
++        for path in ['reports/GAMEPLAY_REPORT.md', 'reports/result.json', 'opening/documents.json',
++                     'turns/T1/api_response.json', 'turns/T1/before/documents.json', 'turns/T1/after/documents.json',
++                     'turns/T1/evaluation.json', 'diagnostics/provider_usage.jsonl']:
++            assert path in names
++        for item in json.loads(archive.read('evidence/manifest.json'))['files']:
++            assert runner.hashlib.sha256(archive.read(item['path'])).hexdigest() == item['sha256']
++    out = runner.ROOT/'artifacts/pr_play_09'
++    out.mkdir(parents=True, exist_ok=True)
++    runner.write(out/'example_run.json', {'run': str(run), 'verdict': result['verdict'],
++                 'stop_reason': result['stop_reason'], 'scope': 'real HTTP; synthetic SDK; not live quality evidence'})
++
++
++def test_live_capture_required():
++    _, result = runner.run_playtest(scenario='FiveTurnGameplay', mode='Live', authorize_live=True)
++    assert result['verdict'] == 'BLOCKED' and not result['process_cleanup']['owned']
++
++
++def test_versioned_contract_and_bounded_turns():
++    value = runner.load_scenario('FiveTurnGameplay')
++    assert value['version'] == '1.0.0' and value['provider_request_ceiling'] == 6
++    assert runner.verify_gameplay_grounding(value) is True
++    invalid = copy.deepcopy(value); invalid['actions'][4]['required_npc'] = 'invented_person'
++    with pytest.raises(ValueError):
++        runner.verify_gameplay_grounding(invalid)
++    value['actions'][3]['timeout'] = 91
++    with pytest.raises(ValueError):
++        runner.validate_scenario(value)
++
++
++def test_unknown_rules_are_not_assumed_correct():
++    assert evaluate()['mechanical']['rules']['status'] == 'uncertain'
++
++
++def test_engine_nonmutating_contract_prevents_time_and_world_changes():
++    body = response(); body['resolution'] = {'metadata': {'authoritative_mutation': False}}
++    after = state(); after['world.json']['world_state']['flags']['quest_accepted'] = True
++    assert 'nonmutating_contract_violation' in categories(evaluate(body=body, after=after))
++
++
++def test_departed_npc_invalidates_next_action():
++    assert g.prerequisite_failure(action(1), state()) == 'Required NPC no longer present'
++
++
++def test_missing_object_invalidates_next_action():
++    assert g.prerequisite_failure(action(2), state()) == 'Required object no longer present'
+--- entry/tests/validation_coverage_registry.py
++++ current/tests/validation_coverage_registry.py
+@@ -131,13 +131,13 @@
+ REGISTRY: Final[tuple[CoverageEntry, ...]] = (
+     CoverageEntry(
+         feature_id="automated_playtest_harness",
+-        title="Isolated automated opening diagnostics and evidence export",
++        title="Isolated opening and five-turn gameplay diagnostics and evidence export",
+         owner_domain="tooling",
+         status=CoverageStatus.ACTIVE,
+         required_surfaces=frozenset({RequiredSurface.INTEGRATION_SMOKE}),
+         transcript_modules=(), behavioral_gauntlet_axes=(), manual_gauntlets=(),
+         playability_scenarios=(), unit_contract_modules=(),
+-        integration_smoke_modules=("tests/test_automated_playtest.py",),
++        integration_smoke_modules=("tests/test_automated_playtest.py", "tests/test_five_turn_gameplay.py"),
+         notes="Production HTTP, acceptance, admission and ledger owners; synthetic transport. No gameplay-quality scoring authority.",
+         optional_smoke_overlap=(),
+     ),
+--- entry/tools/validate_pr_play_09.py
++++ current/tools/validate_pr_play_09.py
+@@ -0,0 +1,84 @@
++"""PR-PLAY-09 deterministic regression, reusing established PR-PLAY selections.
++
++Runs real owned interpreter PIDs (no Windows venv redirector), restores prior
++fixed evidence sinks, and records command/exit/timeout for every selected lane.
++"""
++from pathlib import Path
++import hashlib
++import json
++import os
++import subprocess
++import sys
++import time
++
++from tools.validate_pr_play_06 import GROUPS
++from tools.playtest.runner import stop_owned
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'artifacts/pr_play_09'
++LANES = {
++    'harness': ['test_automated_playtest', 'test_validation_coverage_registry'],
++    'gameplay': ['test_five_turn_gameplay'],
++    'rules_persistence': ['test_noncombat_resolution', 'test_noncombat_runtime_integration', 'test_state_authority', 'test_activate_scene_validation_and_get_persistence'],
++    'conversation': ['test_social_interaction_authority', 'test_atgb_r1_07_correction_contract'],
++    'provider': GROUPS['provider'],
++    'diagnostics': ['test_pr_play_04_opening_integrity', 'test_pr_play_05_diagnostics', 'test_pr_play_06_opening_budget', 'test_pr_play_07_semantic_acceptance'],
++    'structured': GROUPS['structured'],
++    'opening': GROUPS['opening'],
++    'world': GROUPS['world'],
++    'export_atgb': ['test_review_handoff', 'test_atgb_infrastructure', 'test_atgb_accounting', 'test_atgb_readiness'],
++}
++
++
++def protected_hashes():
++    return {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
++            for name in ('data', 'experiments', 'game', 'static') for p in (ROOT/name).rglob('*')
++            if p.is_file() and '__pycache__' not in p.parts}
++
++
++def main():
++    OUT.mkdir(parents=True, exist_ok=True)
++    temp = ROOT/'development/tmp/pr_play_09'
++    temp.mkdir(parents=True, exist_ok=True)
++    before = protected_hashes()
++    write = lambda path, data: path.write_text(json.dumps(data, indent=2), encoding='utf-8')
++    write(OUT/'validation_protected_before.json', before)
++    # Historical tests write fixed diagnostic sinks. Restore their existing bytes.
++    backup = {p: p.read_bytes() for name in ('pr_play_04', 'pr_play_05', 'pr_play_06', 'pr_play_07', 'pr_play_08')
++              for p in (ROOT/'artifacts'/name).rglob('*') if p.is_file()}
++    results = json.loads((OUT/'regression_runs.json').read_text(encoding='utf-8')) if (OUT/'regression_runs.json').exists() else {}
++    env = dict(os.environ, PR_PLAY_DIAGNOSTIC_OUT=str(OUT/'regression_diagnostics'))
++    env['PYTHONPATH'] = os.pathsep.join([str(ROOT), *[p for p in sys.path if 'site-packages' in p]])
++    try:
++        for lane in sys.argv[1:] or LANES:
++            command = [getattr(sys, '_base_executable', sys.executable), '-u', '-m', 'pytest',
++                       *['tests/'+n+'.py' for n in LANES[lane]], '--tb=short',
++                       '--basetemp='+str(temp/(lane+'_'+str(time.time_ns()))),
++                       '--junitxml='+str(OUT/(lane+'_regression.xml'))]
++            started = time.monotonic()
++            with (OUT/(lane+'_regression.txt')).open('w', encoding='utf-8') as log:
++                proc = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT,
++                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
++                timeout = False
++                try:
++                    code = proc.wait(timeout=120)
++                except subprocess.TimeoutExpired:
++                    timeout = True
++                    stop_owned(proc, 5)
++                    code = None
++            results[lane] = {'command': command, 'exit': code, 'timeout': timeout,
++                             'seconds': round(time.monotonic()-started, 3)}
++            write(OUT/'regression_runs.json', results)
++            print(lane, code, 'timeout='+str(timeout), flush=True)
++    finally:
++        for p, content in backup.items():
++            if not p.exists() or p.read_bytes() != content:
++                p.write_bytes(content)
++        after = protected_hashes()
++        write(OUT/'protected_integrity.json', {'files': len(before), 'unchanged': before == after,
++              'changed': [k for k in before if before[k] != after.get(k)],
++              'added': sorted(set(after)-set(before)), 'after': after})
++
++
++if __name__ == '__main__':
++    main()
+--- entry/tools/report_pr_play_09.py
++++ current/tools/report_pr_play_09.py
+@@ -0,0 +1,476 @@
++"""Explicit-selection offline review package for PR-PLAY-09. Never runs gameplay."""
++from pathlib import Path
++from datetime import datetime
++from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
++import difflib
++import hashlib
++import json
++import os
++import shutil
++import subprocess
++import xml.etree.ElementTree as ET
++import zipfile
++
++from tools.build_review_handoff import build_handoff
++from tools.playtest.runner import ROOT, write
++
++O = ROOT/'artifacts/pr_play_09'
++R = ROOT/'development/campaigns/product_realization/pr_play_09'
++COMMAND = r'.\scripts\run_live_playtest.ps1 -Scenario FiveTurnGameplay -Mode Live -AuthorizeLiveProvider -CaptureResponse'
++SOURCES = ['tools/playtest/runner.py', 'tools/playtest/worker.py', 'tools/playtest/gameplay.py',
++           'tools/playtest/scenarios/FiveTurnGameplay.json', 'scripts/run_live_playtest.ps1',
++           'tests/test_five_turn_gameplay.py', 'tests/validation_coverage_registry.py',
++           'tools/validate_pr_play_09.py', 'tools/report_pr_play_09.py',
++           'docs/AUTOMATED_PLAYTEST_GUIDE.md', 'docs/NEXT_SESSION.md']
++CONFIRMATIONS = '''
++- No live provider calls or provider-connectivity probes during this pass.
++- No model changes.
++- No output-budget increases (opening normally 3000; ordinary narration normally 600).
++- No automatic retries (existing SDK=0 and host=0 controls retained).
++- No gameplay implementation changes.
++- No unauthorized gameplay-state mutations; only production endpoints changed disposable isolated stores.
++- No new persistent gameplay structures.
++- No experimental PR-EG integration.
++- Frozen ATGB baseline unchanged.
++- No secrets included; explicit file selection and configured-secret byte scan applied.
++- No commit or push performed.
++'''.strip()
++
++
++def report(name, title, body):
++    path = R/(name+'.md')
++    path.write_text(f'# {title}\n\nPR-PLAY-09 · 2026-10-30 America/New_York · evidence_scope: structural_only.\n\n'+body.strip()+'\n', encoding='utf-8')
++    return path
++
++
++def main():
++    O.mkdir(parents=True, exist_ok=True)
++    R.mkdir(parents=True, exist_ok=True)
++    results = {}
++    cases = []
++    for p in sorted(O.glob('*_regression.xml')):
++        suite = next(ET.parse(p).getroot().iter('testsuite'))
++        counts = {k: int(suite.get(k, '0')) for k in ('tests', 'failures', 'errors', 'skipped')}
++        counts['passed'] = counts['tests']-counts['failures']-counts['errors']-counts['skipped']
++        counts['failures_observed'] = [c.get('classname')+'::'+c.get('name') for c in suite if c.find('failure') is not None]
++        results[p.stem.removesuffix('_regression')] = counts
++        if p.name == 'gameplay_regression.xml':
++            cases = [{'name': c.get('name'), 'outcome': 'FAIL' if c.find('failure') is not None else 'ERROR' if c.find('error') is not None else 'PASS'} for c in suite if c.tag == 'testcase']
++    assert results['gameplay']['failures'] == results['gameplay']['errors'] == 0
++    assert results['harness']['failures'] == results['harness']['errors'] == 0
++    runs = json.loads((O/'regression_runs.json').read_text())
++    assert not any(v['timeout'] for v in runs.values())
++    passed, failed = (sum(v[k] for v in results.values()) for k in ('passed', 'failures'))
++    write(O/'test_summary.json', results)
++    write(O/'G1_G25_results.json', {'scope': 'Synthetic instrumentation controls; G1 evaluator-only, not six-request end-to-end completion', 'tests': cases})
++
++    before = json.loads((O/'protected_before.json').read_text())
++    after = {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
++             for name in ('data', 'game', 'static', 'experiments') for p in (ROOT/name).rglob('*')
++             if p.is_file() and '__pycache__' not in p.parts}
++    integrity = {'files': len(before), 'unchanged': before == after,
++                 'changed': [k for k in before if before[k] != after.get(k)], 'added': sorted(set(after)-set(before))}
++    write(O/'entry_to_exit_integrity.json', integrity)
++    assert integrity['unchanged']
++    example = Path(json.loads((O/'example_run.json').read_text())['run'])
++    result = json.loads((example/'reports/result.json').read_text())
++    assert result['provider_usage']['dispatched_requests'] == 6 and result['stop_reason'] == 'provider_budget_exhaustion'
++    assert result['provider_exposure']['live_calls'] == 0
++    target = O/'example'
++    target.mkdir(exist_ok=True)
++    for name in ('result.json', 'GAMEPLAY_REPORT.md', 'SUMMARY.md'):
++        shutil.copy2(example/'reports'/name, target/name)
++    with zipfile.ZipFile(example/'evidence/evidence.zip') as z:
++        assert z.testzip() is None
++        for item in json.loads(z.read('evidence/manifest.json'))['files']:
++            assert hashlib.sha256(z.read(item['path'])).hexdigest() == item['sha256']
++    # Preserve the full example evidence as selected uncompressed members so the
++    # standard exporter can hash each member without nested-review archives.
++    selected_example = [p for folder in ('configuration', 'baseline', 'opening', 'after', 'turns', 'diagnostics', 'reports', 'evidence')
++                        for p in (example/folder).rglob('*') if p.is_file() and p.suffix != '.zip']
++    historical = ROOT/'artifacts/atgb/automated_playtests/20261030T183848Z-5fe421902485/reports/result.json'
++    history = json.loads(historical.read_text()) if historical.exists() else None
++    historical_evidence = {'available': bool(history), 'source': str(historical.relative_to(ROOT)),
++                           'sha256': hashlib.sha256(historical.read_bytes()).hexdigest() if history else None,
++                           'opening_only': True}
++    if history:
++        historical_evidence.update({k: history[k] for k in ('provider_usage', 'opening_acceptance', 'opening_commits_observed', 'state_comparison')})
++    write(O/'historical_opening_summary.json', historical_evidence)
++
++    table = '| Lane | Passed | Failed | Errors |\n|---|---:|---:|---:|\n'+''.join(f"| {k} | {v['passed']} | {v['failures']} | {v['errors']} |\n" for k,v in results.items())
++    report('01_BASELINE_AND_EXISTING_HARNESS', '01 — Baseline and Existing Harness', f'''
++HEAD: `{(O/'revision.txt').read_text().strip()}`. Entry worktree extensively dirty:
++production, normal campaign saves, governance, old evidence and untracked harness
++files. Full entry status retained in artifacts/pr_play_09/entry_status.txt. Existing
++work was preserved; scoped diff is against entry bytes, not an assumed clean HEAD.
++
++Reviewed authorities: Development Constitution, NEXT_SESSION, PR-AA Product
++Realization portfolio/roadmap, validation evidence standard, Product Realization
++validation, review-handoff standard, state authority, testing documentation and ATGB
++benchmark specification. Reviewed PR-PLAY-04 acceptance/commit repair, -05 diagnostics,
++-06 output caps, -07 independent semantic diagnostics/capture and -08 runner/worker,
++analysis, scenarios, deterministic matrix and closeout. No new gameplay owner.
++
++Reused: runner HTTP/process lifecycle, worker SDK replacement, pinned ATGB isolation
++and hashes, production provider admission/accounting/parser/semantic/acceptance and
++persistence, existing comparator/classifier/export and standard review exporter.
++
++Historical live evidence is locally available at the path recorded in
++historical_opening_summary.json and its sibling evidence/evidence.zip. It records
++one request, 26593 input / 1724 output / 28317 total tokens, accepted structured and
++semantic opening, one commit, turn +1, log +1. This pass read that evidence; it did
++not create it or make another live call. One opening proves no subsequent-turn reliability.
++''')
++    report('02_SCENARIO_DESIGN', '02 — Scenario Design', '''
++FiveTurnGameplay v1.0.0 is pinned to frontier-gate-v1. Opening occurs once through
++/api/start_campaign after /api/new_campaign and baseline capture. It is not a player turn.
++
++| Step | Exact input | Fixture authority |
++|---|---|---|
++| T1 | I take a moment to look around the gate district. What do I notice? | scene visible_facts/opening_seed_facts |
++| T2 | I approach the gate serjeant and ask what happened to the missing patrol. | world.npcs gate_serjeant; route_change topic; scene visible_facts |
++| T3 | I examine the notice board carefully. What notices are posted? | scene.interactables notice_board; discoverable notice_patrol_route |
++| T4 | I want to investigate the missing patrol. What leads can I pursue from here? | established notices, authorized prior discoveries and NPC topics |
++| T5 | I approach the gate and try to enter the city. | Enter Cinderwatch exit targets market_quarter |
++
++The serjeant is authored in world.npcs despite a different set of scene.addressables;
++runtime recognition is tested rather than patched. Private identities and unearned
++route-clue disclosure are not assumed available. No curfew hours, prices or patrol
++fate are invented. Each action defines ID, input/category, properties, permitted and
++forbidden changes, criteria, timeout, stop conditions, subject probes and scene prerequisite.
++
++All inputs use production /api/chat, including movement. No direct resolver calls
++in the harness, injected outcomes, forced quest acceptance, rewritten failed actions,
++or invented alternatives. A refusal/check/obstacle may be legitimate. Unexpected
++pre-turn scene invalidates the remaining fixed script: PARTIAL with skipped reasons.
++No unbounded AI player exists. Changing the scenario requires a new explicit version.
++''')
++    report('03_HARNESS_IMPLEMENTATION', '03 — Harness Implementation', '''
++Modified runner.py extends the existing scenario dispatcher and opening checkpoint;
++worker.py adds synthetic SDK interpretation/narration records and two deterministic
++turn faults. gameplay.py is an observer/evaluator/report helper composed by that
++runner, not a second harness or a gameplay authority. PowerShell and Python entry
++points recognize FiveTurnGameplay. Coverage registry names the new test module.
++
++Each submitted turn waits for its HTTP response, captures state and native journal
++slice, evaluates it, then decides continuation. Before the next submission, exhausted
++request limits stop without dispatch. Token admission failures also stop. Structure,
++semantic, provider and state failures stop; quality probes may continue. All skipped
++turns receive reasons. No automatic retries or concurrently submitted actions.
++
++Turn deadlines include before/API/after capture. The scenario retains the existing
++180-second ceiling, individual request/turn cap 90 seconds, startup 30 and owned
++shutdown 5. On interruption, owned worker cleanup precedes persistent salvage;
++interruption.json and final/turn state survive where available. Missing final API
++state remains explicitly unavailable. No restart continues a spent budget.
++
++Exports include opening/, turns/Tn/{before,after,api_response,evaluation}, diagnostics
++and reports. Individual source/API captures retain 2 MiB bounds; DM text in results
++is bounded to 8192 characters with truncation metadata. Large diff values use 2048
++character previews and SHA-256; exact values remain in snapshots. No repeated full
++state blobs in result.json. Existing 32 MiB and 30-second evidence bounds remain.
++''')
++    report('04_MECHANICAL_EVALUATION', '04 — Mechanical Evaluation', '''
++Opening retains PR-PLAY-04 acceptance, exact one commit/turn/log checks and rollback
++comparison. Later turns compare preceding snapshots separately; zero turn advancement
++is allowed for nonmutating informational responses, including their logged exchanges.
++Advancing a resolved turn requires one corresponding log entry. Campaign must stay
++started; movement must match an authored permitted destination and native resolved
++transition/target. Characters, campaign configuration, combat, conditions and authored
++scene structures are forbidden mutation roots in this noncombat script. New world
++roots fail; native nonmutating contracts cannot change world, scene or turn count.
++
++HTTP, provider finish, extraction, JSON, envelope, native semantic attempts/final seal,
++nonresolution provenance and gameplay acceptance remain distinct. Failed candidate
++validation is preserved separately from final hard validation. An unvalidated response
++does not become semantic PASS from valid JSON. Missing evidence is UNKNOWN/INCONCLUSIVE.
++
++Rules checks use the native noncombat_resolution contract: required check_request
++presence and agreement between engine success_state and emitted resolution success.
++No harness dice, check DC, success or failure is invented. Absent canonical rules
++evidence stays uncertain; a recorded resolution alone is not proof of full adjudication.
++Native semantic validation supplies unsupported-claim/disclosure authority. The tool
++does not claim exhaustive hidden-information or world-mutation verification. Other
++world/time/session changes and narration versus consequences remain reviewable from
++full snapshots, resolution and native diagnostics; mutation authority beyond the
++explicit checks is REQUIRES_HUMAN_REVIEW, not a generalized state-authority proof.
++
++Findings distinguish confirmed mechanical, confirmed semantic, heuristic quality,
++scenario limitation and unknown. Legitimate refusal and blocked movement controls
++pass technical checks. Earliest mechanical/semantic/quality findings are separate,
++linked to input, response, source, journal and comparison. No root cause is invented.
++''')
++    report('05_NARRATIVE_QUALITY_EVALUATION', '05 — Narrative-Quality Evaluation', '''
++Rubric pr-play-09-quality-v1 covers Q1 responsiveness, Q2 grounding, Q3 continuity,
++Q4 actionability, Q5 narrative quality, Q6 agency/consequences. Human scale:
++0 complete failure, 1 major deficiency, 2 partially adequate, 3 good, 4 strong.
++
++Every dimension has score/status, response evidence, method, confidence and explanation.
++Automated evidence cannot justify a numerical narrative grade: scores remain null,
++status REQUIRES_HUMAN_REVIEW. Q6 is N/A for simple observation/posted-information
++description; no arbitrary zero. Human engagement, dialogue naturalness, believability
++and pacing remain unscored. A future reviewer may populate supported judgments.
++
++Deterministic probes: response existence, exact known generic marker and exact repeat.
++Subject-word matching and repetition-as-poor-quality are explicitly heuristic. Missing
++subject words cannot establish irrelevance; a refused answer is not automatically a
++defect. No keyword-derived narrative score or global quality PASS is generated.
++QualityReviewer is an interface for future optional assessment; no live judge/client
++or extra grading call is implemented. Mechanical verdict and quality concerns stay separate.
++
++The example flags repetition at T4 and a possible relevance concern on the serjeant
++clarification. These originate in synthetic SDK control records; they are not a live
++product diagnosis. Five completed API submissions would still not prove five meaningful
++interactions. The exported assessment says NOT_ESTABLISHED for this budget-stopped run.
++''')
++    feasibility = '''
++The hard ceiling is six provider requests total: opening plus whatever production
++operations each action actually needs. Existing atomic admission and cumulative
++ledger reconciliation remain authoritative. The worker disables SDK/host retries,
++forbids connectivity probes, preserves normal routing/model selection and per-operation
++output limits. No provider escalation/retry path is introduced. All operation records
++retain model/purpose/owner, count, input/output/total tokens, latency, status and configured
++zero retry count. Missing usage/latency stays null. Application latency is separate.
++
++Aggregate ceilings remain 200000 input / 20000 output / 220000 total; any stricter
++inherited ceiling wins. Effective limits print before worker launch. Opening normally
++reserves up to 3000 output, ordinary narration 600; no allowance is increased. Existing
++interpretation reservations also count. A successful historical opening used 28317
++tokens; that is evidence, not a forecast of five additional turns or monetary cost.
++No currency estimate is supplied.
++
++Live interpretation calls request_interpretation; resolved actions can separately
++call gm.call_gpt. The normal-pipeline synthetic example records opening=1, T1=1,
++T2=1, T3=2, T4=1: six requests, 120/60/180 synthetic usage. T5 is skipped before
++submission. The T2 fixture was clarified rather than forcing an NPC success. Five
++actions each using interpretation+narration would expose eleven calls including
++opening; this illustrates feasibility, not a guaranteed upper bound for every optional
++production path. A complete five-turn run inside six cannot be guaranteed.
++
++Readiness is conditional for a six-request diagnostic that may stop early. Keep the
++hard limit. External reviewers may instead authorize a separately designed budget
++scope after reviewing these native operation records. No larger ceiling or bypass
++is implemented or authorized here. Do not restart the process to finish the script.
++'''
++    report('06_PROVIDER_SAFETY_AND_PERFORMANCE', '06 — Provider Safety and Performance', feasibility)
++    (O/'provider_budget_feasibility.md').write_text(feasibility.strip()+'\n', encoding='utf-8')
++    matrix = '''
++| G | Control | Scope |
++|---|---|---|
++| G1 | Five successful evaluator records; final PASS while quality remains human-review | evaluator positive control only |
++| G2 | Failed opening, no Turn 1 | HTTP |
++| G3 | Turn 2 provider exception, stop with journal | HTTP + native-record control |
++| G4 | Turn 3 malformed interpretation; invalid narration envelope | HTTP + native-record control |
++| G5 | Generic semantic nonresolution classified separately | native-record/heuristic control |
++| G6 | Legitimate NPC refusal not automatically failed | evaluator |
++| G7 | Unsupported world claim rejected by native hard-validation evidence | evaluator of native contract |
++| G8 | Forbidden character/new-world mutation | snapshot comparison |
++| G9 | Authored movement agrees with native transition | evaluator |
++| G10 | Supported blocked movement accepted | evaluator |
++| G11 | Next action invalidated by scene divergence | HTTP read-side fault; no persistent injection |
++| G12 | Six admissions exhausted; T5 never submitted | HTTP |
++| G13 | Turn timeout, worker stopped, interrupted state exported | HTTP controller fault |
++| G14 | Missing text/semantic evidence stays uncertain | evaluator |
++| G15 | Off-topic text is heuristic concern, not confirmed defect | evaluator |
++| G16 | Exact repeated narration is a concern | evaluator |
++| G17 | Descriptive response changes no state/turn | evaluator |
++| G18 | Canonical engine noncombat result consistent | real resolver-derived fixture; evaluator |
++| G19 | Contradictory engine outcome detected | real resolver-derived fixture with negative control |
++| G20 | Inapplicable Q6 is N/A, score null | rubric |
++| G21 | Narrative Q5 requires human review, no score invented | rubric |
++| G22 | Exact ledger accounting, opening versus turns | HTTP |
++| G23 | Zero live; external connection refused | worker subprocess + HTTP |
++| G24 | Unauthorized Live blocked before worker | controller |
++| G25 | Transcript/state/API/diagnostics/hash-complete export | HTTP ZIP verification |
++'''
++    report('07_DETERMINISTIC_VALIDATION', '07 — Deterministic Validation', f'''
++{table}
++
++Completed selected scope: **{passed} passed / {failed} failed / zero errors or timeouts**.
++G1–G25 and additional safeguards are covered by {results['gameplay']['passed']} passing tests.
++G1 proves positive evaluator behavior, not an end-to-end successful five-turn run under
++the six-request production limit. The real HTTP example completes four turns and stops
++for budget. Do not promote fixture controls to live-quality or generalization claims.
++
++{matrix}
++
++Six failures match the pre-existing PR-PLAY-08 baseline: three rich-opening assertions,
++one saved stew-price conversation assertion, and two stale source-attestation readiness
++assertions. Exact names/text remain in JUnit/logs. Production sources and failing test
++owners are unchanged in this pass; no unrelated repairs or threshold changes. No new
++regression demonstrated in completed lanes. Initial restricted-localhost startup was
++environment-blocked; deterministic lanes ran with localhost access, external provider
++transport denied. Earlier instrument failures (oversized duplicated state export and
++pytest's inherited interpretation-disable flags) were tooling defects corrected before
++the final runs; they do not imply production defects.
++
++Relevant lanes include prior harness, opening/diagnostics/budgets, structured/semantic,
++world progression, conversation/ATGB interpretation, canonical noncombat rules,
++state authority/persistence and evidence export. Commands/exits/timing are recorded in
++regression_runs.json. This is no full-suite claim. No live benchmark or independent
++held-out generalization was run. Entry-to-exit {len(before)} protected hashes match.
++''')
++    readiness = f'''
++**B — Conditionally ready for a controlled six-request diagnostic; complete five-turn
++execution is not guaranteed.** Do not label this A or claim live AI-DM competence.
++
++Future exact command, only after external review and separate live authorization:
++
++```powershell
++{COMMAND}
++```
++
++Preflight: pinned fixture present/hash-verified; five authored inputs; fresh isolated
++store and worker binding/ownership attestation; scenario/version/evidence paths saved;
++capture mandatory; six-request/aggregate/inherited ceilings displayed and enforced;
++SDK/host retry suppression attested; ordinary interpretation/expression flags required;
++normal provider routing/output caps preserved; stop conditions and owned cleanup active.
++Credentials are checked only for presence through normal configuration, never probed,
++printed or included. Deterministic faults cannot be selected in Live mode.
++
++Expected maximum live exposure: six provider dispatches, possibly fewer, no retries.
++Normal interpretation and narration can use more than one dispatch per turn, so budget
++may stop the script. Token/latency telemetry is recorded, not a fabricated dollar quote.
++Exports: reports/result.json, reports/GAMEPLAY_REPORT.md, turn snapshots/diffs/native
++diagnostics and evidence/evidence.zip with SHA-256 manifest. Browser remains NOT_TESTED.
++
++Remaining limitations: no actual live five-turn transcript or human quality review;
++full rules/disclosure/mutation authority beyond recorded native evidence is uncertain;
++six inherited baseline regressions/source attestations remain. ATGB baseline/scores and
++existing experimental integration restrictions remain unchanged. Review the feasibility
++report before deciding whether a potentially partial six-request test is useful.
++This command was not executed during this implementation pass.
++'''
++    report('08_LIVE_TEST_READINESS', '08 — Live-Test Readiness', readiness)
++    (O/'live_execution_instructions.md').write_text(readiness.strip()+'\n', encoding='utf-8')
++    final = report('09_FINAL_VERDICT_AND_HANDOFF', '09 — Final Verdict and Handoff', f'''
++**B — Conditionally ready.** The scoped five-turn harness extension exists and its
++{results['gameplay']['passed']} deterministic instrumentation checks pass. Relevant completed lanes:
++{passed} passed / six pre-existing failures. No full live five-turn success established.
++The real SDK-stubbed HTTP example exhausts six requests after four turns and safely
++skips T5. Quality remains separately REQUIRES_HUMAN_REVIEW. The G1 positive evaluator
++control is not evidence of end-to-end six-request feasibility. No production repair.
++
++One recommended next action: external review of this completion package, including
++the budget feasibility analysis. Do not execute a live test or expand budgets in this pass.
++If separately authorized later, the exact six-request diagnostic command is:
++
++```powershell
++{COMMAND}
++```
++
++Maximum exposure six dispatches, zero retries, unchanged configured models/output
++allowances and bounded aggregate tokens. It may stop before five turns; a larger scope
++requires new explicit authorization. No unbounded player/judge or provider escalation.
++
++Behavioral Evidence: example/result.json and GAMEPLAY_REPORT.md plus the complete
++selected example store evidence identify four captured synthetic player turns, no live
++turns. Representative infrastructure success: grounded nonmutating observation.
++Representative concern: T2 clarification and T4 repeated response. These are synthetic
++controls, not actual provider-performance findings; no human review or evaluator-policy
++change, no observed human/evaluator disagreement, no independent generalization or
++ATGB result. Rendered UI, actual meaningful five-turn play, and live adequacy remain unproven.
++
++{CONFIRMATIONS}
++
++Stop after generating the timestamped CURRENT_REVIEW ZIP. Await external review.
++''')
++
++    # Concise current-session orientation; older dirty content is retained verbatim.
++    handoff = ROOT/'docs/NEXT_SESSION.md'
++    original = (O/'entry_sources/docs/NEXT_SESSION.md').read_text(encoding='utf-8')
++    intro = f'''## Latest gameplay tooling pass — PR-PLAY-09
++
++2026-10-30: **B — Conditionally ready for a bounded six-request diagnostic.**
++FiveTurnGameplay v1.0.0 extends tools/playtest and scripts/run_live_playtest.ps1:
++opening prerequisite then five fixed intents through production /api/chat; sequential,
++no retry, per-turn evidence/state/native validation/accounting and human-review rubric.
++Normal-pipeline SDK-stubbed HTTP example uses six requests through four turns, then
++skips T5. Complete five-turn execution within six is not guaranteed; no pipeline bypass.
++G1 is evaluator-only positive control, not end-to-end feasibility. {results['gameplay']['passed']} new
++instrumentation tests pass; relevant lanes {passed} passed/six matching pre-existing failures.
++{len(before)} protected data/game/static/experiment hashes unchanged. No production repair,
++live/provider-connectivity calls, model/output increase, retries, new gameplay structures,
++PR-EG integration, frozen ATGB edit, secrets, commit or push. Prior dirty work preserved.
++Quality, broader authority and actual live meaningful play remain unproven.
++
++Nine reports: development/campaigns/product_realization/pr_play_09/.
++Evidence and feasibility: artifacts/pr_play_09/. Guide: docs/AUTOMATED_PLAYTEST_GUIDE.md.
++Review: handoff/CURRENT_REVIEW.md and timestamped ZIP. Recommended next action:
++external review only; exact separately authorized six-request Live command is in
++report 08. Stop after review ZIP; no next live action is authorized by this handoff.
++
++'''
++    handoff.write_text(original.replace('Updated 2026-10-29 / PR-PLAY-08.', 'Updated 2026-10-30 / PR-PLAY-09.').replace('## Latest tooling pass — PR-PLAY-08', intro+'## Latest tooling pass — PR-PLAY-08', 1), encoding='utf-8')
++
++    diff_parts = []
++    snapshots = []
++    for name in SOURCES:
++        source = ROOT/name
++        old = O/'entry_sources'/name
++        diff_parts.extend(difflib.unified_diff(old.read_text(encoding='utf-8').splitlines(True) if old.exists() else [],
++                           source.read_text(encoding='utf-8').splitlines(True), fromfile='entry/'+name, tofile='current/'+name))
++        dest = O/'source_snapshots'/name
++        dest.parent.mkdir(parents=True, exist_ok=True)
++        shutil.copy2(source, dest)
++        snapshots.append(dest)
++    (O/'source_diff.patch').write_text(''.join(diff_parts), encoding='utf-8')
++    (O/'exit_status.txt').write_text(subprocess.run(['git', 'status', '--short'], cwd=ROOT, capture_output=True, text=True).stdout, encoding='utf-8')
++    support = [*map(lambda n: ROOT/n, SOURCES), *snapshots, *sorted(R.glob('*.md')),
++               *sorted(p for p in O.iterdir() if p.is_file() and p.suffix in {'.json', '.md', '.txt', '.patch', '.xml'} and p.name != 'review_config.json'),
++               *sorted(target.glob('*')), *selected_example]
++    support = list(dict.fromkeys(support))
++    # Read configured secrets only in memory; never save environment or secret values.
++    from dotenv import dotenv_values
++    values = {**dotenv_values(ROOT/'.env'), **os.environ}
++    secrets = [v.encode() for k,v in values.items() if isinstance(v, str) and len(v)>8
++               and any(x in k.lower() for x in ('api_key', 'secret', 'password', 'credential'))]
++    for p in support:
++        assert not any(secret in p.read_bytes() for secret in secrets), 'Configured secret detected in selected review file'
++    config = {
++        'campaign_id': 'pr_play_09', 'campaign_name': 'PR-PLAY-09 — Automated Five-Turn Gameplay Smoke Test',
++        'campaign_date': '2026-10-30', 'purpose': 'Offline bounded harness extension; stop before live execution.',
++        'objective_status': 'B — Conditionally ready; six-request diagnostic may stop before five turns',
++        'executive_summary': f'{results["gameplay"]["passed"]} gameplay instrument checks pass. {passed} passing checks and six matching pre-existing failures across relevant lanes. Synthetic HTTP example completes four turns within six requests; fifth skipped. No live calls or production changes.',
++        'primary_report': final.relative_to(ROOT).as_posix(),
++        'supporting_files': [{'path': p.relative_to(ROOT).as_posix(), 'role': 'source' if p in [ROOT/n for n in SOURCES] else 'evidence', 'why': 'Explicit PR-PLAY-09 source, report, provenance or deterministic evidence.'} for p in support],
++        'changes': {'production': [], 'tooling': ['Existing runner/worker extended with bounded five-action scenario, native evidence evaluation and transcript export.'],
++                    'validation': ['G1–G25 controls, coverage registry and bounded regression lanes.'],
++                    'documentation': ['Nine reports, guide and current session handoff.'], 'generated_artifacts': ['Selected transcripts, JUnit/logs, source diff/status and protected hashes.']},
++        'testing': {'focused': f'{results["gameplay"]["passed"]} gameplay and {results["harness"]["passed"]} prior harness/registry checks passed.',
++                    'broader': f'{passed} passed / six matching pre-existing failures; no timeout or error.',
++                    'full_suite': 'Not run.', 'runtime_validation': 'Owned localhost HTTP and production pipeline, synthetic SDK and external socket denial.',
++                    'model_runtime_boundary': 'Zero live provider/connectivity operations.', 'new_regressions': 'None demonstrated in completed scope.',
++                    'pre_existing_failures': 'Three rich-opening, one stew-price conversation and two stale source-attestation assertions.'},
++        'decisions_requiring_human_review': ['External review of conditional readiness and six-request feasibility before any separately authorized Live invocation.'],
++        'known_problems': {'campaign_specific': ['No end-to-end successful five-turn execution under six requests demonstrated; G1 is evaluator-only. Narrative quality and complete authority need human review.'],
++                           'pre_existing': ['Six baseline failures; stale ATGB source attestations are not rewritten.']},
++        'does_not_prove': ['Live meaningful five-turn play, rendered UI, conversational competence, independent generalization or ATGB performance.'],
++        'recommended_next_step': 'External review only; do not execute the future Live command in this pass.',
++        'self_contained_review_test': 'Nine reports, scenario/source/diff, G1–G25/JUnit/regression evidence, complete selected synthetic HTTP example, feasibility and future command.',
++    }
++    write(O/'review_config.json', config)
++    build_handoff(config, archive_history=False)
++    try:
++        stamp = datetime.now(ZoneInfo('America/New_York')).strftime('%Y%m%d-%H%M%S')
++    except ZoneInfoNotFoundError:
++        # Stock Windows Python may have no IANA database. Use the Windows zone
++        # database explicitly, independent of the host's selected local zone.
++        stamp = subprocess.run(['powershell', '-NoProfile', '-Command',
++            "[TimeZoneInfo]::ConvertTimeBySystemTimeZoneId([DateTime]::UtcNow, 'Eastern Standard Time').ToString('yyyyMMdd-HHmmss')"],
++            check=True, capture_output=True, text=True, timeout=10).stdout.strip()
++    archive = ROOT/'handoff'/f'CURRENT_REVIEW({stamp}).zip'
++    shutil.copy2(ROOT/'handoff/CURRENT_REVIEW.zip', archive)
++    with zipfile.ZipFile(archive) as z:
++        assert z.testzip() is None
++        for name in z.namelist():
++            assert not any(secret in z.read(name) for secret in secrets), 'Configured secret detected in review archive'
++        for p in sorted(R.glob('*.md')):
++            assert any(name.endswith(p.relative_to(ROOT).as_posix()) for name in z.namelist())
++    print(json.dumps({'review_zip': str(archive), 'bytes': archive.stat().st_size, 'tests_passed': passed,
++                      'preexisting_failures': failed, 'protected_files': len(before), 'protected_unchanged': True,
++                      'live_calls': 0, 'verdict': 'B — Conditionally ready'}, indent=2))
++
++
++if __name__ == '__main__':
++    main()
+--- entry/docs/AUTOMATED_PLAYTEST_GUIDE.md
++++ current/docs/AUTOMATED_PLAYTEST_GUIDE.md
+@@ -60,7 +60,7 @@
+ This opens once, observes the scene, verifies the started flag, and captures state.
+ The dispatcher also defines NPC interaction, examination, rules-action, and
+ movement steps using existing chat/action request contracts. There is no autonomous
+-player, unbounded scenario loop, or live multi-turn mode. Future scenarios require
++player, unbounded scenario loop, or unbounded agent. FiveTurnGameplay adds bounded multi-turn execution (see below). Future scenarios require
+ reviewed request fixtures, appropriate invariants, and bounded limits.
+ 
+ ## Live opening — only after separate review and authorization
+@@ -175,3 +175,80 @@
+ 
+ Lane logs, JUnit XML, exact commands, and preservation hashes are written under
+ `artifacts/pr_play_08/`. This command runs no live provider operations.
++
++
++## PR-PLAY-09 — Five-turn gameplay smoke test v1.0.0
++
++```powershell
++.\scripts\run_live_playtest.ps1 -Scenario FiveTurnGameplay -Mode Deterministic -CaptureResponse
++```
++
++The existing runner opens once, then submits five fixed player intents through
++`POST /api/chat`: observe the gate district, speak to the gate serjeant, examine
++the notice board, ask for patrol leads, and attempt to enter Cinderwatch. The
++pinned scene/world support these entities. Opening is a prerequisite, not Turn 1.
++No outcome is inserted into state by the harness. Synthetic SDK records remain
++subject to the production interpretation, semantic and resolution owners.
++
++Each turn preserves player input, API response, diagnostic journal slice, native
++validation, accounting, state snapshots and a bounded diff in `turns/Tn/`.
++`opening/` preserves the accepted-opening checkpoint. `reports/GAMEPLAY_REPORT.md`
++is the transcript; `reports/result.json` separates mechanical, semantic and quality
++results, attempted/completed/skipped turns and earliest findings. Large diff values
++have previews and hashes; full snapshots remain available. The existing 32 MiB
++export bound applies. Export failure makes the result INCONCLUSIVE.
++
++Q1–Q6 use a documented 0–4 human-review rubric. Unscored dimensions are
++REQUIRES_HUMAN_REVIEW; inapplicable dimensions are N/A. Subject matching and
++exact repetition are only probes, never numerical narrative-quality judgments.
++No live judge exists. Native accepted_response and hard-validation evidence are
++recorded without rerunning a competing semantic or rules authority. Unknown
++rules, hidden disclosure, or unexplained state changes still require review.
++
++### Conditional live readiness — no authorization granted by this guide
++
++After external review and separate explicit authorization only:
++
++```powershell
++.\scripts\run_live_playtest.ps1 -Scenario FiveTurnGameplay -Mode Live -AuthorizeLiveProvider -CaptureResponse
++```
++
++Maximum six requests, zero SDK/host retries, existing routing and output limits,
++aggregate token limits at most 200000 input / 20000 output / 220000 total; stricter
++inherited limits win. The command displays effective ceilings before the worker
++starts. No connectivity probe is sent. Do not restart a spent session to continue.
++Live without invocation authorization or response capture is blocked. Disabled
++interpretation/expression flags block the five-turn Live preflight rather than
++silently selecting a cheaper pipeline.
++
++Completion within six requests cannot be guaranteed: interpretation and narration
++are distinct operations. The normal-pipeline synthetic example uses six requests
++through Turn 4 and skips Turn 5. A simple two-operation-per-action path would
++expose eleven operations including opening, before any other optional operation;
++this is a feasibility illustration, not an authorized ceiling or a prediction.
++The existing six-request admission remains the hard limit. A separately reviewed
++six-request diagnostic may be justified, but it may stop before five turns.
++Any larger budget requires a new authorization and scoped change; no such command
++is provided here. No live execution occurred during PR-PLAY-09 implementation.
++
++Preflight verifies pinned fixture hashes, isolated storage binding/owned PID,
++normal production configuration, capture, bounded budgets, retry suppression,
++output paths and stop conditions. Missing next-scene prerequisites produce recorded
++scenario divergence/PARTIAL; legitimate refusal or blocked movement is not itself
++an invariant failure. State/structure/semantic/provider errors stop execution;
++heuristic quality concerns may continue. Timeouts terminate the owned worker and
++preserve interrupted-turn/final persistent evidence. No automatic retries or
++alternative player actions are generated.
++
++Deterministic turn faults may be selected with the Python entry point:
++`--fixture-response turn2_exception` or `--fixture-response turn3_invalid_json`.
++They cannot be used in Live mode. Run the full bounded offline regression:
++
++```powershell
++.\.venv\Scripts\python.exe -m tools.validate_pr_play_09
++```
++
++G1 is an evaluator positive control; it does not prove six-request end-to-end
++completion. G2/G3/G4/G11/G12/G13/G22/G23/G24/G25 include owned HTTP runs. Other
++G controls exercise recorded native contracts directly. No ATGB corpus scores,
++live adequacy, rendered-UI or broad conversational competence are established.
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -1,8 +1,29 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-29 / PR-PLAY-08.
++Ashen Thrones — Product Realization. Updated 2026-10-30 / PR-PLAY-09.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest gameplay tooling pass — PR-PLAY-09
++
++2026-10-30: **B — Conditionally ready for a bounded six-request diagnostic.**
++FiveTurnGameplay v1.0.0 extends tools/playtest and scripts/run_live_playtest.ps1:
++opening prerequisite then five fixed intents through production /api/chat; sequential,
++no retry, per-turn evidence/state/native validation/accounting and human-review rubric.
++Normal-pipeline SDK-stubbed HTTP example uses six requests through four turns, then
++skips T5. Complete five-turn execution within six is not guaranteed; no pipeline bypass.
++G1 is evaluator-only positive control, not end-to-end feasibility. 33 new
++instrumentation tests pass; relevant lanes 586 passed/six matching pre-existing failures.
++471 protected data/game/static/experiment hashes unchanged. No production repair,
++live/provider-connectivity calls, model/output increase, retries, new gameplay structures,
++PR-EG integration, frozen ATGB edit, secrets, commit or push. Prior dirty work preserved.
++Quality, broader authority and actual live meaningful play remain unproven.
++
++Nine reports: development/campaigns/product_realization/pr_play_09/.
++Evidence and feasibility: artifacts/pr_play_09/. Guide: docs/AUTOMATED_PLAYTEST_GUIDE.md.
++Review: handoff/CURRENT_REVIEW.md and timestamped ZIP. Recommended next action:
++external review only; exact separately authorized six-request Live command is in
++report 08. Stop after review ZIP; no next live action is authorized by this handoff.
+ 
+ ## Latest tooling pass — PR-PLAY-08
+ 

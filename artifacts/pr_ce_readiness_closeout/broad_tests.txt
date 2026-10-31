@@ -1,0 +1,24 @@
+PR-CE broad deterministic regression
+Command:
+  .venv\Scripts\python.exe -m pytest -q --tb=line --override-ini=addopts= -o faulthandler_timeout=45 --junitxml=artifacts/pr_ce_readiness_closeout/broad.xml --basetemp=artifacts/pr_ce_readiness_closeout/pytest_broad
+
+Live provider calls: 0
+Completed: yes
+Elapsed: 590.52s (0:09:50)
+Exit code: 1
+
+passed: 7431
+failed: 202
+skipped: 99
+timed out: 0
+interrupted: 0
+warnings: 1 (StarletteDeprecationWarning on fastapi.testclient / httpx)
+socketpair / accept hang frames: 0
+
+Collected total matches 7431 + 202 + 99 = 7732.
+
+The suite ran past the tests that stalled in PR-CD. Failures are assertion failures across 65 files. The largest clusters are tests/test_turn_pipeline_shared.py (33), tests/test_explicit_world_action_social_lock_override.py (9), and several exploration, investigation, and HTTP narration files (7 each). The four social-relevance HTTP tests are included.
+
+This run does not establish that all 202 failures were introduced by the subjective-classifier edit. The four social HTTP narration failures reproduced before that edit. No failure in this run was a TestClient portal hang.
+
+Broad regression is not claimed as passed.

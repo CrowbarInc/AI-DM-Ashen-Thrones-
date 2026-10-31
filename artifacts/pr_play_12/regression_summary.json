@@ -1,0 +1,280 @@
+{
+  "headline": {
+    "regression_passed": 878,
+    "regression_failed": 14,
+    "failure_classification": {
+      "preexisting failure": 14,
+      "environment-blocked": 0,
+      "unresolved": 0,
+      "new regression": 0
+    },
+    "focused_passed": 27,
+    "focused_total": 27,
+    "baseline": "878 passing / 14 failures; same PR11 lane selections",
+    "full_suite": false,
+    "ATGB_benchmark": false
+  },
+  "lanes": {
+    "harness": {
+      "source": "harness_local.xml",
+      "successful_same_case_supplement": [],
+      "tests": 35,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 35,
+      "baseline_failures": 0
+    },
+    "gameplay": {
+      "source": "gameplay_complete.xml",
+      "successful_same_case_supplement": [],
+      "tests": 33,
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 33,
+      "baseline_failures": 0
+    },
+    "rules_persistence": {
+      "source": "rules_persistence_complete.xml",
+      "successful_same_case_supplement": [],
+      "tests": 53,
+      "passed": 53,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 53,
+      "baseline_failures": 0
+    },
+    "conversation": {
+      "source": "conversation_complete.xml",
+      "successful_same_case_supplement": [],
+      "tests": 35,
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 35,
+      "baseline_failures": 0
+    },
+    "provider": {
+      "source": "provider_final.xml",
+      "successful_same_case_supplement": [],
+      "tests": 89,
+      "passed": 88,
+      "failed": 1,
+      "skipped": 0,
+      "failure_cases": [
+        "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+      ],
+      "baseline_passed": 88,
+      "baseline_failures": 1
+    },
+    "diagnostics": {
+      "source": "diagnostics_final.xml",
+      "successful_same_case_supplement": [
+        "tests.test_pr_play_06_opening_budget::test_opening_fixtures[minimal]",
+        "tests.test_pr_play_07_semantic_acceptance::test_capture_requires_controlled_scope[diagnostics]"
+      ],
+      "tests": 81,
+      "passed": 81,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 81,
+      "baseline_failures": 0
+    },
+    "structured": {
+      "source": "structured_final.xml",
+      "successful_same_case_supplement": [],
+      "tests": 61,
+      "passed": 60,
+      "failed": 1,
+      "skipped": 0,
+      "failure_cases": [
+        "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid"
+      ],
+      "baseline_passed": 60,
+      "baseline_failures": 1
+    },
+    "opening": {
+      "source": "opening_complete.xml",
+      "successful_same_case_supplement": [],
+      "tests": 26,
+      "passed": 23,
+      "failed": 3,
+      "skipped": 0,
+      "failure_cases": [
+        "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+        "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+        "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening"
+      ],
+      "baseline_passed": 23,
+      "baseline_failures": 3
+    },
+    "world": {
+      "source": "world_short.xml",
+      "successful_same_case_supplement": [
+        "tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[0]",
+        "tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[1]",
+        "tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[2]",
+        "tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[3]"
+      ],
+      "tests": 123,
+      "passed": 123,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 123,
+      "baseline_failures": 0
+    },
+    "export_atgb": {
+      "source": "export_atgb_short.xml",
+      "successful_same_case_supplement": [
+        "tests.test_atgb_infrastructure::test_provider_disabled_host_uses_chat_and_isolates_state"
+      ],
+      "tests": 56,
+      "passed": 55,
+      "failed": 1,
+      "skipped": 0,
+      "failure_cases": [
+        "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage"
+      ],
+      "baseline_passed": 55,
+      "baseline_failures": 1
+    },
+    "overlay": {
+      "source": "overlay_complete.xml",
+      "successful_same_case_supplement": [],
+      "tests": 88,
+      "passed": 88,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 88,
+      "baseline_failures": 0
+    },
+    "hidden_faction": {
+      "source": "hidden_faction_complete.xml",
+      "successful_same_case_supplement": [],
+      "tests": 78,
+      "passed": 78,
+      "failed": 0,
+      "skipped": 0,
+      "failure_cases": [],
+      "baseline_passed": 78,
+      "baseline_failures": 0
+    },
+    "claim_authority": {
+      "source": "claim_authority_final.xml",
+      "successful_same_case_supplement": [],
+      "tests": 134,
+      "passed": 126,
+      "failed": 8,
+      "skipped": 0,
+      "failure_cases": [
+        "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+        "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+        "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+        "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+        "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+        "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+        "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+        "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing"
+      ],
+      "baseline_passed": 126,
+      "baseline_failures": 8
+    }
+  },
+  "failures": [
+    {
+      "lane": "provider",
+      "test": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "classification": "preexisting failure",
+      "message": "assert False\ntests\\test_provider_accounting_integrity.py:308: in test_readiness_acceptance_is_not_live_execution\n    assert live_accounting_readiness(ROOT)[\"ok\"]\nE   assert False"
+    },
+    {
+      "lane": "structured",
+      "test": "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid",
+      "classification": "preexisting failure",
+      "message": "assert \"can't say what the stew costs\" in 'Tavern Runner mutters, \"Word is, hot stew and rumors for coin.\"'\ntests\\test_pr_br_continuation18_immutable_boundary.py:561: in test_raw_chat_stub_preserves_valid_and_contains_invalid\n    assert \"can't say what the stew costs\" in visible\nE   assert \"can't say what the stew costs\" in 'Tavern Runner mutters, \"Word is, hot stew and rumors for coin.\"'"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "classification": "preexisting failure",
+      "message": "assert \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. A... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"\ntests\\test_start_campaign_api.py:174: in test_start_campaign_emits_opening_and_sets_started\n    assert response_text in RICH_OPENING_GPT_RESPONSE[\"player_facing_text\"]\nE   assert \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. A... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\""
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "classification": "preexisting failure",
+      "message": "assert 781 > 800\n +  where 781 = <built-in method get of dict object at 0x00000261A87134C0>('post_final_emission_gate_text_len', 0)\n +    where <built-in method get of dict object at 0x00000261A87134C0> = {'accepted_emitted_equality': {'attempted_text': \"Rain spatters soot-dark stone across Cinderwatch's eastern gate whil...table': True, ...}, 'accepted_response_provenance': 'initial_generation', 'canonical_gm_object_id': 2618460632256, ...}.get\ntests\\test_start_campaign_api.py:258: in test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text\n    assert emission_debug.get(\"post_final_emission_gate_text_len\", 0) > 800\nE   assert 781 > 800\nE    +  where 781 = <built-in method get of dict object at 0x00000261A87134C0>('post_final_emission_gate_text_len', 0)\nE    +    where <built-in method get of dict object at 0x00000261A87134C0> = {'accepted_emitted_equality': {'attempted_text': \"Rain spatters soot-dark stone across Cinderwatch's eastern gate whil...table': True, ...}, 'accepted_response_provenance': 'initial_generation', 'canonical_gm_object_id': 2618460632256, ...}.get"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "classification": "preexisting failure",
+      "message": "assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\"\ntests\\test_start_campaign_api.py:287: in test_start_campaign_promotes_valid_upstream_prepared_scene_opening\n    assert response_text in RICH_OPENING_GPT_RESPONSE[\"player_facing_text\"]\nE   assert \"You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.\" in \"Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush.\""
+    },
+    {
+      "lane": "export_atgb",
+      "test": "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage",
+      "classification": "preexisting failure",
+      "message": "assert False\ntests\\test_atgb_accounting.py:134: in test_readiness_verifies_repaired_dispatch_coverage\n    assert audit[\"ok\"]\nE   assert False"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+      "classification": "preexisting failure",
+      "message": "AssertionError: The damage alone doesn't identify who worked on the lock.\nassert False is True\ntests\\test_pr_br_claim_control_slice2.py:146: in test_false_positive_controls_remain_speakable\n    assert _audit(text, decision)[\"hard_valid\"] is True, text\nE   AssertionError: The damage alone doesn't identify who worked on the lock.\nE   assert False is True"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+      "classification": "preexisting failure",
+      "message": "tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.\nsite: game.gm.call_gpt\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\main.py\", line 372, in _main\n    config.hook.pytest_runtestloop(session=session)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\main.py\", line 396, in pytest_runtestloop\n    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 118, in pytest_runtest_protocol\n    runtestprotocol(item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 137, in runtestprotocol\n    reports.append(call_and_report(item, \"call\", log))\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 244, in call_and_report\n    call = CallInfo.from_call(\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 353, in from_call\n    result: TResult | None = func()\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 245, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 179, in pytest_runtest_call\n    item.runtest()\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\python.py\", line 1720, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\python.py\", line 166, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\tests\\test_realization_provenance.py\", line 105, in test_call_gpt_provider_failure_metadata_has_provider_family\n    out = gm.call_gpt([{\"role\": \"user\", \"content\": \"hello\"}])\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\tests\\helpers\\live_model_guard.py\", line 73, in _blocked_call\n    raise LiveModelCallForbidden(\"game.gm.call_gpt\")\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\tests\\helpers\\live_model_guard.py\", line 30, in __init__\n    stack = \"\".join(traceback.format_stack(limit=25))\ntests\\test_realization_provenance.py:105: in test_call_gpt_provider_failure_metadata_has_provider_family\n    out = gm.call_gpt([{\"role\": \"user\", \"content\": \"hello\"}])\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests\\helpers\\live_model_guard.py:73: in _blocked_call\n    raise LiveModelCallForbidden(\"game.gm.call_gpt\")\nE   tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.\nE   site: game.gm.call_gpt\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\main.py\", line 372, in _main\nE       config.hook.pytest_runtestloop(session=session)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\nE       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\nE       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\nE       res = hook_impl.function(*args)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\main.py\", line 396, in pytest_runtestloop\nE       item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\nE       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\nE       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\nE       res = hook_impl.function(*args)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 118, in pytest_runtest_protocol\nE       runtestprotocol(item, nextitem=nextitem)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 137, in runtestprotocol\nE       reports.append(call_and_report(item, \"call\", log))\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 244, in call_and_report\nE       call = CallInfo.from_call(\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 353, in from_call\nE       result: TResult | None = func()\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 245, in <lambda>\nE       lambda: runtest_hook(item=item, **kwds),\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\nE       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\nE       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\nE       res = hook_impl.function(*args)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\runner.py\", line 179, in pytest_runtest_call\nE       item.runtest()\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\python.py\", line 1720, in runtest\nE       self.ihook.pytest_pyfunc_call(pyfuncitem=self)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\nE       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\nE       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\nE       res = hook_impl.function(*args)\nE     File \"C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\_pytest\\python.py\", line 166, in pytest_pyfunc_call\nE       result = testfunction(**testargs)\nE     File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\tests\\test_realization_provenance.py\", line 105, in test_call_gpt_provider_failure_metadata_has_provider_family\nE       out = gm.call_gpt([{\"role\": \"user\", \"content\": \"hello\"}])\nE     File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\tests\\helpers\\live_model_guard.py\", line 73, in _blocked_call\nE       raise LiveModelCallForbidden(\"game.gm.call_gpt\")\nE     File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\tests\\helpers\\live_model_guard.py\", line 30, in __init__\nE       stack = \"\".join(traceback.format_stack(limit=25))"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "classification": "preexisting failure",
+      "message": "assert None == 'discover_clue'\n +  where None = <built-in method get of dict object at 0x000001A0E751A600>('kind')\n +    where <built-in method get of dict object at 0x000001A0E751A600> = ({'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]}).get\n +      where {'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x000001A0E73F5C40>('resolution')\n +        where <built-in method get of dict object at 0x000001A0E73F5C40> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get\ntests\\test_investigation_result_provenance_non_invention.py:259: in test_general_written_surface_question_discovers_authored_clue\n    assert (data.get(\"resolution\") or {}).get(\"kind\") == \"discover_clue\"\nE   assert None == 'discover_clue'\nE    +  where None = <built-in method get of dict object at 0x000001A0E751A600>('kind')\nE    +    where <built-in method get of dict object at 0x000001A0E751A600> = ({'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]}).get\nE    +      where {'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': \"The Ash Cowl's pressure mounts.\", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x000001A0E73F5C40>('resolution')\nE    +        where <built-in method get of dict object at 0x000001A0E73F5C40> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "classification": "preexisting failure",
+      "message": "AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')\ntests\\test_investigation_result_provenance_non_invention.py:269: in test_general_visible_evidence_may_be_reported\n    assert \"cooper\" in text or \"bench\" in text\nE   AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "classification": "preexisting failure",
+      "message": "AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'\n  \n  'details on the exa... patrol assignment.' is contained here:\n    details on the exact timing and personnel of the missing patrol assignment.\ntests\\test_investigation_result_provenance_non_invention.py:304: in test_general_valid_target_no_evidence_is_grounded_absence\n    assert SUSPICIOUS_TITLE.lower() not in _facing(data).lower()\nE   AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'\nE     \nE     'details on the exa... patrol assignment.' is contained here:\nE       details on the exact timing and personnel of the missing patrol assignment."
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "classification": "preexisting failure",
+      "message": "AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'\n  \n  'cooper hale' is contained here:\n    the last user was cooper hale, who left at dusk. []\n  ?                   +++++++++++\ntests\\test_investigation_result_provenance_non_invention.py:316: in test_general_requested_identity_absent_does_not_mint_person\n    assert \"cooper hale\" not in blob\nE   AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'\nE     \nE     'cooper hale' is contained here:\nE       the last user was cooper hale, who left at dusk. []\nE     ?                   +++++++++++"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "classification": "preexisting failure",
+      "message": "assert 'duke' not in \"a sealed do...ke's killer.\"\n  \n  'duke' is contained here:\n    a sealed dossier names the duke's killer.\n  ?                            ++++\ntests\\test_investigation_result_provenance_non_invention.py:443: in test_general_observe_empty_target_does_not_invent\n    assert \"duke\" not in _facing(data).lower()\nE   assert 'duke' not in \"a sealed do...ke's killer.\"\nE     \nE     'duke' is contained here:\nE       a sealed dossier names the duke's killer.\nE     ?                            ++++"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing",
+      "classification": "preexisting failure",
+      "message": "AssertionError: assert 'exact timing' not in 'details on ... assignment.'\n  \n  'exact timing' is contained here:\n    details on the exact timing and personnel of the missing patrol assignment.\n  ?                ++++++++++++\ntests\\test_investigation_result_provenance_non_invention.py:578: in test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing\n    assert \"exact timing\" not in facing\nE   AssertionError: assert 'exact timing' not in 'details on ... assignment.'\nE     \nE     'exact timing' is contained here:\nE       details on the exact timing and personnel of the missing patrol assignment.\nE     ?                ++++++++++++"
+    }
+  ],
+  "initial_attempts": "Incomplete source copy omitted legacy fixtures and effective model configuration; local HTTP initially blocked. Initial runner stopped after superseding complete-copy runs. Initial logs/JUnit retained but not counted twice.",
+  "initial_assessment": "Nine initial byte-equality assertions failed on known persistence envelope/debug metadata. Raw evidence retained; corrected gameplay comparison explicitly excludes only recorded bookkeeping.",
+  "synthetic_environment": "Invalid offline key only; original existing model configuration projected unchanged for final affected lanes. No actual provider configuration written."
+}

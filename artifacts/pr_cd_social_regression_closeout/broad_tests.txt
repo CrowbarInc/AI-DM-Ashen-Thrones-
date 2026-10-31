@@ -1,0 +1,11 @@
+.\.venv\Scripts\python.exe -m pytest tests\test_social_question_relevance_answer_selection.py -vv -s --tb=short --basetemp=codex_pytest_tmp_prcd_stall
+RESULT: interrupted after silence at tests/test_social_question_relevance_answer_selection.py::test_general_http_ask_a_not_b. Last completed test: test_general_answer_selection_does_not_create_knowledge.
+
+.\.venv\Scripts\python.exe -m pytest tests\test_social_question_relevance_answer_selection.py::test_general_http_ask_a_not_b -vv -s --tb=short -o faulthandler_timeout=20 --basetemp=codex_pytest_tmp_prcd_fault
+RESULT: faulthandler showed blocking in Windows asyncio socketpair / AnyIO / Starlette TestClient portal setup.
+
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_br_resolution_contract.py tests\test_pr_br_authority_reconciliation.py -q --tb=short --basetemp=codex_pytest_tmp_prcd_authority
+RESULT: interrupted after partial output of 26 passing dots; no pass claim.
+
+.\.venv\Scripts\python.exe -m pytest -q --tb=short -o faulthandler_timeout=30 --basetemp=codex_pytest_tmp_prcd_broad
+RESULT: outer timeout after 90 seconds; 13 passing dots printed; faulthandler showed the same Windows asyncio socketpair / TestClient portal setup blocker at tests/test_activate_scene_validation_and_get_persistence.py::test_invalid_activate_scene_id_ignored_safely.

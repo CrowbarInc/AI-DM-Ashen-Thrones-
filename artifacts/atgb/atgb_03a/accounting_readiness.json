@@ -1,0 +1,65 @@
+{
+  "version": "ATGB-03A-1",
+  "ok": false,
+  "stop_reason": "provider_call_ceiling_not_observable",
+  "request_upper_bound": null,
+  "dispatch_sites": [
+    {
+      "path": "game/api_upstream_preflight.py",
+      "function": "run_upstream_api_preflight",
+      "line": 240
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "function": "request_expression",
+      "line": 817
+    },
+    {
+      "path": "game/gm.py",
+      "function": "call_gpt",
+      "line": 5214
+    },
+    {
+      "path": "game/host_constrained_candidates.py",
+      "function": "invoke_candidate_provider",
+      "line": 726
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "function": "request_interpretation",
+      "line": 241
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "function": "_invoke_interpretation_model",
+      "line": 221
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "function": "_invoke_provider",
+      "line": 487
+    }
+  ],
+  "established_gaps": [
+    {
+      "path": "game/host_constrained_candidates.py",
+      "function": "invoke_candidate_provider",
+      "line": 726,
+      "reason": "completion_ledger_does_not_cover_dispatch_exceptions"
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "function": "_invoke_interpretation_model",
+      "line": 221,
+      "reason": "dispatch_without_existing_budget_guard_or_ledger"
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "function": "_invoke_provider",
+      "line": 487,
+      "reason": "completion_ledger_does_not_cover_dispatch_exceptions"
+    }
+  ],
+  "reason": "ledger_coverage_incomplete",
+  "note": "Observed ledger totals cannot authorize live continuation. No host field is replaced."
+}

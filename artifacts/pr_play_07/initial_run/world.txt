@@ -1,0 +1,14 @@
+.......E.E.............................................................. [ 58%]
+...................................................                      [100%]
+=================================== ERRORS ====================================
+_____________ ERROR at setup of test_flags_persist_via_save_load ______________
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\world'
+___________ ERROR at setup of test_increment_world_counter_persists ___________
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\world'
+=========================== short test summary info ===========================
+ERROR tests/test_world_state.py::test_flags_persist_via_save_load - FileNotFo...
+ERROR tests/test_world_state.py::test_increment_world_counter_persists - File...

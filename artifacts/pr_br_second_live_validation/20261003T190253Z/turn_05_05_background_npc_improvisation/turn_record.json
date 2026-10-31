@@ -1,0 +1,242 @@
+{
+  "probe_id": "05_background_npc_improvisation",
+  "probe_question": "Lantern-tender with only the slip lantern established. Ordinary evening talk.",
+  "player_text": "I ask the lantern-tender how the evening is treating him.",
+  "http_status": 200,
+  "emitted_narration": "\"Evening's seen better days,\" Osric says, voice low and reserved. \"The work's steady enough, but the river's been restless, and folks keep an uneasy eye on it. Nothing more I can say that'd brighten the mood.\" He shifts beside the lantern, his gaze briefly flicking to the darkening water before settling back on you.",
+  "raw_generations": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "\"Evening's seen better days,\" Osric says, voice low and reserved. \"The work's steady enough, but the river's been restless, and folks keep an uneasy eye on it. Nothing more I can say that'd brighten the mood.\" He shifts beside the lantern, his gaze briefly flicking to the darkening water before settling back on you.",
+      "prompt_flags": {
+        "user_chars": 112272,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true,
+        "contains_authoritative_retry_context": false,
+        "contains_validation_failure": false
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "initial_generation_calls": 1,
+  "retry_generation_calls": 0,
+  "interpretation_call_count": 0,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": "question",
+  "resolution_social": {
+    "social_intent_class": "social_exchange",
+    "npc_id": "osric",
+    "npc_name": "Osric",
+    "target_resolved": true,
+    "topic_revealed": null,
+    "skill_check": null,
+    "npc_reply_expected": true,
+    "reply_kind": "refusal",
+    "target_source": "declared_action",
+    "target_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+    "target_candidate_id": "lantern-tender how the evening is treating him",
+    "target_candidate_valid": false,
+    "stale_interlocutor_cleared": false,
+    "addressability_checked_against": [
+      "active_entities",
+      "entity_presence_active_or_nearby",
+      "scene_addressables",
+      "world_roster_in_scene",
+      "interaction_continuity"
+    ],
+    "declared_switch_detected": true,
+    "declared_switch_target_actor_id": "osric",
+    "continuity_overridden_by_declared_switch": false,
+    "spoken_vocative_detected": false,
+    "spoken_vocative_target_actor_id": null,
+    "continuity_overridden_by_spoken_vocative": false,
+    "actor_addressable": true,
+    "target_binding": {
+      "final_target_kind": "npc",
+      "npc_id": "osric",
+      "target_source": "native_npc",
+      "origin_actor_id": null,
+      "promoted_this_turn": false
+    },
+    "target_profile_hints": {
+      "guardedness": "medium",
+      "answer_reliability_tier": "medium",
+      "speaks_authoritatively_for_scene": false
+    },
+    "authority_source_used": "declared_action",
+    "proposed_reply_speaker_id": "osric",
+    "grounding_fallback_applied": false,
+    "grounding_reason_code": "authoritative_speaker_eligible",
+    "grounded_speaker_id": "osric"
+  },
+  "resolution_npc_id": null,
+  "target_scene_id": null,
+  "resolved_transition": false,
+  "selected_resolver": "social",
+  "interaction_obligation": {
+    "kind": "question",
+    "target": "osric",
+    "interlocutor_id": "osric",
+    "subject": "how the evening is treating him",
+    "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+    "claim_id": null,
+    "resolution_mode": "grounded_information_request",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_78f77f7a769b"
+  },
+  "resolution_contract_id": "rc_78f77f7a769b",
+  "resolution_contract_operation": "ask",
+  "resolution_contract_subject": "social",
+  "decision_present": true,
+  "decision_contract_id": "rc_78f77f7a769b",
+  "decision_id_matches_contract": true,
+  "decision_outcome": "epistemically_qualified",
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+  ],
+  "permitted_mutations": null,
+  "proposed_facts": [
+    {
+      "text": "A post lantern burns at the end of the ferry slip.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "Osric stands beside the post lantern.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "Osric exists as lantern-tender",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "osric",
+        "subject_aliases": [
+          "Osric"
+        ],
+        "relation": "exists",
+        "value": "lantern-tender",
+        "authority": "world_truth"
+      },
+      "outcome": "established_or_retrieved"
+    }
+  ],
+  "accepted_response": {
+    "immutable": true,
+    "text": "\"Evening's seen better days,\" Osric says, voice low and reserved. \"The work's steady enough, but the river's been restless, and folks keep an uneasy eye on it. Nothing more I can say that'd brighten the mood.\" He shifts beside the lantern, his gaze briefly flicking to the darkening water before settling back on you.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "I ask the lantern-tender how the evening is treating him.",
+    "turn_identity": "rc_78f77f7a769b",
+    "speaker": "Osric",
+    "addressee": "Osric",
+    "target": "Osric",
+    "operation": "ask",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [
+        {
+          "text": "\" He shifts beside the lantern, his gaze briefly flicking to the darkening water before settling back on you.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_78f77f7a769b",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "\" He shifts beside the lantern, his gaze briefly flicking to the darkening water before settling back on you.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "bounded_incidental",
+            "semantic_identity": {}
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_78f77f7a769b",
+      "operation": "ask",
+      "interlocutor_id": "osric",
+      "expected_resolution": "answer"
+    },
+    "resolution_kind": "question",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "gm_metadata_validation_keys": [
+    "hard_validation_attempt_1"
+  ],
+  "committed_active_scene_id": "ferry_slip",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "ferry_slip",
+    "active_interlocutor": {
+      "id": "osric",
+      "label": "Osric",
+      "kind": "interlocutor",
+      "scene_id": "ferry_slip",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_78f77f7a769b"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [],
+    "rejected": [],
+    "incidental_entities": []
+  },
+  "committed_world_flags": [],
+  "committed_factions": [],
+  "committed_event_log": []
+}

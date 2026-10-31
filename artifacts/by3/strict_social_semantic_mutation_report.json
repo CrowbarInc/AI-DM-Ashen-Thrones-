@@ -2,22 +2,22 @@
   "attribution_gaps": [],
   "before_after_coverage": {
     "after_by3": {
-      "first_semantic_mutation_bucket": "fallback",
-      "first_semantic_mutation_checkpoint_id": "normalized_social_candidate",
-      "first_semantic_mutation_source": "game.social_exchange_emission.build_final_strict_social_response",
-      "post_gate_mutation_detected": true,
-      "semantic_mutation_changed_count": 1,
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": null,
+      "semantic_mutation_changed_count": 0,
       "trace_continuity": true
     },
     "before_by2": {
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_source": null,
       "missing_checkpoint": "writer_or_pre_policy_checkpoint",
-      "post_gate_mutation_detected": true,
+      "post_gate_mutation_detected": null,
       "semantic_mutation_changed_count": 0,
-      "trace_continuity": false
+      "trace_continuity": true
     },
-    "gap_closed": true,
+    "gap_closed": false,
     "target_turn": "wrong_speaker_strict_social_emission|idx:0"
   },
   "by3_instrumentation": {
@@ -34,29 +34,19 @@
   "remaining_by4_candidates": [],
   "schema_version": 1,
   "summary": {
-    "attributable_first_mutations": 3,
+    "attributable_first_mutations": 1,
     "bucket_distribution": {
-      "fallback": 1,
-      "policy": 1,
       "sanitizer": 1
     },
     "first_source_coverage_rate": 1.0,
-    "mutated_turns": 3,
+    "mutated_turns": 1,
     "representative_high_risk_turns": [],
     "semantic_mutation_risk_max": 10,
-    "semantic_mutation_risk_mean": 3.33,
+    "semantic_mutation_risk_mean": 10.0,
     "top_mutation_sources": [
       {
         "count": 1,
-        "source": "game.response_policy_enforcement.apply_response_policy_enforcement"
-      },
-      {
-        "count": 1,
         "source": "game.output_sanitizer.sanitize_player_facing_output"
-      },
-      {
-        "count": 1,
-        "source": "game.social_exchange_emission.build_final_strict_social_response"
       }
     ],
     "total_turns": 8,
@@ -64,11 +54,11 @@
   },
   "turns": [
     {
-      "final_text_hash": "852a600eeac26299",
+      "final_text_hash": "560dd9c4751c336e",
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_checkpoint_id": null,
       "first_semantic_mutation_source": null,
-      "post_gate_mutation_detected": false,
+      "post_gate_mutation_detected": null,
       "scenario_id": "directed_npc_question",
       "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
@@ -81,11 +71,11 @@
       "turn_index": 0
     },
     {
-      "final_text_hash": "753c3e3dfe4cddc7",
+      "final_text_hash": "d7119fc81faa3c6c",
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_checkpoint_id": null,
       "first_semantic_mutation_source": null,
-      "post_gate_mutation_detected": false,
+      "post_gate_mutation_detected": null,
       "scenario_id": "lead_followup_with_dialogue_lock",
       "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
@@ -98,11 +88,11 @@
       "turn_index": 0
     },
     {
-      "final_text_hash": "cbdfa417f88429cf",
+      "final_text_hash": "560dd9c4751c336e",
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_checkpoint_id": null,
       "first_semantic_mutation_source": null,
-      "post_gate_mutation_detected": false,
+      "post_gate_mutation_detected": null,
       "scenario_id": "lead_followup_with_dialogue_lock",
       "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
@@ -115,11 +105,11 @@
       "turn_index": 1
     },
     {
-      "final_text_hash": "35391543b1b96b61",
-      "first_semantic_mutation_bucket": "policy",
-      "first_semantic_mutation_checkpoint_id": "policy_output",
-      "first_semantic_mutation_source": "game.response_policy_enforcement.apply_response_policy_enforcement",
-      "post_gate_mutation_detected": true,
+      "final_text_hash": "e5a4429a2ef51f40",
+      "first_semantic_mutation_bucket": "sanitizer",
+      "first_semantic_mutation_checkpoint_id": "sanitizer_output",
+      "first_semantic_mutation_source": "game.output_sanitizer.sanitize_player_facing_output",
+      "post_gate_mutation_detected": null,
       "scenario_id": "sanitizer_scaffold_leakage",
       "semantic_mutation_changed_count": 2,
       "semantic_mutation_risk_band": "low",
@@ -132,13 +122,13 @@
       "turn_index": 0
     },
     {
-      "final_text_hash": "e0706b194850bd12",
-      "first_semantic_mutation_bucket": "sanitizer",
-      "first_semantic_mutation_checkpoint_id": "sanitizer_output",
-      "first_semantic_mutation_source": "game.output_sanitizer.sanitize_player_facing_output",
-      "post_gate_mutation_detected": true,
+      "final_text_hash": "fa0de78b709e8846",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": null,
       "scenario_id": "thin_answer_action_outcome_final_emission",
-      "semantic_mutation_changed_count": 1,
+      "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
       "semantic_mutation_risk_score": 0,
       "semantic_mutation_trace_complete": true,
@@ -149,11 +139,11 @@
       "turn_index": 0
     },
     {
-      "final_text_hash": "343a3ab4400975e2",
+      "final_text_hash": "560dd9c4751c336e",
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_checkpoint_id": null,
       "first_semantic_mutation_source": null,
-      "post_gate_mutation_detected": false,
+      "post_gate_mutation_detected": null,
       "scenario_id": "vocative_override_after_prior_continuity",
       "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
@@ -166,11 +156,11 @@
       "turn_index": 0
     },
     {
-      "final_text_hash": "4a8943f6a5a5260c",
+      "final_text_hash": "b48810d30794df6e",
       "first_semantic_mutation_bucket": null,
       "first_semantic_mutation_checkpoint_id": null,
       "first_semantic_mutation_source": null,
-      "post_gate_mutation_detected": false,
+      "post_gate_mutation_detected": null,
       "scenario_id": "vocative_override_after_prior_continuity",
       "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
@@ -183,13 +173,13 @@
       "turn_index": 1
     },
     {
-      "final_text_hash": "6d40a5a9fc370ed1",
-      "first_semantic_mutation_bucket": "fallback",
-      "first_semantic_mutation_checkpoint_id": "normalized_social_candidate",
-      "first_semantic_mutation_source": "game.social_exchange_emission.build_final_strict_social_response",
-      "post_gate_mutation_detected": true,
+      "final_text_hash": "560dd9c4751c336e",
+      "first_semantic_mutation_bucket": null,
+      "first_semantic_mutation_checkpoint_id": null,
+      "first_semantic_mutation_source": null,
+      "post_gate_mutation_detected": null,
       "scenario_id": "wrong_speaker_strict_social_emission",
-      "semantic_mutation_changed_count": 1,
+      "semantic_mutation_changed_count": 0,
       "semantic_mutation_risk_band": "low",
       "semantic_mutation_risk_score": 0,
       "semantic_mutation_trace_complete": true,

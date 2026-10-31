@@ -1,0 +1,4060 @@
+{
+  "rows": {
+    "conversation": [
+      {
+        "turn": 1,
+        "player": "Could you describe our surroundings?",
+        "expected": "gm_no_mutation",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A soot-streaked lantern burns beside the courtyard gate. The side gate is barred from the other side. Sergeant Mara looks concerned as she watches the road.",
+        "kind": "conversational_answer",
+        "social": null,
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"DESCRIPTION\",\"subject\":\"Description of the surroundings\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Request a description of the surroundings in the Waystation courtyard.\"},\"asserted_premises\":[{\"text\":\"The player asks for a description of the surroundings.\"}],\"requested_outcomes\":[{\"text\":\"Provide a detailed description of the Waystation courtyard, including visible features and points of interest.\"}],\"action_components\":[{\"order\":1,\"description\":\"Request description of surroundings in the Waystation courtyard.\",\"target_ref\":null,\"operation_class\":\"PERCEIVE\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"courtyard_gate\",\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Request a description of the surroundings in the Waystation courtyard."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player asks for a description of the surroundings.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Provide a detailed description of the Waystation courtyard, including visible features and points of interest.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Request description of surroundings in the Waystation courtyard.",
+              "target_ref": null,
+              "operation_class": "PERCEIVE"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_lantern",
+              "courtyard_gate",
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "DESCRIPTION",
+            "subject": "Description of the surroundings",
+            "evidence_refs": [
+              "scene",
+              "visible:0",
+              "visible:1",
+              "visible:2"
+            ]
+          },
+          "incidental_context": [],
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+            "visible:1": "The side gate is barred from the other side.",
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "authorization": null,
+        "decision_reason": "communication_before_execution",
+        "decision_owner": "GM",
+        "resolver_invoked": false,
+        "state_before": {
+          "turn_counter": 0,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 1,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 0,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 0,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 1,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 0,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 3370.742,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1714,
+          "output_tokens": 197,
+          "total_tokens": 1911,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "turn": 2,
+        "player": "I ask Sergeant Mara whether the north road is watched.",
+        "expected": "execute_mara",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+        "kind": "question",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road",
+            "clue_text": null
+          },
+          "recalled_topic": false,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "sergeant_mara",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": true,
+          "declared_switch_target_actor_id": "sergeant_mara",
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "target_binding": {
+            "final_target_kind": "npc",
+            "npc_id": "sergeant_mara",
+            "target_source": "native_npc",
+            "origin_actor_id": null,
+            "promoted_this_turn": false
+          },
+          "target_profile_hints": {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": false
+          },
+          "authority_source_used": "explicit_target",
+          "proposed_reply_speaker_id": "sergeant_mara",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_eligible",
+          "grounded_speaker_id": "sergeant_mara",
+          "lead_discussion_updates": [
+            {
+              "npc_id": "sergeant_mara",
+              "lead_id": "north_road",
+              "disclosure_level": "explicit",
+              "player_acknowledged": false,
+              "mention_count": 1,
+              "acknowledged_updated": false
+            }
+          ]
+        },
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"Whether the north road is watched\",\"evidence_refs\":[\"scene\",\"visible:2\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask Sergeant Mara if the north road is watched\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara watches the road.\"}],\"requested_outcomes\":[{\"text\":\"Sergeant Mara provides information about whether the north road is watched\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara whether the north road is watched\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask Sergeant Mara if the north road is watched"
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara watches the road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Sergeant Mara provides information about whether the north road is watched",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara whether the north road is watched",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "Whether the north road is watched",
+            "evidence_refs": [
+              "scene",
+              "visible:2"
+            ]
+          },
+          "incidental_context": [],
+          "public_evidence": {
+            "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+            "visible:2": "Sergeant Mara looks concerned as she watches the road."
+          }
+        },
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask Sergeant Mara whether the north road is watched."
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 0,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 1,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 0,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 1,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 2,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 1,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 5054.174,
+        "calls": {
+          "provider_calls": 2,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 0,
+          "input_tokens": 26401,
+          "output_tokens": 260,
+          "total_tokens": 26661,
+          "purposes": [
+            "interpretation",
+            "strict_social"
+          ]
+        }
+      },
+      {
+        "turn": 3,
+        "player": "What did you mean by the north road?",
+        "expected": "execute_mara",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Sergeant Mara says, \"Word is, the street beyond the gate is the north road.\"",
+        "kind": "question",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road"
+          },
+          "recalled_topic": true,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "sergeant_mara",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "target_binding": {
+            "final_target_kind": "npc",
+            "npc_id": "sergeant_mara",
+            "target_source": "native_npc",
+            "origin_actor_id": null,
+            "promoted_this_turn": false
+          },
+          "target_profile_hints": {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": false
+          },
+          "authority_source_used": "explicit_target",
+          "proposed_reply_speaker_id": "sergeant_mara",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_eligible",
+          "grounded_speaker_id": "sergeant_mara",
+          "lead_discussion_updates": [
+            {
+              "npc_id": "sergeant_mara",
+              "lead_id": "north_road",
+              "disclosure_level": "explicit",
+              "player_acknowledged": true,
+              "mention_count": 2,
+              "acknowledged_updated": true
+            }
+          ],
+          "anchor_tokens_extracted": [
+            "mara",
+            "word"
+          ],
+          "anchor_token_matched": null,
+          "anchor_followup_detected": false,
+          "explanation_of_recent_anchor_followup": false,
+          "correction_reask_followup_detected": false,
+          "recent_reference_clarification_detected": false,
+          "recent_reference_kind": null,
+          "recent_reference_phrase_matched": null,
+          "clarification_prompt_shape": null,
+          "social_escalation": {
+            "escalation_level": 1,
+            "escalation_reason": "answer_pressure_thread_followup",
+            "escalation_effect": "vague_or_guarded_answer_allowed",
+            "force_partial_answer": false,
+            "force_actionable_lead": false,
+            "add_suspicion": false,
+            "trigger_scene_momentum": false,
+            "convert_refusal_to_conditioned_offer": false,
+            "topic_exhausted": false,
+            "effective_reply_kind": null,
+            "social_question_dimension": "general",
+            "topic_exhausted_for_dimension": false,
+            "valid_followup_detected": true,
+            "prior_same_dimension_answer_exists": false
+          },
+          "social_question_dimension": "general",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": true,
+          "prior_same_dimension_answer_exists": false,
+          "strategy_forced_to_answer": true,
+          "forced_answer_reason": "valid_followup_alignment"
+        },
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Meaning of 'the north road' as mentioned by Sergeant Mara\",\"evidence_refs\":[\"npc_latest_reply\",\"npc:sergeant_mara:street\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask Sergeant Mara to clarify what she meant by 'the north road'.\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara said the street beyond the gate is the north road.\"}],\"requested_outcomes\":[{\"text\":\"Clarification from Sergeant Mara about the meaning or significance of 'the north road'.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara what she meant by 'the north road'.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask Sergeant Mara to clarify what she meant by 'the north road'."
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara said the street beyond the gate is the north road.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Clarification from Sergeant Mara about the meaning or significance of 'the north road'.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara what she meant by 'the north road'.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "CLARIFICATION",
+            "subject": "Meaning of 'the north road' as mentioned by Sergeant Mara",
+            "evidence_refs": [
+              "npc_latest_reply",
+              "npc:sergeant_mara:street"
+            ]
+          },
+          "incidental_context": [],
+          "public_evidence": {
+            "npc_latest_reply": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "npc:sergeant_mara:street": "The street beyond the gate is the north road."
+          }
+        },
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "established_interlocutor",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "continues",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": false,
+          "player_text": "What did you mean by the north road?"
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 1,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 2,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 1,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 2411.101,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1989,
+          "output_tokens": 206,
+          "total_tokens": 2195,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "turn": 4,
+        "player": "What did she mean by the road?",
+        "expected": "gm_no_mutation",
+        "behavior_pass": false,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Sergeant Mara says, \"Word is, the street beyond the gate is the north road.\" The street beyond the gate is the north road.",
+        "kind": "conversational_answer",
+        "social": null,
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"EXPLANATION\",\"subject\":\"Meaning of 'the road' as used by Sergeant Mara\",\"evidence_refs\":[\"npc_latest_reply\",\"npc:sergeant_mara:street\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask GM to explain what Sergeant Mara meant by 'the road'.\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara said, 'Word is, the street beyond the gate is the north road.'\"}],\"requested_outcomes\":[{\"text\":\"Clarification of the meaning of 'the road' in Sergeant Mara's statement.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask GM what Sergeant Mara meant by 'the road'.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask GM to explain what Sergeant Mara meant by 'the road'."
+          },
+          "asserted_premises": [
+            {
+              "text": "Sergeant Mara said, 'Word is, the street beyond the gate is the north road.'",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Clarification of the meaning of 'the road' in Sergeant Mara's statement.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask GM what Sergeant Mara meant by 'the road'.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "EXPLANATION",
+            "subject": "Meaning of 'the road' as used by Sergeant Mara",
+            "evidence_refs": [
+              "npc_latest_reply",
+              "npc:sergeant_mara:street"
+            ]
+          },
+          "incidental_context": [],
+          "public_evidence": {
+            "npc_latest_reply": "Sergeant Mara says, \"Word is, the street beyond the gate is the north road.\"",
+            "npc:sergeant_mara:street": "The street beyond the gate is the north road."
+          }
+        },
+        "authorization": null,
+        "decision_reason": "communication_before_execution",
+        "decision_owner": "GM",
+        "resolver_invoked": false,
+        "state_before": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 2539.648,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1962,
+          "output_tokens": 208,
+          "total_tokens": 2170,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "turn": 5,
+        "player": "I ask one of them what happened.",
+        "expected": "clarify_no_mutation",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "kind": "conversational_clarify",
+        "social": null,
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"NPC\",\"purpose\":\"QUESTION\",\"subject\":\"What happened?\" ,\"evidence_refs\":[]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask Sergeant Mara what happened.\"},\"asserted_premises\":[{\"text\":\"The player character wants to know what happened from one of the NPCs present.\"}],\"requested_outcomes\":[{\"text\":\"Receive information from Sergeant Mara about what happened.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara what happened.\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask Sergeant Mara what happened."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player character wants to know what happened from one of the NPCs present.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Receive information from Sergeant Mara about what happened.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara what happened.",
+              "target_ref": "sergeant_mara",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "NPC",
+            "purpose": "QUESTION",
+            "subject": "What happened?",
+            "evidence_refs": []
+          },
+          "incidental_context": [],
+          "public_evidence": {}
+        },
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "provider_candidate_only",
+          "target_id": null,
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "unresolved",
+          "conflict_details": {
+            "provider_target": "sergeant_mara"
+          },
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask one of them what happened."
+        },
+        "decision_reason": "unresolved_addressee",
+        "decision_owner": "GM",
+        "resolver_invoked": false,
+        "state_before": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "waystation_courtyard",
+          "original_text": "I ask one of them what happened.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "target_resolution": "ambiguous"
+        },
+        "elapsed_ms": 2071.545,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 2021,
+          "output_tokens": 162,
+          "total_tokens": 2183,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "turn": 6,
+        "player": "The sergeant.",
+        "expected": "execute_mara",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"",
+        "kind": "question",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "target_resolved": true,
+          "topic_revealed": null,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "sergeant_mara",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "target_binding": {
+            "final_target_kind": "npc",
+            "npc_id": "sergeant_mara",
+            "target_source": "native_npc",
+            "origin_actor_id": null,
+            "promoted_this_turn": false
+          },
+          "target_profile_hints": {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": false
+          },
+          "reply_plan_kind": "authoritative_answer_available",
+          "incidental_subjective_allowed": false,
+          "absence_of_authored_topic_forces_refusal": false,
+          "declared_claims_expected": false,
+          "durable_state_mutation_allowed": false,
+          "npc_speech_authority": "none",
+          "objective_world_fact_authority": "none",
+          "authority_source_used": "explicit_target",
+          "proposed_reply_speaker_id": "sergeant_mara",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+          "grounded_speaker_id": "sergeant_mara"
+        },
+        "raw_interpretation": null,
+        "interpretation_record": null,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "established_interlocutor",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "continues",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": false,
+          "player_text": "The sergeant."
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 3,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 4,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 3,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 4434.743,
+        "calls": {
+          "provider_calls": 2,
+          "interpretation_calls": 0,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 51910,
+          "output_tokens": 166,
+          "total_tokens": 52076,
+          "purposes": [
+            "strict_social",
+            "retry_escalation"
+          ]
+        }
+      },
+      {
+        "turn": 7,
+        "player": "Instead, make that a question about the lamp.",
+        "expected": "cannot_undo",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "That action already resolved, so I cannot undo it. You can take a new action if you want.",
+        "kind": "conversational_answer",
+        "social": null,
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Question about the lamp\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask a question about the courtyard lantern.\"},\"asserted_premises\":[{\"text\":\"There is a lit lantern hanging beside the courtyard gate.\"}],\"requested_outcomes\":[{\"text\":\"Obtain information about the courtyard lantern.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara a question about the courtyard lantern.\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\",\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Ask a question about the courtyard lantern."
+          },
+          "asserted_premises": [
+            {
+              "text": "There is a lit lantern hanging beside the courtyard gate.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Obtain information about the courtyard lantern.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Ask Sergeant Mara a question about the courtyard lantern.",
+              "target_ref": "courtyard_lantern",
+              "operation_class": "ASK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara",
+              "courtyard_lantern"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "CLARIFICATION",
+            "subject": "Question about the lamp",
+            "evidence_refs": []
+          },
+          "incidental_context": [],
+          "public_evidence": {}
+        },
+        "authorization": null,
+        "decision_reason": "executed_intention_not_reversible",
+        "decision_owner": "GM",
+        "resolver_invoked": false,
+        "state_before": {
+          "turn_counter": 3,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 4,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 3,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 3,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 4,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 3,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 2166.849,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1932,
+          "output_tokens": 171,
+          "total_tokens": 2103,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "turn": 8,
+        "player": "I inspect the courtyard lantern.",
+        "expected": "inspect",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "A small maker's mark is stamped beneath the lantern.",
+        "kind": "discover_clue",
+        "social": null,
+        "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"ACTION\",\"subject\":\"Inspect the courtyard lantern\",\"evidence_refs\":[\"visible:0\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to inspect the courtyard lantern to learn more about it.\"},\"asserted_premises\":[{\"text\":\"A lit lantern hangs beside the courtyard gate.\"},{\"text\":\"The lantern is soot-streaked.\"}],\"requested_outcomes\":[{\"text\":\"Detailed description or relevant information about the courtyard lantern.\"}],\"action_components\":[{\"order\":1,\"description\":\"Character inspects the courtyard lantern.\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+        "interpretation_record": {
+          "communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "The player intends to inspect the courtyard lantern to learn more about it."
+          },
+          "asserted_premises": [
+            {
+              "text": "A lit lantern hangs beside the courtyard gate.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The lantern is soot-streaked.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Detailed description or relevant information about the courtyard lantern.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Character inspects the courtyard lantern.",
+              "target_ref": "courtyard_lantern",
+              "operation_class": "INSPECT"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_lantern"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "CHARACTER",
+            "purpose": "ACTION",
+            "subject": "Inspect the courtyard lantern",
+            "evidence_refs": [
+              "visible:0"
+            ]
+          },
+          "incidental_context": [],
+          "public_evidence": {
+            "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+          }
+        },
+        "authorization": {
+          "communication_ownership": "character_action",
+          "intent_purpose": "perform_action",
+          "target_resolution": "none_required",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "inspect",
+          "clarification": "",
+          "choices": [],
+          "direct_address": false,
+          "player_text": "I inspect the courtyard lantern."
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 3,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 3
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 5,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 3,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 4,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 3,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 4,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 5,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 4,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 2398.55,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1918,
+          "output_tokens": 182,
+          "total_tokens": 2100,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "turn": 9,
+        "player": "Does the gate look safe? If so, I go through.",
+        "expected": "no_move",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+        "kind": "conversational_clarify",
+        "social": null,
+        "raw_interpretation": null,
+        "interpretation_record": null,
+        "authorization": null,
+        "decision_reason": "communication_before_execution",
+        "decision_owner": "MIXED",
+        "resolver_invoked": false,
+        "state_before": {
+          "turn_counter": 4,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 5,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 4,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 4,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 5,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 4,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 61.921,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        }
+      },
+      {
+        "turn": 10,
+        "player": "I walk through the courtyard gate.",
+        "expected": "move_street",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+        "kind": "scene_transition",
+        "social": null,
+        "raw_interpretation": null,
+        "interpretation_record": null,
+        "authorization": {
+          "communication_ownership": "character_action",
+          "intent_purpose": "perform_action",
+          "target_resolution": "none_required",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "act",
+          "clarification": "",
+          "choices": [],
+          "direct_address": false,
+          "player_text": "I walk through the courtyard gate."
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 4,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 4
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 6,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 4,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 5,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 4,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 5,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 5
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 7,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 5,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 7,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 5,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 6,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 5,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_street",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 346.523,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        }
+      }
+    ],
+    "holdouts": [
+      {
+        "id": "explicit_named_ask",
+        "player": "I ask Sergeant Mara whether the north road is watched.",
+        "expect": "execute_npc",
+        "elapsed_ms": 4358.544,
+        "calls": {
+          "provider_calls": 2,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 0,
+          "input_tokens": 25474,
+          "output_tokens": 278,
+          "total_tokens": 25752,
+          "purposes": [
+            "interpretation",
+            "strict_social"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": true,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask Sergeant Mara whether the north road is watched."
+        },
+        "actual_recipient": "NPC",
+        "actual_purpose": "QUESTION",
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\""
+      },
+      {
+        "id": "explicit_role_ask",
+        "player": "I ask the sergeant who set the lantern out.",
+        "expect": "execute_npc",
+        "elapsed_ms": 7783.496,
+        "calls": {
+          "provider_calls": 3,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 50616,
+          "output_tokens": 441,
+          "total_tokens": 51057,
+          "purposes": [
+            "interpretation",
+            "strict_social",
+            "retry_escalation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "unique_contextual",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask the sergeant who set the lantern out."
+        },
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\""
+      },
+      {
+        "id": "unique_pronoun",
+        "player": "I ask him what he saw on the road.",
+        "expect": "execute_npc",
+        "elapsed_ms": 5163.822,
+        "calls": {
+          "provider_calls": 2,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 0,
+          "input_tokens": 25368,
+          "output_tokens": 268,
+          "total_tokens": 25636,
+          "purposes": [
+            "interpretation",
+            "strict_social"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": true,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "established_interlocutor",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "continues",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask him what he saw on the road."
+        },
+        "actual_recipient": "NPC",
+        "actual_purpose": "QUESTION",
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\""
+      },
+      {
+        "id": "ambiguous_one_of_them_two_npcs",
+        "player": "I ask one of them what happened.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 2374.369,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1716,
+          "output_tokens": 200,
+          "total_tokens": 1916,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask one of them what happened."
+        },
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      },
+      {
+        "id": "ambiguous_one_of_them_one_npc",
+        "player": "I put the question to one of them.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 2195.699,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1707,
+          "output_tokens": 209,
+          "total_tokens": 1916,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": false,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": false,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": "GM",
+        "actual_purpose": "CLARIFICATION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Which NPC is the character addressing with the question?"
+      },
+      {
+        "id": "ambiguous_either_guard",
+        "player": "I ask either guard about the patrol.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 2344.081,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1716,
+          "output_tokens": 196,
+          "total_tokens": 1912,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask either guard about the patrol."
+        },
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      },
+      {
+        "id": "unresolved_someone",
+        "player": "I ask someone nearby what the shouting was.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 2180.863,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1717,
+          "output_tokens": 177,
+          "total_tokens": 1894,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask someone nearby what the shouting was."
+        },
+        "actual_recipient": "NPC",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      },
+      {
+        "id": "distinguishing_fact",
+        "player": "I ask the taller guard about the gate.",
+        "expect": "execute_npc",
+        "elapsed_ms": 6627.25,
+        "calls": {
+          "provider_calls": 3,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 51847,
+          "output_tokens": 345,
+          "total_tokens": 52192,
+          "purposes": [
+            "interpretation",
+            "strict_social",
+            "retry_escalation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "authoritative_world_state",
+          "target_id": "corporal_bren",
+          "candidate_target_ids": [
+            "corporal_bren"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask the taller guard about the gate."
+        },
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": "corporal_bren",
+        "kind": "question",
+        "response": "Corporal Bren says, \"I cannot answer that from what is settled here.\""
+      },
+      {
+        "id": "no_invented_distinction",
+        "player": "I ask the taller guard about the gate.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 2251.722,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1717,
+          "output_tokens": 182,
+          "total_tokens": 1899,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "provider_candidate_only",
+          "target_id": null,
+          "candidate_target_ids": [
+            "corporal_bren"
+          ],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "unresolved",
+          "conflict_details": {},
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask the taller guard about the gate."
+        },
+        "actual_recipient": "NPC",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      },
+      {
+        "id": "gm_about_npc",
+        "player": "What does the sergeant know about the lantern?",
+        "expect": "gm_no_social",
+        "elapsed_ms": 2376.698,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1708,
+          "output_tokens": 195,
+          "total_tokens": 1903,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": true,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_answer",
+        "response": "That has not been established in the information available to you."
+      },
+      {
+        "id": "direct_ask_conflicting_owner",
+        "player": "I ask the sergeant who owns the lantern.",
+        "expect": "execute_npc",
+        "elapsed_ms": 7224.728,
+        "calls": {
+          "provider_calls": 3,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 50664,
+          "output_tokens": 344,
+          "total_tokens": 51008,
+          "purposes": [
+            "interpretation",
+            "strict_social",
+            "retry_escalation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "unique_contextual",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask the sergeant who owns the lantern."
+        },
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\""
+      },
+      {
+        "id": "npc_followup",
+        "player": "What did you mean by the north road?",
+        "expect": "execute_npc",
+        "elapsed_ms": 2227.807,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1711,
+          "output_tokens": 197,
+          "total_tokens": 1908,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": false,
+        "state_pass": false,
+        "label_pass": false,
+        "handoff_pass": false,
+        "response_pass": false,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": null,
+        "kind": "interpretation_rejected",
+        "response": "I need you to clarify who you are addressing."
+      },
+      {
+        "id": "gm_clarification_of_npc",
+        "player": "What did she mean by the road?",
+        "expect": "gm_no_social",
+        "elapsed_ms": 2220.89,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1706,
+          "output_tokens": 178,
+          "total_tokens": 1884,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": true,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": "GM",
+        "actual_purpose": "EXPLANATION",
+        "social_npc": null,
+        "kind": "conversational_answer",
+        "response": "That has not been established in the information available to you."
+      },
+      {
+        "id": "correction_pending",
+        "player": "Instead, make that a question about the lamp.",
+        "expect": "revise_no_execution",
+        "elapsed_ms": 2452.427,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1763,
+          "output_tokens": 169,
+          "total_tokens": 1932,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": "GM",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean?"
+      },
+      {
+        "id": "correction_already_executed",
+        "player": "Instead, make that a question about the lamp.",
+        "expect": "cannot_undo",
+        "elapsed_ms": 2324.687,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1708,
+          "output_tokens": 168,
+          "total_tokens": 1876,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": "GM",
+        "actual_purpose": "CLARIFICATION",
+        "social_npc": null,
+        "kind": "conversational_answer",
+        "response": "That action already resolved, so I cannot undo it. You can take a new action if you want."
+      },
+      {
+        "id": "correction_nothing_pending",
+        "player": "Instead, make that a question about the lamp.",
+        "expect": "ask_what_to_change",
+        "elapsed_ms": 2263.952,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1708,
+          "output_tokens": 200,
+          "total_tokens": 1908,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": "GM",
+        "actual_purpose": "CLARIFICATION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "I don't have an unexecuted intention to revise. What do you want to change?"
+      },
+      {
+        "id": "confirm_single_candidate",
+        "player": "Yes.",
+        "expect": "execute_npc",
+        "elapsed_ms": 2509.312,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 0,
+          "narration_calls": 1,
+          "retry_calls": 0,
+          "input_tokens": 23547,
+          "output_tokens": 92,
+          "total_tokens": 23639,
+          "purposes": [
+            "strict_social"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "gm_directed",
+          "intent_purpose": "request_information",
+          "target_resolution": "none_required",
+          "target_provenance": "none",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "none",
+          "allowed_operation": null,
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            }
+          ],
+          "direct_address": false,
+          "player_text": "Yes."
+        },
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\""
+      },
+      {
+        "id": "confirm_without_proposal",
+        "player": "Yes.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 16.594,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "That does not confirm a proposed action. Nothing has been attempted."
+      },
+      {
+        "id": "confirm_among_many",
+        "player": "Yes.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 17.216,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Yes does not choose among them. Name the person you mean. Nothing has been attempted."
+      },
+      {
+        "id": "withdrawal",
+        "player": "Never mind, forget that question.",
+        "expect": "withdraw_no_execution",
+        "elapsed_ms": 16.974,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": false,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": null,
+        "kind": "conversational_answer",
+        "response": "I've set aside the unexecuted intention. Anything already resolved still stands."
+      },
+      {
+        "id": "mixed_ask_then_leave",
+        "player": "I ask Mara about the road, then leave.",
+        "expect": "preserve_both_no_flatten",
+        "elapsed_ms": 16.469,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "You can ask Mara about the road first. I have not done this yet: leave. Those later steps cannot be resolved as stated. Should I do the first one now?"
+      },
+      {
+        "id": "conditional_gate",
+        "player": "Does the gate look safe? If so, I go through.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 15.182,
+        "calls": {
+          "provider_calls": 0,
+          "interpretation_calls": 0,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "total_tokens": 0,
+          "purposes": []
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": false,
+        "authorization": null,
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted."
+      },
+      {
+        "id": "incidental_glance",
+        "player": "I glance toward Mara and ask about the patrol.",
+        "expect": "execute_npc",
+        "elapsed_ms": 6770.922,
+        "calls": {
+          "provider_calls": 3,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 49611,
+          "output_tokens": 356,
+          "total_tokens": 49967,
+          "purposes": [
+            "interpretation",
+            "strict_social",
+            "retry_escalation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": true,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "request_information",
+          "target_resolution": "contextual",
+          "target_provenance": "unique_contextual",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I glance toward Mara and ask about the patrol."
+        },
+        "actual_recipient": "NPC",
+        "actual_purpose": "QUESTION",
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\""
+      },
+      {
+        "id": "provider_no_target",
+        "player": "I ask one of them what happened.",
+        "expect": "clarify_no_mutation",
+        "elapsed_ms": 2369.486,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1716,
+          "output_tokens": 193,
+          "total_tokens": 1909,
+          "purposes": [
+            "interpretation"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "I ask one of them what happened."
+        },
+        "actual_recipient": "NPC",
+        "actual_purpose": "QUESTION",
+        "social_npc": null,
+        "kind": "conversational_clarify",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      },
+      {
+        "id": "save_load_pending",
+        "player": "The sergeant.",
+        "expect": "execute_after_reload",
+        "elapsed_ms": 1997.734,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 0,
+          "narration_calls": 1,
+          "retry_calls": 0,
+          "input_tokens": 23927,
+          "output_tokens": 88,
+          "total_tokens": 24015,
+          "purposes": [
+            "strict_social"
+          ]
+        },
+        "behavior_pass": true,
+        "state_pass": true,
+        "label_pass": null,
+        "handoff_pass": true,
+        "response_pass": true,
+        "authorization_present": true,
+        "authorization": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "contextual",
+          "target_provenance": "established_interlocutor",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "continues",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": false,
+          "player_text": "The sergeant."
+        },
+        "actual_recipient": null,
+        "actual_purpose": null,
+        "social_npc": "sergeant_mara",
+        "kind": "question",
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\""
+      }
+    ],
+    "performance": [
+      {
+        "case": "A_established_dialogue",
+        "player": "I ask Sergeant Mara about the north road.",
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+        "kind": "question",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road"
+          },
+          "recalled_topic": true,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "sergeant_mara",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "target_binding": {
+            "final_target_kind": "npc",
+            "npc_id": "sergeant_mara",
+            "target_source": "native_npc",
+            "origin_actor_id": null,
+            "promoted_this_turn": false
+          },
+          "target_profile_hints": {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": false
+          },
+          "authority_source_used": "explicit_target",
+          "proposed_reply_speaker_id": "sergeant_mara",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_eligible",
+          "grounded_speaker_id": "sergeant_mara",
+          "lead_discussion_updates": [
+            {
+              "npc_id": "sergeant_mara",
+              "lead_id": "north_road",
+              "disclosure_level": "explicit",
+              "player_acknowledged": true,
+              "mention_count": 2,
+              "acknowledged_updated": true
+            }
+          ]
+        },
+        "elapsed_ms": 2521.291,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1820,
+          "output_tokens": 181,
+          "total_tokens": 2001,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "case": "B_unavailable_answer",
+        "player": "I ask Sergeant Mara who forged the lantern.",
+        "response": "Sergeant Mara shakes their head. \"I don't know.\"",
+        "kind": "question",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "target_resolved": true,
+          "topic_revealed": null,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "unknown",
+          "target_source": "explicit_target",
+          "target_reason": "normalized target_id matches scene-addressable roster",
+          "target_candidate_id": "sergeant_mara",
+          "target_candidate_valid": true,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "target_binding": {
+            "final_target_kind": "npc",
+            "npc_id": "sergeant_mara",
+            "target_source": "native_npc",
+            "origin_actor_id": null,
+            "promoted_this_turn": false
+          },
+          "target_profile_hints": {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": false
+          },
+          "reply_plan_kind": "genuine_uncertainty",
+          "incidental_subjective_allowed": false,
+          "absence_of_authored_topic_forces_refusal": false,
+          "declared_claims_expected": false,
+          "durable_state_mutation_allowed": false,
+          "npc_speech_authority": "none",
+          "objective_world_fact_authority": "none",
+          "authority_source_used": "explicit_target",
+          "proposed_reply_speaker_id": "sergeant_mara",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_eligible",
+          "grounded_speaker_id": "sergeant_mara",
+          "strategy_forced_to_answer": false,
+          "suppressed_fallback_strategies": []
+        },
+        "elapsed_ms": 7069.667,
+        "calls": {
+          "provider_calls": 3,
+          "interpretation_calls": 1,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 50784,
+          "output_tokens": 360,
+          "total_tokens": 51144,
+          "purposes": [
+            "interpretation",
+            "strict_social",
+            "retry_escalation"
+          ]
+        }
+      },
+      {
+        "case": "C_gm_question",
+        "player": "Could you describe our surroundings?",
+        "response": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A soot-streaked lantern burns beside the courtyard gate. The side gate is barred from the other side. Sergeant Mara looks concerned as she watches the road.",
+        "kind": "conversational_answer",
+        "social": null,
+        "elapsed_ms": 2416.826,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1704,
+          "output_tokens": 193,
+          "total_tokens": 1897,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "case": "D_consequential_inspect",
+        "player": "I inspect the courtyard lantern.",
+        "response": "You inspect courtyard lantern. A small maker's mark is stamped beneath the lantern.",
+        "kind": "discover_clue",
+        "social": null,
+        "elapsed_ms": 3691.395,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1704,
+          "output_tokens": 172,
+          "total_tokens": 1876,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      },
+      {
+        "case": "E_ambiguous",
+        "player": "I ask one of them what happened.",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "kind": "conversational_clarify",
+        "social": null,
+        "elapsed_ms": 2389.322,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 1,
+          "narration_calls": 0,
+          "retry_calls": 0,
+          "input_tokens": 1716,
+          "output_tokens": 203,
+          "total_tokens": 1919,
+          "purposes": [
+            "interpretation"
+          ]
+        }
+      }
+    ]
+  },
+  "provider": {
+    "requests": 49,
+    "input_tokens": 494725,
+    "output_tokens": 7349,
+    "total_tokens": 502074,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_02b9bb81a0df1b56006ad2b12eb4f887d2a9442fbea176c859",
+        "input_tokens": 1714,
+        "output_tokens": 197,
+        "total_tokens": 1911,
+        "latency_ms": 3330.662,
+        "estimated_input_tokens": 2972,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_07001f6d12bcd3e7006ad2b131d39087d28b2146ed3e4d8d90",
+        "input_tokens": 1885,
+        "output_tokens": 171,
+        "total_tokens": 2056,
+        "latency_ms": 2597.432,
+        "estimated_input_tokens": 3242,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0279ea34d2f80543006ad2b134698c87d2a080da884c761dc6",
+        "input_tokens": 24516,
+        "output_tokens": 89,
+        "total_tokens": 24605,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0e39cedb03c40572006ad2b136ab5487d2bc2125c5be398b0c",
+        "input_tokens": 1989,
+        "output_tokens": 206,
+        "total_tokens": 2195,
+        "latency_ms": 2188.02,
+        "estimated_input_tokens": 3376,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0e48bddbcfadbff3006ad2b13911ac87d28b3f168c107fe0c4",
+        "input_tokens": 1962,
+        "output_tokens": 208,
+        "total_tokens": 2170,
+        "latency_ms": 2477.335,
+        "estimated_input_tokens": 3321,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_05a13c7399ed8441006ad2b13bad7c87d2b5ac7b1ad7c3c2f9",
+        "input_tokens": 2021,
+        "output_tokens": 162,
+        "total_tokens": 2183,
+        "latency_ms": 2006.914,
+        "estimated_input_tokens": 3402,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0b9be82210e31dc4006ad2b13dd8ec87d280d1fc098828e94a",
+        "input_tokens": 24271,
+        "output_tokens": 75,
+        "total_tokens": 24346,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_055b8120f0a99d4e006ad2b140026487d2b04a3133c28109c4",
+        "input_tokens": 27639,
+        "output_tokens": 91,
+        "total_tokens": 27730,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_096934953df207be006ad2b142293c87d28a99e47cbe4aedff",
+        "input_tokens": 1932,
+        "output_tokens": 171,
+        "total_tokens": 2103,
+        "latency_ms": 2104.382,
+        "estimated_input_tokens": 3271,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0ddda6ef3195078b006ad2b144549887d2abf4b38d441bf85d",
+        "input_tokens": 1918,
+        "output_tokens": 182,
+        "total_tokens": 2100,
+        "latency_ms": 2177.684,
+        "estimated_input_tokens": 3257,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a1c06963c5d426a006ad2b147265087d2859f68eff3240a47",
+        "input_tokens": 1707,
+        "output_tokens": 168,
+        "total_tokens": 1875,
+        "latency_ms": 3018.081,
+        "estimated_input_tokens": 2962,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0dbbe937378ef170006ad2b14a4a8487d2a97a440e09937281",
+        "input_tokens": 23796,
+        "output_tokens": 44,
+        "total_tokens": 23840,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_033f2fd0ee95fa1d006ad2b14ca5cc87d29c07e2d5621381fc",
+        "input_tokens": 1820,
+        "output_tokens": 181,
+        "total_tokens": 2001,
+        "latency_ms": 2298.827,
+        "estimated_input_tokens": 3117,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_07c03e44fa293ded006ad2b14f267887d292ec1e457567b3b6",
+        "input_tokens": 1707,
+        "output_tokens": 178,
+        "total_tokens": 1885,
+        "latency_ms": 2029.635,
+        "estimated_input_tokens": 2962,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_05173960244e1401006ad2b15137fc87d2afc49543c30d75ce",
+        "input_tokens": 22822,
+        "output_tokens": 116,
+        "total_tokens": 22938,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0cb27e27edafb2ca006ad2b153e79087d28554af6f402c4415",
+        "input_tokens": 26255,
+        "output_tokens": 66,
+        "total_tokens": 26321,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0dcdad2ce6af6426006ad2b15638fc87d29307c42e246c32de",
+        "input_tokens": 1704,
+        "output_tokens": 193,
+        "total_tokens": 1897,
+        "latency_ms": 2398.253,
+        "estimated_input_tokens": 2960,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_09561a658f5eae43006ad2b158a4f087d286271cbca935e74c",
+        "input_tokens": 1704,
+        "output_tokens": 172,
+        "total_tokens": 1876,
+        "latency_ms": 3521.677,
+        "estimated_input_tokens": 2959,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_00610a6474d6c79c006ad2b15c6b9487d28dda80fd6eb338d1",
+        "input_tokens": 1716,
+        "output_tokens": 203,
+        "total_tokens": 1919,
+        "latency_ms": 2372.089,
+        "estimated_input_tokens": 2970,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0e9f95e3ee17208b006ad2b15ecca887d281177daa5e07038e",
+        "input_tokens": 1709,
+        "output_tokens": 194,
+        "total_tokens": 1903,
+        "latency_ms": 2133.289,
+        "estimated_input_tokens": 2966,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0f0f5afacb4c88a5006ad2b160feec87d2a941558fcd29ecc3",
+        "input_tokens": 23765,
+        "output_tokens": 84,
+        "total_tokens": 23849,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0977be0b57c71af2006ad2b163304887d295811a626d9604e9",
+        "input_tokens": 1709,
+        "output_tokens": 184,
+        "total_tokens": 1893,
+        "latency_ms": 2493.709,
+        "estimated_input_tokens": 2962,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0bf43effeea21df8006ad2b165ca6887d2a74fd7dc1473d8d2",
+        "input_tokens": 22797,
+        "output_tokens": 115,
+        "total_tokens": 22912,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_09ec12cfe88c7f79006ad2b1680a5887d2a07a735e685e0ff9",
+        "input_tokens": 26110,
+        "output_tokens": 142,
+        "total_tokens": 26252,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0c91ef713235bc43006ad2b16b797487d2a44695d3e7ddad85",
+        "input_tokens": 1708,
+        "output_tokens": 170,
+        "total_tokens": 1878,
+        "latency_ms": 2643.604,
+        "estimated_input_tokens": 2959,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_04e5e2c39da08e29006ad2b16df23087d2ad056e87de2ce31c",
+        "input_tokens": 23660,
+        "output_tokens": 98,
+        "total_tokens": 23758,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0222cff0a0de9795006ad2b170329087d2aeeeddaacdf683b6",
+        "input_tokens": 1716,
+        "output_tokens": 200,
+        "total_tokens": 1916,
+        "latency_ms": 2352.438,
+        "estimated_input_tokens": 2970,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_078928a4f40e1883006ad2b1728f0c87d29978281e57c0940d",
+        "input_tokens": 1707,
+        "output_tokens": 209,
+        "total_tokens": 1916,
+        "latency_ms": 2176.336,
+        "estimated_input_tokens": 2959,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_074a67ad515c8847006ad2b174d69887d28b82ac8192bf4428",
+        "input_tokens": 1716,
+        "output_tokens": 196,
+        "total_tokens": 1912,
+        "latency_ms": 2320.852,
+        "estimated_input_tokens": 2972,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0f8c32185a4efa30006ad2b177349087d296fa3bec99b20b36",
+        "input_tokens": 1717,
+        "output_tokens": 177,
+        "total_tokens": 1894,
+        "latency_ms": 2161.201,
+        "estimated_input_tokens": 2974,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_01ea774cc183cec0006ad2b179690087d289f8bf1ae599f8df",
+        "input_tokens": 1734,
+        "output_tokens": 177,
+        "total_tokens": 1911,
+        "latency_ms": 2390.757,
+        "estimated_input_tokens": 2995,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0e7dbe77335d951c006ad2b17be21487d2bef59a9ab3b90127",
+        "input_tokens": 23159,
+        "output_tokens": 97,
+        "total_tokens": 23256,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a5179144ffafe21006ad2b17dfc2487d28aa75e5f72693abd",
+        "input_tokens": 26954,
+        "output_tokens": 71,
+        "total_tokens": 27025,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a297d340472ab9e006ad2b180324087d2a7c0e820cc87ee4a",
+        "input_tokens": 1717,
+        "output_tokens": 182,
+        "total_tokens": 1899,
+        "latency_ms": 2231.444,
+        "estimated_input_tokens": 2972,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_01ff0683fc1f226f006ad2b1824bd887d29ca88e4ac61ad36b",
+        "input_tokens": 1708,
+        "output_tokens": 195,
+        "total_tokens": 1903,
+        "latency_ms": 2356.734,
+        "estimated_input_tokens": 2963,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0d49c982963cbd9b006ad2b184ce5087d28a2605249fc7f5e9",
+        "input_tokens": 1708,
+        "output_tokens": 174,
+        "total_tokens": 1882,
+        "latency_ms": 2464.774,
+        "estimated_input_tokens": 2961,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0f21990cb8cd48d2006ad2b18751bc87d28de2f3ef44aca9ea",
+        "input_tokens": 22776,
+        "output_tokens": 93,
+        "total_tokens": 22869,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_08fe912efc5f7b19006ad2b189ed1c87d2a586fcb3ef9dccbb",
+        "input_tokens": 26180,
+        "output_tokens": 77,
+        "total_tokens": 26257,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0f9ec88b82171ea2006ad2b18c133887d2b6387cdb0cb6c190",
+        "input_tokens": 1711,
+        "output_tokens": 197,
+        "total_tokens": 1908,
+        "latency_ms": 2212.984,
+        "estimated_input_tokens": 2964,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_01e95e23df667be9006ad2b18e3f2087d2aebdd0ac1378a921",
+        "input_tokens": 1706,
+        "output_tokens": 178,
+        "total_tokens": 1884,
+        "latency_ms": 2202.149,
+        "estimated_input_tokens": 2958,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_09aafae9b0d40894006ad2b19090dc87d2a21e1303417e0cb7",
+        "input_tokens": 1763,
+        "output_tokens": 169,
+        "total_tokens": 1932,
+        "latency_ms": 2431.344,
+        "estimated_input_tokens": 3031,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_04b5d392ee04fae8006ad2b19310d887d2bd7c4c536f289c40",
+        "input_tokens": 1708,
+        "output_tokens": 168,
+        "total_tokens": 1876,
+        "latency_ms": 2303.27,
+        "estimated_input_tokens": 2963,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_09cb328a000970fe006ad2b195557887d2b977ef2bfe8a71c9",
+        "input_tokens": 1708,
+        "output_tokens": 200,
+        "total_tokens": 1908,
+        "latency_ms": 2244.136,
+        "estimated_input_tokens": 2963,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_01b9aefb32ec82cc006ad2b197e28487d2985403016e75d85f",
+        "input_tokens": 23547,
+        "output_tokens": 92,
+        "total_tokens": 23639,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a66c14c31612f44006ad2b19a65f887d2bc3be14fde2a6b36",
+        "input_tokens": 1708,
+        "output_tokens": 194,
+        "total_tokens": 1902,
+        "latency_ms": 2073.605,
+        "estimated_input_tokens": 2963,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_06eb2149177049da006ad2b19c861487d2a81853b53580942e",
+        "input_tokens": 22468,
+        "output_tokens": 98,
+        "total_tokens": 22566,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_04d9e54399ef8009006ad2b19f349487d28de23613574b12cf",
+        "input_tokens": 25435,
+        "output_tokens": 64,
+        "total_tokens": 25499,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_06e88f6094f612fb006ad2b1a1335887d2b4f5475cfd138f93",
+        "input_tokens": 1716,
+        "output_tokens": 193,
+        "total_tokens": 1909,
+        "latency_ms": 2350.464,
+        "estimated_input_tokens": 2970,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_08635421c3485798006ad2b1a3a76487d2ac4fe9a2cbc47304",
+        "input_tokens": 23927,
+        "output_tokens": 88,
+        "total_tokens": 24015,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      }
+    ]
+  }
+}

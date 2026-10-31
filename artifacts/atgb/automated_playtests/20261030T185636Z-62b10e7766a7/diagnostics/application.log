@@ -1,0 +1,14 @@
+INFO:     Started server process [29608]
+INFO:     Waiting for application startup.
+[API preflight] skipped (ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT is set)
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+INFO:     Application startup complete.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 19b5d60b3f0b76a09dc2ee93
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov�"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error

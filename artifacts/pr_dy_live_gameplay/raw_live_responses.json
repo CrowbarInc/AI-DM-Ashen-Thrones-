@@ -1,0 +1,273 @@
+[
+  {
+    "player_input": "",
+    "text": "The action was resolved, but live narration was not requested because it would exceed the provider budget.",
+    "kind": "scene_opening",
+    "action_id": "campaign_start_opening_scene",
+    "mode": null,
+    "outcome": null,
+    "mutation": null,
+    "live": {}
+  },
+  {
+    "player_input": "I take a closer look at the notice board.",
+    "text": "You inspect notice board. The missing patrol was last seen taking the northwest mud track past the crates.",
+    "kind": "discover_clue",
+    "action_id": "notice_board",
+    "mode": "AUTO",
+    "outcome": null,
+    "mutation": null,
+    "live": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+      "model_communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to have their character closely inspect the notice board in the scene.\"},\"asserted_premises\":[{\"text\":\"The scene is set at Cinderwatch Gate District with a notice board present.\"},{\"text\":\"The notice board is relevant to the missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"The character gains detailed information from the notice board about the missing patrol or related notices.\"}],\"action_components\":[{\"order\":1,\"description\":\"The character moves their attention to the notice board and examines it closely.\",\"target_ref\":\"notice_board\",\"operation_class\":\"INSPECT\"}],\"references\":{\"permitted_entity_ids\":[\"guard_captain\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "provider_requests": [
+        {
+          "purpose": "interpretation",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_07ddedbe052db274006acb7f72a2cc87d2bdb4de591b070f20",
+          "input_tokens": 700,
+          "output_tokens": 187,
+          "total_tokens": 887,
+          "latency_ms": 3225.426,
+          "estimated_input_tokens": 1260,
+          "max_output_tokens": 320,
+          "usage_consistent": true
+        }
+      ],
+      "bridge": {
+        "source": "stored_interpretation",
+        "accepted": true,
+        "operation": "INSPECT",
+        "target_ref": "notice_board",
+        "engine_type": "investigate",
+        "visible_surface_inspection": false
+      },
+      "record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player intends to have their character closely inspect the notice board in the scene."
+        },
+        "asserted_premises": [
+          {
+            "text": "The scene is set at Cinderwatch Gate District with a notice board present.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "The notice board is relevant to the missing patrol inquiry.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character gains detailed information from the notice board about the missing patrol or related notices.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The character moves their attention to the notice board and examines it closely.",
+            "target_ref": "notice_board",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "guard_captain",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      }
+    }
+  },
+  {
+    "player_input": "I ask the captain what he thinks happened to them.",
+    "text": "Guard Captain mutters, \"Word is, the missing patrol was last seen taking the northwest mud track past the crates.\"",
+    "kind": "question",
+    "action_id": "guard_captain",
+    "mode": "AUTO",
+    "outcome": null,
+    "mutation": null,
+    "live": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+      "model_communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character asks the guard captain for his opinion on what happened to the missing patrol.\"},\"asserted_premises\":[{\"text\":\"There is a guard captain present in the scene.\"},{\"text\":\"There is an ongoing inquiry about a missing patrol.\"},{\"text\":\"The player character can speak to the guard captain.\"}],\"requested_outcomes\":[{\"text\":\"The guard captain provides his thoughts or information about the fate of the missing patrol.\"}],\"action_components\":[{\"order\":1,\"description\":\"Address the guard captain with a question about what he thinks happened to the missing patrol.\",\"target_ref\":\"guard_captain\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"guard_captain\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "provider_requests": [
+        {
+          "purpose": "interpretation",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_0b0a7fbd1d15febf006acb7f921bac87d1a9c2920f68597a27",
+          "input_tokens": 724,
+          "output_tokens": 198,
+          "total_tokens": 922,
+          "latency_ms": 3119.761,
+          "estimated_input_tokens": 1296,
+          "max_output_tokens": 320,
+          "usage_consistent": true
+        }
+      ],
+      "bridge": {
+        "source": "stored_interpretation",
+        "accepted": true,
+        "operation": "ASK",
+        "target_ref": "guard_captain",
+        "engine_type": "question",
+        "visible_surface_inspection": false
+      },
+      "record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player character asks the guard captain for his opinion on what happened to the missing patrol."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a guard captain present in the scene.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "There is an ongoing inquiry about a missing patrol.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "The player character can speak to the guard captain.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The guard captain provides his thoughts or information about the fate of the missing patrol.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Address the guard captain with a question about what he thinks happened to the missing patrol.",
+            "target_ref": "guard_captain",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "guard_captain",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      }
+    }
+  },
+  {
+    "player_input": "How does searching work at the table? I'm not doing anything in the scene.",
+    "text": "Understood. I'll treat that as out of character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+    "kind": "interpretation_rejected",
+    "action_id": "interpretation_rejected",
+    "mode": "AUTO",
+    "outcome": "automatic_ooc",
+    "mutation": false,
+    "live": {
+      "status": "blocked",
+      "reason": "automatic_ooc",
+      "eligibility_disposition": "OUT_OF_CHARACTER",
+      "model_communication_mode": "RULES_QUESTION",
+      "interpretation_status": "INTERPRETED",
+      "raw_interpretation": "{\"communication_mode\":\"RULES_QUESTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player is asking how the searching mechanic works in the game, indicating they are not currently taking any in-scene action but want to understand the rules or process.\"},\"asserted_premises\":[{\"text\":\"The player is not performing any action in the scene currently.\"},{\"text\":\"The player wants to understand how searching works at the table.\"}],\"requested_outcomes\":[{\"text\":\"An explanation of the searching mechanic or rules in the game.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask for an explanation of how searching works in the game rules or at the table.\",\"target_ref\":null,\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"guard_captain\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "provider_requests": [
+        {
+          "purpose": "interpretation",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_0c2290f0646bf269006acb7fbef62c87d2bbbe561849eb46c1",
+          "input_tokens": 749,
+          "output_tokens": 198,
+          "total_tokens": 947,
+          "latency_ms": 2454.263,
+          "estimated_input_tokens": 1332,
+          "max_output_tokens": 320,
+          "usage_consistent": true
+        }
+      ],
+      "record": {
+        "communication_mode": "RULES_QUESTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player is asking how the searching mechanic works in the game, indicating they are not currently taking any in-scene action but want to understand the rules or process."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player is not performing any action in the scene currently.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "The player wants to understand how searching works at the table.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "An explanation of the searching mechanic or rules in the game.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask for an explanation of how searching works in the game rules or at the table.",
+            "target_ref": null,
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "guard_captain",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      }
+    }
+  },
+  {
+    "player_input": "OOC: please leave the scene exactly as it is.",
+    "text": "Understood. I will treat that as out-of-character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+    "kind": "ooc_message",
+    "action_id": "ooc_message",
+    "mode": "OOC",
+    "outcome": "non_mutating_ooc_acknowledgement",
+    "mutation": false,
+    "live": {}
+  }
+]

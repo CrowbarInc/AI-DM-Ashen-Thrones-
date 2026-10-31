@@ -1,0 +1,50 @@
+{
+  "case_id": "s01q1",
+  "family": "s01",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "724b72ca7c4a22e67456931b6126abdcd9f26500a216290fee60498f2d2baf52",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Cala told Brin"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s01"
+    ],
+    "answered_arguments": [
+      "listener"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 explicitly states that Cala told Brin, indicating Cala reported the crack to Brin."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

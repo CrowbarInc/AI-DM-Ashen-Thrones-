@@ -1,0 +1,782 @@
+{
+  "campaign.json": {
+    "title": "Ashen Thrones",
+    "premise": "A grimdark political sandbox where fractured powers, ancient mysteries, and ruthless factions compete for dominance in a dangerous world. Survival, intrigue, and warfare shape the rise or destruction of new rulers.",
+    "tone": "grimdark political intrigue with survival and horror elements",
+    "player_character": "Galinor",
+    "character_role": "A wandering wizard seeking to establish a stronghold of power in a fractured and hostile world.",
+    "starting_context": "Galinor arrives in a struggling frontier city at the edge of rival territories, where noble houses scheme, criminal syndicates rule the shadows, and whispers spread of an abandoned fortress nearby\u2014one said to rest atop ancient and dangerous magical foundations.",
+    "character_secret": {
+      "title": "The Betrayed Loyalist",
+      "description": "Galinor once served faithfully as a trusted court mage. When he uncovered evidence of a conspiracy and brought it to his ruler, he discovered the conspiracy was orchestrated by the throne itself.",
+      "implications": [
+        "The ruler cannot allow Galinor to live if his identity becomes known.",
+        "Agents of the throne may hunt surviving witnesses of the purge.",
+        "Galinor holds knowledge capable of destabilizing an entire realm."
+      ],
+      "hidden_truth": "The conspiracy may have involved forbidden magic or darker powers influencing the throne."
+    },
+    "world_pressures": [
+      "Rival noble houses competing for territory and influence.",
+      "Religious orders attempting to control or suppress dangerous magic.",
+      "Criminal syndicates dominating trade, smuggling, and urban power.",
+      "Invading armies exploiting political instability.",
+      "Eldritch cults pursuing forgotten rituals and ancient powers."
+    ],
+    "environmental_threats": [
+      "harsh seasons and famine",
+      "disease and plague",
+      "dangerous wilderness and monsters",
+      "war-torn lands and refugee movements",
+      "cursed ruins and unstable magical sites"
+    ],
+    "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+    "campaign_structure": "A sandbox political world where the player gradually establishes a locus of power through alliances, conquest, intrigue, and exploration.",
+    "long_term_goals": [
+      "Establish a fortified stronghold",
+      "Build a network of agents and allies",
+      "Acquire rare magical knowledge",
+      "Manipulate regional politics"
+    ],
+    "gm_guidance": [
+      "Emphasize faction intrigue, shifting alliances, and fragile political balance.",
+      "Make survival and logistics meaningful pressures.",
+      "Allow the player to acquire land, followers, and influence gradually.",
+      "Let the world react dynamically as the player's influence grows."
+    ]
+  },
+  "character.json": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat.json": {
+    "persistence_version": 1,
+    "kind": "combat",
+    "saved_at": "2026-10-30T19:01:44.707838Z",
+    "payload": {
+      "in_combat": false,
+      "round": 0,
+      "initiative_order": [],
+      "turn_index": 0,
+      "active_actor_id": null,
+      "player_turn_used": false
+    },
+    "integrity": {
+      "payload_sha256": "5173f2e2f569585ed9a729d0ed4987dce1a35973b2186a16c01e2d484a6bdbe0",
+      "canonicalization": "json/sort_keys,separators",
+      "hash": "sha256"
+    }
+  },
+  "conditions.json": {
+    "dazed": {
+      "name": "Dazed",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true
+      }
+    },
+    "shaken": {
+      "name": "Shaken",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "sickened": {
+      "name": "Sickened",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "damage_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "blinded": {
+      "name": "Blinded",
+      "kind": "condition",
+      "default_effects": {
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "stunned": {
+      "name": "Stunned",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true,
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "risky_strike": {
+      "name": "Risky Strike",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "defensive_stance": {
+      "name": "Defensive Stance",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "shield": {
+      "name": "Shield",
+      "kind": "spell_effect",
+      "default_effects": {
+        "ac_bonus": 4
+      }
+    }
+  },
+  "session.json": {
+    "persistence_version": 1,
+    "kind": "session",
+    "saved_at": "2026-10-30T19:01:44.710349Z",
+    "payload": {
+      "active_scene_id": "frontier_gate",
+      "visited_scene_ids": [
+        "frontier_gate"
+      ],
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "response_mode": "standard",
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "scene_state": {
+        "active_scene_id": "frontier_gate",
+        "active_entities": [
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner",
+          "guard_captain",
+          "refugee",
+          "threadbare_watcher"
+        ],
+        "entity_presence": {
+          "gate_guard": "active",
+          "gate_serjeant": "active",
+          "tavern_runner": "active",
+          "guard_captain": "active",
+          "threadbare_watcher": "active",
+          "refugee": "active"
+        },
+        "current_interlocutor": null,
+        "emergent_addressables": [],
+        "promoted_actor_npc_map": {}
+      },
+      "runtime_scene_overlays": {
+        "old_milestone": {
+          "scene_id": "old_milestone",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        },
+        "frontier_gate": {
+          "scene_id": "frontier_gate",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        },
+        "market_quarter": {
+          "scene_id": "market_quarter",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        }
+      },
+      "scene_runtime": {
+        "frontier_gate": {
+          "discovered_clues": [],
+          "discovered_clue_ids": [],
+          "pending_leads": [],
+          "revealed_hidden_facts": [],
+          "suspicion_flags": [],
+          "searched_targets": [],
+          "resolved_interactables": [],
+          "last_exploration_action_key": null,
+          "repeated_action_count": 0,
+          "last_resolution_kind": null,
+          "last_description_hash": null,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "consumed_action_ids": [],
+          "momentum_exchanges_since": 0,
+          "momentum_next_due_in": 2,
+          "momentum_last_kind": null
+        }
+      },
+      "clue_knowledge": {},
+      "lead_registry": {},
+      "npc_runtime": {
+        "gate_guard": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        },
+        "gate_serjeant": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        },
+        "tavern_runner": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        }
+      },
+      "last_action_debug": null,
+      "debug_traces": [
+        {
+          "kind": "state_mutation",
+          "domain": "scene_state",
+          "owner_module": "game.interaction_context",
+          "operation": "rebuild_active_scene_entities",
+          "changed_area": "scene_state.active_entities"
+        },
+        {
+          "kind": "state_mutation",
+          "domain": "scene_state",
+          "owner_module": "game.interaction_context",
+          "operation": "rebuild_active_scene_entities",
+          "changed_area": "scene_state.active_entities"
+        }
+      ],
+      "flags": {},
+      "chat_history": [],
+      "character_name": "Galinor",
+      "campaign_run_id": "0776401bfefcf70350789b6c",
+      "session_id": "0776401bfefcf70350789b6c",
+      "campaign_started": false,
+      "last_saved_at": "2026-10-30T19:01:44.710349Z",
+      "__turn_start_active_interaction_target_id": ""
+    },
+    "integrity": {
+      "payload_sha256": "36ddc00040fe24b38f989d5a1ed6c4c9fa9490f4154a60b7fd5a16bfae8fd58f",
+      "canonicalization": "json/sort_keys,separators",
+      "hash": "sha256"
+    }
+  },
+  "session_log.jsonl": [],
+  "world.json": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate",
+        "aliases": [
+          "guard",
+          "watch",
+          "watch guard"
+        ],
+        "topics": [
+          {
+            "id": "watch_command",
+            "text": "Captain Thoran commands the gate watch tonight.",
+            "clue_id": "captain_thoran_watch"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate",
+        "aliases": [
+          "serjeant",
+          "watch serjeant",
+          "gate serjeant"
+        ],
+        "topics": [
+          {
+            "id": "route_change",
+            "text": "The patrol route changed after the Ash Compact census choke worsened.",
+            "clue_id": "patrol_route_change"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "aliases": [
+          "runner",
+          "tavern runner"
+        ],
+        "topics": [
+          {
+            "id": "patrol_rumor",
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "clue_id": "muddy_footprints_northwest"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "sell_rumors",
+        "disposition": "friendly",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "scenes/frontier_gate.json": {
+    "scene": {
+      "id": "frontier_gate",
+      "location": "Cinderwatch Gate District",
+      "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+      "mode": "social",
+      "visible_facts": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "opening_seed_facts": [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+        "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+        "A tavern runner shouts offers of hot stew and paid rumor.",
+        "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+        "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+      ],
+      "journal_seed_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "notice_patrol_route",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "hidden_facts": [
+        "An agent of a noble house is watching new arrivals from the square's edge.",
+        "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+        "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+        "A spotter above the lane is matching faces to a written list paid for in silver."
+      ],
+      "exits": [
+        {
+          "label": "Enter Cinderwatch",
+          "target_scene_id": "market_quarter"
+        },
+        {
+          "label": "Follow the missing patrol rumor",
+          "target_scene_id": "old_milestone"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "guard",
+            "watchman",
+            "sentry",
+            "guardsman",
+            "captain"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 1,
+          "address_roles": [
+            "runner",
+            "informant"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "refugee",
+          "name": "Ragged stranger",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 2,
+          "address_roles": [
+            "stranger",
+            "refugee"
+          ],
+          "aliases": [
+            "ragged stranger"
+          ]
+        },
+        {
+          "id": "threadbare_watcher",
+          "name": "Threadbare watcher",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 3,
+          "address_roles": [
+            "watcher"
+          ],
+          "aliases": []
+        }
+      ],
+      "interactables": [
+        {
+          "id": "notice_board",
+          "label": "Notice board",
+          "aliases": [
+            "notice",
+            "board",
+            "curfew notice",
+            "missing patrol warning"
+          ],
+          "type": "investigate",
+          "reveals_clue": "notice_patrol_route"
+        }
+      ]
+    }
+  },
+  "scenes/market_quarter.json": {
+    "scene": {
+      "id": "market_quarter",
+      "location": "Cinderwatch Market Quarter",
+      "summary": "Canvases snap in the wind over a market built from salvage timber and old stone. Mercenaries, pilgrims, smugglers, and hungry townsfolk bargain under armed watch.",
+      "mode": "exploration",
+      "visible_facts": [
+        "A moneylender's house flies noble colors.",
+        "Rumors of an abandoned fortress circulate among caravan guards."
+      ],
+      "opening_seed_facts": [
+        "A moneylender's house flies noble colors.",
+        "Canvases snap in the wind over the market stalls."
+      ],
+      "discoverable_clues": [],
+      "hidden_facts": [
+        "The Ash Cowl taxes black-market arcane goods here."
+      ],
+      "exits": [
+        {
+          "label": "Return to the Gate",
+          "target_scene_id": "frontier_gate"
+        },
+        {
+          "label": "Seek the fortress trail",
+          "target_scene_id": "old_milestone"
+        }
+      ],
+      "enemies": [],
+      "actions": []
+    }
+  },
+  "scenes/old_milestone.json": {
+    "scene": {
+      "id": "old_milestone",
+      "location": "Old Milestone",
+      "summary": "A weathered milestone leans beside the northwest mud track, where the road thins into scrub and standing rainwater.",
+      "mode": "exploration",
+      "visible_facts": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub.",
+        "The track continues a short way past the stone before rainwater and brush make the next step unclear."
+      ],
+      "opening_seed_facts": [
+        "A weathered stone milestone leans beside the northwest mud track.",
+        "The mud around the marker is churned with faint overlapping prints that fade into the scrub."
+      ],
+      "journal_seed_facts": [
+        "The northwest mud track reaches an old milestone beyond the gate.",
+        "The mud around the marker is churned; any trail beyond it is unclear."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "milestone_mud_prints",
+          "text": "Faint overlapping prints mark the mud around the old milestone, but their number, origin, and direction stay unclear."
+        }
+      ],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Return to Cinderwatch Gate",
+          "target_scene_id": "frontier_gate"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "interactables": [
+        {
+          "id": "milestone",
+          "label": "Weathered milestone",
+          "aliases": [
+            "old milestone",
+            "stone",
+            "marker",
+            "weathered stone"
+          ],
+          "type": "investigate",
+          "reveals_clue": "milestone_mud_prints"
+        },
+        {
+          "id": "prints",
+          "label": "Mud prints",
+          "aliases": [
+            "footprints",
+            "mud",
+            "track",
+            "mud track",
+            "northwest track"
+          ],
+          "type": "investigate",
+          "reveals_clue": "milestone_mud_prints"
+        }
+      ]
+    }
+  }
+}

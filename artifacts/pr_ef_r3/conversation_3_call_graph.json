@@ -1,0 +1,262 @@
+{
+  "turns": [
+    {
+      "turn": 1,
+      "player": "Could you describe our surroundings?",
+      "response": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A soot-streaked lantern burns beside the courtyard gate. The side gate is barred from the other side. Sergeant Mara looks concerned as she watches the road.",
+      "provider_calls": 1,
+      "elapsed_ms": 4148.943,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1704,
+          "output_tokens": 193,
+          "total_tokens": 1897,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 1704,
+      "output_tokens": 193
+    },
+    {
+      "turn": 2,
+      "player": "What do I already know about that lantern?",
+      "response": "A soot-streaked lantern burns beside the courtyard gate. You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+      "provider_calls": 1,
+      "elapsed_ms": 2188.611,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1873,
+          "output_tokens": 191,
+          "total_tokens": 2064,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 1873,
+      "output_tokens": 191
+    },
+    {
+      "turn": 3,
+      "player": "I ask Mara what troubles her.",
+      "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"",
+      "provider_calls": 3,
+      "elapsed_ms": 7716.674,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 2013,
+          "output_tokens": 156,
+          "total_tokens": 2169,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "strict_social",
+          "input_tokens": 22783,
+          "output_tokens": 71,
+          "total_tokens": 22854,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "retry_escalation",
+          "input_tokens": 25769,
+          "output_tokens": 63,
+          "total_tokens": 25832,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 50565,
+      "output_tokens": 290
+    },
+    {
+      "turn": 4,
+      "player": "Which road do you mean?",
+      "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+      "provider_calls": 2,
+      "elapsed_ms": 6619.842,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 2011,
+          "output_tokens": 170,
+          "total_tokens": 2181,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "strict_social",
+          "input_tokens": 23865,
+          "output_tokens": 85,
+          "total_tokens": 23950,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 25876,
+      "output_tokens": 255
+    },
+    {
+      "turn": 5,
+      "player": "I ask Mara who forged the lantern.",
+      "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"",
+      "provider_calls": 3,
+      "elapsed_ms": 7842.679,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 2010,
+          "output_tokens": 179,
+          "total_tokens": 2189,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "strict_social",
+          "input_tokens": 24442,
+          "output_tokens": 97,
+          "total_tokens": 24539,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "retry_escalation",
+          "input_tokens": 27863,
+          "output_tokens": 81,
+          "total_tokens": 27944,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 54315,
+      "output_tokens": 357
+    },
+    {
+      "turn": 6,
+      "player": "GM, can you clarify what Mara just said?",
+      "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"",
+      "provider_calls": 1,
+      "elapsed_ms": 2915.055,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1944,
+          "output_tokens": 183,
+          "total_tokens": 2127,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 1944,
+      "output_tokens": 183
+    },
+    {
+      "turn": 7,
+      "player": "I turn to Mara and ask about the north road.",
+      "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+      "provider_calls": 1,
+      "elapsed_ms": 2740.175,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1920,
+          "output_tokens": 216,
+          "total_tokens": 2136,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 1920,
+      "output_tokens": 216
+    },
+    {
+      "turn": 8,
+      "player": "I inspect the courtyard lantern.",
+      "response": "A small maker's mark is stamped beneath the lantern.",
+      "provider_calls": 1,
+      "elapsed_ms": 2958.969,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1928,
+          "output_tokens": 176,
+          "total_tokens": 2104,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 1928,
+      "output_tokens": 176
+    },
+    {
+      "turn": 9,
+      "player": "Drop any outstanding request; keep what already happened.",
+      "response": "I've set aside the unexecuted intention. Anything already resolved still stands.",
+      "provider_calls": 1,
+      "elapsed_ms": 2745.618,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1930,
+          "output_tokens": 147,
+          "total_tokens": 2077,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 1930,
+      "output_tokens": 147
+    },
+    {
+      "turn": 10,
+      "player": "I tell the sergeant to describe the courtyard.",
+      "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"",
+      "provider_calls": 3,
+      "elapsed_ms": 9695.818,
+      "calls": [
+        {
+          "purpose": "interpretation",
+          "input_tokens": 1944,
+          "output_tokens": 170,
+          "total_tokens": 2114,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "strict_social",
+          "input_tokens": 25090,
+          "output_tokens": 123,
+          "total_tokens": 25213,
+          "model": "gpt-4.1-mini-2025-04-14"
+        },
+        {
+          "purpose": "retry_escalation",
+          "input_tokens": 28023,
+          "output_tokens": 89,
+          "total_tokens": 28112,
+          "model": "gpt-4.1-mini-2025-04-14"
+        }
+      ],
+      "input_tokens": 55057,
+      "output_tokens": 382
+    },
+    {
+      "turn": 11,
+      "player": "I walk through the courtyard gate.",
+      "response": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "provider_calls": 0,
+      "elapsed_ms": 334.624,
+      "calls": [],
+      "input_tokens": 0,
+      "output_tokens": 0
+    }
+  ],
+  "by_purpose": {
+    "interpretation": {
+      "calls": 10,
+      "input_tokens": 19277,
+      "output_tokens": 1781
+    },
+    "strict_social": {
+      "calls": 4,
+      "input_tokens": 96180,
+      "output_tokens": 376
+    },
+    "retry_escalation": {
+      "calls": 3,
+      "input_tokens": 81655,
+      "output_tokens": 233
+    }
+  },
+  "usage_rows": 17,
+  "cursor_consumed": 17
+}

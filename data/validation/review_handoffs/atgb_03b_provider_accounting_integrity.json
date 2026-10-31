@@ -1,0 +1,487 @@
+{
+  "campaign_id": "atgb_03b_provider_accounting_integrity",
+  "campaign_name": "ATGB-03B Provider Accounting Integrity",
+  "campaign_date": "2026-10-18",
+  "purpose": "Repair provider-request accounting across production dispatch owners and validate safe ATGB request bounds without live execution.",
+  "objective_status": "IMPLEMENTED; CURRENT-SOURCE ACCOUNTING READINESS VERIFIED; REVIEW PENDING; NO LIVE EXECUTION",
+  "executive_summary": "The existing budget owner now reserves allowance atomically and writes durable attempt identity before dispatch. Seven production owners, including startup preflight, share the lifecycle. Current source/readiness verification passes. Latest 59 lifecycle/owner/readiness checks pass; relevant regression run 225/227 with both failures reproduced before repair. One isolated Windows reset-write error passed targeted retry. No new provider requests, gameplay change, baseline run or score; original evidence preserved.",
+  "changes": {
+    "production": [
+      "Provider budget admission/reservation, durable lifecycle, stable identity and idempotent completion; integrations at all seven known owners.",
+      "S04.2 early-return path exposes existing performance fields and separately scoped accounting metadata; reply/decisions unchanged."
+    ],
+    "validation": [
+      "Deterministic successful/failed/interrupted/refused dispatch tests for every owner; concurrency, incomplete telemetry, ledger failure, readiness mutation and ATGB isolation/budget tests."
+    ],
+    "tooling": [
+      "ATGB readiness verifies guarded SDK sites and reviewed source hashes. Worker reconciles admissions, preserves host telemetry, receives remaining campaign budgets and deadline."
+    ],
+    "documentation": [
+      "Complete dispatch inventory, root-cause/correction report, session orientation and scope/comparability review."
+    ],
+    "generated_artifacts": [
+      "All test attempts, original-source comparison diff, payload AST checks, readiness/preservation records and standard handoff."
+    ]
+  },
+  "testing": {
+    "focused": "Latest current lifecycle/dispatch-owner/readiness suite: 59 passed. ATGB accounting, infrastructure and readiness checks observed passing; see per-attempt JUnit records.",
+    "broader": "227 relevant provider/gameplay/ATGB tests: 225 passed, 2 pre-existing failures reproduced using original budget/call_gpt in memory.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Provider-disabled real chat/reset isolation and controlled provider stubs only; no live benchmark or real API request.",
+    "model_runtime_boundary": "Original SDK call arguments/model routing unchanged at all seven dispatch owners; real-provider behavior unmeasured.",
+    "new_regressions": "None established in the exercised scope. One Windows reset file-replacement error passed targeted retry; original failure retained.",
+    "pre_existing_failures": "Exact routing metadata expectation and expression answer_sufficiency expectation both reproduce with pre-repair code."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Accounting is process-local and opt-in; active accounting requires fresh durable ledger. No automatic resume of prior ledger.",
+      "JSONL consumers must recognize lifecycle events; historical completion-only records cannot be retroactively certified.",
+      "Changed application sources/unknown dispatch sites require renewed readiness review."
+    ],
+    "pre_existing": [
+      "Two reproduced regression failures remain unchanged.",
+      "Windows isolated reset os.replace can fail transiently; targeted retry passed.",
+      "Original ATGB baseline remains 15/37 captured, unscored, with S07/S09 opening delivery unmeasured."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review infrastructure correction, dispatch coverage, telemetry compatibility and known limitations before any separately authorized ATGB continuation.",
+    "Do not infer gameplay improvement or assign original conversational scores from accounting tests. All human judgments remain pending."
+  ],
+  "missing_concepts": [
+    "No account-wide/distributed request quota or automatic crash-resume accounting is implemented.",
+    "Complete live baseline and authorized human scoring remain outside this pass."
+  ],
+  "does_not_prove": [
+    "Live-provider benchmark completion, conversational improvement, a gameplay score, new cost/latency measurements, or SDK transport-request counts.",
+    "Completeness of historical ATGB-03 ledgers or same-trial S04 resume continuity.",
+    "Budget safety of independently launched experimental utilities or arbitrary future provider code."
+  ],
+  "recommended_next_step": "Await review. Do not run live ATGB, modify gameplay, or start Product Realization work. A later authorized continuation must use proven allowances, explicit deadlines and distinct S04 trial provenance.",
+  "primary_report": "development/reports/atgb_03b_provider_accounting_integrity.md",
+  "evidence_packets": [],
+  "configuration_source": "tools/atgb/provider_accounting_integrity.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_03/S03/provider_usage.jsonl",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/provider_usage.jsonl",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/transcript.md",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/accounting_readiness.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_accounting_analysis.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_final.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_fixed.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_readiness.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_scope.diff",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_verified.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/audit_scope.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/dispatch_inventory.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/environmental_worker_failure.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/package_review.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/preflight_retry.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/preservation_before.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/preservation_checks.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/prior_failures.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/regression.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/reproduce_prior_failures.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/scope_review.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/api.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/api_upstream_preflight.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/expressive_dialogue.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/gm.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/host_constrained_candidates.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/live_chat_interpretation.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/provider_budget.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/semantic_interpreter.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/game/unified_semantic_planning.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/tests/test_atgb_accounting.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/tools/atgb/accounting.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/tools/atgb/chat_worker.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/source_before/tools/atgb/driver.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/surface_final.xml",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/validation_results.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/review_handoffs/atgb_03b_provider_accounting_integrity.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_03_initial_live_baseline.md",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_03a_provider_accounting.md",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api_upstream_preflight.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/gm.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/host_constrained_candidates.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_atgb_accounting.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_atgb_infrastructure.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_atgb_readiness.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_model_routing_runtime.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r3_r1_expression_semantics.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_provider_accounting_integrity.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/accounting.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/provider_accounting_integrity.json",
+      "role": "provider_accounting_integrity_evidence",
+      "why": "Review lifecycle safety, source scope/comparability and exact validation limits without live-provider claims.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "ZIP includes all seven changed owners and budget source, reviewed-source manifest, before-source diff, tests and every JUnit attempt, complete dispatch inventory, preservation/AST checks, readiness, and original accounting reports. Manifest payload hashes verified after packaging."
+}

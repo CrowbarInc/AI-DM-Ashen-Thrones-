@@ -1,0 +1,47 @@
+PR-CE focused deterministic results
+Interpreter: .venv Python 3.12.0
+Live provider calls: 0
+Timeouts: 0
+Interrupted: 0
+
+1. PR-CE classification
+   tests/test_pr_ce_subjective_preference_classification.py
+   13 passed in 1.25s
+
+2. PR-CC focused
+   tests/test_pr_cc_social_reply_reconciliation.py
+   tests/test_social.py::test_question_without_topic_marks_consequential_unknown_and_non_invention_hint
+   tests/test_dialogue_social_plan.py
+   tests/test_dialogue_social_plan_block_x_contract_pins.py
+   tests/test_dialogue_social_plan_block_y.py
+   36 passed in 1.60s
+
+3. Social resolver
+   tests/test_social.py
+   31 passed in 1.25s
+
+4. Social relevance
+   tests/test_social_question_relevance_answer_selection.py
+   20 passed, 4 failed in 1.90s
+   FAILED test_general_http_ask_a_not_b
+   FAILED test_general_http_relevant_hook_still_lands
+   FAILED test_general_http_unauthorized_no_leak
+   FAILED test_general_http_first_ask
+   These four completed. They failed narration assertions. They did not hang.
+   The same four failures were observed before the subjective-classifier edit.
+
+5. PR-BY retry contract and PR-BW narration-only
+   tests/test_pr_by_narration_only_retry_contract.py
+   tests/test_pr_bw_narration_only_envelope.py
+   27 passed in 1.49s
+
+6. Authority integrity, including C18
+   tests/test_pr_br_resolution_contract.py
+   tests/test_pr_br_authority_reconciliation.py
+   tests/test_pr_br_continuation18_immutable_boundary.py
+   104 passed, 1 warning in 4.89s
+
+7. Scene activation HTTP file
+   tests/test_activate_scene_validation_and_get_persistence.py
+   6 passed, 1 warning in 1.50s
+   Includes the previously stalled test_invalid_activate_scene_id_ignored_safely.

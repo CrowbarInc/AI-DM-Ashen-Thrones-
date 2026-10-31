@@ -1,0 +1,456 @@
+{
+  "campaign_id": "atgb_02a_baseline_readiness",
+  "campaign_name": "ATGB-02A Baseline Readiness and Reproducibility",
+  "campaign_date": "2026-10-18",
+  "purpose": "Validate starting conditions and reproducibility without live providers or production gameplay changes.",
+  "objective_status": "MACHINE PREREQUISITES VERIFIED; NARRATIVE DELIVERY PARTIALLY VERIFIED; AWAIT REVIEW",
+  "executive_summary": "All ten scenarios have verified machine prerequisites in frozen frontier-gate-v1. S07 and S09 opening delivery remains partially verified; narrative assumptions remain unverified in every scenario. No blocked scenario in the intact baseline. Repeated resets are equivalent. Focused checks: 24 passed; adjacent regression: 49 passed. Replaced mutable working-data bootstrap with a pinned snapshot of an existing replay fixture and defaults; preflight blocks missing or incompatible prerequisites before chat. No production gameplay change, live evaluation, performance score, generalization claim or new Product Realization campaign. Failure class: evaluation instrument setup. Await review before ATGB-03.",
+  "changes": {
+    "production": [
+      "None. Production reset and gameplay semantics unchanged. Canonical data preserved."
+    ],
+    "validation": [
+      "24 readiness/infrastructure tests pass, including repeated resets and rejection paths."
+    ],
+    "tooling": [
+      "Frozen baseline validator, preflight before chat, preflight-only CLI, separate result reporting; workspace temporary stores."
+    ],
+    "documentation": [
+      "Readiness matrix, execution instructions, explicit S07 partition supersession notes and NEXT_SESSION update."
+    ],
+    "generated_artifacts": [
+      "Provider-disabled preflight of all ten scenarios; validation results and logs. No gameplay performance evidence."
+    ]
+  },
+  "testing": {
+    "focused": "24 passed. Existing S06 host-chat regression submits four ordered turns with all providers disabled; repeated initialization test resets 10 scenarios twice without chat.",
+    "broader": "49 passed: playability evaluator, review-handoff and validation-evidence-standard tests.",
+    "full_suite": "Not run.",
+    "runtime_validation": "20 repeated isolated resets plus final 10-scenario preflight. Same normalized state hash. No live evaluation.",
+    "model_runtime_boundary": "Providers disabled; no model evaluation or gameplay scoring. No live run authorized.",
+    "new_regressions": "None observed in the validated scope.",
+    "pre_existing_failures": "Sandbox socketpair initialization timeout and transient atomic rename denial are preserved as environmental attempts; final authorized provider-disabled tests passed."
+  },
+  "decisions_requiring_human_review": [
+    "Accept the frozen baseline and readiness limitations before ATGB-03. No live baseline authorized by this package."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "S07/S09 opening context is authored but delivery not verified by silent reset.",
+      "Narrative assumptions remain unverified for all scenarios.",
+      "Windows sandbox blocks local asyncio socketpair startup; authorized provider-disabled test run passed outside sandbox."
+    ],
+    "pre_existing": [
+      "Held-out scenarios were previously exposed.",
+      "PR-BL versus later PR-EG session orientation remains unreconciled."
+    ]
+  },
+  "missing_concepts": [
+    "Live baseline with human rubric review (not authorized here).",
+    "Opening context delivery evidence for S07 and S09."
+  ],
+  "does_not_prove": [
+    "Improved gameplay or conversational competence.",
+    "A live ATGB performance result.",
+    "Related or independent conversational generalization.",
+    "Full-suite regression safety."
+  ],
+  "recommended_next_step": "Stop. Review readiness matrix and baseline. Await review before ATGB-03; do not initiate live evaluation or a Product Realization campaign.",
+  "primary_report": "development/reports/atgb_02a_readiness.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_02a/adjacent.txt",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/adjacent.xml",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/final_focused.txt",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/final_focused.xml",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/host_diagnostic.txt",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/legacy_reset_findings.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/preflight/report.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/preflight/result.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_02a/validation_results.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/campaign.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/character.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/conditions.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/market_quarter.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/old_milestone.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/world.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_execution.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/state_authority_model.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/campaign_reset.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/campaign_state.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/defaults.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/fresh_campaign_verify.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/world.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/helpers/golden_replay_fixtures.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_atgb_infrastructure.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_atgb_readiness.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/__init__.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/baseline.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/budget.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/fixtures.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/preflight.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/results.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/worksheet.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/run_atgb.py",
+      "role": "readiness_review_support",
+      "why": "Review initialization authority, source provenance, prerequisites or provider-disabled validation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "The ZIP contains the matrix, source provenance and complete frozen baseline, preflight and isolation code, all scenario fixtures, execution instructions and validation evidence. It supports review of verified, partially verified, blocked and unverified starting conditions without an external repository search. No live-provider result is claimed."
+}

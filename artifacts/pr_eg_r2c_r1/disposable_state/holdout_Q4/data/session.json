@@ -1,0 +1,51 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:28:30.188230Z",
+  "payload": {
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "eve",
+          "speaker_name": "Librarian Eve",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Tell me about hours",
+          "delivered_text": "Librarian Eve says, \"The archive opens at noon.\"",
+          "subject": "",
+          "topic_id": "hours",
+          "requested_information": "",
+          "supplied_text": "The archive opens at noon.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "western_archive",
+          "turn": 1,
+          "active": false
+        },
+        {
+          "speaker_id": "eve",
+          "speaker_name": "Librarian Eve",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Tell me about unknown",
+          "delivered_text": "Librarian Eve says, \"I could not identify the bell maker.\"",
+          "subject": "",
+          "topic_id": "unknown",
+          "requested_information": "",
+          "supplied_text": "I could not identify the bell maker.",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "western_archive",
+          "turn": 2,
+          "active": true
+        }
+      ]
+    },
+    "last_saved_at": "2026-10-17T10:28:30.188230Z"
+  },
+  "integrity": {
+    "payload_sha256": "21903cecccbd263ae846d4510925caaa7ab5eea280923a164e3b452747c74cb5",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

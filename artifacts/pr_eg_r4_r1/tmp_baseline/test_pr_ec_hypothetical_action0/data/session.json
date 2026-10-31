@@ -1,0 +1,67 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T16:04:59.187664Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T16:04:59.187664Z",
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "What would happen if I opened the door?",
+          "delivered_text": "I can't say what would happen for certain, and nothing has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "authorization_source": "conversational_decision:hypothetical_action",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "GM",
+        "purpose": "EXPLANATION",
+        "subject": "What would happen if I opened the door?",
+        "response": "I can't say what would happen for certain, and nothing has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "923d6f84d8e16ad69f824b0bdf6d7da10231928c80352c3ccca708e68eea8dad",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

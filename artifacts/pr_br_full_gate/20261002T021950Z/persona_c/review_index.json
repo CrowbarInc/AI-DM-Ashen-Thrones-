@@ -1,0 +1,901 @@
+[
+  {
+    "n": 1,
+    "player": "I pick my way through the mud to the roster beside the gate and read the fresh warning about the missing patrol, looking for names, a route, or how recently it was posted.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": "time",
+    "dimensions": [
+      "time",
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I step back from the board and scan the gate approach for the crate yards, looking northwest for the mud track the notice names and whether anything there looks recently disturbed.",
+    "op": "perceive",
+    "target": "for crate yards",
+    "interlocutor": "inc_bc59100d55",
+    "dimension": "wear",
+    "dimensions": [
+      "wear"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": "for crate yards",
+    "bound": "inc_bc59100d55",
+    "entity_id": "inc_bc59100d55",
+    "authority_reasons": [
+      "scene:populated",
+      "pr_bn:accepted"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "interaction_incomplete"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: interaction_incomplete. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "The track itself tells me nothing, so I walk into the crate yards and look between the stacks, checking the gaps and the ground behind them for anything the rain and wagon ruts would not have wiped away.",
+    "op": "act",
+    "target": "for crate yards",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "discourse_inheritance",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_5568cfd9c4fd",
+      "label": "The track itself tells me nothing, so I walk into the crate yards and look between the stacks, checking the gaps and the ground behind them for anything the rai",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I pause between the stacks and look at the nearest guard, noting where their eyes go and whether their hand is on a weapon, then ask quietly if anyone passed through the yards since the notice went up.",
+    "op": "perceive",
+    "target": "for crate yards",
+    "interlocutor": "inc_bc59100d55",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": null,
+    "bound": "inc_bc59100d55",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "unresolved_compound_intent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_5568cfd9c4fd",
+      "label": "The track itself tells me nothing, so I walk into the crate yards and look between the stacks, checking the gaps and the ground behind them for anything the rai",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+    "op": "follow",
+    "target": "Gate Guard",
+    "interlocutor": "gate_guard",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_guard",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "for crate yards",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_bc59100d55",
+      "label": "for crate yards",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "The road shows me nothing, so I turn back toward the crowd and study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate.",
+    "op": "inspect",
+    "target": "Threadbare watcher",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "crowd",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I ease closer through the crowd until I can see the same stretch of gate their eyes keep checking, and I ask, low, who they are waiting for.",
+    "op": "ask",
+    "target": "Threadbare watcher",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "I let the silence stand and look into the knot of guards and refugees their eyes just left, picking out which face they lingered on and who went still when I spoke.",
+    "op": "ask",
+    "target": "Threadbare watcher",
+    "interlocutor": "inc_c3dd140eff",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": "they lingered on",
+    "bound": "inc_c3dd140eff",
+    "entity_id": "inc_c3dd140eff",
+    "authority_reasons": [
+      "scene:populated",
+      "pr_bn:accepted"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "wrong_interlocutor"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: wrong_interlocutor. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_c3dd140eff",
+      "label": "they lingered on",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "refugee"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I leave the stranger their silence and look across the mud at the bright townhouse, checking its door, windows, and whether anyone there is watching the gate while the crowd pretends not to.",
+    "op": "inspect",
+    "target": "Cinderwatch Gate District",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_c3dd140eff",
+      "label": "they lingered on",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "frontier_gate",
+      "label": "Cinderwatch Gate District",
+      "kind": "place",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "refugee"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "I cross the mud to the townhouse and look past the sky in the polished windows, checking for a lamp, a face, or any movement behind the glass, and I read whatever mark or crest is on the shut door.",
+    "op": "perceive",
+    "target": "Cinderwatch Gate District",
+    "interlocutor": null,
+    "dimension": "wear",
+    "dimensions": [
+      "wear"
+    ],
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "interaction_incomplete"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: interaction_incomplete. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "interaction_incomplete"
+    ],
+    "rejected2": [
+      "interaction_incomplete"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_c3dd140eff",
+      "label": "they lingered on",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "frontier_gate",
+      "label": "Cinderwatch Gate District",
+      "kind": "place",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "spoiler_guard",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "refugee"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  }
+]

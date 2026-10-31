@@ -1,0 +1,55 @@
+{
+  "case_id": "s03q2",
+  "family": "s03",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "734eb602e8afbe29dd54792f6d6af29f8998df4aeb86c048cb9e2da396a8d091",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Mara lent Tovin the copper whistle"
+    ],
+    "qualifiers": [
+      "npc_knowledge",
+      "world_source"
+    ],
+    "selected_fact_ids": [
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s03"
+    ],
+    "answered_arguments": [
+      "lender",
+      "borrower",
+      "item"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f2 directly states that Mara lent Tovin a copper whistle."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_answer",
+      "unanchored_qualifier",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

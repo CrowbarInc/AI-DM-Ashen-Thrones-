@@ -1,0 +1,343 @@
+[
+  {
+    "turn": 1,
+    "player_text": "I approach the tavern runner near the rain barrel and ask, \"Hot stew sounds comforting in this weather—what news do you hear about the missing patrol and the current state beyond the frontier?",
+    "operation": "ask",
+    "dimension": "sound",
+    "dimensions": [
+      "sound"
+    ],
+    "target": {
+      "type": "interlocutor",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "tavern_runner",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "candidate_incidental_entities": [],
+    "candidate_spans": [],
+    "candidate_semantic_heads": [
+      "runner"
+    ],
+    "personhood_verdict": "person",
+    "binding_result": "bound_canonical",
+    "instantiated_incidental_entities": [],
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "tavern_runner",
+      "entity_id": null,
+      "label": "Tavern Runner",
+      "explicit_new_interlocutor": false,
+      "authority_reasons": [
+        "identity:established"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "\"I've heard the patrol vanished near some muddy footprints just northwest of the crates,\" the tavern runner says, glancing about nervously. \"No one knows exactly what happened, but that's where their trail went cold.\"",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "\"I've heard the patrol vanished near some muddy footprints just northwest of the crates,\" the tavern runner says, glancing about nervously. \"No one knows exactly what happened, but that's where their trail went cold.\"",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "\"I've heard the patrol vanished near some muddy footprints just northwest of the crates,\" the tavern runner says, glancing about nervously. \"No one knows exactly what happened, but that's where their trail went cold.\"",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "\"I've heard the patrol vanished near some muddy footprints just northwest of the crates,\" the tavern runner says, glancing about nervously. \"No one knows exactly what happened, but that's where their trail went cold.\""
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "\"I've heard the patrol vanished near some muddy footprints just northwest of the crates,\" the tavern runner says, glancing about nervously.",
+        "kind": "npc_claim",
+        "epistemic_status": "hearsay",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "speaker_conflict": false,
+    "rejected_label_persisted": false,
+    "offline_evaluator": {
+      "semantic_result": "FAIL",
+      "score": 81
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_8cefd67e8c77"
+    }
+  },
+  {
+    "turn": 2,
+    "player_text": "I nod thoughtfully, wiping a bit of rain from my cloak. \"Muddy footprints northwest of the crates, you say? Have you noticed if anyone else is searching or any clues have turned up since then?\" I ask the tavern runner, hoping to learn more about the dangers beyond the gate.",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target": {
+      "type": "interlocutor",
+      "id_or_text": "Tavern Runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "tavern_runner",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Tavern Runner",
+      "source": "explicit_player"
+    },
+    "candidate_incidental_entities": [],
+    "candidate_spans": [],
+    "candidate_semantic_heads": [
+      "runner"
+    ],
+    "personhood_verdict": "person",
+    "binding_result": "bound_canonical",
+    "instantiated_incidental_entities": [],
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "tavern_runner",
+      "entity_id": null,
+      "label": "Tavern Runner",
+      "explicit_new_interlocutor": false,
+      "authority_reasons": [
+        "identity:established"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "\"I can't say I've seen anyone else poking around those footprints yourself,\" the tavern runner replies, glancing warily toward the gate and back at the muddy lane northwest of the crates. \"The word is the patrol vanished there, but since then, no one's come by with any news or signs. If you want to find out more, I hear some folk have been heading toward that old milestone on the road—might be worth following up before the curfew tightens any further.\"",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "\"I can't say I've seen anyone else poking around those footprints yourself,\" the tavern runner replies, glancing warily toward the gate and back at the muddy lane northwest of the crates. \"The word is the patrol vanished there, but since then, no one's come by with any news or signs. If you want to find out more, I hear some folk have been heading toward that old milestone on the road—might be worth following up before the curfew tightens any further.\"",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "\"I can't say I've seen anyone else poking around those footprints yourself,\" the tavern runner replies, glancing warily toward the gate and back at the muddy lane northwest of the crates. \"The word is the patrol vanished there, but since then, no one's come by with any news or signs. If you want to find out more, I hear some folk have been heading toward that old milestone on the road—might be worth following up before the curfew tightens any further.\"",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [
+        "low_confidence_locate"
+      ],
+      "text": "\"I can't say I've seen anyone else poking around those footprints yourself,\" the tavern runner replies, glancing warily toward the gate and back at the muddy lane northwest of the crates. \"The word is the patrol vanished there, but since then, no one's come by with any news or signs. If you want to find out more, I hear some folk have been heading toward that old milestone on the road—might be worth following up before the curfew tightens any further.\""
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "\"The word is the patrol vanished there, but since then, no one's come by with any news or signs.",
+        "kind": "npc_claim",
+        "epistemic_status": "hearsay",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      },
+      {
+        "text": "If you want to find out more, I hear some folk have been heading toward that old milestone on the road—might be worth following up before the curfew tightens any further.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "speaker_conflict": false,
+    "rejected_label_persisted": false,
+    "offline_evaluator": {
+      "semantic_result": "FAIL",
+      "score": 80
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_af1333684a8b"
+    }
+  },
+  {
+    "turn": 3,
+    "player_text": "I thank the tavern runner and turn toward the muddy lane northwest of the crates, carefully stepping through the rain to inspect the footprints they mentioned. I look for any signs or clues nearby that might hint at what happened to the missing patrol before deciding whether to follow the road toward the old milestone.",
+    "operation": "inspect",
+    "dimension": null,
+    "dimensions": [],
+    "target": {
+      "type": "interlocutor",
+      "id_or_text": "muddy lane northwest",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "inc_d06766ba95",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "inc_d06766ba95",
+      "label": "muddy lane northwest",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "muddy lane northwest",
+      "source": "explicit_player"
+    },
+    "candidate_incidental_entities": [
+      "muddy lane northwest"
+    ],
+    "candidate_spans": [
+      "the muddy lane northwest of the crates"
+    ],
+    "candidate_semantic_heads": [
+      "northwest"
+    ],
+    "personhood_verdict": "person",
+    "binding_result": "bound_incidental",
+    "instantiated_incidental_entities": [
+      "muddy lane northwest"
+    ],
+    "entity_binding": {
+      "status": "bound_incidental",
+      "entity_class": "permitted_bounded_incidental",
+      "proposed_interlocutor": "muddy lane northwest",
+      "proposed_span": "the muddy lane northwest of the crates",
+      "bound_interlocutor_id": "inc_d06766ba95",
+      "entity_id": "inc_d06766ba95",
+      "label": "muddy lane northwest",
+      "explicit_new_interlocutor": true,
+      "authority_reasons": [
+        "scene:populated",
+        "pr_bn:accepted"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "You stand beside a weathered stone milestone leaning precariously at the edge of the northwest mud track. The rain slicks the uneven ground, and the muddied earth around the marker is marked with faint, overlapping footprints that blur toward the scrub. The track continues a short distance beyond the stone but quickly dissolves into rainwater and dense brush, obscuring any clear path forward.\n\nThese prints are indistinct—too many impressions mingle here, and the details that might reveal their origin or direction of travel have been washed and muddled by the rain. Whatever happened to the missing patrol remains veiled in this churned mud. The scene offers no immediate sign of struggle or broken equipment; only the weathered milestone and the disrupted earth accompany your careful examination.\n\nThe road toward the old milestone suggests possible direction, though the uncertain trail beyond it means you may need to rely on other clues or guidance for what comes next.",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "You stand beside a weathered stone milestone leaning precariously at the edge of the northwest mud track. The rain slicks the uneven ground, and the muddied earth around the marker is marked with faint, overlapping footprints that blur toward the scrub. The track continues a short distance beyond the stone but quickly dissolves into rainwater and dense brush, obscuring any clear path forward.\n\nThese prints are indistinct—too many impressions mingle here, and the details that might reveal their origin or direction of travel have been washed and muddled by the rain. Whatever happened to the missing patrol remains veiled in this churned mud. The scene offers no immediate sign of struggle or broken equipment; only the weathered milestone and the disrupted earth accompany your careful examination.\n\nThe road toward the old milestone suggests possible direction, though the uncertain trail beyond it means you may need to rely on other clues or guidance for what comes next.",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "You stand beside a weathered stone milestone leaning precariously at the edge of the northwest mud track. The rain slicks the uneven ground, and the muddied earth around the marker is marked with faint, overlapping footprints that blur toward the scrub. The track continues a short distance beyond the stone but quickly dissolves into rainwater and dense brush, obscuring any clear path forward. These prints are indistinct—too many impressions mingle here, and the details that might reveal their origin or direction of travel have been washed and muddled by the rain. Whatever happened to the missing patrol remains veiled in this churned mud. The scene offers no immediate sign of struggle or broken equipment; only the weathered milestone and the disrupted earth accompany your careful examination. The road toward the old milestone suggests possible direction, though the uncertain trail beyond it means you may need to rely on other clues or guidance for what comes next.",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "You stand beside a weathered stone milestone leaning precariously at the edge of the northwest mud track. The rain slicks the uneven ground, and the muddied earth around the marker is marked with faint, overlapping footprints that blur toward the scrub. The track continues a short distance beyond the stone but quickly dissolves into rainwater and dense brush, obscuring any clear path forward.\n\nThese prints are indistinct—too many impressions mingle here, and the details that might reveal their origin or direction of travel have been washed and muddled by the rain. Whatever happened to the missing patrol remains veiled in this churned mud. The scene offers no immediate sign of struggle or broken equipment; only the weathered milestone and the disrupted earth accompany your careful examination.\n\nThe road toward the old milestone suggests possible direction, though the uncertain trail beyond it means you may need to rely on other clues or guidance for what comes next."
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "You stand beside a weathered stone milestone leaning precariously at the edge of the northwest mud track.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "text": "The rain slicks the uneven ground, and the muddied earth around the marker is marked with faint, overlapping footprints that blur toward the scrub.",
+        "kind": "incidental_fact",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "text": "These prints are indistinct—too many impressions mingle here, and the details that might reveal their origin or direction of travel have been washed and muddled by the rain.",
+        "kind": "incidental_fact",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "text": "Whatever happened to the missing patrol remains veiled in this churned mud.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "speaker_conflict": false,
+    "rejected_label_persisted": false,
+    "offline_evaluator": {
+      "semantic_result": "PASS",
+      "score": 87
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "old_milestone",
+      "active_interlocutor": {
+        "id": "inc_d06766ba95",
+        "label": "muddy lane northwest",
+        "kind": "interlocutor",
+        "scene_id": "old_milestone",
+        "turn_index": 4,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "inc_d06766ba95",
+        "label": "muddy lane northwest",
+        "kind": "interlocutor",
+        "scene_id": "old_milestone",
+        "turn_index": 4,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_3f2f86ccb734"
+    }
+  }
+]

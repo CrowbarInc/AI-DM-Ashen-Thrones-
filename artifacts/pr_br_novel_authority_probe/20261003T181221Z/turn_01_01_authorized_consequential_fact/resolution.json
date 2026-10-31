@@ -1,0 +1,350 @@
+{
+  "world_tick_events": [],
+  "metadata": {
+    "resolution_contract": {
+      "contract_id": "rc_128a5f3af6bc",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": null,
+      "interlocutor_id": null,
+      "conversational_subject": "Is the kiln still firing pots today?",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "Is the kiln still firing pots today?",
+      "construction": {
+        "cues": [],
+        "referent_slot": null,
+        "referent_reason": "no_anaphor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "clay_kiln_yard",
+            "type": "place",
+            "label": "Brineward kiln yard"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "ask",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": null,
+        "canonicalization_attempted": true,
+        "canonical_target_found": false,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "unresolved",
+          "entity_class": "ambiguous_unresolved",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": null,
+          "entity_id": null,
+          "label": null,
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "Is the kiln still firing pots today?",
+          "source": "deterministic_fast_path",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "commitment_status": "executed_now",
+        "primary_operation": "ask",
+        "resolution_subject": "social",
+        "resolution_subject_coherence": "accepted",
+        "semantic_input_length": 36,
+        "provenance_excerpt": "Is the kiln still firing pots today?",
+        "secondary_operations": [],
+        "requested_addressee": null,
+        "addressee_binding_status": "unresolved"
+      },
+      "retry_preserved": true
+    },
+    "interaction_obligation": {
+      "kind": "question",
+      "target": null,
+      "interlocutor_id": null,
+      "subject": "Is the kiln still firing pots today",
+      "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+      "claim_id": null,
+      "resolution_mode": "clarification_target_failure",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_128a5f3af6bc"
+    },
+    "gm_resolution_decision": {
+      "contract_id": "rc_128a5f3af6bc",
+      "resolution_method": "ask",
+      "outcome_classification": "established_or_retrieved",
+      "established_fact_refs": [
+        "scene_world_authored_corpus"
+      ],
+      "proposed_facts": [
+        {
+          "text": "The clay kiln is cold and its firing arch is cracked.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "clay_kiln",
+            "subject_aliases": [
+              "clay kiln",
+              "kiln",
+              "firing arch"
+            ],
+            "relation": "condition",
+            "value": "cracked",
+            "value_aliases": [
+              "cracked",
+              "cold"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "Racks of unfired bowls stand under a canvas awning.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.1",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        }
+      ],
+      "permitted_state_mutations": [],
+      "persistence_policy": "do_not_persist",
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "unresolved_consequential_questions": [],
+      "authority_algorithm": "source_provenance_v2"
+    },
+    "ordinary_contract_established": true,
+    "semantic_owner": "resolution_contract",
+    "contract_before_resolver": true,
+    "contract_construction_source": "deterministic",
+    "selected_resolver": "social",
+    "adjudication_resolver_family": null,
+    "emission_debug": {
+      "dialogue_social_plan": {
+        "version": 1,
+        "applies": false,
+        "speaker_id": null,
+        "speaker_name": null,
+        "speaker_source": "unresolved",
+        "dialogue_intent": null,
+        "reply_kind": "unknown",
+        "pressure_state": "none",
+        "relationship_codes": [
+          "unknown"
+        ],
+        "tone_bounds": [
+          "neutral"
+        ],
+        "prohibited_content_codes": [
+          "no_narrator_override",
+          "no_ooc_instructions",
+          "no_player_agency_override",
+          "no_prompt_text"
+        ],
+        "derivation_codes": [
+          "dialogue_social_plan:v1",
+          "intent:ctir_only",
+          "referent_tracking:consumed",
+          "session_hints:bounded",
+          "speaker:unresolved"
+        ],
+        "validator": {
+          "validated": true,
+          "errors": [],
+          "reject_field_names": [
+            "dialogue",
+            "dialogue_line",
+            "gm_guidance",
+            "instructions",
+            "message",
+            "narration",
+            "player_facing_text",
+            "prompt",
+            "system_prompt",
+            "text"
+          ],
+          "allowed_reply_kinds": [
+            "answer",
+            "explanation",
+            "reaction",
+            "refusal",
+            "unknown"
+          ],
+          "allowed_pressure_states": [
+            "high",
+            "low",
+            "moderate",
+            "none"
+          ],
+          "allowed_tone_codes": [
+            "cold",
+            "deferential",
+            "direct",
+            "evasive",
+            "guarded",
+            "hostile",
+            "neutral",
+            "threatening",
+            "warm"
+          ],
+          "allowed_relationship_codes": [
+            "engagement_engaged",
+            "engagement_focused",
+            "engagement_none",
+            "fear_high",
+            "fear_low",
+            "friendly",
+            "hostile",
+            "neutral",
+            "suspicion_high",
+            "suspicion_low",
+            "trust_high",
+            "trust_low",
+            "unfriendly",
+            "unknown"
+          ],
+          "allowed_speaker_alias_resolution_sources": [
+            "continuity_snapshot",
+            "interaction_continuity_contract",
+            "manual_bundle_override",
+            "referent_tracking"
+          ]
+        },
+        "bounded_session_hints": {
+          "active_interaction_target_id": null,
+          "active_interaction_target_name": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        }
+      },
+      "scene_state_anchor": {
+        "enabled": true,
+        "scene_id": "clay_kiln_yard",
+        "counts": {
+          "location": 5,
+          "actor": 2,
+          "player_action": 5
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "interaction_kind": "unknown",
+        "pressure_focus_allowed": false,
+        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=12 ambient=1"
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      },
+      "selected_conversational_memory": [],
+      "conversational_memory": {
+        "selected_count": 0
+      }
+    }
+  },
+  "prompt": "Is the kiln still firing pots today?"
+}

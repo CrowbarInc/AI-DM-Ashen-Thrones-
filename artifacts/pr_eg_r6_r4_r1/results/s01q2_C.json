@@ -1,0 +1,47 @@
+{
+  "case_id": "s01q2",
+  "family": "s01",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "724b72ca7c4a22e67456931b6126abdcd9f26500a216290fee60498f2d2baf52",
+  "answer": {
+    "response_class": "RELATED_NONANSWER",
+    "values": [],
+    "qualifiers": [],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s01"
+    ],
+    "answered_arguments": [
+      "speaker",
+      "listener"
+    ],
+    "missing_arguments": [
+      "content"
+    ],
+    "conflict": false,
+    "reason": "The facts confirm that Cala told Brin, but do not specify what Cala told Brin."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": false,
+    "false_rejection": true,
+    "unsupported_inference": false,
+    "earliest_failure": "F05"
+  },
+  "provider_error": null
+}

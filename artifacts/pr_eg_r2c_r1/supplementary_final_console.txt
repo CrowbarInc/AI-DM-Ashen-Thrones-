@@ -1,0 +1,167 @@
+................FF...................................................... [ 53%]
+.........................................................FF.FFF          [100%]
+================================== FAILURES ===================================
+__ test_immutable_preseal_preserves_selected_authored_answer_over_ignorance ___
+tests\test_social_question_relevance_answer_selection.py:428: in test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+    assert record.get("provenance") == "initial_generation"
+E   AssertionError: assert 'authorized_host_speech' == 'initial_generation'
+E     
+E     - initial_generation
+E     + authorized_host_speech
+________ test_generic_ask_without_subject_can_still_reveal_first_topic ________
+tests\test_social_question_relevance_answer_selection.py:436: in test_generic_ask_without_subject_can_still_reveal_first_topic
+    assert _topic_id(res) == "kiln_bank"
+E   AssertionError: assert '' == 'kiln_bank'
+E     
+E     - kiln_bank
+_______________ test_by3_strict_social_hidden_mutation_detected _______________
+tests\test_by3_strict_social_semantic_mutation.py:50: in test_by3_strict_social_hidden_mutation_detected
+    assert target["post_gate_mutation_detected"] is True
+E   assert None is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+____________ test_by3_wrong_speaker_fixture_has_attributable_trace ____________
+tests\test_by3_strict_social_semantic_mutation.py:72: in test_by3_wrong_speaker_fixture_has_attributable_trace
+    assert str(target.get("first_semantic_mutation_source") or "").strip()
+E   AssertionError: assert ''
+E    +  where '' = <built-in method strip of str object at 0x00007FFE85401D00>()
+E    +    where <built-in method strip of str object at 0x00007FFE85401D00> = ''.strip
+E    +      where '' = str((None or ''))
+E    +        where None = <built-in method get of dict object at 0x000002911A31C800>('first_semantic_mutation_source')
+E    +          where <built-in method get of dict object at 0x000002911A31C800> = {'turn_identity': 'wrong_speaker_strict_social_emission|idx:0', 'scenario_id': 'wrong_speaker_strict_social_emission', 'turn_index': 0, 'turn_id': None, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+___________________ test_by3_report_schema_and_gap_closure ____________________
+tests\test_by3_strict_social_semantic_mutation.py:103: in test_by3_report_schema_and_gap_closure
+    assert coverage["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+________ test_by3_writer_raw_checkpoint_present_on_strict_social_turn _________
+tests\test_by3_strict_social_semantic_mutation.py:131: in test_by3_writer_raw_checkpoint_present_on_strict_social_turn
+    assert CHECKPOINT_NORMALIZED_SOCIAL_CANDIDATE in checkpoint_ids
+E   AssertionError: assert 'normalized_social_candidate' in {'policy_output', 'replay_final_text', 'writer_raw_candidate'}
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+______________________ test_by3_generate_repo_artifacts _______________________
+tests\test_by3_strict_social_semantic_mutation.py:152: in test_by3_generate_repo_artifacts
+    assert by3_report["before_after_coverage"]["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_social_question_relevance_answer_selection.py::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+FAILED tests/test_social_question_relevance_answer_selection.py::test_generic_ask_without_subject_can_still_reveal_first_topic
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_strict_social_hidden_mutation_detected
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_wrong_speaker_fixture_has_attributable_trace
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_report_schema_and_gap_closure
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_writer_raw_checkpoint_present_on_strict_social_turn
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_generate_repo_artifacts

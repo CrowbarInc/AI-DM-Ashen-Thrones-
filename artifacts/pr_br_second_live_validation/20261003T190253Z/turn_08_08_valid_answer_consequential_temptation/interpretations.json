@@ -1,0 +1,19 @@
+[
+  {
+    "event": "attempt",
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "user_chars": 455,
+      "contains_resolution_contract": false,
+      "contains_gm_resolution_decision": false,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false,
+      "user_head": "{\"utterance\": \"Is there any ink left in the pot, and did the scribes' college buy the last of it?\", \"abstention_reason\": \"insufficient_discourse_context\", \"candidates\": [{\"id\": \"ink_stall\", \"type\": \"place\", \"label\": \"Ashford ink stall\", \"aliases\": []}], \"discourse\": {\"scene_id\": \"ink_stall\", \"active_interlocutor\": null, \"active_claim\": null, \"active_actionable_lead\": null, \"active_inspected\": null, \"last_attempted_action\": null}, \"recent_visible\": []}",
+      "user_tail": "{\"utterance\": \"Is there any ink left in the pot, and did the scribes' college buy the last of it?\", \"abstention_reason\": \"insufficient_discourse_context\", \"candidates\": [{\"id\": \"ink_stall\", \"type\": \"place\", \"label\": \"Ashford ink stall\", \"aliases\": []}], \"discourse\": {\"scene_id\": \"ink_stall\", \"active_interlocutor\": null, \"active_claim\": null, \"active_actionable_lead\": null, \"active_inspected\": null, \"last_attempted_action\": null}, \"recent_visible\": []}"
+    },
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[],\"raw_target_text\":\"Is there any ink left in the pot, and did the scribes' college buy the last of it?\",\"proposed_target_id\":\"ink_stall\",\"interlocutor_id\":null,\"conversational_subject\":\"ink availability and purchase history\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"information about remaining ink and purchase by scribes' college\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  }
+]

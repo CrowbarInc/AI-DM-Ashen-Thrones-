@@ -1,0 +1,65 @@
+{
+  "case": "O8",
+  "fixture": "captured PR-PLAY-09 snapshots with explicit adversarial deltas",
+  "operation": "classify captured accepted opening",
+  "expected_integrity": false,
+  "actual": {
+    "integrity": false,
+    "changes": [
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/discoverable_clues_add",
+        "change": "added",
+        "before": null,
+        "after": [],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "uncertain_or_unauthorized_mutation",
+        "reason": "scene_update_not_authored_public_fact",
+        "authority_evidence": null
+      },
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/hidden_facts_add",
+        "change": "added",
+        "before": null,
+        "after": [],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "uncertain_or_unauthorized_mutation",
+        "reason": "scene_update_not_authored_public_fact",
+        "authority_evidence": null
+      },
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/mode",
+        "change": "added",
+        "before": null,
+        "after": "social",
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "uncertain_or_unauthorized_mutation",
+        "reason": "scene_update_not_authored_public_fact",
+        "authority_evidence": null
+      },
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add",
+        "change": "modified",
+        "before": [],
+        "after": [
+          "An agent of a noble house is watching new arrivals from the square's edge.",
+          "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+          "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+          "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+          "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
+        ],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "uncertain_or_unauthorized_mutation",
+        "reason": "scene_update_not_authored_public_fact",
+        "authority_evidence": null
+      }
+    ],
+    "omitted_entries": 0,
+    "total_changes": 4,
+    "snapshots_preserved": true
+  },
+  "passed": true
+}

@@ -1,0 +1,24 @@
+# Addition-only excerpt; see repair_inventory.md for the other changed lines.
+--- a/game/prompt_context.py
++++ b/game/prompt_context.py
+@@ -1890,0 +1891,20 @@
++        (
++            "ANSWER POLICY: response_policy.answer_completeness; response_policy.response_delta.enabled; answer first."
++        ),
++        (
++            "UNCERTAINTY POLICY: response_policy.uncertainty.categories; response_policy.uncertainty.sources; "
++            "response_policy.uncertainty.answer_shape; uncertainty_hint.turn_context; uncertainty_hint.speaker; "
++            "uncertainty_hint.scene_snapshot; frame uncertainty as world-facing limits only; vary sentence count and cadence naturally."
++        ),
++        (
++            "ANTI-RAILROADING (POLICY): HARD WORLD CONSTRAINT; SALIENT LEAD; FORCED PLAYER DIRECTION; "
++            "not globally banned; unjustified forced direction; allow_commitment_language_when_player_explicitly_committed; explicit commitment."
++        ),
++        (
++            "CONTEXT SEPARATION (POLICY): local exchange first; briefly color; must not replace the substantive reply; not from generic scene mood alone."
++        ),
++        (
++            "PLAYER-FACING NARRATION PURITY (POLICY): Obey response_policy.player_facing_narration_purity; "
++            "speak only in player-facing diegetic prose; engine/UI guidance; menu labels; consequence/opportunity; bulleted/numbered choice lists."
++        ),
++        "SCENE ANCHORING (POLICY).",

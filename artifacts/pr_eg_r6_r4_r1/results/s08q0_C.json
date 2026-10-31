@@ -1,0 +1,51 @@
+{
+  "case_id": "s08q0",
+  "family": "s08",
+  "partition": "holdout",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "2c4917851a10d8c2c315d37b857f517401f79c0d1d5c9fd348c8e9df7ac11d6b",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The keeper may have moved the bronze dial"
+    ],
+    "qualifiers": [
+      "may have",
+      "yesterday"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s08"
+    ],
+    "answered_arguments": [
+      "agent"
+    ],
+    "missing_arguments": [
+      "destination"
+    ],
+    "conflict": false,
+    "reason": "The fact explicitly states that 'The keeper may have moved the bronze dial yesterday,' providing a direct answer with qualifiers indicating uncertainty and temporal context. The destination of the dial is unrecorded and thus missing."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

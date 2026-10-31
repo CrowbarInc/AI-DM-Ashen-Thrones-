@@ -1,0 +1,1774 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T12:48:07.939379Z",
+  "payload": {
+    "active_scene_id": "scene_investigate",
+    "visited_scene_ids": [
+      "scene_investigate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 1,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "scene_investigate",
+      "active_entities": [],
+      "entity_presence": {
+        "guard_captain": "offscene",
+        "tavern_runner": "offscene"
+      },
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {
+      "scene_investigate": {
+        "scene_id": "scene_investigate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      }
+    },
+    "scene_runtime": {
+      "scene_investigate": {
+        "discovered_clues": [],
+        "discovered_clue_ids": [],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": null,
+        "repeated_action_count": 0,
+        "last_resolution_kind": null,
+        "last_description_hash": "44bf91be51ad7be6d303f1ac97ccefcf",
+        "last_perception_visible_facts": [],
+        "last_perception_narration": "",
+        "last_perception_turn": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 1,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null,
+        "passive_action_streak": 0,
+        "recent_player_actions": [
+          {
+            "text": "How far away is he?",
+            "passive": false,
+            "markers": [],
+            "resolution_kind": null,
+            "turn": 1
+          }
+        ],
+        "last_player_action_text": "How far away is he?",
+        "last_player_action_passive": false,
+        "recent_contextual_leads": []
+      }
+    },
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": {
+      "last_action_type": "chat",
+      "player_input": "How far away is he?",
+      "normalized_action": null,
+      "resolution_kind": "adjudication_query",
+      "target_scene": null,
+      "resolver_result": {
+        "kind": "adjudication_query",
+        "action_id": "adjudication_query",
+        "label": "How far away is he?",
+        "prompt": "How far away is he?",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "clue_id": null,
+        "discovered_clues": [],
+        "state_changes": {},
+        "hint": "",
+        "adjudication": {
+          "category": "action_feasibility_query",
+          "answer_type": "needs_concrete_action",
+          "requires_check": null,
+          "check_request": null,
+          "player_facing_text": "I need a concrete, in-scene target before I can resolve that.",
+          "resolver_family": "feasibility"
+        },
+        "requires_check": false,
+        "check_request": null,
+        "world_tick_events": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          }
+        ]
+      },
+      "scene_transition": null,
+      "response_type_contract": {
+        "required_response_type": "answer",
+        "source_route": "adjudication",
+        "allow_escalation": false,
+        "debug_reasons": [
+          "adjudication_query_requires_answer",
+          "informational_query_guard"
+        ]
+      },
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
+    },
+    "debug_traces": [
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "event": "resolution_contract",
+        "raw_input": "How far away is he?",
+        "resolution_contract": {
+          "request_kind": "inquiry",
+          "operation": "ask",
+          "target": null,
+          "interlocutor": null,
+          "subject": "How far away is he?",
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "authority": "unknown_allowed",
+          "constraint": "Resolve ask for How far away is he? (ask). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description."
+        },
+        "referent_provenance": "explicit_player",
+        "discourse_ref": null,
+        "discourse_focus": {
+          "scene_id": "scene_investigate",
+          "active_interlocutor": null,
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null
+        },
+        "interaction_obligation_kind": "question",
+        "authority_route": "clarification_target_failure",
+        "semantic_result": null,
+        "echo_detected": false,
+        "action_outcome": null,
+        "claim_promoted": false,
+        "retry_preserved": false,
+        "construction": {
+          "cues": [
+            "pronoun"
+          ],
+          "referent_slot": null,
+          "referent_reason": "no_anaphor",
+          "ambiguity_detected": false,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": true,
+          "fast_path_abstained": false,
+          "fast_path_abstention_reason": null,
+          "model_interpreter_invoked": false,
+          "model_proposal_rejected": false,
+          "clarification_after_model": false,
+          "interpretation_api_calls": 0,
+          "interpretation_error": null,
+          "canonical_candidates": [
+            {
+              "id": "scene_investigate",
+              "type": "place",
+              "label": "Investigator's Office"
+            },
+            {
+              "id": "desk",
+              "type": "object",
+              "label": "desk"
+            },
+            {
+              "id": "iron_latch",
+              "type": "object",
+              "label": "iron latch"
+            },
+            {
+              "id": "cooking_pot",
+              "type": "object",
+              "label": "cooking pot"
+            },
+            {
+              "id": "posted_sheet",
+              "type": "object",
+              "label": "posted sheet"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "ask",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": null,
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "validated",
+          "validation_result": {
+            "status": "validated",
+            "reason": null,
+            "failed_fields": [],
+            "clarification_required": false,
+            "model_interpretation_appropriate": false,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "ask",
+            "discourse_commit_allowed": true,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "discourse_commit_allowed": true,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "none"
+          },
+          "authoritative": true,
+          "semantic_completeness": "sufficient",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "How far away is he?",
+            "source": "deterministic_fast_path",
+            "primary_operation": "ask",
+            "supporting_operations": [],
+            "raw_target_text": null,
+            "proposed_target_id": null,
+            "target_capture": "none",
+            "has_determiner": false,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": false,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "ask",
+          "resolution_subject": "feasibility",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 19,
+          "provenance_excerpt": "How far away is he?",
+          "secondary_operations": [],
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          },
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved",
+          "conversational_authorization": {
+            "communication_ownership": "character_action",
+            "intent_purpose": "perform_action",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": null,
+            "candidate_target_ids": [],
+            "operation_eligibility": "executable",
+            "mutation_eligibility": true,
+            "authority_provenance": "resolution_contract",
+            "conflict_status": "none",
+            "conflict_details": {},
+            "pending_intention_relationship": "starts_new",
+            "allowed_operation": "ask",
+            "clarification": "",
+            "choices": [],
+            "direct_address": false,
+            "player_text": "How far away is he?"
+          }
+        }
+      },
+      {
+        "event": "resolution_contract",
+        "raw_input": "How far away is he?",
+        "resolution_contract": {
+          "request_kind": "inquiry",
+          "operation": "ask",
+          "target": null,
+          "interlocutor": null,
+          "subject": "How far away is he?",
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "authority": "unknown_allowed",
+          "constraint": "Resolve ask for How far away is he? (ask). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description."
+        },
+        "referent_provenance": "explicit_player",
+        "discourse_ref": null,
+        "discourse_focus": {
+          "scene_id": null,
+          "active_interlocutor": null,
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null
+        },
+        "interaction_obligation_kind": "question",
+        "authority_route": null,
+        "semantic_result": null,
+        "echo_detected": false,
+        "action_outcome": null,
+        "claim_promoted": false,
+        "retry_preserved": true,
+        "construction": {
+          "cues": [
+            "pronoun"
+          ],
+          "referent_slot": null,
+          "referent_reason": "no_anaphor",
+          "ambiguity_detected": false,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": true,
+          "fast_path_abstained": false,
+          "fast_path_abstention_reason": null,
+          "model_interpreter_invoked": false,
+          "model_proposal_rejected": false,
+          "clarification_after_model": false,
+          "interpretation_api_calls": 0,
+          "interpretation_error": null,
+          "canonical_candidates": [
+            {
+              "id": "scene_investigate",
+              "type": "place",
+              "label": "Investigator's Office"
+            },
+            {
+              "id": "desk",
+              "type": "object",
+              "label": "desk"
+            },
+            {
+              "id": "iron_latch",
+              "type": "object",
+              "label": "iron latch"
+            },
+            {
+              "id": "cooking_pot",
+              "type": "object",
+              "label": "cooking pot"
+            },
+            {
+              "id": "posted_sheet",
+              "type": "object",
+              "label": "posted sheet"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "ask",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": null,
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "validated",
+          "validation_result": {
+            "status": "validated",
+            "reason": null,
+            "failed_fields": [],
+            "clarification_required": false,
+            "model_interpretation_appropriate": false,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "ask",
+            "discourse_commit_allowed": true,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "discourse_commit_allowed": true,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "none"
+          },
+          "authoritative": true,
+          "semantic_completeness": "sufficient",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "How far away is he?",
+            "source": "deterministic_fast_path",
+            "primary_operation": "ask",
+            "supporting_operations": [],
+            "raw_target_text": null,
+            "proposed_target_id": null,
+            "target_capture": "none",
+            "has_determiner": false,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": false,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "ask",
+          "resolution_subject": "feasibility",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 19,
+          "provenance_excerpt": "How far away is he?",
+          "secondary_operations": [],
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          },
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved",
+          "conversational_authorization": {
+            "communication_ownership": "character_action",
+            "intent_purpose": "perform_action",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": null,
+            "candidate_target_ids": [],
+            "operation_eligibility": "executable",
+            "mutation_eligibility": true,
+            "authority_provenance": "resolution_contract",
+            "conflict_status": "none",
+            "conflict_details": {},
+            "pending_intention_relationship": "starts_new",
+            "allowed_operation": "ask",
+            "clarification": "",
+            "choices": [],
+            "direct_address": false,
+            "player_text": "How far away is he?"
+          }
+        }
+      },
+      {
+        "event": "resolution_contract",
+        "raw_input": "How far away is he?",
+        "resolution_contract": {
+          "request_kind": "inquiry",
+          "operation": "ask",
+          "target": null,
+          "interlocutor": null,
+          "subject": "How far away is he?",
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "authority": "unknown_allowed",
+          "constraint": "Resolve ask for How far away is he? (ask). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description."
+        },
+        "referent_provenance": "explicit_player",
+        "discourse_ref": null,
+        "discourse_focus": {
+          "scene_id": "scene_investigate",
+          "active_interlocutor": null,
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null
+        },
+        "interaction_obligation_kind": "question",
+        "authority_route": "unknown_allowed",
+        "semantic_result": {
+          "status": "satisfied",
+          "reasons": [
+            "inquiry_answered"
+          ],
+          "contract_id": "rc_23f8d29adc57",
+          "operation": "ask",
+          "target": null,
+          "dimension": null,
+          "discourse_referent": null,
+          "candidate_answer_target": null,
+          "target_compatible": true,
+          "operation_compatible": true,
+          "dimension_compatible": true,
+          "resolution_kind": "answer",
+          "valid_inability": false,
+          "valid_refusal": false,
+          "valid_clarification": false,
+          "necessary_clarification": false
+        },
+        "echo_detected": false,
+        "action_outcome": null,
+        "claim_promoted": false,
+        "retry_preserved": true,
+        "construction": {
+          "cues": [
+            "pronoun"
+          ],
+          "referent_slot": null,
+          "referent_reason": "no_anaphor",
+          "ambiguity_detected": false,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": true,
+          "fast_path_abstained": false,
+          "fast_path_abstention_reason": null,
+          "model_interpreter_invoked": false,
+          "model_proposal_rejected": false,
+          "clarification_after_model": false,
+          "interpretation_api_calls": 0,
+          "interpretation_error": null,
+          "canonical_candidates": [
+            {
+              "id": "scene_investigate",
+              "type": "place",
+              "label": "Investigator's Office"
+            },
+            {
+              "id": "desk",
+              "type": "object",
+              "label": "desk"
+            },
+            {
+              "id": "iron_latch",
+              "type": "object",
+              "label": "iron latch"
+            },
+            {
+              "id": "cooking_pot",
+              "type": "object",
+              "label": "cooking pot"
+            },
+            {
+              "id": "posted_sheet",
+              "type": "object",
+              "label": "posted sheet"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "ask",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": null,
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "validated",
+          "validation_result": {
+            "status": "validated",
+            "reason": null,
+            "failed_fields": [],
+            "clarification_required": false,
+            "model_interpretation_appropriate": false,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "ask",
+            "discourse_commit_allowed": true,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "discourse_commit_allowed": true,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "none"
+          },
+          "authoritative": true,
+          "semantic_completeness": "sufficient",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "How far away is he?",
+            "source": "deterministic_fast_path",
+            "primary_operation": "ask",
+            "supporting_operations": [],
+            "raw_target_text": null,
+            "proposed_target_id": null,
+            "target_capture": "none",
+            "has_determiner": false,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": false,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "ask",
+          "resolution_subject": "feasibility",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 19,
+          "provenance_excerpt": "How far away is he?",
+          "secondary_operations": [],
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          },
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved",
+          "conversational_authorization": {
+            "communication_ownership": "character_action",
+            "intent_purpose": "perform_action",
+            "target_resolution": "none_required",
+            "target_provenance": "none",
+            "target_id": null,
+            "candidate_target_ids": [],
+            "operation_eligibility": "executable",
+            "mutation_eligibility": true,
+            "authority_provenance": "resolution_contract",
+            "conflict_status": "none",
+            "conflict_details": {},
+            "pending_intention_relationship": "starts_new",
+            "allowed_operation": "ask",
+            "clarification": "",
+            "choices": [],
+            "direct_address": false,
+            "player_text": "How far away is he?"
+          }
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "promote_bounded_improvisation",
+        "seam": "post_gm_updates",
+        "source": "gm_bounded_improvisation_proposals",
+        "affected_domains": [
+          "player_visible_state",
+          "interaction_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "bounded_improvisation",
+        "provenance_class": "telemetry_only",
+        "adoption_status": "telemetry_only",
+        "risk_class": "low",
+        "needs_gateway": false,
+        "proposed_future_owner": "no_change",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "accepted_count": 0,
+        "promoted_count": 0,
+        "rejected_count": 0,
+        "promoted_ids": 0
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.api",
+        "operation": "observe_missing_response_policy_enforcement_marker",
+        "seam": "post_gm_updates",
+        "source": "post_gm_adoption_semantic_policy_audit",
+        "affected_domains": [
+          "scene_state",
+          "world_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "telemetry-only",
+        "provenance_class": "telemetry_only",
+        "adoption_status": "telemetry_only",
+        "risk_class": "low",
+        "needs_gateway": false,
+        "proposed_future_owner": "no_change",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "response_policy_enforcement_marker_present": false,
+        "validation_reason_codes": [
+          "post_gm_audit:response_policy_enforcement_marker_missing"
+        ]
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "player_visible_state",
+        "owner_module": "game.api",
+        "operation": "detect_surfaced_clues",
+        "seam": "post_gm_updates",
+        "source": "post_emission_surfaced_clue_telemetry",
+        "affected_domains": [
+          "player_visible_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "telemetry-only",
+        "provenance_class": "telemetry_only",
+        "adoption_status": "telemetry_only",
+        "risk_class": "low",
+        "needs_gateway": false,
+        "proposed_future_owner": "telemetry_only",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "surfaced_clue_count": 0,
+        "player_text_present": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "world_state",
+        "owner_module": "game.api",
+        "operation": "apply_social_narration_lead_supplements",
+        "seam": "post_gm_updates",
+        "source": "post_emission_social_lead_supplement",
+        "affected_domains": [
+          "world_state",
+          "scene_state",
+          "player_visible_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": true,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "validation_reason_codes": [
+          "social_lead_supplement:legacy_shape_allowed"
+        ],
+        "sanitized_narration_available": true,
+        "scene_id_present": true,
+        "resolution_present": true,
+        "narration_present": true,
+        "narration_oversized": false,
+        "narration_social_leads_count": 0,
+        "player_text_present": true,
+        "gateway_present": true,
+        "gateway_decision": "allow_validated_legacy_social_lead_supplement",
+        "gateway_shape_validation_enforced": true,
+        "gateway_policy_enforcement": "observe_only",
+        "gateway_mode": "observe_only",
+        "future_blocking_candidate": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "world_state",
+        "owner_module": "game.api",
+        "operation": "ensure_scene_has_minimum_actionable_lead",
+        "seam": "post_gm_updates",
+        "source": "post_emission_minimum_actionable_lead",
+        "affected_domains": [
+          "world_state",
+          "scene_state",
+          "player_visible_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "deterministic_resolution",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": false,
+        "proposed_future_owner": "engine_resolution_gateway",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "gm_output_present": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.api",
+        "operation": "apply_spoken_state_refinement_cash_out",
+        "seam": "post_gm_updates",
+        "source": "post_emission_spoken_state_refinement",
+        "affected_domains": [
+          "interaction_state",
+          "scene_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "medium",
+        "needs_gateway": true,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "gm_output_present": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.api",
+        "operation": "apply_conservative_emergent_enrollment_from_gm_output",
+        "seam": "post_gm_updates",
+        "source": "post_emission_emergent_actor_enrollment",
+        "affected_domains": [
+          "scene_state",
+          "interaction_state"
+        ],
+        "derived_from_model_or_post_emission": true,
+        "authority": "authoritative",
+        "provenance_class": "post_emission_text",
+        "adoption_status": "authoritative_adopted",
+        "risk_class": "high",
+        "needs_gateway": true,
+        "proposed_future_owner": "post_gm_adoption_gateway",
+        "scene_id": "scene_investigate",
+        "resolution": {
+          "kind": "adjudication_query"
+        },
+        "validation_reason_codes": [
+          "emergent_actor_adoption:legacy_shape_allowed"
+        ],
+        "sanitized_narration_available": true,
+        "scene_id_present": true,
+        "narration_present": true,
+        "narration_oversized": false,
+        "emergent_actor_enrolled": false,
+        "emergent_actor_id_present": false,
+        "gateway_present": true,
+        "gateway_decision": "allow_validated_legacy_emergent_actor_adoption",
+        "gateway_shape_validation_enforced": true,
+        "gateway_policy_enforcement": "observe_only",
+        "gateway_mode": "observe_only",
+        "future_blocking_candidate": true
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "timestamp": "2026-10-17T12:48:07.887342Z",
+        "source": "chat",
+        "action_type": "chat",
+        "raw_input": "How far away is he?",
+        "processing_input": "How far away is he?",
+        "communication_mode": {
+          "mode": "AUTO",
+          "source": "automatic",
+          "textual_mode": null,
+          "textual_label": null,
+          "caller_override": null
+        },
+        "live_chat_interpretation": {
+          "status": "skipped",
+          "reason": "live_interpretation_disabled",
+          "provider_requests": [],
+          "record": null
+        },
+        "turn_stage_order": [
+          "player_input",
+          "intent_normalization_expansion",
+          "action_classification",
+          "engine_resolution",
+          "authoritative_state_mutation",
+          "prompt_context_construction",
+          "gpt_narration",
+          "affordance_derivation",
+          "response_debug_packaging"
+        ],
+        "incoming_payload": {
+          "text": "How far away is he?"
+        },
+        "parsed_intent": null,
+        "segmented_turn": {
+          "adjudication_question_text": "How far away is he?"
+        },
+        "normalized_action": null,
+        "resolution": {
+          "kind": "adjudication_query",
+          "action_id": "adjudication_query",
+          "label": "How far away is he?",
+          "prompt": "How far away is he?",
+          "success": null,
+          "resolved_transition": false,
+          "target_scene_id": null,
+          "clue_id": null,
+          "discovered_clues": [],
+          "state_changes": {},
+          "hint": "",
+          "adjudication": {
+            "category": "action_feasibility_query",
+            "answer_type": "needs_concrete_action",
+            "requires_check": null,
+            "check_request": null,
+            "player_facing_text": "I need a concrete, in-scene target before I can resolve that.",
+            "resolver_family": "feasibility"
+          },
+          "requires_check": false,
+          "check_request": null,
+          "metadata": {
+            "resolution_contract": {
+              "contract_id": "rc_23f8d29adc57",
+              "turn_index": 1,
+              "request_kind": "inquiry",
+              "operation": "ask",
+              "target_ref": null,
+              "interlocutor_id": null,
+              "conversational_subject": "How far away is he?",
+              "dimension": null,
+              "dimensions": [],
+              "expected_resolution": "answer",
+              "epistemic_mode": "unknown_allowed",
+              "discourse_ref": null,
+              "referent_provenance": "explicit_player",
+              "ambiguous": false,
+              "raw_input": "How far away is he?",
+              "construction": {
+                "cues": [
+                  "pronoun"
+                ],
+                "referent_slot": null,
+                "referent_reason": "no_anaphor",
+                "ambiguity_detected": false,
+                "actionable_inherited": false,
+                "active_claim_inherited": false,
+                "fast_path_proposal": true,
+                "fast_path_used": true,
+                "fast_path_abstained": false,
+                "fast_path_abstention_reason": null,
+                "model_interpreter_invoked": false,
+                "model_proposal_rejected": false,
+                "clarification_after_model": false,
+                "interpretation_api_calls": 0,
+                "interpretation_error": null,
+                "canonical_candidates": [
+                  {
+                    "id": "scene_investigate",
+                    "type": "place",
+                    "label": "Investigator's Office"
+                  },
+                  {
+                    "id": "desk",
+                    "type": "object",
+                    "label": "desk"
+                  },
+                  {
+                    "id": "iron_latch",
+                    "type": "object",
+                    "label": "iron latch"
+                  },
+                  {
+                    "id": "cooking_pot",
+                    "type": "object",
+                    "label": "cooking pot"
+                  },
+                  {
+                    "id": "posted_sheet",
+                    "type": "object",
+                    "label": "posted sheet"
+                  }
+                ],
+                "proposal_source": "deterministic_fast_path",
+                "proposed_operation": "ask",
+                "proposed_supporting_operations": [],
+                "proposed_raw_target": null,
+                "canonicalization_attempted": true,
+                "canonical_target_found": false,
+                "operation_conflict": false,
+                "validation_status": "validated",
+                "validation_result": {
+                  "status": "validated",
+                  "reason": null,
+                  "failed_fields": [],
+                  "clarification_required": false,
+                  "model_interpretation_appropriate": false,
+                  "canonical_target_id": null,
+                  "canonical_target_label": null,
+                  "canonical_target_type": null,
+                  "canonical_basis": null,
+                  "authoritative_operation": "ask",
+                  "discourse_commit_allowed": true,
+                  "compatibility_bridge": null
+                },
+                "abstention_reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "discourse_commit_allowed": true,
+                "interlocutor_rejected": false,
+                "entity_binding": {
+                  "status": "unresolved",
+                  "entity_class": "ambiguous_unresolved",
+                  "proposed_interlocutor": null,
+                  "proposed_span": null,
+                  "bound_interlocutor_id": null,
+                  "entity_id": null,
+                  "label": null,
+                  "explicit_new_interlocutor": false,
+                  "authority_reasons": [],
+                  "claim_binding": "none"
+                },
+                "authoritative": true,
+                "semantic_completeness": "sufficient",
+                "compatibility_bridge": null,
+                "interpretation_proposal": {
+                  "raw_input": "How far away is he?",
+                  "source": "deterministic_fast_path",
+                  "primary_operation": "ask",
+                  "supporting_operations": [],
+                  "raw_target_text": null,
+                  "proposed_target_id": null,
+                  "target_capture": "none",
+                  "has_determiner": false,
+                  "interlocutor_id": null,
+                  "conversational_subject": null,
+                  "dimension": null,
+                  "dimensions": [],
+                  "expected_resolution": "answer",
+                  "referenced_claim_id": null,
+                  "referenced_action_id": null,
+                  "referenced_inspected_id": null,
+                  "confidence": null,
+                  "clarification_required": false,
+                  "ambiguous": false,
+                  "operation_conflict": false,
+                  "notes": {}
+                },
+                "commitment_status": "executed_now",
+                "primary_operation": "ask",
+                "resolution_subject": "feasibility",
+                "resolution_subject_coherence": "accepted",
+                "semantic_input_length": 19,
+                "provenance_excerpt": "How far away is he?",
+                "secondary_operations": [],
+                "executable_obligations": {
+                  "primary": null,
+                  "mutation_owner": null,
+                  "sequence": [],
+                  "supporting": []
+                },
+                "requested_addressee": null,
+                "addressee_binding_status": "unresolved",
+                "conversational_authorization": {
+                  "communication_ownership": "character_action",
+                  "intent_purpose": "perform_action",
+                  "target_resolution": "none_required",
+                  "target_provenance": "none",
+                  "target_id": null,
+                  "candidate_target_ids": [],
+                  "operation_eligibility": "executable",
+                  "mutation_eligibility": true,
+                  "authority_provenance": "resolution_contract",
+                  "conflict_status": "none",
+                  "conflict_details": {},
+                  "pending_intention_relationship": "starts_new",
+                  "allowed_operation": "ask",
+                  "clarification": "",
+                  "choices": [],
+                  "direct_address": false,
+                  "player_text": "How far away is he?"
+                }
+              },
+              "retry_preserved": true
+            },
+            "interaction_obligation": {
+              "kind": "question",
+              "target": null,
+              "interlocutor_id": null,
+              "subject": "How far away is he",
+              "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+              "claim_id": null,
+              "resolution_mode": "clarification_target_failure",
+              "turn_index": 1,
+              "resolution_contract_id": "rc_23f8d29adc57",
+              "executable_obligations": {
+                "primary": null,
+                "mutation_owner": null,
+                "sequence": [],
+                "supporting": []
+              }
+            },
+            "gm_resolution_decision": {
+              "contract_id": "rc_23f8d29adc57",
+              "resolution_method": "ask",
+              "outcome_classification": "established_or_retrieved",
+              "established_fact_refs": [
+                "scene_world_authored_corpus"
+              ],
+              "proposed_facts": [
+                {
+                  "text": "Filing shelves crowd one wall; loose papers curl at the edges.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.0",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "A brass compass sits beside a blot of spilled ink on the desk.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.1",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Rain taps at shutter slats while distant bells mark the ward.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.2",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Guard Captain exists as guard",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_world_npc"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "world.npcs.0",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "guard_captain",
+                    "subject_aliases": [
+                      "Guard Captain"
+                    ],
+                    "relation": "exists",
+                    "value": "guard",
+                    "authority": "world_truth"
+                  }
+                },
+                {
+                  "text": "Tavern Runner exists as informant",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_world_npc"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "world.npcs.1",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "tavern_runner",
+                    "subject_aliases": [
+                      "Tavern Runner"
+                    ],
+                    "relation": "exists",
+                    "value": "informant",
+                    "authority": "world_truth"
+                  }
+                }
+              ],
+              "permitted_state_mutations": [],
+              "persistence_policy": "do_not_persist",
+              "narration_constraints": [
+                "Narration may not establish consequential world facts absent this decision.",
+                "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+                "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+                "Inference must not be narrated as physical evidence.",
+                "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+              ],
+              "unresolved_consequential_questions": [],
+              "unresolved_qualifiers": [],
+              "answer_relations": [],
+              "epistemic_acts": [
+                {
+                  "act": "establish",
+                  "source_ref": "scene.visible_facts.0",
+                  "authority": "world_truth",
+                  "semantic_identity": {}
+                },
+                {
+                  "act": "establish",
+                  "source_ref": "scene.visible_facts.1",
+                  "authority": "world_truth",
+                  "semantic_identity": {}
+                },
+                {
+                  "act": "establish",
+                  "source_ref": "scene.visible_facts.2",
+                  "authority": "world_truth",
+                  "semantic_identity": {}
+                },
+                {
+                  "act": "establish",
+                  "source_ref": "world.npcs.0",
+                  "authority": "world_truth",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "guard_captain",
+                    "subject_aliases": [
+                      "Guard Captain"
+                    ],
+                    "relation": "exists",
+                    "value": "guard",
+                    "authority": "world_truth"
+                  }
+                },
+                {
+                  "act": "establish",
+                  "source_ref": "world.npcs.1",
+                  "authority": "world_truth",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "tavern_runner",
+                    "subject_aliases": [
+                      "Tavern Runner"
+                    ],
+                    "relation": "exists",
+                    "value": "informant",
+                    "authority": "world_truth"
+                  }
+                }
+              ],
+              "realization_claims": [
+                {
+                  "claim_id": "rc_b8398b0ee31a",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "modality": "",
+                  "realization_role": "MUST_STATE",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.0",
+                  "text": "Filing shelves crowd one wall; loose papers curl at the edges.",
+                  "relation_kind": "ordinary_predicate",
+                  "premise_claim_ids": []
+                },
+                {
+                  "claim_id": "rc_20626908c2d6",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "modality": "",
+                  "realization_role": "MUST_STATE",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.1",
+                  "text": "A brass compass sits beside a blot of spilled ink on the desk.",
+                  "relation_kind": "ordinary_predicate",
+                  "premise_claim_ids": []
+                },
+                {
+                  "claim_id": "rc_2ee5cfe225ed",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "modality": "",
+                  "realization_role": "MUST_STATE",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.2",
+                  "text": "Rain taps at shutter slats while distant bells mark the ward.",
+                  "relation_kind": "ordinary_predicate",
+                  "premise_claim_ids": []
+                },
+                {
+                  "claim_id": "rc_2e7f0fd4252a",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "guard_captain",
+                    "subject_aliases": [
+                      "Guard Captain"
+                    ],
+                    "relation": "exists",
+                    "value": "guard",
+                    "authority": "world_truth"
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "modality": "",
+                  "realization_role": "MUST_STATE",
+                  "persistence": "world_truth",
+                  "source_ref": "world.npcs.0",
+                  "text": "Guard Captain exists as guard",
+                  "relation_kind": "observation",
+                  "premise_claim_ids": []
+                },
+                {
+                  "claim_id": "rc_10199b2a6373",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "tavern_runner",
+                    "subject_aliases": [
+                      "Tavern Runner"
+                    ],
+                    "relation": "exists",
+                    "value": "informant",
+                    "authority": "world_truth"
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "modality": "",
+                  "realization_role": "MUST_STATE",
+                  "persistence": "world_truth",
+                  "source_ref": "world.npcs.1",
+                  "text": "Tavern Runner exists as informant",
+                  "relation_kind": "observation",
+                  "premise_claim_ids": []
+                }
+              ],
+              "executable_obligations": {
+                "primary": null,
+                "mutation_owner": null,
+                "sequence": [],
+                "supporting": []
+              },
+              "authority_algorithm": "proposition_claim_control_v1"
+            },
+            "ordinary_contract_established": true,
+            "semantic_owner": "resolution_contract",
+            "contract_before_resolver": true,
+            "contract_construction_source": "deterministic",
+            "selected_resolver": "adjudication",
+            "adjudication_resolver_family": "feasibility",
+            "turn_segmentation": {
+              "adjudication_question_text": "How far away is he?"
+            },
+            "canonical_entry_path": "adjudication",
+            "canonical_entry_reason": "no_addressable_target",
+            "canonical_entry_target_actor_id": null,
+            "adjudication_resolver_input": {
+              "family": "feasibility",
+              "contract_id": "rc_23f8d29adc57",
+              "operation": "ask",
+              "interlocutor_id": null
+            },
+            "intent_route_debug": {
+              "routed_to": "adjudication_query",
+              "route_reason": "procedural_action_feasibility_query",
+              "addressed_actor_id": null,
+              "addressed_actor_source": null
+            },
+            "response_type_contract": {
+              "required_response_type": "answer",
+              "source_route": "adjudication",
+              "allow_escalation": false,
+              "escalation_block_reason": "informational_query_guard",
+              "strict_target_id": null,
+              "strict_answer_expected": true,
+              "strict_dialogue_expected": false,
+              "action_must_preserve_agency": false,
+              "debug_reasons": [
+                "adjudication_query_requires_answer",
+                "informational_query_guard"
+              ]
+            },
+            "live_chat_interpretation": {
+              "status": "skipped",
+              "reason": "live_interpretation_disabled",
+              "provider_requests": [],
+              "record": null
+            },
+            "communication_mode": "AUTO"
+          },
+          "world_tick_events": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ]
+        },
+        "scene_before": "scene_investigate",
+        "scene_after": "scene_investigate",
+        "clue_updates": [],
+        "world_flag_updates": [
+          "clock:time_pressure=1"
+        ],
+        "turn_trace": {
+          "source": "chat",
+          "player_input": "How far away is he?",
+          "intent": {
+            "parsed": null,
+            "segmented_turn": {
+              "adjudication_question_text": "How far away is he?"
+            },
+            "normalized": null,
+            "implied_context": {
+              "applied": false,
+              "cases": [],
+              "target_id": null,
+              "commitment_broken": false,
+              "break_reason": null
+            }
+          },
+          "classification": {
+            "action_type": "chat",
+            "resolved_kind": "adjudication_query",
+            "requires_check": false
+          },
+          "response_type_contract": {
+            "required_response_type": "answer",
+            "source_route": "adjudication",
+            "allow_escalation": false,
+            "debug_reasons": [
+              "adjudication_query_requires_answer",
+              "informational_query_guard"
+            ]
+          },
+          "social_contract_trace": {
+            "route_selected": "undecided",
+            "routing_reason_code": "no_addressable_target",
+            "social_followup_recovery": "not_applicable",
+            "reply_owner_actor_id": null,
+            "interlocutor_status": "none",
+            "continuity_status": "broken",
+            "fallback_anchor_source": "none",
+            "visible_grounded_speaker": null,
+            "final_reply_owner": null
+          },
+          "resolution_path": "adjudication_engine",
+          "authoritative_state_changes": {
+            "scene_transition": null,
+            "resolution_state_changes": {},
+            "resolution_world_updates": [],
+            "check_request": null
+          },
+          "interaction_after": {
+            "active_interaction_target_id": null,
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "narration_obligations": {
+            "is_opening_scene": true,
+            "must_advance_scene": false,
+            "should_answer_active_npc": false,
+            "avoid_input_echo": true,
+            "avoid_player_action_restatement": true,
+            "prefer_structured_turn_summary": true,
+            "active_npc_reply_expected": false,
+            "active_npc_reply_kind": null,
+            "scene_momentum_due": false,
+            "scene_momentum_exchanges_since": 0,
+            "scene_momentum_next_due_in": 2,
+            "suppress_non_social_emitters": false
+          },
+          "clues": {
+            "discovered_texts": [],
+            "presentation_changes": [],
+            "known_counts": {
+              "implicit": 0,
+              "explicit": 0,
+              "actionable": 0
+            }
+          },
+          "affordances_after": [
+            {
+              "id": "desk",
+              "type": "investigate",
+              "label": "Examine Desk",
+              "targetEntityId": "desk"
+            },
+            {
+              "id": "iron_latch",
+              "type": "investigate",
+              "label": "Examine the iron latch",
+              "targetEntityId": "iron_latch"
+            },
+            {
+              "id": "cooking_pot",
+              "type": "investigate",
+              "label": "Examine the cooking pot",
+              "targetEntityId": "cooking_pot"
+            },
+            {
+              "id": "posted_sheet",
+              "type": "investigate",
+              "label": "Examine the posted sheet",
+              "targetEntityId": "posted_sheet"
+            },
+            {
+              "id": "approach_the_filing_shelves_crowd_one_wall_loose",
+              "type": "investigate",
+              "label": "Approach the Filing shelves crowd one wall; loose"
+            }
+          ],
+          "emergent_actor": {
+            "emergent_actor_enrolled": false,
+            "emergent_actor_id": null,
+            "emergent_actor_source_text": null
+          },
+          "leads": {
+            "registry_debug": [],
+            "delta_after_reconcile": [],
+            "changed_count": 0
+          },
+          "latency_ms": {
+            "intent_classification": 6,
+            "engine_resolution": 0,
+            "prompt_construction": 0,
+            "gpt_call": 0,
+            "retry_loop_total": 0,
+            "final_emission_gate": 0,
+            "fallback_repair": 0,
+            "total_turn": 33
+          }
+        },
+        "gpt_called": false,
+        "response_ok": true,
+        "error": null,
+        "canonical_entry": {
+          "should_route_social": false,
+          "target_actor_id": null,
+          "target_source": null,
+          "reason": "no_addressable_target",
+          "spoken_text": null,
+          "declared_switch_detected": false,
+          "declared_switch_target_actor_id": null,
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false
+        },
+        "canonical_entry_path": "adjudication",
+        "canonical_entry_reason": "no_addressable_target",
+        "canonical_entry_target_actor_id": null,
+        "selected_resolver": "adjudication",
+        "ordinary_semantic_owner": "resolution_contract",
+        "response_type_contract": {
+          "required_response_type": "answer",
+          "source_route": "adjudication",
+          "allow_escalation": false,
+          "debug_reasons": [
+            "adjudication_query_requires_answer",
+            "informational_query_guard"
+          ]
+        },
+        "latency_ms": {
+          "intent_classification": 6,
+          "engine_resolution": 0,
+          "prompt_construction": 0,
+          "gpt_call": 0,
+          "retry_loop_total": 0,
+          "final_emission_gate": 0,
+          "fallback_repair": 0,
+          "total_turn": 33
+        },
+        "performance": {
+          "elapsed_ms": 33,
+          "interpretation_ms": 6,
+          "resolution_ms": 0,
+          "narration_ms": 0,
+          "validation_ms": 0,
+          "retry_ms": 0,
+          "provider_call_count": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "chat",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      }
+    ],
+    "flags": {},
+    "chat_history": [],
+    "character_name": "Galinor",
+    "campaign_run_id": "4513a1f020806cb826028730",
+    "session_id": "4513a1f020806cb826028730",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-17T12:48:07.939379Z",
+    "conversational_context": {
+      "last_executed_intention": {
+        "status": "executed",
+        "text": "How far away is he?",
+        "operation": null,
+        "target": null,
+        "scene_id": "scene_investigate"
+      },
+      "pending_intention": null,
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "How far away is he?",
+          "delivered_text": "I need a concrete, in-scene target before I can resolve that.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "scene_investigate",
+          "turn": 1,
+          "active": true
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "RESOLVED",
+        "owner": "GM",
+        "purpose": "ACTION_RESULT",
+        "subject": "How far away is he?",
+        "response": "I need a concrete, in-scene target before I can resolve that.",
+        "refusal_reason": null,
+        "scene_id": "scene_investigate",
+        "operation": "adjudication_query"
+      }
+    },
+    "interpretation_telemetry": {
+      "fast_path_success": 1,
+      "fast_path_abstention": 0,
+      "model_interpreter_invoked": 0,
+      "proposal_accepted": 0,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 0
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "scene_investigate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_23f8d29adc57"
+    },
+    "narration_temporal_provenance": {
+      "version": 1,
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [],
+      "rejected_consequential": []
+    },
+    "bounded_improvisation": {
+      "version": 1,
+      "entries": [],
+      "rejected": []
+    },
+    "emergent_actor_debug": {
+      "emergent_actor_enrolled": false,
+      "emergent_actor_id": null,
+      "emergent_actor_source_text": null
+    },
+    "last_bounded_improvisation_promotion": {
+      "promoted_count": 0,
+      "rejected_count": 0,
+      "accepted_count": 0,
+      "promoted_ids": []
+    }
+  },
+  "integrity": {
+    "payload_sha256": "ab4846bef694e77c4629a46f84fddcf26e68790c2fdf9426fceae9d379f8041f",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

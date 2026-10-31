@@ -1,0 +1,16 @@
+{
+  "revision": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "python": "3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)]",
+  "default_model": "gpt-4.1-mini",
+  "high_precision_model": "gpt-4.1-mini",
+  "retry_model": "gpt-4.1-mini",
+  "routing_enabled": true,
+  "strict_social_route": {
+    "selected_model": "gpt-4.1-mini",
+    "route_reason": "purpose_strict_social",
+    "route_family": "high_precision",
+    "escalation_allowed": true
+  },
+  "provider_transport": "OpenAI Responses; production defaults for temperature/top_p; experimental max_retries=0",
+  "client_date": "2026-10-16 America/New_York"
+}

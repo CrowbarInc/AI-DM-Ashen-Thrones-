@@ -1,0 +1,40 @@
+PR-BU lexical-scope false-rejection repair. Deterministic pytest. Model/API calls: 0.
+
+Focused composition file:
+python -m pytest tests/test_pr_bu_narration_claim_composition.py --override-ini="addopts=" -q --tb=no
+Result: 62 passed. Includes the original 41-case matrix.
+
+Focused lexical-scope file:
+python -m pytest tests/test_pr_bu_lexical_scope.py --override-ini="addopts=" -q --tb=no
+Result: 28 passed.
+Geography controls 11/11. Causal-scope controls 13/13. Preserved P1 retry, P1 initial, P2 initial, and P3 initial 4/4.
+
+Together:
+python -m pytest tests/test_pr_bu_narration_claim_composition.py tests/test_pr_bu_lexical_scope.py --override-ini="addopts=" -q --tb=short
+Result: 90 passed.
+
+Original matrix result file:
+python artifacts/pr_bu_lexical_scope_false_rejection/write_matrix_result.py
+41 cases. Expected outcomes matched: 41. False accepts: 0. False rejects: 0. Correct accepts: 18. Correct rejects: 23.
+New lexical-scope cases are not in that denominator.
+
+Broader:
+python -m pytest tests/test_pr_bu_lexical_scope.py tests/test_pr_bu_narration_claim_composition.py tests/test_pr_bs_decision_facing_answer_recipe.py tests/test_pr_bt_selective_epistemic_guidance.py tests/test_pr_bt_policy_instruction_deduplication.py tests/test_pr_br_authority_reconciliation.py tests/test_pr_br_structured_chat_path.py tests/test_pr_br_structured_realization_envelope.py tests/test_pr_br_decision_owned_realization_claims.py tests/test_pr_br_continuation18_immutable_boundary.py tests/test_pr_br_localized_live_defects.py tests/test_pr_br_continuation19_hard_authority.py tests/test_pr_br_c19_free_text_authority.py tests/test_pr_br_claim_control_regex_bound.py tests/test_pr_br_claim_control_slice1.py tests/test_pr_br_claim_control_slice2.py tests/test_pr_br_qualifier_movement_mixed_intent.py tests/test_pr_br_gm_resolution_decision.py tests/test_pr_br_decision_semantic_fidelity_slice3.py tests/test_pr_br_decision_ownership_slice2.py tests/test_pr_br_continuation20_incidental_entity.py tests/test_narrative_mode_output_validator.py tests/test_prompt_and_guard.py tests/test_live_model_guard.py --override-ini="addopts=" --basetemp=development/tmp/pytest_pr_bu_lexical_scope -q --tb=line
+Result: 341 passed, 1 failed, in 20.41s.
+
+The single failure is tests/test_pr_bt_policy_instruction_deduplication.py::test_pr_bt_provider_requests_remove_at_least_12000_chars_each
+assert (121438 - 110405) >= 12000
+Savings: 11033 characters.
+Same measurement as the complement-authorization cycle (313 passed, 1 failed). This repair did not edit prompts. The added 28 passes are the new lexical-scope module.
+
+C18:
+tests/test_pr_br_structured_chat_path.py and tests/test_pr_br_continuation18_immutable_boundary.py
+32 passed, and both files are inside the 341.
+test_raw_chat_accepts_authorized_fact_and_seals_it asserts accepted == sealed == emitted.
+
+Preserved-gate after codes:
+python artifacts/pr_bu_lexical_scope_false_rejection/dump_gates.py
+P1 retry hard_valid true. Codes: authorized_qualified_inference, unknown_cause_actor_or_time.
+P1 initial hard_valid false. Codes include unauthorized_causal_relation and unsupported_narrator_lead.
+P2 initial hard_valid false. Code: unauthorized_declared_claim. narration_validation is unset.
+P3 initial hard_valid true. Code: accepted_declared_realization.

@@ -1,0 +1,202 @@
+{
+  "campaign_id": "pr-br-continuation-13",
+  "campaign_name": "PR-BR Continuation 13 — Post-Generation Semantic Preservation & Social Resolution Execution",
+  "campaign_date": "2026-09-30",
+  "purpose": "Stop a later transformation from reducing satisfaction of an authoritative Resolution Contract, and make a canonical social ask resolve as an actual reply. Six focused live turns. No smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Recorded Continuation 12 replacements are blocked: a time answer beats the source template, a notice-board reading beats the scene frame, and a patrol clue does not satisfy a social ask. Deterministic band: 303 passed, 0 failed. Live turns: 6. Interpretation calls: 3. Generation calls: 6. Evaluator model calls: 0. Retries: 0. Correct contracts 5/6. Initial manual PASS 5/6. Final manual PASS 2/6. Semantic degradations 3. Social resolution 1/3. Evaluator PASS 4/6 with 3 false PASS and 1 false FAIL. The remaining break is an equal-rank clue or topic line replacing a useful answer. READY FOR INDEPENDENT 10-TURN SMOKE: NO. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/resolution_contract.py ranks candidates, rejects foreign dimensions, atmospheric avoidance, and scene frames, and keeps the best safe answer.",
+      "game/live_resolution.py makes follow-up inability lines follow the requested dimension.",
+      "game/social.py and game/narration_state_consistency.py refuse a clue or arrival line that lowers contract rank.",
+      "game/speaker_contract_enforcement.py retargets a satisfying line onto the canonical speaker.",
+      "game/playability_eval.py fails dimension substitution, atmospheric avoidance, and unresolved social asks.",
+      "game/api.py applies the final monotonicity check after perception grounding."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation13_semantic_preservation.py replays Continuation 12 turns 2, 3, and 6 and covers the social and evaluator fixtures.",
+      "Broader band: 303 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation13_live.py runs at most six focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 13 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation13 live transcript, stage traces, manual review, junit, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 13 preservation tests, including the three recorded replays and the stubbed /api/chat inspection, passed inside the 303-test band.",
+    "broader": "303 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation13/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 3 fast-path. 3 abstentions. 3 interpretation calls. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "3 interpretation calls. 6 generation calls. 0 evaluator model calls. 0 generation retries. 0 aborted.",
+    "new_regressions": "None in this band.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Do not authorize independent smoke. Final manual quality is 2/6 and three useful answers were replaced after generation.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Turns 1 and 4 replaced a useful answer with an authored fact that scored satisfied at the same rank.",
+      "Turn 6 replaced a certainty answer because both lines were unchecked.",
+      "Turn 2 kept a legitimate time inability and dropped the more specific generated answer.",
+      "The evaluator false-passed turns 1, 4, and 5."
+    ],
+    "pre_existing": [
+      "The omitted-index unscoped nominal bridge remains for callers that do not pass a catalog."
+    ]
+  },
+  "missing_concepts": [
+    "Equal-rank clue and topic replacements must not win unless they answer the same contract.",
+    "Quote-first speaker attribution must stay eligible when it already answers."
+  ],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest."
+  ],
+  "recommended_next_step": "Stop equal-rank clue and topic lines from replacing a candidate that already answers the contract. Keep a quote-first spoken answer eligible. Do not start independent smoke. Do not start PR-BS.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+      "role": "audit",
+      "why": "Continuation 13 record.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "monotonicity",
+      "why": "Rank, dimension coverage, best-safe candidate, and final comparison.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_resolution.py",
+      "role": "fallback",
+      "why": "Dimension-specific follow-up inability lines.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/social.py",
+      "role": "clue_frame",
+      "why": "Authored-knowledge replacement now compares contract rank.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/narration_state_consistency.py",
+      "role": "scene_momentum",
+      "why": "Destination arrival cannot replace a stronger answer.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/speaker_contract_enforcement.py",
+      "role": "social",
+      "why": "Canonical speaker retarget when a satisfying line would otherwise be dropped.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/playability_eval.py",
+      "role": "evaluator",
+      "why": "Fails dimension, atmospheric, and social mismatches.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api.py",
+      "role": "emission",
+      "why": "Final monotonicity check after the post-generation tail.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api_turn_support.py",
+      "role": "emission",
+      "why": "Obvious contract misses include the new downgrade reasons.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation13_semantic_preservation.py",
+      "role": "tests",
+      "why": "Recorded replays, dimension, social, and evaluator fixtures.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/junit.xml",
+      "role": "regression",
+      "why": "303 passed, 0 failed.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/manual_review.md",
+      "role": "manual_review",
+      "why": "Human-DM review of the six live turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/provenance.json",
+      "role": "provenance",
+      "why": "HEAD and cost bounds.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/20261001T003832Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/20261001T003832Z/turns.json",
+      "role": "traces",
+      "why": "Per-turn contracts, stage transitions, and generated versus final text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/20261001T003832Z/summary.json",
+      "role": "cost",
+      "why": "Call counts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/20261001T003832Z/generation_calls.json",
+      "role": "traces",
+      "why": "Generated candidates before final emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation13/20261001T003832Z/interpretation_calls.json",
+      "role": "traces",
+      "why": "Structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation13_live.py",
+      "role": "harness",
+      "why": "Six-turn cap and the live shapes.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

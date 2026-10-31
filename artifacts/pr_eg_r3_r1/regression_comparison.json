@@ -1,0 +1,59 @@
+{
+  "predecessor_counts": {
+    "failed": 25,
+    "passed": 605
+  },
+  "before_degree_counts": {
+    "failed": 25,
+    "passed": 691
+  },
+  "first_post_degree_counts": {
+    "failed": 27,
+    "passed": 690
+  },
+  "confirming_counts": {
+    "failed": 25,
+    "passed": 692
+  },
+  "predecessor_tests": 630,
+  "confirming_tests": 717,
+  "inherited_failures": [
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_generate_repo_artifacts",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_report_schema_and_gap_closure",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_strict_social_hidden_mutation_detected",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_writer_raw_checkpoint_present_on_strict_social_turn",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_wrong_speaker_fixture_has_attributable_trace",
+    "tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration",
+    "tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution",
+    "tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages",
+    "tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent",
+    "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+    "tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange",
+    "tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "tests.test_turn_pipeline_shared::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+    "tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback"
+  ],
+  "new_failures_vs_predecessor": [],
+  "resolved_failures_vs_predecessor": [],
+  "environmental_file_locks": [
+    {
+      "test": "tests.test_pr_ed_provider_efficiency::test_completed_move_skips_provider_and_keeps_resolver_arrival",
+      "message": "PermissionError: [WinError 5] Access is denied: 'C:\\\\Users\\\\Master Mandalcio\\\\Documents\\\\Tabletop Gaming\\\\AI Dungeon Master\\\\ashen_thrones_ai_gm\\\\development\\\\tmp\\\\pytest\\\\test_completed_move_skips_prov0\\\\data\\\\session.json.tmp.c67a52c5e21b"
+    },
+    {
+      "test": "tests.test_turn_pipeline_shared::test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace",
+      "message": "PermissionError: [WinError 5] Access is denied: 'C:\\\\Users\\\\Master Mandalcio\\\\Documents\\\\Tabletop Gaming\\\\AI Dungeon Master\\\\ashen_thrones_ai_gm\\\\development\\\\tmp\\\\pytest\\\\test_chat_social_route_ships_d0\\\\data\\\\session.json.tmp.1d21073e2a5d"
+    }
+  ]
+}

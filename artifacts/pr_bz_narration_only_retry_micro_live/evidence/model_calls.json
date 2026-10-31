@@ -1,0 +1,84 @@
+[
+  {
+    "index": 1,
+    "probe": null,
+    "kind": "preflight",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-08T23:35:04.340635+00:00",
+    "input_chars": 134,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": false,
+    "retry_context_present": false,
+    "provider_response_contract": "structured_realization",
+    "exact_narration_only_contract_present": false,
+    "declared_claims_in_system_prompt": false,
+    "create_kwarg_keys": [
+      "max_output_tokens",
+      "temperature",
+      "timeout"
+    ],
+    "api_response_schema_present": false,
+    "raw_output": "OK",
+    "response_id": "resp_086c8e80eb768901006ac828a9d07887d284216f58c4017b05",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 24,
+      "output_tokens": 2,
+      "total_tokens": 26,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-08T23:35:09.790536+00:00",
+    "latency_seconds": 5.449
+  },
+  {
+    "index": 2,
+    "probe": "P2",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-08T23:35:10.213537+00:00",
+    "input_chars": 100313,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": false,
+    "provider_response_contract": "narration_only",
+    "exact_narration_only_contract_present": true,
+    "declared_claims_in_system_prompt": false,
+    "create_kwarg_keys": [],
+    "api_response_schema_present": false,
+    "raw_output": "{\"narration\": \"The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \\\"I don't have a particular favorite to keep for myself,\\\" they say carefully. \\\"Every loaf here is made with care, but I try not to show any preference.\\\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.\"}",
+    "response_id": "resp_036b3829385bdcad006ac828ae977087d29808874f9edbe63c",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 23413,
+      "output_tokens": 85,
+      "total_tokens": 23498,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-08T23:35:13.793146+00:00",
+    "latency_seconds": 3.58
+  }
+]

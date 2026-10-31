@@ -1,0 +1,229 @@
+{
+  "current_turn_count": 1,
+  "extra_current_turn_count": 0,
+  "extra_previous_turn_count": 0,
+  "frequencies": {
+    "fallback_families": {
+      "changed_key_count": 0,
+      "current": {},
+      "delta": {},
+      "previous": {}
+    },
+    "fallback_owners": {
+      "changed_key_count": 0,
+      "current": {},
+      "delta": {},
+      "previous": {}
+    },
+    "response_delta": {
+      "checked": {
+        "changed_key_count": 0,
+        "current": {
+          "checked": 0
+        },
+        "delta": {},
+        "previous": {
+          "checked": 0
+        }
+      },
+      "current": {
+        "echo_overlap_band_counts": {},
+        "response_delta_checked_count": 0,
+        "response_delta_failed_count": 0,
+        "response_delta_kind_counts": {},
+        "response_delta_repaired_count": 0,
+        "response_delta_unknown_count": 1
+      },
+      "echo_overlap_bands": {
+        "changed_key_count": 0,
+        "current": {},
+        "delta": {},
+        "previous": {}
+      },
+      "failed": {
+        "changed_key_count": 0,
+        "current": {
+          "failed": 0
+        },
+        "delta": {},
+        "previous": {
+          "failed": 0
+        }
+      },
+      "kinds": {
+        "changed_key_count": 0,
+        "current": {},
+        "delta": {},
+        "previous": {}
+      },
+      "previous": {
+        "echo_overlap_band_counts": {},
+        "response_delta_checked_count": 0,
+        "response_delta_failed_count": 0,
+        "response_delta_kind_counts": {},
+        "response_delta_repaired_count": 0,
+        "response_delta_unknown_count": 1
+      },
+      "repaired": {
+        "changed_key_count": 0,
+        "current": {
+          "repaired": 0
+        },
+        "delta": {},
+        "previous": {
+          "repaired": 0
+        }
+      },
+      "semantic_delta_frequency_delta_count": 0,
+      "unknown": {
+        "changed_key_count": 0,
+        "current": {
+          "unknown": 1
+        },
+        "delta": {},
+        "previous": {
+          "unknown": 1
+        }
+      }
+    },
+    "routes": {
+      "changed_key_count": 2,
+      "current": {
+        "action": 1
+      },
+      "delta": {
+        "action": 1,
+        "dialogue": -1
+      },
+      "previous": {
+        "dialogue": 1
+      }
+    },
+    "runtime_lineage": {
+      "changed_key_count": 0,
+      "current_total_events": 0,
+      "frequency_deltas": {
+        "by_event_kind": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "by_recurrence_key": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "by_stage": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "fallback_content_owner_frequency": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "fallback_frequency": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "fallback_selection_owner_frequency": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "gate_path_frequency": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "mutation_kind_frequency": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        },
+        "speaker_repair_frequency": {
+          "changed_key_count": 0,
+          "current": {},
+          "delta": {},
+          "previous": {}
+        }
+      },
+      "previous_total_events": 0,
+      "total_event_delta": 0
+    },
+    "speakers": {
+      "changed_key_count": 2,
+      "current": {
+        "guard": 1
+      },
+      "delta": {
+        "guard": 1,
+        "runner": -1
+      },
+      "previous": {
+        "runner": 1
+      }
+    }
+  },
+  "owner_drift_classifications": [
+    {
+      "delta_key": "speaker",
+      "owner_drift_bucket": "speaker_drift",
+      "turn_index": 0
+    },
+    {
+      "delta_key": "route",
+      "owner_drift_bucket": "route_drift",
+      "turn_index": 0
+    },
+    {
+      "delta_key": "text_fingerprint",
+      "owner_drift_bucket": "replay_drift_unclassified",
+      "turn_index": 0
+    }
+  ],
+  "per_turn_deltas": [
+    {
+      "current_turn_id": "t01",
+      "deltas": {
+        "route": {
+          "current": "action",
+          "previous": "dialogue"
+        },
+        "speaker": {
+          "current": "guard",
+          "previous": "runner"
+        },
+        "text_fingerprint": {
+          "current": "975d25cb28e506cb",
+          "previous": "c859b4c0778c0314"
+        }
+      },
+      "previous_turn_id": "t01",
+      "turn_index": 0
+    }
+  ],
+  "previous_turn_count": 1,
+  "report_only": true,
+  "schema_version": 1,
+  "summary": {
+    "fallback_delta_count": 0,
+    "route_delta_count": 1,
+    "runtime_lineage_delta_count": 0,
+    "scaffold_delta_count": 0,
+    "semantic_delta_frequency_delta_count": 0,
+    "speaker_delta_count": 1,
+    "text_fingerprint_delta_count": 1
+  },
+  "total_turns_compared": 1
+}

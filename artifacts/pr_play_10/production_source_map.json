@@ -1,0 +1,128 @@
+[
+  {
+    "module": "game/storage.py",
+    "function": "save_session",
+    "line": 251,
+    "input_output_contract": "Persist session to disk. Sets last_saved_at timestamp for save summary."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "get_effective_scene",
+    "line": 349,
+    "input_output_contract": "Load canon and merge the session runtime overlay; required for gameplay logic."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "_validate_runtime_coherency_structural",
+    "line": 404,
+    "input_output_contract": "Structural, deterministic coherency check for runtime state.\n\nMust not attempt semantic repair or authored-data linting."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "_default_runtime_scene_overlay",
+    "line": 472,
+    "input_output_contract": "See source signature and report 03."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "_ensure_runtime_scene_overlay_shape",
+    "line": 483,
+    "input_output_contract": "See source signature and report 03."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "get_runtime_scene_overlay",
+    "line": 498,
+    "input_output_contract": "Return mutable runtime overlay for *scene_id*, creating the canonical shape if missing."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "build_effective_scene",
+    "line": 529,
+    "input_output_contract": "Return a merged scene view without mutating the canon scene or overlay."
+  },
+  {
+    "module": "game/storage.py",
+    "function": "get_scene_runtime",
+    "line": 619,
+    "input_output_contract": "Return mutable runtime dict for a given scene, initializing if needed."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_validate_gm_scene_update_for_legacy_adoption",
+    "line": 1578,
+    "input_output_contract": "Validate GM scene_update payload shape before preserving legacy overlay adoption.\n\nThis rejects malformed or unsafe shapes only. It intentionally does not make\nbroad gameplay-policy decisions about valid legacy scene update proposals."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_post_gm_adoption_gateway",
+    "line": 1864,
+    "input_output_contract": "Trace the transitional post-GM adoption gateway.\n\nBranch validators currently enforce payload-shape safety. The gateway records\nrouting/adoption decisions and future policy intent, but it does not yet make\nbroad semantic gameplay-policy decisions."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_record_post_gm_mutation_trace",
+    "line": 1902,
+    "input_output_contract": "Best-effort trace for post-GM mutation seams; never affects turn execution.\n\nMetadata is deliberately allowlisted so traces contain counts/status/reasons,\nnot raw narration, scene_update payloads, world_updates payloads, or hidden facts."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_apply_post_gm_updates",
+    "line": 1988,
+    "input_output_contract": "Apply GM-proposed updates (scene_update, new_scene_draft, activate_scene_id, world_updates),\nrepeated description guard, detect surfaced clues (telemetry only), and narration-based social leads.\n\nReturns (scene, session, combat, surfaced_in_text, narration_social_lead_clue_texts)."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_opening_response_rejection",
+    "line": 4789,
+    "input_output_contract": "Reject an opening that the existing contract does not accept.\n\nSafe fallback text is not a completed scene_opening. Structured validation\nis unchanged: a rejected envelope stays rejected."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_capture_opening_baseline",
+    "line": 4869,
+    "input_output_contract": "See source signature and report 03."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_restore_opening_baseline",
+    "line": 4878,
+    "input_output_contract": "Write the pre-attempt session, world, combat, and transcript back to disk."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_OpeningScope",
+    "line": 4892,
+    "input_output_contract": "Process-local opening attempt. Holds the existing persistence lock until close."
+  },
+  {
+    "module": "game/api.py",
+    "function": "new_campaign",
+    "line": 5246,
+    "input_output_contract": "Hard reset: new session graph, fresh combat, world playthrough cleared, transcript empty."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_complete_opening_turn_persistence_like_chat",
+    "line": 5893,
+    "input_output_contract": "Shared tail of ``/api/chat`` after GM output exists (opening / exploration / adjudication paths).\n\n``POST /api/start_campaign`` reuses this tail with ``mark_campaign_started`` so bootstrap\npersistence matches chat openings; final-emission layers remain downstream consumers only."
+  },
+  {
+    "module": "game/api.py",
+    "function": "_start_campaign_after_admission",
+    "line": 6382,
+    "input_output_contract": "See source signature and report 03."
+  },
+  {
+    "module": "game/gm.py",
+    "function": "call_gpt",
+    "line": 5170,
+    "input_output_contract": "See source signature and report 03."
+  },
+  {
+    "module": "game/response_policy_enforcement.py",
+    "function": "apply_response_policy_enforcement",
+    "line": 1567,
+    "input_output_contract": "Apply deterministic post-generation enforcement in documented priority order.\n\nThis is guard/policy on the GM dict before final emission. Player-visible phrase legality for\nLLM slop (scaffold tokens, procedural imperatives, analytical templates, etc.) is enforced again\nin ``sanitize_player_facing_output``; tests split accordingly."
+  }
+]

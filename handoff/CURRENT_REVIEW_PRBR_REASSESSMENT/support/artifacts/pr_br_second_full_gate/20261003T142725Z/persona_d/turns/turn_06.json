@@ -1,0 +1,872 @@
+{
+  "turn_number": 6,
+  "player_text": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+  "visible_motivation": "Use an incidental physical detail to find a traveler with firsthand knowledge of the abandoned route.",
+  "intended_meaning": "Identify someone who recently used the northwest track and learn what they encountered.",
+  "generation_attempt_1": "You study the muddy wheels of the waiting wagons, searching for the patterns unique to the northwest track past the crates. You then turn to the man most likely to be the driver, hoping for an answer. He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'. Nothing too odd, just the usual mud and tight paths. Some of the wagons struggled with the churned earth near the old milestone, but no trouble or sight strange enough to mention.\"\n\nHis gaze flicks to the notice board, where the warning about the missing patrol still stands. \"If you need details on that, the guard captain's office might share more—if they'll trust you.\"",
+  "generation_attempt_2": null,
+  "attempt_1_hard_valid": true,
+  "attempt_1_reasons": [],
+  "attempt_2_hard_valid": null,
+  "attempt_2_reasons": [],
+  "regeneration_invoked": false,
+  "regeneration_feedback": null,
+  "rejected_attempt_2_reasons": null,
+  "generation_attempt_count": 1,
+  "accepted_provenance": "initial_generation",
+  "accepted_response_text": "You study the muddy wheels of the waiting wagons, searching for the patterns unique to the northwest track past the crates. You then turn to the man most likely to be the driver, hoping for an answer. He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'. Nothing too odd, just the usual mud and tight paths. Some of the wagons struggled with the churned earth near the old milestone, but no trouble or sight strange enough to mention.\"\n\nHis gaze flicks to the notice board, where the warning about the missing patrol still stands. \"If you need details on that, the guard captain's office might share more—if they'll trust you.\"",
+  "accepted_immutable": true,
+  "final_emitted_response": "You study the muddy wheels of the waiting wagons, searching for the patterns unique to the northwest track past the crates. You then turn to the man most likely to be the driver, hoping for an answer. He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'. Nothing too odd, just the usual mud and tight paths. Some of the wagons struggled with the churned earth near the old milestone, but no trouble or sight strange enough to mention.\"\n\nHis gaze flicks to the notice board, where the warning about the missing patrol still stands. \"If you need details on that, the guard captain's office might share more—if they'll trust you.\"",
+  "gm_text": "You study the muddy wheels of the waiting wagons, searching for the patterns unique to the northwest track past the crates. You then turn to the man most likely to be the driver, hoping for an answer. He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'. Nothing too odd, just the usual mud and tight paths. Some of the wagons struggled with the churned earth near the old milestone, but no trouble or sight strange enough to mention.\"\n\nHis gaze flicks to the notice board, where the warning about the missing patrol still stands. \"If you need details on that, the guard captain's office might share more—if they'll trust you.\"",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "scene_momentum:new_information",
+    "resolution_contract_semantic_preserved"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": false,
+  "fast_path_abstained": true,
+  "abstention_reason": "unresolved_compound_intent",
+  "interpreter_invoked": true,
+  "proposal_source": "deterministic_fast_path",
+  "validation_status": "abstained",
+  "validator_reason": "unresolved_compound_intent",
+  "interpretation_proposal": {
+    "raw_input": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+    "source": "deterministic_fast_path",
+    "primary_operation": null,
+    "supporting_operations": [
+      "inspect",
+      "ask"
+    ],
+    "raw_target_text": "likeliest driver",
+    "proposed_target_id": null,
+    "target_capture": "verb_object",
+    "has_determiner": true,
+    "interlocutor_id": "inc_dbd4f71091",
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": true,
+    "notes": {}
+  },
+  "operation": "unresolved",
+  "canonical_target": null,
+  "target_ref": {},
+  "discourse_ref": null,
+  "interlocutor_id": "inc_dbd4f71091",
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "clarification",
+  "ambiguous": true,
+  "binding_status": "bound_incidental",
+  "entity_class": "permitted_bounded_incidental",
+  "proposed_interlocutor": null,
+  "bound_interlocutor": "inc_dbd4f71091",
+  "entity_id": "inc_dbd4f71091",
+  "authority_reasons": [
+    "identity:established"
+  ],
+  "entity_binding": {
+    "status": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed_interlocutor": null,
+    "proposed_span": null,
+    "bound_interlocutor_id": "inc_dbd4f71091",
+    "entity_id": "inc_dbd4f71091",
+    "label": "likeliest driver",
+    "explicit_new_interlocutor": false,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_b2850ccc8311",
+    "turn_index": 7,
+    "request_kind": "clarification",
+    "operation": "unresolved",
+    "target_ref": null,
+    "interlocutor_id": "inc_dbd4f71091",
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "clarification",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": null,
+    "referent_provenance": "unresolved",
+    "ambiguous": true,
+    "raw_input": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": null,
+      "referent_reason": "unresolved_compound_intent",
+      "ambiguity_detected": true,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": false,
+      "fast_path_abstained": true,
+      "fast_path_abstention_reason": "unresolved_compound_intent",
+      "model_interpreter_invoked": true,
+      "model_proposal_rejected": true,
+      "clarification_after_model": true,
+      "interpretation_api_calls": 1,
+      "interpretation_error": "ambiguous_referent",
+      "canonical_candidates": [
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "inc_dbd4f71091",
+          "type": "interlocutor",
+          "label": "inc_dbd4f71091"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        },
+        {
+          "id": "inc_dbd4f71091",
+          "type": "interlocutor",
+          "label": "likeliest driver"
+        },
+        {
+          "id": "inc_dbd4f71091",
+          "type": "interlocutor",
+          "label": "likeliest driver"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": null,
+      "proposed_supporting_operations": [
+        "inspect",
+        "ask"
+      ],
+      "proposed_raw_target": "likeliest driver",
+      "canonicalization_attempted": true,
+      "canonical_target_found": false,
+      "operation_conflict": true,
+      "validation_status": "abstained",
+      "validation_result": {
+        "status": "abstained",
+        "reason": "unresolved_compound_intent",
+        "failed_fields": [
+          "primary_operation"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "unresolved",
+        "discourse_commit_allowed": false,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": "unresolved_compound_intent",
+      "failed_fields": [
+        "primary_operation"
+      ],
+      "clarification_required": true,
+      "model_interpretation_appropriate": true,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "bound_incidental",
+        "entity_class": "permitted_bounded_incidental",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": "inc_dbd4f71091",
+        "entity_id": "inc_dbd4f71091",
+        "label": "likeliest driver",
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [
+          "identity:established"
+        ],
+        "claim_binding": "none"
+      },
+      "authoritative": false,
+      "semantic_completeness": "not_applied",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+        "source": "deterministic_fast_path",
+        "primary_operation": null,
+        "supporting_operations": [
+          "inspect",
+          "ask"
+        ],
+        "raw_target_text": "likeliest driver",
+        "proposed_target_id": null,
+        "target_capture": "verb_object",
+        "has_determiner": true,
+        "interlocutor_id": "inc_dbd4f71091",
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": true,
+        "notes": {}
+      },
+      "commitment_status": "executed_now",
+      "primary_operation": "unresolved",
+      "resolution_subject": "unspecified",
+      "resolution_subject_coherence": "accepted",
+      "semantic_input_length": 169,
+      "provenance_excerpt": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+      "secondary_operations": [],
+      "requested_addressee": "likeliest driver",
+      "addressee_binding_status": "bound_incidental"
+    },
+    "retry_preserved": true
+  },
+  "active_interlocutor": null,
+  "active_claim": null,
+  "active_inspected": {
+    "id": "notice_board",
+    "label": "Notice board",
+    "kind": "object",
+    "epistemic_status": null,
+    "turn_index": 6,
+    "source": "resolution_contract"
+  },
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": null,
+    "last_committed_turn": 7,
+    "last_committed_contract_id": "rc_b2850ccc8311"
+  },
+  "authority_generated": [
+    {
+      "proposition": "He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Nothing too odd, just the usual mud and tight paths.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "\"If you need details on that, the guard captain's office might share more—if they'll trust you.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authority_retry": [],
+  "authority_emitted": [
+    {
+      "proposition": "He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Nothing too odd, just the usual mud and tight paths.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "\"If you need details on that, the guard captain's office might share more—if they'll trust you.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "FAIL",
+  "failing_gates": [
+    "player_intent_addressed"
+  ],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 86,
+      "rating": "strong",
+      "passed": false,
+      "semantic_result": "FAIL",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "FAIL",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 118,
+          "text_preview": "You study the muddy wheels of the waiting wagons, searching for the patterns unique to the northwest track past the crates. You then turn to the man most likely"
+        }
+      },
+      "player_intent_addressed": {
+        "status": "FAIL",
+        "passed": false,
+        "reason_codes": [
+          "intent_addressed:resolution_contract_unsatisfied"
+        ],
+        "evidence": {
+          "request_kind": "question",
+          "player_terms": [
+            "along",
+            "anything",
+            "come",
+            "distinctive",
+            "driver",
+            "inspect",
+            "likeliest",
+            "northwest",
+            "through",
+            "today",
+            "track",
+            "wagon",
+            "waiting",
+            "wheels"
+          ],
+          "gm_terms": [
+            "answer",
+            "before",
+            "board",
+            "captain's",
+            "churned",
+            "crates",
+            "details",
+            "driver",
+            "earth",
+            "enough",
+            "flicks",
+            "gaze",
+            "guard",
+            "he",
+            "his",
+            "hoping",
+            "likely",
+            "made",
+            "man",
+            "mention"
+          ],
+          "direct_answer_score": 22,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_b2850ccc8311",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "unresolved",
+            "referent_provenance": "unresolved",
+            "assessment_status": "unsatisfied",
+            "assessment_reasons": [
+              "clarification_missing"
+            ],
+            "target": null,
+            "candidate_answer_target": null,
+            "target_compatible": null,
+            "operation_compatible": false,
+            "dimension_compatible": null,
+            "resolution_kind": "unrelated",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": null,
+              "referent_reason": "unresolved_compound_intent",
+              "ambiguity_detected": true,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": false,
+              "fast_path_abstained": true,
+              "fast_path_abstention_reason": "unresolved_compound_intent",
+              "model_interpreter_invoked": true,
+              "model_proposal_rejected": true,
+              "clarification_after_model": true,
+              "interpretation_api_calls": 1,
+              "interpretation_error": "ambiguous_referent",
+              "canonical_candidates": [
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "inc_dbd4f71091",
+                  "type": "interlocutor",
+                  "label": "inc_dbd4f71091"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "id": "inc_dbd4f71091",
+                  "type": "interlocutor",
+                  "label": "likeliest driver"
+                },
+                {
+                  "id": "inc_dbd4f71091",
+                  "type": "interlocutor",
+                  "label": "likeliest driver"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": null,
+              "proposed_supporting_operations": [
+                "inspect",
+                "ask"
+              ],
+              "proposed_raw_target": "likeliest driver",
+              "canonicalization_attempted": true,
+              "canonical_target_found": false,
+              "operation_conflict": true,
+              "validation_status": "abstained",
+              "validation_result": {
+                "status": "abstained",
+                "reason": "unresolved_compound_intent",
+                "failed_fields": [
+                  "primary_operation"
+                ],
+                "clarification_required": true,
+                "model_interpretation_appropriate": true,
+                "canonical_target_id": null,
+                "canonical_target_label": null,
+                "canonical_target_type": null,
+                "canonical_basis": null,
+                "authoritative_operation": "unresolved",
+                "discourse_commit_allowed": false,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": "unresolved_compound_intent",
+              "failed_fields": [
+                "primary_operation"
+              ],
+              "clarification_required": true,
+              "model_interpretation_appropriate": true,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "bound_incidental",
+                "entity_class": "permitted_bounded_incidental",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": "inc_dbd4f71091",
+                "entity_id": "inc_dbd4f71091",
+                "label": "likeliest driver",
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [
+                  "identity:established"
+                ],
+                "claim_binding": "none"
+              },
+              "authoritative": false,
+              "semantic_completeness": "not_applied",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+                "source": "deterministic_fast_path",
+                "primary_operation": null,
+                "supporting_operations": [
+                  "inspect",
+                  "ask"
+                ],
+                "raw_target_text": "likeliest driver",
+                "proposed_target_id": null,
+                "target_capture": "verb_object",
+                "has_determiner": true,
+                "interlocutor_id": "inc_dbd4f71091",
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": true,
+                "notes": {}
+              },
+              "commitment_status": "executed_now",
+              "primary_operation": "unresolved",
+              "resolution_subject": "unspecified",
+              "resolution_subject_coherence": "accepted",
+              "semantic_input_length": 169,
+              "provenance_excerpt": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+              "secondary_operations": [],
+              "requested_addressee": "likeliest driver",
+              "addressee_binding_status": "bound_incidental"
+            },
+            "failure_locus": "response_missed_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 86,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 22,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 23
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 22,
+        "passed": true,
+        "reasons": [
+          "Concrete answer markers present."
+        ],
+        "signals": {
+          "has_question": true,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.104,
+          "gm_word_count": 118,
+          "bounded_partial": false,
+          "next_lead": false,
+          "answer_markers": 2
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 6,
+          "topic_overlap_ratio": 0.429,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.057,
+          "player_presses_thread": false,
+          "gm_word_count": 118,
+          "net_new_terms": 60
+        }
+      },
+      "immersion": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": true,
+          "scene_anchor_hits": 1
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (22/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (23/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 86,
+        "rating": "strong",
+        "passed": false,
+        "semantic_result": "FAIL",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 1,
+  "turn_generation_calls": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "You study the muddy wheels of the waiting wagons, searching for the patterns unique to the northwest track past the crates. You then turn to the man most likely to be the driver, hoping for an answer. He shrugs, wary and reserved, before saying, \"I made the run through that track this mornin'. Nothing too odd, just the usual mud and tight paths. Some of the wagons struggled with the churned earth near the old milestone, but no trouble or sight strange enough to mention.\"\n\nHis gaze flicks to the notice board, where the warning about the missing patrol still stands. \"If you need details on that, the guard captain's office might share more—if they'll trust you.\""
+    }
+  ],
+  "turn_interpretation_calls": [
+    {
+      "event": "attempt",
+      "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[\"ask\"],\"raw_target_text\":\"the waiting wagon wheels for the distinctive mud of that northwest track\",\"proposed_target_id\":null,\"interlocutor_id\":\"inc_dbd4f71091\",\"conversational_subject\":\"wagon wheels and travel route\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Determine if the wagon wheels show mud from the northwest track and then ask the likeliest driver if they came through that way today and noticed anything odd.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":true,\"ambiguous\":true,\"confidence\":\"medium\"}"
+    }
+  ],
+  "persistence": {
+    "session_id": "05175d021232ea8d46d8b973",
+    "campaign_run_id": "05175d021232ea8d46d8b973",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 7,
+      "last_committed_contract_id": "rc_b2850ccc8311"
+    },
+    "incidental_entities": [
+      {
+        "entity_id": "inc_dbd4f71091",
+        "label": "likeliest driver",
+        "role": "likeliest driver",
+        "scene_id": "frontier_gate",
+        "provenance": "bounded_incidental",
+        "authority": "bounded_improvisation",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "truth_status": "runtime_incidental",
+        "consequence_level": "incidental"
+      }
+    ],
+    "ledger_entries": [
+      {
+        "id": "inc_dbd4f71091",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "content": "likeliest driver",
+        "scope": "scene",
+        "scene_id": "frontier_gate",
+        "consequence_level": "incidental",
+        "source": "player_proposed_interlocutor",
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental"
+      }
+    ],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "threadbare_watcher",
+        "name": "Threadbare watcher",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 358972
+  },
+  "resolution_kind": null,
+  "api_ok": true
+}

@@ -1,0 +1,13 @@
+# 03 — Claim and Resolution Authority
+
+PR-PLAY-11 · 2026-10-30 America/New_York · evidence_scope: structural_only.
+
+The decision is a pre-narration authority boundary, not merely a dice-result classifier. It covers authored facts, epistemic limits, incidental texture, action outcomes, mechanics and persistent consequences. claim_authority_matrix.json identifies existing owners and limits. GPT expressions never become state truth by assertion.
+
+authored_world_fact does not self-authorize. A realize declaration must match a supplied authorized realization_claim and preserve modality/premise ceilings. source_claim_id is **not mandatory**: _declared_identity_matches_realization also accepts semantic identity, exact text and bounded lexical compatibility. Exact authored environmental facts can use authored provenance; premises may be empty when no uncertain dependency exists. No special opening exemption exists. Scene context is usable only through the host's actual decision/evidence, not a model-invented authority claim.
+
+Missing provenance defaults to generated_proposal during coercion, but realized output provenance is taken from the matched host claim. Requested provenance is not independently equality-checked in the realize branch; contradictions in *requested labels* alone do not necessarily reject. Proposal world-truth requests are explicitly prohibited. Invalid source IDs may fall back to exact text matching: C6 rejects unsupported content with an invalid ID, while source_id_fallback.json documents that a bogus ID with independently matched authored text remains accepted. This preexisting contract is not silently strengthened or relaxed here. Source ID matching itself is permissive; broad assurance about all malformed metadata is not claimed.
+
+MUST_STATE is host presentation priority derived from authorized world claims. It is not an authority grant or resolution flag. Declared roles and ordinary_predicate do not by themselves reject this opening. established modality is valid for these established facts. The historical combination is valid for all seven declarations. Correct source IDs, changed role, or changed requested provenance leave the original narrated sentence rejected. Same semantic subject can pass declaration validation and fail prose validation because each surface is checked separately.
+
+Consequential player-action, mechanical and persistent-world outcomes remain engine-owned. Ordinary prose can trigger a consequential lexical restriction when it asserts posted information, evidence, historical causes or other guarded content. Sounding mundane does not bypass that check. Bounded incidental details and NPC rumors retain their existing separate policy and persistence limits.

@@ -1,0 +1,198 @@
+{
+  "campaign_id": "pr-br-continuation-19",
+  "campaign_name": "PR-BR Continuation 19 — Hard-Authority Boundary and Contract Canonicalization Closeout",
+  "campaign_date": "2026-10-01",
+  "purpose": "Reject ungrounded authoritative operational rules before C18 seals them, and canonicalize source follow-ups and social questions. Four focused live turns. No independent smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "C18's seal-or-retry lifecycle is unchanged. Ungrounded schedules, access rules, and official levies are hard-invalid and retry once. Grounded rules, NPC rumors, and bounded incidental detail stay valid. The 267-test band passed, including the 16-turn historical replay. Four live turns kept exact accepted text and emitted no unauthorized world rule. Two live contracts were not canonical: a source follow-up stayed on content, and an unbound ask of an unlisted merchant sealed the safe line. READY FOR ANOTHER INDEPENDENT 10-TURN SMOKE: NO. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/proposition_authority.py classifies schedules, access rules, levies, and incidental detail with PR-BN kinds.",
+      "game/immutable_valid_response.py rejects ungrounded authoritative rules and retries once without rewriting the sentence.",
+      "game/resolution_contract.py binds clause-sized claims by id and keeps social questions as ask.",
+      "game/bounded_improvisation.py treats official levies as stronger than mundane prices."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation19_hard_authority.py covers third-bell, grounded, rumor, bounded, price, temporal, access, source follow-up, ask/act, the six C18 turns, and stubbed /api/chat.",
+      "Broader band: 267 passed, 0 failed. Continuations 12-16 and 18 included."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation19_live.py runs at most four focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md Continuation 19 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation19/20261002T002239Z live transcript, turns, authority review, and cost summary."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 19 authority, claim binding, ask/act, and raw chat stub tests passed.",
+    "broader": "267 passed, 0 failed. Full suite not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "4 completed live turns. 1 interpretation call. 6 gameplay-generation calls, of which 2 were regenerations. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "1 interpretation call. 6 gameplay-generation calls. 0 evaluator model calls. 2 regenerations. 0 aborted.",
+    "new_regressions": "None in the deterministic band. Live turn 2 kept dimension content. Live turn 3 sealed a safe nonresolution after an unbound ask.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Do not run an independent 10-turn smoke from this result.",
+    "Live turn 3 shows a fast-path ask with no interlocutor for a person who is not in the scene.",
+    "Live turn 2 did not select the source dimension when no active claim existed.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Source follow-up without a stored claim can remain dimension content.",
+      "Ask with a null interlocutor can be returned instead of abstaining, and both generations can stay on the previous NPC."
+    ],
+    "pre_existing": [
+      "Scene openings and turns without a contract operation still use the legacy emission path."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health. The smoke was not run.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest.",
+    "Does not prove every live social follow-up selects the source dimension."
+  ],
+  "recommended_next_step": "External review. Do not close PR-BR. Do not start PR-BS. Do not run the independent smoke or the four live turns again in this cycle.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "role": "audit",
+      "why": "Continuation 18 record and Continuation 19 closeout.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "lifecycle",
+      "why": "C18 seal, hard validation, one retry, and the new ungrounded-rule reason.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/proposition_authority.py",
+      "role": "authority",
+      "why": "PR-BN proposition classification for schedules, access, levies, and incidental detail.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/bounded_improvisation.py",
+      "role": "authority",
+      "why": "PR-BN kinds and official-levy check.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "contract",
+      "why": "Claim identity, source follow-up, and ask versus act canonicalization.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "contract",
+      "why": "Fast-path families and claim-target identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interaction_completion.py",
+      "role": "contract",
+      "why": "Terminal ask versus act, with open limited to a real object.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "discourse",
+      "why": "Active-claim extraction and epistemic status.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation19_hard_authority.py",
+      "role": "tests",
+      "why": "Third-bell, controls, variants, C18 replay, and stubbed /api/chat.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "role": "tests",
+      "why": "C18 immutability, 16-turn replay, and rejected-claim persistence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation16_interaction_completion.py",
+      "role": "tests",
+      "why": "C16 interaction completion regressions.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_br_continuation15_content_clarification.py",
+      "role": "tests",
+      "why": "C15 content clarification regressions.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_br_continuation14_resolution_content.py",
+      "role": "tests",
+      "why": "C14 resolution content regressions.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/run_pr_br_continuation19_live.py",
+      "role": "runner",
+      "why": "Four-turn focused live session.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation19/20261002T002239Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation19/20261002T002239Z/turns.json",
+      "role": "turns",
+      "why": "Contracts, authority review, provenance, and accepted versus emitted text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation19/20261002T002239Z/summary.json",
+      "role": "cost",
+      "why": "Generation, interpretation, and regeneration counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation19/20261002T002239Z/generation_calls.json",
+      "role": "calls",
+      "why": "Per-call generation excerpts and retry reasons.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation19/20261002T002239Z/interpretation_calls.json",
+      "role": "calls",
+      "why": "The one live interpretation proposal.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "world": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_world_progression_tick_integration.py",
+      "tests/test_world_state.py",
+      "tests/test_world_progression_backbone.py",
+      "tests/test_opening_scene_realization.py",
+      "tests/test_scene_opening_narrative_plan.py",
+      "tests/test_atgb_r2_04_question_evidence_contract.py",
+      "tests/test_atgb_r2_02_speech_participant_grounding.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\p12_world",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\world_short.xml"
+    ],
+    "exit": 1,
+    "seconds": 5.31
+  },
+  "export_atgb": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_review_handoff.py",
+      "tests/test_atgb_infrastructure.py",
+      "tests/test_atgb_accounting.py",
+      "tests/test_atgb_readiness.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\p12_expor",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\export_atgb_short.xml"
+    ],
+    "exit": 1,
+    "seconds": 18.24
+  }
+}

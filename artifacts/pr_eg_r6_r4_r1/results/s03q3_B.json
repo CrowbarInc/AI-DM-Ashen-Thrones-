@@ -1,0 +1,54 @@
+{
+  "case_id": "s03q3",
+  "family": "s03",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "734eb602e8afbe29dd54792f6d6af29f8998df4aeb86c048cb9e2da396a8d091",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Mara did not sell the ivory key to Tovin"
+    ],
+    "qualifiers": [
+      "did not",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s03"
+    ],
+    "answered_arguments": [
+      "seller",
+      "buyer"
+    ],
+    "missing_arguments": [
+      "buyer"
+    ],
+    "conflict": false,
+    "reason": "The facts explicitly state that Mara did not sell the ivory key to Tovin, but no fact identifies any buyer who purchased the ivory key from Mara. Therefore, the question about who bought the ivory key from Mara is directly answered negatively for Tovin, but no buyer is identified."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

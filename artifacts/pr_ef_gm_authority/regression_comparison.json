@@ -1,0 +1,3025 @@
+{
+  "baseline_total": 286,
+  "baseline_passed": 256,
+  "final_total": 301,
+  "final_passed": 271,
+  "inherited": [
+    "tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration",
+    "tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution",
+    "tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages",
+    "tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent",
+    "tests.test_turn_pipeline_shared::test_chat_action_outcome_contract_survives_inside_active_social_scene",
+    "tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange",
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]",
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]",
+    "tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "tests.test_turn_pipeline_shared::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+    "tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]",
+    "tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "tests.test_turn_pipeline_shared::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
+    "tests.test_turn_pipeline_shared::test_chat_repeated_social_questions_keep_npc_uncertainty_voice",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+    "tests.test_turn_pipeline_shared::test_pipeline_strict_social_ragged_stranger_fallback_repaired",
+    "tests.test_turn_pipeline_shared::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical"
+  ],
+  "resolved": [],
+  "new_regressions": [],
+  "changed_failure_signatures": [],
+  "added_tests": [
+    "tests.test_pr_ef_gm_authority::test_bad_compound_target_is_not_offered",
+    "tests.test_pr_ef_gm_authority::test_conditional_turn_keeps_action_before_movement_question_shortcut",
+    "tests.test_pr_ef_gm_authority::test_gm_question_cannot_swallow_conditional_action",
+    "tests.test_pr_ef_gm_authority::test_gm_why_after_refusal_keeps_reason_and_does_not_ask_for_npc",
+    "tests.test_pr_ef_gm_authority::test_new_explicit_action_supersedes_old_pending_intention",
+    "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence",
+    "tests.test_pr_ef_gm_authority::test_public_evidence_excludes_undiscovered_clues_and_npc_topics",
+    "tests.test_pr_ef_gm_authority::test_schema_owns_communication_without_execution_fields",
+    "tests.test_pr_ef_gm_authority::test_unknown_and_mixed_communication_cannot_execute",
+    "tests.test_pr_ef_gm_authority::test_unsupported_first_step_cannot_be_reordered_into_confirmation",
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[ATTACK]",
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[INVENTORY_GRANT]",
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[SOCIAL_SIGNAL]",
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[TIME_CONTROL]",
+    "tests.test_pr_ef_gm_authority::test_withdrawal_after_reload_cannot_execute_pending"
+  ],
+  "individual_results": {
+    "tests.test_exploration_resolution::test_chat_attack_mechanical_resolution_kind_not_exploration_set": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_build_messages_none_does_not_crash_on_response_type_metadata": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_captain_dialog_build_messages_not_exploration_kind": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_exploration_parsed_routes_through_exploration": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}"
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_investigate_desk_logged_resolution_kind_investigate": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_investigate_desk_resolution_kind_in_gpt_messages": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_investigate_notice_board_mechanical_resolution_investigate": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert None == 'observe'\n +  where None = <built-in method get of dict object at 0x00000192B85D9A40>('kind')\n +    where <built-in method get of dict object at 0x00000192B85D9A40> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert None == 'observe'\n +  where None = <built-in method get of dict object at 0x0000023E89EF9540>('kind')\n +    where <built-in method get of dict object at 0x0000023E89EF9540> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get"
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_observe_area_resolution_kwarg_to_build_messages": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert None == 'observe'\n +  where None = <built-in method get of dict object at 0x00000192B85FF000>('kind')\n +    where <built-in method get of dict object at 0x00000192B85FF000> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert None == 'observe'\n +  where None = <built-in method get of dict object at 0x0000023E8D500480>('kind')\n +    where <built-in method get of dict object at 0x0000023E8D500480> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get"
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_peaceful_intent_log_world_tick_not_exploration_kind": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_quarterstaff_attack_mechanical_resolution_absent": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert False\n +  where False = any([False])"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert False\n +  where False = any([False])"
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_sword_attack_calls_gpt_keeps_active_scene": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_chat_sword_attack_gpt_invoked": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_combat_actions_still_routed_unchanged": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_custom_engine_result_mystery_action_id": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_custom_unknown_action_returns_normalized_engine_result": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_discover_clue_engine_result_map_fragment_interactable": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_discover_clue_includes_hidden_fact_metadata_when_interactable_configured": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_discover_clue_returns_normalized_engine_result": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_investigate_engine_result_with_empty_discoverable_clues": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_investigate_returns_normalized_engine_result": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_observe_engine_result_with_literal_empty_session_world": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_observe_investigate_interact_produce_structured_resolution": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_observe_returns_normalized_engine_result": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_exploration_intent_unrelated_phrases_return_none[scene0-I attack the guard with my sword]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_exploration_intent_unrelated_phrases_return_none[scene1-Cast magic missile at the orc]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_exploration_intent_unrelated_phrases_return_none[scene2-I attack the guard]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_exploration_intent_unrelated_phrases_return_none[scene3-I attack the guard]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_exploration_intent_unrelated_phrases_return_none[scene4-Cast magic missile at the orc]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_go_north_here_scene_north_room_exit": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_go_north_label_and_prompt_match_raw_text": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_go_north_label_or_prompt_contains_go_north_phrase": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_go_north_no_exits_normalizes_label_and_prompt": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_go_north_travel_north_gate_exit_in_label": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_go_north_with_exit_label_go_north": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_investigate_label_contains_investigate_word": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_investigate_notice_board_gate_empty_exits_investigate_in_label": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_investigate_notice_board_gate_minimal_scene_investigate_in_label": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_investigate_notice_board_gate_no_exits": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_parse_investigate_notice_board_in_label_local_import": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_repeated_exploration_action_updates_anti_stall_runtime": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_resolve_interactable_hidden_fact_text_matches_scene_hidden_facts": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_scene_transition_engine_result_north_room_exit": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_scene_transition_returns_normalized_engine_result": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_resolution::test_scene_transition_with_known_target_activates_before_narration": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_skill_checks::test_action_without_configured_check_works_normally": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_skill_checks::test_gpt_payload_includes_skill_check_when_resolved": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_skill_checks::test_investigate_with_failed_skill_check": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_skill_checks::test_investigate_with_successful_skill_check": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_exploration_skill_checks::test_observe_with_configured_check_success": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_gate::test_final_emission_gate_decomposed_redirect_stub": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_bj39_enforce_response_type_contract_applies_upstream_answer_prepared_repair": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_bj39_enforce_response_type_contract_marks_upstream_absent_for_answer": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_bj39_gate_delegator_removed": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_co92_stamp_response_type_prepared_repair_owner_bucket_action_outcome": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_merge_opening_upstream_prepare_attach_observability_into_response_type_debug": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_resolve_upstream_prepared_answer_action_repair_absent_marks_absent": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_resolve_upstream_prepared_answer_action_repair_answer_present": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_response_type_opening_mode_active_scene_opening_or_shipped_mode": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_final_emission_response_type::test_upstream_prepared_emission_field_source_prefers_attribution": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_inverse_mixed_intent_keeps_social_primary_and_committed_travel": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_it_happened_here_is_still_an_event_site": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_modality_contrasts_do_not_execute_uncommitted_travel": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_npc_rumor_with_a_source_stays_a_claim": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_preservation_keeps_authorized_uncertainty_and_drops_narrator_lead": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_successful_transition_authorizes_destination_and_rejects_departure_exit": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_turn7_thanks_is_supporting_and_travel_is_primary": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_unknown_cause_actor_and_time_are_not_event_sites": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_br_qualifier_movement_mixed_intent::test_unresolved_and_failed_movement_do_not_authorize_arrival": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ambiguous_statement_stays_unresolved": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_auto_mode_classifies_prefixes_and_defers_unmarked_text": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_explicit_ic_override": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_explicit_ooc_override_blocks_an_action_sentence": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_explicit_override_takes_precedence_over_automatic_classification": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ic_prefix": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_mixed_message_is_deferred": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ooc_correction_of_a_committed_action_requires_adjudication": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ooc_message_cannot_advance_time": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ooc_message_cannot_invoke_a_gameplay_resolver": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ooc_message_cannot_mutate_state": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ooc_prefix": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ooc_rules_question_does_not_execute": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ordinary_ic_action_routes_to_the_gameplay_adapter": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_ordinary_ic_dialogue": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_reclassification_after_execution_does_not_rewrite_state": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_reclassification_before_execution_reroutes": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_rejected_or_deferred_messages_do_not_change_state": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_unified_history_preserves_message_order": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_dq_ic_ooc_messages::test_unsupported_ic_mechanic_stays_in_character": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_du_player_pipeline::test_pr_du_four_action_sequence_and_ooc_through_production_chat": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_du_player_pipeline::test_pr_du_ooc_interruption_is_non_mutating_through_chat_entry": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_du_player_pipeline::test_pr_du_single_turn_uses_production_chat_entry_with_stored_interpretation": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_du_player_pipeline::test_pr_dv_rejected_and_ambiguous_stored_interpretations_do_not_fallback_execute": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_du_player_pipeline::test_pr_dv_structured_resolution_facts_survive_generic_final_text": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ea_conversational_orchestration::test_pr_ea_contract_distinguishes_incidental_context_from_primary_execute": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ea_conversational_orchestration::test_pr_ea_deterministic_incomplete_movement_clarifies_without_context": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ea_conversational_orchestration::test_pr_ea_incomplete_movement_does_not_advance_turn_or_clock": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ea_conversational_orchestration::test_pr_ea_live_missing_move_target_uses_focused_clarification": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ea_conversational_orchestration::test_pr_ea_stored_incidental_plus_move_executes_existing_authoritative_resolver": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ea_conversational_orchestration::test_pr_ea_unmarked_ooc_help_question_is_nonmutating_without_provider": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_eb_conversational_continuity::test_pr_eb_active_npc_followup_routes_to_existing_social_resolver": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_eb_conversational_continuity::test_pr_eb_ambiguous_pronoun_inspection_resumes_after_clarification": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_eb_conversational_continuity::test_pr_eb_conversation_exit_clears_active_interlocutor_without_world_mutation": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_ambiguous_destination_then_continuation": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_compound_actions_are_named_and_not_executed": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_dependent_sequence_does_not_narrate_the_second_step": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_development_movement_family[Can I get to the docks from here?]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_development_movement_family[I go to the docks.]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_development_movement_family[I leave the guard and walk toward the docks.]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_development_movement_family[I make for the harbor.]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_development_movement_family[I was thinking about visiting the docks.]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_development_movement_family[Let's head down to the waterfront.]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_dialogue_to_movement_clears_talk_and_moves": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_direct_movement_uses_existing_resolver": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H01]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H02]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H03]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H04]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H05]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H06]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H07]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H08]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H09]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H10]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H11]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H12]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H13]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_semantic_family[H14]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_holdout_wording_is_not_hardcoded": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_hypothetical_action_does_not_mutate": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_impossible_wall_stays_with_existing_authority": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_movement_question_does_not_move_or_advance_time": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_ordinary_inspection_still_reaches_existing_resolver": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_pending_destination_survives_save_and_load": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_return_uses_previous_visited_scene": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_tentative_movement_does_not_execute": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ec_movement_partial_intent::test_pr_ec_unknown_destination_is_not_canonicalized": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_completed_move_skips_provider_and_keeps_resolver_arrival": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_context_question_then_move_then_followup_stays_grounded": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_dialogue_still_uses_the_provider": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_duplicate_turn_packet_policy_is_omitted_without_mutating_input": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_local_observation_skip_does_not_require_a_provider": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_narration_retry_stops_for_unsent_or_identical_output": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ed_provider_efficiency::test_unequal_turn_packet_policy_stays": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_bad_compound_target_is_not_offered": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_conditional_turn_keeps_action_before_movement_question_shortcut": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_gm_question_cannot_swallow_conditional_action": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_gm_why_after_refusal_keeps_reason_and_does_not_ask_for_npc": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_new_explicit_action_supersedes_old_pending_intention": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_production_ten_turn_sequence": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_public_evidence_excludes_undiscovered_clues_and_npc_topics": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_schema_owns_communication_without_execution_fields": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_unknown_and_mixed_communication_cannot_execute": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_unsupported_first_step_cannot_be_reordered_into_confirmation": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[ATTACK]": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[INVENTORY_GRANT]": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[SOCIAL_SIGNAL]": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_unsupported_singletons_never_offer_confirmation[TIME_CONTROL]": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_pr_ef_gm_authority::test_withdrawal_after_reload_cannot_execute_pending": {
+      "baseline": null,
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_accepts_legacy_missing_envelope_when_allowed": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_append_log_is_serialized_against_snapshot_restore": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_atomic_save_failure_does_not_corrupt_live_session_file": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_atomic_save_session_writes_valid_envelope": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_envelope_round_trip_with_integrity": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_new_campaign_reset_cannot_overlap_restore_or_save_silently": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_overlapping_persistence_operations_are_serialized_deterministically": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_rejects_integrity_mismatch": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_rejects_missing_envelope_when_not_allowed": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_rejects_unsupported_version": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_rejects_wrong_document_kind": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_restore_rejected_when_post_restore_runtime_is_structurally_incoherent": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_snapshot_restore_cannot_race_a_save_into_mixed_visible_state": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_snapshot_restore_is_all_or_nothing_with_rollback_on_commit_failure": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_snapshot_restore_validates_before_any_live_mutation": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_runtime_persistence_regression_suite_obj14::test_obj14_successful_restore_yields_coherent_loadable_runtime": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_character_player_name_persists": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_clues_persist_across_save_load": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_get_save_summary_returns_expected_shape": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_loaded_canon_scene_is_marked_and_rejected_by_mutation_guard": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_runtime_scene_overlay_persists_and_active_scene_merges_without_scene_file_write": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_save_load_active_scene": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_save_load::test_world_flags_persist_across_save_load": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_active_interaction_target_set_and_switches_on_social_exchange": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_build_scene_npc_player_snapshot_merges_world_and_runtime": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_clear_interaction_context_resets_all_fields": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_direct_question_sets_npc_reply_expected_signal": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_find_npc_by_target": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_follow_up_without_explicit_target_id_keeps_guard_captain_via_continuity": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_frontier_gate_generic_addressing_smoke_authoritative": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_implied_ambiguous_phrasing_is_noop": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_implied_bring_drink_reinforces_current_target": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_implied_lowered_voice_updates_privacy_context": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_implied_sitting_with_target_updates_position_context": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_intimidate_returns_engine_check_request": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_listening_invitation_sets_reply_expected_explanation": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_missing_npc_target_handled_safely": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_native_world_npc_path_never_gets_false_promotion_metadata": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_non_social_context_update_clears_target": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_npc_runtime_trust_attitude_persistence": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_parse_social_intent": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_persuade_returns_engine_check_request": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_promoted_actor_followup_resolves_same_npc_via_continuity": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_question_reveals_topic_clue": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_question_without_topic_marks_consequential_unknown_and_non_invention_hint": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_repeat_question_does_not_duplicate_reveal": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_repromotion_of_same_actor_is_idempotent_in_social_path": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_resolve_social_skill_check": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_return_to_guard_follow_up_resolves_same_npc_via_generic_role": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_scene_actor_auto_promotes_on_meaningful_social_contact": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_social_clue_reveal_refreshes_registry_lead_touch": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_social_resolution_uses_existing_promoted_actor_map_before_new_promotion": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_social_result_dict_matches_engine_contract": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_social::test_unpromotable_actor_fails_cleanly_in_social_resolution": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_action_and_chat_investigate_both_mark_runtime_discovery_memory": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_action_and_chat_mutate_runtime_before_request_build[via_api_action]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_action_and_chat_social_use_equivalent_shared_turn_logic": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_affordances_are_state_derived_not_from_gpt_text": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_action_outcome_contract_survives_inside_active_social_scene": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_active_target_direct_command_routes_to_social_exchange": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: expected resolution.kind in ['social_probe'], got 'question'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: expected resolution.kind in ['social_probe'], got 'question'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_active_target_location_question_routes_to_social_exchange": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_adjudication_refuses_over_answer_without_basis": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_communication_mode_override_conflict_is_nonmutating": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_covert_concealment_under_observation_prompts_engine_check": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_does_not_override_forceful_world_action": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[lean_in_quiet_question]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[scan_crowd_question]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[next_step_so]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[what_next_well]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[where_lead]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_what_planning]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_who_attacked]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_npc_directed_question_regressions[runner_direct_address]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_dialogue_lock_routes_npc_directed_question_regressions[who_saw]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_earshot_question_routes_to_adjudication_with_state_answer": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ic_strips_declaration_before_narration_context": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[attack_like]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[inspect_like]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[move_like]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[pr_dw_original_failure]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[roll_like]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[rollback_like]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[spelled_with_space]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[state_mutation_like]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_actions_available]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_roll_question]": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x00000192B8074880>('resolution')\n +    where <built-in method get of dict object at 0x00000192B8074880> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x0000023E8CF29F00>('resolution')\n +    where <built-in method get of dict object at 0x0000023E8CF29F00> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_implied_lowered_voice_reaches_request_build_context": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_implied_sit_with_target_reaches_request_build_context": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_known_follow_up_bypasses_uncertainty_fallback": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert 'retry_strategy:selected=unresolved_question' in ''\n +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, \"Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert 'retry_strategy:selected=unresolved_question' in ''\n +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, \"Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x00000192B8406640>('category')\n +    where <built-in method get of dict object at 0x00000192B8406640> = {}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x0000023E8D467100>('category')\n +    where <built-in method get of dict object at 0x0000023E8D467100> = {}.get"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_mixed_turn_preserves_embedded_adjudication_metadata": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x00000192B834A2C0>('category')\n +    where <built-in method get of dict object at 0x00000192B834A2C0> = {}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x0000023E89F1A040>('category')\n +    where <built-in method get of dict object at 0x0000023E89F1A040> = {}.get"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_passive_scene_prefers_already_introduced_suspicious_figure": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_persists_recent_contextual_leads_from_gm_reply": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_persuasion_returns_engine_check_prompt_without_gpt": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_pipeline_ships_no_validator_voice_policy": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert False\n +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x00000192B4D85B10>)"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert False\n +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x0000023E8D5A5BE0>)"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_repeated_social_questions_keep_npc_uncertainty_voice": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_social": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_roll_requirement_question_routes_to_adjudication_without_gpt": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_single_wait_records_world_progress_and_keeps_hard_valid_narration": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_blocks_advisory_prose_before_emit": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_interruption_output_stays_coherent": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_social_exchange_invalid_blob_is_repaired_before_emit": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_social_pressure_line_prefers_dialogue_over_adjudication": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x00000192B59A8F00>('resolution')\n +    where <built-in method get of dict object at 0x00000192B59A8F00> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x0000023E8D340B00>('resolution')\n +    where <built-in method get of dict object at 0x0000023E8D340B00> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_prefers_highest_priority_failure_first": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_scene_stall_only": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_unresolved_question_only": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_targeted_retry_validator_voice_only": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert 0 == 2\n +  where 0 = len([])"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert 0 == 2\n +  where 0 = len([])"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback": {
+      "baseline": {
+        "status": "failed",
+        "signature": "assert 1 == 2\n +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...itative_social_target_requires_dialogue\", \"dialogue_turn_contains_question_expectation\", \"social_question_guard\"]}}'}]])"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "assert 1 == 2\n +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...itative_social_target_requires_dialogue\", \"dialogue_turn_contains_question_expectation\", \"social_question_guard\"]}}'}]])"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}\n +  where 'unknown' = <built-in method get of dict object at 0x00000192B8326240>('reply_kind')\n +    where <built-in method get of dict object at 0x00000192B8326240> = {'social_intent_class': 'social_exchange', 'npc_id': 'runner', 'npc_name': 'Tavern Runner', 'target_resolved': True, ...}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}\n +  where 'unknown' = <built-in method get of dict object at 0x0000023E8D49AA00>('reply_kind')\n +    where <built-in method get of dict object at 0x0000023E8D49AA00> = {'social_intent_class': 'social_exchange', 'npc_id': 'runner', 'npc_name': 'Tavern Runner', 'target_resolved': True, ...}.get"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_pipeline_interruption_denial_still_emits_coherent_strict_social": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_pipeline_strict_social_ragged_stranger_fallback_repaired": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert None\n +  where None = <built-in method get of dict object at 0x00000192B8547440>('speaker_contract_enforcement_reason')\n +    where <built-in method get of dict object at 0x00000192B8547440> = {}.get"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert None\n +  where None = <built-in method get of dict object at 0x0000023E8D69AE40>('speaker_contract_enforcement_reason')\n +    where <built-in method get of dict object at 0x0000023E8D69AE40> = {}.get"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical": {
+      "baseline": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'"
+      },
+      "final": {
+        "status": "failed",
+        "signature": "AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'"
+      }
+    },
+    "tests.test_turn_pipeline_shared::test_resolved_turn_trace_is_compact_and_authoritative": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_bare_compass_head_stays_unresolved_travel": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_contextual_directional_proceed_stays_unresolved_travel": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_directional_proceed_reaches_travel_without_compass_exit_bind": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_existing_follow_exit_still_transitions": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_human_shaped_cascade_does_not_commit_destination_b": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_local_movement_and_nonspatial_proceed_are_not_scene_travel": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_local_movement_narration_is_not_rewritten": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_named_destination_proceed_uses_existing_exit": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_ownerless_false_arrival_is_not_emitted": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_ownerless_false_scene_update_is_not_adopted": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_same_scene_update_survives_when_no_transition_occurred": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    },
+    "tests.test_unparsed_movement_state_narration_integrity::test_successful_transition_keeps_destination_narration": {
+      "baseline": {
+        "status": "passed",
+        "signature": ""
+      },
+      "final": {
+        "status": "passed",
+        "signature": ""
+      }
+    }
+  }
+}

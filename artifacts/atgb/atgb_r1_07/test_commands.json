@@ -1,0 +1,98 @@
+[
+  {
+    "name": "baseline",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_02_revision_boundary.py tests/test_atgb_r1_04_readiness.py tests/test_pr_ef_gm_authority.py tests/test_pr_ef_r4_authorization.py tests/test_pr_ea_conversational_orchestration.py tests/test_pr_eb_conversational_continuity.py tests/test_realization_authority.py tests/test_conversational_memory_window.py -q --basetemp=development/tmp/atgb_r1_07_before --junitxml=artifacts/atgb/atgb_r1_07/baseline.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/baseline.txt",
+    "passed_observed": 72,
+    "failed_observed": 0,
+    "skipped_observed": 0,
+    "final_counts": null,
+    "exit_code": 1,
+    "completed": false,
+    "interruption": "Ctrl-C via tool; no finalized JUnit. Baseline: 72 dots, 30%, next source-order test is HTTP production_ten_turn_sequence; no stack captured."
+  },
+  {
+    "name": "baseline_direct",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_02_revision_boundary.py tests/test_atgb_r1_04_readiness.py tests/test_pr_ef_gm_authority.py tests/test_pr_ea_conversational_orchestration.py tests/test_pr_eb_conversational_continuity.py tests/test_realization_authority.py tests/test_conversational_memory_window.py -k 'not production_ten_turn_sequence' -q --basetemp=development/tmp/atgb_r1_07_baseline_direct --junitxml=artifacts/atgb/atgb_r1_07/baseline_direct.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/baseline_direct.txt",
+    "passed": 209,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 0,
+    "completed": true,
+    "failures": []
+  },
+  {
+    "name": "focused",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_07_correction_contract.py -q --basetemp=development/tmp/atgb_r1_07_focused --junitxml=artifacts/atgb/atgb_r1_07/focused.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/focused.txt",
+    "passed": 25,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 0,
+    "completed": true,
+    "failures": [],
+    "note": "25 initial new tests; four direct API cases subsequently added and passed in after.xml (29 new total)."
+  },
+  {
+    "name": "after",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_07_correction_contract.py tests/test_atgb_r1_02_revision_boundary.py tests/test_atgb_r1_04_readiness.py tests/test_pr_ef_gm_authority.py tests/test_pr_ea_conversational_orchestration.py tests/test_pr_eb_conversational_continuity.py tests/test_realization_authority.py tests/test_conversational_memory_window.py -k 'not production_ten_turn_sequence' -q --basetemp=development/tmp/atgb_r1_07_after --junitxml=artifacts/atgb/atgb_r1_07/after.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/after.txt",
+    "passed": 238,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 0,
+    "completed": true,
+    "failures": []
+  },
+  {
+    "name": "broader",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_pr_do_authority_separation.py tests/test_pr_dh_live_interpretation.py tests/test_atgb_readiness.py tests/test_atgb_infrastructure.py tests/test_live_model_guard.py tests/test_realization_provenance.py tests/test_realization_layer_audit.py -q --basetemp=development/tmp/atgb_r1_07_broader --junitxml=artifacts/atgb/atgb_r1_07/broader.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/broader.txt",
+    "passed_observed": 0,
+    "failed_observed": 0,
+    "skipped_observed": 0,
+    "final_counts": null,
+    "exit_code": 1,
+    "completed": false,
+    "interruption": "Ctrl-C via tool; empty captured output, no completed tests evidenced; stall point not localized. No completed broad-suite result."
+  },
+  {
+    "name": "broader_direct",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_pr_do_authority_separation.py tests/test_pr_dh_live_interpretation.py tests/test_live_model_guard.py tests/test_realization_provenance.py -vv -o faulthandler_timeout=30 --basetemp=development/tmp/atgb_r1_07_broader_direct --junitxml=artifacts/atgb/atgb_r1_07/broader_direct.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/broader_direct.txt",
+    "passed": 23,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 1,
+    "completed": true,
+    "failures": [
+      {
+        "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+        "message": "tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.\nsite: game.gm.call_gpt\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\main.py\", line 384, in _main\n    config.hook.pytest_runtestloop(session=session)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\main.py\", line 408, in pytest_runtestloop\n    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 118, in pytest_runtest_protocol\n    runtestprotocol(item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 139, in runtestprotocol\n    reports.append(call_and_report(item, \"call\", log))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 249, in call_and_report\n    call = CallInfo.from_call(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 361, in from_call\n    result: TResult | None = func()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 250, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 184, in pytest_runtest_call\n    item.runtest()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 1707, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 167, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_realization_provenance.py\", line 105, in test_call_gpt_provider_failure_metadata_has_provider_family\n    out = gm.call_gpt([{\"role\": \"user\", \"content\": \"hello\"}])\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 73, in _blocked_call\n    raise LiveModelCallForbidden(\"game.gm.call_gpt\")\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 30, in __init__\n    stack = \"\".join(traceback.format_stack(limit=25))"
+      }
+    ]
+  },
+  {
+    "name": "broader_baseline",
+    "exact_command": ".venv/Scripts/python.exe -m pytest tests/test_pr_do_authority_separation.py tests/test_pr_dh_live_interpretation.py tests/test_live_model_guard.py tests/test_realization_provenance.py -vv -o faulthandler_timeout=30 --basetemp=development/tmp/atgb_r1_07_broader_baseline --junitxml=artifacts/atgb/atgb_r1_07/broader_baseline.xml",
+    "output_capture": "*> artifacts/atgb/atgb_r1_07/broader_baseline.txt",
+    "passed": 23,
+    "failed": 1,
+    "errors": 0,
+    "skipped": 0,
+    "exit_code": 1,
+    "completed": true,
+    "failures": [
+      {
+        "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+        "message": "tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.\nsite: game.gm.call_gpt\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\main.py\", line 384, in _main\n    config.hook.pytest_runtestloop(session=session)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\main.py\", line 408, in pytest_runtestloop\n    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 118, in pytest_runtest_protocol\n    runtestprotocol(item, nextitem=nextitem)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 139, in runtestprotocol\n    reports.append(call_and_report(item, \"call\", log))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 249, in call_and_report\n    call = CallInfo.from_call(\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 361, in from_call\n    result: TResult | None = func()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 250, in <lambda>\n    lambda: runtest_hook(item=item, **kwds),\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\runner.py\", line 184, in pytest_runtest_call\n    item.runtest()\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 1707, in runtest\n    self.ihook.pytest_pyfunc_call(pyfuncitem=self)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_hooks.py\", line 512, in __call__\n    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_manager.py\", line 120, in _hookexec\n    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\pluggy\\_callers.py\", line 121, in _multicall\n    res = hook_impl.function(*args)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Lib\\site-packages\\_pytest\\python.py\", line 167, in pytest_pyfunc_call\n    result = testfunction(**testargs)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_realization_provenance.py\", line 105, in test_call_gpt_provider_failure_metadata_has_provider_family\n    out = gm.call_gpt([{\"role\": \"user\", \"content\": \"hello\"}])\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 73, in _blocked_call\n    raise LiveModelCallForbidden(\"game.gm.call_gpt\")\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\helpers\\live_model_guard.py\", line 30, in __init__\n    stack = \"\".join(traceback.format_stack(limit=25))"
+      }
+    ],
+    "note": "Executed by compare_broader_baseline.py with entry bytes; finally restored repaired bytes. Same failure and counts as broader_direct."
+  }
+]

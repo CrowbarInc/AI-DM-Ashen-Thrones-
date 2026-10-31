@@ -1,0 +1,819 @@
+[
+  {
+    "turn_number": 1,
+    "shape": "compound social request",
+    "intended_meaning": "Find a person at the gate and ask what is required to pass tonight.",
+    "player_text": "I look for someone working the gate and ask what I need to get through tonight.",
+    "gm_text": "You find no such thing among what is actually present. The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention_reason": "unresolved_compound_intent",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "proposed_operation": "ask",
+    "proposed_target": "gate_guard",
+    "proposed_supporting": [
+      "perceive"
+    ],
+    "proposed_subject": "requirements to get through the gate tonight",
+    "proposed_interlocutor": "gate_guard",
+    "canonical_candidates": [
+      {
+        "id": "frontier_gate",
+        "type": "place",
+        "label": "Cinderwatch Gate District"
+      },
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "market_quarter",
+        "type": "place",
+        "label": "Enter Cinderwatch"
+      },
+      {
+        "id": "old_milestone",
+        "type": "place",
+        "label": "Follow the missing patrol rumor"
+      },
+      {
+        "id": "guard_captain",
+        "type": "interlocutor",
+        "label": "Guard Captain"
+      },
+      {
+        "id": "tavern_runner",
+        "type": "interlocutor",
+        "label": "Tavern Runner"
+      },
+      {
+        "id": "refugee",
+        "type": "interlocutor",
+        "label": "Ragged stranger"
+      },
+      {
+        "id": "threadbare_watcher",
+        "type": "interlocutor",
+        "label": "Threadbare watcher"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "gate_serjeant",
+        "type": "interlocutor",
+        "label": "Gate Serjeant"
+      }
+    ],
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Gate Guard",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "source_turn": null
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "requirements to get through the gate tonight",
+    "ambiguous": false,
+    "contract_id": "rc_2ae6a8e4d65d",
+    "discourse_commit_allowed": true,
+    "compatibility_bridge": null,
+    "interpretation_error": null,
+    "semantic_result": "FAIL",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_2ae6a8e4d65d"
+    },
+    "telemetry": {
+      "fast_path_success": 0,
+      "fast_path_abstention": 1,
+      "model_interpreter_invoked": 1,
+      "proposal_accepted": 1,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 1
+    }
+  },
+  {
+    "turn_number": 2,
+    "shape": "setup action plus question",
+    "intended_meaning": "Inspect the posted notice closely enough to learn what people use it for.",
+    "player_text": "I go up to the posted notice and try to work out what people actually use it for.",
+    "gm_text": "The visible wear and marks establish no reliable use of the Notice board.",
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention_reason": "insufficient_discourse_context",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "proposed_operation": "inspect",
+    "proposed_target": "notice_board",
+    "proposed_supporting": [
+      "perceive"
+    ],
+    "proposed_subject": "notice board",
+    "proposed_interlocutor": null,
+    "canonical_candidates": [
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "gate_guard"
+      },
+      {
+        "id": "gate_guard",
+        "type": "claim",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "frontier_gate",
+        "type": "place",
+        "label": "Cinderwatch Gate District"
+      },
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "market_quarter",
+        "type": "place",
+        "label": "Enter Cinderwatch"
+      },
+      {
+        "id": "old_milestone",
+        "type": "place",
+        "label": "Follow the missing patrol rumor"
+      },
+      {
+        "id": "guard_captain",
+        "type": "interlocutor",
+        "label": "Guard Captain"
+      },
+      {
+        "id": "tavern_runner",
+        "type": "interlocutor",
+        "label": "Tavern Runner"
+      },
+      {
+        "id": "refugee",
+        "type": "interlocutor",
+        "label": "Ragged stranger"
+      },
+      {
+        "id": "threadbare_watcher",
+        "type": "interlocutor",
+        "label": "Threadbare watcher"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "gate_serjeant",
+        "type": "interlocutor",
+        "label": "Gate Serjeant"
+      }
+    ],
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "inspect",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Notice board",
+    "ambiguous": false,
+    "contract_id": "rc_72208cd5c409",
+    "discourse_commit_allowed": true,
+    "compatibility_bridge": null,
+    "interpretation_error": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_72208cd5c409"
+    },
+    "telemetry": {
+      "fast_path_success": 0,
+      "fast_path_abstention": 2,
+      "model_interpreter_invoked": 2,
+      "proposal_accepted": 2,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 2
+    }
+  },
+  {
+    "turn_number": 3,
+    "shape": "pronoun or object follow-up",
+    "intended_meaning": "Ask what the thing just under discussion says about the curfew.",
+    "player_text": "What does it say about the curfew?",
+    "gm_text": "The notice board at Cinderwatch's eastern gate outlines a curfew that local authorities have recently imposed. It broadly restricts movement after dusk to reduce disorder and contain unrest amid the mounting tensions in the district. The precise hours and enforcement details, however, are noted with official strictness but lack comprehensive explanation here, leaving some uncertainty about exceptions or special permissions.",
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "discourse_inheritance",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_supporting": [],
+    "proposed_subject": null,
+    "proposed_interlocutor": null,
+    "canonical_candidates": [
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "gate_guard"
+      },
+      {
+        "id": "gate_guard",
+        "type": "claim",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "frontier_gate",
+        "type": "place",
+        "label": "Cinderwatch Gate District"
+      },
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "market_quarter",
+        "type": "place",
+        "label": "Enter Cinderwatch"
+      },
+      {
+        "id": "old_milestone",
+        "type": "place",
+        "label": "Follow the missing patrol rumor"
+      },
+      {
+        "id": "guard_captain",
+        "type": "interlocutor",
+        "label": "Guard Captain"
+      },
+      {
+        "id": "tavern_runner",
+        "type": "interlocutor",
+        "label": "Tavern Runner"
+      },
+      {
+        "id": "refugee",
+        "type": "interlocutor",
+        "label": "Ragged stranger"
+      },
+      {
+        "id": "threadbare_watcher",
+        "type": "interlocutor",
+        "label": "Threadbare watcher"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "Gate Guard"
+      }
+    ],
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": 2
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Notice board",
+    "ambiguous": false,
+    "contract_id": "rc_bf49326383c6",
+    "discourse_commit_allowed": true,
+    "compatibility_bridge": null,
+    "interpretation_error": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_bf49326383c6"
+    },
+    "telemetry": {
+      "fast_path_success": 1,
+      "fast_path_abstention": 2,
+      "model_interpreter_invoked": 2,
+      "proposal_accepted": 2,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 2
+    }
+  },
+  {
+    "turn_number": 4,
+    "shape": "elliptical claim or lead follow-up",
+    "intended_meaning": "Ask who the previous statement came from.",
+    "player_text": "Who from?",
+    "gm_text": "The guard says, \"No. I cannot answer that from what I know.\"",
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_supporting": [],
+    "proposed_subject": null,
+    "proposed_interlocutor": null,
+    "canonical_candidates": [
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "gate_guard"
+      },
+      {
+        "id": "gate_guard",
+        "type": "claim",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "frontier_gate",
+        "type": "place",
+        "label": "Cinderwatch Gate District"
+      },
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "market_quarter",
+        "type": "place",
+        "label": "Enter Cinderwatch"
+      },
+      {
+        "id": "old_milestone",
+        "type": "place",
+        "label": "Follow the missing patrol rumor"
+      },
+      {
+        "id": "guard_captain",
+        "type": "interlocutor",
+        "label": "Guard Captain"
+      },
+      {
+        "id": "tavern_runner",
+        "type": "interlocutor",
+        "label": "Tavern Runner"
+      },
+      {
+        "id": "refugee",
+        "type": "interlocutor",
+        "label": "Ragged stranger"
+      },
+      {
+        "id": "threadbare_watcher",
+        "type": "interlocutor",
+        "label": "Threadbare watcher"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "Gate Guard"
+      }
+    ],
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": null,
+    "conversational_subject": "Who from?",
+    "ambiguous": false,
+    "contract_id": "rc_73407daca30b",
+    "discourse_commit_allowed": true,
+    "compatibility_bridge": null,
+    "interpretation_error": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_73407daca30b"
+    },
+    "telemetry": {
+      "fast_path_success": 2,
+      "fast_path_abstention": 2,
+      "model_interpreter_invoked": 2,
+      "proposal_accepted": 2,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 2
+    }
+  },
+  {
+    "turn_number": 5,
+    "shape": "referential action",
+    "intended_meaning": "Take the concrete next step the previous speaker suggested.",
+    "player_text": "Fine, I take the step he suggested.",
+    "gm_text": "You place your foot on the worn step as suggested. The gate serjeant briefly glances your way but says nothing. The rain continues to spatter around the gate, thickening the mud where refugees and wagons struggle for space. Beyond the gate, the bustle of the Cinderwatch Market Quarter invites, though the tension around the missing patrol warning lingers in the air.",
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_supporting": [],
+    "proposed_subject": null,
+    "proposed_interlocutor": null,
+    "canonical_candidates": [
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "gate_guard"
+      },
+      {
+        "id": "gate_guard",
+        "type": "claim",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "frontier_gate",
+        "type": "place",
+        "label": "Cinderwatch Gate District"
+      },
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "market_quarter",
+        "type": "place",
+        "label": "Enter Cinderwatch"
+      },
+      {
+        "id": "old_milestone",
+        "type": "place",
+        "label": "Follow the missing patrol rumor"
+      },
+      {
+        "id": "guard_captain",
+        "type": "interlocutor",
+        "label": "Guard Captain"
+      },
+      {
+        "id": "tavern_runner",
+        "type": "interlocutor",
+        "label": "Tavern Runner"
+      },
+      {
+        "id": "refugee",
+        "type": "interlocutor",
+        "label": "Ragged stranger"
+      },
+      {
+        "id": "threadbare_watcher",
+        "type": "interlocutor",
+        "label": "Threadbare watcher"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "Gate Guard"
+      }
+    ],
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": null,
+    "conversational_subject": "Fine, I take the step he suggested.",
+    "ambiguous": false,
+    "contract_id": "rc_5bb3f0446fb3",
+    "discourse_commit_allowed": true,
+    "compatibility_bridge": null,
+    "interpretation_error": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 5,
+      "last_committed_contract_id": "rc_5bb3f0446fb3"
+    },
+    "telemetry": {
+      "fast_path_success": 3,
+      "fast_path_abstention": 2,
+      "model_interpreter_invoked": 2,
+      "proposal_accepted": 2,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 2
+    }
+  },
+  {
+    "turn_number": 6,
+    "shape": "ambiguous or second compound",
+    "intended_meaning": "Ask the current person about the thing just discussed, or clarify if it is ambiguous.",
+    "player_text": "I ask him about it.",
+    "gm_text": "No reliable source here can verify it; another source is needed.",
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "ask",
+    "proposed_target": "him about it",
+    "proposed_supporting": [],
+    "proposed_subject": null,
+    "proposed_interlocutor": null,
+    "canonical_candidates": [
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "gate_guard"
+      },
+      {
+        "id": "gate_guard",
+        "type": "claim",
+        "label": "Gate Guard"
+      },
+      {
+        "id": "frontier_gate",
+        "type": "place",
+        "label": "Cinderwatch Gate District"
+      },
+      {
+        "id": "notice_board",
+        "type": "object",
+        "label": "Notice board"
+      },
+      {
+        "id": "market_quarter",
+        "type": "place",
+        "label": "Enter Cinderwatch"
+      },
+      {
+        "id": "old_milestone",
+        "type": "place",
+        "label": "Follow the missing patrol rumor"
+      },
+      {
+        "id": "guard_captain",
+        "type": "interlocutor",
+        "label": "Guard Captain"
+      },
+      {
+        "id": "tavern_runner",
+        "type": "interlocutor",
+        "label": "Tavern Runner"
+      },
+      {
+        "id": "refugee",
+        "type": "interlocutor",
+        "label": "Ragged stranger"
+      },
+      {
+        "id": "threadbare_watcher",
+        "type": "interlocutor",
+        "label": "Threadbare watcher"
+      },
+      {
+        "id": "gate_guard",
+        "type": "interlocutor",
+        "label": "Gate Guard"
+      }
+    ],
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Notice board",
+    "ambiguous": false,
+    "contract_id": "rc_e1858d0efce6",
+    "discourse_commit_allowed": true,
+    "compatibility_bridge": null,
+    "interpretation_error": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 6,
+      "last_committed_contract_id": "rc_e1858d0efce6"
+    },
+    "telemetry": {
+      "fast_path_success": 4,
+      "fast_path_abstention": 2,
+      "model_interpreter_invoked": 2,
+      "proposal_accepted": 2,
+      "proposal_rejected": 0,
+      "clarification_after_model": 0,
+      "interpretation_api_calls": 2
+    }
+  }
+]

@@ -1,0 +1,104 @@
+{
+  "scene": {
+    "scene": {
+      "id": "reed_landing",
+      "location": "Brineward reed landing",
+      "summary": "A short timber landing sits over shallow water. Cut reeds are stacked beside a ladder that climbs to a drying loft.",
+      "mode": "exploration",
+      "visible_facts": [
+        "Cut reeds are stacked beside a ladder.",
+        "The ladder climbs to the reed drying loft."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Go to the reed drying loft",
+          "target_scene_id": "reed_drying_loft"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [
+    {
+      "scene": {
+        "id": "reed_drying_loft",
+        "location": "Brineward reed drying loft",
+        "summary": "Bundles of cut reed hang from the loft beams. The air is dry and dusty.",
+        "mode": "exploration",
+        "visible_facts": [
+          "Bundles of cut reed hang from the loft beams."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to the reed landing",
+            "target_scene_id": "reed_landing"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [],
+        "interactables": []
+      }
+    }
+  ],
+  "world": {
+    "settlements": [
+      {
+        "id": "brineward",
+        "name": "Brineward",
+        "type": "riverside_ward",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A riverside ward of workshops, stalls, and work yards."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "starting_context": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a riverside craft ward."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace or stall in Brineward.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "reed_landing",
+    "visited_scene_ids": [
+      "reed_landing"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

@@ -1,0 +1,2684 @@
+{
+  "model_calls": 0,
+  "corpus": "The bell's wooden yoke is split.\nThe bell's leather hanger is torn.\nA bronze bell hangs from a timber frame.\nChapel belfry",
+  "traces": {
+    "p1_sentence_on_saved_decision": {
+      "recognizers": {
+        "epistemic_frame": "uncertain",
+        "is_claim_or_uncertain": true,
+        "attributed_source": false,
+        "decision_allows_inference": true,
+        "decision_allows_epistemic_limit": false,
+        "authorized_epistemic_limit": false,
+        "qualified_inference": "might",
+        "generated_lead": "",
+        "specific_lead": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "uncertain_frame": "might",
+        "narrator_modal": "perhaps",
+        "nonassertion": "",
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "event_cause": "",
+        "event_history": "",
+        "definite_history": "has been",
+        "actor": "",
+        "agent_fill": "",
+        "time_fill": "",
+        "certainty_upgrade": "",
+        "evidential": "suggest",
+        "stateful": "",
+        "ungrounded_definite": true,
+        "unsupported_narrator_lead": true,
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": [],
+        "structured_consequential": [],
+        "covered_rows": [],
+        "definites": [
+          {
+            "span": "This damage might suggest the bell has",
+            "tokens": [
+              {
+                "token": "damage",
+                "in_ground": false
+              },
+              {
+                "token": "might",
+                "in_ground": false
+              },
+              {
+                "token": "suggest",
+                "in_ground": false
+              }
+            ]
+          }
+        ],
+        "unresolved_qualifiers": []
+      },
+      "flow": [
+        {
+          "function": "attributed_uncertain_claim_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "epistemically_qualified"
+        },
+        {
+          "function": "authorized_epistemic_limit_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "authorized_epistemic_limit"
+        },
+        {
+          "function": "unsupported_narrator_lead_append",
+          "taken": true,
+          "terminal": false,
+          "continues": true,
+          "detail": "appends unauthorized claim; does not return"
+        },
+        {
+          "function": "authorized_qualified_inference_return",
+          "taken": true,
+          "terminal": true,
+          "continues": false,
+          "detail": "returns before cause/history residuals"
+        }
+      ],
+      "audit": {
+        "hard_reject": true,
+        "reason_codes": [
+          "authorized_qualified_inference",
+          "unsupported_narrator_lead"
+        ],
+        "authorized_flags": [
+          false,
+          true
+        ],
+        "claims": [
+          {
+            "authorized": false,
+            "reason_codes": [
+              "unsupported_narrator_lead"
+            ],
+            "relation_kind": "gameplay_lead",
+            "provenance": "generated_proposal",
+            "epistemic_status": "unresolved"
+          },
+          {
+            "authorized": true,
+            "reason_codes": [
+              "authorized_qualified_inference"
+            ],
+            "relation_kind": "epistemic_status",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred"
+          }
+        ],
+        "actual": "reject",
+        "fact_reasons": [
+          "unsupported_narrator_lead"
+        ],
+        "fact_authorized": false
+      }
+    },
+    "p1_sentence_on_effective_decision": {
+      "recognizers": {
+        "epistemic_frame": "uncertain",
+        "is_claim_or_uncertain": true,
+        "attributed_source": false,
+        "decision_allows_inference": true,
+        "decision_allows_epistemic_limit": false,
+        "authorized_epistemic_limit": false,
+        "qualified_inference": "might",
+        "generated_lead": "",
+        "specific_lead": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "uncertain_frame": "might",
+        "narrator_modal": "perhaps",
+        "nonassertion": "",
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "event_cause": "",
+        "event_history": "",
+        "definite_history": "has been",
+        "actor": "",
+        "agent_fill": "",
+        "time_fill": "",
+        "certainty_upgrade": "",
+        "evidential": "suggest",
+        "stateful": "",
+        "ungrounded_definite": false,
+        "unsupported_narrator_lead": false,
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": [],
+        "structured_consequential": [],
+        "covered_rows": [],
+        "definites": [
+          {
+            "span": "This damage might suggest the bell has",
+            "tokens": [
+              {
+                "token": "damage",
+                "in_ground": false
+              },
+              {
+                "token": "might",
+                "in_ground": true
+              },
+              {
+                "token": "suggest",
+                "in_ground": false
+              }
+            ]
+          }
+        ],
+        "unresolved_qualifiers": []
+      },
+      "flow": [
+        {
+          "function": "attributed_uncertain_claim_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "epistemically_qualified"
+        },
+        {
+          "function": "authorized_epistemic_limit_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "authorized_epistemic_limit"
+        },
+        {
+          "function": "unsupported_narrator_lead_append",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "appends unauthorized claim; does not return"
+        },
+        {
+          "function": "authorized_qualified_inference_return",
+          "taken": true,
+          "terminal": true,
+          "continues": false,
+          "detail": "returns before cause/history residuals"
+        }
+      ],
+      "audit": {
+        "hard_reject": false,
+        "reason_codes": [
+          "authorized_qualified_inference"
+        ],
+        "authorized_flags": [
+          true
+        ],
+        "claims": [
+          {
+            "authorized": true,
+            "reason_codes": [
+              "authorized_qualified_inference"
+            ],
+            "relation_kind": "epistemic_status",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred"
+          }
+        ],
+        "actual": "accept",
+        "fact_reasons": [
+          "authorized_qualified_inference"
+        ],
+        "fact_authorized": true
+      }
+    },
+    "p1_declaration_validation": {
+      "hard_valid": true,
+      "accepted": [
+        [
+          "accepted_bounded_declared_inference"
+        ]
+      ],
+      "rejected": [],
+      "recognizers": {
+        "epistemic_frame": "uncertain",
+        "is_claim_or_uncertain": true,
+        "attributed_source": false,
+        "decision_allows_inference": true,
+        "decision_allows_epistemic_limit": false,
+        "authorized_epistemic_limit": false,
+        "qualified_inference": "might",
+        "generated_lead": "",
+        "specific_lead": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "uncertain_frame": "might",
+        "narrator_modal": "",
+        "nonassertion": "",
+        "cause_fill": "",
+        "causal_relation": "",
+        "event_cause": "",
+        "event_history": "",
+        "definite_history": "has been",
+        "actor": "",
+        "agent_fill": "",
+        "time_fill": "",
+        "certainty_upgrade": "",
+        "evidential": "indicate",
+        "stateful": "",
+        "ungrounded_definite": true,
+        "unsupported_narrator_lead": true,
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": [],
+        "structured_consequential": [],
+        "covered_rows": [],
+        "definites": [
+          {
+            "span": "The split wooden yoke and torn leather",
+            "tokens": [
+              {
+                "token": "split",
+                "in_ground": true
+              },
+              {
+                "token": "wooden",
+                "in_ground": true
+              },
+              {
+                "token": "leather",
+                "in_ground": true
+              }
+            ]
+          },
+          {
+            "span": "the bell has been under significant stress",
+            "tokens": [
+              {
+                "token": "under",
+                "in_ground": false
+              },
+              {
+                "token": "significant",
+                "in_ground": false
+              },
+              {
+                "token": "stress",
+                "in_ground": false
+              }
+            ]
+          }
+        ],
+        "unresolved_qualifiers": []
+      }
+    },
+    "p1_full_envelope_hard_valid": true,
+    "p1_full_narration_sentences": [
+      {
+        "sentence": "The bell's wooden yoke is visibly split, and its leather hanger is torn.",
+        "audit": {
+          "hard_reject": false,
+          "reason_codes": [],
+          "authorized_flags": [],
+          "claims": [],
+          "actual": "no_claim",
+          "fact_reasons": [],
+          "fact_authorized": null
+        },
+        "flow": [
+          {
+            "function": "attributed_uncertain_claim_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "epistemically_qualified"
+          },
+          {
+            "function": "authorized_epistemic_limit_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "authorized_epistemic_limit"
+          },
+          {
+            "function": "unsupported_narrator_lead_append",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "appends unauthorized claim; does not return"
+          },
+          {
+            "function": "authorized_qualified_inference_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "returns before cause/history residuals"
+          },
+          {
+            "function": "explicit_nonassertion_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "explicit_nonassertion"
+          },
+          {
+            "function": "interrogative_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "interrogative_not_assertion"
+          },
+          {
+            "function": "unknown_slot_append",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "unknown_cause_actor_or_time"
+          },
+          {
+            "function": "relationship_residuals",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "causal/evidential/certainty"
+          },
+          {
+            "function": "slot_fill",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": ""
+          },
+          {
+            "function": "structured_semantic_rejection",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": ""
+          },
+          {
+            "function": "consequential_or_history_tail",
+            "taken": true,
+            "terminal": false,
+            "continues": true,
+            "detail": "falls through to residual/legacy classification"
+          }
+        ]
+      },
+      {
+        "sentence": "This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.",
+        "audit": {
+          "hard_reject": false,
+          "reason_codes": [
+            "authorized_qualified_inference"
+          ],
+          "authorized_flags": [
+            true
+          ],
+          "claims": [
+            {
+              "authorized": true,
+              "reason_codes": [
+                "authorized_qualified_inference"
+              ],
+              "relation_kind": "epistemic_status",
+              "provenance": "gm_inference",
+              "epistemic_status": "inferred"
+            }
+          ],
+          "actual": "accept",
+          "fact_reasons": [
+            "authorized_qualified_inference"
+          ],
+          "fact_authorized": true
+        },
+        "flow": [
+          {
+            "function": "attributed_uncertain_claim_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "epistemically_qualified"
+          },
+          {
+            "function": "authorized_epistemic_limit_return",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "authorized_epistemic_limit"
+          },
+          {
+            "function": "unsupported_narrator_lead_append",
+            "taken": false,
+            "terminal": false,
+            "continues": true,
+            "detail": "appends unauthorized claim; does not return"
+          },
+          {
+            "function": "authorized_qualified_inference_return",
+            "taken": true,
+            "terminal": true,
+            "continues": false,
+            "detail": "returns before cause/history residuals"
+          }
+        ]
+      }
+    ],
+    "p3_sentence": {
+      "recognizers": {
+        "epistemic_frame": "uncertain",
+        "is_claim_or_uncertain": true,
+        "attributed_source": false,
+        "decision_allows_inference": false,
+        "decision_allows_epistemic_limit": false,
+        "authorized_epistemic_limit": false,
+        "qualified_inference": "could",
+        "generated_lead": "",
+        "specific_lead": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "remains uncertain",
+        "uncertain_frame": "could",
+        "narrator_modal": "",
+        "nonassertion": "",
+        "cause_fill": "",
+        "causal_relation": "",
+        "event_cause": "",
+        "event_history": "",
+        "definite_history": "cut",
+        "actor": "",
+        "agent_fill": "",
+        "time_fill": "",
+        "certainty_upgrade": "",
+        "evidential": "",
+        "stateful": "cut",
+        "ungrounded_definite": true,
+        "unsupported_narrator_lead": true,
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": [],
+        "structured_consequential": [],
+        "covered_rows": [],
+        "definites": [
+          {
+            "span": "that motive remains uncertain",
+            "tokens": [
+              {
+                "token": "motive",
+                "in_ground": false
+              },
+              {
+                "token": "remains",
+                "in_ground": false
+              },
+              {
+                "token": "uncertain",
+                "in_ground": false
+              }
+            ]
+          }
+        ],
+        "unresolved_qualifiers": []
+      },
+      "flow": [
+        {
+          "function": "attributed_uncertain_claim_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "epistemically_qualified"
+        },
+        {
+          "function": "authorized_epistemic_limit_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "authorized_epistemic_limit"
+        },
+        {
+          "function": "unsupported_narrator_lead_append",
+          "taken": true,
+          "terminal": false,
+          "continues": true,
+          "detail": "appends unauthorized claim; does not return"
+        },
+        {
+          "function": "authorized_qualified_inference_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "returns before cause/history residuals"
+        },
+        {
+          "function": "explicit_nonassertion_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "explicit_nonassertion"
+        },
+        {
+          "function": "interrogative_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "interrogative_not_assertion"
+        },
+        {
+          "function": "unknown_slot_append",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "unknown_cause_actor_or_time"
+        },
+        {
+          "function": "relationship_residuals",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "causal/evidential/certainty"
+        },
+        {
+          "function": "slot_fill",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": ""
+        },
+        {
+          "function": "structured_semantic_rejection",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": ""
+        },
+        {
+          "function": "consequential_or_history_tail",
+          "taken": true,
+          "terminal": false,
+          "continues": true,
+          "detail": "falls through to residual/legacy classification"
+        }
+      ],
+      "audit": {
+        "hard_reject": true,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ],
+        "authorized_flags": [
+          false
+        ],
+        "claims": [
+          {
+            "authorized": false,
+            "reason_codes": [
+              "unsupported_narrator_lead"
+            ],
+            "relation_kind": "gameplay_lead",
+            "provenance": "generated_proposal",
+            "epistemic_status": "unresolved"
+          }
+        ],
+        "actual": "reject",
+        "fact_reasons": [
+          "unsupported_narrator_lead"
+        ],
+        "fact_authorized": false
+      }
+    },
+    "p3_envelope_hard_valid": false,
+    "p3_envelope_reasons": [
+      [
+        "unsupported_narrator_lead"
+      ]
+    ],
+    "p3_retry": {
+      "hard_valid": true,
+      "sentences": [
+        {
+          "sentence": "The bell's wooden yoke is split, and its leather hanger is torn.",
+          "recognizers": {
+            "epistemic_frame": "world_truth",
+            "is_claim_or_uncertain": false,
+            "attributed_source": false,
+            "decision_allows_inference": false,
+            "decision_allows_epistemic_limit": false,
+            "authorized_epistemic_limit": false,
+            "qualified_inference": "",
+            "generated_lead": "",
+            "specific_lead": "",
+            "unknown_slot": "",
+            "epistemic_limit": "",
+            "epistemic_parent": "",
+            "uncertain_frame": "",
+            "narrator_modal": "",
+            "nonassertion": "",
+            "cause_fill": "",
+            "causal_relation": "",
+            "event_cause": "",
+            "event_history": "",
+            "definite_history": "",
+            "actor": "",
+            "agent_fill": "",
+            "time_fill": "",
+            "certainty_upgrade": "",
+            "evidential": "",
+            "stateful": "",
+            "ungrounded_definite": false,
+            "unsupported_narrator_lead": false,
+            "slot_fill_reasons": [],
+            "relationship_residuals": [],
+            "ordinary_residuals": [],
+            "structured_consequential": [],
+            "covered_rows": [],
+            "definites": [
+              {
+                "span": "The bell's wooden yoke is split",
+                "tokens": [
+                  {
+                    "token": "wooden",
+                    "in_ground": true
+                  },
+                  {
+                    "token": "split",
+                    "in_ground": true
+                  }
+                ]
+              }
+            ],
+            "unresolved_qualifiers": []
+          },
+          "flow": [
+            {
+              "function": "attributed_uncertain_claim_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "epistemically_qualified"
+            },
+            {
+              "function": "authorized_epistemic_limit_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "authorized_epistemic_limit"
+            },
+            {
+              "function": "unsupported_narrator_lead_append",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "appends unauthorized claim; does not return"
+            },
+            {
+              "function": "authorized_qualified_inference_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "returns before cause/history residuals"
+            },
+            {
+              "function": "explicit_nonassertion_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "explicit_nonassertion"
+            },
+            {
+              "function": "interrogative_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "interrogative_not_assertion"
+            },
+            {
+              "function": "unknown_slot_append",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "unknown_cause_actor_or_time"
+            },
+            {
+              "function": "relationship_residuals",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "causal/evidential/certainty"
+            },
+            {
+              "function": "slot_fill",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": ""
+            },
+            {
+              "function": "structured_semantic_rejection",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": ""
+            },
+            {
+              "function": "consequential_or_history_tail",
+              "taken": true,
+              "terminal": false,
+              "continues": true,
+              "detail": "falls through to residual/legacy classification"
+            }
+          ],
+          "audit": {
+            "hard_reject": false,
+            "reason_codes": [],
+            "authorized_flags": [],
+            "claims": [],
+            "actual": "no_claim",
+            "fact_reasons": [],
+            "fact_authorized": null
+          }
+        },
+        {
+          "sentence": "These damages are clear, but whether they were made deliberately cannot be determined from what is visible here.",
+          "recognizers": {
+            "epistemic_frame": "world_truth",
+            "is_claim_or_uncertain": false,
+            "attributed_source": false,
+            "decision_allows_inference": false,
+            "decision_allows_epistemic_limit": false,
+            "authorized_epistemic_limit": false,
+            "qualified_inference": "",
+            "generated_lead": "",
+            "specific_lead": "",
+            "unknown_slot": "",
+            "epistemic_limit": "",
+            "epistemic_parent": "cannot be determined",
+            "uncertain_frame": "",
+            "narrator_modal": "",
+            "nonassertion": "",
+            "cause_fill": "",
+            "causal_relation": "",
+            "event_cause": "",
+            "event_history": "",
+            "definite_history": "were",
+            "actor": "",
+            "agent_fill": "",
+            "time_fill": "",
+            "certainty_upgrade": "",
+            "evidential": "",
+            "stateful": "",
+            "ungrounded_definite": false,
+            "unsupported_narrator_lead": false,
+            "slot_fill_reasons": [],
+            "relationship_residuals": [],
+            "ordinary_residuals": [],
+            "structured_consequential": [],
+            "covered_rows": [],
+            "definites": [],
+            "unresolved_qualifiers": []
+          },
+          "flow": [
+            {
+              "function": "attributed_uncertain_claim_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "epistemically_qualified"
+            },
+            {
+              "function": "authorized_epistemic_limit_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "authorized_epistemic_limit"
+            },
+            {
+              "function": "unsupported_narrator_lead_append",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "appends unauthorized claim; does not return"
+            },
+            {
+              "function": "authorized_qualified_inference_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "returns before cause/history residuals"
+            },
+            {
+              "function": "explicit_nonassertion_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "explicit_nonassertion"
+            },
+            {
+              "function": "interrogative_return",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "interrogative_not_assertion"
+            },
+            {
+              "function": "unknown_slot_append",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "unknown_cause_actor_or_time"
+            },
+            {
+              "function": "relationship_residuals",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": "causal/evidential/certainty"
+            },
+            {
+              "function": "slot_fill",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": ""
+            },
+            {
+              "function": "structured_semantic_rejection",
+              "taken": false,
+              "terminal": false,
+              "continues": true,
+              "detail": ""
+            },
+            {
+              "function": "consequential_or_history_tail",
+              "taken": true,
+              "terminal": false,
+              "continues": true,
+              "detail": "falls through to residual/legacy classification"
+            }
+          ],
+          "audit": {
+            "hard_reject": false,
+            "reason_codes": [],
+            "authorized_flags": [],
+            "claims": [],
+            "actual": "no_claim",
+            "fact_reasons": [],
+            "fact_authorized": null
+          }
+        }
+      ]
+    },
+    "p1_if_unresolved_qualifiers_populated": {
+      "recognizers": {
+        "epistemic_frame": "uncertain",
+        "is_claim_or_uncertain": true,
+        "attributed_source": false,
+        "decision_allows_inference": true,
+        "decision_allows_epistemic_limit": true,
+        "authorized_epistemic_limit": false,
+        "qualified_inference": "might",
+        "generated_lead": "",
+        "specific_lead": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "uncertain_frame": "might",
+        "narrator_modal": "perhaps",
+        "nonassertion": "",
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "event_cause": "",
+        "event_history": "",
+        "definite_history": "has been",
+        "actor": "",
+        "agent_fill": "",
+        "time_fill": "",
+        "certainty_upgrade": "",
+        "evidential": "suggest",
+        "stateful": "",
+        "ungrounded_definite": true,
+        "unsupported_narrator_lead": true,
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": [],
+        "structured_consequential": [],
+        "covered_rows": [],
+        "definites": [
+          {
+            "span": "This damage might suggest the bell has",
+            "tokens": [
+              {
+                "token": "damage",
+                "in_ground": false
+              },
+              {
+                "token": "might",
+                "in_ground": false
+              },
+              {
+                "token": "suggest",
+                "in_ground": false
+              }
+            ]
+          }
+        ],
+        "unresolved_qualifiers": [
+          "cause",
+          "actor",
+          "time",
+          "history"
+        ]
+      },
+      "flow": [
+        {
+          "function": "attributed_uncertain_claim_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "epistemically_qualified"
+        },
+        {
+          "function": "authorized_epistemic_limit_return",
+          "taken": false,
+          "terminal": false,
+          "continues": true,
+          "detail": "authorized_epistemic_limit"
+        },
+        {
+          "function": "unsupported_narrator_lead_append",
+          "taken": true,
+          "terminal": false,
+          "continues": true,
+          "detail": "appends unauthorized claim; does not return"
+        },
+        {
+          "function": "authorized_qualified_inference_return",
+          "taken": true,
+          "terminal": true,
+          "continues": false,
+          "detail": "returns before cause/history residuals"
+        }
+      ],
+      "audit": {
+        "hard_reject": true,
+        "reason_codes": [
+          "authorized_qualified_inference",
+          "unsupported_narrator_lead"
+        ],
+        "authorized_flags": [
+          false,
+          true
+        ],
+        "claims": [
+          {
+            "authorized": false,
+            "reason_codes": [
+              "unsupported_narrator_lead"
+            ],
+            "relation_kind": "gameplay_lead",
+            "provenance": "generated_proposal",
+            "epistemic_status": "unresolved"
+          },
+          {
+            "authorized": true,
+            "reason_codes": [
+              "authorized_qualified_inference"
+            ],
+            "relation_kind": "epistemic_status",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred"
+          }
+        ],
+        "actual": "reject",
+        "fact_reasons": [
+          "unsupported_narrator_lead"
+        ],
+        "fact_authorized": false
+      },
+      "note": "Recipe lists cause/actor/time/history. Saved decision unresolved_qualifiers is empty. This copy only shows that populating the slot list still loses to the inference return."
+    }
+  },
+  "counts": {
+    "cases": 41,
+    "correct_accepts": 13,
+    "correct_rejects": 14,
+    "false_accepts": 9,
+    "false_rejects": 5,
+    "ambiguous": 0,
+    "accept_by_omission": 9
+  },
+  "cases": [
+    {
+      "case_id": "A01",
+      "semantic_category": "pure_observation",
+      "text": "The bell's wooden yoke is split.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "accept",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "authored_state_source"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Authorized observation restated exactly.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "A02",
+      "semantic_category": "pure_observation",
+      "text": "The bell's leather hanger is torn.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "accept",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "authored_state_source"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Authorized observation restated exactly.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "A03",
+      "semantic_category": "valid_qualified_inference",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with significant stress or force.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "accept",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Existing PR-BS useful-A1 sentence. Qualified possibility, no cause connective.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "A04",
+      "semantic_category": "valid_qualified_inference",
+      "text": "The split yoke might suggest the wood gave under a load.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "accept",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Control A. Hedge tied to the observation. No because/due-to and no history noun.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "B01",
+      "semantic_category": "unsupported_cause",
+      "text": "The split is due to prolonged neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_causal_relation"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Control B. Unqualified cause. No inference hedge.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "B02",
+      "semantic_category": "unsupported_history",
+      "text": "The hanger was torn last night.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_time_attribution"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Unqualified history and time. Existing PR-BS overreach wording.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": [
+          "unauthorized_time_attribution"
+        ]
+      }
+    },
+    {
+      "case_id": "B03",
+      "semantic_category": "unsupported_cause",
+      "text": "A sudden pull caused the split yoke.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_cause_attribution"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Unqualified cause. Existing PR-BS overreach wording.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": [
+          "unauthorized_cause_attribution"
+        ]
+      }
+    },
+    {
+      "case_id": "B04",
+      "semantic_category": "unsupported_actor",
+      "text": "Someone cracked the wooden yoke.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "D"
+      ],
+      "notes": "Unqualified actor. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C01",
+      "semantic_category": "mixed_inference_plus_cause",
+      "text": "This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.",
+      "authority_setup": "p1_interpret_after_accepted_declaration",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": true,
+        "narrator_modal": "perhaps"
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "C",
+        "D"
+      ],
+      "notes": "Live production path. The accepted declaration is merged into proposed facts before narration audit. That merge puts the hedge word into the definite-phrase ground.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C01b",
+      "semantic_category": "mixed_inference_plus_cause",
+      "text": "This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.",
+      "authority_setup": "p1_interpret_before_declaration_merge",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": true,
+        "narrator_modal": "perhaps"
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Same live sentence on the saved decision, before the declaration is copied into the ground. The lead check fires, and the inference return still skips the cause residual.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C02",
+      "semantic_category": "mixed_inference_plus_cause",
+      "text": "The split wooden yoke and the torn leather hanger might suggest significant stress, perhaps due to prolonged neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": true,
+        "narrator_modal": "perhaps"
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "C",
+        "D"
+      ],
+      "notes": "Mixed E shape. Authorized hedge first, unauthorized due-to second.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C03",
+      "semantic_category": "mixed_cause_then_inference",
+      "text": "Prolonged neglect is the cause, though the split yoke might also suggest stress.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Mixed D shape. Unauthorized cause before the hedge.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C04",
+      "semantic_category": "mixed_inference_plus_history_noun",
+      "text": "The split wooden yoke might point to neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "C",
+        "D"
+      ],
+      "notes": "Grounded subject plus the neglect noun the recipe forbids. No due-to.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C05",
+      "semantic_category": "mixed_inference_plus_history_noun",
+      "text": "The damage might point to neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Existing PR-BS overreach sentence. Ungrounded 'damage' may reject for a different reason than neglect.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "C06",
+      "semantic_category": "declaration_bounded_inference",
+      "text": "The split wooden yoke and torn leather hanger might indicate the bell has been under significant stress or neglect, possibly from heavy use or an external force.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Live P1 declaration. Neglect, heavy use, and external force without due-to.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D01",
+      "semantic_category": "player_hypothesis_conditional",
+      "text": "These visible damages could be consistent with being deliberately cut, but without additional evidence, that motive remains uncertain.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "remains uncertain",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "B"
+      ],
+      "notes": "Live P3 sentence. Conditional fit plus ungrounded motive. Whole sentence should not pass.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D02",
+      "semantic_category": "player_hypothesis_conditional",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with deliberate cutting, but the explanation remains uncertain.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "explanation remains uncertain",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": true,
+      "ambiguous": false,
+      "root_cause_category": [
+        "B",
+        "D"
+      ],
+      "notes": "Same conditional proposition, no new motive noun, remains uncertain.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D03",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with deliberate cutting, but the explanation remains unclear.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unknown_cause_actor_or_time"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "explanation remains unclear",
+        "epistemic_limit": "explanation remains unclear",
+        "epistemic_parent": "explanation remains unclear",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Same proposition. remains unclear.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D04",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with deliberate cutting, but the explanation is unclear.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unknown_cause_actor_or_time"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "is unclear",
+        "epistemic_limit": "explanation is unclear",
+        "epistemic_parent": "explanation is unclear",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Same proposition. is unclear.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D05",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with deliberate cutting, but the explanation is uncertain.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "explanation is uncertain",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": true,
+      "ambiguous": false,
+      "root_cause_category": [
+        "B",
+        "D"
+      ],
+      "notes": "Same proposition. is uncertain.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D06",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with deliberate cutting, but deliberate cutting cannot be determined.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "cannot be determined",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Same proposition. cannot be determined. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D07",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke and the torn leather hanger could be consistent with deliberate cutting, but deliberate cutting cannot be established.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_certainty_upgrade",
+        "unauthorized_evidential_relation"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "cannot be established",
+        "certainty_upgrade": "established",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": true,
+      "ambiguous": false,
+      "root_cause_category": [
+        "B",
+        "E",
+        "D"
+      ],
+      "notes": "Same proposition. cannot be established. Contains the stem established.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ],
+          [
+            "unauthorized_certainty_upgrade"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D08",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke might be consistent with deliberate cutting.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "might be consistent with. No uncertainty coda. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D09",
+      "semantic_category": "uncertainty_variant",
+      "text": "The split wooden yoke may fit deliberate cutting.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "may",
+        "uncertainty_frame": "may",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "may fit. No uncertainty coda. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "D10",
+      "semantic_category": "uncertainty_variant",
+      "text": "Deliberate cutting is possible, and the split yoke does not rule it out.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "is possible / not ruled out. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "E01",
+      "semantic_category": "certainty_upgrade",
+      "text": "The split yoke clearly comes from deliberate cutting.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_certainty_upgrade"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "clearly",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Certainty strengthening of the hypothesis.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_certainty_upgrade"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "E02",
+      "semantic_category": "certainty_upgrade",
+      "text": "The split yoke was definitely cut on purpose.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unowned_stateful_world_assertion"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "definitely. May or may not be in the certainty recognizer.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "E03",
+      "semantic_category": "certainty_upgrade",
+      "text": "The split yoke was certainly cut.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unowned_stateful_world_assertion"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "certainly.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "E04",
+      "semantic_category": "certainty_upgrade",
+      "text": "The split yoke was obviously cut.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unowned_stateful_world_assertion"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "obviously.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F01",
+      "semantic_category": "negated_certainty",
+      "text": "The cause is not clear.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Negated clarity. Should not become a certainty upgrade. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F02",
+      "semantic_category": "negated_certainty",
+      "text": "The cause is clear.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "D"
+      ],
+      "notes": "Positive clarity about cause. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F03",
+      "semantic_category": "negated_certainty",
+      "text": "It is not clearly neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "accept",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_certainty_upgrade"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "clearly",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": true,
+      "ambiguous": false,
+      "root_cause_category": [
+        "E",
+        "D"
+      ],
+      "notes": "not clearly. Scope should block the certainty keyword.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_certainty_upgrade"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F04",
+      "semantic_category": "negated_certainty",
+      "text": "It clearly could be neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "clearly",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "C",
+        "D"
+      ],
+      "notes": "clearly attached to a forbidden history noun, even with could.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_certainty_upgrade"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F05",
+      "semantic_category": "negated_certainty",
+      "text": "There is no clear evidence of deliberate cutting.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "no clear evidence. Negative evidential wording. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F06",
+      "semantic_category": "negated_certainty",
+      "text": "Deliberate cutting cannot be established.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unauthorized_certainty_upgrade",
+        "unauthorized_evidential_relation"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "cannot be established",
+        "certainty_upgrade": "established",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": true,
+      "ambiguous": false,
+      "root_cause_category": [
+        "B",
+        "E",
+        "D"
+      ],
+      "notes": "cannot be established. Negation over establish.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ],
+          [
+            "unauthorized_certainty_upgrade"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "F07",
+      "semantic_category": "negated_certainty",
+      "text": "Deliberate cutting remains possible but unproven.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "accept",
+      "actual_classification": "accept_by_omission",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [],
+      "relevant_recognizers": {
+        "qualified_inference": "",
+        "uncertainty_frame": "",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": false,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "possible but unproven. No claim was emitted, so the narration audit does not reject the sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "G01",
+      "semantic_category": "order_reversed_mixed",
+      "text": "Perhaps due to prolonged neglect, the split wooden yoke might suggest significant stress.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "Perhaps",
+        "uncertainty_frame": "Perhaps",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": false,
+        "narrator_modal": "Perhaps"
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "C",
+        "D"
+      ],
+      "notes": "Unauthorized cause first, qualified inference second. Same sentence.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "G02",
+      "semantic_category": "order_forward_mixed",
+      "text": "The split wooden yoke might suggest significant stress, perhaps due to prolonged neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "authorized_qualified_inference"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": false,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": true,
+        "narrator_modal": "perhaps"
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "C",
+        "D"
+      ],
+      "notes": "Qualified inference first, unauthorized cause second.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "H01",
+      "semantic_category": "live_p3_unclear_swap",
+      "text": "These visible damages could be consistent with being deliberately cut, but without additional evidence, that motive remains unclear.",
+      "authority_setup": "p3_perceive",
+      "expected_classification": "reject",
+      "actual_classification": "accept",
+      "rejection_acceptance_path": "consequential_or_history_tail",
+      "reason_codes": [
+        "unknown_cause_actor_or_time"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "could",
+        "uncertainty_frame": "could",
+        "unknown_slot": "remains unclear",
+        "epistemic_limit": "",
+        "epistemic_parent": "remains unclear",
+        "certainty_upgrade": "",
+        "lead": false,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": true,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [
+        "D"
+      ],
+      "notes": "Live P3 with only uncertain changed to unclear. Motive is still ungrounded. Exemption must not immunize it.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "H02",
+      "semantic_category": "live_p1_without_due_to",
+      "text": "This damage might suggest the bell has been subjected to significant stress or prolonged neglect.",
+      "authority_setup": "p1_interpret",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "",
+        "causal_relation": "",
+        "hypothesis_frame": true,
+        "narrator_modal": ""
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Live P1 cause clause removed. Neglect noun remains.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    },
+    {
+      "case_id": "H03",
+      "semantic_category": "slotted_decision_still_returns",
+      "text": "This damage might suggest the bell has been subjected to significant stress or prolonged neglect, perhaps due to heavy use or an external force acting upon it.",
+      "authority_setup": "p1_interpret_with_unresolved_qualifiers",
+      "expected_classification": "reject",
+      "actual_classification": "reject",
+      "rejection_acceptance_path": "authorized_qualified_inference_return",
+      "reason_codes": [
+        "unsupported_narrator_lead"
+      ],
+      "relevant_recognizers": {
+        "qualified_inference": "might",
+        "uncertainty_frame": "might",
+        "unknown_slot": "",
+        "epistemic_limit": "",
+        "epistemic_parent": "",
+        "certainty_upgrade": "",
+        "lead": true,
+        "ungrounded_definite": true,
+        "cause_fill": "due to",
+        "causal_relation": "due to",
+        "hypothesis_frame": true,
+        "narrator_modal": "perhaps"
+      },
+      "false_accept": false,
+      "false_reject": false,
+      "ambiguous": false,
+      "root_cause_category": [],
+      "notes": "Same live sentence after copying cause/actor/time/history onto unresolved_qualifiers.",
+      "skipped_if_early_return": {
+        "slot_fill_reasons": [],
+        "relationship_residuals": [
+          [
+            "unauthorized_causal_relation"
+          ],
+          [
+            "unauthorized_evidential_relation"
+          ]
+        ],
+        "ordinary_residuals": []
+      }
+    }
+  ]
+}

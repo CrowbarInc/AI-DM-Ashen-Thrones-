@@ -1737,6 +1737,21 @@ def run_preserve_if_valid(
         return verdict
 
     first = _check(gm)
+    if isinstance(resolution, Mapping) and resolution.get("kind") == "scene_opening":
+        from game.provider_budget import observe_opening_semantics
+
+        envelope = (gm.get("metadata") or {}).get("realization_envelope") or {}
+        declarations = envelope.get("declared_claims")
+        observe_opening_semantics({
+            "semantic_classification": "candidate_valid" if first["hard_valid"] else "candidate_rejected",
+            "classification_source": "game.immutable_valid_response.run_preserve_if_valid._check",
+            "classification_reason": "hard_validation_passed" if first["hard_valid"] else "hard_validation_failed",
+            "semantic_reasons": list(first.get("reasons") or []),
+            "narration_present": bool(gm.get("player_facing_text")),
+            "narration_length": len(str(gm.get("player_facing_text") or "")),
+            "declarations_present": isinstance(declarations, list),
+            "declaration_count": len(declarations) if isinstance(declarations, list) else None,
+        })
     metadata = gm.setdefault("metadata", {})
     if isinstance(metadata, dict):
         metadata["hard_validation_attempt_1"] = {
@@ -1795,6 +1810,16 @@ def run_preserve_if_valid(
                         }
                     hard["decision_acceptance_why"] = why
         seal_delivery_contract(sealed)
+        if isinstance(resolution, Mapping) and resolution.get("kind") == "scene_opening":
+            from game.provider_budget import observe_opening_semantics
+
+            record = (sealed.get("metadata") or {}).get(ACCEPTED_KEY) or {}
+            observe_opening_semantics({
+                "semantic_classification": record.get("provenance"),
+                "classification_source": "game.immutable_valid_response.run_preserve_if_valid._finish",
+                "classification_reason": why,
+                "nonresolution_origin": "application" if record.get("provenance") == PROVENANCE_SAFE else None,
+            })
         return sealed
 
     if first["hard_valid"]:

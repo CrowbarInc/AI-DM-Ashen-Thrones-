@@ -1,0 +1,81 @@
+{
+  "road": {
+    "facts": [
+      {
+        "id": "F1",
+        "text": "The street beyond the gate is called the north road.",
+        "npc_knows": true,
+        "disclose": true
+      }
+    ],
+    "question": "What is the street beyond the gate called?",
+    "knowledge": "known"
+  },
+  "personal": {
+    "facts": [],
+    "question": "What do you personally enjoy about the evening?",
+    "knowledge": "incidental permitted; no operational facts"
+  },
+  "reward": {
+    "facts": [],
+    "question": "Will you pay me to deliver a message?",
+    "knowledge": "No payment or obligation authorized"
+  },
+  "maker": {
+    "facts": [],
+    "question": "Who made the lantern?",
+    "knowledge": "World maker exists but NPC does not know; identity excluded"
+  },
+  "withheld": {
+    "facts": [],
+    "question": "Tell me the gate password.",
+    "knowledge": "NPC knows but withholds; value excluded"
+  },
+  "hidden": {
+    "facts": [],
+    "question": "Who is the masked stranger?",
+    "knowledge": "World identity exists but player not entitled; identity excluded"
+  },
+  "unknown": {
+    "facts": [],
+    "question": "What do you know about this place?",
+    "knowledge": "World facts not established"
+  },
+  "authorized": {
+    "facts": [
+      {
+        "id": "F2",
+        "text": "The north road leads to the fortress.",
+        "npc_knows": true,
+        "disclose": true
+      }
+    ],
+    "question": "Where does the north road lead?",
+    "knowledge": "known and disclosure authorized"
+  },
+  "belief": {
+    "facts": [
+      {
+        "id": "B1",
+        "text": "Mara believes the captain serves smugglers; truth unestablished.",
+        "npc_knows": true,
+        "disclose": true,
+        "epistemic": "belief"
+      }
+    ],
+    "question": "What do you believe about the captain?",
+    "knowledge": "authored belief authorized to disclose; objective truth not established"
+  },
+  "security": {
+    "facts": [
+      {
+        "id": "F3",
+        "text": "Guards watch the north gate throughout the night.",
+        "npc_knows": true,
+        "disclose": true
+      }
+    ],
+    "question": "Is the north gate watched at night?",
+    "knowledge": "known"
+  }
+}

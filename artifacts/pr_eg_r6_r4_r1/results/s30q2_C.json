@@ -1,0 +1,46 @@
+{
+  "case_id": "s30q2",
+  "family": "s30",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "3c9998944f6d51fbc75ce0d1d6ac90b63347cec85f2692ba62b8b27d6af0b726",
+  "answer": {
+    "response_class": "UNKNOWN",
+    "values": [],
+    "qualifiers": [],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s30"
+    ],
+    "answered_arguments": [
+      "agent"
+    ],
+    "missing_arguments": [
+      "assignment location on watch rota"
+    ],
+    "conflict": false,
+    "reason": "The fact states that Senn does not guard the granary, but does not specify where Senn is assigned on the watch rota."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": false,
+    "false_rejection": true,
+    "unsupported_inference": false,
+    "earliest_failure": "F15"
+  },
+  "provider_error": null
+}

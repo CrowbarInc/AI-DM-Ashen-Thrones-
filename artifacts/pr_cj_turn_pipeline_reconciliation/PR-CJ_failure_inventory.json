@@ -1,0 +1,351 @@
+{
+  "suite": "tests/test_turn_pipeline_shared.py",
+  "command": ".venv\\Scripts\\python.exe -m pytest tests/test_turn_pipeline_shared.py --tb=line --junitxml=artifacts/pr_cj_turn_pipeline_reconciliation/pytest_shared.xml --basetemp=artifacts/pr_cj_turn_pipeline_reconciliation/pytest_basetemp_parent/run1 -p no:cacheprovider",
+  "result": "33 failed, 32 passed, 1 warning in 8.16s",
+  "live_provider_calls": 0,
+  "head_comparison": {
+    "commit": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+    "method": "detached worktree, same venv, HEAD copy of the test file",
+    "head_failures": [
+      "test_action_and_chat_investigate_both_mark_runtime_discovery_memory",
+      "test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+      "test_chat_single_wait_in_tense_scene_forces_interaction_pressure",
+      "test_chat_repeated_passive_actions_do_not_stall_into_atmosphere",
+      "test_chat_passive_scene_prefers_already_introduced_suspicious_figure",
+      "test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere"
+    ],
+    "note": "At HEAD those six fail on different assertions than the dirty tree. The other 27 dirty-tree failures pass at HEAD."
+  },
+  "failures": [
+    {
+      "test_name": "test_action_and_chat_investigate_both_mark_runtime_discovery_memory",
+      "cluster": "A_social_default_selection",
+      "assertion": "chat resolution['kind'] KeyError",
+      "expected": "chat and action resolution.kind == discover_clue and desk clue in scene runtime",
+      "actual": "chat resolution has no kind. Action path still discovers the clue when called directly.",
+      "response_fields": ["resolution.kind", "session.scene_runtime.scene_investigate.discovered_clues"],
+      "first_failing_boundary": "select_ordinary_resolver returns social for 'I investigate the desk.', so the exploration stage never runs",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+      "cluster": "D_resolution_shell",
+      "assertion": "resolution is None",
+      "expected": "unparsed greeting returns resolution null",
+      "actual": "resolution object with ordinary_contract_established, prompt 'hello there', no kind",
+      "response_fields": ["resolution", "resolution.metadata.ordinary_contract_established", "resolution.metadata.selected_resolver"],
+      "first_failing_boundary": "chat() always allocates a resolution dict and returns it on the unparsed path",
+      "subsystem": "chat response shape"
+    },
+    {
+      "test_name": "test_chat_targeted_retry_validator_voice_only",
+      "cluster": "C_immutable_retry_prompt",
+      "assertion": "'Retry target: validator_voice.' in second provider prompt",
+      "expected": "gm_retry validator_voice prompt, two calls",
+      "actual": "two calls occurred; second prompt is immutable regeneration text for unauthorized_resolution_decision_fact",
+      "response_fields": ["retry messages[-1].content"],
+      "first_failing_boundary": "immutable_valid_response.regeneration_feedback",
+      "subsystem": "retry prompt contract"
+    },
+    {
+      "test_name": "test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]",
+      "cluster": "E_stock_phrase_leak",
+      "assertion": "global visibility stock absent",
+      "expected": "player text does not contain 'for a breath, the scene holds'",
+      "actual": "that phrase is in player_facing_text",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "final emission / sanitizer did not strip the stock line",
+      "subsystem": "emission sanitizer"
+    },
+    {
+      "test_name": "test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]",
+      "cluster": "E_stock_phrase_leak",
+      "assertion": "social visible-intro filler absent",
+      "expected": "player text does not contain 'stands nearby'",
+      "actual": "that phrase is in player_facing_text",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "final emission / sanitizer did not strip the stock line",
+      "subsystem": "emission sanitizer"
+    },
+    {
+      "test_name": "test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "reply_kind contains unknown",
+      "expected": "reply_kind unknown",
+      "actual": "reply_kind in {answer, explanation, refusal}",
+      "response_fields": ["resolution.social.reply_kind"],
+      "first_failing_boundary": "social reply classification",
+      "subsystem": "social reply planning"
+    },
+    {
+      "test_name": "test_chat_known_follow_up_bypasses_uncertainty_fallback",
+      "cluster": "I_clarification_instead_of_retry",
+      "assertion": "retry_strategy:selected=unresolved_question in debug notes",
+      "expected": "unresolved-question retry selected and uncertainty stock absent",
+      "actual": "debug notes empty; player text is 'person says, \"Which do you mean? I cannot tell which one that refers...'",
+      "response_fields": ["gm_output.player_facing_text", "debug notes"],
+      "first_failing_boundary": "contract abstains as clarification (insufficient discourse) and does not record the retry strategy",
+      "subsystem": "referent clarification"
+    },
+    {
+      "test_name": "test_chat_targeted_retry_unresolved_question_only",
+      "cluster": "B_adjudication_preempts_retry",
+      "assertion": "len(captured gpt calls) == 2",
+      "expected": "two narration calls and Retry target: unresolved_question",
+      "actual": "0 provider calls; resolution.kind adjudication_query; subject place_location",
+      "response_fields": ["resolution.kind", "resolution.adjudication", "gpt call count"],
+      "first_failing_boundary": "select_ordinary_resolver returns adjudication/place_location before narration retry",
+      "subsystem": "adjudication routing"
+    },
+    {
+      "test_name": "test_chat_targeted_retry_prefers_highest_priority_failure_first",
+      "cluster": "B_adjudication_preempts_retry",
+      "assertion": "len(captured gpt calls) == 2",
+      "expected": "unresolved_question retry preferred over validator_voice",
+      "actual": "0 provider calls; same place_location adjudication as the unresolved-question test",
+      "response_fields": ["gpt call count", "resolution.kind"],
+      "first_failing_boundary": "select_ordinary_resolver returns adjudication/place_location",
+      "subsystem": "adjudication routing"
+    },
+    {
+      "test_name": "test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+      "cluster": "A_social_default_selection",
+      "assertion": "len(captured gpt calls) == 2",
+      "expected": "second call then known-fact fallback starting 'you are in'",
+      "actual": "1 provider call; 'Where are we?' contracted as ask/social",
+      "response_fields": ["gpt call count", "resolution.metadata.selected_resolver"],
+      "first_failing_boundary": "social resolver selected; unresolved_question retry not armed",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "len(captured gpt calls) == 2",
+      "expected": "speaker-grounded uncertainty fallback naming Tavern Runner",
+      "actual": "1 provider call for 'Who attacked them?'",
+      "response_fields": ["gpt call count", "gm_output.player_facing_text"],
+      "first_failing_boundary": "deterministic unresolved-question fallback removed from the critical path",
+      "subsystem": "retry fallback"
+    },
+    {
+      "test_name": "test_chat_targeted_retry_scene_stall_only",
+      "cluster": "A_social_default_selection",
+      "assertion": "len(captured gpt calls) == 2",
+      "expected": "Retry target: scene_stall",
+      "actual": "1 provider call; 'I wait.' is ask/social and passive_wait stage is not permitted",
+      "response_fields": ["gpt call count"],
+      "first_failing_boundary": "select_ordinary_resolver social; stage_permitted(passive_wait) is false",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_single_wait_in_tense_scene_forces_interaction_pressure",
+      "cluster": "A_social_default_selection",
+      "assertion": "_assert_concrete_pressure",
+      "expected": "concrete pressure phrase and passive_scene_pressure tag",
+      "actual": "pressure phrases absent",
+      "response_fields": ["gm_output.player_facing_text", "gm_output.tags"],
+      "first_failing_boundary": "'I wait.' selected as social, so passive pressure does not run",
+      "subsystem": "passive scene pressure"
+    },
+    {
+      "test_name": "test_chat_repeated_passive_actions_do_not_stall_into_atmosphere",
+      "cluster": "A_social_default_selection",
+      "assertion": "_assert_concrete_pressure",
+      "expected": "second passive turn still exerts concrete pressure",
+      "actual": "pressure phrases absent",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "wait/watch utterances selected as social",
+      "subsystem": "passive scene pressure"
+    },
+    {
+      "test_name": "test_chat_passive_scene_prefers_already_introduced_suspicious_figure",
+      "cluster": "A_social_default_selection",
+      "assertion": "player text equals the hard-valid atmosphere line",
+      "expected": "The square stays hushed except for the scrape of boots on wet stone.",
+      "actual": "No one here can answer that from what is settled here.",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "safe nonresolution replaces narration after the utterance is contracted as a social ask",
+      "subsystem": "immutable safe nonresolution"
+    },
+    {
+      "test_name": "test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere",
+      "cluster": "A_social_default_selection",
+      "assertion": "player text equals the hard-valid atmosphere line",
+      "expected": "The square stays hushed except for the scrape of boots on wet stone.",
+      "actual": "No one here can answer that from what is settled here.",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "safe nonresolution replaces narration after 'I wait.' is contracted as a social ask",
+      "subsystem": "immutable safe nonresolution"
+    },
+    {
+      "test_name": "test_chat_repeated_social_questions_keep_npc_uncertainty_voice",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "'tavern runner' in player text",
+      "expected": "NPC uncertainty voice names Tavern Runner",
+      "actual": "rain rattles over the shutters while the crowd churns.",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "speaker grounding repair did not rewrite the provider atmosphere line",
+      "subsystem": "speaker contract"
+    },
+    {
+      "test_name": "test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+      "cluster": "D_resolution_shell",
+      "assertion": "resolution is None",
+      "expected": "dialogue preference leaves resolution null for this chat shape",
+      "actual": "resolution shell with ordinary_contract_established and prompt 'Footman? I require an audience.'",
+      "response_fields": ["resolution"],
+      "first_failing_boundary": "unparsed chat returns the contract shell",
+      "subsystem": "chat response shape"
+    },
+    {
+      "test_name": "test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+      "cluster": "A_social_default_selection",
+      "assertion": "resolution.kind in {discover_clue, investigate}",
+      "expected": "desk investigation kind plus embedded Perception question metadata",
+      "actual": "kind is null; utterance contracted as ask/social",
+      "response_fields": ["resolution.kind"],
+      "first_failing_boundary": "social resolver blocks the exploration stage",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]",
+      "cluster": "A_social_default_selection",
+      "assertion": "resolution.kind in {discover_clue, investigate}",
+      "expected": "investigate/discover_clue and mixed investigation metadata",
+      "actual": "kind is null; fast path abstains and operation becomes ask/social",
+      "response_fields": ["resolution.kind"],
+      "first_failing_boundary": "social resolver blocks exploration",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]",
+      "cluster": "G_exploration_selected_metadata",
+      "assertion": "AssertionError with empty message",
+      "expected": "investigate kind, parser_lane mixed_scene_object_investigation, action_outcome response type",
+      "actual": "JUnit recorded only AssertionError. Contract probe selects exploration/inspect.",
+      "response_fields": ["resolution.kind", "resolution.metadata.parser_lane", "final emission response_type_required"],
+      "first_failing_boundary": "after exploration selection; exact assert not expanded in JUnit",
+      "subsystem": "mixed investigation metadata"
+    },
+    {
+      "test_name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]",
+      "cluster": "G_exploration_selected_metadata",
+      "assertion": "AssertionError with empty message",
+      "expected": "investigate kind and mixed investigation metadata",
+      "actual": "JUnit recorded only AssertionError. Contract probe selects exploration; fast path abstains malformed_target_span.",
+      "response_fields": ["resolution.metadata"],
+      "first_failing_boundary": "after exploration selection",
+      "subsystem": "mixed investigation metadata"
+    },
+    {
+      "test_name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]",
+      "cluster": "G_exploration_selected_metadata",
+      "assertion": "AssertionError with empty message",
+      "expected": "investigate kind and mixed investigation metadata",
+      "actual": "JUnit recorded only AssertionError. Contract probe selects exploration/inspect.",
+      "response_fields": ["resolution.metadata"],
+      "first_failing_boundary": "after exploration selection",
+      "subsystem": "mixed investigation metadata"
+    },
+    {
+      "test_name": "test_chat_action_outcome_contract_survives_inside_active_social_scene",
+      "cluster": "A_social_default_selection",
+      "assertion": "'desk' in player text",
+      "expected": "desk investigation outcome survives an active social scene",
+      "actual": "for a breath, the scene holds while voices shift around you.",
+      "response_fields": ["gm_output.player_facing_text", "resolution.kind"],
+      "first_failing_boundary": "active social framing plus ask/social contract replaces the investigation outcome",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+      "cluster": "H_embedded_adjudication_dropped",
+      "assertion": "embedded_adjudication.category == roll_requirement_query",
+      "expected": "resolution.kind question and embedded roll metadata",
+      "actual": "kind question succeeded; embedded category is null",
+      "response_fields": ["resolution.kind", "resolution.metadata.embedded_adjudication"],
+      "first_failing_boundary": "owned resolution contract skips embedded adjudication attachment",
+      "subsystem": "embedded adjudication"
+    },
+    {
+      "test_name": "test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+      "cluster": "E_stock_phrase_leak",
+      "assertion": "internal scaffold labels absent",
+      "expected": "player text does not contain 'planner:'",
+      "actual": "planner: is present",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "sanitizer did not strip the scaffold label",
+      "subsystem": "emission sanitizer"
+    },
+    {
+      "test_name": "test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]",
+      "cluster": "A_social_default_selection",
+      "assertion": "desk clue in scene runtime discovered_clues",
+      "expected": "chat investigation mutates runtime before the provider request",
+      "actual": "discovered_clues is empty",
+      "response_fields": ["session.scene_runtime.scene_investigate.discovered_clues"],
+      "first_failing_boundary": "social resolver never calls the exploration resolver, so the clue is not applied",
+      "subsystem": "ordinary contract selection"
+    },
+    {
+      "test_name": "test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+      "cluster": "E_stock_phrase_leak",
+      "assertion": "unresolved stock absent",
+      "expected": "repaired social text without 'from here, no certain answer presents itself'",
+      "actual": "that stock phrase is in player_facing_text",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "emit repair did not replace the unresolved stock line",
+      "subsystem": "social emission"
+    },
+    {
+      "test_name": "test_chat_social_exchange_blocks_advisory_prose_before_emit",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "emission repair evidence missing",
+      "expected": "repair tag or debug marker after advisory prose is blocked",
+      "actual": "assert_emission_repair_evidence failed",
+      "response_fields": ["gm_output.tags", "debug notes"],
+      "first_failing_boundary": "deterministic social repair evidence not recorded",
+      "subsystem": "social emission"
+    },
+    {
+      "test_name": "test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "second interruption text differs from the first canned line",
+      "expected": "repeated interruption progresses",
+      "actual": "both turns emit 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "interruption progression repair did not replace the repeated line",
+      "subsystem": "social progression"
+    },
+    {
+      "test_name": "test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "refusal phrase present",
+      "expected": "a clean refusal phrase after repeated questioning",
+      "actual": "none of the expected refusal phrases are present",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "emit repair did not produce the refusal line",
+      "subsystem": "social progression"
+    },
+    {
+      "test_name": "test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "'tavern runner' in player text",
+      "expected": "wrong 'Merchant says' attribution repaired to Tavern Runner",
+      "actual": "no one here can answer that from what is settled here.",
+      "response_fields": ["gm_output.player_facing_text"],
+      "first_failing_boundary": "safe nonresolution replaces the candidate before speaker repair",
+      "subsystem": "immutable safe nonresolution"
+    },
+    {
+      "test_name": "test_pipeline_strict_social_ragged_stranger_fallback_repaired",
+      "cluster": "F_speaker_reply_repair",
+      "assertion": "speaker_contract_enforcement_reason is set",
+      "expected": "speaker enforcement reason present",
+      "actual": "reason is null",
+      "response_fields": ["final emission speaker_contract_enforcement_reason"],
+      "first_failing_boundary": "speaker enforcement is no longer on the critical path",
+      "subsystem": "speaker contract"
+    }
+  ]
+}

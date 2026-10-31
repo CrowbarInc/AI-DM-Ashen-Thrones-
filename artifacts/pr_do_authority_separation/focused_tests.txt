@@ -1,0 +1,8 @@
+python -m pytest tests/test_pr_do_authority_separation.py -q --tb=line
+python -m pytest tests/test_pr_dn_interpretation_robustness.py -q --tb=line
+python -m pytest tests/test_pr_dm_hybrid_refinement.py -q --tb=line
+python -m pytest tests/test_pr_dl_interpretation_comparison.py -q --tb=line
+python -m pytest tests/test_pr_dk_escalation_routing.py -q --tb=line
+python -m pytest tests/test_pr_dj_selective_interpretation.py -q --tb=line
+python -m pytest tests/test_pr_cx_authority_assurance.py -q --tb=line
+python -m pytest tests/test_turn_pipeline_shared.py -q --tb=line

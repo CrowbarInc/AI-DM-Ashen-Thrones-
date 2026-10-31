@@ -1,0 +1,12 @@
+--- before/game/expressive_dialogue.py
++++ after/game/expressive_dialogue.py
+@@ -963,6 +963,9 @@
+         record["expression_adoption"] = "ADOPTED_GENERATED_EXPRESSION"
+     else:
+         record["expression_adoption"] = "HOST_FALLBACK"
++    from game.immutable_valid_response import seal_delivery_contract
++
++    seal_delivery_contract(gm)
+ 
+ 
+ def maybe_reword_continuity_line(

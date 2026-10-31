@@ -1,0 +1,62 @@
+[
+  {
+    "scenario_id": "S07",
+    "context_present_in_world_state": true,
+    "world_state_evidence": "Live preflight verifies authored opening/journal seeds and addressables against the frozen scene.",
+    "opening_seed_facts": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "journal_seed_facts": [
+      "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+      "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+      "A notice board announces new taxes and curfews, and names a missing patrol.",
+      "A tavern runner is hawking hot stew and rumor for coin.",
+      "A ragged stranger hangs back, watching the crowd more than the queue."
+    ],
+    "opening_delivered_before_first_player_turn": false,
+    "delivery_evidence": "Approved worker silently resets, verifies empty log/history, then posts only the fixture player turns. No start_campaign/opening/GET state or journal output was delivered as conversation.",
+    "context_inferred_by_fixture": "Fresh gate, opening description available, including rain and frayed banners. The runner is visibly hawking.",
+    "unavailable_or_unverified": [
+      "Browser-rendered state or journal visibility",
+      "Any opening delivery outside captured API sequence"
+    ],
+    "classification": "setup_delivery_limitation",
+    "extra_context_injected": false,
+    "scoring_constraint": "S07 opening-dependent naturalness and banner assumptions are not a valid fully established setup. S09 explicit named addressee question can be reviewed, but posture delivery cannot be assumed. Keep unsupported criteria uncertain/not evaluated; no gameplay failure assigned for missing opening."
+  },
+  {
+    "scenario_id": "S09",
+    "context_present_in_world_state": true,
+    "world_state_evidence": "Live preflight verifies authored opening/journal seeds and addressables against the frozen scene.",
+    "opening_seed_facts": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "journal_seed_facts": [
+      "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+      "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+      "A notice board announces new taxes and curfews, and names a missing patrol.",
+      "A tavern runner is hawking hot stew and rumor for coin.",
+      "A ragged stranger hangs back, watching the crowd more than the queue."
+    ],
+    "opening_delivered_before_first_player_turn": false,
+    "delivery_evidence": "Approved worker silently resets, verifies empty log/history, then posts only the fixture player turns. No start_campaign/opening/GET state or journal output was delivered as conversation.",
+    "context_inferred_by_fixture": "Fresh gate. Held-out. Not a tuning set.",
+    "unavailable_or_unverified": [
+      "Browser-rendered state or journal visibility",
+      "Any opening delivery outside captured API sequence"
+    ],
+    "classification": "setup_delivery_limitation",
+    "extra_context_injected": false,
+    "scoring_constraint": "S07 opening-dependent naturalness and banner assumptions are not a valid fully established setup. S09 explicit named addressee question can be reviewed, but posture delivery cannot be assumed. Keep unsupported criteria uncertain/not evaluated; no gameplay failure assigned for missing opening."
+  }
+]

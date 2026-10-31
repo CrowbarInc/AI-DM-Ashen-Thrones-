@@ -786,16 +786,17 @@ def validate_expression(spoken: str, contract: Mapping[str, Any]) -> dict[str, A
 def request_expression(contract: Mapping[str, Any]) -> dict[str, Any]:
     """One plain-text completion. No narration stack and no retry."""
     from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
-    from game.provider_budget import begin_request, finish_request
+    from game.provider_budget import admit_request
 
     prompt = contract.get("prompt") if isinstance(contract.get("prompt"), Mapping) else {}
     system = str(prompt.get("system") or "")
     user = str(prompt.get("user") or "")
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     estimated = max(1, (len(system) + len(user)) // 4)
-    refusal = begin_request(purpose="expression", estimated_input=estimated, max_output=_OUTPUT_CAP)
+    attempt = admit_request(owner="expressive_dialogue.request_expression", model=DEFAULT_MODEL_NAME, purpose="expression", estimated_input=estimated, max_output=_OUTPUT_CAP)
+    refusal = attempt.refusal
     if refusal:
-        usage = finish_request(
+        usage = attempt.finish(
             {
                 "purpose": "expression",
                 "sent": False,
@@ -808,13 +809,14 @@ def request_expression(contract: Mapping[str, Any]) -> dict[str, Any]:
         )
         return {"ok": False, "sent": False, "text": "", "reason": refusal, "usage": usage, "latency_ms": 0}
     from openai import OpenAI
+    from game.provider_budget import sdk_retry_options
 
     from game.gm import provider_timeout_seconds
 
     started = time.perf_counter()
     try:
-        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
-        response = client.responses.create(
+        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+        response = attempt.dispatch(client.responses.create,
             model=DEFAULT_MODEL_NAME,
             input=messages,
             temperature=0.2,
@@ -822,7 +824,7 @@ def request_expression(contract: Mapping[str, Any]) -> dict[str, Any]:
         )
     except Exception as exc:  # noqa: BLE001 - one failure falls back; it is not retried
         latency = round((time.perf_counter() - started) * 1000, 3)
-        finish_request(
+        attempt.finish(
             {
                 "purpose": "expression",
                 "sent": True,
@@ -845,7 +847,7 @@ def request_expression(contract: Mapping[str, Any]) -> dict[str, Any]:
     else:
         incoming, outgoing, total = int(incoming), int(outgoing), int(total)
     model = str(getattr(response, "model", "") or "")
-    usage = finish_request(
+    usage = attempt.finish(
         {
             "purpose": "expression",
             "sent": True,

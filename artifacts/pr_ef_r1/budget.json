@@ -1,0 +1,24 @@
+{
+  "model": "gpt-4.1-mini",
+  "maximum_requests": 80,
+  "maximum_input_tokens": 430000,
+  "maximum_output_tokens": 22000,
+  "maximum_total_tokens": 452000,
+  "allocation": {
+    "availability_and_diagnosis": 2,
+    "frozen_and_independent_holdouts": 24,
+    "two_final_conversations_reserved": 38
+  },
+  "timeout_seconds": 25,
+  "narration_max_output_tokens": 1600,
+  "interpretation_max_output_tokens": 320,
+  "payload": "disposable authored courtyard only; no active save",
+  "original_maximum_requests": 64,
+  "revision_reason": "66 live calls used, two final continuous sequences passed. Final replay exposed a clarification/status inconsistency; repair only that validation gate and reserve at most 14 calls for a fresh exact-final-code ten-turn check. No further exploration.",
+  "revisions": [
+    {
+      "maximum_requests": 68,
+      "reason": "After 55 calls, one complete final-code conversation passed. Reserve up to 13 remaining calls for the unchanged alternate ten-turn sequence; no more exploratory calls. Token limits unchanged."
+    }
+  ]
+}

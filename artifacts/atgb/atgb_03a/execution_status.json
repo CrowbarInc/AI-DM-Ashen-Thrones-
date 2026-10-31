@@ -1,0 +1,138 @@
+{
+  "status": "STOPPED_BEFORE_LIVE_CONTINUATION",
+  "accounting_version": "ATGB-03A-1",
+  "correction": "benchmark-only fail-closed pre-execution guard and ledger reconciliation",
+  "upper_bound_repair_complete": false,
+  "live_continuation_completed": false,
+  "new_live_trials": [],
+  "additional_provider_requests": 0,
+  "scenario_status": [
+    {
+      "scenario_id": "S01",
+      "expected_turns": 4,
+      "captured_turns": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": true,
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S02",
+      "expected_turns": 4,
+      "captured_turns": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": true,
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S03",
+      "expected_turns": 5,
+      "captured_turns": 5,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": true,
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S04",
+      "expected_turns": 4,
+      "captured_turns": 2,
+      "execution_status": "infrastructure_stop",
+      "stop_reason": "provider_call_ceiling_not_observable",
+      "human_review_status": "pending",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": true,
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S05",
+      "expected_turns": 4,
+      "captured_turns": 0,
+      "execution_status": "not_attempted_after_infrastructure_stop",
+      "stop_reason": "earlier_S04_accounting_stop",
+      "human_review_status": "not_evaluated_no_transcript",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": "not_rerun_live; preparation preflight passed",
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S06",
+      "expected_turns": 4,
+      "captured_turns": 0,
+      "execution_status": "not_attempted_after_infrastructure_stop",
+      "stop_reason": "earlier_S04_accounting_stop",
+      "human_review_status": "not_evaluated_no_transcript",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": "not_rerun_live; preparation preflight passed",
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S07",
+      "expected_turns": 4,
+      "captured_turns": 0,
+      "execution_status": "not_attempted_after_infrastructure_stop",
+      "stop_reason": "earlier_S04_accounting_stop",
+      "human_review_status": "not_evaluated_no_transcript",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": "not_rerun_live; preparation preflight passed",
+      "opening_context_delivery": {
+        "status": "not_evaluated_scenario_not_executed",
+        "delivered": null
+      }
+    },
+    {
+      "scenario_id": "S08",
+      "expected_turns": 4,
+      "captured_turns": 0,
+      "execution_status": "not_attempted_after_infrastructure_stop",
+      "stop_reason": "earlier_S04_accounting_stop",
+      "human_review_status": "not_evaluated_no_transcript",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": "not_rerun_live; preparation preflight passed",
+      "opening_context_delivery": null
+    },
+    {
+      "scenario_id": "S09",
+      "expected_turns": 2,
+      "captured_turns": 0,
+      "execution_status": "not_attempted_after_infrastructure_stop",
+      "stop_reason": "earlier_S04_accounting_stop",
+      "human_review_status": "not_evaluated_no_transcript",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": "not_rerun_live; preparation preflight passed",
+      "opening_context_delivery": {
+        "status": "not_evaluated_scenario_not_executed",
+        "delivered": null
+      }
+    },
+    {
+      "scenario_id": "S10",
+      "expected_turns": 2,
+      "captured_turns": 0,
+      "execution_status": "not_attempted_after_infrastructure_stop",
+      "stop_reason": "earlier_S04_accounting_stop",
+      "human_review_status": "not_evaluated_no_transcript",
+      "conversational_scores": "not_evaluated",
+      "preflight_ok": "not_rerun_live; preparation preflight passed",
+      "opening_context_delivery": null
+    }
+  ],
+  "captured_turns": 15,
+  "uncaptured_turns": 22,
+  "evaluated_successes": null,
+  "evaluated_failures": null,
+  "human_review": "pending",
+  "gameplay_scores": null,
+  "cost": {
+    "status": "unavailable",
+    "value": null
+  },
+  "limitation": "Existing ledger cannot safely establish request upper bound across production dispatch owners. User stop condition applied."
+}

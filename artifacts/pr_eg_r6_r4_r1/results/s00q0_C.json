@@ -1,0 +1,51 @@
+{
+  "case_id": "s00q0",
+  "family": "s00",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "96f114a29ce33cf1710e69fcc0b1e2b95936d257902313fa70b9adc13e17e294",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The surveyor"
+    ],
+    "qualifiers": [
+      "in a padded case",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f00"
+    ],
+    "selected_source_ids": [
+      "s00"
+    ],
+    "answered_arguments": [
+      "keeper"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that the surveyor keeps the amber lens in a padded case, which directly answers the question."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

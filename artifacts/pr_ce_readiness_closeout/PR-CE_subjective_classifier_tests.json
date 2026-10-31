@@ -1,0 +1,112 @@
+{
+  "live_provider_calls": 0,
+  "test_module": "tests/test_pr_ce_subjective_preference_classification.py",
+  "result": "13 passed",
+  "positive_controls": [
+    {
+      "context": "baker choosing bread",
+      "player": "Baker, which loaf do you usually keep for yourself?",
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "incidental_subjective_allowed": true,
+      "npc_speech_authority": "claim_only",
+      "objective_world_fact_authority": "none",
+      "durable_state_mutation_allowed": false,
+      "authored_answer_required": false
+    },
+    {
+      "context": "innkeeper preferring a meal",
+      "player": "Innkeeper, which meal do you usually pick?",
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "incidental_subjective_allowed": true,
+      "npc_speech_authority": "claim_only",
+      "objective_world_fact_authority": "none",
+      "durable_state_mutation_allowed": false,
+      "authored_answer_required": false
+    },
+    {
+      "context": "merchant recommending merchandise",
+      "player": "Merchant, which cloth do you like best?",
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "incidental_subjective_allowed": true,
+      "npc_speech_authority": "claim_only",
+      "objective_world_fact_authority": "none",
+      "durable_state_mutation_allowed": false,
+      "authored_answer_required": false
+    },
+    {
+      "context": "artisan selecting materials",
+      "player": "Artisan, which timber do you usually choose?",
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "incidental_subjective_allowed": true,
+      "npc_speech_authority": "claim_only",
+      "objective_world_fact_authority": "none",
+      "durable_state_mutation_allowed": false,
+      "authored_answer_required": false
+    },
+    {
+      "context": "traveler preferring a route",
+      "player": "Traveler, which road do you usually take?",
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "incidental_subjective_allowed": true,
+      "npc_speech_authority": "claim_only",
+      "objective_world_fact_authority": "none",
+      "durable_state_mutation_allowed": false,
+      "authored_answer_required": false
+    },
+    {
+      "context": "guard expressing an ordinary opinion",
+      "player": "Guard, which view of the square do you prefer?",
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "incidental_subjective_allowed": true,
+      "npc_speech_authority": "claim_only",
+      "objective_world_fact_authority": "none",
+      "durable_state_mutation_allowed": false,
+      "authored_answer_required": false
+    }
+  ],
+  "negative_controls": [
+    {
+      "player": "Which secret guard schedule do you prefer?",
+      "reply_plan_kind": "genuine_refusal",
+      "incidental_subjective_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "authored_context_required"
+    },
+    {
+      "player": "Which restricted entrance would you choose?",
+      "reply_plan_kind": "genuine_refusal",
+      "incidental_subjective_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "authored_context_required"
+    },
+    {
+      "player": "Which confidential faction plan do you like best?",
+      "reply_plan_kind": "genuine_refusal",
+      "incidental_subjective_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "authored_context_required"
+    },
+    {
+      "player": "Which suspect do you think committed the murder?",
+      "reply_plan_kind": "consequential_information_request",
+      "incidental_subjective_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "authored_context_required",
+      "note": "Bare 'murder' is now consequential. Before this repair the sentence was genuine_uncertainty and did not match the subjective expression."
+    },
+    {
+      "player": "Which official order would you recommend forging?",
+      "reply_plan_kind": "consequential_information_request",
+      "incidental_subjective_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "authored_context_required"
+    },
+    {
+      "player": "Which hidden quest objective would you select?",
+      "reply_plan_kind": "consequential_information_request",
+      "incidental_subjective_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "authored_context_required"
+    }
+  ]
+}

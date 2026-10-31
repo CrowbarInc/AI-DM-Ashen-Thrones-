@@ -1,0 +1,55 @@
+{
+  "case_id": "s17q4",
+  "family": "s17",
+  "partition": "holdout",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "27b59b52fd3b3381c25c2a6912aadd0818f54696226a3e006907ca1f090de13e",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "buyer Iven",
+      "At dusk"
+    ],
+    "qualifiers": [
+      "At dusk",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s17"
+    ],
+    "answered_arguments": [
+      "buyer",
+      "sale location"
+    ],
+    "missing_arguments": [
+      "exact sale location"
+    ],
+    "conflict": false,
+    "reason": "The fact states that the buyer was Iven and the sale occurred at dusk, but the exact location of the sale is not specified."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

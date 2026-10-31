@@ -1,0 +1,24 @@
+.........................................................E.............. [ 88%]
+.........                                                                [100%]
+=================================== ERRORS ====================================
+________ ERROR at setup of test_historical_rich_fixture_still_rejected ________
+tests\test_pr_play_04_opening_integrity.py:118: in opening_world
+    api.new_campaign(_request())
+game\api.py:5268: in new_campaign
+    meta = apply_new_campaign_hard_reset()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\campaign_reset.py:54: in apply_new_campaign_hard_reset
+    save_combat(combat)
+game\storage.py:305: in save_combat
+    _atomic_save_json(COMBAT_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_complete_diagnostics\\test_historical_rich_fixture_s0\\data\\combat.json.tmp.2d1b443a3ff0ab2e' -> 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_complete_diagnostics\\test_historical_rich_fixture_s0\\data\\combat.json'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+=========================== short test summary info ===========================
+ERROR tests/test_pr_play_06_opening_budget.py::test_historical_rich_fixture_still_rejected

@@ -1,0 +1,44 @@
+{
+  "evidence_scope": "structural_only",
+  "source_checks": [
+    {
+      "function": "build_messages",
+      "unchanged": true
+    },
+    {
+      "function": "collect_narration_context_call_kwargs",
+      "unchanged": true
+    },
+    {
+      "function": "_provider_response_contract_from_payload",
+      "unchanged": true
+    },
+    {
+      "function": "_provider_response_contract_from_messages",
+      "unchanged": true
+    },
+    {
+      "function": "_safe_json",
+      "unchanged": true
+    },
+    {
+      "function": "all top-level assignments (including system/response contracts)",
+      "unchanged": true
+    }
+  ],
+  "fixtures": [
+    "market_quarter",
+    "frontier_gate"
+  ],
+  "matrix": {
+    "scene identity": "preserved; unchanged prompt producer and captured request components",
+    "character identity": "preserved; unchanged prompt producer and captured request components",
+    "NPC context": "preserved; unchanged prompt producer and captured request components",
+    "authorized visible facts": "preserved; unchanged prompt producer and captured request components",
+    "hidden-fact protection": "preserved; unchanged prompt producer and captured request components",
+    "structured declarations": "preserved; unchanged prompt producer and captured request components",
+    "gameplay authority": "preserved; unchanged prompt producer and captured request components",
+    "opening instructions": "preserved; unchanged prompt producer and captured request components"
+  },
+  "reductions": []
+}

@@ -1,0 +1,638 @@
+{
+  "turn_number": 3,
+  "player_text": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+  "visible_motivation": "He hedged that prices shift with rumors and the guards, and that sure warmth means paying more or knowing the right people. I want a current price and who he means.",
+  "intended_meaning": "Get the current stew price and who can actually provide a dry meal.",
+  "generated_candidate": "\"Honestly, I can't give you a solid number right now,\" the tavern runner says, lowering their voice further as rain splatters around you. \"Prices shift with the rumors and the guards' moods. As for who the right people are—well, those vary just as much. If you want sure warmth or solid information, you might need to pay a bit more or have the right acquaintance. It's not the sort of thing I can just name out loud in this crowd.\"",
+  "gm_text": "Tavern Runner says, \"I couldn't tell you I keep my voice down. A number, then. What are you charging for one bowl right n; you will need another source.\"",
+  "gm_tags": [
+    "dialogue",
+    "refusal_with_reason",
+    "interaction_obligation_terminal_preserved"
+  ],
+  "best_safe_candidate": "Tavern Runner says, \"I couldn't tell you I keep my voice down. A number, then. What are you charging for one bowl right n; you will need another source.\"",
+  "final_selected_candidate": "Tavern Runner says, \"I couldn't tell you I keep my voice down. A number, then. What are you charging for one bowl right n; you will need another source.\"",
+  "best_candidate_emitted": true,
+  "best_safe_invalidation": null,
+  "satisfied_candidate": "",
+  "initial_safe_candidate": "\"Honestly, I can't give you a solid number right now,\" the tavern runner says, lowering their voice further as rain splatters around you. \"Prices shift with the rumors and the guards' moods. As for who the right people are—well, those vary just as much. If you want sure warmth or solid information, you might need to pay a bit more or have the right acquaintance. It's not the sort of thing I can just name out loud in this crowd.\"",
+  "candidate_transitions": [
+    {
+      "stage": "final_emission",
+      "reason": "compared",
+      "contract_id": "rc_22ce6ce2148d",
+      "operation": "ask",
+      "target": null,
+      "interlocutor": "tavern_runner",
+      "dimension": null,
+      "expected_resolution": "answer",
+      "satisfaction_before": "legitimate_nonresolution",
+      "satisfaction_after": "legitimate_nonresolution",
+      "rank_before": 2,
+      "rank_after": 2,
+      "coverage_before": [],
+      "coverage_after": [],
+      "replacement_decision": "accepted",
+      "replacement_reason": "resolution_content_preserved",
+      "best_safe_candidate_before": "Tavern Runner says, \"I couldn't tell you I keep my voice down. A number, then. What are you charging for one bowl right n; you will need another source.\"",
+      "selected_preview": "Tavern Runner says, \"I couldn't tell you I keep my voice down. A number, then. What are you charging for one bowl right n; you will need another source.\"",
+      "invalidation_reason": null
+    }
+  ],
+  "outcome_precedence": {
+    "downgrade_attempted": false,
+    "downgrade_rejected": false,
+    "downgrade_reason": null,
+    "recovery_used": false,
+    "recovery_source": null,
+    "destroyed": false,
+    "scene_momentum_appended": false,
+    "final_outcome_kind": "inability",
+    "final_satisfaction": "legitimate_nonresolution",
+    "replacement_reason": "resolution_content_preserved"
+  },
+  "telemetry_semantic_degradation": false,
+  "telemetry_semantic_degradation_reasons": [],
+  "initial_satisfaction": {
+    "status": "legitimate_nonresolution",
+    "reasons": [
+      "valid_inability"
+    ],
+    "resolution_kind": "inability",
+    "dimension_compatible": null,
+    "keeps_answer": false,
+    "rank": null
+  },
+  "final_satisfaction": {
+    "status": "legitimate_nonresolution",
+    "reasons": [
+      "valid_inability"
+    ],
+    "resolution_kind": "inability",
+    "dimension_compatible": null,
+    "keeps_answer": false,
+    "rank": null
+  },
+  "initial_coverage": {
+    "required_dimensions": [],
+    "covered_dimensions": [],
+    "complete": true,
+    "dimension": null,
+    "operation": "ask",
+    "expected_resolution": "answer"
+  },
+  "final_coverage": {
+    "required_dimensions": [],
+    "covered_dimensions": [],
+    "complete": true,
+    "dimension": null,
+    "operation": "ask",
+    "expected_resolution": "answer"
+  },
+  "detector_semantic_degradation": false,
+  "detector_semantic_degradation_reasons": [],
+  "fast_path_used": true,
+  "semantic_completeness": "sufficient",
+  "fast_path_abstained": false,
+  "abstention_reason": null,
+  "interpreter_invoked": false,
+  "proposal_source": "deterministic_fast_path",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+    "source": "deterministic_fast_path",
+    "primary_operation": "ask",
+    "supporting_operations": [],
+    "raw_target_text": null,
+    "proposed_target_id": null,
+    "target_capture": "none",
+    "has_determiner": false,
+    "interlocutor_id": "tavern_runner",
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "ask",
+  "canonical_target": null,
+  "target_ref": {},
+  "discourse_ref": null,
+  "interlocutor_id": "tavern_runner",
+  "conversational_subject": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "contract_id": "rc_22ce6ce2148d",
+  "contract": {
+    "contract_id": "rc_22ce6ce2148d",
+    "turn_index": 4,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": null,
+    "interlocutor_id": "tavern_runner",
+    "conversational_subject": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": null,
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+    "construction": {
+      "cues": [],
+      "referent_slot": null,
+      "referent_reason": "no_anaphor",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": null,
+      "canonicalization_attempted": true,
+      "canonical_target_found": false,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+        "source": "deterministic_fast_path",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "raw_target_text": null,
+        "proposed_target_id": null,
+        "target_capture": "none",
+        "has_determiner": false,
+        "interlocutor_id": "tavern_runner",
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": {
+    "id": "tavern_runner",
+    "label": "Tavern Runner",
+    "kind": "interlocutor"
+  },
+  "active_claim": null,
+  "active_inspected": null,
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 4,
+    "last_committed_contract_id": "rc_22ce6ce2148d"
+  },
+  "authority": null,
+  "bounded_ledger_tail": {
+    "entries": [],
+    "rejected": []
+  },
+  "semantic_result": "PASS",
+  "failing_gates": [],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 81,
+      "rating": "strong",
+      "passed": true,
+      "semantic_result": "PASS",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "PASS",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 29,
+          "text_preview": "Tavern Runner says, \"I couldn't tell you I keep my voice down. A number, then. What are you charging for one bowl right n; you will need another source.\""
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "question",
+          "player_terms": [
+            "bowl",
+            "charging",
+            "down",
+            "keep",
+            "number",
+            "people",
+            "right",
+            "voice",
+            "what"
+          ],
+          "gm_terms": [
+            "another",
+            "bowl",
+            "charging",
+            "couldn't",
+            "down",
+            "keep",
+            "need",
+            "number",
+            "one",
+            "right",
+            "runner",
+            "says",
+            "source",
+            "tavern",
+            "tell",
+            "voice",
+            "what"
+          ],
+          "direct_answer_score": 17,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_22ce6ce2148d",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "ask",
+            "referent_provenance": "explicit_player",
+            "assessment_status": "legitimate_nonresolution",
+            "assessment_reasons": [
+              "valid_inability"
+            ],
+            "target": null,
+            "candidate_answer_target": null,
+            "target_compatible": true,
+            "operation_compatible": true,
+            "dimension_compatible": null,
+            "resolution_kind": "inability",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [],
+              "referent_slot": null,
+              "referent_reason": "no_anaphor",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "ask",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": null,
+              "canonicalization_attempted": true,
+              "canonical_target_found": false,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": null,
+                "canonical_target_label": null,
+                "canonical_target_type": null,
+                "canonical_basis": null,
+                "authoritative_operation": "ask",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I keep my voice down. A number, then. What are you charging for one bowl right now, and who are these right people?",
+                "source": "deterministic_fast_path",
+                "primary_operation": "ask",
+                "supporting_operations": [],
+                "raw_target_text": null,
+                "proposed_target_id": null,
+                "target_capture": "none",
+                "has_determiner": false,
+                "interlocutor_id": "tavern_runner",
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_met_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 81,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 17,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 23
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 17,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "has_question": true,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.45,
+          "gm_word_count": 29,
+          "bounded_partial": false,
+          "next_lead": false,
+          "answer_markers": 1
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 8,
+          "topic_overlap_ratio": 0.889,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.135,
+          "player_presses_thread": false,
+          "gm_word_count": 29,
+          "net_new_terms": 12
+        }
+      },
+      "immersion": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": true,
+          "scene_anchor_hits": 1
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: acceptable (17/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (23/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 81,
+        "rating": "strong",
+        "passed": true,
+        "semantic_result": "PASS",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 0,
+  "turn_generation_calls": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "model_player_facing_text": "\"Honestly, I can't give you a solid number right now,\" the tavern runner says, lowering their voice further as rain splatters around you. \"Prices shift with the rumors and the guards' moods. As for who the right people are—well, those vary just as much. If you want sure warmth or solid information, you might need to pay a bit more or have the right acquaintance. It's not the sort of thing I can just name out loud in this crowd.\""
+    }
+  ],
+  "turn_interpretation_calls": [],
+  "resolution_kind": "social_probe",
+  "api_ok": true
+}

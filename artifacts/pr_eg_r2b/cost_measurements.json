@@ -1,0 +1,91 @@
+{
+  "generation": {
+    "attempts": 3,
+    "completed": 2,
+    "items": 11,
+    "input_tokens": 2495,
+    "output_tokens": 251,
+    "median_request_ms": 2501.7911000031745,
+    "max_request_ms": 3707.867500008433,
+    "single_case_requests": [
+      {
+        "trial": "interactive_generation",
+        "latency_ms": 1295.714699997916,
+        "usage": {
+          "input_tokens": 319,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 25,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 344
+        }
+      }
+    ]
+  },
+  "validation": {
+    "attempts": 23,
+    "completed": 23,
+    "items": 125,
+    "input_tokens": 32490,
+    "output_tokens": 3361,
+    "median_request_ms": 1582.1285999991233,
+    "max_request_ms": 2777.8488000039943,
+    "single_case_requests": [
+      {
+        "trial": "single_repeat_paraphrase01",
+        "latency_ms": 1557.829400000628,
+        "usage": {
+          "input_tokens": 431,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 44,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 475
+        }
+      },
+      {
+        "trial": "single_repeat_commitment04",
+        "latency_ms": 859.8628000036115,
+        "usage": {
+          "input_tokens": 390,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 45,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 435
+        }
+      },
+      {
+        "trial": "interactive_validation",
+        "latency_ms": 900.4232000006596,
+        "usage": {
+          "input_tokens": 429,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 31,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 460
+        }
+      }
+    ]
+  },
+  "local_AB_and_C_median_ms": 2.354099997319281,
+  "local_timing_scope": "A+B together and timer setup; C is computed after timing. Not a separate C measurement.",
+  "historical_strict_social_input_tokens": "approximately 24000-26000; historical, not a fresh paired measurement"
+}

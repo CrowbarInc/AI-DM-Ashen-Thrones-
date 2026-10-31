@@ -1,0 +1,48 @@
+{
+  "case_id": "s04q3",
+  "family": "s04",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "e26a1f0131dcc4dd02107eb9438ef186abde32f8cf9c3d986ac823014cbbfc82",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Its current maintainer is unknown"
+    ],
+    "qualifiers": [
+      "current"
+    ],
+    "selected_fact_ids": [
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s04"
+    ],
+    "answered_arguments": [
+      "west beacon"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f2 explicitly states that the current maintainer of the west beacon is unknown, directly answering the question about who maintains the west beacon now."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

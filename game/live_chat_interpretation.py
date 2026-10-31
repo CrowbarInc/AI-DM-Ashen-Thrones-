@@ -17,8 +17,7 @@ from typing import Any
 from game.player_interpretation_bridge import visible_catalog
 from game.provider_budget import (
     accounting_active,
-    begin_request,
-    finish_request,
+    admit_request,
     provider_calls_disabled,
 )
 from game.semantic_interpreter import live_interpretation_enabled, player_visible_turns
@@ -57,8 +56,11 @@ def production_interpretation_schema() -> dict[str, Any]:
         "MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
     )
     schema["properties"]["communication"]["properties"]["purpose"]["description"] = (
-        "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION revises "
-        "unexecuted intent; WITHDRAWAL cancels it; RULES asks play procedure; EXPLANATION asks cause or meaning. "
+        "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects "
+        "conversational meaning, subject, referent or description, or revises an actual unexecuted intention. "
+        "Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's "
+        "request for explanation; it does not by itself mean the AI-DM needs more information. "
+        "WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. "
         "These control acts are never ACTION, even when mentioning a physical operation."
     )
     return schema
@@ -215,9 +217,10 @@ def _usage_triplet(resp: Any) -> tuple[int | None, int | None, int | None]:
 def request_interpretation(messages: list[dict[str, str]], *, estimated_input: int) -> dict[str, Any]:
     """One structured completion. No retry and no model switch."""
     _adapt, _build, _leaks, _preflight, model_id, schema_fn = _contract()
-    refusal = begin_request(purpose="interpretation", estimated_input=estimated_input, max_output=_OUTPUT_CAP)
+    attempt = admit_request(owner="live_chat_interpretation.request_interpretation", model=model_id, purpose="interpretation", estimated_input=estimated_input, max_output=_OUTPUT_CAP)
+    refusal = attempt.refusal
     if refusal:
-        usage = finish_request(
+        usage = attempt.finish(
             {
                 "purpose": "interpretation",
                 "sent": False,
@@ -230,6 +233,7 @@ def request_interpretation(messages: list[dict[str, str]], *, estimated_input: i
         )
         return {"ok": False, "sent": False, "reason": refusal, "error": refusal, "usage": usage}
     from openai import OpenAI
+    from game.provider_budget import sdk_retry_options
 
     from game.config import get_openai_api_key
 
@@ -237,8 +241,8 @@ def request_interpretation(messages: list[dict[str, str]], *, estimated_input: i
     try:
         from game.gm import provider_timeout_seconds
 
-        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
-        response = client.responses.create(
+        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+        response = attempt.dispatch(client.responses.create,
             model=model_id,
             input=messages,
             temperature=0,
@@ -253,7 +257,7 @@ def request_interpretation(messages: list[dict[str, str]], *, estimated_input: i
             },
         )
     except Exception as exc:  # noqa: BLE001 - a failed call is not retried
-        finish_request(
+        attempt.finish(
             {
                 "purpose": "interpretation",
                 "sent": True,
@@ -268,7 +272,7 @@ def request_interpretation(messages: list[dict[str, str]], *, estimated_input: i
         return {"ok": False, "sent": True, "reason": "provider_failure", "error": type(exc).__name__}
     incoming, outgoing, total = _usage_triplet(response)
     model = str(getattr(response, "model", "") or "")
-    record = finish_request(
+    record = attempt.finish(
         {
             "purpose": "interpretation",
             "sent": True,
@@ -317,6 +321,15 @@ def interpret_production_turn(
         catalog=catalog,
         recent_visible=recent or None,
     )
+    # Specialize the legacy mode guidance on the production request only.
+    messages[1]["content"] = "\n".join(
+        "Communication modes: IN_WORLD_ACTION=character action or NPC speech; "
+        "OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; "
+        "RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; "
+        "OTHER for resolved GM conversation, including ordinary conversational correction."
+        if line.startswith("Communication modes:") else line
+        for line in messages[1]["content"].splitlines()
+    )
     from game.conversational_orchestration import public_conversation_evidence
     evidence = public_conversation_evidence(scene, log)
     messages[0]["content"] += (
@@ -329,8 +342,28 @@ def interpret_production_turn(
         "CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. "
         "For GM/session communication leave action_components empty unless a NEW observation is requested; "
         "use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. "
-        "Select evidence_refs only when the supplied PUBLIC passage actually answers the question. "
-        "No evidence means unknown. Subject describes the question, never a new fact. "
+        "Ordinary conversational correction supplies corrected meaning, subject, referent or description. "
+        "Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. "
+        "When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; "
+        "continue the corrected conversation without asking confirmation merely because it is corrective. "
+        "Use correction.subject REFERENT for a conversational subject, referent or description correction. "
+        "This does not itself revise a gameplay action; leave action_components empty. "
+        "Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; "
+        "never invent pending work, revise executed actions or execute from a correction alone. "
+        "Recover the underlying question from preceding context, including elliptical follow-ups and corrections. "
+        "Keep a uniquely established subject; do not adopt a rejected interpretation or a nearby alternative. "
+        "For information requests, subject identifies the requested detail (time, location, identity, cause, "
+        "sequence, description, relationship or explanation), not just the topic; it never asserts a new fact. "
+        "Select relevant authorized PUBLIC evidence_refs supporting that detail, not merely the same topic, "
+        "person, place or event. Background may support a partial answer, but must not stand in for missing detail. "
+        "Restricted or unestablished information in internal world state is not disclosure authority; "
+        "do not select it or infer unsupported facts. "
+        "An understood question with no answer-bearing evidence uses empty evidence_refs and an honest limitation, "
+        "not clarification solely because the answer is unavailable; prefer a supported answer over redundant clarification. "
+        "Ask a targeted question when meaningful ambiguity remains: competing subjects, people, a missing interlocutor "
+        "or action parameter, or conflicting intentions. Clarify the unresolved subject separately from an established "
+        "addressee; never guess to avoid clarification. "
+        "Acknowledgments asserting no world facts may use empty evidence_refs. "
         "Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation."
         " A declaration of what I/we do is CHARACTER/ACTION, including inspection; "
         "a request to describe already visible information is GM/DESCRIPTION. "
@@ -339,7 +372,8 @@ def interpret_production_turn(
         "For GM recall of NPC speech, prefer that same established NPC answer passage."
         " For clarification of the most recent NPC statement, npc_latest_reply is the actual latest "
         "utterance, including inability or refusal. Do not substitute an earlier topic for it. "
-        " Communication is the primary contract; legacy communication_mode describes the same speech act. "
+        " Communication is the primary contract; legacy communication_mode describes execution disposition. "
+        "A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. "
         "Third-person description of a person does not speak to them. A question about what their expression "
         "implies is GM/EXPLANATION; do not ask the person on the player's behalf. "
         "A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. "
@@ -399,9 +433,10 @@ def interpret_production_turn(
     provider_requests = [call.get("usage")] if isinstance(call.get("usage"), dict) else []
     if not call.get("ok"):
         reason = str(call.get("reason") or "provider_failure")
+        from game.provider_budget import sdk_retry_options, PLAYTEST_STOP_MESSAGE
         return _blocked(
             reason,
-            "I couldn't interpret that just now, so no gameplay action was taken.",
+            PLAYTEST_STOP_MESSAGE if sdk_retry_options() and reason == "request ceiling" else "I couldn't interpret that just now, so no gameplay action was taken.",
             tags=["interpretation_rejected", "non_mutating"],
             extra={"provider_requests": provider_requests, "provider_error": call.get("error")},
         )

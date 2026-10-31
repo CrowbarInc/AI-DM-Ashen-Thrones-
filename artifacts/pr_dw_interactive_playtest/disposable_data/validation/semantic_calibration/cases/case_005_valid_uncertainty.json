@@ -1,0 +1,17 @@
+{
+  "case_id": "case_005_valid_uncertainty",
+  "category": "positive.valid_uncertainty",
+  "player_input": "Who murdered Lord Harrow?",
+  "prior_context": "Current context establishes that the player has not discovered the killer.",
+  "gm_response": "You don't know. Nothing you've learned so far identifies the killer.",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "A GM may coherently state that the information is not known to the player.",
+  "provenance": {"kind": "manually_authored_positive_control"},
+  "synthetic": true,
+  "action_type": "question",
+  "whether_uncertainty_refusal_is_valid": true
+}

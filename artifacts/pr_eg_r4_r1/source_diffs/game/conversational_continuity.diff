@@ -1,0 +1,35 @@
+--- before/game/conversational_continuity.py
++++ after/game/conversational_continuity.py
+@@ -182,15 +182,19 @@
+     """Store the line the player was given. Rejected candidates are not accepted here."""
+     if not isinstance(session, dict):
+         return None
+-    delivered = " ".join(str(delivered_text or "").split())
+-    if not delivered:
++    delivered = str(delivered_text or "")
++    if not delivered.strip():
+         return None
+     if adoption is not None:
+-        from game.immutable_valid_response import semantic_equal
+-
+-        if not adoption.get("immutable") or not semantic_equal(delivered, str(adoption.get("text") or "")):
++        from game.immutable_valid_response import verify_delivery_record
++
++        if (not adoption.get("immutable") or delivered != str(adoption.get("text") or "")
++                or (adoption.get("integrity_digest") and not verify_delivery_record(adoption))):
+             raise ValueError("Delivered speech does not match the accepted response")
+     payload = social if isinstance(social, Mapping) else {}
++    if adoption is not None and adoption.get("authorization_source") == "host_terminal_safety":
++        payload = {}
++        ownership = "gm"
+     authority = payload.get("dialogue_authority") if isinstance(payload.get("dialogue_authority"), Mapping) else {}
+     speaker_id = str((authority or {}).get("npc_id") or payload.get("npc_id") or "")
+     speaker_name = str((authority or {}).get("npc_name") or payload.get("npc_name") or "")
+@@ -236,6 +240,7 @@
+         explicit=explicit,
+     )
+     if adoption is not None:
++        row["response_integrity_digest"] = str(adoption.get("integrity_digest") or "")
+         row["authorization_source"] = str(adoption.get("authorization_source") or adoption.get("provenance") or "")
+         row["adoption_turn_identity"] = str(adoption.get("turn_identity") or "")
+         if adoption.get("speaker_id") and str(adoption["speaker_id"]) != speaker_id:

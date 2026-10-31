@@ -1,0 +1,153 @@
+{
+  "method": "game.gm.build_messages on saved PR-BS isolated probe state. Zero model/API calls.",
+  "protocol_chars": 651,
+  "optimized_system_prompt_chars": 9012,
+  "system_prompt_chars": 9564,
+  "system_prompt_chars_restored": 552,
+  "fixed_restored_cost_chars": 552,
+  "probe_specific_restored_cost_chars": {
+    "P1": 552,
+    "P2": 552,
+    "P3": 552
+  },
+  "original": {
+    "P1": 110450,
+    "P2": 121438,
+    "P3": 110665
+  },
+  "optimized": {
+    "P1": 97260,
+    "P2": 109853,
+    "P3": 99200
+  },
+  "probes": {
+    "P1": {
+      "total_provider_chars": 97812,
+      "system_prompt_chars": 9564,
+      "instructions_chars": 13607,
+      "instructions_count": 81,
+      "response_policy_chars": 21346,
+      "turn_packet_chars": 10676,
+      "answer_recipe_chars": 2356,
+      "restored_protocol_chars": 651,
+      "protocol_occurrences_in_system": 1,
+      "protocol_occurrences_in_instructions": 0,
+      "protocol_occurrences_in_answer_recipe": 0,
+      "abstract_sentence_present": false,
+      "original_total_chars": 110450,
+      "optimized_total_chars": 97260,
+      "chars_restored_vs_optimized": 552,
+      "chars_still_removed_vs_original": 12638,
+      "previous_reduction_chars": 13190,
+      "percentage_of_previous_reduction_retained": 95.82,
+      "percentage_reduction_vs_original": 11.44,
+      "rule_presence": {
+        "authority_generated_prose_not_authoritative": true,
+        "authority_decision_claims_constrain_realization": true,
+        "recipe_cannot_grant_authority": true,
+        "inference_uncertainty_visible": true,
+        "player_hypothesis_preserved": true,
+        "npc_incidental_bounded": true,
+        "declaration_lane_visible": true,
+        "ordinary_narration_need_not_be_declared": true,
+        "fallback_unknown_visible": true,
+        "invalid_output_no_prose_escape": true,
+        "structured_envelope_explicit": true,
+        "raw_internal_json_no_player_leak": true
+      },
+      "guidance_presence": {
+        "visible_evidence_grounds_the_answer": true,
+        "permitted_inference_is_useful": true,
+        "inference_stays_explicitly_qualified": true,
+        "cause_and_history_stay_unresolved": true,
+        "unsupported_history_is_not_encouraged": true,
+        "uncertainty_is_not_a_refusal": true
+      }
+    },
+    "P2": {
+      "total_provider_chars": 110405,
+      "system_prompt_chars": 9564,
+      "instructions_chars": 14267,
+      "instructions_count": 86,
+      "response_policy_chars": 21465,
+      "turn_packet_chars": 10640,
+      "answer_recipe_chars": 1876,
+      "restored_protocol_chars": 651,
+      "protocol_occurrences_in_system": 1,
+      "protocol_occurrences_in_instructions": 0,
+      "protocol_occurrences_in_answer_recipe": 0,
+      "abstract_sentence_present": false,
+      "original_total_chars": 121438,
+      "optimized_total_chars": 109853,
+      "chars_restored_vs_optimized": 552,
+      "chars_still_removed_vs_original": 11033,
+      "previous_reduction_chars": 11585,
+      "percentage_of_previous_reduction_retained": 95.24,
+      "percentage_reduction_vs_original": 9.09,
+      "rule_presence": {
+        "authority_generated_prose_not_authoritative": true,
+        "authority_decision_claims_constrain_realization": true,
+        "recipe_cannot_grant_authority": true,
+        "inference_uncertainty_visible": true,
+        "player_hypothesis_preserved": true,
+        "npc_incidental_bounded": true,
+        "declaration_lane_visible": true,
+        "ordinary_narration_need_not_be_declared": true,
+        "fallback_unknown_visible": true,
+        "invalid_output_no_prose_escape": true,
+        "structured_envelope_explicit": true,
+        "raw_internal_json_no_player_leak": true
+      },
+      "guidance_presence": {
+        "protocol_scoped_to_interpretation_or_hypothesis": true,
+        "mundane_npc_dialogue_remains_incidental": true,
+        "refusal_hesitation_mannerism_remain_plain_narration": true,
+        "recipe_allows_ordinary_dialogue": true,
+        "recipe_names_refusal_hesitation_mannerism_phrasing": true
+      }
+    },
+    "P3": {
+      "total_provider_chars": 99752,
+      "system_prompt_chars": 9564,
+      "instructions_chars": 13675,
+      "instructions_count": 81,
+      "response_policy_chars": 21138,
+      "turn_packet_chars": 10910,
+      "answer_recipe_chars": 1691,
+      "restored_protocol_chars": 651,
+      "protocol_occurrences_in_system": 1,
+      "protocol_occurrences_in_instructions": 0,
+      "protocol_occurrences_in_answer_recipe": 0,
+      "abstract_sentence_present": false,
+      "original_total_chars": 110665,
+      "optimized_total_chars": 99200,
+      "chars_restored_vs_optimized": 552,
+      "chars_still_removed_vs_original": 10913,
+      "previous_reduction_chars": 11465,
+      "percentage_of_previous_reduction_retained": 95.19,
+      "percentage_reduction_vs_original": 9.86,
+      "rule_presence": {
+        "authority_generated_prose_not_authoritative": true,
+        "authority_decision_claims_constrain_realization": true,
+        "recipe_cannot_grant_authority": true,
+        "inference_uncertainty_visible": true,
+        "player_hypothesis_preserved": true,
+        "npc_incidental_bounded": true,
+        "declaration_lane_visible": true,
+        "ordinary_narration_need_not_be_declared": true,
+        "fallback_unknown_visible": true,
+        "invalid_output_no_prose_escape": true,
+        "structured_envelope_explicit": true,
+        "raw_internal_json_no_player_leak": true
+      },
+      "guidance_presence": {
+        "player_hypotheses_may_be_discussed": true,
+        "hypotheses_remain_conditional": true,
+        "fit_is_evaluated_against_evidence": true,
+        "proposal_does_not_become_truth": true,
+        "certainty_language_stays_inside_epistemic_status": true,
+        "useful_discussion_is_permitted": true
+      }
+    }
+  }
+}

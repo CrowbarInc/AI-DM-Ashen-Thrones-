@@ -1,0 +1,150 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_ansel_oil",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "ansel",
+      "topic_id": "oil"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "ansel",
+      "name": "Ansel",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "gate",
+          "text": "Ansel told Brea the yard gate sticks at dawn.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "oil",
+          "text": "The hinge oil is kept in the green tin.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "hymn",
+          "text": "The yard cipher is iron hymn.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "brea",
+      "name": "Brea",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "gate",
+          "text": "Brea told Ansel the yard gate sticks at dusk.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "broom",
+          "text": "The yard broom hangs by the cistern.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "hymn",
+          "text": "The yard cipher is iron hymn.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "cole",
+      "name": "Cole",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "lamp",
+          "text": "Cole lights the yard lamp at sunset.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "hymn",
+          "text": "The yard cipher is iron hymn.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

@@ -1,0 +1,748 @@
+[
+  {
+    "function": "public_conversation_evidence",
+    "file": "game\\conversational_orchestration.py",
+    "line": 308,
+    "inputs_or_locals": {},
+    "return": {
+      "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+      "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+    }
+  },
+  {
+    "function": "request_interpretation",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 214,
+    "inputs_or_locals": {
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: No, I was asking about the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+        }
+      ],
+      "estimated_input": 3415
+    },
+    "return": {
+      "ok": true,
+      "sent": true,
+      "text": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification about the intended topic of inquiry (people vs. weather)\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that the question is about the people present, not the weather.\"},\"asserted_premises\":[{\"text\":\"The previous question was about the weather, but the player wants to clarify they meant the people.\"}],\"requested_outcomes\":[{\"text\":\"The GM understands the player is asking about the people in the scene, not the weather.\"}],\"action_components\":[], \"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"Do you want a description of the people present at the gate district instead of the weather?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"Clarifying the intended subject of inquiry from weather to people.\"}}",
+      "usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "585282b60e7c41cb96d4c43d2f13f743",
+        "attempt_id": "1bb4a94b50db47fda39ea06931c9e0ab",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:06:22.438753+00:00",
+        "time": "2026-10-19T09:06:25.809976+00:00",
+        "sent": true,
+        "request_id": "resp_0d02baf9d4d3b54e006ad5dd9008b887d2b5cc878063453733",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 2008,
+        "output_tokens": 212,
+        "total_tokens": 2220,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2488.476
+      }
+    }
+  },
+  {
+    "function": "interpret_production_turn",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 297,
+    "inputs_or_locals": {
+      "player_text": "No, I was asking about the people, not the weather.",
+      "evidence": {
+        "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+        "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      },
+      "parsed": {
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+          "evidence_refs": []
+        },
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that the question is about the people present, not the weather."
+        },
+        "asserted_premises": [
+          {
+            "text": "The previous question was about the weather, but the player wants to clarify they meant the people."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The GM understands the player is asking about the people in the scene, not the weather."
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+        "correction": {
+          "subject": "NONE",
+          "note": "Clarifying the intended subject of inquiry from weather to people."
+        }
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+        "evidence_refs": []
+      },
+      "adapted": {
+        "structurally_valid": true,
+        "errors": [],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Clarify that the question is about the people present, not the weather."
+          },
+          "asserted_premises": [
+            {
+              "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "gate_guard",
+              "gate_serjeant",
+              "notice_board",
+              "tavern_runner"
+            ],
+            "unresolved_references": []
+          },
+          "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+          "correction": {
+            "subject": "NONE",
+            "note": "Clarifying the intended subject of inquiry from weather to people."
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "CLARIFICATION",
+            "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+            "evidence_refs": []
+          },
+          "incidental_context": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "public_evidence": {}
+        },
+        "eligibility": {
+          "disposition": "NEEDS_CLARIFICATION",
+          "execution_authorized": false,
+          "executed": false,
+          "mutated_state": false,
+          "consumes_action": false,
+          "advances_time": false,
+          "creates_npc_response": false,
+          "history_rewritten": false,
+          "history_disposition": "UNCHANGED",
+          "rolls_dice": false,
+          "reveals_hidden_information": false,
+          "engine_submission": null,
+          "rejected_identifiers": [],
+          "reasons": [
+            "clarification_or_unresolved_reference"
+          ],
+          "compound_transaction": false,
+          "authoritative_effects": []
+        },
+        "executed": false,
+        "mutated_state": false,
+        "live_provider_calls": 0,
+        "authoritative_effects": []
+      },
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that the question is about the people present, not the weather."
+        },
+        "asserted_premises": [
+          {
+            "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+        "correction": {
+          "subject": "NONE",
+          "note": "Clarifying the intended subject of inquiry from weather to people."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      }
+    },
+    "return": {
+      "status": "blocked",
+      "reason": "clarification_required",
+      "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+      "tags": [
+        "interpretation_clarification",
+        "non_mutating"
+      ],
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that the question is about the people present, not the weather."
+        },
+        "asserted_premises": [
+          {
+            "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+        "correction": {
+          "subject": "NONE",
+          "note": "Clarifying the intended subject of inquiry from weather to people."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification about the intended topic of inquiry (people vs. weather)\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that the question is about the people present, not the weather.\"},\"asserted_premises\":[{\"text\":\"The previous question was about the weather, but the player wants to clarify they meant the people.\"}],\"requested_outcomes\":[{\"text\":\"The GM understands the player is asking about the people in the scene, not the weather.\"}],\"action_components\":[], \"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"Do you want a description of the people present at the gate district instead of the weather?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"Clarifying the intended subject of inquiry from weather to people.\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "585282b60e7c41cb96d4c43d2f13f743",
+          "attempt_id": "1bb4a94b50db47fda39ea06931c9e0ab",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:06:22.438753+00:00",
+          "time": "2026-10-19T09:06:25.809976+00:00",
+          "sent": true,
+          "request_id": "resp_0d02baf9d4d3b54e006ad5dd9008b887d2b5cc878063453733",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2008,
+          "output_tokens": 212,
+          "total_tokens": 2220,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2488.476
+        }
+      ],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": ""
+      },
+      "eligibility_disposition": "NEEDS_CLARIFICATION",
+      "model_communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED"
+    }
+  },
+  {
+    "function": "_pending_revision_decision",
+    "file": "game\\conversational_orchestration.py",
+    "line": 391,
+    "inputs_or_locals": {
+      "text": "No, I was asking about the people, not the weather.",
+      "purpose": "CLARIFICATION",
+      "components": [],
+      "pending": null
+    },
+    "return": null
+  },
+  {
+    "function": "_communication_decision",
+    "file": "game\\conversational_orchestration.py",
+    "line": 461,
+    "inputs_or_locals": {
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that the question is about the people present, not the weather."
+        },
+        "asserted_premises": [
+          {
+            "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+        "correction": {
+          "subject": "NONE",
+          "note": "Clarifying the intended subject of inquiry from weather to people."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "text": "No, I was asking about the people, not the weather.",
+      "answer": "Do you want a description of the people present at the gate district instead of the weather?",
+      "owner": "GM",
+      "purpose": "CLARIFICATION"
+    },
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "No, I was asking about the people, not the weather.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    }
+  },
+  {
+    "function": "decision_from_interpretation_record",
+    "file": "game\\conversational_orchestration.py",
+    "line": 2187,
+    "inputs_or_locals": {
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that the question is about the people present, not the weather."
+        },
+        "asserted_premises": [
+          {
+            "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "gate_guard",
+            "gate_serjeant",
+            "notice_board",
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+        "correction": {
+          "subject": "NONE",
+          "note": "Clarifying the intended subject of inquiry from weather to people."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "player_text": "No, I was asking about the people, not the weather."
+    },
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "No, I was asking about the people, not the weather.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    }
+  },
+  {
+    "function": "_nonmutating_conversational_decision_response",
+    "file": "game\\api.py",
+    "line": 773,
+    "inputs_or_locals": {},
+    "return": {
+      "ok": true,
+      "gm_output": {
+        "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+        "tags": [
+          "conversational_orchestration",
+          "clarify",
+          "non_mutating"
+        ],
+        "scene_update": null,
+        "activate_scene_id": null,
+        "new_scene_draft": null,
+        "world_updates": null,
+        "suggested_action": null,
+        "debug_notes": "conversational_orchestration:communication_before_execution",
+        "metadata": {
+          "accepted_response": {
+            "addressee": "player",
+            "adoption_status": "candidate_accepted",
+            "attempt": 0,
+            "authority_result": "accepted",
+            "authorization_provenance": {
+              "addressee": "player",
+              "authority_category": "host_operation",
+              "authorized_proposition": "",
+              "epistemic_status": "none",
+              "operation": "ask",
+              "policy_version": "pr-eg-r6-r1-r1",
+              "provenance_id": "2608602d877553f8",
+              "source_id": "",
+              "speaker_id": "",
+              "validation": "host_operation"
+            },
+            "authorization_source": "conversational_decision:communication_before_execution",
+            "candidate_disposition": "host_selected",
+            "canonical": false,
+            "contract": {
+              "contract_id": "",
+              "expected_resolution": "",
+              "interlocutor_id": "",
+              "operation": ""
+            },
+            "contract_satisfying": true,
+            "generation_attempts": 0,
+            "grounding_result": "not_a_replacement_trigger",
+            "hard_validation": {
+              "authority": [
+                "conversational_decision:communication_before_execution"
+              ],
+              "gm_resolution_decision_audit": null,
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": []
+            },
+            "immutable": true,
+            "interaction_completion": true,
+            "operation": "ask",
+            "player_input": "No, I was asking about the people, not the weather.",
+            "provenance": "authorized_host_speech",
+            "resolution_kind": "conversational_clarify",
+            "speaker": "GM",
+            "speaker_id": "",
+            "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+            "subject": "",
+            "target": "",
+            "text": "Do you want a description of the people present at the gate district instead of the weather?",
+            "turn_identity": "",
+            "integrity_digest": "416bc6e7ab92becdfbbfbf5f472db892d5556cf4edfa7f15231aa9a53f9262ea"
+          },
+          "emission_debug": {
+            "accepted_response_provenance": "authorized_host_speech",
+            "generation_attempts": 0,
+            "legacy_emission_authority": false,
+            "semantic_degradation": false,
+            "semantic_degradation_reasons": [],
+            "resolution_contract_semantic": {
+              "status": "satisfied",
+              "reasons": [],
+              "preserved": true
+            },
+            "accepted_emitted_equality": {
+              "exact_match": true,
+              "semantic_match": true,
+              "presentation_only": false,
+              "mutation_blocked": false,
+              "attempted_text": "Do you want a description of the people present at the gate district instead of the weather?"
+            }
+          }
+        }
+      },
+      "resolution": {
+        "kind": "conversational_clarify",
+        "action_id": "conversational_clarify",
+        "label": "No, I was asking about the people, not the weather.",
+        "prompt": "No, I was asking about the people, not the weather.",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {},
+        "metadata": {
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "authoritative_mutation": false,
+          "resolver_invoked": false,
+          "gameplay_parser_invoked": false,
+          "narration_invoked": false,
+          "processing_outcome": "conversational_clarify",
+          "conversational_decision": {
+            "category": "CLARIFY",
+            "primary_intention": "No, I was asking about the people, not the weather.",
+            "intent_family": "gm_communication",
+            "incidental_context": [],
+            "proposed_operation": null,
+            "proposed_target": null,
+            "proposed_record": null,
+            "missing_information": [],
+            "context_references": [],
+            "requires_authoritative_execution": false,
+            "reason": "communication_before_execution",
+            "confidence": null,
+            "ambiguity": null,
+            "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+            "context_update": null,
+            "intent_modality": "informational",
+            "secondary_intentions": [],
+            "execution_policy": "answer_only",
+            "communication_owner": "GM",
+            "communication_purpose": "CLARIFICATION",
+            "authorization": null
+          },
+          "live_chat_interpretation": {
+            "status": "blocked",
+            "reason": "clarification_required",
+            "eligibility_disposition": "NEEDS_CLARIFICATION",
+            "model_communication_mode": "CLARIFICATION",
+            "interpretation_status": "INTERPRETED",
+            "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification about the intended topic of inquiry (people vs. weather)\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that the question is about the people present, not the weather.\"},\"asserted_premises\":[{\"text\":\"The previous question was about the weather, but the player wants to clarify they meant the people.\"}],\"requested_outcomes\":[{\"text\":\"The GM understands the player is asking about the people in the scene, not the weather.\"}],\"action_components\":[], \"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"Do you want a description of the people present at the gate district instead of the weather?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"Clarifying the intended subject of inquiry from weather to people.\"}}",
+            "provider_requests": [
+              {
+                "event": "completed",
+                "version": "ATGB-03B-1",
+                "run_id": "585282b60e7c41cb96d4c43d2f13f743",
+                "attempt_id": "1bb4a94b50db47fda39ea06931c9e0ab",
+                "purpose": "interpretation",
+                "owner": "live_chat_interpretation.request_interpretation",
+                "configured_model": "gpt-4.1-mini",
+                "admitted_at": "2026-10-19T09:06:22.438753+00:00",
+                "time": "2026-10-19T09:06:25.809976+00:00",
+                "sent": true,
+                "request_id": "resp_0d02baf9d4d3b54e006ad5dd9008b887d2b5cc878063453733",
+                "model": "gpt-4.1-mini-2025-04-14",
+                "input_tokens": 2008,
+                "output_tokens": 212,
+                "total_tokens": 2220,
+                "usage_consistent": true,
+                "refusal": null,
+                "completion_status": "completed",
+                "dispatch_attempted": true,
+                "latency_ms": 2488.476
+              }
+            ],
+            "record": {
+              "communication_mode": "CLARIFICATION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "Clarify that the question is about the people present, not the weather."
+              },
+              "asserted_premises": [
+                {
+                  "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+                  "canon_status": "PLAYER_CLAIM"
+                }
+              ],
+              "requested_outcomes": [
+                {
+                  "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+                  "adjudication_status": "UNADJUDICATED"
+                }
+              ],
+              "action_components": [],
+              "references": {
+                "permitted_entity_ids": [
+                  "gate_guard",
+                  "gate_serjeant",
+                  "notice_board",
+                  "tavern_runner"
+                ],
+                "unresolved_references": []
+              },
+              "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+              "correction": {
+                "subject": "NONE",
+                "note": "Clarifying the intended subject of inquiry from weather to people."
+              },
+              "communication": {
+                "recipient": "GM",
+                "purpose": "CLARIFICATION",
+                "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+                "evidence_refs": []
+              },
+              "incidental_context": [],
+              "reference_reconciliation": {
+                "annotations": [],
+                "addressee": null,
+                "operation": ""
+              },
+              "public_evidence": {}
+            }
+          },
+          "stored_interpretation_bridge": null,
+          "provider_calls": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0
+          },
+          "performance": {
+            "elapsed_ms": 3446,
+            "interpretation_ms": null,
+            "resolution_ms": null,
+            "narration_ms": null,
+            "validation_ms": null,
+            "retry_ms": null,
+            "provider_call_count": 1,
+            "input_tokens": 2008,
+            "output_tokens": 212,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "conversational_clarify",
+            "successful": false,
+            "provider_narration_skipped": false
+          }
+        }
+      }
+    }
+  }
+]

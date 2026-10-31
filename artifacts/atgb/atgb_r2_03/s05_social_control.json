@@ -1,0 +1,320 @@
+{
+  "classification": "synthetic in-memory resolver control; not historical full-state replay",
+  "session_before": {
+    "active_scene_id": "frontier_gate",
+    "turn_counter": 2,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": "tavern_runner",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged"
+    },
+    "npc_runtime": {
+      "tavern_runner": {
+        "revealed_topics": [
+          "patrol_rumor"
+        ]
+      }
+    }
+  },
+  "normalized_action": {
+    "id": "tavern_runner",
+    "label": "Tavern Runner",
+    "type": "question",
+    "prompt": "Tell me more about that.",
+    "target_id": "tavern_runner",
+    "targetEntityId": "tavern_runner",
+    "metadata": {
+      "stored_interpretation": {
+        "operation": "ASK",
+        "target_ref": "tavern_runner",
+        "visible_surface_inspection": false,
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        }
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "public_conversation_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    }
+  },
+  "bridge_metadata": {
+    "source": "stored_interpretation",
+    "accepted": true,
+    "operation": "ASK",
+    "target_ref": "tavern_runner",
+    "engine_type": "question",
+    "visible_surface_inspection": false
+  },
+  "resolution": {
+    "kind": "question",
+    "action_id": "tavern_runner",
+    "label": "Tavern Runner",
+    "prompt": "Tell me more about that.",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "hint": "Player spoke with Tavern Runner. No authored answer was available. Narrate honest uncertainty or a bounded conversational reply without inventing facts the speaker does not have.",
+    "social": {
+      "social_intent_class": "social_exchange",
+      "npc_id": "tavern_runner",
+      "npc_name": "Tavern Runner",
+      "target_resolved": true,
+      "topic_revealed": null,
+      "skill_check": null,
+      "topic_selection": {
+        "candidate_sources": [],
+        "selected_source": "",
+        "ambiguous": false
+      },
+      "npc_reply_expected": true,
+      "reply_kind": "unknown",
+      "target_source": "explicit_target",
+      "target_reason": "normalized target_id matches scene-addressable roster",
+      "target_candidate_id": "tavern_runner",
+      "target_candidate_valid": true,
+      "stale_interlocutor_cleared": false,
+      "addressability_checked_against": [
+        "active_entities",
+        "entity_presence_active_or_nearby",
+        "scene_addressables",
+        "world_roster_in_scene",
+        "interaction_continuity"
+      ],
+      "declared_switch_detected": false,
+      "declared_switch_target_actor_id": null,
+      "continuity_overridden_by_declared_switch": false,
+      "spoken_vocative_detected": false,
+      "spoken_vocative_target_actor_id": null,
+      "continuity_overridden_by_spoken_vocative": false,
+      "actor_addressable": true,
+      "target_binding": {
+        "final_target_kind": "npc",
+        "npc_id": "tavern_runner",
+        "target_source": "native_npc",
+        "origin_actor_id": null,
+        "promoted_this_turn": false
+      },
+      "target_profile_hints": {
+        "guardedness": "medium",
+        "answer_reliability_tier": "medium",
+        "speaks_authoritatively_for_scene": false
+      },
+      "reply_plan_kind": "genuine_uncertainty",
+      "incidental_subjective_allowed": false,
+      "absence_of_authored_topic_forces_refusal": false,
+      "declared_claims_expected": false,
+      "durable_state_mutation_allowed": false,
+      "npc_speech_authority": "none",
+      "objective_world_fact_authority": "none",
+      "dialogue_authority": {
+        "topic_grounding": {
+          "speaker_id": "tavern_runner",
+          "addressee": "player",
+          "requested_subject": "more",
+          "requested_information": "general",
+          "reference": "current_request",
+          "candidate_sources": [],
+          "selected_source": "",
+          "ambiguous": false,
+          "ownership": "npc"
+        },
+        "requested_information": "general",
+        "subject": "more",
+        "knowledge_posture": "unknown",
+        "answer_relation": "none",
+        "answer_sufficiency": "unknown",
+        "proposition_id": "",
+        "authorized_proposition": "",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "tavern_runner",
+        "npc_name": "Tavern Runner",
+        "npc_role": "",
+        "npc_disposition": "",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": "",
+        "reuse_prior_speech": false,
+        "authorization_provenance": {
+          "authority_category": "host_operation",
+          "speaker_id": "tavern_runner",
+          "addressee": "player",
+          "operation": "converse",
+          "authorized_proposition": "",
+          "source_id": "",
+          "epistemic_status": "none",
+          "validation": "host_operation",
+          "provenance_id": "c1d6493aca86112f",
+          "policy_version": "pr-eg-r6-r1-r1"
+        }
+      },
+      "authority_source_used": "explicit_target",
+      "proposed_reply_speaker_id": "tavern_runner",
+      "grounding_fallback_applied": false,
+      "grounding_reason_code": "authoritative_speaker_eligible",
+      "grounded_speaker_id": "tavern_runner"
+    },
+    "requires_check": false,
+    "metadata": {
+      "stored_interpretation": {
+        "operation": "ASK",
+        "target_ref": "tavern_runner",
+        "visible_surface_inspection": false,
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        }
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "public_conversation_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      },
+      "npc_stance": {
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "topics_revealed": 1,
+        "last_interaction_turn": 0
+      }
+    }
+  },
+  "session_after": {
+    "active_scene_id": "frontier_gate",
+    "turn_counter": 2,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": "tavern_runner",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "npc_runtime": {
+      "tavern_runner": {
+        "revealed_topics": [
+          "patrol_rumor"
+        ],
+        "attitude": 0,
+        "trust": 0,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "last_interaction_turn": 0
+      }
+    },
+    "scene_state": {
+      "active_entities": [
+        "gate_guard",
+        "gate_serjeant",
+        "tavern_runner",
+        "guard_captain",
+        "refugee",
+        "threadbare_watcher"
+      ],
+      "entity_presence": {
+        "gate_guard": "active",
+        "gate_serjeant": "active",
+        "tavern_runner": "active",
+        "guard_captain": "active",
+        "refugee": "active",
+        "threadbare_watcher": "active"
+      },
+      "emergent_addressables": [],
+      "active_scene_id": "frontier_gate",
+      "current_interlocutor": "tavern_runner",
+      "promoted_actor_npc_map": {}
+    },
+    "debug_traces": [
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.interaction_context",
+        "operation": "set_social_target",
+        "changed_area": "interaction_context+scene_state.current_interlocutor"
+      }
+    ],
+    "scene_runtime": {
+      "frontier_gate": {
+        "discovered_clues": [],
+        "discovered_clue_ids": [],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": null,
+        "repeated_action_count": 0,
+        "last_resolution_kind": null,
+        "last_description_hash": null,
+        "last_perception_visible_facts": [],
+        "last_perception_narration": "",
+        "last_perception_turn": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      }
+    },
+    "runtime_scene_overlays": {
+      "frontier_gate": {
+        "scene_id": "frontier_gate",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      }
+    }
+  },
+  "world_changed_in_memory": false
+}

@@ -1,6 +1,6 @@
 # BQ16 Recurrence Graduation Audit
 
-**Date:** 2026-06-06T00:00:00Z
+**Date:** 2026-10-18T16:31:34Z
 **Protected replay only:** true
 
 ## Governance context (CO99)
@@ -22,18 +22,18 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 
 | Requirement | Current (BQ-C4) | Target | Category |
 |---|---|---|---|
-| Protected replay observations | Low volume (`recurrence_data_quality` critical) | Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | **Observation volume** |
-| Unique recurrence keys | 2 keys | Coverage supporting forecast/governance validation | **Observation volume** |
+| Protected replay observations | Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | Sufficient for maturity confidence (`volume_factor` ≥ 0.5 per serialization policy) | **Observation volume** |
+| Unique recurrence keys | 5 keys | Coverage supporting forecast/governance validation | **Observation volume** |
 | Trajectory snapshots | ≥ 2 snapshots (`trajectory_available: true`) | ≥ 2 snapshots for change detection | **Trajectory** |
-| Graduation readiness score | `93.5` | ≥ `90.0` | **Graduation gate** |
+| Graduation readiness score | `94.7` | ≥ `90.0` | **Graduation gate** |
 | Calibration score | See BQC4 | ≥ `70.0` | **Confidence** |
 | Largest calibration gap | See BQC4 | ≤ `0.20` | **Confidence** |
 | `graduation_confidence_ready` | See BQC4 | `true` | **Confidence** |
 | Forecast confidence | `1.0` | ≥ `0.75` | **Operational readiness** |
-| Effectiveness confidence | `0.9` | ≥ `0.75` | **Operational readiness** |
+| Effectiveness confidence | `1.0` | ≥ `0.75` | **Operational readiness** |
 | Governance confidence | `1.0` | ≥ `0.75` | **Operational readiness** |
-| Operational readiness score | `91.3` | ≥ `80.0` | **Operational readiness** |
-| Overall maturity score | `68.5` | ≥ `80.0` | **Program maturity** |
+| Operational readiness score | `100.0` | ≥ `80.0` | **Operational readiness** |
+| Overall maturity score | `76.8` | ≥ `80.0` | **Program maturity** |
 | Critical blind spots | `0` (none) | `0` | **Architectural constraint** |
 | Program graduated | `false` | `true` | **Verdict** |
 
@@ -52,7 +52,7 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 
 ## Graduation Readiness
 
-- Graduation readiness score: `93.5`
+- Graduation readiness score: `94.7`
 - Readiness level: `Ready for graduation`
 - Program graduated: `false`
 - Recommended next action: Execute roadmap sequence in dependency order to reach optimized maturity.
@@ -61,16 +61,16 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 
 | Capability | Implemented | Validated | Operational | Confidence |
 |---|---|---|---|---:|
-| Historical Persistence | `true` | `true` | `true` | `0.67` |
-| Trend Analytics | `true` | `true` | `true` | `0.77` |
+| Historical Persistence | `true` | `true` | `true` | `1.00` |
+| Trend Analytics | `true` | `true` | `true` | `1.00` |
 | Forecasting | `true` | `true` | `true` | `1.00` |
-| Portfolio Analytics | `true` | `true` | `true` | `0.97` |
-| Remediation Targeting | `true` | `true` | `true` | `0.63` |
-| ROI Analytics | `true` | `true` | `true` | `0.62` |
+| Portfolio Analytics | `true` | `true` | `true` | `1.00` |
+| Remediation Targeting | `true` | `true` | `true` | `0.90` |
+| ROI Analytics | `true` | `true` | `true` | `0.85` |
 | Governance | `true` | `true` | `true` | `1.00` |
-| Lifecycle Management | `true` | `true` | `true` | `0.87` |
-| Effectiveness Measurement | `true` | `true` | `true` | `0.90` |
-| Maturity Assessment | `true` | `true` | `true` | `0.69` |
+| Lifecycle Management | `true` | `true` | `true` | `1.00` |
+| Effectiveness Measurement | `true` | `true` | `true` | `1.00` |
+| Maturity Assessment | `true` | `true` | `true` | `0.77` |
 | Strategic Roadmap | `true` | `true` | `true` | `0.80` |
 | Completion Tracking | `true` | `true` | `true` | `0.96` |
 
@@ -82,7 +82,7 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 - `portfolio_analytics_present` (observability): current `True`, target `True`, status `met`
 - `governance_analytics_present` (observability): current `True`, target `True`, status `met`
 - `lifecycle_analytics_present` (observability): current `True`, target `True`, status `met`
-- `governance_health_target_met` (governance): current `36.3`, target `80.0`, status `unmet`
+- `governance_health_target_met` (governance): current `50.1`, target `80.0`, status `unmet`
 - `watchlist_operational` (governance): current `True`, target `True`, status `met`
 - `ownership_accountability_present` (governance): current `True`, target `True`, status `met`
 - `retirement_tracking_present` (governance): current `True`, target `True`, status `met`
@@ -98,13 +98,13 @@ Evidence required before formal graduation (aligned with BQ-C4 blockers and `REC
 - `transition_tracking_available` (lifecycle): current `True`, target `True`, status `met`
 - `closure_effectiveness_measurable` (lifecycle): current `True`, target `True`, status `met`
 - `age_distribution_available` (lifecycle): current `True`, target `True`, status `met`
-- `operational_readiness_target_met` (operational_readiness): current `91.3`, target `80.0`, status `met`
-- `effectiveness_confidence_target_met` (operational_readiness): current `0.9`, target `0.75`, status `met`
+- `operational_readiness_target_met` (operational_readiness): current `100.0`, target `80.0`, status `met`
+- `effectiveness_confidence_target_met` (operational_readiness): current `1.0`, target `0.75`, status `met`
 - `governance_confidence_target_met` (operational_readiness): current `1.0`, target `0.75`, status `met`
 - `trajectory_available` (operational_readiness): current `True`, target `True`, status `met`
-- `overall_maturity_target_met` (program): current `68.5`, target `80.0`, status `unmet`
+- `overall_maturity_target_met` (program): current `76.8`, target `80.0`, status `unmet`
 - `forecast_confidence_graduation` (program): current `1.0`, target `0.75`, status `met`
-- `effectiveness_confidence_graduation` (program): current `0.9`, target `0.75`, status `met`
+- `effectiveness_confidence_graduation` (program): current `1.0`, target `0.75`, status `met`
 
 # Roadmap Validation
 

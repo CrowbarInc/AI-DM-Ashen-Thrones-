@@ -1,0 +1,131 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_nara_watch",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "nara",
+      "topic_id": "watch"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "nara",
+      "name": "Nara",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "bell",
+          "text": "The bell beside the ferry is called the harbor bell.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "depart",
+          "text": "The ferry departs at dawn.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "watch",
+          "text": "Guards watch the harbor gate throughout the night.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "flood",
+          "text": "Travelers say the north road floods in spring.",
+          "epistemic": "rumor"
+        },
+        {
+          "id": "sign",
+          "text": "The gate countersign is gray lantern.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "oren",
+      "name": "Oren",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "road",
+          "text": "The street beyond the harbor gate is called the north road.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "posted",
+          "text": "The ferry schedules are posted on the dock.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "slate",
+          "text": "The glazier keeps the slate lens.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "sign",
+          "text": "The gate countersign is gray lantern.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "scene": {
+    "scene": {
+      "id": "net_loft",
+      "location": "Brineward net loft",
+      "summary": "Coils of mended fishing net hang from the rafters of a timber loft. Nessa, a net-mender in a tarred apron, is splicing a rope.",
+      "mode": "social",
+      "visible_facts": [
+        "Coils of mended fishing net hang from the rafters.",
+        "Nessa is splicing a rope at a low bench."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "nessa",
+          "name": "Nessa",
+          "scene_id": "net_loft",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "net-mender",
+            "net-mender",
+            "net mender"
+          ],
+          "aliases": [
+            "net-mender",
+            "net mender"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "brineward",
+        "name": "Brineward",
+        "type": "riverside_ward",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A riverside ward of workshops, stalls, and work yards."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "nessa",
+        "name": "Nessa",
+        "location": "net_loft",
+        "role": "net-mender",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "net-mender",
+          "net mender"
+        ],
+        "topics": [
+          {
+            "id": "work",
+            "text": "Nessa splices rope and mends nets for the fishing boats."
+          }
+        ]
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "starting_context": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a riverside craft ward."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace or stall in Brineward.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "net_loft",
+    "visited_scene_ids": [
+      "net_loft"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

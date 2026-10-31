@@ -1,0 +1,55 @@
+{
+  "case_id": "s15q3",
+  "family": "s15",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "aa6de46ea0d452526328250fb2b21240d17a950ee6eb9dc024022c08ec31ac9c",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "The Yarrow family holds hereditary rights to gather reeds on the south bank"
+    ],
+    "qualifiers": [
+      "not to own the bank",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s15"
+    ],
+    "answered_arguments": [
+      "holder",
+      "right",
+      "location"
+    ],
+    "missing_arguments": [
+      "owner"
+    ],
+    "conflict": false,
+    "reason": "The fact establishes that the Yarrow family holds hereditary rights to gather reeds on the south bank but explicitly states they do not own the bank. No information about the actual owner of the south bank is provided."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

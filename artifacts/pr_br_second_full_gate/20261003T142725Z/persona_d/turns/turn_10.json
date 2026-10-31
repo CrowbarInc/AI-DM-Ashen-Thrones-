@@ -1,0 +1,896 @@
+{
+  "turn_number": 10,
+  "player_text": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+  "visible_motivation": "Let mundane physical traces answer where the deliberately silent household will not.",
+  "intended_meaning": "Determine whether anyone from the townhouse recently traveled through the gate and which route they took.",
+  "generation_attempt_1": "You step back from the townhouse's silent door, your eyes tracing the rain-softened footprints and carriage tracks stamped into the muddy earth. The freshest trails veer toward the gate district, winding through the crowd and traffic chokepoint outside Cinderwatch's eastern gate. The blurred marks seem to confirm the patrol's last known direction, linking with reports that their northwest route past the supply crates is where they were last seen. Nearby, the gloomy weather and the heavy presence of guards continue to press the crowd into uneasy silence, lending weight to the missing patrol rumor hanging over the gate.",
+  "generation_attempt_2": "You step back from the silent door, your eyes tracing the shallow impressions left by recent footprints and carriage wheels in the rain-softened earth. The tracks turn away from the townhouse and head toward the gate, winding through the muddy cluster of wagons and waiting travelers. While the trail seems fresh, the muted bustle around the gate offers no clear sign of who last passed this way or what they carried. The atmosphere remains tense, edged with the guarded silence of those nearby.",
+  "attempt_1_hard_valid": false,
+  "attempt_1_reasons": [
+    "consequential_invention"
+  ],
+  "attempt_2_hard_valid": false,
+  "attempt_2_reasons": [
+    "consequential_invention"
+  ],
+  "regeneration_invoked": true,
+  "regeneration_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+  "rejected_attempt_2_reasons": [
+    "consequential_invention"
+  ],
+  "generation_attempt_count": 2,
+  "accepted_provenance": "safe_nonresolution",
+  "accepted_response_text": "The inspection establishes no further reliable detail from the current scene.",
+  "accepted_immutable": true,
+  "final_emitted_response": "The inspection establishes no further reliable detail from the current scene.",
+  "gm_text": "The inspection establishes no further reliable detail from the current scene.",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "resolution_contract_semantic_preserved"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": true,
+  "fast_path_abstained": false,
+  "abstention_reason": null,
+  "interpreter_invoked": false,
+  "proposal_source": "deterministic_fast_path",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+    "source": "deterministic_fast_path",
+    "primary_operation": "inspect",
+    "supporting_operations": [],
+    "raw_target_text": "rain-softened footprints and carriage tracks leaving the tow",
+    "proposed_target_id": null,
+    "target_capture": "verb_object",
+    "has_determiner": true,
+    "interlocutor_id": null,
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": null,
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": "notice_board",
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "inspect",
+  "canonical_target": "Notice board",
+  "target_ref": {
+    "type": "object",
+    "id_or_text": "Notice board",
+    "source": "explicit_player"
+  },
+  "discourse_ref": {
+    "type": "object",
+    "id": "notice_board",
+    "label": "Notice board",
+    "source_turn": null
+  },
+  "interlocutor_id": null,
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "clarification",
+  "ambiguous": false,
+  "binding_status": "unresolved",
+  "entity_class": "ambiguous_unresolved",
+  "proposed_interlocutor": "gate",
+  "bound_interlocutor": null,
+  "entity_id": null,
+  "authority_reasons": [
+    "proposal:not_a_person"
+  ],
+  "entity_binding": {
+    "status": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed_interlocutor": "gate",
+    "proposed_span": "the gate",
+    "bound_interlocutor_id": null,
+    "entity_id": null,
+    "label": null,
+    "explicit_new_interlocutor": true,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_9bbb7dc4f1af",
+    "turn_index": 11,
+    "request_kind": "inquiry",
+    "operation": "inspect",
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "Notice board",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Notice board",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "clarification",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+    "construction": {
+      "cues": [],
+      "referent_slot": "explicit_target",
+      "referent_reason": "incidental_entity_unresolved",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "inc_dbd4f71091",
+          "type": "interlocutor",
+          "label": "likeliest driver"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "rc_4e726954de90",
+          "type": "action",
+          "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        },
+        {
+          "id": "inc_dbd4f71091",
+          "type": "interlocutor",
+          "label": "likeliest driver"
+        },
+        {
+          "id": "inc_dbd4f71091",
+          "type": "interlocutor",
+          "label": "likeliest driver"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "inspect",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": "rain-softened footprints and carriage tracks leaving the tow",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "notice_board",
+        "canonical_target_label": "Notice board",
+        "canonical_target_type": "object",
+        "canonical_basis": "discourse",
+        "authoritative_operation": "inspect",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": true,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": "gate",
+        "proposed_span": "the gate",
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": true,
+        "authority_reasons": [
+          "proposal:not_a_person"
+        ],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+        "source": "deterministic_fast_path",
+        "primary_operation": "inspect",
+        "supporting_operations": [],
+        "raw_target_text": "rain-softened footprints and carriage tracks leaving the tow",
+        "proposed_target_id": null,
+        "target_capture": "verb_object",
+        "has_determiner": true,
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": null,
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": "notice_board",
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      },
+      "commitment_status": "executed_now",
+      "primary_operation": "inspect",
+      "resolution_subject": "perception",
+      "resolution_subject_coherence": "accepted",
+      "semantic_input_length": 169,
+      "provenance_excerpt": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+      "secondary_operations": [],
+      "requested_addressee": "gate",
+      "addressee_binding_status": "unresolved"
+    },
+    "retry_preserved": true
+  },
+  "active_interlocutor": null,
+  "active_claim": null,
+  "active_inspected": {
+    "id": "notice_board",
+    "label": "Notice board",
+    "kind": "object",
+    "epistemic_status": null,
+    "turn_index": 11,
+    "source": "resolution_contract"
+  },
+  "actionable_lead": null,
+  "previous_action": {
+    "id": "rc_4e726954de90",
+    "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know",
+    "kind": "act",
+    "epistemic_status": null,
+    "turn_index": 10,
+    "source": "resolution_contract"
+  },
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 11,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": {
+      "id": "rc_4e726954de90",
+      "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know",
+      "kind": "act",
+      "scene_id": "frontier_gate",
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "last_committed_turn": 11,
+    "last_committed_contract_id": "rc_9bbb7dc4f1af"
+  },
+  "authority_generated": [
+    {
+      "proposition": "You step back from the townhouse's silent door, your eyes tracing the rain-softened footprints and carriage tracks stamped into the muddy earth.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Nearby, the gloomy weather and the heavy presence of guards continue to press the crowd into uneasy silence, lending weight to the missing patrol rumor hanging over the gate.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "rumor",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authority_retry": [
+    {
+      "proposition": "You step back from the silent door, your eyes tracing the shallow impressions left by recent footprints and carriage wheels in the rain-softened earth.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "While the trail seems fresh, the muted bustle around the gate offers no clear sign of who last passed this way or what they carried.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authority_emitted": [],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "FAIL",
+  "failing_gates": [
+    "player_intent_addressed"
+  ],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 67,
+      "rating": "acceptable",
+      "passed": false,
+      "semantic_result": "FAIL",
+      "diagnostic_quality_rating": "acceptable"
+    },
+    "semantic_result": "FAIL",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 11,
+          "text_preview": "The inspection establishes no further reliable detail from the current scene."
+        }
+      },
+      "player_intent_addressed": {
+        "status": "FAIL",
+        "passed": false,
+        "reason_codes": [
+          "intent_addressed:resolution_contract_unsatisfied"
+        ],
+        "evidence": {
+          "request_kind": "action_or_statement",
+          "player_terms": [
+            "back",
+            "carriage",
+            "door",
+            "following",
+            "footprints",
+            "fresh",
+            "gate",
+            "leads",
+            "leaving",
+            "rain",
+            "silent",
+            "softened",
+            "step",
+            "study",
+            "toward",
+            "townhouse",
+            "tracks",
+            "trail",
+            "whichever"
+          ],
+          "gm_terms": [
+            "current",
+            "detail",
+            "establishes",
+            "further",
+            "inspection",
+            "reliable",
+            "scene"
+          ],
+          "direct_answer_score": 23,
+          "player_intent_score": 4,
+          "resolution_contract": {
+            "contract_id": "rc_9bbb7dc4f1af",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "inspect",
+            "referent_provenance": "explicit_player",
+            "assessment_status": "unsatisfied",
+            "assessment_reasons": [
+              "target_incompatible"
+            ],
+            "target": "Notice board",
+            "candidate_answer_target": "inspection",
+            "target_compatible": false,
+            "operation_compatible": false,
+            "dimension_compatible": false,
+            "resolution_kind": "unrelated",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [],
+              "referent_slot": "explicit_target",
+              "referent_reason": "incidental_entity_unresolved",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "inc_dbd4f71091",
+                  "type": "interlocutor",
+                  "label": "likeliest driver"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "rc_4e726954de90",
+                  "type": "action",
+                  "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "id": "inc_dbd4f71091",
+                  "type": "interlocutor",
+                  "label": "likeliest driver"
+                },
+                {
+                  "id": "inc_dbd4f71091",
+                  "type": "interlocutor",
+                  "label": "likeliest driver"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "inspect",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": "rain-softened footprints and carriage tracks leaving the tow",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "notice_board",
+                "canonical_target_label": "Notice board",
+                "canonical_target_type": "object",
+                "canonical_basis": "discourse",
+                "authoritative_operation": "inspect",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": true,
+              "entity_binding": {
+                "status": "unresolved",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": "gate",
+                "proposed_span": "the gate",
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": true,
+                "authority_reasons": [
+                  "proposal:not_a_person"
+                ],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+                "source": "deterministic_fast_path",
+                "primary_operation": "inspect",
+                "supporting_operations": [],
+                "raw_target_text": "rain-softened footprints and carriage tracks leaving the tow",
+                "proposed_target_id": null,
+                "target_capture": "verb_object",
+                "has_determiner": true,
+                "interlocutor_id": null,
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": null,
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": "notice_board",
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              },
+              "commitment_status": "executed_now",
+              "primary_operation": "inspect",
+              "resolution_subject": "perception",
+              "resolution_subject_coherence": "accepted",
+              "semantic_input_length": 169,
+              "provenance_excerpt": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+              "secondary_operations": [],
+              "requested_addressee": "gate",
+              "addressee_binding_status": "unresolved"
+            },
+            "failure_locus": "response_missed_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 67,
+      "rating": "acceptable",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 23,
+        "player_intent": 4,
+        "logical_escalation": 18,
+        "immersion": 22
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "No explicit question detected; scored leniently for directness."
+        ],
+        "signals": {
+          "has_question": false,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.0,
+          "gm_word_count": 11,
+          "bounded_partial": false,
+          "next_lead": false,
+          "answer_markers": 1
+        }
+      },
+      "player_intent": {
+        "score": 4,
+        "passed": false,
+        "reasons": [
+          "GM misses obvious player topic anchors.",
+          "Possible thread drift from the established player focus."
+        ],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 0,
+          "topic_overlap_ratio": 0.0,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.0,
+          "player_presses_thread": false,
+          "gm_word_count": 11,
+          "net_new_terms": 7
+        }
+      },
+      "immersion": {
+        "score": 22,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": false,
+          "scene_anchor_hits": 0
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (23/25).",
+        "logical_escalation: acceptable (18/25).",
+        "immersion: strong (22/25)."
+      ],
+      "failures": [
+        "player_intent: weak (4/25).",
+        "player_intent: GM misses obvious player topic anchors.",
+        "player_intent: Possible thread drift from the established player focus."
+      ],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 67,
+        "rating": "acceptable",
+        "passed": false,
+        "semantic_result": "FAIL",
+        "diagnostic_quality_rating": "acceptable"
+      }
+    }
+  },
+  "generation_calls_this_turn": 2,
+  "interpretation_calls_this_turn": 0,
+  "turn_generation_calls": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "You step back from the townhouse's silent door, your eyes tracing the rain-softened footprints and carriage tracks stamped into the muddy earth. The freshest trails veer toward the gate district, winding through the crowd and traffic chokepoint outside Cinderwatch's eastern gate. The blurred marks seem to confirm the patrol's last known direction, linking with reports that their northwest route past the supply crates is where they were last seen. Nearby, the gloomy weather and the heavy presence of guards continue to press the crowd into uneasy silence, lending weight to the missing patrol rumor hanging over the gate."
+    },
+    {
+      "purpose": "retry_escalation",
+      "retry_attempt": 1,
+      "retry_reason": "hard_invalid",
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "You step back from the silent door, your eyes tracing the shallow impressions left by recent footprints and carriage wheels in the rain-softened earth. The tracks turn away from the townhouse and head toward the gate, winding through the muddy cluster of wagons and waiting travelers. While the trail seems fresh, the muted bustle around the gate offers no clear sign of who last passed this way or what they carried. The atmosphere remains tense, edged with the guarded silence of those nearby."
+    }
+  ],
+  "turn_interpretation_calls": [],
+  "persistence": {
+    "session_id": "05175d021232ea8d46d8b973",
+    "campaign_run_id": "05175d021232ea8d46d8b973",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 11,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": {
+        "id": "rc_4e726954de90",
+        "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know",
+        "kind": "act",
+        "scene_id": "frontier_gate",
+        "turn_index": 10,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 11,
+      "last_committed_contract_id": "rc_9bbb7dc4f1af"
+    },
+    "incidental_entities": [
+      {
+        "entity_id": "inc_dbd4f71091",
+        "label": "likeliest driver",
+        "role": "likeliest driver",
+        "scene_id": "frontier_gate",
+        "provenance": "bounded_incidental",
+        "authority": "bounded_improvisation",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "truth_status": "runtime_incidental",
+        "consequence_level": "incidental"
+      }
+    ],
+    "ledger_entries": [
+      {
+        "id": "inc_dbd4f71091",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "content": "likeliest driver",
+        "scope": "scene",
+        "scene_id": "frontier_gate",
+        "consequence_level": "incidental",
+        "source": "player_proposed_interlocutor",
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental"
+      },
+      {
+        "id": "bi_e1c2bccf558d",
+        "kind": "incidental_fact",
+        "category": "sensory_detail",
+        "content": "You knock firmly beneath the townhouse's noble banners, awaiting a response concerning the gate patrols or the change in their route. Inside, no immediate answer comes forth, as if the residents maintain a deliberate silence on such matters. The atmosphere carries a quiet tension, hinting that any information about sponsorship or patrol adjustments is closely guarded, perhaps requiring a more official inquiry or a subtle approach to draw it out.",
+        "scope": "scene",
+        "scene_id": "frontier_gate",
+        "consequence_level": "low",
+        "source": "dm_improvisation",
+        "speaker_id": null,
+        "epistemic_status": null,
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental",
+        "satisfies_contract_id": "rc_4e726954de90",
+        "requested_dimension": "appearance"
+      }
+    ],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "threadbare_watcher",
+        "name": "Threadbare watcher",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 532179
+  },
+  "resolution_kind": "investigate",
+  "api_ok": true
+}

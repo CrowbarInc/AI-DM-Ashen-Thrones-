@@ -1,0 +1,3 @@
+# 07 — Source Extraction Contract
+
+`engine.FACT` requires local fact ID, host source ID, open relationship name, named roles with literal value/evidence, unknown roles, qualifier phrases, negation, temporal/spatial scope, epistemic status, provenance and source evidence span. A source may yield several facts. No fixed global relationship ontology or phrase-specific matching rules. Human-reviewed entailment and canonical authority are absent. A communication event/content link is not a first-class typed reference in this prototype; this is a discovered limitation, not a production-ready schema.

@@ -1,0 +1,56 @@
+[
+  {
+    "probe_id": "action_request",
+    "player_text": "Walk me as far as the yard allows toward the notice board.",
+    "gm_text": "The requested action cannot be completed here; another route is needed.",
+    "model_calls": 1,
+    "contract_id": "rc_39d9f154460c",
+    "operation": "act",
+    "request_kind": "action",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_39d9f154460c",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "act",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "action_nonresolution"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "probe_id": "perception_smell",
+    "player_text": "What does the paper on that board smell like?",
+    "gm_text": "No distinct sound or smell can be established beyond the current scene's general activity.",
+    "model_calls": 1,
+    "contract_id": "rc_c9db59409345",
+    "operation": "perceive",
+    "request_kind": "inquiry",
+    "dimension": "smell",
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_c9db59409345",
+      "dimension": "smell",
+      "dimensions": [
+        "smell"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "covered:smell"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  }
+]

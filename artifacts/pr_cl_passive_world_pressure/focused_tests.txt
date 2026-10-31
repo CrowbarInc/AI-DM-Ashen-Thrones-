@@ -1,0 +1,13 @@
+Target tests (both fail at _assert_concrete_pressure):
+.venv\Scripts\python.exe -m pytest tests/test_turn_pipeline_shared.py::test_chat_single_wait_in_tense_scene_forces_interaction_pressure tests/test_turn_pipeline_shared.py::test_chat_repeated_passive_actions_do_not_stall_into_atmosphere --tb=short -q --override-ini="addopts="
+2 failed
+
+Shared pipeline:
+.venv\Scripts\python.exe -m pytest tests/test_turn_pipeline_shared.py --tb=line -q -p no:cacheprovider --override-ini="addopts=" --junitxml=artifacts/pr_cl_passive_world_pressure/pytest_shared.xml
+39 passed, 26 failed, 0 skipped, 0 errors
+
+Focused block:
+.venv\Scripts\python.exe -m pytest tests/test_pr_ck_ordinary_resolver_selection.py tests/test_final_emission_passive_scene_pressure.py tests/test_bv4b_concrete_beat_upstream_satisfier.py tests/test_grounded_observation_non_invention.py tests/test_clocks_projects_logging_lint.py tests/test_world_progression_tick_integration.py tests/test_world_state.py tests/test_agenda_simulation.py tests/test_pr_br_continuation18_immutable_boundary.py tests/test_social_question_relevance_answer_selection.py tests/test_pr_cc_social_reply_reconciliation.py tests/test_pr_ce_subjective_preference_classification.py tests/test_pr_by_narration_only_retry_contract.py tests/test_pr_bw_narration_only_envelope.py tests/test_authored_knowledge_realization.py tests/test_pr_br_gm_resolution_decision.py --tb=line -q -p no:cacheprovider --override-ini="addopts=" --junitxml=artifacts/pr_cl_passive_world_pressure/pytest_focused.xml
+200 passed, 4 failed, 0 skipped, 0 errors
+
+The 4 focused failures are pre-existing grounded-observation follow-ups and authored-knowledge HTTP tests. Resolver, clock, tick, NPC agenda, passive-pressure unit, immutable C18, PR-CC, PR-CE, PR-BY, PR-BW, PR-CI social relevance, and decision tests passed.

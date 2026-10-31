@@ -1,0 +1,55 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:01:49.756936Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:01:49.756936Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "What road?",
+          "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+          "subject": "road",
+          "requested_information": "general",
+          "supplied_text": "Word is, the street beyond the gate is called the north road.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "social.topic_revealed:fact",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    }
+  },
+  "integrity": {
+    "payload_sha256": "5f21f179ccd26ac67c44b2971fb1ca46a6fe164388f8c88eef6d65b07bf253a7",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

@@ -1,0 +1,22 @@
+[
+  ".venv/Scripts/python.exe",
+  "-m",
+  "pytest",
+  "tests/test_provider_accounting_integrity.py",
+  "tests/test_api_upstream_preflight.py",
+  "tests/test_campaign_reset.py",
+  "tests/test_atgb_r1_02_revision_boundary.py",
+  "tests/test_atgb_r1_07_correction_contract.py",
+  "tests/test_atgb_r2_02_speech_participant_grounding.py",
+  "tests/test_atgb_r2_04_question_evidence_contract.py",
+  "tests/test_pr_ed_provider_efficiency.py",
+  "tests/test_pr_ef_gm_authority.py",
+  "tests/test_final_emission_gate_diagnostics.py",
+  "-q",
+  "-k",
+  "not lifespan_calls_preflight_when_not_skipped",
+  "--basetemp",
+  "development/tmp/pr_play_02_regression",
+  "--junitxml",
+  "artifacts/pr_play_02/regression.xml"
+]

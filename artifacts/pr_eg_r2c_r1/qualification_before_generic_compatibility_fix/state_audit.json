@@ -1,0 +1,3347 @@
+[
+  {
+    "conversation": "primary",
+    "turn": 1,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 1,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 0,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara"
+    ],
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "primary",
+    "turn": 2,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          }
+        ],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 3,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 2,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 3,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "primary",
+    "turn": 4,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 3,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 2,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 4,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 3,
+            "assets": []
+          }
+        ]
+      },
+      {
+        "path": "/world_state/flags/faction_ash_cowl_agenda_advanced",
+        "before": null,
+        "after": true
+      },
+      {
+        "path": "/world_state/flags/faction_house_verevin_agenda_advanced",
+        "before": null,
+        "after": true
+      },
+      {
+        "path": "/world_state/flags/faction_ordo_pyric_agenda_advanced",
+        "before": null,
+        "after": true
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": null,
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    },
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "conversational_continuity.bounded_personal_line"
+  },
+  {
+    "conversation": "primary",
+    "turn": 5,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 4,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 3,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 5,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 4,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 6,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 5,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 4,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 6,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 5,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "primary",
+    "turn": 7,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          }
+        ],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "street"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "social_waystation_courtyard_sergeant_mara_night_watch",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "sergeant_mara",
+            "topic_id": "night_watch"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 6,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 5,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 7,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 6,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "social.topic_revealed:night_watch"
+  },
+  {
+    "conversation": "primary",
+    "turn": 8,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 7,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 6,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 9,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 7,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 9,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 7,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 8,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 7,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    },
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 9,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 9,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 7,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 9,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 7,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 8,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 7,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 8,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 8,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 9,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 8,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.knowledge_posture"
+  },
+  {
+    "conversation": "primary",
+    "turn": 10,
+    "world_diff": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "conversational_decision:npc_request_declined"
+  },
+  {
+    "conversation": "primary",
+    "turn": 11,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "conversational_decision:npc_request_declined"
+  },
+  {
+    "conversation": "primary",
+    "turn": 12,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 8,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 8,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 9,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 8,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 9,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 9,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 10,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 9,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "secret passage bypasses",
+            "text": "Sergeant Mara says, \"I couldn't answer that.\"",
+            "canonical": false,
+            "turn": 9,
+            "status": "active",
+            "requested_information": "hidden"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "primary",
+    "turn": 13,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 9,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 9,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 10,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 9,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 10,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 10,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 10,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 10,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 10,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara"
+    ],
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "primary",
+    "turn": 14,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      ""
+    ],
+    "adoption_source": "conversational_decision:gm_recall_of_npc_statement"
+  },
+  {
+    "conversation": "primary",
+    "turn": 15,
+    "world_diff": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "secret passage bypasses",
+            "text": "Sergeant Mara says, \"I couldn't answer that.\"",
+            "canonical": false,
+            "turn": 9,
+            "status": "active",
+            "requested_information": "hidden"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "secret passage bypasses",
+            "text": "Sergeant Mara says, \"I couldn't answer that.\"",
+            "canonical": false,
+            "turn": 9,
+            "status": "active",
+            "requested_information": "hidden"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "still evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 11,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    },
+    "history_speakers": [
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "sergeant_mara",
+      "",
+      "sergeant_mara"
+    ],
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 1,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "social_waystation_courtyard_corporal_bren_night_watch",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "corporal_bren",
+            "topic_id": "night_watch"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 1,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 0,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren"
+    ],
+    "adoption_source": "social.topic_revealed:night_watch"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 2,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "social_waystation_courtyard_corporal_bren_night_watch",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "corporal_bren",
+            "topic_id": "night_watch"
+          }
+        ],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "social_waystation_courtyard_corporal_bren_night_watch",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "corporal_bren",
+            "topic_id": "night_watch"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 3,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 2,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": null,
+        "after": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 3,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 4,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 2,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 3,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 2,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 4,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 3,
+            "assets": []
+          }
+        ]
+      },
+      {
+        "path": "/world_state/flags/faction_ash_cowl_agenda_advanced",
+        "before": null,
+        "after": true
+      },
+      {
+        "path": "/world_state/flags/faction_house_verevin_agenda_advanced",
+        "before": null,
+        "after": true
+      },
+      {
+        "path": "/world_state/flags/faction_ordo_pyric_agenda_advanced",
+        "before": null,
+        "after": true
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 4,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 5,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 3,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 4,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 3,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 5,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 4,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    },
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "conversational_continuity.bounded_personal_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 5,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 6,
+    "world_diff": [
+      {
+        "path": "/event_log",
+        "before": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "social_waystation_courtyard_corporal_bren_night_watch",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "corporal_bren",
+            "topic_id": "night_watch"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          }
+        ],
+        "after": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "social_waystation_courtyard_corporal_bren_night_watch",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "corporal_bren",
+            "topic_id": "night_watch"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "Ordo Pyric's pressure mounts.",
+            "source": "ordo_pyric"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "House Verevin completes an off-screen operation.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "The Ash Cowl completes an off-screen operation.",
+            "source": "ash_cowl"
+          },
+          {
+            "type": "faction_operation_complete",
+            "text": "Ordo Pyric completes an off-screen operation.",
+            "source": "ordo_pyric"
+          },
+          {
+            "type": "social_lead_revealed",
+            "clue_id": "north_road",
+            "scene_id": "waystation_courtyard",
+            "npc_id": "corporal_bren",
+            "topic_id": "street"
+          }
+        ]
+      },
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 6,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 4,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 5,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 4,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 6,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 5,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 7,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 8,
+    "world_diff": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    },
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "conversational_decision:npc_request_declined"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 9,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "conversational_decision:npc_request_declined"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 10,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 7,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 5,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 6,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 5,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 7,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 6,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "guards leave gate",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "surveillance"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 11,
+    "world_diff": [
+      {
+        "path": "/factions",
+        "before": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 8,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 6,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 7,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 6,
+            "assets": []
+          }
+        ],
+        "after": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 9,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 7,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 9,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 7,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 8,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 7,
+            "assets": []
+          }
+        ]
+      }
+    ],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "guards leave gate",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "surveillance"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "guards leave gate",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "surveillance"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "that",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "hidden"
+          }
+        ]
+      }
+    ],
+    "save_load": null,
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren"
+    ],
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 12,
+    "world_diff": [],
+    "commitment_diff": [],
+    "save_load": {
+      "context_equal": true
+    },
+    "history_speakers": [
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      "corporal_bren",
+      ""
+    ],
+    "adoption_source": "conversational_decision:gm_recall_of_npc_statement"
+  }
+]

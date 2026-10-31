@@ -1,0 +1,717 @@
+--- before/game/conversational_orchestration.py
++++ after/game/conversational_orchestration.py
+@@ -41,6 +41,16 @@
+     intent_modality: str = "committed"
+     secondary_intentions: list[dict[str, Any]] = field(default_factory=list)
+     execution_policy: str = ""
++    communication_owner: str = "CHARACTER"
++    communication_purpose: str = "ACTION"
++
++    def __post_init__(self) -> None:
++        if self.communication_owner == "CHARACTER" and self.category != ConversationalDecisionCategory.EXECUTE:
++            object.__setattr__(self, "communication_owner", "SESSION" if self.intent_family == "ooc_help" else "GM")
++            if self.communication_purpose == "ACTION":
++                object.__setattr__(self, "communication_purpose", "CLARIFICATION" if self.category == ConversationalDecisionCategory.CLARIFY else "EXPLANATION")
++        elif self.category == ConversationalDecisionCategory.EXECUTE and self.proposed_operation == "ASK":
++            object.__setattr__(self, "communication_owner", "NPC")
+ 
+     def to_public_dict(self) -> dict[str, Any]:
+         payload = asdict(self)
+@@ -218,6 +228,112 @@
+     return ctx if isinstance(ctx, Mapping) else {}
+ 
+ 
++def public_conversation_evidence(scene: Mapping[str, Any] | None, log: list | None) -> dict[str, str]:
++    """Public summaries and previously emitted text only; no clue/NPC/private data."""
++    evidence: dict[str, str] = {}
++    summary = _visible_scene_summary(scene)
++    if summary:
++        evidence["scene"] = summary
++    for index, fact in enumerate(_scene_obj(scene).get("visible_facts") or []):
++        if isinstance(fact, str) and fact.strip():
++            evidence[f"visible:{index}"] = fact.strip()
++    for index, row in enumerate((log or [])[-4:]):
++        if not isinstance(row, Mapping):
++            continue
++        gm = row.get("gm_output") or {}
++        visible = row.get("player_facing_text") or (gm.get("player_facing_text") if isinstance(gm, Mapping) else "")
++        if isinstance(visible, str) and visible.strip():
++            evidence[f"reply:{index}"] = visible.strip()[:1200]
++        resolution = row.get("resolution") or {}
++        social = resolution.get("social") if isinstance(resolution, Mapping) else None
++        if isinstance(social, Mapping) and isinstance(social.get("topic_revealed"), Mapping):
++            topic = social["topic_revealed"]
++            if social.get("npc_id") and topic.get("id") and topic.get("text"):
++                evidence[f"npc:{social['npc_id']}:{topic['id']}"] = str(topic["text"])
++    return evidence
++
++
++def _communication_decision(record: Mapping[str, Any], text: str) -> ConversationalDecision | None:
++    communication = record.get("communication")
++    if not isinstance(communication, Mapping):
++        return None
++    owner = str(communication.get("recipient") or "AMBIGUOUS")
++    purpose = str(communication.get("purpose") or "CLARIFICATION")
++    if record.get("communication_mode") == "RULES_QUESTION" and owner in {"GM", "SESSION"}:
++        owner, purpose = "SESSION", "RULES"
++    components = record.get("action_components") or []
++    if owner == "GM" and purpose in {"QUESTION", "DESCRIPTION", "EXPLANATION", "RECALL", "RULES"} and any(
++        isinstance(c, Mapping) and c.get("operation_class") in {"MOVE", "ATTACK", "USE_VISIBLE_OBJECT", "FOLLOW"}
++        for c in components
++    ):
++        owner = "MIXED"
++    if owner in {"CHARACTER", "NPC"} and purpose in {"ACTION", "OBSERVATION", "QUESTION", "CLARIFICATION", "RECALL"} and record.get("action_components"):
++        return None
++    if owner == "GM" and purpose == "OBSERVATION" and components:
++        if all(isinstance(c, Mapping) and c.get("operation_class") in {"PERCEIVE", "INSPECT"} for c in components):
++            return None
++    category = ConversationalDecisionCategory.ANSWER
++    update = None
++    if purpose in {"CORRECTION", "WITHDRAWAL"}:
++        answer = "I've set aside the unexecuted intention. Anything already resolved still stands."
++        if purpose == "CORRECTION":
++            answer += " Please state the revised action before we attempt it."
++        update = _context_update_clear_pending()
++    elif owner == "MIXED":
++        category = ConversationalDecisionCategory.CLARIFY
++        answer = "Let's settle the question before attempting the action. "
++        evidence = record.get("public_evidence") or {}
++        answer += " ".join(str(v) for v in evidence.values()) if evidence else "That condition is not established yet."
++        answer += " No part of the action has been attempted."
++    elif purpose == "TENTATIVE":
++        answer = "We can consider that before committing. Nothing has been attempted."
++    elif owner == "AMBIGUOUS" or purpose in {"CLARIFICATION", "CONFIRMATION"} or (owner == "CHARACTER" and not components):
++        category = ConversationalDecisionCategory.CLARIFY
++        answer = "Do you mean a question for me, something to say to someone here, or an action to attempt?"
++    else:
++        evidence = record.get("public_evidence") or {}
++        answer = " ".join(dict.fromkeys(str(v) for v in evidence.values()))
++        if not answer:
++            answer = "That has not been established in the information available to you."
++            if purpose == "RULES" or owner == "SESSION":
++                answer = "I don't have an established ruling for that question. No action or roll has been made."
++    return ConversationalDecision(
++        category=category, primary_intention=text, intent_family="gm_communication" if owner == "GM" else "communication",
++        communication_owner=owner, communication_purpose=purpose,
++        reason="communication_before_execution", player_facing_text=answer,
++        context_references=list((record.get("public_evidence") or {}).keys()),
++        context_update=update, execution_policy="answer_only", intent_modality="informational",
++        secondary_intentions=[dict(c) for c in components if isinstance(c, Mapping)] if owner == "MIXED" else [],
++    )
++
++
++def _gm_continuation_decision(text: str, session: Mapping[str, Any] | None, log: list | None) -> ConversationalDecision | None:
++    """Resolve clear facilitator follow-ups before an active NPC can capture them."""
++    if re.match(r"^(?:no[,.!]?\s*)?(?:actually[,.]?\s*)?(?:never\s+mind|forget\s+(?:it|that|the\s+plan)|cancel|don't\s+(?:do|open|move|go))\b", text, re.I) or (
++        _conversation_context(session).get("pending_clarification") and re.fullmatch(r"(?:no|nope|not now)[.!]?", text, re.I)
++    ):
++        return _communication_decision({"communication": {"recipient": "GM", "purpose": "WITHDRAWAL"}}, text)
++    if re.match(r"^actually\b", text, re.I):
++        return _communication_decision({"communication": {"recipient": "GM", "purpose": "CORRECTION"}}, text)
++    is_explanation = bool(re.match(r"^why\b", text, re.I))
++    explicit_gm = bool(re.search(r"\b(?:GM|DM|game master|you\s+(?:mean|said|say)|remind\s+me)\b", text, re.I))
++    ctx = _conversation_context(session).get("last_gm_exchange") or {}
++    refused = isinstance(ctx, Mapping) and ctx.get("category") == "DECLINE"
++    if not (explicit_gm or (is_explanation and (refused or re.search(r"\b(?:I|can't|cannot|couldn't|not)\b", text, re.I)))):
++        return None
++    # A declared character utterance remains owned by the in-world recipient.
++    if re.match(r"^(?:I|we)\s+(?:ask|tell|say|warn|explain)\b", text, re.I):
++        return None
++    from game.live_chat_interpretation import production_live_interpretation_enabled
++    if production_live_interpretation_enabled() and not (is_explanation and refused):
++        return None
++    evidence = public_conversation_evidence(None, log)
++    last = list(evidence.values())[-1:]
++    record = {"communication": {"recipient": "GM", "purpose": "EXPLANATION"},
++              "public_evidence": {"last_reply": last[0]} if last else {}}
++    return _communication_decision(record, text)
++
++
+ def _interaction_context(session: Mapping[str, Any] | None) -> Mapping[str, Any]:
+     if not isinstance(session, Mapping):
+         return {}
+@@ -330,6 +446,8 @@
+     if not isinstance(pending, Mapping):
+         return None
+     if _scene_id(scene) and _clean_text(pending.get("scene_id")) and _scene_id(scene) != _clean_text(pending.get("scene_id")):
++        if _AGENT_RE.search(player_text):
++            return None
+         return ConversationalDecision(
+             category=ConversationalDecisionCategory.CLARIFY,
+             primary_intention=_clean_text(player_text),
+@@ -342,6 +460,13 @@
+         )
+     kind = _clean_text(pending.get("kind"))
+     operation = _clean_text(pending.get("operation")).upper()
++    if kind == "deferred_intentions" and _YES_RE.match(player_text):
++        return ConversationalDecision(
++            category=ConversationalDecisionCategory.DECLINE, primary_intention=player_text,
++            intent_family="unsupported_world_operation", reason="deferred_intention_not_eligible",
++            player_facing_text="The remaining intention cannot be resolved as stated. Nothing further has been attempted.",
++            secondary_intentions=list(pending.get("steps") or []), context_update=_context_update_clear_pending(),
++        )
+     if kind in {"missing_destination", "ambiguous_destination", "compound_sequence"} or (
+         operation == "MOVE" and kind != "missing_target"
+     ):
+@@ -402,6 +527,11 @@
+             player_facing_text=f"You end the conversation with {npc_label}.",
+             context_update=_context_update_clear_pending(clear_interlocutor=True),
+         )
++    # The existing live call classifies recipient as well as action. Do not let
++    # an NPC slot capture every question before that boundary can see it.
++    from game.live_chat_interpretation import production_live_interpretation_enabled
++    if production_live_interpretation_enabled():
++        return None
+     is_question = bool(_QUESTION_START_RE.search(text) or "?" in text)
+     is_followup = bool(_FOLLOWUP_FRAGMENT_RE.search(text) or _PRONOUN_REFERENCE_RE.search(text))
+     if not (is_question or is_followup):
+@@ -541,7 +671,7 @@
+ )
+ _SPLIT_RE = re.compile(r"\s*(?:;|,?\s+then\s+|\s+and\s+then\s+|\s+while\s+)\s*", re.IGNORECASE)
+ _YES_RE = re.compile(
+-    r"^\s*(?:yes|yeah|yep|do\s+that|do\s+the\s+first(?:\s+one)?|the\s+first(?:\s+one)?|go\s+ahead)\.?\s*$",
++    r"^\s*(?:yes|yeah|yep|do\s+that|do\s+the\s+first(?:\s+one)?|the\s+first(?:\s+one)?|go\s+ahead|(?:all\s+right|alright|okay|ok|sure)(?:,?\s+(?:proceed|go\s+ahead))?)[.!]?\s*$",
+     re.IGNORECASE,
+ )
+ _INCOMPLETE_GOAL_RE = re.compile(
+@@ -1150,7 +1280,29 @@
+     scene: Mapping[str, Any] | None,
+     clear: bool,
+     incidental: list[str],
++    world: Mapping[str, Any] | None = None,
+ ) -> ConversationalDecision:
++    if scene is not None:
++        from game.player_interpretation_bridge import normalized_action_from_interpretation
++        from game.storage import list_scene_ids
++        for step in steps:
++            if step.get("supported"):
++                proposal = _operation_record(operation=step["operation"], target_id=step["target_id"], player_text=step["text"])
++                _, meta = normalized_action_from_interpretation(
++                    proposal, scene=dict(scene), world=dict(world or {}),
++                    player_text=player_text, known_scene_ids=list_scene_ids,
++                )
++                step["supported"] = meta.get("accepted") is True
++    # Unsupported intentions are retained for explanation, never offered for approval.
++    if not steps or not steps[0].get("supported"):
++        named = ", then ".join(_spoken_step(step.get("text")) for step in steps)
++        return ConversationalDecision(
++            category=ConversationalDecisionCategory.CLARIFY if len(steps) > 1 else ConversationalDecisionCategory.DECLINE,
++            primary_intention=player_text, intent_family="unsupported_world_operation",
++            reason="proposal_not_eligible", secondary_intentions=steps,
++            player_facing_text=f"I cannot carry out {named or 'that attempt'} with the available actions and targets. I have not done any of them yet.",
++            context_update=_context_update_clear_pending(),
++        )
+     pending = {
+         "kind": "compound_sequence",
+         "operation": _clean_text(steps[0].get("operation")) if steps else "",
+@@ -1160,11 +1312,11 @@
+     }
+     supported = [step for step in steps if step.get("supported")]
+     unsupported = [step for step in steps if not step.get("supported")]
+-    if len(supported) == 1 and unsupported:
++    if unsupported:
+         message = (
+             f"You can {_spoken_step(supported[0].get('text'))} first. I have not done this yet: "
+             + ", ".join(_spoken_step(step.get("text")) for step in unsupported)
+-            + ". Should I do the first one now?"
++            + ". Those later steps cannot be resolved as stated. Should I do the first one now?"
+         )
+     else:
+         named = ", then ".join(_spoken_step(step.get("text")) for step in steps)
+@@ -1279,7 +1431,7 @@
+             for clause in consequential
+         ]
+         clear = _should_clear_interlocutor(session, incidental, str(consequential[0].get("operation") or ""))
+-        return _compound_clarification(text, steps, scene=scene, clear=clear, incidental=incidental)
++        return _compound_clarification(text, steps, scene=scene, clear=clear, incidental=incidental, world=world)
+     clause = consequential[0]
+     if clause.get("operation") != "MOVE":
+         if not incidental:
+@@ -1305,7 +1457,7 @@
+                 incidental=incidental,
+                 session=session,
+             )
+-        return _compound_clarification(text, [step], scene=scene, clear=clear, incidental=incidental)
++        return _compound_clarification(text, [step], scene=scene, clear=clear, incidental=incidental, world=world)
+     destination = str(clause.get("destination") or "")
+     grounded_summary = ""
+     if destination:
+@@ -1344,7 +1496,7 @@
+         return steps[0] if steps else None
+     for step in steps:
+         label = _clean_text(step.get("label") or step.get("text"))
+-        if label and _place_match(player_text, label):
++        if step.get("supported") and label and _place_match(player_text, label):
+             return step
+     return None
+ 
+@@ -1378,13 +1530,13 @@
+                 ),
+                 intent_modality="committed",
+                 execution_policy="decline_unauthorized_route",
+-                context_update=_context_update(pending=dict(pending), pending_set=True),
++                context_update=_context_update_clear_pending(),
+             )
+         remaining = [step for step in steps if step is not selected]
+         remainder = None
+         if remaining:
+             remainder = {
+-                "kind": "compound_sequence",
++                "kind": "compound_sequence" if remaining[0].get("supported") else "deferred_intentions",
+                 "operation": _clean_text(remaining[0].get("operation")),
+                 "original_text": _clean_text(pending.get("original_text")) or player_text,
+                 "steps": remaining,
+@@ -1445,9 +1597,15 @@
+     connected: list[Mapping[str, Any]],
+     unsupported: list[str],
+     incidental: list[str],
++    scene: Mapping[str, Any] | None = None,
++    world: Mapping[str, Any] | None = None,
++    ordered_components: list[Mapping[str, Any]] | None = None,
+ ) -> ConversationalDecision:
+     steps: list[dict[str, Any]] = []
+-    for component in connected:
++    for component in ordered_components if ordered_components is not None else connected:
++        operation = _clean_text(component.get("operation_class")).upper()
++        if operation in _INCIDENTAL_OPERATIONS:
++            continue
+         description = _clean_text(component.get("description")) or _clean_text(component.get("operation_class"))
+         steps.append(
+             {
+@@ -1455,13 +1613,13 @@
+                 "label": description,
+                 "operation": _clean_text(component.get("operation_class")).upper(),
+                 "target_id": _clean_text(component.get("target_ref")),
+-                "supported": bool(_clean_text(component.get("target_ref"))),
++                "supported": operation in _CONNECTED_OPERATIONS and bool(_clean_text(component.get("target_ref"))),
+                 "consequential": True,
+                 "dependency": "sequence",
+                 "status": "pending",
+             }
+         )
+-    for description in unsupported:
++    for description in unsupported if ordered_components is None else []:
+         steps.append(
+             {
+                 "text": description,
+@@ -1474,7 +1632,7 @@
+                 "status": "pending",
+             }
+         )
+-    return _compound_clarification(summary or player_text, steps, scene=None, clear=False, incidental=incidental)
++    return _compound_clarification(summary or player_text, steps, scene=scene, world=world, clear=False, incidental=incidental)
+ 
+ 
+ def deterministic_conversational_decision(
+@@ -1497,6 +1655,17 @@
+             confidence=1.0,
+             player_facing_text="What are you trying to accomplish?",
+         )
++    if re.search(r"\?\s*(?:if|provided|unless|otherwise)\b.*?\b(?:I|we)(?:['’]ll|\s+will)?\s+\w+", text, re.I):
++        # A question followed by a conditional declaration is not a standalone
++        # capability question. Keep the complete condition/action without
++        # authorizing an operation or requiring a provider to confirm it.
++        return _communication_decision({
++            "communication": {"recipient": "MIXED", "purpose": "QUESTION"},
++            "action_components": [{"description": text, "operation_class": "UNRESOLVED_CONDITIONAL"}],
++        }, text)
++    gm_continuation = _gm_continuation_decision(text, session, log)
++    if gm_continuation is not None:
++        return gm_continuation
+     resumed = _resume_pending_clarification(player_text=text, scene=scene, session=session)
+     if resumed is not None:
+         return resumed
+@@ -1598,6 +1767,8 @@
+     *,
+     bridge_meta: Mapping[str, Any] | None = None,
+     player_text: str = "",
++    scene: Mapping[str, Any] | None = None,
++    world: Mapping[str, Any] | None = None,
+ ) -> ConversationalDecision:
+     """Build a decision envelope from an existing interpretation/bridge result."""
+     text = _clean_text(player_text)
+@@ -1613,10 +1784,15 @@
+             confidence=0.4,
+             player_facing_text=message,
+         )
++    communication_decision = _communication_decision(record, text)
++    if communication_decision is not None:
++        return communication_decision
+     mode = _clean_text(record.get("communication_mode"))
+     status = _clean_text(record.get("interpretation_status"))
+     summary = _clean_text((record.get("player_intent") or {}).get("summary") if isinstance(record.get("player_intent"), Mapping) else "")
+     components = record.get("action_components") if isinstance(record.get("action_components"), list) else []
++    if mode == "RULES_QUESTION":
++        return _communication_decision({"communication": {"recipient": "SESSION", "purpose": "RULES"}}, text)
+     if mode in {"OUT_OF_CHARACTER", "OUT_OF_CHARACTER_CORRECTION"}:
+         return ConversationalDecision(
+             category=ConversationalDecisionCategory.ANSWER,
+@@ -1628,6 +1804,13 @@
+                 "Understood. I will treat that as out of character. No gameplay action is executed, "
+                 "no game time advances, and committed state is unchanged."
+             ),
++        )
++    if status == "UNSUPPORTED_REQUEST":
++        return ConversationalDecision(
++            category=ConversationalDecisionCategory.DECLINE, primary_intention=summary or text,
++            intent_family="unsupported_world_operation", reason="unsupported_request",
++            player_facing_text=f"I cannot carry out {summary or text or 'that request'} with the available actions. No action has been attempted.",
++            context_update=_context_update_clear_pending(),
+         )
+     if status and status != "INTERPRETED":
+         question = _clean_text(record.get("clarification_question"))
+@@ -1670,8 +1853,17 @@
+             reason="single_authoritative_component",
+             confidence=0.78 if incidental else 0.9,
+         )
+-    if len(connected) > 1 or unsupported:
+-        return _compound_from_record_parts(text, summary, connected, unsupported, incidental)
++    if len(connected) + len(unsupported) > 1:
++        return _compound_from_record_parts(text, summary, connected, unsupported, incidental, scene=scene, world=world,
++                                           ordered_components=[c for c in components if isinstance(c, Mapping)])
++    if unsupported:
++        return ConversationalDecision(
++            category=ConversationalDecisionCategory.DECLINE, primary_intention=summary or text,
++            intent_family="unsupported_world_operation", reason="unsupported_single_intention",
++            proposed_operation=_clean_text(components[0].get("operation_class")) if components else None,
++            player_facing_text=f"I cannot carry out {unsupported[0]} with the available actions. No action has been attempted.",
++            context_update=_context_update_clear_pending(),
++        )
+     reason = _clean_text((bridge_meta or {}).get("reason") if isinstance(bridge_meta, Mapping) else "") or "no_executable_component"
+     operation = _clean_text((bridge_meta or {}).get("operation") if isinstance(bridge_meta, Mapping) else "")
+     message, missing = _focused_bridge_clarification(reason, operation=operation)
+--- before/game/live_chat_interpretation.py
++++ after/game/live_chat_interpretation.py
+@@ -27,6 +27,39 @@
+ _SECRET_RE = re.compile(r"sk-[A-Za-z0-9_\-]{8,}|Bearer\s+\S+", re.IGNORECASE)
+ _OUTPUT_CAP = 320
+ _CONTRACT = None
++
++RECIPIENTS = ("GM", "NPC", "CHARACTER", "SESSION", "MIXED", "AMBIGUOUS")
++PURPOSES = ("QUESTION", "DESCRIPTION", "EXPLANATION", "RECALL", "RULES", "ACTION", "OBSERVATION", "CORRECTION", "WITHDRAWAL", "CONFIRMATION", "TENTATIVE", "CLARIFICATION")
++
++
++def production_interpretation_schema() -> dict[str, Any]:
++    """Extend the existing interpretation envelope, without granting outcomes."""
++    import copy
++    schema = copy.deepcopy(_contract()[5]())
++    schema["properties"]["communication"] = {
++        "type": "object", "additionalProperties": False,
++        "properties": {
++            "recipient": {"type": "string", "enum": list(RECIPIENTS)},
++            "purpose": {"type": "string", "enum": list(PURPOSES)},
++            "subject": {"type": "string"},
++            "evidence_refs": {"type": "array", "items": {"type": "string"}},
++        },
++        "required": ["recipient", "purpose", "subject", "evidence_refs"],
++    }
++    schema["required"].append("communication")
++    return schema
++
++
++def valid_communication(value: Any, evidence: dict[str, str]) -> bool:
++    return (
++        isinstance(value, dict)
++        and set(value) == {"recipient", "purpose", "subject", "evidence_refs"}
++        and value.get("recipient") in RECIPIENTS
++        and value.get("purpose") in PURPOSES
++        and isinstance(value.get("subject"), str)
++        and isinstance(value.get("evidence_refs"), list)
++        and all(isinstance(ref, str) and ref in evidence for ref in value["evidence_refs"])
++    )
+ 
+ 
+ def redact(text: str) -> str:
+@@ -160,7 +193,7 @@
+                     "type": "json_schema",
+                     "name": "pr_dr_interpretation",
+                     "strict": True,
+-                    "schema": schema_fn(),
++                    "schema": production_interpretation_schema(),
+                 }
+             },
+         )
+@@ -213,6 +246,7 @@
+     scene: dict | None,
+     world: dict | None,
+     log: list | None,
++    session: dict | None = None,
+ ) -> dict[str, Any]:
+     """Return skipped, blocked, or accepted. Accepted carries a bridge record."""
+     if not production_live_interpretation_enabled():
+@@ -228,6 +262,38 @@
+         catalog=catalog,
+         recent_visible=recent or None,
+     )
++    from game.conversational_orchestration import public_conversation_evidence
++    evidence = public_conversation_evidence(scene, log)
++    messages[0]["content"] += (
++        " Establish communication.recipient and purpose BEFORE describing operations. "
++        "GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, "
++        "third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. "
++        "A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. "
++        "SESSION owns rules and interface questions. CHARACTER owns committed attempts only. "
++        "MIXED owns question plus conditional or independent action; preserve all components, never authorize them. "
++        "CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. "
++        "For GM/session communication leave action_components empty unless a NEW observation is requested; "
++        "use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. "
++        "Select evidence_refs only when the supplied PUBLIC passage actually answers the question. "
++        "No evidence means unknown. Subject describes the question, never a new fact. "
++        "Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation."
++        " A declaration of what I/we do is CHARACTER/ACTION, including inspection; "
++        "a request to describe already visible information is GM/DESCRIPTION. "
++        "NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; "
++        "select its npc:<speaker>:<topic> evidence reference when supplied. "
++        "For GM recall of NPC speech, prefer that same established NPC answer passage."
++    )
++    messages[1]["content"] += "\nPUBLIC answer evidence: " + json.dumps(evidence, ensure_ascii=False)
++    interaction = (session or {}).get("interaction_context") or {}
++    context = (session or {}).get("conversational_context") or {}
++    exchange = context.get("last_gm_exchange") or {}
++    messages[1]["content"] += "\nConversation ownership context: " + json.dumps({
++        "active_npc_id": interaction.get("active_interaction_target_id"),
++        "last_response_category": exchange.get("category"),
++        "last_response_owner": exchange.get("owner"),
++        "last_subject": exchange.get("subject"),
++        "pending_kind": (context.get("pending_clarification") or {}).get("kind"),
++    }, ensure_ascii=False)
+     leaks = context_leaks(messages, player_text)
+     for turn in recent:
+         for value in turn.values():
+@@ -241,7 +307,8 @@
+             tags=["interpretation_rejected", "non_mutating"],
+         )
+ 
+-    estimated = preflight_tokens(messages)
++    from experiments.pr_dp.prompt import estimate_input_tokens
++    estimated = estimate_input_tokens(messages, production_interpretation_schema())
+     if accounting_active() and estimated <= 0:
+         return _blocked(
+             "token_estimate_unavailable",
+@@ -278,10 +345,30 @@
+         )
+ 
+     payload = dict(parsed)
++    communication = payload.pop("communication", None)
++    # Old recorded records remain replayable; the live provider schema requires ownership.
++    if communication is not None and not valid_communication(communication, evidence):
++        return _blocked("malformed_communication", "I need you to clarify who you are addressing.",
++                        tags=["interpretation_rejected", "non_mutating"],
++                        extra={"provider_requests": provider_requests})
+     if mode == "IC":
+         payload["communication_mode"] = "IN_WORLD_ACTION"
++    if communication and payload.get("action_components") and (
++        communication["recipient"] in {"CHARACTER", "NPC"}
++        or (communication["recipient"] == "GM" and communication["purpose"] == "OBSERVATION")
++    ):
++        payload["communication_mode"] = "IN_WORLD_ACTION"
++    if communication and communication["purpose"] == "ACTION" and payload.get("communication_mode") == "IN_WORLD_ACTION":
++        # Recipient is where the player speaks; ACTION purpose is a declared
++        # character attempt. Preserve that commitment rather than swallowing it
++        # as a description request when the two model labels disagree.
++        communication["recipient"] = "CHARACTER"
+     adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+     record = adapted.get("record") if isinstance(adapted.get("record"), dict) else None
++    if record is not None and communication is not None:
++        record["communication"] = communication
++        # Only passages selected from the engine's public projection can reach emission.
++        record["public_evidence"] = {ref: evidence[ref] for ref in communication["evidence_refs"]}
+     eligibility = adapted.get("eligibility") if isinstance(adapted.get("eligibility"), dict) else {}
+     disposition = str(eligibility.get("disposition") or "")
+     common = {
+--- before/game/player_interpretation_bridge.py
++++ after/game/player_interpretation_bridge.py
+@@ -177,6 +177,10 @@
+             }
+         },
+     }
++    communication = record.get("communication")
++    if isinstance(communication, dict):
++        normalized["metadata"]["communication"] = dict(communication)
++        normalized["metadata"]["public_conversation_evidence"] = dict(record.get("public_evidence") or {})
+     if visible_surface_inspection:
+         normalized["metadata"]["stored_interpretation"]["compatibility"] = "visible_surface_inspection"
+     if operation == "MOVE":
+--- before/game/social.py
++++ after/game/social.py
+@@ -4209,6 +4209,23 @@
+             topic_hint,
+             player_text=str(raw_player_text or prompt or ""),
+         )
++        recalled_topic = False
++
++        # Communication ownership may resolve an anaphoric clarification to an
++        # already revealed topic. The social owner rechecks speaker, authored
++        # payload and disclosure state; provider text cannot grant knowledge.
++        communication = incoming_action_meta.get("communication") or {}
++        evidence = incoming_action_meta.get("public_conversation_evidence") or {}
++        if not topic_rec and communication.get("recipient") == "NPC" and communication.get("purpose") in {"QUESTION", "CLARIFICATION", "RECALL"}:
++            for topic in npc.get("topics") or npc.get("knowledge") or []:
++                if not isinstance(topic, dict):
++                    continue
++                topic_id = str(topic.get("id") or "")
++                ref = f"npc:{npc_id}:{topic_id}"
++                if topic_id in runtime.get("revealed_topics", []) and evidence.get(ref) == topic.get("text") and ref in communication.get("evidence_refs", []):
++                    topic_rec = dict(topic)
++                    recalled_topic = True
++                    break
+ 
+         if topic_rec:
+             revealed_ids = runtime.get("revealed_topics") or []
+@@ -4228,6 +4245,7 @@
+                     "npc_name": npc_name,
+                     "target_resolved": True,
+                     "topic_revealed": topic_rec,
++                    "recalled_topic": recalled_topic,
+                     "skill_check": None,
+                 },
+                 action_type=action_type,
+--- before/game/api.py
++++ after/game/api.py
+@@ -785,15 +785,27 @@
+                 latency={"total_turn": _turn_elapsed_ms()},
+                 gm=gm,
+                 provider_requests=len(provider_requests),
+-                successful=True,
++                interpretation_usage=provider_requests,
++                successful=decision.category in {ConversationalDecisionCategory.ANSWER, ConversationalDecisionCategory.PLAN},
+                 disposition=f"conversational_{category.lower()}",
+             ),
+         },
+     }
+-    if decision.context_update:
+-        session = load_session()
+-        if _apply_conversational_context_update(session, decision):
+-            save_session(session)
++    session = load_session()
++    context_changed = _apply_conversational_context_update(session, decision)
++    if decision.intent_family != "ooc_help":
++        context = session.setdefault("conversational_context", {})
++        context["last_gm_exchange"] = {
++            "category": category, "owner": decision.communication_owner,
++            "purpose": decision.communication_purpose,
++            "subject": decision.primary_intention[:240],
++            "response": gm["player_facing_text"][:1200],
++            "refusal_reason": decision.reason if category == "DECLINE" else None,
++            "scene_id": session.get("active_scene_id"),
++        }
++        context_changed = True
++    if context_changed:
++        save_session(session)
+     append_log(
+         {
+             "timestamp": utc_iso_now(),
+@@ -956,6 +968,11 @@
+     kind = str(resolution.get("kind") or "").strip().lower()
+     meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
++    if social.get("recalled_topic") and social.get("target_resolved") and isinstance(social.get("topic_revealed"), dict):
++        from game.social import format_authored_knowledge_realization_line
++        text = str(social["topic_revealed"].get("text") or "").strip()
++        if text:
++            return format_authored_knowledge_realization_line(resolution, text), "recalled_social_topic"
+     if social.get("npc_reply_expected") is True:
+         return None
+     if kind == "observe" and str(meta.get("parser_lane") or "").strip().lower() == "local_observation_question":
+@@ -1006,6 +1023,7 @@
+     provider_requests: int = 0,
+     successful: bool,
+     disposition: str,
++    interpretation_usage: list | None = None,
+ ) -> dict:
+     """Compact turn trace. No prompts, credentials, or world dumps."""
+     md = gm.get("metadata") if isinstance(gm, dict) and isinstance(gm.get("metadata"), dict) else {}
+@@ -1014,6 +1032,14 @@
+     narration_count = int(narration_calls) if isinstance(narration_calls, int) else 0
+     retry_count = md.get("narration_retry_count")
+     stages = dict(latency or {})
++    usages = [row for row in (interpretation_usage or []) if isinstance(row, dict) and row.get("sent") is not False]
++    if narration_count:
++        usages.append(call)
++    def token_total(key: str):
++        if narration_count > 1:
++            return None  # Last narration stamp cannot account for earlier retries.
++        values = [row.get(key) for row in usages]
++        return sum(values) if values and all(isinstance(value, int) for value in values) else None
+     return {
+         "elapsed_ms": stages.get("total_turn"),
+         "interpretation_ms": stages.get("intent_classification"),
+@@ -1022,8 +1048,8 @@
+         "validation_ms": stages.get("final_emission_gate"),
+         "retry_ms": stages.get("retry_loop_total"),
+         "provider_call_count": narration_count + int(provider_requests or 0),
+-        "input_tokens": call.get("input_tokens"),
+-        "output_tokens": call.get("output_tokens"),
++        "input_tokens": token_total("input_tokens") if interpretation_usage is not None else call.get("input_tokens"),
++        "output_tokens": token_total("output_tokens") if interpretation_usage is not None else call.get("output_tokens"),
+         "retry_count": int(retry_count) if isinstance(retry_count, int) else 0,
+         "retry_reason": md.get("provider_narration_skip_reason") or call.get("purpose"),
+         "disposition": disposition,
+@@ -5822,6 +5848,7 @@
+         else 0,
+         successful=True,
+         disposition=str(trace.get("action_type") or "chat"),
++        interpretation_usage=(trace.get("live_chat_interpretation") or {}).get("provider_requests") or [],
+     )
+     if isinstance(resolution, dict):
+         resolution_meta = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+@@ -5832,6 +5859,13 @@
+     # First successful opening only (structured start or chat scene_opening); never set on failed turns.
+     if mark_campaign_started:
+         session["campaign_started"] = True
++    session.setdefault("conversational_context", {})["last_gm_exchange"] = {
++        "category": "RESOLVED", "owner": "GM", "purpose": "ACTION_RESULT",
++        "subject": str(player_text_for_eval or "")[:240],
++        "response": str(gm.get("player_facing_text") or "")[:1200],
++        "refusal_reason": None, "scene_id": scene["scene"].get("id"),
++        "operation": (resolution or {}).get("kind"),
++    }
+     save_session(session)
+     save_combat(combat)
+ 
+@@ -6258,6 +6292,7 @@
+         stored_decision = decision_from_interpretation_record(
+             stored_interpretation,
+             player_text=req.text,
++            scene=scene, world=world,
+         )
+         if stored_decision.reason == "interpretation_not_interpreted":
+             return _nonmutating_interpretation_failure_response(req, {"reason": "not_interpreted"})
+@@ -6291,6 +6326,7 @@
+             scene=scene,
+             world=world,
+             log=recent_log,
++            session=session,
+         )
+         if live_outcome.get("status") == "blocked":
+             live_record = live_outcome.get("record") if isinstance(live_outcome.get("record"), dict) else None
+@@ -6299,6 +6335,7 @@
+                     live_record,
+                     bridge_meta=live_outcome,
+                     player_text=req.text or "",
++                    scene=scene, world=world,
+                 )
+                 if decision.category == ConversationalDecisionCategory.EXECUTE:
+                     live_locked_action, stored_bridge_meta = normalized_action_from_interpretation(
+@@ -6337,6 +6374,7 @@
+                 live_outcome.get("record") if isinstance(live_outcome.get("record"), dict) else None,
+                 bridge_meta=live_outcome,
+                 player_text=req.text or "",
++                scene=scene, world=world,
+             )
+             if decision.category != ConversationalDecisionCategory.EXECUTE:
+                 return _nonmutating_conversational_decision_response(
+@@ -6368,6 +6406,13 @@
+                 )
+             bridged_from_stored_interpretation = live_locked_action
+             live_outcome = {**live_outcome, "bridge": stored_bridge_meta}
++
++    if bridged_from_stored_interpretation is not None and deterministic_decision is None:
++        # A newly interpreted explicit action supersedes an older unexecuted
++        # proposal. Structured resumption already carries its own remainder.
++        context = session.get("conversational_context")
++        if isinstance(context, dict):
++            context["pending_clarification"] = None
+ 
+     trace: dict = {
+         'timestamp': utc_iso_now(),

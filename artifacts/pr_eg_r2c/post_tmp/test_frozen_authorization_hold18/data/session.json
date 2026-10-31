@@ -1,0 +1,100 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T09:57:06.846624Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T09:57:06.846624Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "pending_clarification": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean?",
+        "target_resolution": "ambiguous"
+      },
+      "pending_intention": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean?",
+        "target_resolution": "ambiguous"
+      },
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Yes.",
+          "delivered_text": "Yes does not choose among them. Name the person you mean. Nothing has been attempted.",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Yes.",
+        "response": "Yes does not choose among them. Name the person you mean. Nothing has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "5b3c937d48519ae8ba2d2f185ea3c599f32eb00180d664675cf398ebb7ae1a1c",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

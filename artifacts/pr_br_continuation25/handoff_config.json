@@ -1,0 +1,73 @@
+{
+  "campaign_id": "pr-br-continuation-25",
+  "campaign_name": "PR-BR Continuation 25 — Contract-First Semantic Ownership Reconciliation",
+  "campaign_date": "2026-10-03",
+  "purpose": "Reconcile ordinary natural-language gameplay around one Resolution Contract, then validate with at most six live turns. PR-BR stays open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Ordinary chat now builds one Resolution Contract before specialized resolvers run. Historical C12-C24 suites held, and the Y1-Y20 matrix passed. The six-turn live session kept a contract on every turn and did not mismatch accepted and emitted text, but manual review was 4/6. Turn 4 showed the adjudication family selector still treating tavern/shelter tokens as a place question inside a contemplated plan. Turn 1 sealed a JSON blob after labeling speech as an act. Decision: C25 revealed a deeper semantic-architecture dependency. No 4x10 gate. No human playtest. No commit.",
+  "primary_report": "artifacts/pr_br_continuation25/AUDIT.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/ordinary_semantic_ownership.py establishes one contract and selects the resolver.",
+      "game/api.py runs that boundary before social, exploration, travel, world-action, generic intent, and attack execution.",
+      "game/resolution_contract.py treats passive wait, direct attack, committed go/head/walk, and local-presence questions as contract operations.",
+      "game/perception_grounding.py realizes local-presence answers from the current scene before the response is sealed."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation25_semantic_ownership.py covers Y1-Y20, multi-clause ownership, the single-owner source order, and stubbed chat."
+    ],
+    "tooling": [
+      "artifacts/pr_br_continuation25/run_live.py runs at most six live turns in one isolated session."
+    ],
+    "documentation": [
+      "artifacts/pr_br_continuation25/AUDIT.md"
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation25/live/20261003T132903Z transcript, turns, and cost summary."
+    ]
+  },
+  "testing": {
+    "focused": "C25 ownership tests passed, including Y1-Y20.",
+    "broader": "C12-C24 modules passed. Local-presence and nearby HTTP tests passed. One pre-existing question-rule unit test stayed red.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 3 interpretation invocations. 5 gameplay generations. 1 retry. No smoke. No 4x10. No repair rerun.",
+    "model_runtime_boundary": "3 interpretation invocations. 5 initial gameplay generations. 1 retry. 0 evaluator calls. 6 player-model calls.",
+    "new_regressions": "Live turn 4 place-token takeover and live turn 1 JSON emission. Not patched after the session.",
+    "pre_existing_failures": "test_question_rule_does_not_rewrite_resolved_place_existence, already red for C24."
+  },
+  "decisions_requiring_human_review": [
+    "Whether another implementation cycle should replace lexical adjudication-family selection with contract fields, before any 4x10 gate."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Ask plus the words tavern or shelter can still select place_location.",
+      "A validated interpretation can label a spoken approach as an act.",
+      "A sealed retry can include raw JSON in the player-visible text."
+    ],
+    "pre_existing": [
+      "test_question_rule_does_not_rewrite_resolved_place_existence remains red."
+    ]
+  },
+  "missing_concepts": [
+    "Family selection that uses contract operation and commitment without re-reading raw tokens as a second owner."
+  ],
+  "does_not_prove": [
+    "It does not prove the second 4x10 gate would pass.",
+    "It does not prove every ask is free of lexical family takeover.",
+    "It does not authorize human playtest or PR-BS."
+  ],
+  "recommended_next_step": "External review. Do not open C26, do not run the 4x10 gate, and do not patch the tavern/shelter trigger from this live session.",
+  "supporting_files": [
+    {"path": "artifacts/pr_br_continuation25/AUDIT.md", "role": "audit", "why": "C25 audit.", "human_review_required": true},
+    {"path": "artifacts/pr_br_continuation25/MANUAL_REVIEW.md", "role": "manual_review", "why": "Live manual judgments.", "human_review_required": true, "behavioral_evidence": true},
+    {"path": "artifacts/pr_br_continuation25/PROVENANCE.md", "role": "provenance", "why": "HEAD and working tree."},
+    {"path": "artifacts/pr_br_continuation25/live/20261003T132903Z/visible.md", "role": "transcript", "why": "Player-visible live transcript.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/pr_br_continuation25/live/20261003T132903Z/turns.json", "role": "telemetry", "why": "Per-turn ownership telemetry.", "behavioral_evidence": true},
+    {"path": "artifacts/pr_br_continuation25/live/20261003T132903Z/summary.json", "role": "cost", "why": "Model and API cost accounting."},
+    {"path": "artifacts/pr_br_continuation25/live/20261003T132903Z/generation_calls.json", "role": "generations", "why": "Gameplay generation log."},
+    {"path": "artifacts/pr_br_continuation25/live/20261003T132903Z/interpretation_calls.json", "role": "interpretations", "why": "Interpretation invocation log."},
+    {"path": "game/ordinary_semantic_ownership.py", "role": "implementation", "why": "Unified contract boundary and resolver selection."},
+    {"path": "tests/test_pr_br_continuation25_semantic_ownership.py", "role": "tests", "why": "Y1-Y20 matrix and single-owner invariant."}
+  ]
+}

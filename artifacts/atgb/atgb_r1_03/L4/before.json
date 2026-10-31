@@ -1,0 +1,391 @@
+{
+  "session": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-19T09:06:33.845442Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "pending_clarification": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean?",
+        "target_resolution": "ambiguous"
+      },
+      "pending_intention": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean?",
+        "target_resolution": "ambiguous"
+      }
+    }
+  },
+  "world": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "location": "frontier_gate",
+        "role": "guard",
+        "affiliation": "cinderwatch",
+        "disposition": "neutral",
+        "current_agenda": "patrol_gate",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "patrol",
+            "text": "A patrol went missing near the old milestone."
+          }
+        ],
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "role": "informant",
+        "affiliation": "ash_cowl",
+        "disposition": "friendly",
+        "current_agenda": "sell_rumors",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          }
+        ],
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "sergeant_mara",
+        "name": "Sergeant Mara",
+        "location": "waystation_courtyard",
+        "role": "guard",
+        "disposition": "neutral",
+        "topics": [
+          {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road"
+          }
+        ],
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "corporal_bren",
+        "name": "Corporal Bren",
+        "location": "waystation_courtyard",
+        "role": "guard",
+        "description": "",
+        "disposition": "neutral",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": [],
+        "topics": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat": {
+    "in_combat": false,
+    "player_turn_used": false,
+    "round": 0
+  },
+  "scene": {
+    "scene": {
+      "id": "waystation_courtyard",
+      "location": "Waystation courtyard",
+      "summary": "A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road.",
+      "visible_facts": [
+        "A soot-streaked lantern burns beside the courtyard gate.",
+        "The side gate is barred from the other side.",
+        "Sergeant Mara looks concerned as she watches the road."
+      ],
+      "interactables": [
+        {
+          "id": "courtyard_lantern",
+          "label": "courtyard lantern",
+          "type": "examine",
+          "description": "A soot-streaked lantern burns beside the courtyard gate.",
+          "reveals_clue": "lantern_mark"
+        }
+      ],
+      "exits": [
+        {
+          "id": "courtyard_gate",
+          "label": "Courtyard gate",
+          "target_scene_id": "waystation_street",
+          "aliases": [
+            "gate",
+            "courtyard gate"
+          ]
+        }
+      ],
+      "discoverable_clues": [
+        {
+          "id": "lantern_mark",
+          "text": "A small maker's mark is stamped beneath the lantern."
+        }
+      ],
+      "hidden_facts": [],
+      "actions": [],
+      "objects": [],
+      "discovered_clues": [],
+      "runtime_entities": []
+    }
+  },
+  "log": []
+}

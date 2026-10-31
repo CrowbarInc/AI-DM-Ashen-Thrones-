@@ -1,0 +1,499 @@
+[
+  {
+    "conversation": "primary",
+    "turn": 2,
+    "audit": {
+      "attempted": true,
+      "calls": 1,
+      "operation": "uncertainty",
+      "revision": "eb6f0519a567a337",
+      "decision": "rejected",
+      "reasons": [
+        "unsupported_addition"
+      ],
+      "candidate": "I'm not sure what food is available right now.",
+      "raw_candidate": "I\u2019m not sure what food is available right now.",
+      "delivered_generated": false,
+      "fallback_used": true,
+      "validation_ms": 0.096,
+      "latency_ms": 1762.98,
+      "provider": {
+        "sent": true,
+        "ok": true,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 160,
+        "output_tokens": 12,
+        "error": ""
+      },
+      "contract": {
+        "speaker_id": "tavern_runner",
+        "speaker_name": "Tavern Runner",
+        "speaker_identity": {
+          "id": "tavern_runner",
+          "name": "Tavern Runner"
+        },
+        "addressee": "player",
+        "player_question": "I ask Tavern Runner what food is available.",
+        "operation": "uncertainty",
+        "authorized_source": "dialogue_authority.knowledge_posture",
+        "source_identity": {
+          "ref": "dialogue_authority.knowledge_posture",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unknown",
+        "epistemic_posture": "unknown",
+        "answer_sufficiency": "unknown",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "state_lack_of_knowledge",
+        "permitted_meaning": {
+          "operation": "state_lack_of_knowledge",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Tavern Runner"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "eb6f0519a567a337",
+        "fallback_response": "Tavern Runner says, \"I couldn't tell you.\"",
+        "canonical": false,
+        "delivery_frame": ""
+      },
+      "prompt": {
+        "system": "You write one sentence spoken by Tavern Runner to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+        "user": "Player question: I ask Tavern Runner what food is available.\nOperation: uncertainty\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: say you do not know the answer. You may repeat the player's subject only to name what is unknown. Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
+      }
+    }
+  },
+  {
+    "conversation": "primary",
+    "turn": 6,
+    "audit": {
+      "attempted": true,
+      "calls": 1,
+      "operation": "incidental_characterization",
+      "revision": "4fb4e82065567747",
+      "decision": "rejected",
+      "reasons": [
+        "unsupported_addition"
+      ],
+      "candidate": "I prefer the evening because it feels calmer and the world seems to slow down just enough for me to catch my breath.",
+      "raw_candidate": "I prefer the evening because it feels calmer and the world seems to slow down just enough for me to catch my breath.",
+      "delivered_generated": false,
+      "fallback_used": true,
+      "validation_ms": 0.121,
+      "latency_ms": 1100.942,
+      "provider": {
+        "sent": true,
+        "ok": true,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 172,
+        "output_tokens": 25,
+        "error": ""
+      },
+      "contract": {
+        "speaker_id": "tavern_runner",
+        "speaker_name": "Tavern Runner",
+        "speaker_identity": {
+          "id": "tavern_runner",
+          "name": "Tavern Runner"
+        },
+        "addressee": "player",
+        "player_question": "Why do you prefer that time?",
+        "operation": "incidental_characterization",
+        "authorized_source": "conversational_continuity.bounded_personal_line",
+        "source_identity": {
+          "ref": "conversational_continuity.bounded_personal_line",
+          "proposition_id": "statement:e8392847f249"
+        },
+        "proposition_id": "statement:e8392847f249",
+        "authorized_propositions": [
+          "I prefer the evening."
+        ],
+        "knowledge_posture": "belief",
+        "epistemic_posture": "belief",
+        "answer_sufficiency": "does_not_answer",
+        "disclosure_posture": "host_line",
+        "permitted_expression_scope": "nonconsequential_subjective_reason",
+        "permitted_meaning": {
+          "operation": "explain_own_preference",
+          "preference_anchor": "evening",
+          "subject": "speaker_experience",
+          "theme_id": "speaker_preference_ease",
+          "licensed_by": "established_preference",
+          "external_world": false,
+          "consequential_commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Tavern Runner"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "4fb4e82065567747",
+        "fallback_response": "Tavern Runner says, \"I prefer the evening.\"",
+        "canonical": false,
+        "delivery_frame": ""
+      },
+      "prompt": {
+        "system": "You write one sentence spoken by Tavern Runner to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+        "user": "Player question: Why do you prefer that time?\nOperation: incidental_characterization\nAUTHORIZED FACTS:\n- I prefer the evening.\nAUTHORIZED MEANING: you prefer evening. OPTIONAL NONCANONICAL EXPRESSION: one personal reason, only about how that feels to you. You may say it feels easier, calmer, quieter, or more peaceful. Ordinary grammar is allowed. Do not mention other people, places, guards, schedules, secrets, payments, duties, or meetings."
+      }
+    }
+  },
+  {
+    "conversation": "primary",
+    "turn": 10,
+    "audit": {
+      "attempted": true,
+      "calls": 1,
+      "operation": "nonbinding_refusal",
+      "revision": "0d36386d87a2c1a6",
+      "decision": "rejected",
+      "reasons": [
+        "unsupported_addition"
+      ],
+      "candidate": "I can't promise you a reward for helping out.",
+      "raw_candidate": "I can\u2019t promise you a reward for helping out.",
+      "delivered_generated": false,
+      "fallback_used": true,
+      "validation_ms": 0.069,
+      "latency_ms": 1014.439,
+      "provider": {
+        "sent": true,
+        "ok": true,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 159,
+        "output_tokens": 12,
+        "error": ""
+      },
+      "contract": {
+        "speaker_id": "sergeant_mara",
+        "speaker_name": "Sergeant Mara",
+        "speaker_identity": {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara"
+        },
+        "addressee": "player",
+        "player_question": "I ask Sergeant Mara to promise me a reward if I help.",
+        "operation": "nonbinding_refusal",
+        "authorized_source": "dialogue_authority.player_line",
+        "source_identity": {
+          "ref": "dialogue_authority.player_line",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unestablished",
+        "epistemic_posture": "unestablished",
+        "answer_sufficiency": "unknown",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "refuse_without_commitment",
+        "permitted_meaning": {
+          "operation": "refuse_without_commitment",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Sergeant Mara"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "0d36386d87a2c1a6",
+        "fallback_response": "Sergeant Mara says, \"I couldn't tell you.\"",
+        "canonical": false,
+        "delivery_frame": ""
+      },
+      "prompt": {
+        "system": "You write one sentence spoken by Sergeant Mara to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+        "user": "Player question: I ask Sergeant Mara to promise me a reward if I help.\nOperation: nonbinding_refusal\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: refuse the request in one sentence. Say you cannot promise a reward. Do not promise payment, name an authority, or explain a rule. Do not use because, but, or since."
+      }
+    }
+  },
+  {
+    "conversation": "primary",
+    "turn": 11,
+    "audit": {
+      "attempted": true,
+      "calls": 1,
+      "operation": "uncertainty",
+      "revision": "259e404e08f19e6f",
+      "decision": "rejected",
+      "reasons": [
+        "unsupported_addition"
+      ],
+      "candidate": "I'm not sure who made the lantern you're asking about.",
+      "raw_candidate": "I\u2019m not sure who made the lantern you\u2019re asking about.",
+      "delivered_generated": false,
+      "fallback_used": true,
+      "validation_ms": 0.057,
+      "latency_ms": 906.54,
+      "provider": {
+        "sent": true,
+        "ok": true,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 160,
+        "output_tokens": 14,
+        "error": ""
+      },
+      "contract": {
+        "speaker_id": "tavern_runner",
+        "speaker_name": "Tavern Runner",
+        "speaker_identity": {
+          "id": "tavern_runner",
+          "name": "Tavern Runner"
+        },
+        "addressee": "player",
+        "player_question": "I ask Tavern Runner who made the lantern.",
+        "operation": "uncertainty",
+        "authorized_source": "dialogue_authority.player_line",
+        "source_identity": {
+          "ref": "dialogue_authority.player_line",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unknown",
+        "epistemic_posture": "unknown",
+        "answer_sufficiency": "unknown",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "state_lack_of_knowledge",
+        "permitted_meaning": {
+          "operation": "state_lack_of_knowledge",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Tavern Runner"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "259e404e08f19e6f",
+        "fallback_response": "Tavern Runner says, \"I couldn't tell you.\"",
+        "canonical": false,
+        "delivery_frame": ""
+      },
+      "prompt": {
+        "system": "You write one sentence spoken by Tavern Runner to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+        "user": "Player question: I ask Tavern Runner who made the lantern.\nOperation: uncertainty\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: say you do not know the answer. You may repeat the player's subject only to name what is unknown. Do not invent a maker, owner, place, time, or cause. Do not use because, but, or since."
+      }
+    }
+  },
+  {
+    "conversation": "secondary",
+    "turn": 10,
+    "audit": {
+      "attempted": true,
+      "calls": 1,
+      "operation": "nonbinding_refusal",
+      "revision": "e1bab8328c7a2aee",
+      "decision": "rejected",
+      "reasons": [
+        "unsupported_addition",
+        "unsupported_explanation"
+      ],
+      "candidate": "I'm sorry, but I cannot promise you any silver for your help.",
+      "raw_candidate": "I'm sorry, but I cannot promise you any silver for your help.",
+      "delivered_generated": false,
+      "fallback_used": true,
+      "validation_ms": 0.086,
+      "latency_ms": 1754.371,
+      "provider": {
+        "sent": true,
+        "ok": true,
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 161,
+        "output_tokens": 15,
+        "error": ""
+      },
+      "contract": {
+        "speaker_id": "clerk_oren",
+        "speaker_name": "Clerk Oren",
+        "speaker_identity": {
+          "id": "clerk_oren",
+          "name": "Clerk Oren"
+        },
+        "addressee": "player",
+        "player_question": "I ask Clerk Oren to promise me ten silver if I help.",
+        "operation": "nonbinding_refusal",
+        "authorized_source": "dialogue_authority.player_line",
+        "source_identity": {
+          "ref": "dialogue_authority.player_line",
+          "proposition_id": ""
+        },
+        "proposition_id": "",
+        "authorized_propositions": [],
+        "knowledge_posture": "unestablished",
+        "epistemic_posture": "unestablished",
+        "answer_sufficiency": "unknown",
+        "disclosure_posture": "none",
+        "permitted_expression_scope": "refuse_without_commitment",
+        "permitted_meaning": {
+          "operation": "refuse_without_commitment",
+          "new_facts": false,
+          "commitment": false
+        },
+        "prohibited_speech_acts": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "prohibited_additions": [
+          "new_consequential_fact",
+          "new_obligation",
+          "hidden_disclosure",
+          "epistemic_strengthening",
+          "unauthorized_commitment",
+          "entity_substitution",
+          "factual_strengthening",
+          "security_information",
+          "new_relationship",
+          "secret"
+        ],
+        "entity_identities": [
+          {
+            "id": "speaker",
+            "forms": [
+              "Clerk Oren"
+            ],
+            "aliases": []
+          }
+        ],
+        "prior_delivered_statement": "",
+        "source_revision": "e1bab8328c7a2aee",
+        "fallback_response": "Clerk Oren says, \"I couldn't tell you.\"",
+        "canonical": false,
+        "delivery_frame": ""
+      },
+      "prompt": {
+        "system": "You write one sentence spoken by Clerk Oren to the player. AUTHORIZED FACTS are the only consequential claims you may express. OPTIONAL NONCANONICAL EXPRESSION is wording only and cannot establish a new fact. Do not mention rules, contracts, or that you are a model. Reply with the spoken sentence only.",
+        "user": "Player question: I ask Clerk Oren to promise me ten silver if I help.\nOperation: nonbinding_refusal\nAUTHORIZED FACTS:\n- (none)\nAUTHORIZED FACTS are empty. OPTIONAL NONCANONICAL EXPRESSION: refuse the request in one sentence. Say you cannot promise a reward. Do not promise payment, name an authority, or explain a rule. Do not use because, but, or since."
+      }
+    }
+  }
+]

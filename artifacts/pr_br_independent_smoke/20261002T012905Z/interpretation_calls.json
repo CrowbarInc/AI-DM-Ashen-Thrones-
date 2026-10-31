@@ -1,0 +1,34 @@
+[
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"act\"],\"raw_target_text\":\"what a bowl of that stew costs, and whether I can eat it somewhere out of this rain\",\"proposed_target_id\":\"tavern_runner\",\"interlocutor_id\":\"tavern_runner\",\"conversational_subject\":\"stew price and eating location\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"get price of stew and permission or information about eating location\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"If the dry place is inside the market quarter, how do I get through this line, and will the guards let a stranger in just to eat?\",\"proposed_target_id\":\"gate_guard\",\"interlocutor_id\":\"tavern_runner\",\"conversational_subject\":\"access to market quarter and guards' permission\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"information about passing through the crowd and guards' policy on strangers entering to eat\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"follow\"],\"raw_target_text\":\"what a traveler has to show or pay to get through this gate\",\"proposed_target_id\":\"gate_guard\",\"interlocutor_id\":\"gate_guard\",\"conversational_subject\":\"gate passage requirements\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"information about what a traveler must show or pay to pass through the gate\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"confirm\"],\"raw_target_text\":\"What papers, and what fee, are actually in force for a lone traveler at this moment?\",\"proposed_target_id\":\"gate_guard\",\"interlocutor_id\":\"gate_guard\",\"conversational_subject\":\"entry requirements for lone travelers\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"The player wants to know the current official requirements (papers and fees) for a lone traveler to pass through the gate.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"I read the postings for the taxes, the curfew, and anything that says what a traveler needs in order to pass.\",\"proposed_target_id\":\"notice_board\",\"interlocutor_id\":\"gate_guard\",\"conversational_subject\":\"traveler requirements to pass the gate\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"to learn the current official requirements and notices relevant to travelers passing through the gate\",\"referenced_claim_id\":null,\"referenced_action_id\":\"lead_frontier_gate_notice_board\",\"referenced_inspected_id\":\"notice_board\",\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"act\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"I step into the line and move toward the gate. I tell the guard I have no papers and nothing set aside for a fee, and that I am going through now.\",\"proposed_target_id\":\"gate_guard\",\"interlocutor_id\":\"gate_guard\",\"conversational_subject\":\"passing through the gate without papers or fee\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"to gain passage through the gate despite lacking papers or fee\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"act\"],\"raw_target_text\":\"I ask quietly what they are waiting for.\",\"proposed_target_id\":\"threadbare_watcher\",\"interlocutor_id\":\"threadbare_watcher\",\"conversational_subject\":\"waiting\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"to learn what the threadbare watcher is waiting for\",\"referenced_claim_id\":null,\"referenced_action_id\":\"rc_e85ec8d5b246\",\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"I ask him what he is watching for out there.\",\"proposed_target_id\":\"gate_serjeant\",\"interlocutor_id\":\"gate_serjeant\",\"conversational_subject\":\"what the gate serjeant is watching for\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"to learn what the gate serjeant is watching for outside the gate\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  }
+]

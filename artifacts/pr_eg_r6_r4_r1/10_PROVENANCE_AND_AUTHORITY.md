@@ -1,0 +1,3 @@
+# 10 — Provenance and Authority
+
+Source provenance and epistemic metadata are host-owned. world_source, host_operation and bounded_expression can be eligible under host disclosure policy; verified_history is excluded from world-evidence extraction. Actual corpus includes world sources, authorized noncanonical narration, beliefs, rumor, disputed reports and historical speech. Security probes cover all four required provenance labels. No new host_operation campaign evidence is invented. C compares provenance/epistemic to the original eligible source. Authorization is not canonical status; source authority cannot be promoted by confidence or human review.

@@ -1,0 +1,51 @@
+{
+  "case_id": "s18q3",
+  "family": "s18",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "115ecde6537933abd955ae8cc841dfa2c8ca12ca69f9b55ed5bab713a0813240",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Ull borrowed the silver compass from Tessa"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s18"
+    ],
+    "answered_arguments": [
+      "borrower"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 states that owner Tessa lent the silver compass to borrower Ull until the next market day, directly answering who borrowed the compass from Ull."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_answer",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

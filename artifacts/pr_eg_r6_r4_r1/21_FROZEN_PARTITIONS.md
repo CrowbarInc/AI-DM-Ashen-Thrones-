@@ -1,0 +1,3 @@
+# 21 — Frozen Partitions
+
+Freeze timestamp: 2026-10-18T18:51:16.330577+00:00. SHA-256 covers corpus.py, engine.py, run.py, CONTRACT.md, all partitions and the production correspondence/authorization dependencies. Frozen input count 12. No partition, label, prompt, scorer or adapter amendments after freeze. verify() checks every hash plus all game/data hashes at each run boundary. Development ran first, then validation/holdout, without tuning. The report and read-only offline diagnostic were written after exposure; they do not alter primary outputs or scoring. Hashes prove preservation after authoring, not that an AI author never saw its own holdout.

@@ -1,0 +1,51 @@
+{
+  "case_id": "s23q0",
+  "family": "s23",
+  "partition": "holdout",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "319b1d46702c19f2491e7687c04f4570ddd4b75afeda0ccdbda64280c795b828",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The toll court"
+    ],
+    "qualifiers": [
+      "pending settlement of the disputed levy",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s23"
+    ],
+    "answered_arguments": [
+      "agent"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that 'The toll court impounded a wool barge pending settlement of the disputed levy.' This directly answers the question about who impounded the wool barge."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

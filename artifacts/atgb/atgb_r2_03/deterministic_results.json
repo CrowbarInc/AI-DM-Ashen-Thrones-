@@ -1,0 +1,1464 @@
+[
+  {
+    "turn_id": "S02.2",
+    "variant": "captured_record_unchanged",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM when the curfew starts."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board lists curfew rules.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Information about the start time of the curfew.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM when the curfew starts.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "curfew start time",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "When does the curfew start?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "visible:0"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.2",
+    "variant": "evidence_selection_only_empty",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM when the curfew starts."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board lists curfew rules.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Information about the start time of the curfew.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM when the curfew starts.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "curfew start time",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "When does the curfew start?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "That has not been established in the information available to you.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.2",
+    "variant": "supported_question_disposition_and_no_answer_evidence",
+    "exact_input_record": {
+      "communication_mode": "OTHER",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM when the curfew starts."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board lists curfew rules.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Information about the start time of the curfew.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "curfew start time",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "When does the curfew start?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "That has not been established in the information available to you.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.3",
+    "variant": "captured_record_unchanged",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you have information about when the missing patrol starts rather than where it went?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Timing of the missing patrol start",
+        "evidence_refs": [
+          "reply:1"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "reply:1": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "reply:1"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.3",
+    "variant": "subject_only",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you have information about when the missing patrol starts rather than where it went?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "curfew start time",
+        "evidence_refs": [
+          "reply:1"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "reply:1": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "reply:1"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.3",
+    "variant": "evidence_selection_only_empty",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you have information about when the missing patrol starts rather than where it went?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "curfew start time",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "CLARIFY",
+      "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you have information about when the missing patrol starts rather than where it went?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.3",
+    "variant": "subject_and_empty_evidence",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you have information about when the missing patrol starts rather than where it went?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "curfew start time",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "CLARIFY",
+      "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you have information about when the missing patrol starts rather than where it went?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.3",
+    "variant": "supported_question_disposition_and_no_answer_evidence",
+    "exact_input_record": {
+      "communication_mode": "OTHER",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "curfew start time",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "That has not been established in the information available to you.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.4",
+    "variant": "captured_record_unchanged",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM what the warning on the notice board says about the last known location of the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board includes a warning about a missing patrol.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about where the missing patrol was last seen according to the warning.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM what the warning says about where the missing patrol was last seen.",
+          "target_ref": "notice_board",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Content of the warning about where the missing patrol was last seen",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "All right. What did the warning say about where they were last seen?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "visible:0"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.4",
+    "variant": "evidence_selection_only_empty",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM what the warning on the notice board says about the last known location of the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board includes a warning about a missing patrol.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about where the missing patrol was last seen according to the warning.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM what the warning says about where the missing patrol was last seen.",
+          "target_ref": "notice_board",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Content of the warning about where the missing patrol was last seen",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "All right. What did the warning say about where they were last seen?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "That has not been established in the information available to you.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S02.4",
+    "variant": "supported_question_disposition_and_no_answer_evidence",
+    "exact_input_record": {
+      "communication_mode": "OTHER",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM what the warning on the notice board says about the last known location of the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board includes a warning about a missing patrol.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about where the missing patrol was last seen according to the warning.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Posted last-seen location of missing patrol",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "All right. What did the warning say about where they were last seen?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "That has not been established in the information available to you.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S05.3",
+    "variant": "captured_record_unchanged",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+          "target_ref": "tavern_runner",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    },
+    "decision": {
+      "category": "EXECUTE",
+      "primary_intention": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+      "intent_family": "world_operation",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": "tavern_runner",
+      "proposed_record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+        },
+        "asserted_premises": [
+          {
+            "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+            "target_ref": "tavern_runner",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "CLARIFICATION",
+          "subject": "More information about the patrol rumor from the Tavern Runner",
+          "evidence_refs": [
+            "npc:tavern_runner:patrol_rumor"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+        }
+      },
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": true,
+      "reason": "single_authoritative_component",
+      "confidence": 0.9,
+      "ambiguity": null,
+      "player_facing_text": "",
+      "context_update": null,
+      "intent_modality": "committed",
+      "secondary_intentions": [],
+      "execution_policy": "",
+      "communication_owner": "NPC",
+      "communication_purpose": "ACTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S05.3",
+    "variant": "alternative_supported_subject_only",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+          "target_ref": "tavern_runner",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "Notice-board account of the same missing patrol",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    },
+    "decision": {
+      "category": "EXECUTE",
+      "primary_intention": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+      "intent_family": "world_operation",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": "tavern_runner",
+      "proposed_record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+        },
+        "asserted_premises": [
+          {
+            "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+            "target_ref": "tavern_runner",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "CLARIFICATION",
+          "subject": "Notice-board account of the same missing patrol",
+          "evidence_refs": [
+            "npc:tavern_runner:patrol_rumor"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+        }
+      },
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": true,
+      "reason": "single_authoritative_component",
+      "confidence": 0.9,
+      "ambiguity": null,
+      "player_facing_text": "",
+      "context_update": null,
+      "intent_modality": "committed",
+      "secondary_intentions": [],
+      "execution_policy": "",
+      "communication_owner": "NPC",
+      "communication_purpose": "ACTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S05.3",
+    "variant": "explicitly_assumed_GM_recall_control_not_unique_resolution",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "RECALL",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    },
+    "decision": {
+      "category": "ANSWER",
+      "primary_intention": "Tell me more about that.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "npc:tavern_runner:patrol_rumor"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "RECALL",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S05.3",
+    "variant": "supported_account_clarification_control",
+    "exact_input_record": {
+      "communication_mode": "OTHER",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you mean the runner's rumor, or what you wanted to learn from the notice board?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Which account of the missing patrol?",
+        "evidence_refs": []
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {}
+    },
+    "decision": {
+      "category": "CLARIFY",
+      "primary_intention": "Tell me more about that.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you mean the runner's rumor, or what you wanted to learn from the notice board?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  },
+  {
+    "turn_id": "S05.3",
+    "variant": "resolver_input",
+    "exact_input_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+          "target_ref": "tavern_runner",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    },
+    "decision": {
+      "category": "EXECUTE",
+      "primary_intention": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+      "intent_family": "world_operation",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": "tavern_runner",
+      "proposed_record": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+        },
+        "asserted_premises": [
+          {
+            "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+            "target_ref": "tavern_runner",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "tavern_runner"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "CLARIFICATION",
+          "subject": "More information about the patrol rumor from the Tavern Runner",
+          "evidence_refs": [
+            "npc:tavern_runner:patrol_rumor"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+        }
+      },
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": true,
+      "reason": "single_authoritative_component",
+      "confidence": 0.9,
+      "ambiguity": null,
+      "player_facing_text": "",
+      "context_update": null,
+      "intent_modality": "committed",
+      "secondary_intentions": [],
+      "execution_policy": "",
+      "communication_owner": "NPC",
+      "communication_purpose": "ACTION",
+      "authorization": null
+    },
+    "inputs_unchanged": true
+  }
+]

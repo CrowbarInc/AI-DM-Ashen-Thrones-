@@ -1,0 +1,30 @@
+{
+  "steps": [
+    {
+      "action": "initialize_campaign",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "capture_baseline",
+      "ok": true,
+      "http_status": null
+    },
+    {
+      "action": "start_campaign",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "capture_final_state",
+      "ok": true,
+      "http_status": null
+    }
+  ],
+  "cleanup": {
+    "owned": true,
+    "pid": 24460,
+    "stopped": true,
+    "exit_code": 1
+  }
+}

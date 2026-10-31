@@ -1,0 +1,16 @@
+game\api.py:1084:        from game.immutable_valid_response import safe_nonresolution
+game\api.py:1088:        line = safe_nonresolution(contract, resolution=resolution, player_text=player_text)
+game\api.py:4821:    if provenance == "safe_nonresolution" or authorization == "safe_nonresolution":
+game\api.py:4822:        return "safe_nonresolution"
+game\api.py:4824:    if isinstance(seal, str) and "safe_nonresolution" in seal:
+game\api.py:4825:        return "safe_nonresolution"
+game\api.py:4827:        seal.get("provenance") == "safe_nonresolution" or seal.get("authorization_source") == "safe_nonresolution"
+game\api.py:4829:        return "safe_nonresolution"
+game\conversational_referents.py:278:    if adoption.get('provenance') == 'safe_nonresolution':
+game\gm_resolution_decision.py:41:OUTCOME_NONRESOLUTION = "safe_nonresolution"
+game\immutable_valid_response.py:24:PROVENANCE_SAFE = "safe_nonresolution"
+game\immutable_valid_response.py:974:def safe_nonresolution(
+game\immutable_valid_response.py:1316:        "authority_result": "accepted" if validation.get("hard_valid") else "safe_nonresolution",
+game\immutable_valid_response.py:1790:            record.update(speaker_id="", subject="", authority_result="safe_nonresolution", authorization_source="host_terminal_safety",
+game\immutable_valid_response.py:2046:            safe_nonresolution(contract, resolution=resolution, visible_facts=facts, player_text=player),
+game\immutable_valid_response.py:2047:            "safe_nonresolution",

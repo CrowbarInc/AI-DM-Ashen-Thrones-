@@ -1,0 +1,28 @@
+{
+  "campaign_id": "remaining_baseline_triage_20260919",
+  "campaign_name": "Remaining Baseline Triage and Root-Cause Confirmation",
+  "campaign_date": "2026-09-19",
+  "purpose": "Convert the 36-test red baseline into evidence-backed repair, cleanup, policy, and unresolved queues without repairing behavior.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "The baseline remains 36 failures. The investigation maps every failure exactly once into 25 root-cause clusters: 4 product-defect failures, 10 architecture-defect failures, 3 validation-defect failures, 8 stale expectations, 1 stale fixture, 4 governance-drift failures, 4 policy-decision failures, and 2 unresolved failures. The six ownership/import failures split into current production facade violations, test-helper validation defects, registry drift, and direct unstamped writes. No repair was implemented.",
+  "changes": {"production": [], "validation": [], "tooling": ["Added registry and queue generator plus five accounting tests."], "documentation": ["Added canonical triage report."], "generated_artifacts": ["Added investigation registry, root-cause clusters, repair queue, cleanup queue, policy queue, and JUnit baselines."]},
+  "testing": {"focused": "Five triage-tooling tests passed.", "broader": "All 36 failures reproduced in the full pre-triage suite.", "full_suite": "Pre: 6,440 collected, 6,305 passed, 36 failed, 99 skipped. Post: 6,445 collected, 6,310 passed, 36 failed, 99 skipped. The five added cases are passing triage-tooling tests.", "runtime_validation": "Existing deterministic tests only; no runtime semantics changed.", "model_runtime_boundary": "No model invocation occurred.", "new_regressions": "None; the exact failure set is unchanged.", "pre_existing_failures": "All 36 failures remain intentionally unrepaired."},
+  "decisions_requiring_human_review": ["Define the permitted local raw-token boundary.", "Choose authoritative destination-redirect lead representation."],
+  "known_problems": {"campaign_specific": [], "pre_existing": ["RC-11 opening debug ordering and RC-13 long-session diagnostic divergence remain unresolved."]},
+  "missing_concepts": ["Repair implementation, validation cleanup, Calibration Round 2, State-to-Narration Consistency, and browser validation are out of scope."],
+  "does_not_prove": ["That all failures are production defects.", "That gameplay or architecture improved.", "That policy-decision or unresolved cases are safe to change."],
+  "recommended_next_step": "Review the confirmed queue, then repair approved P0/P1 root causes in a separate campaign.",
+  "primary_report": "docs/remaining_baseline_triage_and_root_cause_confirmation.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "artifacts/baseline_triage/failure_investigation_registry.json", "role": "authoritative_registry", "why": "Accounts for all failures and clusters with evidence.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/confirmed_repair_queue.json", "role": "repair_queue", "why": "Contains only confirmed product and architecture repairs.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/confirmed_repair_queue.md", "role": "repair_queue_view", "why": "Readable repair queue.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/validation_cleanup_queue.json", "role": "cleanup_queue", "why": "Separates non-product work.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/policy_decisions.md", "role": "policy_queue", "why": "Preserves genuine project-intent questions.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/pre_triage_suite.xml", "role": "pre_junit", "why": "Machine-readable starting baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/baseline_triage/post_triage_suite.xml", "role": "post_junit", "why": "Machine-readable ending baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "tests/test_remaining_baseline_triage.py", "role": "focused_tests", "why": "Checks complete accounting and queue consistency.", "behavioral_evidence": false, "human_review_required": false}
+  ],
+  "self_contained_review_test": "PASS: report, per-test registry, queues, policy questions, and pre/post JUnit are bundled."
+}

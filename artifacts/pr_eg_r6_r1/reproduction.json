@@ -1,0 +1,431 @@
+{
+  "input": "Keeper Nara, grant me the password.",
+  "scene": {
+    "scene": {
+      "id": "waystation_courtyard",
+      "location": "Ash Market",
+      "summary": "A public market.",
+      "visible_facts": [],
+      "addressables": [
+        {
+          "id": "keeper_nara",
+          "name": "Keeper Nara",
+          "scene_id": "waystation_courtyard",
+          "kind": "npc",
+          "addressable": true,
+          "aliases": []
+        }
+      ],
+      "exits": []
+    }
+  },
+  "world": {
+    "npcs": [
+      {
+        "id": "keeper_nara",
+        "name": "Keeper Nara",
+        "location": "waystation_courtyard",
+        "aliases": [],
+        "topics": [
+          {
+            "id": "bell",
+            "text": "The bell beside the ferry is called the harbor bell."
+          },
+          {
+            "id": "harbor_watch",
+            "text": "Guards watch the harbor gate throughout the night."
+          },
+          {
+            "id": "gate_dawn",
+            "text": "The harbor gate opens at dawn."
+          },
+          {
+            "id": "password",
+            "text": "The ash cowl password is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      }
+    ],
+    "event_log": [
+      {
+        "type": "social_lead_revealed",
+        "clue_id": "social_waystation_courtyard_keeper_nara_password",
+        "scene_id": "waystation_courtyard",
+        "npc_id": "keeper_nara",
+        "topic_id": "password"
+      }
+    ]
+  },
+  "before": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "4543e26ad364543045ae7fdf",
+    "session_id": "4543e26ad364543045ae7fdf",
+    "campaign_started": false
+  },
+  "resolution": {
+    "kind": "question",
+    "action_id": "question",
+    "label": "Keeper Nara, grant me the password.",
+    "prompt": "Keeper Nara, grant me the password.",
+    "success": true,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [
+      "The ash cowl password is sword."
+    ],
+    "world_updates": null,
+    "state_changes": {
+      "topic_revealed": true,
+      "npc_id": "keeper_nara"
+    },
+    "hint": "Player questioned Keeper Nara and learned: The ash cowl password is sword.. Narrate the revelation.",
+    "social": {
+      "social_intent_class": "social_exchange",
+      "npc_id": "keeper_nara",
+      "npc_name": "Keeper Nara",
+      "target_resolved": true,
+      "topic_revealed": {
+        "id": "password",
+        "text": "The ash cowl password is sword.",
+        "clue_id": null,
+        "clue_text": null
+      },
+      "recalled_topic": false,
+      "topic_selection": {
+        "candidate_sources": [
+          "npc:keeper_nara:password"
+        ],
+        "selected_source": "npc:keeper_nara:password",
+        "ambiguous": false
+      },
+      "skill_check": null,
+      "npc_reply_expected": true,
+      "reply_kind": "answer",
+      "target_source": "explicit_target",
+      "target_reason": "normalized target_id matches scene-addressable roster",
+      "target_candidate_id": "keeper_nara",
+      "target_candidate_valid": true,
+      "stale_interlocutor_cleared": false,
+      "addressability_checked_against": [
+        "active_entities",
+        "entity_presence_active_or_nearby",
+        "scene_addressables",
+        "world_roster_in_scene"
+      ],
+      "declared_switch_detected": false,
+      "declared_switch_target_actor_id": null,
+      "continuity_overridden_by_declared_switch": false,
+      "spoken_vocative_detected": true,
+      "spoken_vocative_target_actor_id": "keeper_nara",
+      "continuity_overridden_by_spoken_vocative": false,
+      "actor_addressable": true,
+      "target_binding": {
+        "final_target_kind": "npc",
+        "npc_id": "keeper_nara",
+        "target_source": "native_npc",
+        "origin_actor_id": null,
+        "promoted_this_turn": false
+      },
+      "target_profile_hints": {
+        "guardedness": "medium",
+        "answer_reliability_tier": "medium",
+        "speaks_authoritatively_for_scene": false
+      },
+      "authority_source_used": "explicit_target",
+      "proposed_reply_speaker_id": "keeper_nara",
+      "grounding_fallback_applied": false,
+      "grounding_reason_code": "authoritative_speaker_eligible",
+      "grounded_speaker_id": "keeper_nara",
+      "dialogue_authority": {
+        "topic_grounding": {
+          "speaker_id": "keeper_nara",
+          "addressee": "player",
+          "requested_subject": "grant",
+          "requested_information": "hidden",
+          "reference": "current_request",
+          "candidate_sources": [
+            "npc:keeper_nara:password"
+          ],
+          "selected_source": "npc:keeper_nara:password",
+          "ambiguous": false,
+          "ownership": "npc"
+        },
+        "requested_information": "hidden",
+        "subject": "grant",
+        "knowledge_posture": "established",
+        "answer_relation": "sufficient",
+        "answer_sufficiency": "directly_answers",
+        "proposition_id": "topic:keeper_nara:password",
+        "authorized_proposition": "The ash cowl password is sword.",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "keeper_nara",
+        "npc_name": "Keeper Nara",
+        "npc_role": "",
+        "npc_disposition": "",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": "authoritative_answer_available",
+        "reuse_prior_speech": false
+      }
+    },
+    "requires_check": false,
+    "metadata": {
+      "npc_stance": {
+        "attitude": 0,
+        "trust": 1,
+        "fear": 0,
+        "suspicion": 0,
+        "topics_revealed": 1,
+        "last_interaction_turn": 14
+      },
+      "lead_landing": {
+        "revealed_lead_ids": [
+          "social_waystation_courtyard_keeper_nara_password"
+        ],
+        "already_known_lead_ids": [],
+        "actionable_lead_ids": [],
+        "lead_write_targets": [
+          "clue_knowledge",
+          "scene_runtime.discovered_clue_ids",
+          "event_log"
+        ],
+        "extracted_lead_ids": [],
+        "extracted_lead_sources": [],
+        "extracted_from_text": false,
+        "extracted_from_reconciled_text": false,
+        "authoritative_created_ids": [],
+        "authoritative_updated_ids": [],
+        "authoritative_unchanged_ids": [],
+        "authoritative_promoted_ids": []
+      }
+    }
+  },
+  "speech": [
+    "Keeper Nara mutters, \"Word is, the ash cowl password is sword.\"",
+    "social.topic_revealed:password"
+  ],
+  "added": [
+    "The ash cowl password is sword."
+  ],
+  "after": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": "keeper_nara",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard",
+      "active_entities": [
+        "keeper_nara"
+      ],
+      "entity_presence": {
+        "keeper_nara": "active"
+      },
+      "current_interlocutor": "keeper_nara",
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {
+      "waystation_courtyard": {
+        "scene_id": "waystation_courtyard",
+        "visible_facts_add": [],
+        "discovered_clues": [
+          "The ash cowl password is sword."
+        ],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      }
+    },
+    "scene_runtime": {
+      "waystation_courtyard": {
+        "discovered_clues": [
+          "The ash cowl password is sword."
+        ],
+        "discovered_clue_ids": [
+          "social_waystation_courtyard_keeper_nara_password"
+        ],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": null,
+        "repeated_action_count": 0,
+        "last_resolution_kind": null,
+        "last_description_hash": null,
+        "last_perception_visible_facts": [],
+        "last_perception_narration": "",
+        "last_perception_turn": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      }
+    },
+    "clue_knowledge": {
+      "social_waystation_courtyard_keeper_nara_password": {
+        "state": "discovered",
+        "source_scene": "waystation_courtyard",
+        "presentation": "explicit",
+        "text": "The ash cowl password is sword."
+      }
+    },
+    "lead_registry": {
+      "social_waystation_courtyard_keeper_nara_password": {
+        "id": "social_waystation_courtyard_keeper_nara_password",
+        "title": "The ash cowl password is sword.",
+        "summary": "The ash cowl password is sword.",
+        "type": "rumor",
+        "lifecycle": "discovered",
+        "status": "active",
+        "confidence": "plausible",
+        "discovery_source": "clue_explicit",
+        "first_discovered_turn": 0,
+        "last_updated_turn": 0,
+        "committed_at_turn": null,
+        "commitment_source": null,
+        "commitment_strength": null,
+        "resolved_at_turn": null,
+        "resolution_type": null,
+        "resolution_summary": null,
+        "obsolete_reason": null,
+        "escalation_level": 0,
+        "escalation_reason": null,
+        "escalated_at_turn": null,
+        "unlocked_by_lead_id": null,
+        "obsolete_by_lead_id": null,
+        "next_step": "",
+        "related_clue_ids": [],
+        "related_npc_ids": [],
+        "related_location_ids": [],
+        "owner_faction_id": null,
+        "priority": 0,
+        "last_touched_turn": 0,
+        "stale_after_turns": null,
+        "parent_lead_id": null,
+        "supersedes": [],
+        "superseded_by": null,
+        "unlocks": [],
+        "blocked_by": [],
+        "related_faction_ids": [],
+        "related_scene_ids": [
+          "waystation_courtyard"
+        ],
+        "tags": [],
+        "evidence_clue_ids": [
+          "social_waystation_courtyard_keeper_nara_password"
+        ],
+        "consequence_ids": [],
+        "metadata": {}
+      }
+    },
+    "npc_runtime": {
+      "keeper_nara": {
+        "attitude": 0,
+        "trust": 1,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [
+          "password"
+        ],
+        "last_interaction_turn": 14
+      }
+    },
+    "last_action_debug": null,
+    "debug_traces": [
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.interaction_context",
+        "operation": "set_social_target",
+        "changed_area": "interaction_context+scene_state.current_interlocutor"
+      }
+    ],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "4543e26ad364543045ae7fdf",
+    "session_id": "4543e26ad364543045ae7fdf",
+    "campaign_started": false,
+    "social_lead_event_ids": [
+      "social_waystation_courtyard_keeper_nara_password"
+    ]
+  }
+}

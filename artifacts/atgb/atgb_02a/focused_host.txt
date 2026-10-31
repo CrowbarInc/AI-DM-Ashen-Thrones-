@@ -1,0 +1,10 @@
+F.......................                                                 [100%]
+================================== FAILURES ===================================
+___ test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes ___
+tests\test_atgb_readiness.py:26: in test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes
+    assert run["turns"] == [] and run["stop_reason"] is None
+E   AssertionError: assert ([] == []
+E     
+E     Use -v to get more diff and 'worker_failed' is None)
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_readiness.py::test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes

@@ -1,0 +1,1018 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="22" skipped="0" tests="412" time="19.932" timestamp="2026-10-17T05:58:58.967884-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_exploration_resolution" name="test_scene_transition_with_known_target_activates_before_narration" time="0.106" /><testcase classname="tests.test_exploration_resolution" name="test_observe_engine_result_with_literal_empty_session_world" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_investigate_engine_result_with_empty_discoverable_clues" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_discover_clue_engine_result_map_fragment_interactable" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_resolve_interactable_hidden_fact_text_matches_scene_hidden_facts" time="0.000" /><testcase classname="tests.test_exploration_resolution" name="test_discover_clue_includes_hidden_fact_metadata_when_interactable_configured" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_scene_transition_engine_result_north_room_exit" time="0.000" /><testcase classname="tests.test_exploration_resolution" name="test_custom_engine_result_mystery_action_id" time="0.000" /><testcase classname="tests.test_exploration_resolution" name="test_observe_investigate_interact_produce_structured_resolution" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_observe_returns_normalized_engine_result" time="0.000" /><testcase classname="tests.test_exploration_resolution" name="test_investigate_returns_normalized_engine_result" time="0.000" /><testcase classname="tests.test_exploration_resolution" name="test_discover_clue_returns_normalized_engine_result" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_scene_transition_returns_normalized_engine_result" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_custom_unknown_action_returns_normalized_engine_result" time="0.000" /><testcase classname="tests.test_exploration_resolution" name="test_repeated_exploration_action_updates_anti_stall_runtime" time="0.137" /><testcase classname="tests.test_exploration_resolution" name="test_combat_actions_still_routed_unchanged" time="0.050" /><testcase classname="tests.test_exploration_resolution" name="test_parse_go_north_travel_north_gate_exit_in_label" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_investigate_notice_board_gate_no_exits" time="0.002" /><testcase classname="tests.test_exploration_resolution" name="test_parse_exploration_intent_unrelated_phrases_return_none[scene0-I attack the guard with my sword]" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_exploration_intent_unrelated_phrases_return_none[scene1-Cast magic missile at the orc]" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_exploration_intent_unrelated_phrases_return_none[scene2-I attack the guard]" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_exploration_intent_unrelated_phrases_return_none[scene3-I attack the guard]" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_exploration_intent_unrelated_phrases_return_none[scene4-Cast magic missile at the orc]" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_chat_investigate_desk_resolution_kind_in_gpt_messages" time="0.079" /><testcase classname="tests.test_exploration_resolution" name="test_chat_quarterstaff_attack_mechanical_resolution_absent" time="0.074"><failure message="assert False&#10; +  where False = any([False])">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_quarterstaff_attack_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC542540&gt;
+
+    def test_chat_quarterstaff_attack_mechanical_resolution_absent(tmp_path, monkeypatch):
+        """Chat with unrelated text goes to GPT without exploration resolution."""
+        _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
+        gpt_called_with_none_resolution = []
+    
+        def capture_gpt(messages):
+            import json
+            for m in messages:
+                if m.get("role") == "user" and "content" in m:
+                    try:
+                        payload = json.loads(m["content"])
+                        res = payload.get("mechanical_resolution")
+                        gpt_called_with_none_resolution.append(res is None)
+                    except Exception:
+                        pass
+            return {"player_facing_text": "The guard frowns.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", capture_gpt)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "I attack the guard with my quarterstaff"})
+        assert r.status_code == 200
+        assert r.json().get("ok") is True
+&gt;       assert any(gpt_called_with_none_resolution)
+E       assert False
+E        +  where False = any([False])
+
+tests\test_exploration_resolution.py:449: AssertionError</failure></testcase><testcase classname="tests.test_exploration_resolution" name="test_parse_go_north_label_and_prompt_match_raw_text" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_investigate_label_contains_investigate_word" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_chat_observe_area_resolution_kwarg_to_build_messages" time="0.076"><failure message="assert None == 'observe'&#10; +  where None = &lt;built-in method get of dict object at 0x000001BFAD3D9A00&gt;('kind')&#10; +    where &lt;built-in method get of dict object at 0x000001BFAD3D9A00&gt; = {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_observe_area_resolut0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC541B20&gt;
+
+    def test_chat_observe_area_resolution_kwarg_to_build_messages(tmp_path, monkeypatch):
+        """When /api/chat receives exploration-style text, it routes through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
+        build_messages_called_with_resolution = []
+    
+        def capture_build_messages(*args, **kwargs):
+            # api passes resolution as the 9th positional arg to build_messages
+            res = args[8] if len(args) &gt; 8 else kwargs.get("resolution")
+            build_messages_called_with_resolution.append(res)
+            from game.gm import build_messages as _orig
+            return _orig(*args, **kwargs)
+    
+        def fake_gpt(messages):
+            return {"player_facing_text": "You look around.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.build_messages", capture_build_messages)
+            m.setattr("game.api.call_gpt", fake_gpt)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "observe the area"})
+        assert r.status_code == 200
+        data = r.json()
+        assert data.get("ok") is True
+        assert len(build_messages_called_with_resolution) &gt;= 1
+        resolution = build_messages_called_with_resolution[-1]
+        assert resolution is not None
+&gt;       assert resolution.get("kind") == "observe"
+E       assert None == 'observe'
+E        +  where None = &lt;built-in method get of dict object at 0x000001BFAD3D9A00&gt;('kind')
+E        +    where &lt;built-in method get of dict object at 0x000001BFAD3D9A00&gt; = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+
+tests\test_exploration_resolution.py:497: AssertionError</failure></testcase><testcase classname="tests.test_exploration_resolution" name="test_chat_captain_dialog_build_messages_not_exploration_kind" time="0.070" /><testcase classname="tests.test_exploration_resolution" name="test_chat_build_messages_none_does_not_crash_on_response_type_metadata" time="0.067" /><testcase classname="tests.test_exploration_resolution" name="test_parse_go_north_with_exit_label_go_north" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_investigate_notice_board_in_label_local_import" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_chat_sword_attack_calls_gpt_keeps_active_scene" time="0.071" /><testcase classname="tests.test_exploration_resolution" name="test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution" time="0.066"><failure message="assert None == 'observe'&#10; +  where None = &lt;built-in method get of dict object at 0x000001BFAD288FC0&gt;('kind')&#10; +    where &lt;built-in method get of dict object at 0x000001BFAD288FC0&gt; = {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_observe_area_gm_buil0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC661760&gt;
+
+    def test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution(tmp_path, monkeypatch):
+        """Chat text 'observe the area' parses and routes through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch)
+        build_messages_resolution = []
+    
+        def capture_build(*args, **kwargs):
+            res = args[8] if len(args) &gt; 8 else kwargs.get("resolution")
+            build_messages_resolution.append(res)
+            return [{"role": "system", "content": "x"}, {"role": "user", "content": "{}"}]
+    
+        def fake_gpt(messages):
+            return {"player_facing_text": "You look around.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            # api holds its own reference to build_messages; patch game.api, not game.gm
+            m.setattr("game.api.build_messages", capture_build)
+            m.setattr("game.api.call_gpt", fake_gpt)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "observe the area"})
+        assert r.status_code == 200
+        assert build_messages_resolution
+        assert build_messages_resolution[0] is not None
+&gt;       assert build_messages_resolution[0].get("kind") == "observe"
+E       assert None == 'observe'
+E        +  where None = &lt;built-in method get of dict object at 0x000001BFAD288FC0&gt;('kind')
+E        +    where &lt;built-in method get of dict object at 0x000001BFAD288FC0&gt; = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+
+tests\test_exploration_resolution.py:609: AssertionError</failure></testcase><testcase classname="tests.test_exploration_resolution" name="test_parse_go_north_no_exits_normalizes_label_and_prompt" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_chat_sword_attack_gpt_invoked" time="0.084" /><testcase classname="tests.test_exploration_resolution" name="test_chat_exploration_parsed_routes_through_exploration" time="0.072"><failure message="AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_exploration_parsed_r0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC680CE0&gt;
+
+    def test_chat_exploration_parsed_routes_through_exploration(tmp_path, monkeypatch):
+        """Chat with exploration intent (e.g. 'observe the area') is parsed and routed through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch)
+        payloads_received = []
+    
+        def capture(messages):
+            import json
+            for m in messages:
+                if m.get("role") == "user" and "content" in m:
+                    try:
+                        p = json.loads(m["content"])
+                        payloads_received.append(p)
+                    except Exception:
+                        pass
+            return {"player_facing_text": "You take in the scene.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", capture)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "observe the area"})
+        assert r.status_code == 200
+        assert payloads_received
+        last_payload = payloads_received[-1]
+&gt;       assert "resolved_exploration_action" in last_payload
+E       AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}
+
+tests\test_exploration_resolution.py:666: AssertionError</failure></testcase><testcase classname="tests.test_exploration_resolution" name="test_parse_go_north_here_scene_north_room_exit" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_investigate_notice_board_gate_empty_exits_investigate_in_label" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_chat_investigate_desk_logged_resolution_kind_investigate" time="0.079" /><testcase classname="tests.test_exploration_resolution" name="test_chat_peaceful_intent_log_world_tick_not_exploration_kind" time="0.076" /><testcase classname="tests.test_exploration_resolution" name="test_parse_go_north_label_or_prompt_contains_go_north_phrase" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_parse_investigate_notice_board_gate_minimal_scene_investigate_in_label" time="0.001" /><testcase classname="tests.test_exploration_resolution" name="test_chat_attack_mechanical_resolution_kind_not_exploration_set" time="0.082" /><testcase classname="tests.test_exploration_resolution" name="test_chat_investigate_notice_board_mechanical_resolution_investigate" time="0.058"><failure message="ValueError: Delivered speech does not match the accepted response">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_investigate_notice_b0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC551D00&gt;
+
+    def test_chat_investigate_notice_board_mechanical_resolution_investigate(tmp_path, monkeypatch):
+        """Chat with 'investigate the notice board' routes through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch)
+    
+        def capture_resolution(messages):
+            import json
+            for m in messages:
+                if m.get("role") == "user" and "content" in m:
+                    try:
+                        payload = json.loads(m["content"])
+                        res = payload.get("mechanical_resolution")
+                        if res and isinstance(res, dict):
+                            capture_resolution.resolution_kind = res.get("kind")
+                            capture_resolution.had_resolved_action = "resolved_exploration_action" in payload
+                    except Exception:
+                        pass
+            return {"player_facing_text": "You find a clue.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        capture_resolution.resolution_kind = None
+        capture_resolution.had_resolved_action = False
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", capture_resolution)
+            client = TestClient(app)
+&gt;           r = client.post("/api/chat", json={"text": "investigate the notice board"})
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_exploration_resolution.py:803: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6314: in api_chat
+    return chat(req, ui_mode=ui_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:7428: in chat
+    return _complete_opening_turn_persistence_like_chat(
+game\api.py:5972: in _complete_opening_turn_persistence_like_chat
+    record_delivered_exchange(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+session = {'active_scene_id': 'scene_a', 'visited_scene_ids': ['scene_a', 'scene_b'], 'current_date': 'Day 1', 'turn_counter': 1, ...}
+player_text = 'investigate the notice board'
+delivered_text = 'Nothing here matches that. What you can actually see is a blank scene awaiting definition.'
+scene_id = 'scene_a', turn = 1, social = None, ownership = ''
+adoption = {'provenance': 'rejected', 'immutable': False, 'text': 'I cannot provide a validated response to that request.', 'hard_invalid_reasons': ['unauthorized_resolution_decision_fact'], ...}
+
+    def record_delivered_exchange(
+        session: dict[str, Any] | None,
+        *,
+        player_text: str,
+        delivered_text: str,
+        scene_id: str = "",
+        turn: int = 0,
+        social: Mapping[str, Any] | None = None,
+        ownership: str = "",
+        adoption: Mapping[str, Any] | None = None,
+    ) -&gt; dict[str, Any] | None:
+        """Store the line the player was given. Rejected candidates are not accepted here."""
+        if not isinstance(session, dict):
+            return None
+        delivered = " ".join(str(delivered_text or "").split())
+        if not delivered:
+            return None
+        if adoption is not None:
+            from game.immutable_valid_response import semantic_equal
+    
+            if not adoption.get("immutable") or not semantic_equal(delivered, str(adoption.get("text") or "")):
+&gt;               raise ValueError("Delivered speech does not match the accepted response")
+E               ValueError: Delivered speech does not match the accepted response
+
+game\conversational_continuity.py:191: ValueError</failure></testcase><testcase classname="tests.test_exploration_skill_checks" name="test_investigate_with_successful_skill_check" time="0.001" /><testcase classname="tests.test_exploration_skill_checks" name="test_investigate_with_failed_skill_check" time="0.001" /><testcase classname="tests.test_exploration_skill_checks" name="test_observe_with_configured_check_success" time="0.001" /><testcase classname="tests.test_exploration_skill_checks" name="test_action_without_configured_check_works_normally" time="0.000" /><testcase classname="tests.test_exploration_skill_checks" name="test_gpt_payload_includes_skill_check_when_resolved" time="0.004" /><testcase classname="tests.test_final_emission_gate" name="test_final_emission_gate_decomposed_redirect_stub" time="0.000" /><testcase classname="tests.test_final_emission_response_type" name="test_upstream_prepared_emission_field_source_prefers_attribution" time="0.000" /><testcase classname="tests.test_final_emission_response_type" name="test_resolve_upstream_prepared_answer_action_repair_answer_present" time="0.000" /><testcase classname="tests.test_final_emission_response_type" name="test_resolve_upstream_prepared_answer_action_repair_absent_marks_absent" time="0.000" /><testcase classname="tests.test_final_emission_response_type" name="test_response_type_opening_mode_active_scene_opening_or_shipped_mode" time="0.000" /><testcase classname="tests.test_final_emission_response_type" name="test_merge_opening_upstream_prepare_attach_observability_into_response_type_debug" time="0.000" /><testcase classname="tests.test_final_emission_response_type" name="test_bj39_enforce_response_type_contract_applies_upstream_answer_prepared_repair" time="0.001" /><testcase classname="tests.test_final_emission_response_type" name="test_co92_stamp_response_type_prepared_repair_owner_bucket_action_outcome" time="0.001" /><testcase classname="tests.test_final_emission_response_type" name="test_bj39_enforce_response_type_contract_marks_upstream_absent_for_answer" time="0.001" /><testcase classname="tests.test_final_emission_response_type" name="test_bj39_gate_delegator_removed" time="0.001" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_unknown_cause_actor_and_time_are_not_event_sites" time="0.005" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_it_happened_here_is_still_an_event_site" time="0.002" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_preservation_keeps_authorized_uncertainty_and_drops_narrator_lead" time="0.007" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_npc_rumor_with_a_source_stays_a_claim" time="0.005" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_successful_transition_authorizes_destination_and_rejects_departure_exit" time="0.006" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_unresolved_and_failed_movement_do_not_authorize_arrival" time="0.002" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_turn7_thanks_is_supporting_and_travel_is_primary" time="0.004" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_inverse_mixed_intent_keeps_social_primary_and_committed_travel" time="0.001" /><testcase classname="tests.test_pr_br_qualifier_movement_mixed_intent" name="test_modality_contrasts_do_not_execute_uncommitted_travel" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_explicit_ic_override" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_explicit_ooc_override_blocks_an_action_sentence" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_auto_mode_classifies_prefixes_and_defers_unmarked_text" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ooc_prefix" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ic_prefix" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ordinary_ic_action_routes_to_the_gameplay_adapter" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ordinary_ic_dialogue" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ooc_rules_question_does_not_execute" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ooc_correction_of_a_committed_action_requires_adjudication" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ambiguous_statement_stays_unresolved" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_unsupported_ic_mechanic_stays_in_character" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_mixed_message_is_deferred" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_reclassification_before_execution_reroutes" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_reclassification_after_execution_does_not_rewrite_state" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ooc_message_cannot_advance_time" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ooc_message_cannot_invoke_a_gameplay_resolver" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_ooc_message_cannot_mutate_state" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_unified_history_preserves_message_order" time="0.001" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_explicit_override_takes_precedence_over_automatic_classification" time="0.000" /><testcase classname="tests.test_pr_dq_ic_ooc_messages" name="test_rejected_or_deferred_messages_do_not_change_state" time="0.001" /><testcase classname="tests.test_pr_du_player_pipeline" name="test_pr_du_single_turn_uses_production_chat_entry_with_stored_interpretation" time="0.079" /><testcase classname="tests.test_pr_du_player_pipeline" name="test_pr_du_ooc_interruption_is_non_mutating_through_chat_entry" time="0.014" /><testcase classname="tests.test_pr_du_player_pipeline" name="test_pr_du_four_action_sequence_and_ooc_through_production_chat" time="0.320" /><testcase classname="tests.test_pr_du_player_pipeline" name="test_pr_dv_structured_resolution_facts_survive_generic_final_text" time="0.052"><failure message="ValueError: Delivered speech does not match the accepted response">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_pr_dv_structured_resoluti0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFA9066DB0&gt;
+
+    def test_pr_dv_structured_resolution_facts_survive_generic_final_text(tmp_path, monkeypatch):
+        _seed_pr_du_world(tmp_path, monkeypatch)
+        interpretations = _stored_interpretations()
+        calls = iter([interpretations["DR01"], interpretations["DR05"], interpretations["DR08"], interpretations["DR10"]])
+    
+        monkeypatch.setattr("game.api._stored_interpretation_for_player_text", lambda *_args: next(calls))
+        monkeypatch.setattr("game.api.call_gpt", _generic_gm_for_resolution)
+    
+&gt;       lantern = chat(ChatRequest(text="Let me get a better look at the lantern beside the gate.", ui_mode="player"))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_pr_du_player_pipeline.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+game\api.py:7428: in chat
+    return _complete_opening_turn_persistence_like_chat(
+game\api.py:5972: in _complete_opening_turn_persistence_like_chat
+    record_delivered_exchange(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+session = {'active_scene_id': 'waystation_courtyard', 'visited_scene_ids': ['waystation_courtyard'], 'turn_counter': 1, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0, 'occult_instability': 0, ...}, ...}
+player_text = 'Let me get a better look at the lantern beside the gate.'
+delivered_text = 'A soot-streaked lantern burns beside the courtyard gate.'
+scene_id = 'waystation_courtyard', turn = 1, social = None, ownership = ''
+adoption = {'immutable': True, 'text': 'The action resolves.', 'provenance': 'initial_generation', 'attempt': 1, ...}
+
+    def record_delivered_exchange(
+        session: dict[str, Any] | None,
+        *,
+        player_text: str,
+        delivered_text: str,
+        scene_id: str = "",
+        turn: int = 0,
+        social: Mapping[str, Any] | None = None,
+        ownership: str = "",
+        adoption: Mapping[str, Any] | None = None,
+    ) -&gt; dict[str, Any] | None:
+        """Store the line the player was given. Rejected candidates are not accepted here."""
+        if not isinstance(session, dict):
+            return None
+        delivered = " ".join(str(delivered_text or "").split())
+        if not delivered:
+            return None
+        if adoption is not None:
+            from game.immutable_valid_response import semantic_equal
+    
+            if not adoption.get("immutable") or not semantic_equal(delivered, str(adoption.get("text") or "")):
+&gt;               raise ValueError("Delivered speech does not match the accepted response")
+E               ValueError: Delivered speech does not match the accepted response
+
+game\conversational_continuity.py:191: ValueError</failure></testcase><testcase classname="tests.test_pr_du_player_pipeline" name="test_pr_dv_rejected_and_ambiguous_stored_interpretations_do_not_fallback_execute" time="0.015" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_contract_distinguishes_incidental_context_from_primary_execute" time="0.001" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_deterministic_incomplete_movement_clarifies_without_context" time="0.001" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_incomplete_movement_does_not_advance_turn_or_clock" time="0.016" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_unmarked_ooc_help_question_is_nonmutating_without_provider" time="0.014" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_stored_incidental_plus_move_executes_existing_authoritative_resolver" time="0.083" /><testcase classname="tests.test_pr_ea_conversational_orchestration" name="test_pr_ea_live_missing_move_target_uses_focused_clarification" time="0.015" /><testcase classname="tests.test_pr_eb_conversational_continuity" name="test_pr_eb_active_npc_followup_routes_to_existing_social_resolver" time="0.074" /><testcase classname="tests.test_pr_eb_conversational_continuity" name="test_pr_eb_conversation_exit_clears_active_interlocutor_without_world_mutation" time="0.019" /><testcase classname="tests.test_pr_eb_conversational_continuity" name="test_pr_eb_ambiguous_pronoun_inspection_resumes_after_clarification" time="0.079" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I go to the docks.]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I make for the harbor.]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[Let's head down to the waterfront.]" time="0.014" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I leave the guard and walk toward the docks.]" time="0.014" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[Can I get to the docks from here?]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_development_movement_family[I was thinking about visiting the docks.]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_wording_is_not_hardcoded" time="0.001" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H01]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H02]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H03]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H04]" time="0.014" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H05]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H06]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H07]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H08]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H09]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H10]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H11]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H12]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H13]" time="0.012" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_holdout_semantic_family[H14]" time="0.013" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_direct_movement_uses_existing_resolver" time="0.089" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_movement_question_does_not_move_or_advance_time" time="0.016" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_tentative_movement_does_not_execute" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_incomplete_movement_clarifies_without_context_and_uses_focused_destination" time="0.094" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_impossible_wall_stays_with_existing_authority" time="0.018" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_dialogue_to_movement_clears_talk_and_moves" time="0.083" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_compound_actions_are_named_and_not_executed" time="0.022" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_dependent_sequence_does_not_narrate_the_second_step" time="0.086" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_hypothetical_action_does_not_mutate" time="0.017" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_ambiguous_destination_then_continuation" time="0.089" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_pending_destination_survives_save_and_load" time="0.088" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_ordinary_inspection_still_reaches_existing_resolver" time="0.077" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_return_uses_previous_visited_scene" time="0.082" /><testcase classname="tests.test_pr_ec_movement_partial_intent" name="test_pr_ec_unknown_destination_is_not_canonicalized" time="0.021" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_duplicate_turn_packet_policy_is_omitted_without_mutating_input" time="0.001" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_unequal_turn_packet_policy_stays" time="0.000" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_narration_retry_stops_for_unsent_or_identical_output" time="0.000" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_completed_move_skips_provider_and_keeps_resolver_arrival" time="0.078" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_authorized_dialogue_skips_provider_restatement" time="0.074" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_context_question_then_move_then_followup_stays_grounded" time="0.102" /><testcase classname="tests.test_pr_ed_provider_efficiency" name="test_local_observation_skip_does_not_require_a_provider" time="0.011" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_production_ten_turn_sequence" time="0.604" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_schema_owns_communication_without_execution_fields" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[SOCIAL_SIGNAL]" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[INVENTORY_GRANT]" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[ATTACK]" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_singletons_never_offer_confirmation[TIME_CONTROL]" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unknown_and_mixed_communication_cannot_execute" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_public_evidence_excludes_undiscovered_clues_and_npc_topics" time="0.013" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_bad_compound_target_is_not_offered" time="0.013" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_withdrawal_after_reload_cannot_execute_pending" time="0.022" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_unsupported_first_step_cannot_be_reordered_into_confirmation" time="0.014" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_gm_question_cannot_swallow_conditional_action" time="0.001" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_conditional_turn_keeps_action_before_movement_question_shortcut" time="0.017" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_gm_why_after_refusal_keeps_reason_and_does_not_ask_for_npc" time="0.023" /><testcase classname="tests.test_pr_ef_gm_authority" name="test_new_explicit_action_supersedes_old_pending_intention" time="0.087" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_grounded_movement_survives_legacy_reparse" time="0.105" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_ownership_precedes_active_npc[GM-EXPLANATION-components0]" time="0.025" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_ownership_precedes_active_npc[SESSION-RULES-components1]" time="0.025" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_ownership_precedes_active_npc[AMBIGUOUS-CLARIFICATION-components2]" time="0.025" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_ownership_precedes_active_npc[MIXED-QUESTION-components3]" time="0.024" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_npc_action_purpose_does_not_change_recipient" time="0.104" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_confirmation_uses_saved_pending_once" time="0.182" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_confirmation_rejects_stale_scene" time="0.039" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_semantic_correction_revises_pending_without_execution" time="0.034" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_unknown_destination_does_not_invent_route" time="0.025" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_causal_answer_uses_resolution_provenance" time="0.129" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_speech_about_travel_is_not_executed_as_movement" time="0.099" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_gm_clarification_with_public_answer_is_answered" time="0.001" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_mixed_gm_observation_and_npc_question_retains_both" time="0.001" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_resolved_discovery_delivers_clue_without_narration" time="0.101" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_single_gm_question_component_stays_informational[RECALL-courtyard_lantern]" time="0.001" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_single_gm_question_component_stays_informational[QUESTION-sergeant_mara]" time="0.001" /><testcase classname="tests.test_pr_ef_r1_semantic_handoff" name="test_ambiguous_reference_with_scene_evidence_still_clarifies" time="0.000" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_original_captured_failures_preserve_authority[2]" time="0.126" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_original_captured_failures_preserve_authority[10]" time="0.177" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_original_captured_failures_preserve_authority[14]" time="0.137" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_known_target_keeps_legitimate_emission_safeguards[No one here can answer that from what is settled here.-authoritative_target_contradiction]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_known_target_keeps_legitimate_emission_safeguards[The person you addressed cannot be identified clearly enough to answer.-authoritative_target_contradiction]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_known_target_keeps_legitimate_emission_safeguards[Captain Sella says, &quot;I do not know.&quot;-wrong_interlocutor]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_known_target_keeps_legitimate_emission_safeguards[The secret is hidden fact: a spy.-hidden_information]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_known_target_unknown_answer_remains_known" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Turn toward Sergeant Mara-True]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Glance at Sergeant Mara-True]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Incline head to Sergeant Mara as a social signal.-True]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Draw my sword and face Sergeant Mara-False]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Unlock the door-False]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Turn toward Sergeant Mara then leave-False]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_only_bounded_posture_is_incidental[Threaten Sergeant Mara-False]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_subject_unknown_does_not_clear_unknown_addressee_or_secondary_move" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_mechanical_outcome_still_validates[False-You succeed.]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_mechanical_outcome_still_validates[True-You fail to hit.]" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_possessive_body_part_does_not_select_movement" time="0.016" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_latest_unknown_statement_is_public_continuation_evidence" time="0.001" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_conflicting_authorities_cannot_be_sealed_as_valid[None]" time="0.002" /><testcase classname="tests.test_pr_ef_r2_social_authority" name="test_conflicting_authorities_cannot_be_sealed_as_valid[&lt;lambda&gt;]" time="0.002" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[explicit_named_ask]" time="0.095" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[explicit_role_ask]" time="0.094" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[unique_pronoun]" time="0.097" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_one_of_them_two_npcs]" time="0.024" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_one_of_them_one_npc]" time="0.027" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_either_guard]" time="0.025" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[unresolved_someone]" time="0.023" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[distinguishing_fact]" time="0.100" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[no_invented_distinction]" time="0.024" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[gm_about_npc]" time="0.022" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[direct_ask_conflicting_owner]" time="0.092" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[npc_followup]" time="0.102" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[gm_clarification_of_npc]" time="0.024" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_pending]" time="0.028" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_already_executed]" time="0.028" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_nothing_pending]" time="0.024" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_single_candidate]" time="0.094" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_without_proposal]" time="0.022" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_among_many]" time="0.026" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[withdrawal]" time="0.026" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[mixed_ask_then_leave]" time="0.024" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[conditional_gate]" time="0.022" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[incidental_glance]" time="0.095" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[provider_no_target]" time="0.027" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[save_load_pending]" time="0.104" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_determined_nonresolution_skips_narration_and_characterization_does_not" time="0.001" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_third_person_question_is_not_an_active_npc_continuation" time="0.026" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_provider_id_does_not_override_unresolved_lexical_addressee" time="0.024" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[established_road_name]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[watched_not_identity]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[watched_reworded]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[partial_patrol_fact]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[forged_lantern_unknown]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[what_troubles_her]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[ordinary_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[opinion_not_canon]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[hidden_password]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[consequential_promise]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[secret_allegiance]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[unresolved_mystery]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[relationship_not_invented]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[rumor_not_invented]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[background_porter_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[contradictory_plan_after_prior_topic]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_identity_topic_does_not_answer_whether_the_road_is_watched" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_prior_topic_does_not_claim_an_authoritative_answer" time="0.000" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_commitment_survives_save_shape_and_is_not_canonical" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_chat_unknown_question_skips_narration_and_does_not_invent" time="0.080" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_personal_question_keeps_a_harmless_quote_and_skips_retry" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[immediate_clarification]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[pronoun_followup]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[paraphrase_followup]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[earlier_topic]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[explicit_addressee_change]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[gm_about_npc_statement]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[ordinary_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[repeated_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[conversational_correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[pending_action_correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[executed_undo]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[negotiation_request]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[unauthorized_promise]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[npc_uncertainty]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[hidden_information]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[absent_npc_reference]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[ambiguous_history]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[save_load_exchange]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[rejected_narration_not_history]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[bounded_commitments]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_personal_ignorance_is_replaced_without_a_retry" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_followup_quotes_the_delivered_line_without_narration" time="0.076" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_envelope_round_trip_with_integrity" time="0.001" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_accepts_legacy_missing_envelope_when_allowed" time="0.000" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_rejects_missing_envelope_when_not_allowed" time="0.000" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_rejects_wrong_document_kind" time="0.000" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_rejects_unsupported_version" time="0.000" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_rejects_integrity_mismatch" time="0.000" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_atomic_save_session_writes_valid_envelope" time="0.009" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_atomic_save_failure_does_not_corrupt_live_session_file" time="0.010" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_snapshot_restore_validates_before_any_live_mutation" time="0.018" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_snapshot_restore_is_all_or_nothing_with_rollback_on_commit_failure" time="0.035" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_overlapping_persistence_operations_are_serialized_deterministically" time="0.012" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_snapshot_restore_cannot_race_a_save_into_mixed_visible_state" time="0.036" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_append_log_is_serialized_against_snapshot_restore" time="0.032" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_new_campaign_reset_cannot_overlap_restore_or_save_silently" time="0.037" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_restore_rejected_when_post_restore_runtime_is_structurally_incoherent" time="0.040" /><testcase classname="tests.test_runtime_persistence_regression_suite_obj14" name="test_obj14_successful_restore_yields_coherent_loadable_runtime" time="0.033" /><testcase classname="tests.test_save_load" name="test_save_load_active_scene" time="0.009" /><testcase classname="tests.test_save_load" name="test_clues_persist_across_save_load" time="0.008" /><testcase classname="tests.test_save_load" name="test_runtime_scene_overlay_persists_and_active_scene_merges_without_scene_file_write" time="0.009" /><testcase classname="tests.test_save_load" name="test_loaded_canon_scene_is_marked_and_rejected_by_mutation_guard" time="0.005" /><testcase classname="tests.test_save_load" name="test_world_flags_persist_across_save_load" time="0.006" /><testcase classname="tests.test_save_load" name="test_character_player_name_persists" time="0.010" /><testcase classname="tests.test_save_load" name="test_get_save_summary_returns_expected_shape" time="0.011" /><testcase classname="tests.test_social" name="test_persuade_returns_engine_check_request" time="0.001" /><testcase classname="tests.test_social" name="test_intimidate_returns_engine_check_request" time="0.001" /><testcase classname="tests.test_social" name="test_question_reveals_topic_clue" time="0.001" /><testcase classname="tests.test_social" name="test_build_scene_npc_player_snapshot_merges_world_and_runtime" time="0.000" /><testcase classname="tests.test_social" name="test_social_clue_reveal_refreshes_registry_lead_touch" time="0.002" /><testcase classname="tests.test_social" name="test_repeat_question_does_not_duplicate_reveal" time="0.001" /><testcase classname="tests.test_social" name="test_direct_question_sets_npc_reply_expected_signal" time="0.001" /><testcase classname="tests.test_social" name="test_listening_invitation_sets_reply_expected_explanation" time="0.001" /><testcase classname="tests.test_social" name="test_question_without_topic_marks_consequential_unknown_and_non_invention_hint" time="0.002" /><testcase classname="tests.test_social" name="test_follow_up_without_explicit_target_id_keeps_guard_captain_via_continuity" time="0.002" /><testcase classname="tests.test_social" name="test_return_to_guard_follow_up_resolves_same_npc_via_generic_role" time="0.001" /><testcase classname="tests.test_social" name="test_missing_npc_target_handled_safely" time="0.001" /><testcase classname="tests.test_social" name="test_social_result_dict_matches_engine_contract" time="0.000" /><testcase classname="tests.test_social" name="test_npc_runtime_trust_attitude_persistence" time="0.001" /><testcase classname="tests.test_social" name="test_find_npc_by_target" time="0.001" /><testcase classname="tests.test_social" name="test_parse_social_intent" time="0.001" /><testcase classname="tests.test_social" name="test_resolve_social_skill_check" time="0.001" /><testcase classname="tests.test_social" name="test_active_interaction_target_set_and_switches_on_social_exchange" time="0.002" /><testcase classname="tests.test_social" name="test_non_social_context_update_clears_target" time="0.001" /><testcase classname="tests.test_social" name="test_implied_lowered_voice_updates_privacy_context" time="0.001" /><testcase classname="tests.test_social" name="test_implied_sitting_with_target_updates_position_context" time="0.001" /><testcase classname="tests.test_social" name="test_implied_bring_drink_reinforces_current_target" time="0.001" /><testcase classname="tests.test_social" name="test_implied_ambiguous_phrasing_is_noop" time="0.001" /><testcase classname="tests.test_social" name="test_frontier_gate_generic_addressing_smoke_authoritative" time="0.007" /><testcase classname="tests.test_social" name="test_clear_interaction_context_resets_all_fields" time="0.000" /><testcase classname="tests.test_social" name="test_social_resolution_uses_existing_promoted_actor_map_before_new_promotion" time="0.002" /><testcase classname="tests.test_social" name="test_scene_actor_auto_promotes_on_meaningful_social_contact" time="0.003" /><testcase classname="tests.test_social" name="test_promoted_actor_followup_resolves_same_npc_via_continuity" time="0.004" /><testcase classname="tests.test_social" name="test_repromotion_of_same_actor_is_idempotent_in_social_path" time="0.005" /><testcase classname="tests.test_social" name="test_native_world_npc_path_never_gets_false_promotion_metadata" time="0.002" /><testcase classname="tests.test_social" name="test_unpromotable_actor_fails_cleanly_in_social_resolution" time="0.002" /><testcase classname="tests.test_turn_pipeline_shared" name="test_action_and_chat_social_use_equivalent_shared_turn_logic" time="0.161" /><testcase classname="tests.test_turn_pipeline_shared" name="test_action_and_chat_investigate_both_mark_runtime_discovery_memory" time="0.179" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_fallback_preserves_endpoint_specific_no_resolution_shape" time="0.081"><failure message="assert {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None&#10; +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = &lt;built-in method get of dict object at 0x000001BFACFC2000&gt;('resolution')&#10; +    where &lt;built-in method get of dict object at 0x000001BFACFC2000&gt; = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_fallback_preserves_e0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFA992AB40&gt;
+
+    def test_chat_fallback_preserves_endpoint_specific_no_resolution_shape(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "hello there"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["ok"] is True
+&gt;       assert data.get("resolution") is None
+E       assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+E        +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = &lt;built-in method get of dict object at 0x000001BFACFC2000&gt;('resolution')
+E        +    where &lt;built-in method get of dict object at 0x000001BFACFC2000&gt; = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+
+tests\test_turn_pipeline_shared.py:293: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_targeted_retry_validator_voice_only" time="0.099" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_pipeline_ships_no_validator_voice_policy" time="0.084" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_social_route_ships_dialogue_contract_through_request_debug_and_trace" time="0.089" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]" time="0.095" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]" time="0.123" /><testcase classname="tests.test_turn_pipeline_shared" name="test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback" time="0.115"><failure message="assert []">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_direct_npc_question_keeps0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC5C1310&gt;
+
+    def test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback(
+        tmp_path, monkeypatch
+    ):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            gm = _gm_response("For a breath, the scene holds while voices shift around you.")
+            gm["response_policy"] = {
+                "response_type_contract": {"required_response_type": "neutral_narration"},
+                "social_response_structure": {
+                    "enabled": False,
+                    "required_response_type": "neutral_narration",
+                    "debug_reason": "response_type_not_dialogue:neutral_narration",
+                },
+            }
+            return gm
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Runner, who attacked the patrol?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+&gt;       assert captured_inputs
+E       assert []
+
+tests\test_turn_pipeline_shared.py:470: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_persists_recent_contextual_leads_from_gm_reply" time="0.087" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_known_follow_up_bypasses_uncertainty_fallback" time="0.088"><failure message="assert 'retry_strategy:selected=unresolved_question' in ''&#10; +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, &quot;Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_known_follow_up_bypa0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC675280&gt;
+
+    def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        session = storage.load_session()
+        scene_runtime = session.setdefault("scene_runtime", {}).setdefault("scene_investigate", {})
+        scene_runtime["recent_contextual_leads"] = [
+            {
+                "key": "lady-misia-near-the-tavern-entrance",
+                "kind": "recent_named_figure",
+                "subject": "Lady Misia",
+                "position": "near the tavern entrance",
+                "named": True,
+                "positioned": True,
+            }
+        ]
+        storage.save_session(session)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response(
+                    "Captain Veyra folds her arms and watches the road."
+                ),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where do I find that person?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        gm_output = data.get("gm_output") or {}
+        assert_no_uncertainty_fallback_stock_smoke(gm_output.get("player_facing_text") or "")
+        assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
+&gt;       assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
+E       assert 'retry_strategy:selected=unresolved_question' in ''
+E        +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, "Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+
+tests\test_turn_pipeline_shared.py:577: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_targeted_retry_unresolved_question_only" time="0.058"><failure message="assert 0 == 2&#10; +  where 0 = len([])">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_targeted_retry_unres0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFACAF76B0&gt;
+
+    def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response(
+                    "Rain beats along the roofline while distant bells blur under street noise."
+                )
+            return _gm_response(
+                "The report is usually copied to the notice board before dusk, though no one here will swear the last sheet is still hanging there. "
+                "Best lead: read the posted notices and ask Captain Veyra who took the last copy."
+            )
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+&gt;       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:606: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_targeted_retry_prefers_highest_priority_failure_first" time="0.060"><failure message="assert 0 == 2&#10; +  where 0 = len([])">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_targeted_retry_prefe0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFACE25550&gt;
+
+    def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response("I can't answer that. Based on what's established, we can determine very little here.")
+            return _gm_response(
+                "No one here has pinned the report to one locked drawer, but Captain Veyra says the gate board carried the last official notice before dusk. "
+                "Best lead: check the board, then press her on who removed the fresh copy."
+            )
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+&gt;       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:646: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback" time="0.020"><failure message="assert 0 == 2&#10; +  where 0 = len([])">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_unresolved_retry_fai0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC543110&gt;
+
+    def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response("Rain rolls over the checkpoint and the crowd shifts under dripping banners.")
+            return _gm_response("The checkpoint feels tense and crowded as boots splash through mud.")
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where are we?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+&gt;       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:676: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback" time="0.095"><failure message="assert 0 == 2&#10; +  where 0 = len([])">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_unresolved_retry_fai1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC674E60&gt;
+
+    def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response("Rain rattles over the shutters while everyone keeps their own counsel.")
+            return _gm_response("Fog hangs low by the gate and no one steps forward first.")
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+&gt;       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:714: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_targeted_retry_scene_stall_only" time="0.099" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_single_wait_records_world_progress_and_keeps_hard_valid_narration" time="0.085" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall" time="0.168" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_passive_scene_prefers_already_introduced_suspicious_figure" time="0.082" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere" time="0.084" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_roll_requirement_question_routes_to_adjudication_without_gpt" time="0.071" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped" time="0.017" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_active_target_location_question_routes_to_social_exchange" time="0.087" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_npc_directed_question_regressions[runner_direct_address]" time="0.101" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_who_attacked]" time="0.089" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_npc_directed_question_regressions[pronoun_what_planning]" time="0.091" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_npc_directed_question_regressions[who_saw]" time="0.094" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[what_next_well]" time="0.086" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[next_step_so]" time="0.086" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_routes_ambiguous_next_step_questions_to_active_npc[where_lead]" time="0.096" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_repeated_social_questions_keep_npc_uncertainty_voice" time="0.154" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_repeated_topic_questions_skip_policy_topic_pressure_for_strict_social" time="0.365" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[lean_in_quiet_question]" time="0.090" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_mixed_questioning_keeps_dialogue_lane[scan_crowd_question]" time="0.136" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_dialogue_lock_does_not_override_forceful_world_action" time="0.047"><failure message="ValueError: Delivered speech does not match the accepted response">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_dialogue_lock_does_n0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFA904DA00&gt;
+
+    def test_chat_dialogue_lock_does_not_override_forceful_world_action(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            client = TestClient(app)
+&gt;           resp = client.post("/api/chat", json={"text": "I follow the runner."})
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_turn_pipeline_shared.py:1225: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:6314: in api_chat
+    return chat(req, ui_mode=ui_mode)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:7428: in chat
+    return _complete_opening_turn_persistence_like_chat(
+game\api.py:5972: in _complete_opening_turn_persistence_like_chat
+    record_delivered_exchange(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+session = {'active_scene_id': 'scene_investigate', 'visited_scene_ids': ['scene_investigate'], 'current_date': 'Day 1', 'turn_counter': 1, ...}
+player_text = 'I follow the runner.'
+delivered_text = 'You try to move, but no reachable destination is established from here.'
+scene_id = 'scene_investigate', turn = 1, social = None, ownership = ''
+adoption = {'immutable': True, 'text': '[Narration]', 'provenance': 'initial_generation', 'attempt': 1, ...}
+
+    def record_delivered_exchange(
+        session: dict[str, Any] | None,
+        *,
+        player_text: str,
+        delivered_text: str,
+        scene_id: str = "",
+        turn: int = 0,
+        social: Mapping[str, Any] | None = None,
+        ownership: str = "",
+        adoption: Mapping[str, Any] | None = None,
+    ) -&gt; dict[str, Any] | None:
+        """Store the line the player was given. Rejected candidates are not accepted here."""
+        if not isinstance(session, dict):
+            return None
+        delivered = " ".join(str(delivered_text or "").split())
+        if not delivered:
+            return None
+        if adoption is not None:
+            from game.immutable_valid_response import semantic_equal
+    
+            if not adoption.get("immutable") or not semantic_equal(delivered, str(adoption.get("text") or "")):
+&gt;               raise ValueError("Delivered speech does not match the accepted response")
+E               ValueError: Delivered speech does not match the accepted response
+
+game\conversational_continuity.py:191: ValueError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_social_pressure_line_prefers_dialogue_over_adjudication" time="0.082"><failure message="assert {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None&#10; +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': &quot;House Verevin's pressure mounts.&quot;, 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = &lt;built-in method get of dict object at 0x000001BFAB5DE9C0&gt;('resolution')&#10; +    where &lt;built-in method get of dict object at 0x000001BFAB5DE9C0&gt; = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_social_pressure_line0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFACE25D30&gt;
+
+    def test_chat_social_pressure_line_prefers_dialogue_over_adjudication(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Footman? I require an audience."})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        gm_out = data.get("gm_output") or {}
+&gt;       assert data.get("resolution") is None
+E       assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+E        +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = &lt;built-in method get of dict object at 0x000001BFAB5DE9C0&gt;('resolution')
+E        +    where &lt;built-in method get of dict object at 0x000001BFAB5DE9C0&gt; = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+
+tests\test_turn_pipeline_shared.py:1248: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_active_target_direct_command_routes_to_social_exchange" time="0.022"><failure message="AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_active_target_direct0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFACDAADE0&gt;
+
+    def test_chat_active_target_direct_command_routes_to_social_exchange(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        world = storage.load_world()
+        world["npcs"] = [
+            {
+                "id": "runner",
+                "name": "Tavern Runner",
+                "location": "scene_investigate",
+                "topics": [{"id": "lanes", "text": "They were seen near the east lanes.", "clue_id": "east_lanes"}],
+            }
+        ]
+        storage._save_json(storage.WORLD_PATH, world)
+    
+        session = storage.load_session()
+        session_ctx = session.setdefault("interaction_context", {})
+        session_ctx["active_interaction_target_id"] = "runner"
+        session_ctx["active_interaction_kind"] = "social"
+        session_ctx["interaction_mode"] = "social"
+        session_ctx["engagement_level"] = "engaged"
+        storage.save_session(session)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Tell me plainly."})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+&gt;       assert_dialogue_lock_social_route_smoke(
+            data.get("resolution") or {},
+            allowed_kinds=("social_probe",),
+        )
+
+tests\test_turn_pipeline_shared.py:1285: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+resolution = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': 'Tell me plainly.', 'prompt': 'Tell me plainly.', ...}
+npc_id = 'runner', allowed_kinds = ('social_probe',)
+
+    def assert_dialogue_lock_social_route_smoke(
+        resolution: Mapping[str, Any],
+        *,
+        npc_id: str = "runner",
+        allowed_kinds: Sequence[str] = _DIALOGUE_LOCK_SOCIAL_KINDS,
+    ) -&gt; None:
+        """HTTP smoke: dialogue-lock turn reached active-target social exchange wiring."""
+        kind = resolution.get("kind")
+        allowed = set(allowed_kinds)
+&gt;       assert kind in allowed, (
+               ^^^^^^^^^^^^^^^
+            f"expected resolution.kind in {sorted(allowed)!r}, got {kind!r}"
+        )
+E       AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'
+
+tests\helpers\emission_smoke_assertions.py:377: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_roll_question]" time="0.014" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_stays_adjudication_without_gpt[ooc_actions_available]" time="0.051" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[pr_dw_original_failure]" time="0.015" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[attack_like]" time="0.016" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[move_like]" time="0.016" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[state_mutation_like]" time="0.016" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[inspect_like]" time="0.015" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[roll_like]" time="0.016" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[rollback_like]" time="0.016" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline[spelled_with_space]" time="0.016" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_communication_mode_override_conflict_is_nonmutating" time="0.014" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_explicit_ic_strips_declaration_before_narration_context" time="0.082" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_earshot_question_routes_to_adjudication_with_state_answer" time="0.058" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_adjudication_refuses_over_answer_without_basis" time="0.058" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_mixed_turn_preserves_embedded_adjudication_metadata" time="0.104"><failure message="AssertionError: assert None == 'roll_requirement_query'&#10; +  where None = &lt;built-in method get of dict object at 0x000001BFAD49F2C0&gt;('category')&#10; +    where &lt;built-in method get of dict object at 0x000001BFAD49F2C0&gt; = {}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_mixed_turn_preserves0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC6700B0&gt;
+
+    def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post(
+                "/api/chat",
+                json={"text": "I investigate the desk (Is Perception needed?)"},
+            )
+        assert resp.status_code == 200
+        data = resp.json()
+        resolution = data.get("resolution") or {}
+        assert resolution.get("kind") in {"discover_clue", "investigate"}
+        metadata = resolution.get("metadata") or {}
+        embedded = metadata.get("embedded_adjudication") or {}
+&gt;       assert embedded.get("category") == "roll_requirement_query"
+E       AssertionError: assert None == 'roll_requirement_query'
+E        +  where None = &lt;built-in method get of dict object at 0x000001BFAD49F2C0&gt;('category')
+E        +    where &lt;built-in method get of dict object at 0x000001BFAD49F2C0&gt; = {}.get
+
+tests\test_turn_pipeline_shared.py:1514: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]" time="0.106" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]" time="0.103" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]" time="0.107" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]" time="0.109" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_action_outcome_contract_survives_inside_active_social_scene" time="0.091" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane" time="0.088"><failure message="AssertionError: assert None == 'roll_requirement_query'&#10; +  where None = &lt;built-in method get of dict object at 0x000001BFAC775F00&gt;('category')&#10; +    where &lt;built-in method get of dict object at 0x000001BFAC775F00&gt; = {}.get">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_mixed_dialogue_with_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC541070&gt;
+
+    def test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        world = storage.load_world()
+        world["npcs"] = [
+            {
+                "id": "runner",
+                "name": "Tavern Runner",
+                "location": "scene_investigate",
+                "topics": [{"id": "alleys", "text": "Try the alley by the bathhouse.", "clue_id": "bathhouse_alley"}],
+            }
+        ]
+        storage._save_json(storage.WORLD_PATH, world)
+    
+        session = storage.load_session()
+        session_ctx = session.setdefault("interaction_context", {})
+        session_ctx["active_interaction_target_id"] = "runner"
+        session_ctx["active_interaction_kind"] = "social"
+        session_ctx["interaction_mode"] = "social"
+        session_ctx["engagement_level"] = "engaged"
+        storage.save_session(session)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post(
+                "/api/chat",
+                json={"text": '"Where can I find them?" (Does that require Sleight of Hand?)'},
+            )
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        resolution = data.get("resolution") or {}
+        assert resolution.get("kind") == "question"
+        assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+        metadata = resolution.get("metadata") or {}
+        embedded = metadata.get("embedded_adjudication") or {}
+&gt;       assert embedded.get("category") == "roll_requirement_query"
+E       AssertionError: assert None == 'roll_requirement_query'
+E        +  where None = &lt;built-in method get of dict object at 0x000001BFAC775F00&gt;('category')
+E        +    where &lt;built-in method get of dict object at 0x000001BFAC775F00&gt; = {}.get
+
+tests\test_turn_pipeline_shared.py:1695: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_persuasion_returns_engine_check_prompt_without_gpt" time="0.107" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_covert_concealment_under_observation_prompts_engine_check" time="0.062" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_final_output_sanitizer_blocks_internal_scaffold_labels" time="0.087"><failure message="AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_final_output_sanitiz0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFA9067860&gt;
+
+    def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response("Planner: route via router. Validator: unresolved."),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where should I start?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        text = assert_player_text_present(data)
+&gt;       assert_no_internal_scaffold_labels(text)
+
+tests\test_turn_pipeline_shared.py:1788: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\helpers\emission_smoke_assertions.py:313: in assert_no_internal_scaffold_labels
+    _assert_phrases_absent(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = 'Planner: route via router. Validator: unresolved.'
+phrases = ('planner:', 'router', 'validator:')
+label = 'internal scaffold labels'
+
+    def _assert_phrases_absent(text: str, phrases: Sequence[str], *, label: str) -&gt; None:
+        low = _normalized_low(text)
+        for phrase in phrases:
+&gt;           assert phrase not in low, f"{label}: unexpected player-facing phrase {phrase!r}"
+                   ^^^^^^^^^^^^^^^^^
+E           AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+
+tests\helpers\emission_smoke_assertions.py:228: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_resolved_turn_trace_is_compact_and_authoritative" time="0.099" /><testcase classname="tests.test_turn_pipeline_shared" name="test_action_and_chat_mutate_runtime_before_request_build[via_api_action]" time="0.088" /><testcase classname="tests.test_turn_pipeline_shared" name="test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]" time="0.083" /><testcase classname="tests.test_turn_pipeline_shared" name="test_affordances_are_state_derived_not_from_gpt_text" time="0.096" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_implied_lowered_voice_reaches_request_build_context" time="0.082" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_implied_sit_with_target_reaches_request_build_context" time="0.080" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_social_exchange_invalid_blob_is_repaired_before_emit" time="0.086"><failure message="AssertionError">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_social_exchange_inva0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC68B560&gt;
+
+    def test_chat_social_exchange_invalid_blob_is_repaired_before_emit(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response(
+                    "From here, no certain answer presents itself. "
+                    "The runner keeps repeating the same rumors while rain hits the shutters."
+                ),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        gm_out = data.get("gm_output") or {}
+        text = str(gm_out.get("player_facing_text") or "")
+        low = text.lower()
+        assert_no_unresolved_stock_phrases(text)
+        assert "tavern runner" in low
+&gt;       assert_emission_repair_evidence(
+            data,
+            debug_notes_reader=read_turn_debug_notes,
+        )
+
+tests\test_turn_pipeline_shared.py:2006: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = {'ok': True, 'gm_output': {'player_facing_text': 'Tavern Runner says, "I couldn\'t tell you."', 'tags': ['deterministi...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}
+debug_notes_reader = &lt;function read_turn_debug_notes at 0x000001BFAC3AF100&gt;
+tag_markers = None, debug_markers = None
+
+    def assert_emission_repair_evidence(
+        data: Mapping[str, Any],
+        *,
+        debug_notes_reader: Callable[[Mapping[str, Any]], str] | None = None,
+        tag_markers: Sequence[str] | None = None,
+        debug_markers: Sequence[str] | None = None,
+    ) -&gt; None:
+        """HTTP smoke: replacement/repair evidence appears via tags or debug notes."""
+        gm_out = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
+        tags = list((gm_out or {}).get("tags") or [])
+        reader = debug_notes_reader or read_turn_debug_notes
+        dbg = _normalized_low(reader(data))
+        tag_set = tuple(tag_markers if tag_markers is not None else _DEFAULT_REPAIR_TAG_MARKERS)
+        debug_set = tuple(debug_markers if debug_markers is not None else _DEFAULT_REPAIR_DEBUG_MARKERS)
+&gt;       assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+tests\helpers\emission_smoke_assertions.py:356: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_social_exchange_blocks_advisory_prose_before_emit" time="0.087"><failure message="AssertionError">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_social_exchange_bloc0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFA98142C0&gt;
+
+    def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response(
+                    "I'd suggest you question the notice board clerk before the lane goes cold."
+                ),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+        low = text.lower()
+        assert_no_advisory_prose(text)
+&gt;       assert_emission_repair_evidence(
+            data,
+            debug_notes_reader=read_turn_debug_notes,
+        )
+
+tests\test_turn_pipeline_shared.py:2034: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = {'ok': True, 'gm_output': {'player_facing_text': 'Tavern Runner says, "I couldn\'t tell you."', 'tags': ['deterministi...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}
+debug_notes_reader = &lt;function read_turn_debug_notes at 0x000001BFAC3AF100&gt;
+tag_markers = None, debug_markers = None
+
+    def assert_emission_repair_evidence(
+        data: Mapping[str, Any],
+        *,
+        debug_notes_reader: Callable[[Mapping[str, Any]], str] | None = None,
+        tag_markers: Sequence[str] | None = None,
+        debug_markers: Sequence[str] | None = None,
+    ) -&gt; None:
+        """HTTP smoke: replacement/repair evidence appears via tags or debug notes."""
+        gm_out = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
+        tags = list((gm_out or {}).get("tags") or [])
+        reader = debug_notes_reader or read_turn_debug_notes
+        dbg = _normalized_low(reader(data))
+        tag_set = tuple(tag_markers if tag_markers is not None else _DEFAULT_REPAIR_TAG_MARKERS)
+        debug_set = tuple(debug_markers if debug_markers is not None else _DEFAULT_REPAIR_DEBUG_MARKERS)
+&gt;       assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+tests\helpers\emission_smoke_assertions.py:356: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_social_exchange_interruption_output_stays_coherent" time="0.088" /><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_repeated_interruption_progresses_without_losing_dialogue_contract" time="0.158"><failure message="assert 'Tavern Runner says, &quot;I couldn\'t tell you.&quot;' != 'Tavern Runner says, &quot;I couldn\'t tell you.&quot;'">tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/post_final_tmp/test_chat_repeated_interruptio0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001BFAC6897C0&gt;
+
+    def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+        interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _messages: _gm_response(interruption))
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            first = client.post("/api/chat", json={"text": "Who attacked them?"})
+            second = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert first.status_code == 200
+        assert second.status_code == 200
+    
+        first_text = str((first.json().get("gm_output") or {}).get("player_facing_text") or "")
+        second_data = second.json()
+        second_output = second_data.get("gm_output") or {}
+        second_text = str(second_output.get("player_facing_text") or "")
+        low1 = first_text.lower()
+        low2 = second_text.lower()
+        meta = _extract_final_emission_meta(second_data) or {}
+    
+        assert "tavern runner" in low1
+&gt;       assert second_text != first_text
+E       assert 'Tavern Runner says, "I couldn\'t tell you."' != 'Tavern Runner says, "I couldn\'t tell you."'
+
+tests\test_turn_pipeline_shared.py:2110: AssertionError</failure></testcase><testcase classname="tests.test_turn_pipeline_shared" name="test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair" time="0.245" /><testcase classname="tests.test_turn_pipeline_shared" name="test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical" time="0.086" /><testcase classname="tests.test_turn_pipeline_shared" name="test_pipeline_strict_social_ragged_stranger_fallback_repaired" time="0.089" /><testcase classname="tests.test_turn_pipeline_shared" name="test_pipeline_interruption_denial_still_emits_coherent_strict_social" time="0.087" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_directional_proceed_reaches_travel_without_compass_exit_bind" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_contextual_directional_proceed_stays_unresolved_travel" time="0.002" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_existing_follow_exit_still_transitions" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_bare_compass_head_stays_unresolved_travel" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_named_destination_proceed_uses_existing_exit" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_local_movement_and_nonspatial_proceed_are_not_scene_travel" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_ownerless_false_arrival_is_not_emitted" time="0.000" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_ownerless_false_scene_update_is_not_adopted" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_same_scene_update_survives_when_no_transition_occurred" time="0.001" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_local_movement_narration_is_not_rewritten" time="0.000" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_successful_transition_keeps_destination_narration" time="0.000" /><testcase classname="tests.test_unparsed_movement_state_narration_integrity" name="test_human_shaped_cascade_does_not_commit_destination_b" time="0.019" /></testsuite></testsuites>

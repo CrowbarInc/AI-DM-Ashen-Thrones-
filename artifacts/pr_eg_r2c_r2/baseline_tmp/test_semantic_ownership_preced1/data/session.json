@@ -1,0 +1,69 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T12:47:54.726754Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T12:47:54.726754Z",
+    "campaign_started": true,
+    "interaction_context": {
+      "active_interaction_kind": "social",
+      "active_interaction_target_id": "sergeant_mara"
+    },
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Could you interpret the situation for me?",
+          "delivered_text": "I don't have an established ruling for that question. No action or roll has been made.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "SESSION",
+        "purpose": "RULES",
+        "subject": "Could you interpret the situation for me?",
+        "response": "I don't have an established ruling for that question. No action or roll has been made.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "1e870e49ee5561a4b0e965ed39072e92b3ba10b7bed43bc03437e605bd2e7e45",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

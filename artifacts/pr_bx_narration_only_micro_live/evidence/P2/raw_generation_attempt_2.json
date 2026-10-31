@@ -1,0 +1,53 @@
+{
+  "response_id": "resp_03105564a0fa5d4a006ac59c47aeb087d291df51ac335d216b",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 24881,
+    "output_tokens": 154,
+    "total_tokens": 25035,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 3.47,
+  "input_chars": 106602,
+  "recipe_present": true,
+  "retry_context_present": true,
+  "provider_response_contract": "narration_only",
+  "declared_claims_in_system_prompt": false,
+  "api_response_schema_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "",
+    "declared_claims": null,
+    "normalized_empty_declarations": null,
+    "declaration_authorship": null,
+    "structured_contract_failure": true,
+    "structured_contract_reason": "unexpected_declared_claims",
+    "provider_response_contract": "narration_only",
+    "tags": [
+      "structured_output_rejected",
+      "structured_contract_failure"
+    ],
+    "metadata_keys": [
+      "legacy_fallback",
+      "output_form",
+      "provider_response_contract",
+      "structured_contract_failure",
+      "structured_contract_reason",
+      "structured_output_rejected"
+    ],
+    "structural_shape": {
+      "json_object": true,
+      "keys": [
+        "declared_claims",
+        "narration"
+      ]
+    },
+    "raw_output": "{\"declared_claims\":[{\"declaration_mode\":\"realize|propose\",\"source_claim_id\":\"rc_9ab69105465f\",\"premise_claim_ids\":[],\"text\":\"A baker stands beside loaves at a bread stall.\",\"relation_kind\":\"ordinary_predicate\",\"modality\":\"established\"},{\"declaration_mode\":\"realize|propose\",\"source_claim_id\":\"rc_2bb408577206\",\"premise_claim_ids\":[],\"text\":\"Baker exists\",\"relation_kind\":\"observation\",\"modality\":\"established\"}],\"narration\":\"The baker shifts uneasily, glancing around before saying quietly, \\\"Best you choose your own favorites from the loaves here.\\\" Their tone holds a guarded edge, unwilling to reveal personal preference.\"}"
+  }
+}

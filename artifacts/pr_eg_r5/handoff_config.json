@@ -1,0 +1,777 @@
+{
+  "campaign_id": "pr_eg_r5_conversational_architecture_reassessment_20261017",
+  "campaign_name": "PR-EG-R5 \u2014 Conversational Architecture Reassessment",
+  "campaign_date": "2026-10-17",
+  "purpose": "Architectural investigation and decision only; stop for external review.",
+  "executive_summary": "B \u2014 DIRECTION ESTABLISHED WITH LIMITATIONS. Recommend AI semantic planning with consolidated host authorization and existing exact final adoption. No runtime implementation or PR-EH work.",
+  "changes": {
+    "production": [
+      "None. Existing game code, saves, tests and predecessor evidence preserved byte-for-byte."
+    ],
+    "validation": [
+      "Seven local function probes; three actual prompt construction captures; existing boundary tests rerun with zero provider budget."
+    ],
+    "tooling": [
+      "R5-only investigation, prompt capture, isolated test wrapper and report packaging scripts."
+    ],
+    "documentation": [
+      "27 required architecture review artifacts."
+    ],
+    "generated_artifacts": [
+      "Source hashes, historical trace extracts, test JUnit, payload captures and usage/preservation audits."
+    ]
+  },
+  "testing": {
+    "focused": "{'passed': 77}",
+    "broader": "Historical only: R4-R1 692 passed, 25 inherited failures; not rerun in R5.",
+    "full_suite": "Not run: no runtime edits.",
+    "runtime_validation": "Controlled existing HTTP/finalization/snapshot tests; seven local function probes. No proposed architecture execution.",
+    "model_runtime_boundary": "No R5 provider calls. R4/R4-R1 fresh calls retained strictly as historical evidence.",
+    "new_regressions": "Selected checks only; see JUnit. No full-suite comparison claimed.",
+    "pre_existing_failures": "25 historical relevant-family failures."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Option C semantic reliability, implication containment and performance remain unqualified.",
+      "R4-R1 final ledger has no interpretation calls; final delivery qualification does not prove interpreter quality."
+    ],
+    "pre_existing": [
+      "Conversational playability unresolved; inherited 25 regression failures."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review direction and proposed first implementation slice before implementation."
+  ],
+  "missing_concepts": [
+    "A shared semantic question/relevance/correction plan with one owner."
+  ],
+  "does_not_prove": [
+    "Conversational playability, safe arbitrary improvisation, fresh semantic superiority or final-code production qualification."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R5 and await external review. Do not begin PR-EH.",
+  "primary_report": "artifacts/pr_eg_r5/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000,
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r5/01_EXECUTIVE_SUMMARY.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/02_BASELINE_AND_REPOSITORY_STATE.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/03_SOURCE_LEVEL_PIPELINE_MAP.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/04_DECISION_OWNERSHIP_MATRIX.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/05_HISTORICAL_FAILURE_TRACES.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/06_INFORMATION_LOSS_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/07_CONVERSATIONAL_OWNERSHIP_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/08_ADDRESSEE_AND_SUBJECT_GROUNDING.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/09_KNOWLEDGE_SELECTION_AND_RELEVANCE.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/10_ANSWER_SUFFICIENCY_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/11_CONVERSATIONAL_MEMORY_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/12_BOUNDED_IMPROVISATION_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/13_FALLBACK_AND_RETRY_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/14_PROVIDER_PROMPT_AND_PAYLOAD_AUDIT.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/15_ARCHITECTURAL_OPTIONS.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/16_OPTION_EVALUATION_MATRIX.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/17_CONTROLLED_ARCHITECTURAL_PROBES.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/18_ADVERSARIAL_BOUNDARY_PROBES.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/19_COMPLEXITY_AND_MAINTAINABILITY.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/20_ROOT_CAUSE_SYNTHESIS.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/21_RECOMMENDED_TARGET_ARCHITECTURE.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/22_MIGRATION_STRATEGY.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/23_FIRST_IMPLEMENTATION_SLICE.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/24_SUCCESS_CRITERIA.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/25_RISKS_AND_UNCERTAINTIES.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/26_FINAL_RECOMMENDATION.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/27_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r5/baseline.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/build_reports.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/checks_environment_failure_junit.xml",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/checks_environment_failure_run.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/checks_junit.xml",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/checks_output.txt",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/checks_run.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/controlled_probes.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/historical_trace_extracts.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/initial_git_status.txt",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/investigate.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/payload_captures.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/payload_probe.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/preservation_check.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/provider_usage_analysis.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/request.txt",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/run_checks.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/source_inventory.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/verify_bundle.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/api_turn_support.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/player_interpretation_bridge.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/ordinary_semantic_ownership.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/interaction_context.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/interaction_routing.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/interaction_completion.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/intent_parser.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/noncombat_resolution.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/proposition_authority.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/bounded_improvisation.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/dialogue_social_plan.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/social.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/social_memory.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/social_exchange_emission.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/social_exchange_policy.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/social_exchange_fallback_catalog.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/speaker_contract_enforcement.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/final_emission_gate.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/final_emission_strict_social_stack.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/final_emission_visibility_fallback.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/final_emission_response_type.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/narration_state_consistency.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/upstream_response_repairs.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/gm.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/gm_retry.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/prompt_context.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/response_policy_enforcement.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/models.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/storage.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_do/adapter.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_do/schema.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_do/eligibility.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_dp/prompt.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_dr/prompt.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tests/conftest.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r4_r1_delivery_integrity.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r3_expressive_dialogue.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r3_r1_expression_semantics.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_speech_adoption.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_ef_gm_authority.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/turns.jsonl",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/metrics.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/playability_metrics.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/critical_stop_evidence.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/engine_usage.jsonl",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/regression_comparison.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/freeze.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/live_turns.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/metrics.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/regression_comparison.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/targeted_junit.xml",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/baseline.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/source_inventory.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/live_usage_final.jsonl",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/persistence_audit.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/canonical_integrity_audit.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tools/build_review_handoff.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tools/qualify_pr_eg_r4.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "tools/qualify_pr_eg_r4_r1.py",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r5/controlled_replay/test_repaired_reproduction.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4_r1/live_state/primary/data/scenes/waystation_courtyard.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_08.json",
+      "role": "architecture_evidence_or_source",
+      "why": "R5 architecture report, reproducible probe, linked source or preserved predecessor evidence.",
+      "human_review_required": false
+    }
+  ]
+}

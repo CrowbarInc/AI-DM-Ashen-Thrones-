@@ -1,0 +1,182 @@
+{
+  "campaign_id": "pr-br-continuation-15",
+  "campaign_name": "PR-BR Continuation 15 — Content-Dimension Coverage, Ambiguity Precedence & Final Preservation Closeout",
+  "campaign_date": "2026-10-01",
+  "purpose": "Give content questions an explicit dimension, rank necessary clarification above generic inability when the referent is ambiguous, and treat dimension coverage as inclusion. Four focused live turns. No smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Content is the existing content dimension, kept distinct from source, confidence, time, and use. Necessary clarification outranks generic inability only when the referent is unbound. Coverage is additive. Semantic-degradation telemetry now records equal-rank requested-content loss. Deterministic band: 329 passed, 0 failed. All six Continuation 14 replays PASS. Live turns: 4. Interpretation calls: 1. Generation calls: 4. Evaluator model calls: 0. Retries: 0. Correct contracts 4/4. Initial manual PASS 4/4. Final manual PASS 4/4. Manual semantic degradations 0. Telemetry degradations 0. best_safe emission mismatches 0. Evaluator PASS 3/4 with 0 false PASS and 1 false FAIL (use paraphrase). READY FOR INDEPENDENT 10-TURN SMOKE: YES, not run. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/resolution_contract.py recognizes content, ranks necessary clarification above inability, covers a requested dimension even when another dimension is also present, and records equal-rank semantic degradation.",
+      "game/interpretation_proposal.py accepts content, canonicalizes substance and statement, and abstains when a content referent cannot be bound.",
+      "game/semantic_interpreter.py asks the model for dimension content and distinguishes it from source, confidence, time, and use.",
+      "game/gm_retry.py does not let scene stall replace a contract clarification."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation15_content_clarification.py covers content distinctions, the six Continuation 14 replays, degradation telemetry, and stubbed /api/chat.",
+      "Broader band: 329 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation15_live.py runs at most four focused live turns and uses detect_semantic_degradation."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 15 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation15 live transcript, candidate histories, manual review, junit, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 15 content, clarification, additive-coverage, telemetry, and six Continuation 14 replay tests passed inside the 329-test band.",
+    "broader": "329 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation15/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "4 completed live turns. 3 fast-path. 1 abstention. 1 interpretation call. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "1 interpretation call. 4 generation calls. 0 evaluator model calls. 0 generation retries. 0 aborted.",
+    "new_regressions": "None in the final band.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Independent 10-turn smoke is ready and was not run. It needs separate authorization.",
+    "Turn 4's use answer reached the player and the evaluator false-failed the paraphrase. Do not treat that as a selection regression.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Use coverage misses 'folks come to that board to catch up on the latest rules and warnings', so a correct use-plus-content answer can be scored unsatisfied."
+    ],
+    "pre_existing": [
+      "The omitted-index unscoped nominal bridge remains for callers that do not pass a catalog."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health. The smoke was not run.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest.",
+    "Does not prove live clarification precedence. The paid follow-up had one salient referent. The recorded Continuation 14 turn 2 replay covers the two-slot case."
+  ],
+  "recommended_next_step": "External review may authorize the independent 10-turn smoke. Do not close PR-BR in this cycle. Do not start PR-BS. Do not repair the turn 4 use cue and rerun these four turns.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+      "role": "audit",
+      "why": "Continuation 15 record.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "selection",
+      "why": "Content dimension, clarification precedence, additive coverage, and degradation telemetry.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "dimensions",
+      "why": "Content validation, aliases, and content-referent abstention.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "role": "interpreter",
+      "why": "Interpreter prompt distinguishes content from source, confidence, time, and use.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/gm_retry.py",
+      "role": "retry",
+      "why": "Scene stall does not replace a contract clarification.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation15_content_clarification.py",
+      "role": "tests",
+      "why": "Content variants, six Continuation 14 replays, evaluator fixtures, and stubbed chat.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation14_resolution_content.py",
+      "role": "tests",
+      "why": "Equal-rank and best-safe regressions from Continuation 14.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation13_semantic_preservation.py",
+      "role": "tests",
+      "why": "Social-resolution and earlier preservation regressions.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/junit.xml",
+      "role": "regression",
+      "why": "329 passed, 0 failed.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/manual_review.md",
+      "role": "manual_review",
+      "why": "Human-DM review of the four live turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/provenance.json",
+      "role": "provenance",
+      "why": "HEAD and cost bounds.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/20261001T094739Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/20261001T094739Z/turns.json",
+      "role": "traces",
+      "why": "Per-turn contracts, coverage, and candidate transitions.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/20261001T094739Z/summary.json",
+      "role": "cost",
+      "why": "Call counts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/20261001T094739Z/generation_calls.json",
+      "role": "traces",
+      "why": "Generated candidates before final emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation15/20261001T094739Z/interpretation_calls.json",
+      "role": "traces",
+      "why": "Structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation15_live.py",
+      "role": "harness",
+      "why": "Four-turn cap and the live shapes.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

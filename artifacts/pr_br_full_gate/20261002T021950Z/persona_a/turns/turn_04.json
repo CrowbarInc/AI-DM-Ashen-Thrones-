@@ -1,0 +1,848 @@
+{
+  "turn_number": 4,
+  "player_text": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+  "visible_motivation": "The serjeant already sent this guard to process me, and the captain is watching the procedure.",
+  "intended_meaning": "I want the toll stated and the examination finished so I can pass the gate.",
+  "generation_attempt_1": "The gate guard acknowledges your introduction with a curt nod. Their eyes briefly scan the modest robes and lack of goods before they state in a tired but precise tone, \"The toll for a traveling wizard without goods, like yourself, is three copper pieces. The examination will be brief—mostly to ensure you carry nothing forbidden. Step forward, and someone will assist with the check.\" The rain continues to drum softly against the soot-dark stones as the guard signals a younger sentry to approach you for the inspection.",
+  "generation_attempt_2": "The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency.",
+  "attempt_1_hard_valid": false,
+  "attempt_1_reasons": [
+    "ungrounded_authoritative_rule"
+  ],
+  "attempt_2_hard_valid": true,
+  "attempt_2_reasons": [],
+  "regeneration_invoked": true,
+  "regeneration_feedback": "The previous attempt was rejected for: ungrounded_authoritative_rule. It asserted an ungrounded authoritative world rule. Answer again without establishing unsupported authoritative facts. Do not invent a replacement fact. Keep the same resolution contract, canonical state, mechanical result, operation, and interlocutor.",
+  "rejected_attempt_2_reasons": null,
+  "generation_attempt_count": 2,
+  "accepted_provenance": "regeneration",
+  "accepted_response_text": "The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency.",
+  "accepted_immutable": true,
+  "final_emitted_response": "The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency.",
+  "gm_text": "The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency.",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "fallback",
+    "resolution_contract_semantic_preserved"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": false,
+  "fast_path_abstained": true,
+  "abstention_reason": "ambiguous_referent",
+  "interpreter_invoked": true,
+  "proposal_source": "model_assisted",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+    "source": "model_assisted",
+    "primary_operation": "act",
+    "supporting_operations": [
+      "perceive"
+    ],
+    "raw_target_text": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+    "proposed_target_id": "gate_serjeant",
+    "target_capture": "model",
+    "has_determiner": false,
+    "interlocutor_id": "gate_serjeant",
+    "conversational_subject": "passing the gate and toll",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "The guard names the toll and begins the check after I identify myself.",
+    "referenced_claim_id": null,
+    "referenced_action_id": "rc_5d44f34c809d",
+    "referenced_inspected_id": null,
+    "confidence": "high",
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "act",
+  "canonical_target": "Gate Serjeant",
+  "target_ref": {
+    "type": "interlocutor",
+    "id_or_text": "Gate Serjeant",
+    "source": "explicit_player"
+  },
+  "discourse_ref": {
+    "type": "interlocutor",
+    "id": "gate_serjeant",
+    "label": "Gate Serjeant",
+    "source_turn": null
+  },
+  "interlocutor_id": null,
+  "dimension": "content",
+  "dimensions": [
+    "content"
+  ],
+  "expected_resolution": "action_outcome",
+  "ambiguous": false,
+  "binding_status": "ambiguous",
+  "entity_class": "ambiguous_unresolved",
+  "proposed_interlocutor": "guard",
+  "bound_interlocutor": null,
+  "entity_id": null,
+  "authority_reasons": [
+    "proposal:ambiguous"
+  ],
+  "entity_binding": {
+    "status": "ambiguous",
+    "entity_class": "ambiguous_unresolved",
+    "proposed_interlocutor": "guard",
+    "proposed_span": "the guard",
+    "bound_interlocutor_id": null,
+    "entity_id": null,
+    "label": null,
+    "explicit_new_interlocutor": true,
+    "authority_reasons": [
+      "proposal:ambiguous"
+    ],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_0327f217ec98",
+    "turn_index": 5,
+    "request_kind": "action",
+    "operation": "act",
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Gate Serjeant",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Gate Serjeant",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "action_outcome",
+    "epistemic_mode": "authoritative",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "source_turn": null
+    },
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": "active_inspected",
+      "referent_reason": "ambiguous_addressee",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": false,
+      "fast_path_abstained": true,
+      "fast_path_abstention_reason": "ambiguous_referent",
+      "model_interpreter_invoked": true,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 1,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "rc_5d44f34c809d",
+          "type": "action",
+          "label": "I step up to the gate and tell the serjeant I'll take the standard toll and examination now."
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        }
+      ],
+      "proposal_source": "model_assisted",
+      "proposed_operation": "act",
+      "proposed_supporting_operations": [
+        "perceive"
+      ],
+      "proposed_raw_target": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "gate_serjeant",
+        "canonical_target_label": "Gate Serjeant",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "scene",
+        "authoritative_operation": "act",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": true,
+      "entity_binding": {
+        "status": "ambiguous",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": "guard",
+        "proposed_span": "the guard",
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": true,
+        "authority_reasons": [
+          "proposal:ambiguous"
+        ],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "not_applied",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+        "source": "model_assisted",
+        "primary_operation": "act",
+        "supporting_operations": [
+          "perceive"
+        ],
+        "raw_target_text": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+        "proposed_target_id": "gate_serjeant",
+        "target_capture": "model",
+        "has_determiner": false,
+        "interlocutor_id": "gate_serjeant",
+        "conversational_subject": "passing the gate and toll",
+        "dimension": "content",
+        "dimensions": [
+          "content"
+        ],
+        "expected_resolution": "The guard names the toll and begins the check after I identify myself.",
+        "referenced_claim_id": null,
+        "referenced_action_id": "rc_5d44f34c809d",
+        "referenced_inspected_id": null,
+        "confidence": "high",
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": null,
+  "active_claim": null,
+  "active_inspected": {
+    "id": "notice_board",
+    "label": "Notice board",
+    "kind": "object",
+    "epistemic_status": null,
+    "turn_index": 2,
+    "source": "resolution_contract"
+  },
+  "actionable_lead": null,
+  "previous_action": {
+    "id": "rc_0327f217ec98",
+    "label": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+    "kind": "act",
+    "epistemic_status": null,
+    "turn_index": 5,
+    "source": "resolution_contract"
+  },
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": {
+      "id": "rc_0327f217ec98",
+      "label": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+      "kind": "act",
+      "scene_id": "frontier_gate",
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "last_committed_turn": 5,
+    "last_committed_contract_id": "rc_0327f217ec98"
+  },
+  "authority_generated": [
+    {
+      "proposition": "The gate guard acknowledges your introduction with a curt nod.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Their eyes briefly scan the modest robes and lack of goods before they state in a tired but precise tone, \"The toll for a traveling wizard without goods, like yourself, is three copper pieces.",
+      "authority_class": "consequential_proposal",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": true,
+      "family": "levy"
+    },
+    {
+      "proposition": "\" The rain continues to drum softly against the soot-dark stones as the guard signals a younger sentry to approach you for the inspection.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "authority_retry": [
+    {
+      "proposition": "After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "authority_emitted": [
+    {
+      "proposition": "After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "unauthorized_generated": [
+    "Their eyes briefly scan the modest robes and lack of goods before they state in a tired but precise tone, \"The toll for a traveling wizard without goods, like yourself, is three copper pieces."
+  ],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "FAIL",
+  "failing_gates": [
+    "player_intent_addressed"
+  ],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 80,
+      "rating": "strong",
+      "passed": false,
+      "semantic_result": "FAIL",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "FAIL",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 59,
+          "text_preview": "The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the"
+        }
+      },
+      "player_intent_addressed": {
+        "status": "FAIL",
+        "passed": false,
+        "reason_codes": [
+          "intent_addressed:resolution_contract_unsatisfied"
+        ],
+        "evidence": {
+          "request_kind": "observation",
+          "player_terms": [
+            "begin",
+            "check",
+            "declare",
+            "face",
+            "galinor",
+            "give",
+            "goods",
+            "guard",
+            "name",
+            "them",
+            "toll",
+            "traveling",
+            "wait",
+            "wizard"
+          ],
+          "gm_terms": [
+            "after",
+            "begin",
+            "belongings",
+            "brief",
+            "check",
+            "declare",
+            "efficiency",
+            "fee",
+            "forward",
+            "galinor",
+            "gate",
+            "gaze",
+            "gesture",
+            "goods",
+            "guard",
+            "identify",
+            "inspect",
+            "meets",
+            "modest",
+            "moves"
+          ],
+          "direct_answer_score": 23,
+          "player_intent_score": 10,
+          "resolution_contract": {
+            "contract_id": "rc_0327f217ec98",
+            "dimension": "content",
+            "dimensions": [
+              "content"
+            ],
+            "operation": "act",
+            "referent_provenance": "explicit_player",
+            "assessment_status": "unsatisfied",
+            "assessment_reasons": [
+              "action_outcome_missing",
+              "generic_scene_replaced_action"
+            ],
+            "target": "Gate Serjeant",
+            "candidate_answer_target": null,
+            "target_compatible": null,
+            "operation_compatible": false,
+            "dimension_compatible": null,
+            "resolution_kind": "unrelated",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": "active_inspected",
+              "referent_reason": "ambiguous_addressee",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": false,
+              "fast_path_abstained": true,
+              "fast_path_abstention_reason": "ambiguous_referent",
+              "model_interpreter_invoked": true,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 1,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "rc_5d44f34c809d",
+                  "type": "action",
+                  "label": "I step up to the gate and tell the serjeant I'll take the standard toll and examination now."
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                }
+              ],
+              "proposal_source": "model_assisted",
+              "proposed_operation": "act",
+              "proposed_supporting_operations": [
+                "perceive"
+              ],
+              "proposed_raw_target": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "gate_serjeant",
+                "canonical_target_label": "Gate Serjeant",
+                "canonical_target_type": "interlocutor",
+                "canonical_basis": "scene",
+                "authoritative_operation": "act",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": true,
+              "entity_binding": {
+                "status": "ambiguous",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": "guard",
+                "proposed_span": "the guard",
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": true,
+                "authority_reasons": [
+                  "proposal:ambiguous"
+                ],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "not_applied",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+                "source": "model_assisted",
+                "primary_operation": "act",
+                "supporting_operations": [
+                  "perceive"
+                ],
+                "raw_target_text": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+                "proposed_target_id": "gate_serjeant",
+                "target_capture": "model",
+                "has_determiner": false,
+                "interlocutor_id": "gate_serjeant",
+                "conversational_subject": "passing the gate and toll",
+                "dimension": "content",
+                "dimensions": [
+                  "content"
+                ],
+                "expected_resolution": "The guard names the toll and begins the check after I identify myself.",
+                "referenced_claim_id": null,
+                "referenced_action_id": "rc_5d44f34c809d",
+                "referenced_inspected_id": null,
+                "confidence": "high",
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_missed_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 80,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 23,
+        "player_intent": 10,
+        "logical_escalation": 23,
+        "immersion": 24
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "No explicit question detected; scored leniently for directness."
+        ],
+        "signals": {
+          "has_question": false,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.22,
+          "gm_word_count": 59,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 1
+        }
+      },
+      "player_intent": {
+        "score": 10,
+        "passed": false,
+        "reasons": [
+          "Narrowing follow-up not matched with specifics."
+        ],
+        "signals": {
+          "narrowing": true,
+          "topic_overlap_count": 9,
+          "topic_overlap_ratio": 0.643,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.085,
+          "player_presses_thread": false,
+          "gm_word_count": 59,
+          "net_new_terms": 29
+        }
+      },
+      "immersion": {
+        "score": 24,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": false,
+          "scene_anchor_hits": 2
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (23/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (24/25)."
+      ],
+      "failures": [
+        "player_intent: weak (10/25).",
+        "player_intent: Narrowing follow-up not matched with specifics."
+      ],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 80,
+        "rating": "strong",
+        "passed": false,
+        "semantic_result": "FAIL",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 2,
+  "interpretation_calls_this_turn": 1,
+  "turn_generation_calls": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "The gate guard acknowledges your introduction with a curt nod. Their eyes briefly scan the modest robes and lack of goods before they state in a tired but precise tone, \"The toll for a traveling wizard without goods, like yourself, is three copper pieces. The examination will be brief—mostly to ensure you carry nothing forbidden. Step forward, and someone will assist with the check.\" The rain continues to drum softly against the soot-dark stones as the guard signals a younger sentry to approach you for the inspection."
+    },
+    {
+      "purpose": "retry_escalation",
+      "retry_attempt": 1,
+      "retry_reason": "hard_invalid",
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency."
+    }
+  ],
+  "turn_interpretation_calls": [
+    {
+      "event": "attempt",
+      "output_text": "{\"primary_operation\":\"act\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.\",\"proposed_target_id\":\"gate_serjeant\",\"interlocutor_id\":\"gate_serjeant\",\"conversational_subject\":\"passing the gate and toll\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"The guard names the toll and begins the check after I identify myself.\",\"referenced_claim_id\":null,\"referenced_action_id\":\"rc_5d44f34c809d\",\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+    }
+  ],
+  "persistence": {
+    "session_id": "6c8d3781fdeb8d0cf7f9835f",
+    "campaign_run_id": "6c8d3781fdeb8d0cf7f9835f",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": {
+        "id": "rc_0327f217ec98",
+        "label": "I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.",
+        "kind": "act",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 5,
+      "last_committed_contract_id": "rc_0327f217ec98"
+    },
+    "incidental_entities": [],
+    "ledger_entries": [],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 250118
+  },
+  "resolution_kind": null,
+  "api_ok": true
+}

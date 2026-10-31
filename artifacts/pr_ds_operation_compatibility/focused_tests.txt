@@ -1,0 +1,31 @@
+python -m pytest tests/test_pr_ds_operation_compatibility.py -q --tb=line
+timeout 180s
+7 passed
+
+python -m pytest tests/test_pr_dr_live_vertical_slice.py -q --tb=line
+timeout 180s
+12 passed
+
+python -m pytest tests/test_pr_dq_ic_ooc_messages.py tests/test_pr_dq_vertical_slice.py -q --tb=line
+timeout 180s
+23 passed
+
+python -m pytest tests/test_pr_do_authority_separation.py -q --tb=line
+timeout 120s
+12 passed
+
+python -m pytest tests/test_exploration_resolution.py tests/test_exploration_skill_checks.py tests/test_referenced_surface_grounding_inspection_resolution.py -q --tb=line
+timeout 300s
+57 passed, 9 failed
+
+python -m pytest tests/test_pr_cx_authority_assurance.py -q --tb=line
+timeout 180s
+9 passed
+
+python -m pytest tests/test_conversational_memory_window.py -q --tb=line
+timeout 180s
+34 passed
+
+python -m pytest tests/test_turn_pipeline_shared.py -q --tb=line
+timeout 300s
+41 passed, 24 failed

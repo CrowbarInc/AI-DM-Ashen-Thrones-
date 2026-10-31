@@ -1,0 +1,164 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "pr-br-continuation-18",
+  "campaign_name": "PR-BR Continuation 18 — Immutable Valid Response Boundary and Bounded Regeneration",
+  "generated_at": "2026-10-01T22:54:09.093891+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 6807,
+      "sha256": "0a015d85a6e5662b897ebd49d2bd4a3b5aeee841c783f1d7762fd416f5de5d90"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "bundle_path": "support/docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 84285,
+      "sha256": "f323f061b1381953221c3605e995f4c50b034b5b43f07d7f6d6f713961185a0b"
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "lifecycle",
+      "why": "Accepted response, hard validation, one retry, and safe nonresolution.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/immutable_valid_response.py",
+      "bundle_path": "support/game/immutable_valid_response.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 38907,
+      "sha256": "0334da860fd5ada17be71f95bd8e598bfc64f7186096dfb14b65cb53db91904e"
+    },
+    {
+      "path": "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "role": "tests",
+      "why": "16-turn replay, seven downstream fixtures, four hard-invalid fixtures, and stub paths.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "bundle_path": "support/tests/test_pr_br_continuation18_immutable_boundary.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 26231,
+      "sha256": "13053999ee0cf2d3e5ea2f7d2ef69b7309354a721efc1ace533fb1a2f20227b3"
+    },
+    {
+      "path": "tools/run_pr_br_continuation18_live.py",
+      "role": "runner",
+      "why": "Six-turn focused live session.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "tools/run_pr_br_continuation18_live.py",
+      "bundle_path": "support/tools/run_pr_br_continuation18_live.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 16104,
+      "sha256": "89b52a8379d1ad46dd77e53c74d24f561f8ccbb1bb2202f2c621c6bfa37ada2e"
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/pr_br_continuation18/20261001T225126Z/transcript.md",
+      "bundle_path": "support/artifacts/pr_br_continuation18/20261001T225126Z/transcript.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 10755,
+      "sha256": "3aeec61cbe550e2cbcf8f9fcda8807374e456bc4dfc0bab37522af272abf849c"
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/turns.json",
+      "role": "turns",
+      "why": "Accepted versus emitted text, provenance, and retry feedback.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/pr_br_continuation18/20261001T225126Z/turns.json",
+      "bundle_path": "support/artifacts/pr_br_continuation18/20261001T225126Z/turns.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 25805,
+      "sha256": "9742de486b3e3ca8222f31da0350417f261122cc442175dfcfb6ef1911811909"
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/summary.json",
+      "role": "cost",
+      "why": "Generation, interpretation, and regeneration counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/pr_br_continuation18/20261001T225126Z/summary.json",
+      "bundle_path": "support/artifacts/pr_br_continuation18/20261001T225126Z/summary.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 482,
+      "sha256": "269cad4418212dc6a65176340331f5f6887b5814baec35676a7475540060b1fa"
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/generation_calls.json",
+      "role": "calls",
+      "why": "Per-call generation excerpts and retry reasons.",
+      "behavioral_evidence": true,
+      "human_review_required": false,
+      "canonical_source_path": "artifacts/pr_br_continuation18/20261001T225126Z/generation_calls.json",
+      "bundle_path": "support/artifacts/pr_br_continuation18/20261001T225126Z/generation_calls.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 5425,
+      "sha256": "befc2a4f61cbec9aebbbe422c3504442acc1f3baec298f9dab059443d8196363"
+    }
+  ],
+  "omitted_artifacts": [
+    {
+      "path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "role": "audit",
+      "why": "Continuation 17 discovery and Continuation 18 implementation record.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "reason": "duplicate content of docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md; canonical reference retained",
+      "size_bytes": 84285,
+      "sha256": "f323f061b1381953221c3605e995f4c50b034b5b43f07d7f6d6f713961185a0b"
+    }
+  ],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 10,
+    "zip_size_bytes": "000000071143",
+    "uncompressed_payload_bytes": 214801,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "artifacts/pr_br_continuation18/handoff_config.json",
+    "canonical_repository_root": "."
+  }
+}

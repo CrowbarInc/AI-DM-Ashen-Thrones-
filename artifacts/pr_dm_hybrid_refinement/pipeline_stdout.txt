@@ -1,0 +1,147 @@
+..F...FFF.FFF.F...............F....F.....FFFFFFF..F......FF.FFFF.        [100%]
+================================== FAILURES ===================================
+E   assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} is None
+     +  where {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x0000025E611D8C80>('resolution')
+     +    where <built-in method get of dict object at 0x0000025E611D8C80> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:293: assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} is None
+E   AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'
+E   AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'
+E   AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}
+     +  where 'unknown' = <built-in method get of dict object at 0x0000025E6132A780>('reply_kind')
+     +    where <built-in method get of dict object at 0x0000025E6132A780> = {'absence_of_authored_topic_forces_refusal': False, 'actor_addressable': True, 'addressability_checked_against': ['act...rby', 'scene_addressables', 'world_roster_in_scene', 'interaction_continuity'], 'anchor_followup_detected': False, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:492: AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}
+E   AssertionError: assert 'retry_strategy:selected=unresolved_question' in ''
+     +  where '' = read_turn_debug_notes({'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:579: AssertionError: assert 'retry_strategy:selected=unresolved_question' in ''
+E   assert 0 == 2
+     +  where 0 = len([])
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:608: assert 0 == 2
+E   assert 0 == 2
+     +  where 0 = len([])
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:648: assert 0 == 2
+E   assert 1 == 2
+     +  where 1 = len([[{'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\n\nRule Priority Hierarchy ...arget_requires_dialogue", "dialogue_turn_contains_question_expectation", "social_question_guard"]}}', 'role': 'user'}]])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:716: assert 1 == 2
+E   AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1138: AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'
+E   assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} is None
+     +  where {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x0000025E61623980>('resolution')
+     +    where <built-in method get of dict object at 0x0000025E61623980> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1253: assert {'metadata': {'adjudication_resolver_family': None, 'contract_before_resolver': True, 'contract_construction_source': ...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} is None
+E   AssertionError: assert None == 'roll_requirement_query'
+     +  where None = <built-in method get of dict object at 0x0000025E627E1F00>('category')
+     +    where <built-in method get of dict object at 0x0000025E627E1F00> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1398: AssertionError: assert None == 'roll_requirement_query'
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_details
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\response_type_smoke.py:41: AssertionError
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_details
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\response_type_smoke.py:41: AssertionError
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] lantern_tampering
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\response_type_smoke.py:41: AssertionError
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] brass_device_anomaly
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\response_type_smoke.py:41: AssertionError
+E   AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+[NON-SOCIAL RESOLUTION REPAIR] empty output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1532: AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'
+E   AssertionError: assert None == 'roll_requirement_query'
+     +  where None = <built-in method get of dict object at 0x0000025E6166A3C0>('category')
+     +    where <built-in method get of dict object at 0x0000025E6166A3C0> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1579: AssertionError: assert None == 'roll_requirement_query'
+E   AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+E   AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:356: AssertionError
+E   AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1993: AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'
+E   assert False
+     +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x0000025E5DBB3BC0>)
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2034: assert False
+E   AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2075: AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'
+E   AssertionError: assert None
+     +  where None = <built-in method get of dict object at 0x0000025E612EA080>('speaker_contract_enforcement_reason')
+     +    where <built-in method get of dict object at 0x0000025E612EA080> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2103: AssertionError: assert None
+=========================== short test summary info ===========================
+FAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+FAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]
+FAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]
+FAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]
+FAILED tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+FAILED tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair
+FAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical
+FAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired
+

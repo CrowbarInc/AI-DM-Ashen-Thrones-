@@ -1,0 +1,122 @@
+{
+  "campaign_id": "pr-br-targeted-live-validation-repair",
+  "campaign_name": "PR-BR Targeted Live-Validation Repair",
+  "campaign_date": "2026-10-03",
+  "purpose": "Deterministic repair of the three second-live failures: unknown-slot qualifier safety, movement decision reconciliation, and mixed-intent obligation preservation. No model calls.",
+  "primary_report": "artifacts/pr_br_targeted_repair/IMPLEMENTATION_REPORT.md",
+  "executive_summary": "The three second-live failures are repaired deterministically. Unknown cause, actor, and time are no longer read as an event location when the sentence says they remain unseen. A resolved scene transition is copied into GMResolutionDecision after the resolver commits, with departure and destination facts tagged by scene. Mixed utterances keep one contract operation and a bounded supporting obligation; travel does not globally override social, and social does not erase committed travel. The six scene-transition regressions pass, as does a Turn 7 reproduction. Suite: 480 passed, 2 failed, 482 collected. The two failures are an ungrounded quoted rule whose closing quote is split off, and an interaction target cleared because guard_captain is not the roster id. Exact model/API calls: 0. Recommendation A.",
+  "objective_status": "localized_defects_repaired_for_small_multi_turn_validation",
+  "changes": {
+    "production": [
+      "Event-site location is a verb complement, and unresolved cause, actor, and time stay unknown when the sentence says so.",
+      "Hedged narrator leads without a speaker, quote, or hearsay verb are unsupported. Attributed NPC speech stays a claim.",
+      "reconcile_movement_decision copies a resolved scene transition into the existing GMResolutionDecision after commit.",
+      "executable_obligations records one primary act plus at most one supporting committed act. The contract operation is unchanged. One travel stage owns the scene write."
+    ],
+    "validation": [
+      "Added tests/test_pr_br_qualifier_movement_mixed_intent.py.",
+      "The six tests in tests/test_scene_transition_authority.py now pass."
+    ],
+    "tooling": [],
+    "documentation": [
+      "Wrote artifacts/pr_br_targeted_repair/IMPLEMENTATION_REPORT.md."
+    ],
+    "generated_artifacts": []
+  },
+  "testing": {
+    "focused": "Qualifier, movement fidelity, Turn 7, inverse mixed intent, and modality contrasts in tests/test_pr_br_qualifier_movement_mixed_intent.py. All passed.",
+    "broader": "Scene-transition authority, decision slices 1-3, live attachment, continuation 12-27, resolution contract, outcome precedence, interpretation proposal, model interpretation, unparsed movement, unresolved travel, state authority, bounded improvisation, and social interaction authority.",
+    "full_suite": "480 passed, 2 failed, 482 collected in the targeted suite. Not the repository-wide suite. Not the 4x10 gate.",
+    "runtime_validation": "None. No isolated live probe and no multi-turn validation.",
+    "model_runtime_boundary": "0 gameplay turns. 0 generation calls. 0 retry calls. 0 interpretation calls. 0 preflight calls. 0 total model/API calls.",
+    "new_regressions": "Two tests in test_authoritative_lead_provenance_social_prose_non_ingestion.py fail. Authorizing every opening quote as testimony was tried and reverted because it cleared the C18 ungrounded-rule reject and the unauthored meeting-place reject.",
+    "pre_existing_failures": "test_calibration_http_captain_answer_does_not_mint_narration_ctx: narration is kept, CTIR records guard_captain, and a later entity rebuild clears the interaction target because that id is not in the gate_guard roster. synchronize_scene_addressability call sites are unchanged from HEAD."
+  },
+  "self_contained_review_test": "The bundle contains the implementation report, the new deterministic tests, and the production modules that implement qualifier checks, movement reconciliation, and mixed obligations.",
+  "decisions_requiring_human_review": [
+    "A. LOCALIZED DEFECTS ARE REPAIRED; PROCEED TO SMALL MULTI-TURN LIVE VALIDATION.",
+    "Do not start the 4x10 gate, a human playtest, or PR-BS on this evidence.",
+    "The split-quote harbor line is still removed as an ungrounded rule. Treating every opening quote as a claim reopened harder authority failures.",
+    "The guard_captain interaction-target clear is an addressability rebuild against the roster id, not a mixed-intent loss."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Supporting social acts are narration obligations. They do not also run the social resolver as a second state write.",
+      "Acknowledgment is hard-failed only at eight or more words.",
+      "A quotation split before its closing mark is not reconstructed into attributed testimony."
+    ],
+    "pre_existing": [
+      "test_calibration_http_captain_answer_does_not_mint_narration_ctx still fails on active_interaction_target_id.",
+      "The 4x10 gate was not rerun."
+    ]
+  },
+  "missing_concepts": [
+    "A supporting social act does not create new persistent discourse state.",
+    "Bare leave without to, for, or cross may not record travel."
+  ],
+  "does_not_prove": [
+    "Does not prove multi-turn continuity.",
+    "Does not rerun the 8-turn live probe.",
+    "Does not rerun the 4x10 gate.",
+    "Does not authorize a human playtest or PR-BS."
+  ],
+  "recommended_next_step": "A. LOCALIZED DEFECTS ARE REPAIRED; PROCEED TO SMALL MULTI-TURN LIVE VALIDATION.",
+  "supporting_files": [
+    {
+      "path": "tests/test_pr_br_qualifier_movement_mixed_intent.py",
+      "role": "deterministic_tests",
+      "why": "Qualifier, movement fidelity, Turn 7, inverse mixed intent, and modality contrasts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_scene_transition_authority.py",
+      "role": "deterministic_tests",
+      "why": "The six previously failing mixed social and travel regressions.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Unknown-slot and event-site checks, narrator-lead classification, and movement reconciliation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/player_commitment.py",
+      "role": "production_code",
+      "why": "Primary and supporting executable obligations, reusing C22 commitment modality.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "production_code",
+      "why": "Stores executable_obligations without replacing the single contract operation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/ordinary_semantic_ownership.py",
+      "role": "production_code",
+      "why": "Lets one travel stage run when a committed travel obligation is recorded.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_resolution.py",
+      "role": "production_code",
+      "why": "Copies the obligation record onto Interaction Obligation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api.py",
+      "role": "production_code",
+      "why": "Passes the contract into the travel stage and reconciles the decision after the scene commit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

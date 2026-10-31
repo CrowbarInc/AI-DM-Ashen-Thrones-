@@ -1,0 +1,251 @@
+{
+  "input": "I'd like you to start the campaign.",
+  "http_status": 200,
+  "elapsed_ms": 7.105,
+  "session_before": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "0369e00bc482bbe517439d27",
+    "session_id": "0369e00bc482bbe517439d27",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-16T20:24:27.843016Z"
+  },
+  "session_after": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "0369e00bc482bbe517439d27",
+    "session_id": "0369e00bc482bbe517439d27",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-16T20:24:27.843016Z"
+  },
+  "conversation_log_before": [],
+  "interpretation_requests": [
+    {
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I'd like you to start the campaign.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused."
+        }
+      ],
+      "kwargs": {
+        "estimated_input": 1301
+      },
+      "evidence_kind": "recorded_provider_replay",
+      "elapsed_ms": 0.002,
+      "result": {
+        "ok": true,
+        "sent": false,
+        "text": "{\"communication_mode\":\"OTHER\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player wants to begin the campaign or game session.\"},\"asserted_premises\":[{\"text\":\"The player is indicating readiness to start the campaign.\"}],\"requested_outcomes\":[{\"text\":\"The campaign or game session begins.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}"
+      }
+    }
+  ],
+  "response": {
+    "ok": true,
+    "gm_output": {
+      "player_facing_text": "What are you trying to accomplish?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:clarification_required"
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "I'd like you to start the campaign.",
+      "prompt": "I'd like you to start the campaign.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "The player wants to begin the campaign or game session.",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [
+            "intention"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "clarification_required",
+          "confidence": 0.55,
+          "ambiguity": null,
+          "player_facing_text": "What are you trying to accomplish?",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": ""
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\":\"OTHER\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player wants to begin the campaign or game session.\"},\"asserted_premises\":[{\"text\":\"The player is indicating readiness to start the campaign.\"}],\"requested_outcomes\":[{\"text\":\"The campaign or game session begins.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player wants to begin the campaign or game session."
+            },
+            "asserted_premises": [
+              {
+                "text": "The player is indicating readiness to start the campaign.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "The campaign or game session begins.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 2,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    }
+  },
+  "changed_session_keys": [],
+  "world_unchanged": true,
+  "campaign_start_predicate_before_request": true
+}

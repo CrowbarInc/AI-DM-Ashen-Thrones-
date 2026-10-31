@@ -1,0 +1,15 @@
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_cp_authorized_finalization.py -q --tb=short
+RESULT: 9 passed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_cp_authorized_finalization.py tests\test_pr_cc_social_reply_reconciliation.py tests\test_pr_ce_subjective_preference_classification.py tests\test_pr_ck_ordinary_resolver_selection.py tests\test_pr_cn_contextual_figure_integrity.py -q --tb=short --basetemp=codex_pytest_tmp_cr_focus
+RESULT: 76 passed, 1 warning
+
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_by_narration_only_retry_contract.py tests\test_pr_br_continuation18_immutable_boundary.py tests\test_pr_br_continuation19_hard_authority.py -q --tb=short
+RESULT: 54 passed, 1 warning
+
+.\.venv\Scripts\python.exe -m pytest tests\test_authored_knowledge_realization.py -q --tb=short --basetemp=codex_pytest_tmp_cr_authored
+RESULT: 14 passed, 2 failed, 1 warning
+
+.\.venv\Scripts\python.exe -m pytest tests\test_turn_pipeline_shared.py -q --tb=short --basetemp=codex_pytest_tmp_cr_shared
+RESULT: 41 passed, 24 failed, 1 warning
+

@@ -1,0 +1,100 @@
+{
+  "campaign_id": "pr-br-resolution-decision-slice3",
+  "campaign_name": "PR-BR Resolution Decision Slice 3",
+  "campaign_date": "2026-10-03",
+  "purpose": "Review deterministic decision-to-narration semantic fidelity implementation and evidence.",
+  "primary_report": "artifacts/pr_br_resolution_decision_slice3/implementation_report.md",
+  "executive_summary": "Slice 3 adds source-owned structured semantic identity to GMProposedFact and validates narration against that identity before lexical fallback. It proves deterministic paraphrase support and semantic drift rejection for structured facts, movement, claims, polarity, qualifiers, and causality, while retaining legacy free-text compatibility.",
+  "objective_status": "implemented_for_review",
+  "changes": {
+    "production": [
+      "Added optional GMProposedFact.semantic_identity.",
+      "Added structured semantic matching before token/subset authorization.",
+      "Projected semantic identity from authored structured facts, resolver state mutations, movement outcomes, and accepted NPC claim entries.",
+      "Demoted token/subset matching to compatibility fallback for rows without structured identity."
+    ],
+    "validation": [
+      "Added Slice 3 tests for paraphrase, strengthening, polarity, qualifiers, epistemic promotion, movement overreach, incidental flexibility, and legacy free-text compatibility."
+    ],
+    "tooling": [
+      "Reused saved-gate static audit tooling against existing persona turn evidence."
+    ],
+    "documentation": [
+      "Added Slice 3 implementation report."
+    ],
+    "generated_artifacts": [
+      "Saved deterministic static audit at artifacts/pr_br_resolution_decision_slice3/saved_gate_static_audit.json."
+    ]
+  },
+  "testing": {
+    "focused": "23 passed: Slice 3 tests plus Slice 1 and Slice 2 regression files.",
+    "broader": "159 passed: PR-BR continuation C18-C27 regression files. 5 passed: bounded improvisation authority.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Saved-gate deterministic static audit only; no live gameplay/model calls.",
+    "model_runtime_boundary": "No gameplay/model API calls and no 4x10 gate rerun.",
+    "new_regressions": "None observed in targeted suites.",
+    "pre_existing_failures": "Saved historical gate audit still reports 69 historical violations, mostly known-family heuristic detections from old turns without reconstructable Slice 3 identities."
+  },
+  "self_contained_review_test": "Handoff generated from explicit source list only.",
+  "decisions_requiring_human_review": [
+    "Decide whether the next deterministic slice should focus on source-owned realization interfaces for more fact classes or on reducing remaining known-family dependence.",
+    "Review whether structured fact authoring should be expanded beyond opt-in dict rows."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Semantic fidelity is limited to structured identities and small deterministic checks, not general English entailment.",
+      "Historical gate artifacts usually lack pre-narration decision identity, so prevention cannot be claimed for most old failures."
+    ],
+    "pre_existing": [
+      "Known-family heuristics still detect most saved-gate historical violations."
+    ]
+  },
+  "missing_concepts": [
+    "A constrained realization interface for structured consequential facts not yet covered by source-owned identity.",
+    "A broader migration path for authored structured facts without forcing free-text migration."
+  ],
+  "does_not_prove": [
+    "Does not prove arbitrary natural-language entailment.",
+    "Does not prove live model paraphrase breadth across all domains.",
+    "Does not remove all known-family heuristics.",
+    "Does not rerun gameplay/model gates."
+  ],
+  "recommended_next_step": "External review of Slice 3, then choose whether another deterministic implementation slice is needed for structured realization coverage.",
+  "supporting_files": [
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Decision-owned fact authority and semantic fidelity implementation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_decision_semantic_fidelity_slice3.py",
+      "role": "focused_tests",
+      "why": "New deterministic Slice 3 semantic-fidelity matrix.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_gm_resolution_decision.py",
+      "role": "slice1_regression_tests",
+      "why": "Slice 1 regression coverage relevant to decision ownership.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_decision_ownership_slice2.py",
+      "role": "slice2_regression_tests",
+      "why": "Slice 2 regression coverage relevant to proposed facts and movement.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_resolution_decision_slice3/saved_gate_static_audit.json",
+      "role": "saved_gate_audit",
+      "why": "Deterministic audit of saved gate evidence only.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

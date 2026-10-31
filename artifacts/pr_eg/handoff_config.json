@@ -1,0 +1,252 @@
+{
+  "campaign_id": "pr_eg_dialogue_quality_20261016",
+  "campaign_name": "PR-EG \u2014 Dialogue Quality and Bounded Improvisation",
+  "campaign_date": "2026-10-16",
+  "purpose": "Improve NPC dialogue relevance and bounded improvisation. Do not start PR-EH.",
+  "objective_status": "C \u2014 PR-EG REQUIRES REPAIR",
+  "executive_summary": "# 01 \u2014 Executive Summary\n\nPR-EG adds a small dialogue-authority record on top of the PR-EF-R4 conversational authorization contract. The record names the information the player asked for, what the NPC is allowed to know, whether a harmless remark is permitted, and when the answer is already determined. It does not replace resolvers, and it does not promote NPC speech into world truth.\n\n## Implemented changes\n\n- A question is classified by the information it requests (a name, whether something is watched, who made an object, a personal feeling, an opinion, a hidden fact, a promise, a mystery, a relationship, or a rumor). An established sentence is used only when it actually supports that request. \u201cThe street beyond the gate is the north road\u201d no longer counts as an answer to \u201cis the north road watched?\u201d\n- A reply plan that claims an authoritative answer without a revealed topic is rewritten to genuine uncertainty with speech authority none. That was the contradictory plan.\n- Personal and opinion questions may use the existing harmless-subjective lane. The speech is marked non-canonical.\n- When the permitted answer is a closed unknown, refusal, or unestablished consequential request, narration is skipped and the NPC says a short in-character line. \u201cWho forged the lantern?\u201d no longer spends a strict-social narration and a retry.\n- If a personal reply mixes a harmless remark with a new world claim, the harmless quoted remark can be kept and the retry is not sent.\n- Conversational commitments (an opinion, a refusal, an admitted uncertainty) are stored on the session\u2019s conversational context, capped, and saved with the session. They are not world facts.\n- Validation records `internal_authority_voice`, `unauthorized_consequential_claim`, and `answer_not_relevant` when those failures occur. The old \u201csettled here\u201d line is not used once a dialogue-authority record exists.\n\n## Player-facing improvements\n\nOn the fresh twelve-turn `/api/chat` conversation:\n\n- \u201cWhat is the street called?\u201d was answered with the north road.\n- \u201cWho forged the lantern?\u201d was \u201cI couldn\u2019t tell you.\u201d in one interpretation call (1,965 input tokens), against the historical three-call, 50,784-input-token path.\n- \u201cWhat troubles you?\u201d became \u201cIt\u2019s this watch, mostly.\u201d One narration call, no retry. The earlier run of the same question spent a narration and a retry (54,871 input tokens) and then fell back to \u201cI couldn\u2019t tell you.\u201d\n- The password was not disclosed. The reward was not promised. The walk through the gate used the existing movement resolver. World topics did not change on any turn.\n\n## Critical limitations\n\nThe same conversation still fails as play in several turns:\n\n- \u201cHas anyone been keeping an eye on it after dark?\u201d was answered \u201cThat has not been established in the information available to you.\u201d That is internal authority language, and it is not Mara speaking.\n- \u201cWhat did you mean by that?\u201d forgot the road name she had just given and, after a narration plus retry (52,957 input tokens), said \u201cI couldn\u2019t tell you.\u201d\n- \u201cDo you prefer the morning or the evening?\u201d still did not state a preference.\n- \u201cI meant the road, not how you feel\u201d was treated as an undo.\n- The reward request was refused as an unavailable action, in engine wording.\n- After leaving the courtyard, the return to the earlier watch question asked which person was meant. It did not continue the conversation.\n- A successful social narration still sends on the order of 26,000 input tokens. The skip removes the extra retry for determined questions. It does not shrink the prompt for questions that still need a model line.\n\nDeterministic frozen holdouts pass every scored dimension. That is not the same as the live transcript passing them.\n\n## Recommendation\n\n**C \u2014 PR-EG REQUIRES REPAIR**\n\nAnswer relevance, natural uncertainty, and bounded improvisation are real on the paths that reach a resolved NPC with a classified request. The continuous conversation still contains an internal-voice answer, a broken follow-up, an evasive preference, and one pathological narration-plus-retry. Those are important dialogue failures. No critical authority violation was observed: hidden information stayed hidden, topics were not rewritten, and the movement turn used the existing resolver.\n\nDo not start PR-EH. Stop for external review.\n",
+  "changes": {
+    "production": [
+      "Dialogue-authority record distinguishes the requested information, NPC posture, and non-canonical speech.",
+      "A topic answers a question only when it supports that request.",
+      "Determined knowledge gaps skip narration. A harmless quoted remark can be kept without a retry."
+    ],
+    "validation": [
+      "Frozen holdouts in tests/fixtures/pr_eg_dialogue_holdouts.json.",
+      "tests/test_pr_eg_dialogue_quality.py scores dimensions separately."
+    ],
+    "tooling": [
+      "tools/validate_pr_eg.py"
+    ],
+    "documentation": [
+      "Reports 01\u201318 under artifacts/pr_eg."
+    ],
+    "generated_artifacts": [
+      "Fresh /api/chat twelve-turn conversation before and after quote recovery.",
+      "Baseline and post-implementation regression junit."
+    ]
+  },
+  "testing": {
+    "focused": "73 passed, including frozen holdout dimensions and quote recovery. Provider not used for the holdout scorer.",
+    "broader": "Family 350 passed / 19 failed. No new failing identities. One historical failure now passes.",
+    "full_suite": "Not run. The established conversational family was run.",
+    "runtime_validation": "Fresh gpt-4.1-mini-2025-04-14 through TestClient /api/chat. Twelve turns, 16 calls, 145400 input tokens, one retry.",
+    "model_runtime_boundary": "Configured gpt-4.1-mini. Observed gpt-4.1-mini-2025-04-14.",
+    "new_regressions": "None in the final family measurement.",
+    "pre_existing_failures": "Nineteen of the twenty PR-EF-R2 identities remain. One, the repeated-question clean refusal, now passes."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "A road-watch follow-up was answered with internal authority language and was not Mara's line.",
+      "The follow-up to the road's name forgot that answer and spent a narration plus retry.",
+      "A preference question stayed ignorance after one narration.",
+      "A clarification was treated as an undo, and a promise request was answered as an unavailable action."
+    ],
+    "pre_existing": [
+      "Nineteen inherited regression failures from the R2 family."
+    ]
+  },
+  "missing_concepts": [
+    "Using a public scene sentence, such as Mara looking concerned, as a partial spoken answer.",
+    "A prompt small enough that one social narration is not tens of thousands of input tokens."
+  ],
+  "decisions_requiring_human_review": [
+    "Accept or reject C \u2014 PR-EG requires repair.",
+    "Do not begin PR-EH from this package."
+  ],
+  "does_not_prove": [
+    "That every follow-up stays with the NPC who just spoke.",
+    "That two fresh runs of the same follow-up take the same route. Turn 3 differed between the two live runs.",
+    "That save/load of commitments was exercised on the disposable live campaign. That campaign directory was removed. The unit test covers the session shape.",
+    "That the nineteen remaining family failures are unchanged in their assertion text. Identities were compared. Bodies were not re-audited."
+  ],
+  "recommended_next_step": "External review. Stop. Do not start PR-EH.",
+  "primary_report": "artifacts/pr_eg/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 5242880,
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/03_DIALOGUE_FAILURE_RECONSTRUCTION.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/04_DIALOGUE_AUTHORITY_DESIGN.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/05_ANSWER_RELEVANCE.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/06_BOUNDED_IMPROVISATION.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/07_DIALOGUE_CONTINUITY.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/08_NPC_KNOWLEDGE_AND_UNCERTAINTY.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/09_NPC_CHARACTERIZATION.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/10_RESPONSE_GENERATION_AND_VALIDATION.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/11_PROVIDER_EFFICIENCY.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/12_FROZEN_DIALOGUE_HOLDOUTS.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/13_FRESH_LIVE_CONVERSATION.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/14_STATE_INTEGRITY_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/15_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/16_REMAINING_ISSUES.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/17_FINAL_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/18_CHANGED_FILE_INVENTORY.md",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg/baseline_junit.xml",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/baseline_output.txt",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/live.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/live_before_quote_recovery.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/live_qualification.json",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/live_qualification_before_quote_recovery.json",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/regression_junit.xml",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg/regression_output.txt",
+      "role": "evidence",
+      "why": "PR-EG report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "Eighteen reports, frozen holdouts referenced from the tests, two live conversations, and the regression junit. No .env and no active campaign saves."
+}

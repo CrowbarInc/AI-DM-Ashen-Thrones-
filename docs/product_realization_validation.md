@@ -25,4 +25,18 @@ When a Product Realization campaign claims a general owner:
 - scenario-independent fixtures with unrelated vocabulary are a hard acceptance
   gate for systemic claims.
 
+A systemic claim is also a generalization claim under
+`docs/DEVELOPMENT_CONSTITUTION.md`. Keep the original reproduction, related
+variations, independent generalization, and the unrelated regression result
+separate. Passing the original calibration scenario does not satisfy the
+scenario-independent fixture gate in this document. That gate remains the
+acceptance rule for a claimed general owner.
+
+Fixtures authored alongside the implementation, including
+scenario-independent fixtures, are not independent held-out evidence.
+Independent generalization requires previously unseen or genuinely held-out
+scenarios. A limited repair that does not claim a general owner may be
+accepted without related variations or independent generalization. This
+paragraph does not relax the fixture gate when a general owner is claimed.
+
 This is a validation rule, not a new runtime owner.

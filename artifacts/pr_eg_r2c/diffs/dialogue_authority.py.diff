@@ -1,0 +1,69 @@
+--- baseline/game/dialogue_authority.py
++++ final/game/dialogue_authority.py
+@@ -360,6 +360,66 @@
+     }
+ 
+ 
++def select_host_speech(
++    resolution: Mapping[str, Any] | None,
++    *,
++    player_text: str,
++    session: Mapping[str, Any] | None = None,
++) -> tuple[str, str] | None:
++    """Project existing social authority for a resolved, nonmechanical question.
++
++    Permission to speak is not permission to invent information. Generated
++    paraphrases have no enforceable grant yet, so this lane uses host wording.
++    The returned source is attached to the existing accepted_response object;
++    it is not another persistent authority store.
++    """
++    if not isinstance(resolution, Mapping) or resolution.get("requires_check"):
++        return None
++    social = resolution.get("social")
++    if not isinstance(social, Mapping) or social.get("target_resolved") is not True:
++        return None
++    from game.resolution_contract import contract_mapping_from_resolution
++
++    contract = contract_mapping_from_resolution(resolution)
++    if str(contract.get("operation") or "ask").lower() != "ask":
++        return None
++    construction = contract.get("construction") or {}
++    if contract.get("ambiguous") or construction.get("authority_conflict"):
++        return None
++    if contract.get("interlocutor_id") and str(contract["interlocutor_id"]) != str(social.get("npc_id") or ""):
++        return None
++    metadata = resolution.get("metadata") or {}
++    decision = metadata.get("gm_resolution_decision") or {}
++    if (decision.get("executable_obligations") or {}).get("primary"):
++        return None
++    name = str(social.get("npc_name") or "").strip()
++    npc_id = str(social.get("npc_id") or "").strip()
++    if not name or not npc_id:
++        return None
++    record = social.get("dialogue_authority")
++    if not isinstance(record, Mapping):
++        record = build_dialogue_authority(player_text, social=social, session=session)
++    # Explicit repeat/clarification binds the relevant delivered exchange even
++    # when a resolver also carries a previously selected topic on this turn.
++    line = str(record.get("player_line") or "").strip()
++    if record.get("reuse_prior_speech") and line:
++        return line, "dialogue_authority.reuse_prior_speech"
++    topic = social.get("topic_revealed")
++    if isinstance(topic, Mapping):
++        text = str(topic.get("text") or topic.get("clue_text") or "").strip()
++        if text:
++            from game.social import format_authored_knowledge_realization_line
++
++            return format_authored_knowledge_realization_line(dict(resolution), text), "social.topic_revealed:" + str(topic.get("id") or "")
++    if line:
++        return line, "dialogue_authority.player_line"
++    from game.conversational_continuity import bounded_personal_line
++
++    if record.get("improvisation_permitted") and record.get("requested_information") in {"opinion", "personal_state"}:
++        return bounded_personal_line(name, npc_id, str(record["requested_information"])), "conversational_continuity.bounded_personal_line"
++    return _player_line(name, str(record.get("knowledge_posture") or "unknown"), ""), "dialogue_authority.knowledge_posture"
++
++
+ def response_class(text: str) -> str:
+     raw = str(text or "")
+     if _INTERNAL.search(raw):

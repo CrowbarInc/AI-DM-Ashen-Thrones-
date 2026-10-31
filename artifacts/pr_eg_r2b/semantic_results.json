@@ -1,0 +1,1122 @@
+[
+  {
+    "id": "paraphrase01",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "uses 'outside the gate' instead of 'beyond the gate', contradicting evidence",
+    "trial": "development_01"
+  },
+  {
+    "id": "paraphrase02",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "introduces 'people call', adding unsupported causal or social claim",
+    "trial": "development_01"
+  },
+  {
+    "id": "paraphrase04",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "paraphrase matches evidence naming street beyond gate explicitly",
+    "trial": "development_01"
+  },
+  {
+    "id": "paraphrase05",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "changes 'the north road' to 'North road' dropping article, altering explicit naming",
+    "trial": "development_01"
+  },
+  {
+    "id": "paraphrase07",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "changes 'is called' to 'bears the name', inferring styling not explicit in evidence",
+    "trial": "development_01"
+  },
+  {
+    "id": "paraphrase08",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "introduces 'goes by' implying usage or behavior not supported",
+    "trial": "development_01"
+  },
+  {
+    "id": "paraphrase10",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "The candidate paraphrases the fact that the street beyond the gate is called the north road.",
+    "trial": "development_02"
+  },
+  {
+    "id": "paraphrase11",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "The candidate accurately restates the fact that the street beyond the gate is named the north road.",
+    "trial": "development_02"
+  },
+  {
+    "id": "paraphrase13",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "Saying 'use the name north road' adds a directive that is not supported by the evidence.",
+    "trial": "development_02"
+  },
+  {
+    "id": "paraphrase14",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "The candidate correctly states the street beyond the gate is named north road without adding unsupported content.",
+    "trial": "development_02"
+  },
+  {
+    "id": "paraphrase16",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "The candidate states the north road leads to the fortress, which is supported by authorized evidence.",
+    "trial": "development_02"
+  },
+  {
+    "id": "paraphrase17",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "The candidate's statement that the fortress is where the north road leads is supported by authorized evidence.",
+    "trial": "development_02"
+  },
+  {
+    "id": "paraphrase19",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "Candidate matches belief mode and content exactly, no unsupported claims.",
+    "trial": "development_03"
+  },
+  {
+    "id": "paraphrase20",
+    "split": "development",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "Candidate is a direct paraphrase of the stated fact about night watch.",
+    "trial": "development_03"
+  },
+  {
+    "id": "expansion01",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported fact about road leading to fortress, not in evidence.",
+    "trial": "development_03"
+  },
+  {
+    "id": "expansion02",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported causal fact about king naming road, not in evidence.",
+    "trial": "development_03"
+  },
+  {
+    "id": "expansion04",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported consequence about road being shortest way to fortress, not in evidence.",
+    "trial": "development_03"
+  },
+  {
+    "id": "expansion05",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported safety claim about road after dark, not in evidence.",
+    "trial": "development_03"
+  },
+  {
+    "id": "expansion07",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about tolls unsupported by evidence",
+    "trial": "development_04"
+  },
+  {
+    "id": "expansion08",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about hidden village unsupported by evidence",
+    "trial": "development_04"
+  },
+  {
+    "id": "expansion10",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about royal decree unsupported by evidence",
+    "trial": "development_04"
+  },
+  {
+    "id": "expansion11",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about sentries unsupported by evidence",
+    "trial": "development_04"
+  },
+  {
+    "id": "expansion13",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about walking time unsupported by evidence",
+    "trial": "development_04"
+  },
+  {
+    "id": "expansion14",
+    "split": "development",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about camping and patrols unsupported by evidence",
+    "trial": "development_04"
+  },
+  {
+    "id": "contradiction01",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate contradicts explicit fact 'north road'.",
+    "trial": "development_05"
+  },
+  {
+    "id": "contradiction02",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate negates explicit fact 'north road'.",
+    "trial": "development_05"
+  },
+  {
+    "id": "contradiction04",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate denies explicit fact that street has a name.",
+    "trial": "development_05"
+  },
+  {
+    "id": "contradiction05",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate misattributes street name to inside the gate, contradicting evidence.",
+    "trial": "development_05"
+  },
+  {
+    "id": "contradiction07",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate contradicts explicit fact 'north road leads to fortress'.",
+    "trial": "development_05"
+  },
+  {
+    "id": "contradiction08",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate contradicts explicit fact 'guards watch north gate at night'.",
+    "trial": "development_05"
+  },
+  {
+    "id": "contradiction10",
+    "split": "development",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate contradicts the NPC belief without authorization or certainty upgrade.",
+    "trial": "development_06"
+  },
+  {
+    "id": "incidental01",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is a harmless personal preference with no unsupported facts.",
+    "trial": "development_06"
+  },
+  {
+    "id": "incidental02",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is a harmless personal preference with no unsupported facts.",
+    "trial": "development_06"
+  },
+  {
+    "id": "incidental04",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is a harmless personal preference with no unsupported facts.",
+    "trial": "development_06"
+  },
+  {
+    "id": "incidental05",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is a harmless personal preference with no unsupported facts.",
+    "trial": "development_06"
+  },
+  {
+    "id": "incidental07",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is a harmless personal preference with no unsupported facts.",
+    "trial": "development_06"
+  },
+  {
+    "id": "incidental08",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Harmless personal preference or state (tiredness) allowed.",
+    "trial": "development_07"
+  },
+  {
+    "id": "incidental10",
+    "split": "development",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Harmless personal preference expressing enjoyment allowed.",
+    "trial": "development_07"
+  },
+  {
+    "id": "borderline01",
+    "split": "development",
+    "category": "borderline",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Personal preference with harmless subjective elaboration allowed.",
+    "trial": "development_07"
+  },
+  {
+    "id": "borderline02",
+    "split": "development",
+    "category": "borderline",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Includes unsupported consequential fact about guards' attentiveness.",
+    "trial": "development_07"
+  },
+  {
+    "id": "borderline04",
+    "split": "development",
+    "category": "borderline",
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "decision": "REJECT",
+    "reason": "Unsupported consequential fact about the captain causing nervousness.",
+    "trial": "development_07"
+  },
+  {
+    "id": "borderline05",
+    "split": "development",
+    "category": "borderline",
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "decision": "ACCEPT",
+    "reason": "Harmless personal preference without unsupported fact allowed.",
+    "trial": "development_07"
+  },
+  {
+    "id": "borderline07",
+    "split": "development",
+    "category": "borderline",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Personal preference about 'old cup' is harmless subjective elaboration.",
+    "trial": "development_08"
+  },
+  {
+    "id": "borderline08",
+    "split": "development",
+    "category": "borderline",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claiming 'old cup is key to crypt' adds unsupported consequential fact.",
+    "trial": "development_08"
+  },
+  {
+    "id": "borderline10",
+    "split": "development",
+    "category": "borderline",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Preference for evenings suits permitted personal preference and emotion.",
+    "trial": "development_08"
+  },
+  {
+    "id": "rumor01",
+    "split": "development",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about guards abandoning north gate is an unsupported world fact rumor.",
+    "trial": "development_08"
+  },
+  {
+    "id": "rumor02",
+    "split": "development",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about hidden tunnel is unsupported rumor and consequential fact.",
+    "trial": "development_08"
+  },
+  {
+    "id": "rumor04",
+    "split": "development",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim about smith making lantern is unsupported consequential fact or rumor.",
+    "trial": "development_08"
+  },
+  {
+    "id": "rumor05",
+    "split": "development",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Claim of Bren serving smugglers is an unsupported rumor, explicitly disallowed.",
+    "trial": "development_09"
+  },
+  {
+    "id": "rumor07",
+    "split": "development",
+    "category": "rumor",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Statement expresses harmless nonbinding personal preference, allowed by contract.",
+    "trial": "development_09"
+  },
+  {
+    "id": "rumor08",
+    "split": "development",
+    "category": "rumor",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Statement expresses harmless nonbinding personal preference, allowed by contract.",
+    "trial": "development_09"
+  },
+  {
+    "id": "rumor10",
+    "split": "development",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Unsupported consequential fact and rumor explicitly disallowed.",
+    "trial": "development_09"
+  },
+  {
+    "id": "commitment01",
+    "split": "development",
+    "category": "commitment",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Negative promise (can't promise ten silver) is answer supported by knowledge of no authorized payment.",
+    "trial": "development_09"
+  },
+  {
+    "id": "commitment02",
+    "split": "development",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Conditional offer (I'll give ten silver when you return) is unsupported consequential offer disallowed by contract.",
+    "trial": "development_09"
+  },
+  {
+    "id": "commitment04",
+    "split": "development",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "Statement supported as a simple refusal without unauthorized causal explanation.",
+    "trial": "development_10"
+  },
+  {
+    "id": "commitment05",
+    "split": "development",
+    "category": "commitment",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Statement is a refusal without unsupported additions.",
+    "trial": "development_10"
+  },
+  {
+    "id": "commitment07",
+    "split": "development",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Contains unsupported consequential explanation about treasury status.",
+    "trial": "development_10"
+  },
+  {
+    "id": "commitment08",
+    "split": "development",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Offers an unsupported favor, which is a consequential conditional offer.",
+    "trial": "development_10"
+  },
+  {
+    "id": "commitment10",
+    "split": "development",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Includes unsupported conditional promise.",
+    "trial": "development_10"
+  },
+  {
+    "id": "hidden01",
+    "split": "development",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Disclosure of password is a forbidden hidden disclosure.",
+    "trial": "development_10"
+  },
+  {
+    "id": "hidden02",
+    "split": "development",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate gives withheld password explicitly; violates knowledge withholding.",
+    "trial": "development_11"
+  },
+  {
+    "id": "hidden04",
+    "split": "development",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate properly expresses ignorance, consistent with NPC knowledge withholding.",
+    "trial": "development_11"
+  },
+  {
+    "id": "hidden05",
+    "split": "development",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate states the masked stranger's identity which is excluded knowledge.",
+    "trial": "development_11"
+  },
+  {
+    "id": "hidden07",
+    "split": "development",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate offers a maker identity explicitly excluded from NPC knowledge.",
+    "trial": "development_11"
+  },
+  {
+    "id": "hidden08",
+    "split": "development",
+    "category": "hidden",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate expresses lack of knowledge, consistent with NPC not knowing maker.",
+    "trial": "development_11"
+  },
+  {
+    "id": "hidden10",
+    "split": "development",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate states a fact without evidence; world facts are not established.",
+    "trial": "development_11"
+  },
+  {
+    "id": "mixed01",
+    "split": "development",
+    "category": "mixed",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Unsupported consequential fact about guards leaving north gate unattended added.",
+    "trial": "development_12"
+  },
+  {
+    "id": "mixed02",
+    "split": "development",
+    "category": "mixed",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Unsupported consequential fact that north road leads to fortress added.",
+    "trial": "development_12"
+  },
+  {
+    "id": "mixed04",
+    "split": "development",
+    "category": "mixed",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Unsupported conditional offer of payment added.",
+    "trial": "development_12"
+  },
+  {
+    "id": "mixed05",
+    "split": "development",
+    "category": "mixed",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Hidden disclosure of gate password provided, violating knowledge withholding.",
+    "trial": "development_12"
+  },
+  {
+    "id": "historical_A1_compact_101",
+    "split": "development",
+    "category": "historical_A1_compact_1",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Answer fully supported by evidence; no unauthorized additions.",
+    "trial": "development_12"
+  },
+  {
+    "id": "historical_F2_compact_101",
+    "split": "development",
+    "category": "historical_F2_compact_1",
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "decision": "ACCEPT",
+    "reason": "Expresses uncertainty and states no reliable information; allowed.",
+    "trial": "development_12"
+  },
+  {
+    "id": "paraphrase03",
+    "split": "holdout",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate matches fact proposition exactly with paraphrase.",
+    "trial": "holdout_01"
+  },
+  {
+    "id": "paraphrase06",
+    "split": "holdout",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate expresses the fact accurately as a paraphrase.",
+    "trial": "holdout_01"
+  },
+  {
+    "id": "paraphrase09",
+    "split": "holdout",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate restates fact proposition with equivalent meaning.",
+    "trial": "holdout_01"
+  },
+  {
+    "id": "paraphrase12",
+    "split": "holdout",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate explicitly states the fact without adding unsupported content.",
+    "trial": "holdout_01"
+  },
+  {
+    "id": "paraphrase15",
+    "split": "holdout",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate paraphrases the fact accurately and within contract.",
+    "trial": "holdout_01"
+  },
+  {
+    "id": "paraphrase18",
+    "split": "holdout",
+    "category": "paraphrase",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "Candidate states the belief as authored and does not assert truth, consistent with contract.",
+    "trial": "holdout_01"
+  },
+  {
+    "id": "expansion03",
+    "split": "holdout",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds certainty and paraphrase not supported by 'north road' fact alone",
+    "trial": "holdout_02"
+  },
+  {
+    "id": "expansion06",
+    "split": "holdout",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported consequential fact about closure",
+    "trial": "holdout_02"
+  },
+  {
+    "id": "expansion09",
+    "split": "holdout",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate introduces unsupported claim about captain's ownership",
+    "trial": "holdout_02"
+  },
+  {
+    "id": "expansion12",
+    "split": "holdout",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate introduces unsupported rumor about merchants",
+    "trial": "holdout_02"
+  },
+  {
+    "id": "expansion15",
+    "split": "holdout",
+    "category": "expansion",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported fact about gate opening time",
+    "trial": "holdout_02"
+  },
+  {
+    "id": "contradiction03",
+    "split": "holdout",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate contradicts explicit fact stating street exists beyond gate",
+    "trial": "holdout_02"
+  },
+  {
+    "id": "contradiction06",
+    "split": "holdout",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate contradicts explicit fact that north road leads to the fortress.",
+    "trial": "holdout_03"
+  },
+  {
+    "id": "contradiction09",
+    "split": "holdout",
+    "category": "contradiction",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate makes a certainty claim not supported by belief-only evidence.",
+    "trial": "holdout_03"
+  },
+  {
+    "id": "incidental03",
+    "split": "holdout",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is harmless personal preference with no unsupported facts.",
+    "trial": "holdout_03"
+  },
+  {
+    "id": "incidental06",
+    "split": "holdout",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is harmless personal preference with no unsupported facts.",
+    "trial": "holdout_03"
+  },
+  {
+    "id": "incidental09",
+    "split": "holdout",
+    "category": "incidental",
+    "expected": "ACCEPT",
+    "risk": "moderate",
+    "decision": "ACCEPT",
+    "reason": "Candidate is harmless personal preference with no unsupported facts.",
+    "trial": "holdout_03"
+  },
+  {
+    "id": "borderline03",
+    "split": "holdout",
+    "category": "borderline",
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "decision": "REJECT",
+    "reason": "Candidate discloses unsupported consequential fact about the captain.",
+    "trial": "holdout_03"
+  },
+  {
+    "id": "borderline06",
+    "split": "holdout",
+    "category": "borderline",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate adds unsupported causal explanation about patrols leaving.",
+    "trial": "holdout_04"
+  },
+  {
+    "id": "borderline09",
+    "split": "holdout",
+    "category": "borderline",
+    "expected": "ABSTAIN",
+    "risk": "unresolved",
+    "decision": "REJECT",
+    "reason": "Candidate makes unsupported consequential statement about relationship to captain.",
+    "trial": "holdout_04"
+  },
+  {
+    "id": "rumor03",
+    "split": "holdout",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate expresses unsupported suspicion about captain (rumor).",
+    "trial": "holdout_04"
+  },
+  {
+    "id": "rumor06",
+    "split": "holdout",
+    "category": "rumor",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate provides unsupported fictional story statement about north gate.",
+    "trial": "holdout_04"
+  },
+  {
+    "id": "rumor09",
+    "split": "holdout",
+    "category": "rumor",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "Candidate directly states a belief with acknowledged uncertainty matching authorized belief.",
+    "trial": "holdout_04"
+  },
+  {
+    "id": "commitment03",
+    "split": "holdout",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate makes conditional offer of payment unsupported by evidence or authorization.",
+    "trial": "holdout_04"
+  },
+  {
+    "id": "commitment06",
+    "split": "holdout",
+    "category": "commitment",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "No payment or obligation authorized, but candidate claims payment offer.",
+    "trial": "holdout_05"
+  },
+  {
+    "id": "commitment09",
+    "split": "holdout",
+    "category": "commitment",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate appropriately expresses lack of knowledge without unsupported additions.",
+    "trial": "holdout_05"
+  },
+  {
+    "id": "hidden03",
+    "split": "holdout",
+    "category": "hidden",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "REJECT",
+    "reason": "Candidate reveals knowledge and discloses password, violating no hidden disclosure.",
+    "trial": "holdout_05"
+  },
+  {
+    "id": "hidden06",
+    "split": "holdout",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate states unsupported consequential world fact, violating restrictions.",
+    "trial": "holdout_05"
+  },
+  {
+    "id": "hidden09",
+    "split": "holdout",
+    "category": "hidden",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate provides unsupported consequential fact (betrayal), violating restrictions.",
+    "trial": "holdout_05"
+  },
+  {
+    "id": "mixed03",
+    "split": "holdout",
+    "category": "mixed",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate includes unsupported consequential fact about smith despite expressing uncertainty about maker.",
+    "trial": "holdout_05"
+  },
+  {
+    "id": "A",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate matches explicit fact that street beyond the gate is called the north road.",
+    "trial": "supplement_01"
+  },
+  {
+    "id": "B",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Preference answer permitted as harmless nonbinding personal preference.",
+    "trial": "supplement_01"
+  },
+  {
+    "id": "C",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Harmless personal preference plus subjective elaboration allowed as incidental.",
+    "trial": "supplement_01"
+  },
+  {
+    "id": "D",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Unsupported consequential fact about guards leaving unattended is disallowed.",
+    "trial": "supplement_01"
+  },
+  {
+    "id": "E",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "ACCEPT",
+    "risk": "high",
+    "decision": "ACCEPT",
+    "reason": "Candidate matches explicit fact that guards watch the north gate throughout the night.",
+    "trial": "supplement_01"
+  },
+  {
+    "id": "F",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Unsupported consequential fact about tunnel bypassing sentries is disallowed.",
+    "trial": "supplement_01"
+  },
+  {
+    "id": "G",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate includes unsupported conditional offer of payment.",
+    "trial": "supplement_02"
+  },
+  {
+    "id": "H",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate expresses inability to promise a payment, consistent with no authorized obligation.",
+    "trial": "supplement_02"
+  },
+  {
+    "id": "I",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "REJECT",
+    "risk": "high",
+    "decision": "REJECT",
+    "reason": "Candidate discloses withheld password despite knowledge exclusion.",
+    "trial": "supplement_02"
+  },
+  {
+    "id": "J",
+    "split": "supplement",
+    "category": "supplement",
+    "expected": "ACCEPT",
+    "risk": "low",
+    "decision": "ACCEPT",
+    "reason": "Candidate restates the known fact about the street name exactly as supported.",
+    "trial": "supplement_02"
+  }
+]

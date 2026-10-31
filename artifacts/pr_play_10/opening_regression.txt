@@ -1,0 +1,44 @@
+..FFF.....................                                               [100%]
+================================== FAILURES ===================================
+_____________ test_start_campaign_emits_opening_and_sets_started ______________
+tests\test_start_campaign_api.py:174: in test_start_campaign_emits_opening_and_sets_started
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+E   assert "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. A... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 443f8a0519afee0f233b8c04
+[PROMPT] fresh campaign prompt constructed
+_ test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text _
+tests\test_start_campaign_api.py:258: in test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+    assert emission_debug.get("post_final_emission_gate_text_len", 0) > 800
+E   AssertionError: assert 781 > 800
+E    +  where 781 = <built-in method get of dict object at 0x000001EC61BCCBC0>('post_final_emission_gate_text_len', 0)
+E    +    where <built-in method get of dict object at 0x000001EC61BCCBC0> = {'live_resolution_mode': {'mode': 'grounded_information_request', 'reason_codes': ['default_existing_resolution'], 'ta..._reason_code': 'speaker_contract_match'}, 'opening_curated_facts_present': True, 'opening_curated_facts_count': 6, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started de86627d01d413149e04ce4f
+[PROMPT] fresh campaign prompt constructed
+_____ test_start_campaign_promotes_valid_upstream_prepared_scene_opening ______
+tests\test_start_campaign_api.py:287: in test_start_campaign_promotes_valid_upstream_prepared_scene_opening
+    assert response_text in RICH_OPENING_GPT_RESPONSE["player_facing_text"]
+E   assert "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke." in "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. Y... You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started 694c8bdd57d52cea4c42134c
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_start_campaign_api.py::test_start_campaign_emits_opening_and_sets_started
+FAILED tests/test_start_campaign_api.py::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text
+FAILED tests/test_start_campaign_api.py::test_start_campaign_promotes_valid_upstream_prepared_scene_opening

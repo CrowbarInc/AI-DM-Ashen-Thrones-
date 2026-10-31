@@ -1,0 +1,400 @@
+{
+  "probe": {
+    "halt": null,
+    "completed_turn_ids": [
+      "T1",
+      "T2"
+    ],
+    "attempted_turn_ids": [
+      "T1",
+      "T2"
+    ],
+    "provider_requests": 4,
+    "combined_tokens": 108690,
+    "accounting_failed": false,
+    "calls": [
+      {
+        "index": 1,
+        "turn": "startup",
+        "kind": "preflight",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "response_model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 24,
+          "output_tokens": 2,
+          "total_tokens": 26,
+          "cached_input_tokens": 0,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "latency_seconds": 1.775,
+        "error": null,
+        "parsed_narration": "OK"
+      },
+      {
+        "index": 2,
+        "turn": "T1",
+        "kind": "generation",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "response_model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 30877,
+          "output_tokens": 66,
+          "total_tokens": 30943,
+          "cached_input_tokens": 0,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "latency_seconds": 1.994,
+        "error": null,
+        "parsed_narration": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary."
+      },
+      {
+        "index": 3,
+        "turn": "T2",
+        "kind": "generation",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "response_model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 34561,
+          "output_tokens": 117,
+          "total_tokens": 34678,
+          "cached_input_tokens": 0,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "latency_seconds": 2.007,
+        "error": null,
+        "parsed_narration": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty."
+      },
+      {
+        "index": 4,
+        "turn": "T2",
+        "kind": "generation",
+        "retry_attempt": 1,
+        "retry_reason": "hard_invalid",
+        "response_model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 42960,
+          "output_tokens": 83,
+          "total_tokens": 43043,
+          "cached_input_tokens": 0,
+          "input_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "latency_seconds": 2.312,
+        "error": null,
+        "parsed_narration": "The guard captain's eyes flick to the notice board, their expression guarded. \"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain."
+      }
+    ]
+  },
+  "config": {
+    "utc": "2026-10-10T02:47:04.617957+00:00",
+    "provider": "OpenAI",
+    "billing_path": "Official OpenAI Python SDK Responses API (client.responses.create).",
+    "endpoint": "https://api.openai.com/v1/responses",
+    "base_url_override_present": false,
+    "models": {
+      "MODEL_NAME": "gpt-4.1-mini",
+      "DEFAULT_MODEL_NAME": "gpt-4.1-mini",
+      "HIGH_PRECISION_MODEL_NAME": "gpt-4.1-mini",
+      "RETRY_ESCALATION_MODEL_NAME": "gpt-4.1-mini"
+    },
+    "enable_model_routing": true,
+    "required_response_model": "gpt-4.1-mini-2025-04-14",
+    "published_prices_usd_per_million": {
+      "input_per_million": 0.4,
+      "cached_input_per_million": 0.1,
+      "output_per_million": 1.6
+    },
+    "price_source": "https://developers.openai.com/api/docs/pricing (same published gpt-4.1-mini rates used by PR-CO)",
+    "hard_budget": {
+      "max_completed_gameplay_turns": 2,
+      "max_provider_requests_including_preflight": 4,
+      "max_combined_tokens": 120000
+    },
+    "expected_cost_at_token_ceiling_usd": {
+      "assumption": "120,000 tokens as gpt-4.1-mini, 95 percent input and 5 percent output, no cache.",
+      "estimate_usd": 0.0552,
+      "all_output_ceiling_usd": 0.192
+    },
+    "unknown_unpriced_or_substituted_models": [],
+    "api_key_present": true,
+    "api_key_length": 164,
+    "production_data_untouched_intent": true
+  },
+  "production_mtime_drift": [],
+  "turns": [
+    {
+      "turn": "T1",
+      "player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+      "http_status": 200,
+      "wall_seconds": 2.608,
+      "severe_mutations": [],
+      "resolver": {
+        "kind": "question",
+        "action_id": "question_guard_captain",
+        "social_intent_class": "social_exchange",
+        "reply_kind": "answer",
+        "npc_id": "guard_captain",
+        "npc_name": "Guard Captain",
+        "incidental_subjective_allowed": true,
+        "topic_revealed": null,
+        "selected_resolver_from_debug_trace": "social"
+      },
+      "final_player_facing_text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+      "gm_tags": [],
+      "validation": {
+        "acceptance": {
+          "why": "initial_hard_valid",
+          "text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary."
+        },
+        "attempt_1_reasons": [],
+        "attempt_1_text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+        "attempt_1_violation_codes": [],
+        "attempt_2_reasons": null,
+        "attempt_2_text": null,
+        "attempt_2_violation_codes": [],
+        "accepted_response": {
+          "provenance": "initial_generation",
+          "text": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+          "authority_result": "accepted",
+          "attempt": 1,
+          "immutable": true,
+          "decision_acceptance_why": "initial_hard_valid"
+        },
+        "regeneration_invoked": null
+      },
+      "provider_candidates": [
+        {
+          "index": 2,
+          "kind": "generation",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "response_model": "gpt-4.1-mini-2025-04-14",
+          "usage": {
+            "input_tokens": 30877,
+            "output_tokens": 66,
+            "total_tokens": 30943,
+            "cached_input_tokens": 0,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "latency_seconds": 1.994,
+          "error": null,
+          "parsed_narration": "The guard captain shrugs, rain pattering off their soaked cloak. \"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.",
+          "raw_output": "{\"narration\": \"The guard captain shrugs, rain pattering off their soaked cloak. \\\"Honestly, I'd prefer somewhere dry, but duty calls, rain or shine. These eastern gates don't watch themselves, no matter the weather.\\\" Their gaze flicks toward the muddy crowd pushing through, expression firm yet weary.\"}"
+        }
+      ],
+      "state": {
+        "turn_counter_before": 1,
+        "turn_counter_after": 2,
+        "scene": "frontier_gate",
+        "revealed_topics_before": null,
+        "revealed_topics_after": [],
+        "trust_after": 0,
+        "visible_facts_unchanged": true
+      }
+    },
+    {
+      "turn": "T2",
+      "player_input": "Captain, what do you know about the missing patrol?",
+      "http_status": 200,
+      "wall_seconds": 5.358,
+      "severe_mutations": [],
+      "resolver": {
+        "kind": "question",
+        "action_id": "question_guard_captain",
+        "social_intent_class": "social_exchange",
+        "reply_kind": "answer",
+        "npc_id": "guard_captain",
+        "npc_name": "Guard Captain",
+        "incidental_subjective_allowed": null,
+        "topic_revealed": {
+          "id": "patrol",
+          "text": "A patrol went missing near the old milestone.",
+          "clue_id": null,
+          "clue_text": null
+        },
+        "selected_resolver_from_debug_trace": "social"
+      },
+      "final_player_facing_text": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+      "gm_tags": [
+        "live_bounded_improvisation_proposal"
+      ],
+      "validation": {
+        "acceptance": {
+          "why": "authored_answer_projection",
+          "text": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\""
+        },
+        "attempt_1_reasons": [
+          "unauthorized_resolution_decision_fact"
+        ],
+        "attempt_1_text": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty.",
+        "attempt_1_violation_codes": [
+          {
+            "text": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone.",
+            "reason_codes": [
+              "official_orders_or_procedures",
+              "patrol_route_or_geography"
+            ]
+          },
+          {
+            "text": "They simply didn't return, and a warning was posted on the notice board here.",
+            "reason_codes": [
+              "notice_roster_history"
+            ]
+          },
+          {
+            "text": "It's troubling—no sign of them, no messages.",
+            "reason_codes": [
+              "unauthorized_negative_evidence"
+            ]
+          },
+          {
+            "text": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone.",
+            "reason_codes": [
+              "undeclared_consequential_claim"
+            ]
+          },
+          {
+            "text": "It's troubling—no sign of them, no messages.",
+            "reason_codes": [
+              "undeclared_consequential_claim",
+              "undeclared_negative_evidence"
+            ]
+          }
+        ],
+        "attempt_2_reasons": [
+          "unauthorized_resolution_decision_fact"
+        ],
+        "attempt_2_text": "The guard captain's eyes flick to the notice board, their expression guarded. \"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain.",
+        "attempt_2_violation_codes": [
+          {
+            "text": "\"There's talk of a patrol missing near the old milestone.",
+            "reason_codes": [
+              "patrol_route_or_geography"
+            ]
+          },
+          {
+            "text": "I don't know the details myself — just that the warning is posted there.",
+            "reason_codes": [
+              "unsupported_narrator_lead"
+            ]
+          },
+          {
+            "text": "I don't know the details myself — just that the warning is posted there.",
+            "reason_codes": [
+              "undeclared_consequential_claim"
+            ]
+          },
+          {
+            "text": "I don't know the details myself — just that the warning is posted there.",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "accepted_response": {
+          "provenance": "safe_nonresolution",
+          "text": "Guard Captain mutters, \"Word is, a patrol went missing near the old milestone.\"",
+          "authority_result": "accepted",
+          "attempt": 2,
+          "immutable": true,
+          "decision_acceptance_why": "authored_answer_projection"
+        },
+        "regeneration_invoked": true
+      },
+      "provider_candidates": [
+        {
+          "index": 3,
+          "kind": "generation",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "response_model": "gpt-4.1-mini-2025-04-14",
+          "usage": {
+            "input_tokens": 34561,
+            "output_tokens": 117,
+            "total_tokens": 34678,
+            "cached_input_tokens": 0,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "latency_seconds": 2.007,
+          "error": null,
+          "parsed_narration": "The guard captain's eyes harden beneath the sodden hood as they reply, \"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty.",
+          "raw_output": "{\"narration\": \"The guard captain's eyes harden beneath the sodden hood as they reply, \\\"We've had no word from a patrol assigned near the old milestone. They were tasked with scouting the old trading crossroads, a crucial route. They simply didn't return, and a warning was posted on the notice board here. It's troubling—no sign of them, no messages. The town's on edge, and rumors spread fast, though few facts yet.\\\" Their gaze flicks over the muddied crowd, expression a mix of concern and the weary resolve of duty.\"}"
+        },
+        {
+          "index": 4,
+          "kind": "generation",
+          "retry_attempt": 1,
+          "retry_reason": "hard_invalid",
+          "response_model": "gpt-4.1-mini-2025-04-14",
+          "usage": {
+            "input_tokens": 42960,
+            "output_tokens": 83,
+            "total_tokens": 43043,
+            "cached_input_tokens": 0,
+            "input_tokens_details": {
+              "cached_tokens": 0,
+              "cache_write_tokens": 0
+            },
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "latency_seconds": 2.312,
+          "error": null,
+          "parsed_narration": "The guard captain's eyes flick to the notice board, their expression guarded. \"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain.",
+          "raw_output": "{\"narration\": \"The guard captain's eyes flick to the notice board, their expression guarded. \\\"There's talk of a patrol missing near the old milestone. I don't know the details myself — just that the warning is posted there. Seems the runner's whispers around the square are picking up on it, too.\\\" Their gaze shifts back to the pressing crowd, firm yet weary amidst the cold rain.\"}"
+        }
+      ],
+      "state": {
+        "turn_counter_before": 2,
+        "turn_counter_after": 3,
+        "scene": "frontier_gate",
+        "revealed_topics_before": [],
+        "revealed_topics_after": [
+          "patrol"
+        ],
+        "trust_after": 1,
+        "visible_facts_unchanged": true
+      }
+    }
+  ]
+}

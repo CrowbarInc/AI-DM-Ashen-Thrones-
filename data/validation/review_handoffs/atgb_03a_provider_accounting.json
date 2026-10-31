@@ -1,0 +1,1284 @@
+{
+  "campaign_id": "atgb_03a_provider_accounting",
+  "campaign_name": "ATGB-03A Provider Accounting Safety and Continuation Readiness",
+  "campaign_date": "2026-10-18",
+  "purpose": "Investigate accounting and continue only if request usage can be bounded safely.",
+  "objective_status": "SAFETY CORRECTION VALIDATED; UPPER BOUND UNRESOLVED; LIVE CONTINUATION STOPPED",
+  "executive_summary": "45 provider-disabled tests passed. Three production ledger coverage gaps prevent a safe upper bound. Benchmark entry points now refuse before live dispatch. No new live trials or requests; original 15/37 captured turns preserved. Human scoring pending. User's explicit stop condition applied; full accounting repair and live baseline remain incomplete.",
+  "changes": {
+    "production": [
+      "None; source hashes match original execution."
+    ],
+    "validation": [
+      "21 new accounting checks plus 24 existing infrastructure/readiness checks passed."
+    ],
+    "tooling": [
+      "ATGB-03A-1 ledger observation/reconciliation and fail-closed readiness gate in runner and direct worker."
+    ],
+    "documentation": [
+      "Root-cause report, current session orientation, distinct-trial continuation plan."
+    ],
+    "generated_artifacts": [
+      "Coverage audit, preservation hashes, original raw metadata, usage/latency summaries, unchanged human worksheets and transcripts."
+    ]
+  },
+  "testing": {
+    "focused": "45 passed, 0 failed/errors/skipped; provider-disabled.",
+    "broader": "Existing provider-disabled chat and all-scenario reset checks included in 45.",
+    "full_suite": "Not run.",
+    "runtime_validation": "No additional live execution; original baseline remains partial.",
+    "model_runtime_boundary": "Original OpenAI gpt-4.1-mini configuration preserved; zero new live calls.",
+    "new_regressions": "None observed in focused scope; live execution intentionally unavailable until accounting is reliable.",
+    "pre_existing_failures": "Host telemetry missing/incomplete scope; completion-ledger coverage gaps. Interrupted sandbox TestClient attempt retained as environmental limitation."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Reliable universal request upper bound remains unresolved; live continuation refused.",
+      "No supported S04.3 resume continuity; future S04 requires a separate full trial.",
+      "S07/S09 opening context unmeasured."
+    ],
+    "pre_existing": [
+      "Original host counters omit expression usage; S04.2 performance absent.",
+      "Ledger does not cover all dispatch owners and unfinished attempts.",
+      "Dirty worktree, previously exposed held-out corpus, unavailable dollar costs/SDK retry counts."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review the fail-closed safety correction and established accounting coverage limitations. No gameplay change proposed.",
+    "Human-score original captured conversations only; retain pending/not-evaluated until authorized judgments are supplied."
+  ],
+  "missing_concepts": [
+    "Reliable dispatch lifecycle accounting across provider owners within an approved scope.",
+    "Validated resume/checkpoint continuity; complete live baseline and human scoring."
+  ],
+  "does_not_prove": [
+    "Complete accounting repair or full live baseline completion.",
+    "Zero provider use from absent host telemetry, or exact turn attribution from an untagged ledger.",
+    "Gameplay improvement, semantic success, S07/S09 opening delivery, independent generalization, dollar cost, or SDK-internal retry totals."
+  ],
+  "recommended_next_step": "Await review. Do not bypass guard or start gameplay/Product Realization repairs. If separately resolved, rerun S04 as trial 2 and execute S05\u2013S10 with proven request allowance and fresh explicit deadlines, preserving S01\u2013S03 and original partial S04.",
+  "primary_report": "development/reports/atgb_03a_provider_accounting.md",
+  "evidence_packets": [],
+  "configuration_source": "artifacts/atgb/atgb_03a/continuation_plan.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_02a/validation_results.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/provider_usage.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/report.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/result.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/review_status.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/atgb-job.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/atgb-worker.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/campaign.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/character.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/combat.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/conditions.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/scenes/frontier_gate.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/scenes/market_quarter.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/scenes/old_milestone.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/session.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/session_log.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/world.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/transcript.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/wall_clock.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/execution_status.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/provider_usage.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/report.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/result.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/review_status.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/atgb-job.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/atgb-worker.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/campaign.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/character.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/combat.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/conditions.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/scenes/frontier_gate.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/scenes/market_quarter.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/scenes/old_milestone.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/world.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/transcript.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/wall_clock.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/execution_status.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/provider_usage.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/report.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/result.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/review_status.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/atgb-job.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/atgb-worker.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/campaign.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/character.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/combat.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/conditions.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/scenes/frontier_gate.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/scenes/market_quarter.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/scenes/old_milestone.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/world.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/transcript.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/wall_clock.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/execution_status.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/provider_usage.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/report.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/result.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/review_status.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/atgb-job.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/atgb-worker.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/campaign.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/character.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/combat.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/conditions.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/scenes/frontier_gate.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/scenes/market_quarter.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/scenes/old_milestone.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/session.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/session_log.jsonl",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/world.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/transcript.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/wall_clock.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/campaign_clock.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/campaign_stop.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/configuration_and_provenance.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/evaluation_status.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execute.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execution_blocker.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execution_summary.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/finalize_live.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused.xml",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_host.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_host.xml",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_retry.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/host_check.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/host_check.xml",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/initial_git_status.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/report.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/result.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/prepare.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preservation_checks.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/provider_telemetry.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/resume_checks.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/scenario_status.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_a_acceptance.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_a_console.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_b_console.txt",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/turn_telemetry.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/validation_results.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/verify_bundle.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/accounting_readiness.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/continuation_plan.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/deterministic_host.xml",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/execution_status.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/inspect_evidence.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_accounting_analysis.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_harness/chat_worker.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_harness/driver.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_provider_telemetry.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_turn_telemetry.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_worksheet.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/original_worksheet.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/package_review.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/preservation_before.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/preservation_checks.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03a/validation_results.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/campaign.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/character.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/conditions.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/market_quarter.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/old_milestone.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/world.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_execution.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02a_readiness.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_atgb_accounting.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/__init__.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/accounting.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/baseline.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/budget.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/fixtures.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/preflight.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/results.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/worksheet.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_atgb.py",
+      "role": "accounting_infrastructure_and_original_trial_evidence",
+      "why": "Review safety correction and distinguish preserved original observations from blocked/unmeasured continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "Bundle includes original captured transcripts/raw evidence/worksheets, original changed harness source snapshots, new accounting code/tests/JUnit, coverage audit, continuation plan and preservation checks. No human scores created. ZIP contents/hash verification recorded separately."
+}

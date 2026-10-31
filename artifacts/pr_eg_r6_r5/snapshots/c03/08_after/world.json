@@ -1,0 +1,121 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_pico_relief",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "pico",
+      "topic_id": "relief"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "ilse",
+      "name": "Ilse",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "dusk",
+          "text": "The patrol changes at dusk.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "west",
+          "text": "The west post is empty at dawn.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "rumor",
+          "text": "Porters claim smugglers use the orchard path.",
+          "epistemic": "rumor"
+        },
+        {
+          "id": "pass",
+          "text": "The night password is silver reed.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "pico",
+      "name": "Pico",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "relief",
+          "text": "Pico relieves Ilse at the east post.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "lantern",
+          "text": "The gate lantern burns until midnight.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "pass",
+          "text": "The night password is silver reed.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "verdict": "D — CRITICAL ARCHITECTURAL OR INTEGRITY BLOCKER",
+  "gates": [
+    {
+      "gate": 1,
+      "name": "Information integrity",
+      "status": "PASS (observed sample)",
+      "evidence": "0 unauthorized consequential disclosure findings / 69 delivered turns; hidden probes not reached; separate adoption blocker"
+    },
+    {
+      "gate": 2,
+      "name": "Conversational relevance",
+      "status": "FAIL",
+      "evidence": "2/69 (2.9%); target 85%"
+    },
+    {
+      "gate": 3,
+      "name": "Playability",
+      "status": "FAIL",
+      "evidence": "1/69 (1.4%); target 80%"
+    },
+    {
+      "gate": 4,
+      "name": "Recovery",
+      "status": "FAIL",
+      "evidence": "1/11 (9.1%); target 75% within two additional player turns"
+    },
+    {
+      "gate": 5,
+      "name": "Continuity",
+      "status": "FAIL",
+      "evidence": "8/57 (14.0%); target 90%"
+    },
+    {
+      "gate": 6,
+      "name": "Characterization",
+      "status": "UNVERIFIED",
+      "evidence": "0/3 required recognizably distinct NPCs"
+    },
+    {
+      "gate": 7,
+      "name": "Player freedom",
+      "status": "UNVERIFIED",
+      "evidence": "2/69 turns assessed useful beyond authored topic prompts; incomplete coverage, see report 15"
+    },
+    {
+      "gate": 8,
+      "name": "Performance",
+      "status": "PASS (observed sample)",
+      "evidence": "Engine calls, retries, latency and per-turn prompt sizes in report 16"
+    },
+    {
+      "gate": 9,
+      "name": "State integrity",
+      "status": "PASS (observed sample)",
+      "evidence": "0/69 unauthorized canonical mutations; separate adoption/history blocker, authorized discovery events retained"
+    },
+    {
+      "gate": 10,
+      "name": "Evidence quality",
+      "status": "UNVERIFIED",
+      "evidence": "69/180 turns; 4/12 sustained conversations; separate provider scoring and root-agent audit"
+    }
+  ],
+  "stop": {
+    "reason": "deterministic_integrity_stop",
+    "conversation": "B_skeptical",
+    "turn": 9,
+    "checks": {
+      "http_ok": true,
+      "accepted_text_matches": false,
+      "history_matches": true,
+      "delivered_history_recorded": true,
+      "rejected_candidate_delivered": false,
+      "canonical_unchanged": true,
+      "no_unauthorized_canonical_changes": true,
+      "hidden_affiliation_leaked": false
+    }
+  },
+  "critical_adoption_findings": [
+    {
+      "conversation": "B_skeptical",
+      "turn": 9,
+      "checks": {
+        "http_ok": true,
+        "accepted_text_matches": false,
+        "history_matches": true,
+        "delivered_history_recorded": true,
+        "rejected_candidate_delivered": false,
+        "canonical_unchanged": true,
+        "no_unauthorized_canonical_changes": true,
+        "hidden_affiliation_leaked": false
+      }
+    }
+  ],
+  "note": "The D verdict is the post-rejection adoption/history stop condition, not an assertion of a new consequential disclosure or unauthorized canonical-world mutation."
+}

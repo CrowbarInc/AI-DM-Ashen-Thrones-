@@ -1,0 +1,227 @@
+{
+  "probe": "P1",
+  "player": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+  "scene": "chapel",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+  "sealed": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+  "accepted": "The bell's wooden yoke is split. The bell's leather hanger is torn.",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "safe_nonresolution",
+  "attempt": 2,
+  "acceptance": {
+    "why": "authorized_observation",
+    "text": "The bell's wooden yoke is split. The bell's leather hanger is torn."
+  },
+  "selected_envelope": "structured_realization",
+  "response_operation": "bounded_interpretation",
+  "declaration_expectation": "optional_bounded_inference",
+  "consequential_realization_required": false,
+  "declaration_channel_exposed": true,
+  "selector_projection_only": true,
+  "selector_authority_owner": "gm_resolution_decision",
+  "selector_reason": "structured_declaration_channel_still_available",
+  "provider_response_contracts": [
+    "structured_realization",
+    "structured_realization"
+  ],
+  "declared_claims_in_any_generation_system_prompt": true,
+  "api_response_schema_present": false,
+  "normalized_declared_claims": [],
+  "normalized_empty_declarations": null,
+  "declaration_authorship": null,
+  "accepted_model_authored_declarations": false,
+  "provider_attempts": 2,
+  "retry": true,
+  "input_tokens": 45563,
+  "output_tokens": 576,
+  "total_tokens": 46139,
+  "initial_player_facing_text": "The split wooden yoke and torn leather hanger on the bell might indicate that it has undergone significant stress or strain. This could be the result of prolonged heavy use or perhaps a sudden forceful impact. However, without additional evidence, the exact cause remains uncertain.",
+  "initial_structural_shape": {
+    "json_object": true,
+    "keys": [
+      "activate_scene_id",
+      "debug_notes",
+      "declared_claims",
+      "improvisation_proposals",
+      "narration",
+      "new_scene_draft",
+      "player_facing_text",
+      "scene_update",
+      "suggested_action",
+      "tags",
+      "world_updates"
+    ]
+  },
+  "initial_declared_claims": [
+    {
+      "declaration_id": "inference_1",
+      "declaration_mode": "propose",
+      "source_claim_id": null,
+      "premise_claim_ids": [
+        "rc_db5ec0aa65c3",
+        "rc_b31ecb1fd1c7"
+      ],
+      "semantic_identity": {},
+      "provenance_requested": "gm_inference",
+      "epistemic_status": "inferred",
+      "modality": "possible",
+      "realization_role": "MUST_STATE",
+      "relation_kind": "epistemic_status",
+      "text": "The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact."
+    }
+  ],
+  "initial_contract_failure": null,
+  "initial_contract_reason": null,
+  "retry_player_facing_text": "The bell's wooden yoke is clearly split, and the leather hanger is torn. These signs mark significant wear or damage, though what exactly caused this damage remains uncertain.",
+  "retry_structural_shape": {
+    "json_object": true,
+    "keys": [
+      "declared_claims",
+      "narration",
+      "player_facing_text",
+      "tags"
+    ]
+  },
+  "retry_declared_claims": [],
+  "validation_attempt_1_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "validation_attempt_2_reasons": [
+    "unauthorized_resolution_decision_fact"
+  ],
+  "regeneration_feedback": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again as the same structured envelope with declared_claims plus narration. Do not repeat rejected declarations or their prose realization. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"inspect\", \"target\": \"chapel bell\", \"interlocutor\": null, \"subject\": \"chapel bell\", \"dimension\": \"interpretation\", \"dimensions\": [\"interpretation\"], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve inspect for chapel bell (interpretation). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_3f400a77512d\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"The bell's wooden yoke is split.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"The bell's leather hanger is torn.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}], \"realization_claims\": [{\"claim_id\": \"rc_db5ec0aa65c3\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"The bell's wooden yoke is split.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_b31ecb1fd1c7\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.1\", \"text\": \"The bell's leather hanger is torn.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\", \"Qualified possibilities may be inferred from authorized observations; no cause, actor, or history is established.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"infer\", \"authority\": \"observation\", \"semantic_identity\": {\"relation_kind\": \"epistemic_status\", \"epistemic_status\": \"inferred\", \"subject\": \"chapel bell\", \"scope\": \"qualified_possibilities_only\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"accepted_realization_claims\": [{\"claim_id\": \"rc_db5ec0aa65c3\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"The bell's wooden yoke is split.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_b31ecb1fd1c7\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.1\", \"text\": \"The bell's leather hanger is torn.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}], \"rejected_declarations\": [{\"text\": \"The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact.\", \"reason_codes\": [\"unauthorized_causal_relation\"], \"declaration_mode\": \"propose\"}], \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unauthorized_causal_relation\"], \"text\": \"The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact.\"}]}, \"structured_envelope_schema\": {\"declared_claims\": [{\"declaration_mode\": \"realize|propose\", \"source_claim_id\": \"claim_id_from_gm_resolution_decision or null\", \"premise_claim_ids\": [\"claim ids of propositions this epistemic claim depends on\"], \"text\": \"short internal claim\", \"relation_kind\": \"observation|causal|evidential|epistemic_status|ordinary_predicate|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}",
+  "player_facing_leakage": [],
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [
+      {
+        "semantic_identity": {},
+        "text": "The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact.",
+        "authority": "unauthorized",
+        "provenance": "",
+        "epistemic_status": "inferred",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_causal_relation"
+        ]
+      },
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "established"
+        },
+        "text": "The bell's wooden yoke is clearly split, and the leather hanger is torn.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "epistemic_status",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unauthorized_certainty_upgrade"
+        ]
+      },
+      {
+        "semantic_identity": {},
+        "text": "These signs mark significant wear or damage, though what exactly caused this damage remains uncertain.",
+        "authority": "unauthorized",
+        "provenance": "generated_proposal",
+        "epistemic_status": "unresolved",
+        "relation_kind": "gameplay_lead",
+        "scene_id": "chapel_belfry",
+        "source_turn": 2,
+        "reason_codes": [
+          "unsupported_narrator_lead"
+        ]
+      }
+    ],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "chapel_belfry",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "kind": "object",
+        "scene_id": "chapel_belfry",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_3f400a77512d"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "chapel_belfry"
+  },
+  "calls": [
+    {
+      "index": 2,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_045335714fad1cbf006ac59c3d6a2487d2ae77415ba9b651ab",
+      "input_chars": 95041,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "provider_response_contract": "structured_realization",
+      "exact_narration_only_contract_present": false,
+      "declared_claims_in_system_prompt": true,
+      "api_response_schema_present": false,
+      "create_kwarg_keys": [],
+      "input_tokens": 22084,
+      "output_tokens": 477,
+      "total_tokens": 22561,
+      "latency_seconds": 5.342,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    },
+    {
+      "index": 3,
+      "kind": "generation",
+      "retry_attempt": 1,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_0f789a2e76b1c9b5006ac59c43106887d2b841b5ab7d301445",
+      "input_chars": 101106,
+      "recipe_present": true,
+      "retry_context_present": true,
+      "provider_response_contract": "structured_realization",
+      "exact_narration_only_contract_present": false,
+      "declared_claims_in_system_prompt": true,
+      "api_response_schema_present": false,
+      "create_kwarg_keys": [],
+      "input_tokens": 23479,
+      "output_tokens": 99,
+      "total_tokens": 23578,
+      "latency_seconds": 1.662,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_3f400a77512d",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_turn_operation": {
+    "projection_only": true,
+    "authority_owner": "gm_resolution_decision",
+    "response_operation": "bounded_interpretation",
+    "declaration_expectation": "optional_bounded_inference",
+    "semantic_ceiling": "interpret_observations_not_unauthorized_cause",
+    "instruction": "Interpret what the listed observations may indicate. Do not explain an unauthorized cause, actor, time, or history. A bounded inference may be proposed as gm_inference, inferred, possible, or left in narration. Do not declare a new world fact merely to answer."
+  }
+}

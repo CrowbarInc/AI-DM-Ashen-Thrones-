@@ -1,0 +1,53 @@
+{
+  "family": "s18",
+  "architecture": "B",
+  "source_ids": [
+    "s18"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f1",
+        "source_id": "s18",
+        "relationship": "lent",
+        "roles": [
+          {
+            "name": "owner",
+            "value": "Tessa",
+            "evidence": "Owner Tessa"
+          },
+          {
+            "name": "borrower",
+            "value": "Ull",
+            "evidence": "borrower Ull"
+          },
+          {
+            "name": "object",
+            "value": "the silver compass",
+            "evidence": "the silver compass"
+          }
+        ],
+        "unknown_roles": [
+          "duration"
+        ],
+        "qualifiers": [
+          "until the next market day"
+        ],
+        "negated": false,
+        "temporal": "until the next market day",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Owner Tessa lent borrower Ull the silver compass until the next market day."
+      },
+      "validation": {
+        "level": "STRUCTURALLY_VALID",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

@@ -1,0 +1,295 @@
+{
+  "index": 1,
+  "turn": "A1",
+  "contract": {
+    "contract_id": "rc_3f400a77512d",
+    "turn_index": 2,
+    "request_kind": "inquiry",
+    "operation": "inspect",
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "chapel bell",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "chapel bell",
+    "dimension": "interpretation",
+    "dimensions": [
+      "interpretation"
+    ],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": {
+      "type": "object",
+      "id": "chapel_bell",
+      "label": "chapel bell",
+      "source_turn": null
+    },
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+    "construction": {
+      "cues": [
+        "interpretation",
+        "pronoun"
+      ],
+      "referent_slot": "explicit_target",
+      "referent_reason": "explicit_current_turn_target",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "chapel_belfry",
+          "type": "place",
+          "label": "Chapel belfry"
+        },
+        {
+          "id": "chapel_bell",
+          "type": "object",
+          "label": "chapel bell"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "inspect",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": "chapel bell",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "chapel_bell",
+        "canonical_target_label": "chapel bell",
+        "canonical_target_type": "object",
+        "canonical_basis": "scene",
+        "authoritative_operation": "inspect",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+        "source": "deterministic_fast_path",
+        "primary_operation": "inspect",
+        "supporting_operations": [],
+        "raw_target_text": "chapel bell",
+        "proposed_target_id": null,
+        "target_capture": "verb_object",
+        "has_determiner": true,
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": "interpretation",
+        "dimensions": [
+          "interpretation"
+        ],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      },
+      "commitment_status": "executed_now",
+      "primary_operation": "inspect",
+      "resolution_subject": "perception",
+      "resolution_subject_coherence": "accepted",
+      "semantic_input_length": 99,
+      "provenance_excerpt": "I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+      "secondary_operations": [],
+      "executable_obligations": {
+        "primary": null,
+        "mutation_owner": null,
+        "sequence": [],
+        "supporting": []
+      },
+      "requested_addressee": null,
+      "addressee_binding_status": "unresolved"
+    }
+  },
+  "decision": {
+    "contract_id": "rc_3f400a77512d",
+    "resolution_method": "inspect",
+    "outcome_classification": "established_or_retrieved",
+    "established_fact_refs": [
+      "scene_world_authored_corpus",
+      "contract_discourse_ref"
+    ],
+    "proposed_facts": [
+      {
+        "text": "The bell's wooden yoke is split.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "The bell's leather hanger is torn.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.1",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      }
+    ],
+    "permitted_state_mutations": [],
+    "persistence_policy": "do_not_persist",
+    "narration_constraints": [
+      "Narration may not establish consequential world facts absent this decision.",
+      "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+      "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+      "Inference must not be narrated as physical evidence.",
+      "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+      "Qualified possibilities may be inferred from authorized observations; no cause, actor, or history is established."
+    ],
+    "unresolved_consequential_questions": [],
+    "unresolved_qualifiers": [],
+    "answer_relations": [],
+    "epistemic_acts": [
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.0",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.1",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "infer",
+        "authority": "observation",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "inferred",
+          "subject": "chapel bell",
+          "scope": "qualified_possibilities_only"
+        }
+      }
+    ],
+    "realization_claims": [
+      {
+        "claim_id": "rc_db5ec0aa65c3",
+        "semantic_identity": {},
+        "provenance": "authored_world_fact",
+        "authority": "world_truth",
+        "epistemic_status": "established",
+        "modality": "",
+        "realization_role": "MUST_STATE",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "text": "The bell's wooden yoke is split.",
+        "relation_kind": "ordinary_predicate",
+        "premise_claim_ids": []
+      },
+      {
+        "claim_id": "rc_b31ecb1fd1c7",
+        "semantic_identity": {},
+        "provenance": "authored_world_fact",
+        "authority": "world_truth",
+        "epistemic_status": "established",
+        "modality": "",
+        "realization_role": "MUST_STATE",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.1",
+        "text": "The bell's leather hanger is torn.",
+        "relation_kind": "ordinary_predicate",
+        "premise_claim_ids": []
+      }
+    ],
+    "executable_obligations": {
+      "primary": null,
+      "mutation_owner": null,
+      "sequence": [],
+      "supporting": []
+    },
+    "authority_algorithm": "proposition_claim_control_v1"
+  },
+  "temporal": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [],
+    "active_claim": null,
+    "discourse_focus": {},
+    "turn_counter": 2,
+    "active_scene_id": "chapel_belfry"
+  },
+  "scene": {
+    "id": "chapel_belfry",
+    "location": "Chapel belfry",
+    "summary": "A bronze bell hangs from a timber frame.",
+    "visible_facts": [
+      "The bell's wooden yoke is split.",
+      "The bell's leather hanger is torn."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "interactables": [
+      {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "aliases": [
+          "bell",
+          "wooden yoke",
+          "yoke",
+          "leather hanger",
+          "hanger"
+        ]
+      }
+    ]
+  }
+}

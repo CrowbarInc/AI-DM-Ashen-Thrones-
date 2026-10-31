@@ -1,0 +1,99 @@
+{
+  "status": 409,
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "after": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "events": [
+    {
+      "event": "initialized",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:32.038271+00:00"
+    },
+    {
+      "event": "rejected",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "ad3f4a9f0ffc444fa8a2806fadd96adc",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": null,
+      "time": "2026-10-29T02:12:32.039269+00:00",
+      "sequence": null,
+      "admission": "rejected",
+      "budget_remaining": 6,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "refusal": "output-token ceiling",
+      "sent": false,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:32.080338+00:00",
+      "attempt_id": null,
+      "opening_attempt_id": "3cb6529338544113a5c81f3ed10ebbad",
+      "stage": "opening_outcome",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "opening_accepted": false,
+      "gameplay_committed": false,
+      "classification": "opening_rejected",
+      "structured_validation_result": false,
+      "rejection_reason": "provider_budget_refused",
+      "recovery_classification": "initial_generation"
+    }
+  ]
+}

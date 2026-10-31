@@ -1,0 +1,93 @@
+{
+  "scene": {
+    "scene": {
+      "id": "ink_stall",
+      "location": "Ashford ink stall",
+      "summary": "A small ink stall sits under a canvas. The ink pot on the counter is empty. A trimmed quill lies beside it. Nothing says who took the last of the ink.",
+      "mode": "exploration",
+      "visible_facts": [
+        {
+          "text": "The ink pot on the counter is empty.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "ink_pot",
+            "subject_aliases": [
+              "ink pot",
+              "pot",
+              "ink"
+            ],
+            "relation": "condition",
+            "value": "empty",
+            "value_aliases": [
+              "empty",
+              "no ink"
+            ],
+            "polarity": "positive"
+          }
+        },
+        "A trimmed quill lies beside the ink pot."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "ashford",
+        "name": "Ashford",
+        "type": "hill_town",
+        "tags": [
+          "mill",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hill town of mills, cisterns, yards, and a ferry slip."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_patch": null,
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "starting_context": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a hill town."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace, yard, or slip in Ashford.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "ink_stall",
+    "visited_scene_ids": [
+      "ink_stall"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "interaction_context": null,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

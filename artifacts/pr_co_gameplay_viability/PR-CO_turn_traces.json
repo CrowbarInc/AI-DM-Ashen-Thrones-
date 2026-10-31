@@ -1,0 +1,398 @@
+{
+  "measurement": "measured",
+  "session": "artifacts/pr_co_gameplay_viability/evidence/isolated_session",
+  "halt": "provider request budget reached (12)",
+  "completed_http_turns": ["T1", "T2", "T3", "T4", "T5"],
+  "turns_not_sent": ["T6", "T7", "T8"],
+  "turns": [
+    {
+      "turn": "T1",
+      "A_player_input": "Guard Captain, which do you prefer: watching the gate in this rain, or a dry watch inside the walls?",
+      "B_pre_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 1,
+        "interlocutor": null,
+        "visible_fact_count": 6,
+        "hidden_fact_count": 4,
+        "faction_pressure": {"house_verevin": 2, "ash_cowl": 2, "ordo_pyric": 1},
+        "contextual_leads": [],
+        "revealed_topics": {},
+        "character_hp": {"current": 8, "max": 8},
+        "inventory_ids": ["spellbook"]
+      },
+      "C_operation_classification": {"operation": "ask", "request_kind": "inquiry", "resolution_kind": "question", "action_id": "question_guard_captain"},
+      "D_resolution_subject": "social",
+      "E_selected_resolver": "social",
+      "F_stage_permissions": {
+        "social": true,
+        "dialogue_first": true,
+        "pursuit": false,
+        "world_action": false,
+        "exploration": false,
+        "passive_wait": false,
+        "generic_intent": false,
+        "travel": false
+      },
+      "G_authoritative_resolution": {
+        "method": "ask",
+        "outcome_classification": "epistemically_qualified",
+        "persistence_policy": "claim_only",
+        "permitted_state_mutations": [],
+        "interlocutor_id": "guard_captain",
+        "commitment_status": "executed_now",
+        "model_interpreter_invoked": false,
+        "discovered_clues": [],
+        "world_tick_events": ["house_verevin pressure", "ash_cowl pressure"]
+      },
+      "H_provider_request_count": 2,
+      "I_retry_count": 1,
+      "J_provider_response": {
+        "attempt_1_usable": true,
+        "attempt_1_narration_preview": "Dry watch inside the walls is a blessing; the gate still needs sharp eyes.",
+        "attempt_2_usable": true,
+        "attempt_2_retry_reason": "hard_invalid",
+        "attempt_2_narration_preview": "Both watches have burdens; rain wears at you, and emptiness inside can be just as hard."
+      },
+      "K_validation": {
+        "attempt_1_hard_valid": false,
+        "attempt_1_reasons": ["unauthorized_resolution_decision_fact"],
+        "attempt_1_reason_codes": ["undeclared_consequential_claim"],
+        "attempt_2_hard_valid": false,
+        "attempt_2_reasons": ["unauthorized_resolution_decision_fact"],
+        "regeneration_invoked": true,
+        "provider_response_contract": "narration_only",
+        "accepted_provenance": "safe_nonresolution",
+        "accepted_attempt": 2
+      },
+      "L_final_narration": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+      "M_post_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 2,
+        "interaction": {"target": "guard_captain", "kind": "social", "mode": "social", "engagement": "engaged"},
+        "faction_pressure": {"house_verevin": 3, "ash_cowl": 3, "ordo_pyric": 2},
+        "faction_agenda_progress": {"house_verevin": 1, "ash_cowl": 1, "ordo_pyric": 1}
+      },
+      "N_state_changes": [
+        "turn_counter 1 to 2",
+        "interlocutor set to guard_captain",
+        "each faction pressure +1 and agenda_progress +1",
+        "visible facts, hidden facts, NPC topics, HP, and inventory unchanged"
+      ],
+      "O_contextual_lead_changes": [],
+      "P_warnings": []
+    },
+    {
+      "turn": "T2",
+      "A_player_input": "About what you just told me — \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Cold rain needles Cinderwatch's eastern gate under...\" — what makes you prefer that?",
+      "B_pre_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 2,
+        "interlocutor": "guard_captain",
+        "engagement": "engaged",
+        "faction_pressure": {"house_verevin": 3, "ash_cowl": 3, "ordo_pyric": 2}
+      },
+      "C_operation_classification": {"operation": "perceive", "request_kind": "clarification", "resolution_kind": null},
+      "D_resolution_subject": "perception",
+      "E_selected_resolver": "exploration",
+      "F_stage_permissions": {
+        "social": false,
+        "dialogue_first": false,
+        "pursuit": true,
+        "world_action": true,
+        "exploration": true,
+        "passive_wait": false,
+        "generic_intent": false,
+        "travel": false
+      },
+      "G_authoritative_resolution": {
+        "method": "perceive",
+        "outcome_classification": "bounded_incidental",
+        "persistence_policy": "runtime_incidental",
+        "permitted_state_mutations": [],
+        "interlocutor_id": "guard_captain",
+        "commitment_status": "executed_now",
+        "model_interpreter_invoked": true,
+        "interpretation_primary_operation": "ask",
+        "interpretation_expected_resolution": "explanation of preference",
+        "contract_proposed_operation": "perceive",
+        "world_tick_events": ["ordo_pyric pressure"]
+      },
+      "H_provider_request_count": 3,
+      "I_retry_count": 1,
+      "J_provider_response": {
+        "interpretation_usable": true,
+        "attempt_1_usable": true,
+        "attempt_1_narration_preview": "Captain prefers the rainy gate for its stubborn pride over a dry indoor watch.",
+        "attempt_2_retry_reason": "hard_invalid",
+        "attempt_2_narration_preview": "Restatement of authored gate visible facts."
+      },
+      "K_validation": {
+        "attempt_1_hard_valid": false,
+        "attempt_1_reasons": ["unsolicited_npc_speech", "unauthorized_resolution_decision_fact"],
+        "attempt_2_hard_valid": false,
+        "attempt_2_reasons": ["unauthorized_resolution_decision_fact"],
+        "regeneration_invoked": true,
+        "provider_response_contract": "narration_only",
+        "accepted_provenance": "safe_nonresolution",
+        "accepted_attempt": 2,
+        "safe_line_dimension": "wear, matched from the quoted word frayed"
+      },
+      "L_final_narration": "The inspection establishes no further reliable detail about the wear.",
+      "M_post_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 3,
+        "interaction": {"target": "guard_captain", "kind": "social", "mode": "social", "engagement": "engaged"},
+        "faction_pressure": {"house_verevin": 4, "ash_cowl": 4, "ordo_pyric": 3}
+      },
+      "N_state_changes": [
+        "turn_counter 2 to 3",
+        "each faction pressure +1 and agenda_progress +1",
+        "scene facts, NPC topics, HP, and inventory unchanged",
+        "interlocutor remained guard_captain"
+      ],
+      "O_contextual_lead_changes": [],
+      "P_warnings": ["interpretation proposed ask; stored contract operation is perceive"]
+    },
+    {
+      "turn": "T3",
+      "A_player_input": "Captain, what do you know about the missing patrol?",
+      "B_pre_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 3,
+        "interlocutor": "guard_captain",
+        "revealed_topics": [],
+        "faction_pressure": {"house_verevin": 4, "ash_cowl": 4, "ordo_pyric": 3}
+      },
+      "C_operation_classification": {"operation": "ask", "request_kind": "inquiry", "resolution_kind": "question", "action_id": "question_guard_captain"},
+      "D_resolution_subject": "social",
+      "E_selected_resolver": "social",
+      "F_stage_permissions": {
+        "social": true,
+        "dialogue_first": true,
+        "pursuit": false,
+        "world_action": false,
+        "exploration": false,
+        "passive_wait": false,
+        "generic_intent": false,
+        "travel": false
+      },
+      "G_authoritative_resolution": {
+        "method": "ask",
+        "outcome_classification": "epistemically_qualified",
+        "persistence_policy": "claim_only",
+        "permitted_state_mutations": [],
+        "interlocutor_id": "guard_captain",
+        "topic_revealed": true,
+        "npc_id": "guard_captain",
+        "discovered_clues": ["A patrol went missing near the old milestone."],
+        "lead_ids": ["social_frontier_gate_guard_captain_patrol", "lead_frontier_gate_old_milestone"],
+        "model_interpreter_invoked": false,
+        "world_tick_events": []
+      },
+      "H_provider_request_count": 2,
+      "I_retry_count": 1,
+      "J_provider_response": {
+        "attempt_1_usable": true,
+        "attempt_1_narration_preview": "Patrol sent near the old milestone, east beyond the trading crossroads, has not returned.",
+        "attempt_2_retry_reason": "hard_invalid",
+        "attempt_2_narration_preview": "A patrol went missing near the old milestone. That's all I can confirm for now."
+      },
+      "K_validation": {
+        "attempt_1_hard_valid": false,
+        "attempt_1_reasons": ["unauthorized_resolution_decision_fact"],
+        "attempt_2_hard_valid": false,
+        "attempt_2_reasons": ["unauthorized_resolution_decision_fact"],
+        "attempt_2_narration_violation": "That's all I can confirm for now. reason_codes unauthorized_certainty_upgrade, unauthorized_evidential_relation",
+        "regeneration_invoked": true,
+        "provider_response_contract": "narration_only",
+        "accepted_provenance": "safe_nonresolution",
+        "accepted_attempt": 2
+      },
+      "L_final_narration": "Guard Captain says, \"I cannot answer that from what is settled here.\"",
+      "M_post_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 4,
+        "interaction": {"target": "guard_captain", "kind": "social", "mode": "social", "engagement": "engaged"},
+        "clue_knowledge": {
+          "social_frontier_gate_guard_captain_patrol": "A patrol went missing near the old milestone.",
+          "lead_frontier_gate_old_milestone": "Investigate the old milestone"
+        },
+        "revealed_topics": {"guard_captain": ["patrol"]},
+        "faction_pressure": {"house_verevin": 5, "ash_cowl": 5, "ordo_pyric": 4}
+      },
+      "N_state_changes": [
+        "turn_counter 3 to 4",
+        "guard_captain revealed topic patrol",
+        "clue_knowledge gained the authored patrol sentence and actionable lead Investigate the old milestone",
+        "each faction pressure +1 and agenda_progress +1",
+        "visible facts, hidden facts, NPC topic text, HP, and inventory unchanged"
+      ],
+      "O_contextual_lead_changes": [
+        {
+          "kind": "active_event",
+          "subject": "guard captain says, \"i cannot answer that from what",
+          "note": "Lead text is the refusal sentence, not the stored patrol fact."
+        }
+      ],
+      "P_warnings": ["player-facing refusal contradicts stored authored discovery"]
+    },
+    {
+      "turn": "T4",
+      "A_player_input": "I examine the notice board for anything unusual.",
+      "B_pre_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 4,
+        "interlocutor": "guard_captain",
+        "notice_board_interactable": false,
+        "visible_notice_fact": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+      },
+      "C_operation_classification": {"operation": "inspect", "request_kind": "inquiry", "resolution_kind": "investigate", "action_id": "i_examine_the_notice_board_for_anything_"},
+      "D_resolution_subject": "perception",
+      "E_selected_resolver": "exploration",
+      "F_stage_permissions": {
+        "social": false,
+        "dialogue_first": false,
+        "pursuit": true,
+        "world_action": true,
+        "exploration": true,
+        "passive_wait": false,
+        "generic_intent": false,
+        "travel": false
+      },
+      "G_authoritative_resolution": {
+        "method": "inspect",
+        "outcome_classification": "established_or_retrieved",
+        "persistence_policy": "do_not_persist",
+        "permitted_state_mutations": [],
+        "referenced_surface_target": "notice board",
+        "referenced_surface_authority": "authored_visible_feature",
+        "referenced_surface_existence": true,
+        "referenced_surface_visibility": true,
+        "referenced_surface_inspectability": false,
+        "referenced_surface_visible_fact": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+        "discovered_clues": [],
+        "success": true,
+        "model_interpreter_invoked": true,
+        "interpretation_primary_operation": "inspect",
+        "interpretation_clarification_required": true
+      },
+      "H_provider_request_count": 3,
+      "I_retry_count": 1,
+      "J_provider_response": {
+        "interpretation_usable": true,
+        "attempt_1_output_tokens": 1156,
+        "attempt_1_narration_preview": "Damp board shows taxes, curfew edicts, and an urgent missing-patrol warning.",
+        "attempt_2_retry_reason": "hard_invalid",
+        "attempt_2_output_tokens": 2292,
+        "attempt_2_narration_preview": "Paraphrase of authored gate facts including the notice board warning."
+      },
+      "K_validation": {
+        "attempt_1_hard_valid": false,
+        "attempt_1_reasons": ["unauthorized_resolution_decision_fact"],
+        "attempt_1_narration_reason_codes": ["notice_roster_history"],
+        "attempt_2_hard_valid": false,
+        "attempt_2_reasons": ["unauthorized_resolution_decision_fact"],
+        "regeneration_invoked": true,
+        "provider_response_contract": "structured_realization",
+        "accepted_provenance": "safe_nonresolution",
+        "accepted_attempt": 2
+      },
+      "L_final_narration": "The inspection establishes no further reliable detail from the current scene.",
+      "M_post_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 5,
+        "interaction": {"target": null, "kind": "investigate", "mode": "activity", "engagement": "focused"},
+        "faction_pressure": {"house_verevin": 6, "ash_cowl": 6, "ordo_pyric": 5},
+        "visible_facts_unchanged": true
+      },
+      "N_state_changes": [
+        "turn_counter 4 to 5",
+        "interaction moved from social/guard_captain to investigate/focused",
+        "each faction pressure +1 and agenda_progress +1",
+        "no new clue text; notice board visible fact unchanged"
+      ],
+      "O_contextual_lead_changes": [],
+      "P_warnings": ["inspectability false because the default scene has no notice-board interactable"]
+    },
+    {
+      "turn": "T5",
+      "A_player_input": "Describe what I can see around me here at the gate.",
+      "B_pre_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 5,
+        "interaction_kind": "investigate",
+        "provider_requests_already_used": 11,
+        "combined_tokens_already_used": 293995
+      },
+      "C_operation_classification": {"operation": "perceive", "request_kind": "inquiry", "resolution_kind": null},
+      "D_resolution_subject": "perception",
+      "E_selected_resolver": "exploration",
+      "F_stage_permissions": {
+        "social": false,
+        "dialogue_first": false,
+        "pursuit": true,
+        "world_action": true,
+        "exploration": true,
+        "passive_wait": false,
+        "generic_intent": false,
+        "travel": false
+      },
+      "G_authoritative_resolution": {
+        "method": "perceive",
+        "outcome_classification": "established_or_retrieved",
+        "persistence_policy": "do_not_persist",
+        "permitted_state_mutations": [],
+        "model_interpreter_invoked": true,
+        "interpretation_primary_operation": "perceive",
+        "interpretation_proposed_target_id": "frontier_gate",
+        "world_tick_events": [
+          "House Verevin completes an off-screen operation.",
+          "The Ash Cowl completes an off-screen operation.",
+          "Ordo Pyric completes an off-screen operation."
+        ]
+      },
+      "H_provider_request_count": 1,
+      "I_retry_count": 0,
+      "J_provider_response": {
+        "interpretation_usable": true,
+        "generation_sent": false,
+        "generation_block_reason": "provider request budget reached (12)"
+      },
+      "K_validation": {
+        "hard_validation": null,
+        "upstream_api_error": {
+          "failure_class": "unknown_api_error",
+          "retryable": false,
+          "message_excerpt": "provider request budget reached (12)"
+        },
+        "realization_fallback_family": "gpt_budget_or_provider_failure",
+        "fallback_provenance_source": "fallback",
+        "fallback_stage": "fallback_selector"
+      },
+      "L_final_narration": "On a slower pass, a well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor reads clearer while one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue keeps pulling the eye.",
+      "M_post_turn_state": {
+        "active_scene_id": "frontier_gate",
+        "turn_counter": 6,
+        "interaction": {"target": null, "kind": "investigate", "mode": "activity", "engagement": "focused"},
+        "faction_pressure": {"house_verevin": 7, "ash_cowl": 7, "ordo_pyric": 6},
+        "faction_agenda_progress": {"house_verevin": 5, "ash_cowl": 5, "ordo_pyric": 5}
+      },
+      "N_state_changes": [
+        "turn_counter 5 to 6",
+        "each faction pressure +1 and agenda_progress +1",
+        "event_log gained three faction_operation_complete rows",
+        "visible facts, hidden facts, NPC roster, HP, and inventory unchanged"
+      ],
+      "O_contextual_lead_changes": [
+        {
+          "kind": "active_event",
+          "subject": "on a slower pass, a well-appointed townhouse overlooking the square flies noble colors"
+        }
+      ],
+      "P_warnings": [
+        "Generation was blocked by the probe budget and classified as unknown_api_error.",
+        "Final text is a deterministic fallback, not a model observation."
+      ]
+    }
+  ]
+}

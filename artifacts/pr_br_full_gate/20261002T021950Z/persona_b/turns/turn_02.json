@@ -1,0 +1,789 @@
+{
+  "turn_number": 2,
+  "player_text": "I keep my voice low and don't take the coin back yet. \"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\"",
+  "visible_motivation": "The runner just tied the missing patrol to muddy footprints northwest of the crates and said that spot is worth watching.",
+  "intended_meaning": "I want to know how fresh and reliable the footprint rumor is before I act on it.",
+  "generation_attempt_1": "\"From what I gathered,\" the guard captain says quietly, \"several gate guards spotted those footprints just this morning near the crates northwest of the entrance. A couple of them were sent out to investigate, but they came back without word—no sign of the patrol or what became of them. So far, the talk you're hearing is mostly rumors swirling among travelers and refugees, patchy and unsettled.\" They glance toward the muddy approach, their expression tight. \"If you want answers, the northwest track past the crates is where to start looking.\"",
+  "generation_attempt_2": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly. \"Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head.\"",
+  "attempt_1_hard_valid": false,
+  "attempt_1_reasons": [
+    "wrong_interlocutor"
+  ],
+  "attempt_2_hard_valid": true,
+  "attempt_2_reasons": [],
+  "regeneration_invoked": true,
+  "regeneration_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: wrong_interlocutor. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+  "rejected_attempt_2_reasons": null,
+  "generation_attempt_count": 2,
+  "accepted_provenance": "regeneration",
+  "accepted_response_text": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly. \"Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head.\"",
+  "accepted_immutable": true,
+  "final_emitted_response": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly. \"Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head.\"",
+  "gm_text": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly. \"Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head.\"",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "scene_momentum:new_information"
+  ],
+  "best_safe_candidate": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly. \"Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head.\"",
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": false,
+  "fast_path_abstained": true,
+  "abstention_reason": "insufficient_discourse_context",
+  "interpreter_invoked": true,
+  "proposal_source": "model_assisted",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I keep my voice low and don't take the coin back yet. \"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\"",
+    "source": "model_assisted",
+    "primary_operation": "ask",
+    "supporting_operations": [
+      "perceive"
+    ],
+    "raw_target_text": "Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?",
+    "proposed_target_id": "tavern_runner",
+    "target_capture": "model",
+    "has_determiner": false,
+    "interlocutor_id": "tavern_runner",
+    "conversational_subject": "missing patrol footprints",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "obtain information about who saw the footprints, when, and whether gate personnel investigated",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": "high",
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "ask",
+  "canonical_target": "tavern_runner",
+  "target_ref": {
+    "type": "interlocutor",
+    "id_or_text": "tavern_runner",
+    "source": "explicit_player"
+  },
+  "discourse_ref": {
+    "type": "interlocutor",
+    "id": "tavern_runner",
+    "label": "tavern_runner",
+    "source_turn": null
+  },
+  "interlocutor_id": "tavern_runner",
+  "dimension": "time",
+  "dimensions": [
+    "time",
+    "content"
+  ],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "binding_status": "bound_canonical",
+  "entity_class": "canonical_established",
+  "proposed_interlocutor": null,
+  "bound_interlocutor": "tavern_runner",
+  "entity_id": null,
+  "authority_reasons": [
+    "identity:discourse"
+  ],
+  "entity_binding": {
+    "status": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed_interlocutor": null,
+    "proposed_span": null,
+    "bound_interlocutor_id": "tavern_runner",
+    "entity_id": null,
+    "label": "tavern_runner",
+    "explicit_new_interlocutor": false,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "claim_binding": "unresolved"
+  },
+  "contract": {
+    "contract_id": "rc_19cda1d38ff6",
+    "turn_index": 3,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "tavern_runner",
+    "conversational_subject": "missing patrol footprints",
+    "dimension": "time",
+    "dimensions": [
+      "time",
+      "content"
+    ],
+    "expected_resolution": "answer",
+    "epistemic_mode": "npc_claim",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "source_turn": null
+    },
+    "referent_provenance": "inherited_discourse",
+    "ambiguous": false,
+    "raw_input": "I keep my voice low and don't take the coin back yet. \"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\"",
+    "construction": {
+      "cues": [
+        "time",
+        "pronoun"
+      ],
+      "referent_slot": null,
+      "referent_reason": "claim_unresolved",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": false,
+      "fast_path_abstained": true,
+      "fast_path_abstention_reason": "insufficient_discourse_context",
+      "model_interpreter_invoked": true,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 1,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "tavern_runner"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        }
+      ],
+      "proposal_source": "model_assisted",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [
+        "perceive"
+      ],
+      "proposed_raw_target": "Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "tavern_runner",
+        "canonical_target_label": "tavern_runner",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "discourse",
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "bound_canonical",
+        "entity_class": "canonical_established",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": "tavern_runner",
+        "entity_id": null,
+        "label": "tavern_runner",
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [
+          "identity:discourse"
+        ],
+        "claim_binding": "unresolved"
+      },
+      "authoritative": true,
+      "semantic_completeness": "not_applied",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I keep my voice low and don't take the coin back yet. \"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\"",
+        "source": "model_assisted",
+        "primary_operation": "ask",
+        "supporting_operations": [
+          "perceive"
+        ],
+        "raw_target_text": "Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?",
+        "proposed_target_id": "tavern_runner",
+        "target_capture": "model",
+        "has_determiner": false,
+        "interlocutor_id": "tavern_runner",
+        "conversational_subject": "missing patrol footprints",
+        "dimension": "content",
+        "dimensions": [
+          "content"
+        ],
+        "expected_resolution": "obtain information about who saw the footprints, when, and whether gate personnel investigated",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": "high",
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": {
+    "id": "tavern_runner",
+    "label": "tavern_runner",
+    "kind": "interlocutor",
+    "epistemic_status": null,
+    "turn_index": 3,
+    "source": "resolution_contract"
+  },
+  "active_claim": null,
+  "active_inspected": null,
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 3,
+    "last_committed_contract_id": "rc_19cda1d38ff6"
+  },
+  "authority_generated": [],
+  "authority_retry": [
+    {
+      "proposition": "\"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "hearsay",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authority_emitted": [
+    {
+      "proposition": "\"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "hearsay",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "PASS",
+  "failing_gates": [],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 87,
+      "rating": "strong",
+      "passed": true,
+      "semantic_result": "PASS",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "PASS",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 64,
+          "text_preview": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they"
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "question",
+          "player_terms": [
+            "actually",
+            "anyone",
+            "back",
+            "coin",
+            "don't",
+            "footprints",
+            "gate",
+            "keep",
+            "long",
+            "look",
+            "take",
+            "talking",
+            "travelers",
+            "voice"
+          ],
+          "gm_terms": [
+            "actually",
+            "before",
+            "captain",
+            "carefully",
+            "checked",
+            "considering",
+            "crates",
+            "direction",
+            "disappearing",
+            "earlier",
+            "eyes",
+            "footprints",
+            "gate",
+            "gone",
+            "guard",
+            "head",
+            "inspect",
+            "investigating",
+            "last",
+            "locals"
+          ],
+          "direct_answer_score": 22,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_19cda1d38ff6",
+            "dimension": "time",
+            "dimensions": [
+              "time",
+              "content"
+            ],
+            "operation": "ask",
+            "referent_provenance": "inherited_discourse",
+            "assessment_status": "satisfied",
+            "assessment_reasons": [
+              "covered:time",
+              "covered:content"
+            ],
+            "target": "tavern_runner",
+            "candidate_answer_target": null,
+            "target_compatible": null,
+            "operation_compatible": true,
+            "dimension_compatible": true,
+            "resolution_kind": "answer",
+            "resolution_coverage": [
+              "time",
+              "content"
+            ],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "time",
+                "pronoun"
+              ],
+              "referent_slot": null,
+              "referent_reason": "claim_unresolved",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": false,
+              "fast_path_abstained": true,
+              "fast_path_abstention_reason": "insufficient_discourse_context",
+              "model_interpreter_invoked": true,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 1,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "tavern_runner"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                }
+              ],
+              "proposal_source": "model_assisted",
+              "proposed_operation": "ask",
+              "proposed_supporting_operations": [
+                "perceive"
+              ],
+              "proposed_raw_target": "Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "tavern_runner",
+                "canonical_target_label": "tavern_runner",
+                "canonical_target_type": "interlocutor",
+                "canonical_basis": "discourse",
+                "authoritative_operation": "ask",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "bound_canonical",
+                "entity_class": "canonical_established",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": "tavern_runner",
+                "entity_id": null,
+                "label": "tavern_runner",
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [
+                  "identity:discourse"
+                ],
+                "claim_binding": "unresolved"
+              },
+              "authoritative": true,
+              "semantic_completeness": "not_applied",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I keep my voice low and don't take the coin back yet. \"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\"",
+                "source": "model_assisted",
+                "primary_operation": "ask",
+                "supporting_operations": [
+                  "perceive"
+                ],
+                "raw_target_text": "Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?",
+                "proposed_target_id": "tavern_runner",
+                "target_capture": "model",
+                "has_determiner": false,
+                "interlocutor_id": "tavern_runner",
+                "conversational_subject": "missing patrol footprints",
+                "dimension": "content",
+                "dimensions": [
+                  "content"
+                ],
+                "expected_resolution": "obtain information about who saw the footprints, when, and whether gate personnel investigated",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": "high",
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_met_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 87,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 22,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 24
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 22,
+        "passed": true,
+        "reasons": [
+          "Concrete answer markers present."
+        ],
+        "signals": {
+          "has_question": true,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.086,
+          "gm_word_count": 64,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 2
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 4,
+          "topic_overlap_ratio": 0.286,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.125,
+          "player_presses_thread": false,
+          "gm_word_count": 64,
+          "net_new_terms": 33
+        }
+      },
+      "immersion": {
+        "score": 24,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": true,
+          "scene_anchor_hits": 2
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (22/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (24/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 87,
+        "rating": "strong",
+        "passed": true,
+        "semantic_result": "PASS",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 2,
+  "interpretation_calls_this_turn": 1,
+  "turn_generation_calls": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "\"From what I gathered,\" the guard captain says quietly, \"several gate guards spotted those footprints just this morning near the crates northwest of the entrance. A couple of them were sent out to investigate, but they came back without word—no sign of the patrol or what became of them. So far, the talk you're hearing is mostly rumors swirling among travelers and refugees, patchy and unsettled.\" They glance toward the muddy approach, their expression tight. \"If you want answers, the northwest track past the crates is where to start looking.\""
+    },
+    {
+      "purpose": "retry_escalation",
+      "retry_attempt": 1,
+      "retry_reason": "hard_invalid",
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "The guard captain narrows their eyes, considering your questions carefully. \"No one from the gate watch has actually gone to inspect those footprints yet,\" they say quietly. \"Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head.\""
+    }
+  ],
+  "turn_interpretation_calls": [
+    {
+      "event": "attempt",
+      "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\",\"proposed_target_id\":\"tavern_runner\",\"interlocutor_id\":\"tavern_runner\",\"conversational_subject\":\"missing patrol footprints\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"obtain information about who saw the footprints, when, and whether gate personnel investigated\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+    }
+  ],
+  "persistence": {
+    "session_id": "a2a06862f50a60c63d84b2bd",
+    "campaign_run_id": "a2a06862f50a60c63d84b2bd",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "tavern_runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_19cda1d38ff6"
+    },
+    "incidental_entities": [],
+    "ledger_entries": [],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 181776
+  },
+  "resolution_kind": "question",
+  "api_ok": true
+}

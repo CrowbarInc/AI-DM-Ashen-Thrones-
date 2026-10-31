@@ -1,0 +1,26 @@
+[
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[],\"raw_target_text\":\"the still figure’s boots and hands, then scan the mud near the rain barrel for tracks or discarded belongings\",\"proposed_target_id\":null,\"interlocutor_id\":null,\"conversational_subject\":null,\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":null,\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":true,\"ambiguous\":true,\"confidence\":\"medium\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"follow\",\"supporting_operations\":[\"inspect\"],\"raw_target_text\":\"I follow the edge of the northwest mud track to the storage crates, searching for bootprints, wagon ruts, broken gear, or guard insignia that differ from the crowd’s fresher traffic.\",\"proposed_target_id\":\"frontier_gate\",\"interlocutor_id\":null,\"conversational_subject\":null,\"dimension\":null,\"dimensions\":[\"location\",\"evidence\",\"tracking\"],\"expected_resolution\":null,\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"I circle the crates and inspect their sheltered sides, gaps, and muddy bases for scratches, cloth snags, concealed marks, or older impressions preserved from the rain and traffic.\",\"proposed_target_id\":null,\"interlocutor_id\":null,\"conversational_subject\":null,\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":null,\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":true,\"ambiguous\":true,\"confidence\":\"medium\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"follow\"],\"raw_target_text\":\"What prevents it—the captain’s absence, restricted entry, or the press at the gate? If I cannot speak with them, tell me who last brought news from the northwest route.\",\"proposed_target_id\":\"guard_captain\",\"interlocutor_id\":\"gate_serjeant\",\"conversational_subject\":\"access to guard captain or last news from northwest route\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Identify the obstacle to speaking with the guard captain or learn who last brought news from the northwest route.\",\"referenced_claim_id\":null,\"referenced_action_id\":\"lead_frontier_gate_guards\",\"referenced_inspected_id\":\"notice_board\",\"clarification_required\":true,\"ambiguous\":true,\"confidence\":\"medium\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[],\"raw_target_text\":\"Which patrol member brought that last news, what exactly did they report, and did you personally see them return through this gate?\",\"proposed_target_id\":\"gate_serjeant\",\"interlocutor_id\":\"gate_serjeant\",\"conversational_subject\":\"patrol news and return\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Obtain information about the patrol member who brought the last news, the content of their report, and confirmation of their return through the gate from the gate serjeant.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  },
+  {
+    "event": "attempt",
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"follow\"],\"raw_target_text\":\"You said no word came back, yet the roster guard says a patrol member reported trouble. Which account is correct, and where is that report recorded?\",\"proposed_target_id\":\"gate_serjeant\",\"interlocutor_id\":\"gate_serjeant\",\"conversational_subject\":\"patrol report discrepancy\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Clarify which account about the patrol report is accurate and locate the record of the report.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":\"notice_board\",\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  }
+]

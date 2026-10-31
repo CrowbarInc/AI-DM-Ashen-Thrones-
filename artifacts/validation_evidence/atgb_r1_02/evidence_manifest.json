@@ -1,0 +1,165 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "deterministic_response_plan",
+  "campaign": {
+    "campaign_id": "atgb_r1_02",
+    "what_was_tested": "Mechanical revision entry and downstream S08.2 response plan under two explicit empty-evidence stubs.",
+    "runtime_path": "decision_from_interpretation_record -> _communication_decision -> revision gate -> ordinary public-evidence answering",
+    "gm_boundary": "Host response plan; interpretation stubbed, no live provider, no expression.",
+    "player_input_mode": "Preserved ATGB related-variation sentence; purposes DESCRIPTION and CORRECTION are controlled stubs.",
+    "run_count": 2,
+    "turn_count": 2,
+    "automated_conclusion": "Routing PASS; stub response adequacy FAIL; production adequacy NOT EVALUABLE."
+  },
+  "claim_types": [
+    "structural_evidence",
+    "runtime_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "s08_2_description",
+      "scenario_run_id": "S08.2-DESCRIPTION-stub",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Frozen related variation replayed at the interpretation-to-orchestration seam; no simulated model output.",
+      "prior_player_context": "What's in front of me right now?",
+      "prior_gm_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "That has not been established in the information available to you.",
+      "historical_result": "Original trial interpretation FAIL / response FAIL / authority PASS (provisional AI assessment, not authenticated human review).",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "routing": {
+          "status": "PASS"
+        },
+        "conversational_adequacy": {
+          "status": "FAIL"
+        }
+      },
+      "diagnostic_result": {
+        "routing_correctness": "PASS",
+        "production_adequacy": "NOT EVALUABLE"
+      },
+      "automated_evaluation": {
+        "method": "Exact deterministic route/fallback assertions; no playability evaluator or ATGB scorer invoked."
+      },
+      "runtime_validity": "VALID deterministic response-plan execution; not live API replay",
+      "final_emission_metadata": {
+        "boundary": "response plan",
+        "live_provider": false
+      },
+      "continuation_action": "Stop at downstream fallback; no additional repair.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_02/s08_2_trace.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; no authenticated human judgment."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null
+    },
+    {
+      "example_id": "s08_2_correction",
+      "scenario_run_id": "S08.2-CORRECTION-stub",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Frozen related variation replayed at the interpretation-to-orchestration seam; no simulated model output.",
+      "prior_player_context": "What's in front of me right now?",
+      "prior_gm_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "That has not been established in the information available to you.",
+      "historical_result": "Original trial interpretation FAIL / response FAIL / authority PASS (provisional AI assessment, not authenticated human review).",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "routing": {
+          "status": "PASS"
+        },
+        "conversational_adequacy": {
+          "status": "FAIL"
+        }
+      },
+      "diagnostic_result": {
+        "routing_correctness": "PASS",
+        "production_adequacy": "NOT EVALUABLE"
+      },
+      "automated_evaluation": {
+        "method": "Exact deterministic route/fallback assertions; no playability evaluator or ATGB scorer invoked."
+      },
+      "runtime_validity": "VALID deterministic response-plan execution; not live API replay",
+      "final_emission_metadata": {
+        "boundary": "response plan",
+        "live_provider": false
+      },
+      "continuation_action": "Stop at downstream fallback; no additional repair.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_02/s08_2_trace.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; no authenticated human judgment."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "SELECTED",
+      "example_id": "s08_2_description",
+      "statement": null
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "SELECTED",
+      "example_id": "s08_2_description",
+      "statement": null
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [
+    {
+      "name": "Downstream contextual response sufficiency",
+      "evidence": "Two empty-evidence stubs return the established-information fallback.",
+      "status": "Observed empty-evidence fallback; deferred outside scope."
+    }
+  ],
+  "limitations_and_unproven_claims": [
+    "Raw historical interpretation/evidence refs unavailable.",
+    "These are related variations, not unseen generalization.",
+    "No ATGB performance result or broad semantic success claim.",
+    "Both fallback outputs fail the people-description request; no successful response is fabricated."
+  ]
+}

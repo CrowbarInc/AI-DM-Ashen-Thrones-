@@ -1,0 +1,130 @@
+{
+  "campaign_id": "pr-br-continuation-10",
+  "campaign_name": "PR-BR Continuation 10 — Typed Interpretation Proposal and Canonical-or-Abstain Validation",
+  "campaign_date": "2026-09-29",
+  "purpose": "Stages 1–2 of the interpretation boundary. Typed proposal, deterministic validator, canonicalize-or-abstain fast path, discourse commit guard, Continuation 8 fixtures, and persona session isolation. No live model. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Interpretation proposals are non-authoritative. The validator canonicalizes a target against scene or discourse referents, or abstains. object:duty and clause-sized pseudo-objects cannot become contract identities or poison later pronouns. Known entities and unique pronouns still fast-path. Compound operation conflicts abstain without lexical-order precedence. Invalid future model proposals are rejected by the same validator. Persona isolation resets session.json. Deterministic band: 222 passed, 0 failed. Live turns 0. Model calls 0. READY FOR LIVE MODEL INTERPRETATION INTEGRATION: YES as Continuation 11. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/interpretation_proposal.py adds the proposal, validator, and commit guard.",
+      "game/resolution_contract.py builds the contract from a validated proposal or an abstention.",
+      "game/discourse_state.py refuses to commit an abstained or malformed referent."
+    ],
+    "validation": [
+      "tests/test_pr_br_interpretation_proposal.py fixtures A–N, model-proposal rejection, and session isolation.",
+      "Existing PR-BR, PR-BP, and PR-BN deterministic band: 222 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_level2_probes.py unlinks session.json and truncates the session log per persona."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 10 section.",
+      "artifacts/pr_br_continuation10/compatibility_bridge.md"
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation10 provenance, junit, and compatibility-bridge note."
+    ]
+  },
+  "testing": {
+    "focused": "tests/test_pr_br_interpretation_proposal.py: 24 passed, 0 failed.",
+    "broader": "222 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation10/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "None. 0 gameplay turns. 0 synthetic-player turns. 0 model calls.",
+    "model_runtime_boundary": "No call_gpt, no interpretation model, no evaluator model.",
+    "new_regressions": "Two existing contract tests failed on the first pass and were fixed. Final band is green.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Continuation 11 may add a structured interpretation call only when the fast path abstains, and must pass a scene index before removing the unscoped-nominal bridge.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4×10 gate from this packet."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "The live path still omits a scene catalog, so short determiner nominals use the unscoped-player-nominal bridge.",
+      "Hard abstention currently reuses the clarification obligation.",
+      "Already-poisoned discourse slots are not scrubbed."
+    ],
+    "pre_existing": [
+      "Continuation 8 manual 3/10 is prior evidence. This continuation did not re-run that smoke."
+    ]
+  },
+  "missing_concepts": [
+    "The live structured-interpretation call.",
+    "Scene-index wiring on the live path.",
+    "Routing abstention to that call before the clarification obligation."
+  ],
+  "does_not_prove": [
+    "Does not prove a live model would emit a valid proposal.",
+    "Does not prove 4×10 synthetic-gate health.",
+    "Does not authorize a human playtest."
+  ],
+  "recommended_next_step": "PR-BR Continuation 11: structured model interpretation only when the fast path abstains, validated by this same canonicalizer, with the scene index supplied. No 4×10 gate in that first integration.",
+  "supporting_files": [
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "implementation",
+      "why": "Typed proposal, validator, abstention reasons, and discourse-commit guard.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "fast_path_integration",
+      "why": "Contract construction consumes the validated proposal or abstains.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "discourse_commit_guard",
+      "why": "Malformed referents cannot enter discourse slots.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_level2_probes.py",
+      "role": "session_isolation",
+      "why": "Each persona isolate drops session.json and the session log.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_interpretation_proposal.py",
+      "role": "deterministic_fixtures",
+      "why": "Continuation 8 mechanisms, invalid model proposals, valid commit, and persona isolation.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/fixtures/pr_br_interpretation/continuation8_shapes.json",
+      "role": "recorded_fixtures",
+      "why": "Replay format for Continuation 11 model proposals without live inference.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation10/compatibility_bridge.md",
+      "role": "compatibility_bridge",
+      "why": "The two temporary bridges Continuation 11 must replace.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation10/junit.xml",
+      "role": "test_results",
+      "why": "222 deterministic tests, 0 failures.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation10/provenance.json",
+      "role": "provenance",
+      "why": "HEAD, zero live calls, and PR-BR still open.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

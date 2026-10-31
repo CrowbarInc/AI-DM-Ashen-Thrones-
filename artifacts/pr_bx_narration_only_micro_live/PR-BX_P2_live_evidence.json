@@ -1,0 +1,41 @@
+{
+  "probe": "P2",
+  "selected_envelope": "narration_only",
+  "provider_response_contract": "narration_only",
+  "provider_attempts": 2,
+  "response_ids": [
+    "resp_013b7995f617f56f006ac59c4591ec87d2b1a54d576492d109",
+    "resp_03105564a0fa5d4a006ac59c47aeb087d291df51ac335d216b"
+  ],
+  "attempt_1": {
+    "structural_keys": ["narration"],
+    "declared_claims": [],
+    "normalized_empty_declarations": true,
+    "declaration_authorship": false,
+    "declaration_validation_hard_valid": true,
+    "narration_validation_hard_valid": false,
+    "narration": "The baker glances around briefly before muttering, “I’m afraid that’s not something I share lightly. Best you choose your own favorites from the loaves here.” Their tone holds a guarded edge, unwilling to reveal personal preference."
+  },
+  "retry_feedback_opening": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again as the same structured envelope with declared_claims plus narration.",
+  "attempt_2": {
+    "structural_keys": ["declared_claims", "narration"],
+    "parser_reason": "unexpected_declared_claims",
+    "realization_envelope_created": false
+  },
+  "emitted": "No one here can answer that from what is settled here.",
+  "emitted_provenance": "safe_nonresolution",
+  "c18_exact_equal_for_sealed_fallback": true,
+  "raw_evidence": [
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/digest.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/envelope_selection.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/raw_generation_attempt_1.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/raw_generation_attempt_2.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/validation.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/normalization.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/c18.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/state_before.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/state_after.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/provider_request_attempt_generation_1.json",
+    "artifacts/pr_bx_narration_only_micro_live/evidence/P2/provider_request_attempt_generation_2.json"
+  ]
+}

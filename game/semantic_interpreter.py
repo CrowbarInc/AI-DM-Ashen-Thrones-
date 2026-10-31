@@ -216,9 +216,16 @@ def parse_interpretation_output(text: str, *, raw_input: str) -> InterpretationP
 def _invoke_interpretation_model(messages: list[dict[str, str]]) -> str:
     """One structured completion. Callers do not retry this."""
     from openai import OpenAI
+    from game.provider_budget import sdk_retry_options
 
-    client = OpenAI(api_key=get_openai_api_key())
-    response = client.responses.create(
+    from game.provider_budget import admit_request
+
+    attempt = admit_request(purpose="contract_interpretation", owner="semantic_interpreter._invoke_interpretation_model",
+                            model=DEFAULT_MODEL_NAME, estimated_input=max(1, len(json.dumps(messages)) // 4), max_output=400)
+    if attempt.refusal:
+        raise RuntimeError(attempt.refusal)
+    client = OpenAI(api_key=get_openai_api_key(), **sdk_retry_options())
+    response = attempt.dispatch(client.responses.create,
         model=DEFAULT_MODEL_NAME,
         input=messages,
         temperature=0,

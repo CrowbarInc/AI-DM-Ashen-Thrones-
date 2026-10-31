@@ -1,0 +1,3 @@
+# 25 — Provider Evidence
+
+570 authorized logical/physical request attempts; 570/570 parsed responses. Model requests use gpt-4.1-mini; actual version IDs, response IDs/status, raw text/object, parsed results, usage, latency and exact request bodies/schema are in calls/. Authorization headers are never saved. No mocked response is included in qualification. SDK retries are disabled. Earlier network-blocked attempts (202) remain under attempts/blocked_network with no fabricated usage and are excluded from provider quality metrics. Explicit user approval enabled the primary run. Additional network gold metadata diagnostic was rejected and replaced by a zero-call local control.

@@ -1,0 +1,420 @@
+{
+  "campaign_id": "atgb_r1_07",
+  "campaign_name": "ATGB-R1-07 Conversational Correction Interpretation and Supported Answer Continuation",
+  "campaign_date": "2026-10-19",
+  "purpose": "Bounded production contract repair and deterministic validation; zero live authority.",
+  "objective_status": "B \u2014 Conditional; stop for external review",
+  "executive_summary": "Existing interpretation guidance distinguishes supplied correction from GM clarification and mechanical revision, selects evidence for the corrected question, and the existing answer join acknowledges resolved supported corrections. Main 238/0; broader 23/1 reproduces entry-source failure. Live model adequacy unproven.",
+  "changes": {
+    "production": [
+      "Production-only schema descriptions/instructions and guarded answer-branch receipt."
+    ],
+    "validation": [
+      "29 new focused checks; 209 existing checks; six offline replay arms."
+    ],
+    "tooling": [
+      "Offline evidence/review scripts only."
+    ],
+    "documentation": [
+      "Eight reports and canonical NEXT_SESSION."
+    ],
+    "generated_artifacts": [
+      "Diffs, logs, JUnit, replay requests/results, hashes and ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "238 passed including 29 new, zero failed/skipped; 1 HTTP test deselected.",
+    "broader": "23 passed, 1 failed; same failure with entry source.",
+    "full_suite": "Not completed; two interrupted attempts documented.",
+    "runtime_validation": "Stubbed direct production chat and offline interpretation/decision paths only.",
+    "model_runtime_boundary": "Zero live provider calls; constructor guard active.",
+    "new_regressions": "None demonstrated in completed relevant slice.",
+    "pre_existing_failures": "Provider-metadata test blocked by live-model guard, reproduced on entry bytes."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Live selection unproven; HTTP/full-suite limits; incomplete attempts."
+    ],
+    "pre_existing": [
+      "Conversational competence and authenticated benchmark scoring remain unestablished."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review bounded change and conditional verdict before authorizing proposed R1-08."
+  ],
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Live repair effect, benchmark improvement, semantic generalization, independent held-out performance or full-suite green."
+  ],
+  "recommended_next_step": "Stop for external review. Only separately authorize report 08 bounded ATGB-R1-08; do not execute now.",
+  "primary_report": "development/reports/atgb_r1_07/08_final_verdict.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/atgb_r1_07"
+  ],
+  "self_contained_review_test": "Eight reports, entry-relative diffs, production/test source, commands/logs/JUnit, replay requests/records/decisions, state hashes and conditional verdict included.",
+  "configuration_source": "artifacts/atgb/atgb_r1_07/review_config.json",
+  "supporting_files": [
+    {
+      "path": "development/reports/atgb_r1_07/01_baseline_and_scope.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/02_interpretation_contract_repair.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/03_evidence_selection_repair.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/04_response_continuation.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/05_deterministic_validation.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/06_regression_and_authority.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/07_change_review.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/08_final_verdict.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_07_correction_contract.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_02_revision_boundary.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_04_readiness.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/after.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/after.xml",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/after_exit.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/baseline.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/baseline_direct.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/baseline_direct.xml",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/baseline_direct_exit.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/before_conversational_orchestration.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/before_live_chat_interpretation.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/before_NEXT_SESSION.md",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader_baseline.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader_baseline.xml",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader_baseline_exit.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader_direct.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader_direct.xml",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/broader_direct_exit.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/changed_by_validation.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/change_size.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/compare_broader_baseline.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/focused.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/focused.xml",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/focused_exit.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/historical_artifact_restoration.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/integrity_verification.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/modified_locations.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/package_review.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/preview_review_verification.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/protected_hashes.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/replay.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/repository_identity.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/repository_status_after.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/repository_status_before.txt",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/source.diff",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/test_commands.json",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/verify_review.py",
+      "role": "bounded_implementation_evidence",
+      "why": "Explicit R1-07 review support.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_07/review_config.json",
+      "role": "configuration_provenance",
+      "why": "Exact explicit bundle selection."
+    }
+  ]
+}

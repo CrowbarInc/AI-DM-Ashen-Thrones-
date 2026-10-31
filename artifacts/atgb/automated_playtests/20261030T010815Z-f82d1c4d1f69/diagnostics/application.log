@@ -1,0 +1,15 @@
+Timeout (0:00:10)!
+Thread 0x0000600c (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 295 in accept
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\socket.py", line 646 in socketpair
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\proactor_events.py", line 785 in _make_self_pipe
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\proactor_events.py", line 640 in __init__
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 315 in __init__
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 144 in _lazy_init
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 58 in __enter__
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 193 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\uvicorn\server.py", line 74 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\playtest\worker.py", line 126 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\playtest\worker.py", line 135 in <module>
+  File "<frozen runpy>", line 88 in _run_code
+  File "<frozen runpy>", line 198 in _run_module_as_main

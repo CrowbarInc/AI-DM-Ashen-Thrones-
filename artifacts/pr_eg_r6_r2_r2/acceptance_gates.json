@@ -1,0 +1,390 @@
+[
+  {
+    "gate": 1,
+    "name": "Operation classification",
+    "status": "FAIL",
+    "evidence": {
+      "automated_grader": {
+        "count": 149,
+        "denominator": 150,
+        "rate": 0.9933333333333333
+      },
+      "implementing_agent": {
+        "count": 130,
+        "denominator": 150,
+        "rate": 0.8666666666666667
+      }
+    }
+  },
+  {
+    "gate": 2,
+    "name": "Referent binding",
+    "status": "FAIL",
+    "evidence": {
+      "automated_grader": {
+        "count": 123,
+        "denominator": 124,
+        "rate": 0.9919354838709677
+      },
+      "implementing_agent": {
+        "count": 25,
+        "denominator": 74,
+        "rate": 0.33783783783783783
+      }
+    }
+  },
+  {
+    "gate": 3,
+    "name": "Role preservation",
+    "status": "FAIL",
+    "evidence": {
+      "automated_grader": {
+        "count": 150,
+        "denominator": 150,
+        "rate": 1.0
+      },
+      "implementing_agent": {
+        "count": 4,
+        "denominator": 8,
+        "rate": 0.5
+      }
+    }
+  },
+  {
+    "gate": 4,
+    "name": "Corrections",
+    "status": "FAIL",
+    "evidence": {
+      "automated_grader": {
+        "count": 15,
+        "denominator": 16,
+        "rate": 0.9375
+      },
+      "implementing_agent": {
+        "count": 5,
+        "denominator": 23,
+        "rate": 0.21739130434782608
+      }
+    }
+  },
+  {
+    "gate": 5,
+    "name": "Follow-ups",
+    "status": "FAIL",
+    "evidence": {
+      "automated_grader": {
+        "count": 38,
+        "denominator": 38,
+        "rate": 1.0
+      },
+      "implementing_agent": {
+        "count": 20,
+        "denominator": 51,
+        "rate": 0.39215686274509803
+      }
+    }
+  },
+  {
+    "gate": 6,
+    "name": "Active focus",
+    "status": "UNVERIFIED",
+    "evidence": "Automated focus grading is unreliable; structural noncommit and actual intended-focus correctness are distinct. External adjudication required."
+  },
+  {
+    "gate": 7,
+    "name": "False clarification",
+    "status": "FAIL",
+    "evidence": {
+      "explicit_local_labels": {
+        "count": 16,
+        "denominator": 150,
+        "rate": 0.10666666666666667
+      },
+      "raw_automated": {
+        "count": 4,
+        "denominator": 136,
+        "rate": 0.029411764705882353
+      }
+    }
+  },
+  {
+    "gate": 8,
+    "name": "Matched relevance improvement",
+    "status": "UNVERIFIED",
+    "evidence": {
+      "raw_automated_baseline": 0.9333333333333333,
+      "raw_automated_final": 1.0,
+      "validity": "UNRELIABLE FOR ACCEPTANCE. Automated grading overcredits absent/wrong bindings and communication-role handling, and omits intended correction/followup denominators. Raw outputs are preserved rather than silently repaired. Relevance, sufficiency and focus claims require external adjudication; no matched improvement is established by these grades."
+    }
+  },
+  {
+    "gate": 9,
+    "name": "No sufficiency regression",
+    "status": "UNVERIFIED",
+    "evidence": {
+      "raw_automated_baseline": 0.9111111111111111,
+      "raw_automated_final": 0.9555555555555556,
+      "validity": "UNRELIABLE FOR ACCEPTANCE. Automated grading overcredits absent/wrong bindings and communication-role handling, and omits intended correction/followup denominators. Raw outputs are preserved rather than silently repaired. Relevance, sufficiency and focus claims require external adjudication; no matched improvement is established by these grades."
+    }
+  },
+  {
+    "gate": 10,
+    "name": "Disclosure",
+    "status": "PASS",
+    "evidence": {
+      "no_secret": 0
+    }
+  },
+  {
+    "gate": 11,
+    "name": "State projection",
+    "status": "PASS",
+    "evidence": {
+      "canonical": 0
+    }
+  },
+  {
+    "gate": 12,
+    "name": "Discovery fixture values",
+    "status": "PASS",
+    "evidence": {
+      "no_secret_clue": 0
+    }
+  },
+  {
+    "gate": 13,
+    "name": "Final delivery",
+    "status": "PASS",
+    "evidence": {
+      "sealed": 0,
+      "exact": 0,
+      "history_exact": 0
+    }
+  },
+  {
+    "gate": 14,
+    "name": "Save load",
+    "status": "PASS",
+    "evidence": {
+      "loaded_identity": true,
+      "http": true,
+      "parent": true,
+      "revision": true,
+      "subject": true,
+      "sealed": true,
+      "history_exact": true
+    }
+  },
+  {
+    "gate": 15,
+    "name": "Regression",
+    "status": "PASS",
+    "evidence": "Five inherited failures; fourteen explained noncritical contract-expectation failures. Existing tests unchanged. See every identity in regression_comparison.json."
+  },
+  {
+    "gate": 16,
+    "name": "Holdout generalization",
+    "status": "FAIL",
+    "evidence": {
+      "operation_correct": {
+        "count": 29,
+        "denominator": 30,
+        "rate": 0.9666666666666667
+      },
+      "referent_correct": {
+        "count": 30,
+        "denominator": 30,
+        "rate": 1.0
+      },
+      "roles_preserved": {
+        "count": 30,
+        "denominator": 30,
+        "rate": 1.0
+      },
+      "correction_success": {
+        "count": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "follow_up_success": {
+        "count": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "focus_preserved": {
+        "count": 29,
+        "denominator": 30,
+        "rate": 0.9666666666666667
+      },
+      "false_clarification": {
+        "count": 1,
+        "denominator": 30,
+        "rate": 0.03333333333333333
+      },
+      "genuine_clarification_correct": {
+        "count": 3,
+        "denominator": 3,
+        "rate": 1.0
+      },
+      "relevant": {
+        "count": 30,
+        "denominator": 30,
+        "rate": 1.0
+      },
+      "sufficient": {
+        "count": 29,
+        "denominator": 30,
+        "rate": 0.9666666666666667
+      },
+      "quality": 2.9,
+      "playability": 2.9
+    }
+  },
+  {
+    "gate": 17,
+    "name": "Performance",
+    "status": "FAIL",
+    "evidence": {
+      "turns": 150,
+      "calls_per_turn": {
+        "mean": 1.26,
+        "median": 1.0,
+        "p95": 2,
+        "maximum": 2
+      },
+      "input_tokens_per_turn": {
+        "mean": 3730.7933333333335,
+        "median": 3463.5,
+        "p95": 4016,
+        "maximum": 30045
+      },
+      "output_tokens_per_turn": {
+        "mean": 201.45333333333335,
+        "median": 201.0,
+        "p95": 280,
+        "maximum": 333
+      },
+      "latency_ms": {
+        "mean": 2538.4274240006926,
+        "median": 2345.4469999996945,
+        "p95": 4335.825200018007,
+        "maximum": 5593.747400009306
+      },
+      "retry_calls": 0,
+      "missing_usage_calls": 0,
+      "calls_by_purpose": {
+        "expression": 37,
+        "semantic_plan": 149,
+        "strict_social": 3
+      },
+      "strict_social_outliers": [
+        {
+          "conversation": "operation_4",
+          "turn": 4,
+          "latency_ms": 5593.747400009306,
+          "calls": [
+            {
+              "purpose": "semantic_plan",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_0ca8fc0b0d066c0a006ad3fcb45e2c87d2bc543cb4dd521366",
+              "input_tokens": 2808,
+              "output_tokens": 232,
+              "total_tokens": 3040,
+              "latency_ms": 2118.044,
+              "usage_consistent": true
+            },
+            {
+              "purpose": "strict_social",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_0a6df48b37ac6332006ad3fcb7fdc887d29d794869d2aa6eec",
+              "input_tokens": 27183,
+              "output_tokens": 27,
+              "total_tokens": 27210,
+              "max_output_tokens": 600,
+              "model_mismatch": false,
+              "usage_consistent": true
+            }
+          ]
+        },
+        {
+          "conversation": "operation_5",
+          "turn": 4,
+          "latency_ms": 5334.882600000128,
+          "calls": [
+            {
+              "purpose": "semantic_plan",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_057e218de492ce04006ad3fcdadef087d2870a8c250a56bc30",
+              "input_tokens": 2808,
+              "output_tokens": 232,
+              "total_tokens": 3040,
+              "latency_ms": 2096.14,
+              "usage_consistent": true
+            },
+            {
+              "purpose": "strict_social",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_06ccd70c32fa1507006ad3fcdeb12087d29e776667d2e21dc8",
+              "input_tokens": 27144,
+              "output_tokens": 43,
+              "total_tokens": 27187,
+              "max_output_tokens": 600,
+              "model_mismatch": false,
+              "usage_consistent": true
+            }
+          ]
+        },
+        {
+          "conversation": "operation_7",
+          "turn": 4,
+          "latency_ms": 5166.674100008095,
+          "calls": [
+            {
+              "purpose": "semantic_plan",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_0bb60ffbad6747ad006ad3fd22699887d2b419367749340045",
+              "input_tokens": 2826,
+              "output_tokens": 242,
+              "total_tokens": 3068,
+              "latency_ms": 2020.952,
+              "usage_consistent": true
+            },
+            {
+              "purpose": "strict_social",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_0b3acf18b8c6e5fc006ad3fd25ea5487d2a9156f401cd852ab",
+              "input_tokens": 27219,
+              "output_tokens": 52,
+              "total_tokens": 27271,
+              "max_output_tokens": 600,
+              "model_mismatch": false,
+              "usage_consistent": true
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "gate": 18,
+    "name": "Fresh provider",
+    "status": "PASS",
+    "evidence": {
+      "turns": 150,
+      "conversations": 10,
+      "source_unchanged": true
+    }
+  }
+]

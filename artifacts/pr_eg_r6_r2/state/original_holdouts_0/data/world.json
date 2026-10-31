@@ -1,0 +1,75 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_quill_ledger_keep",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "quill",
+      "topic_id": "ledger_keep"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_quill_ash_drum",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "quill",
+      "topic_id": "ash_drum"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "quill",
+      "name": "Quill",
+      "role": "npc",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [],
+      "affiliation": "",
+      "topics": [
+        {
+          "id": "ash_drum",
+          "text": "The ash drum is called the ash drum."
+        },
+        {
+          "id": "ledger_keep",
+          "text": "The miller keeps the night ledger."
+        }
+      ],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

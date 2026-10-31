@@ -1,0 +1,9 @@
+Commands run by PR-CF:
+1. git status --short
+2. git rev-parse HEAD
+3. pytest --lf diagnostic with --junitxml=artifacts/pr_cf_regression_triage/lastfailed_diagnostic.xml --basetemp=artifacts/pr_cf_regression_triage/pytest_lastfailed
+   Result: 41 failed, 161 setup errors due missing basetemp parent. Useful for exact inventory shape and non-noise failure signatures.
+4. representative cluster pytest over turn_pipeline/explicit_world_action/social_question/exploration/investigation
+   Result: interrupted after reproducible Windows TestClient socketpair accept hang in tests/test_turn_pipeline_shared.py.
+
+No live model/API calls were made.

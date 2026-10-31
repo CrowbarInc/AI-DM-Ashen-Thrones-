@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.prai_bound_speaker_knowledge.r1",
+  "description": "PR-AI continuation: learn, travel, investigate, return, bind the Guard Captain, ask on the first relevant turn, then take one more grounded action.",
+  "scenarios": [
+    {
+      "case_id": "R2-MT01-AI",
+      "family": "multi_turn_arc",
+      "scenario": "notice_patrol_inquiry_return_captain_first_ask_continuation",
+      "initial_objective": "Learn the missing-patrol route, pursue it, investigate, return, observe, reread the board, bind the Guard Captain, ask what is being done on the first relevant ask, then act on the answer.",
+      "behaviors": [
+        "scene_grounding",
+        "intent_understanding",
+        "state_narration_consistency",
+        "multi_turn_continuity",
+        "player_agency",
+        "world_coherence"
+      ],
+      "content": "frontier_gate notice board, notice_patrol_route clue, old_milestone destination, authored return exit, bound Guard Captain first-ask knowledge",
+      "player_prompts": [
+        "I look around the gate.",
+        "I step closer and read the notice board carefully.",
+        "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+        "I look around.",
+        "I examine the milestone.",
+        "I'll head back to the gate.",
+        "I look around.",
+        "I read the notice board again.",
+        "I turn to the Guard Captain. \"What's being done about the missing patrol?\"",
+        "If the watch already has a commander on this, I'll check the roster board the serjeant is watching."
+      ]
+    }
+  ]
+}

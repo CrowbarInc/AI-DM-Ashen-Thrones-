@@ -1,0 +1,3 @@
+# 08 — Multi-Fact Sources
+
+s01 separates communication, reported content and absence of inspection. s03 includes a negative sale and positive loan; s24 includes delegated duty and retained authority. Extracted facts are preserved in extractions/. Inspect s01_C: the cistern property proposition is anchored but lacks an explicit reported-content link. Its source epistemic is inherited as npc_knowledge, which does not prove the property true. Host anchoring cannot repair this semantic loss. Multi-fact extraction count and review status are in summary.json; no sparse gold annotation is treated as an exhaustive source inventory.

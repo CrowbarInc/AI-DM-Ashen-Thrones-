@@ -1,0 +1,54 @@
+{
+  "case_id": "s21q2",
+  "family": "s21",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "689adcd016d8b350552f14057f72a85a3e43eec29b74c06340ad34d17d3060bf",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "weights used by the saffron sellers"
+    ],
+    "qualifiers": [
+      "used by the saffron sellers",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s21"
+    ],
+    "answered_arguments": [
+      "agent",
+      "object"
+    ],
+    "missing_arguments": [
+      "beneficiary"
+    ],
+    "conflict": false,
+    "reason": "Fact f1 directly states that Arbiter Fen vouches for the weights used by the saffron sellers, with no conflicting information about this specific object."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

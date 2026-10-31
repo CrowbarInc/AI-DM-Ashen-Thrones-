@@ -1,0 +1,110 @@
+{
+  "campaign_id": "constitution_progress_governance_amendment_20261018",
+  "campaign_name": "Constitution Progress and Benchmark Governance Amendment",
+  "campaign_date": "2026-10-18",
+  "purpose": "Adopt the progress, failure, and benchmark governance amendments inside the existing Constitution, review handoff, validation evidence standard, and Product Realization validation rules. No gameplay change and no benchmark corpus.",
+  "objective_status": "ADOPTED — GOVERNANCE ONLY",
+  "executive_summary": "Implementation outcome: the approved amendments are in the Constitution and the three specialized standards, with the refinements recorded in the adoption report. Failure classes are provisional and are not the replay taxonomy. Original reproduction: not applicable; this pass repairs no gameplay failure. Related generalization: not applicable. Independent generalization: not evaluated. Regression: no production or test code changed; the documentation review found no conflict with playability scoring or replay classification. ATGB: no result, because no reviewed corpus exists. Known limitations: the benchmark cannot be run or claimed yet. Remaining uncertainty: docs/NEXT_SESSION.md still orients the product at the 2026-09-26 PR-BL closeout, while later PR-EG history remains in handoff history. That discrepancy is pending maintenance and was not reconciled. No gameplay improvement is claimed.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "No test, evaluator, threshold, calibration case, protected replay, or replay classification changed."
+    ],
+    "tooling": [
+      "No generator change. Existing review-summary sections carry implementation outcome, evidence level, regression, ATGB availability, limitations, and uncertainty."
+    ],
+    "documentation": [
+      "Amended docs/DEVELOPMENT_CONSTITUTION.md with failure investigation, task proportion, claim separation, architectural restraint, and the existing ZIP pointer.",
+      "Amended docs/review_handoff_standard.md so applicable full summaries keep repair evidence levels distinct without new fields.",
+      "Added the Ashen Thrones Gameplay Benchmark section to docs/validation_evidence_standard.md. No corpus, runner, or scorer.",
+      "Added a generalization cross-reference to docs/product_realization_validation.md. The scenario-independent fixture gate remains.",
+      "Updated the Constitution index line in docs/README.md.",
+      "Marked the historical proposal adopted-with-refinements and recorded the NEXT_SESSION versus PR-EG discrepancy as pending maintenance."
+    ],
+    "generated_artifacts": [
+      "Generated this review summary, manifest, and ZIP from the adoption report and the amended authorities."
+    ]
+  },
+  "testing": {
+    "focused": "Documentation consistency review of the amended authorities against playability doctrine and the replay failure contract. No gameplay pytest suite.",
+    "broader": "Not run. Not required for a documentation amendment with no product or test change.",
+    "full_suite": "Not run.",
+    "runtime_validation": "No gameplay, provider, or benchmark run. Original reproduction, related generalization, and independent generalization were not evaluated because this pass has no gameplay failure under repair.",
+    "model_runtime_boundary": "No model was called. A provider call was not required.",
+    "new_regressions": "None. No production or test change.",
+    "pre_existing_failures": "Not reassessed. docs/NEXT_SESSION.md still records the 2026-09-26 PR-BL baseline and was not reconciled with later cycles."
+  },
+  "decisions_requiring_human_review": [
+    "No further acceptance decision is required for these amendments. They are adopted.",
+    "The separate pending maintenance item is whether to reconcile docs/NEXT_SESSION.md product orientation with later PR-EG history. This package does not decide that.",
+    "A later corpus review is required before any Ashen Thrones Gameplay Benchmark result may be claimed."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "docs/NEXT_SESSION.md product orientation remains the 2026-09-26 PR-BL closeout and says stop, do not start PR-BM. Later PR-EG-R6-R4-R1 history remains at handoff/history/pr_eg_r6_r4_r1_source_alignment_20261018/. Recorded as pending maintenance. Not reconciled.",
+      "No reviewed ATGB corpus exists, so communication checkpoints cannot yet produce a benchmark result. Reconsideration before that corpus exists does not authorize a provider call."
+    ],
+    "pre_existing": [
+      "Replay failure classification, playability scoring, semantic calibration, and protected replay keep their existing authorities and were not retargeted as the gameplay benchmark."
+    ]
+  },
+  "missing_concepts": [
+    "A reviewed Ashen Thrones Gameplay Benchmark corpus, runner, and operating procedure do not exist. No ATGB result is claimed.",
+    "The review generator has no dedicated failure-class or evidence-level fields. This amendment uses the existing summary sections. A generator change waits until those prose fields prove easy to skip."
+  ],
+  "does_not_prove": [
+    "That player-AI-DM communication improved.",
+    "An original reproduction, a related variation, or independent generalization of any gameplay repair.",
+    "An Ashen Thrones Gameplay Benchmark result.",
+    "That PR-BL session orientation and the later PR-EG review agree.",
+    "A gameplay, semantic, structural, or full-suite result."
+  ],
+  "recommended_next_step": "Stop. The amendments are adopted. Do not implement ATGB scenarios, runners, or scorers from this package, and do not start a product cycle from it. The NEXT_SESSION versus PR-EG discrepancy remains a separate maintenance item.",
+  "primary_report": "development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "adopted_authority",
+      "why": "Amended Constitution: failure investigation, task proportion, claim separation, and ZIP pointer.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "specialized_authority",
+      "why": "Existing ZIP contract extended so applicable summaries distinguish repair evidence levels.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "specialized_authority",
+      "why": "Home of the Ashen Thrones Gameplay Benchmark rules. No corpus is included.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "specialized_authority",
+      "why": "Systemic fixture gate preserved, with the three repair-evidence levels kept separate from it.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "session_orientation",
+      "why": "Records adoption and the unreconciliation of PR-BL orientation with later PR-EG history.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "role": "historical_proposal",
+      "why": "Historical proposal. Adopted documents govern where the proposal wording differs.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "Not an automated gameplay bundle-only test. The ZIP packages the adoption report and the amended authorities. It contains no gameplay transcript and claims no behavioral PASS."
+}

@@ -1,0 +1,267 @@
+{
+  "session": {
+    "active_scene_id": "clay_shed",
+    "visited_scene_ids": [
+      "clay_shed"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "clay_shed",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "b20ce9ce94c9c6420bd244f2",
+    "session_id": "b20ce9ce94c9c6420bd244f2",
+    "campaign_started": true,
+    "last_saved_at": "2026-10-03T22:31:47.855018Z"
+  },
+  "world": {
+    "settlements": [
+      {
+        "id": "reedbank",
+        "name": "Reedbank",
+        "type": "riverside_hamlet",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hamlet of small craft sheds along a slow river."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "scenes": {
+    "clay_shed": {
+      "scene": {
+        "id": "clay_shed",
+        "location": "Reedbank clay shed",
+        "summary": "A low shed holds unfired pots on plank shelves. The large water jar on the center shelf is split from lip to base, and the clay inside it has dried into pale flakes. A stack of unused coil-pots sits intact on the lower shelf. The shed door stands open to the yard. Nothing here says who split the jar, when, or why.",
+        "mode": "exploration",
+        "visible_facts": [
+          {
+            "text": "The large water jar on the center shelf is split from lip to base.",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "water_jar",
+              "subject_aliases": [
+                "water jar",
+                "jar",
+                "large water jar"
+              ],
+              "relation": "condition",
+              "value": "split",
+              "value_aliases": [
+                "split",
+                "split from lip to base"
+              ],
+              "polarity": "positive"
+            }
+          },
+          {
+            "text": "The clay inside the split water jar has dried into pale flakes.",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "jar_clay",
+              "subject_aliases": [
+                "clay",
+                "dried clay",
+                "pale flakes",
+                "flakes"
+              ],
+              "relation": "condition",
+              "value": "dried flakes",
+              "value_aliases": [
+                "dried",
+                "pale flakes",
+                "dried into pale flakes"
+              ],
+              "polarity": "positive"
+            }
+          },
+          {
+            "text": "A stack of unused coil-pots sits intact on the lower shelf.",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "coil_pots",
+              "subject_aliases": [
+                "coil-pots",
+                "coil pots",
+                "pots",
+                "unused coil-pots"
+              ],
+              "relation": "condition",
+              "value": "intact",
+              "value_aliases": [
+                "intact",
+                "unused",
+                "stack"
+              ],
+              "polarity": "positive"
+            }
+          },
+          {
+            "text": "The shed door stands open to the yard.",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "shed_door",
+              "subject_aliases": [
+                "shed door",
+                "door"
+              ],
+              "relation": "condition",
+              "value": "open",
+              "value_aliases": [
+                "open",
+                "stands open"
+              ],
+              "polarity": "positive"
+            }
+          }
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [],
+        "enemies": [],
+        "actions": [],
+        "addressables": [],
+        "interactables": [
+          {
+            "id": "water_jar",
+            "label": "split water jar",
+            "aliases": [
+              "water jar",
+              "jar",
+              "large water jar",
+              "clay"
+            ],
+            "type": "investigate"
+          }
+        ]
+      }
+    },
+    "frontier_gate": {
+      "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Unused holding scene. It is not part of this validation.",
+        "mode": "social",
+        "visible_facts": [],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Enter Cinderwatch",
+            "target_scene_id": "market_quarter"
+          },
+          {
+            "label": "Follow the missing patrol rumor",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [],
+        "interactables": []
+      }
+    },
+    "market_quarter": {
+      "scene": {
+        "id": "market_quarter",
+        "location": "Cinderwatch Market Quarter",
+        "summary": "Unused holding scene. It is not part of this validation.",
+        "mode": "exploration",
+        "visible_facts": [],
+        "opening_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to the Gate",
+            "target_scene_id": "frontier_gate"
+          },
+          {
+            "label": "Seek the fortress trail",
+            "target_scene_id": "old_milestone"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "journal_seed_facts": [],
+        "addressables": [],
+        "interactables": []
+      }
+    },
+    "old_milestone": {
+      "scene": {
+        "id": "old_milestone",
+        "location": "Old Milestone",
+        "summary": "Unused holding scene. It is not part of this validation.",
+        "mode": "exploration",
+        "visible_facts": [],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to Cinderwatch Gate",
+            "target_scene_id": "frontier_gate"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "interactables": [],
+        "addressables": []
+      }
+    }
+  },
+  "active_scene_id": "clay_shed",
+  "session_log": ""
+}

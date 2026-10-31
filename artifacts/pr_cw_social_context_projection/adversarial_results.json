@@ -1,0 +1,1116 @@
+[
+  {
+    "family": "biography",
+    "candidate": "The guard captain was born in Blackharbor and served for twenty years.",
+    "full_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The guard captain was born in Blackharbor and served for twenty years."
+    },
+    "reduced_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The guard captain was born in Blackharbor and served for twenty years."
+    },
+    "final_outputs": [
+      "The guard captain was born in Blackharbor and served for twenty years.",
+      "The guard captain was born in Blackharbor and served for twenty years."
+    ],
+    "inherited_acceptance_gap": true
+  },
+  {
+    "family": "geography",
+    "candidate": "The old milestone lies east beyond the trading crossroads.",
+    "full_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The old milestone lies east beyond the trading crossroads."
+    },
+    "reduced_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The old milestone lies east beyond the trading crossroads."
+    },
+    "final_outputs": [
+      "The old milestone lies east beyond the trading crossroads.",
+      "The old milestone lies east beyond the trading crossroads."
+    ],
+    "inherited_acceptance_gap": true
+  },
+  {
+    "family": "objective_fact",
+    "candidate": "The gate tax is five silver coins for every traveler.",
+    "full_context_audit": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "Guard Captain says, \"No. I cannot answer that from what I know.\"",
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_601d8bc1627e",
+        "hard_valid": false,
+        "declaration_validation": {
+          "schema_version": 1,
+          "structured_contract_present": true,
+          "hard_valid": true,
+          "accepted_claims": [],
+          "rejected_claims": [],
+          "violations": []
+        },
+        "narration_validation": {
+          "decision_id": "rc_601d8bc1627e",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "world_truth",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ]
+        },
+        "violations": [
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "proposed_facts": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "world_truth",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          },
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "accepted_realized_claims": []
+      }
+    },
+    "reduced_context_audit": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "Guard Captain says, \"No. I cannot answer that from what I know.\"",
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_601d8bc1627e",
+        "hard_valid": false,
+        "declaration_validation": {
+          "schema_version": 1,
+          "structured_contract_present": true,
+          "hard_valid": true,
+          "accepted_claims": [],
+          "rejected_claims": [],
+          "violations": []
+        },
+        "narration_validation": {
+          "decision_id": "rc_601d8bc1627e",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "world_truth",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ]
+        },
+        "violations": [
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "proposed_facts": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "world_truth",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          },
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "accepted_realized_claims": []
+      }
+    },
+    "final_outputs": [
+      "Guard Captain says, \"I cannot answer that from what is settled here.\"",
+      "Guard Captain says, \"I cannot answer that from what is settled here.\""
+    ],
+    "inherited_acceptance_gap": false
+  },
+  {
+    "family": "hidden_information",
+    "candidate": "A secret tunnel runs beneath the gate into the keep.",
+    "full_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "A secret tunnel runs beneath the gate into the keep."
+    },
+    "reduced_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "A secret tunnel runs beneath the gate into the keep."
+    },
+    "final_outputs": [
+      "A secret tunnel runs beneath the gate into the keep.",
+      "A secret tunnel runs beneath the gate into the keep."
+    ],
+    "inherited_acceptance_gap": true
+  },
+  {
+    "family": "npc_action",
+    "candidate": "The captain unlocks the gate and lets you pass.",
+    "full_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The captain unlocks the gate and lets you pass."
+    },
+    "reduced_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The captain unlocks the gate and lets you pass."
+    },
+    "final_outputs": [
+      "The captain unlocks the gate and lets you pass.",
+      "The captain unlocks the gate and lets you pass."
+    ],
+    "inherited_acceptance_gap": true
+  },
+  {
+    "family": "certainty",
+    "candidate": "The captain confirms that bandits murdered the missing patrol.",
+    "full_context_audit": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "The captain confirms that bandits murdered the missing patrol.",
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_601d8bc1627e",
+        "hard_valid": false,
+        "declaration_validation": {
+          "schema_version": 1,
+          "structured_contract_present": true,
+          "hard_valid": true,
+          "accepted_claims": [],
+          "rejected_claims": [],
+          "violations": []
+        },
+        "narration_validation": {
+          "decision_id": "rc_601d8bc1627e",
+          "hard_valid": false,
+          "violations": [
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "provenance": "generated_proposal",
+              "consequence": "consequential",
+              "authorized": false,
+              "reason_codes": [
+                "unauthorized_certainty_upgrade",
+                "unauthorized_evidential_relation",
+                "unowned_stateful_world_assertion"
+              ],
+              "authority": "unauthorized",
+              "persistence": "do_not_persist",
+              "source_ref": "",
+              "outcome_classification": "consequentially_unresolved",
+              "semantic_identity": {}
+            }
+          ],
+          "proposed_facts": [
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "provenance": "generated_proposal",
+              "consequence": "consequential",
+              "authorized": false,
+              "reason_codes": [
+                "unauthorized_certainty_upgrade",
+                "unauthorized_evidential_relation",
+                "unowned_stateful_world_assertion"
+              ],
+              "authority": "unauthorized",
+              "persistence": "do_not_persist",
+              "source_ref": "",
+              "outcome_classification": "consequentially_unresolved",
+              "semantic_identity": {}
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "semantic_identity": {
+                "relation_kind": "evidential"
+              },
+              "provenance": "generated_proposal",
+              "authority": "unauthorized",
+              "epistemic_status": "unresolved",
+              "relation_kind": "evidential",
+              "persistence": "do_not_persist",
+              "authorized": false,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "unauthorized_evidential_relation"
+              ]
+            },
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "established"
+              },
+              "provenance": "generated_proposal",
+              "authority": "unauthorized",
+              "epistemic_status": "unresolved",
+              "relation_kind": "epistemic_status",
+              "persistence": "do_not_persist",
+              "authorized": false,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "unauthorized_certainty_upgrade"
+              ]
+            },
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "semantic_identity": {},
+              "provenance": "generated_proposal",
+              "authority": "unauthorized",
+              "epistemic_status": "unresolved",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "do_not_persist",
+              "authorized": false,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "unowned_stateful_world_assertion"
+              ]
+            }
+          ]
+        },
+        "violations": [
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "provenance": "generated_proposal",
+            "consequence": "consequential",
+            "authorized": false,
+            "reason_codes": [
+              "unauthorized_certainty_upgrade",
+              "unauthorized_evidential_relation",
+              "unowned_stateful_world_assertion"
+            ],
+            "authority": "unauthorized",
+            "persistence": "do_not_persist",
+            "source_ref": "",
+            "outcome_classification": "consequentially_unresolved",
+            "semantic_identity": {}
+          }
+        ],
+        "proposed_facts": [
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "provenance": "generated_proposal",
+            "consequence": "consequential",
+            "authorized": false,
+            "reason_codes": [
+              "unauthorized_certainty_upgrade",
+              "unauthorized_evidential_relation",
+              "unowned_stateful_world_assertion"
+            ],
+            "authority": "unauthorized",
+            "persistence": "do_not_persist",
+            "source_ref": "",
+            "outcome_classification": "consequentially_unresolved",
+            "semantic_identity": {}
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "semantic_identity": {
+              "relation_kind": "evidential"
+            },
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "evidential",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "unauthorized_evidential_relation"
+            ]
+          },
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "established"
+            },
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "epistemic_status",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "unauthorized_certainty_upgrade"
+            ]
+          },
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "unowned_stateful_world_assertion"
+            ]
+          }
+        ],
+        "accepted_realized_claims": []
+      }
+    },
+    "reduced_context_audit": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "The captain confirms that bandits murdered the missing patrol.",
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_601d8bc1627e",
+        "hard_valid": false,
+        "declaration_validation": {
+          "schema_version": 1,
+          "structured_contract_present": true,
+          "hard_valid": true,
+          "accepted_claims": [],
+          "rejected_claims": [],
+          "violations": []
+        },
+        "narration_validation": {
+          "decision_id": "rc_601d8bc1627e",
+          "hard_valid": false,
+          "violations": [
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "provenance": "generated_proposal",
+              "consequence": "consequential",
+              "authorized": false,
+              "reason_codes": [
+                "unauthorized_certainty_upgrade",
+                "unauthorized_evidential_relation",
+                "unowned_stateful_world_assertion"
+              ],
+              "authority": "unauthorized",
+              "persistence": "do_not_persist",
+              "source_ref": "",
+              "outcome_classification": "consequentially_unresolved",
+              "semantic_identity": {}
+            }
+          ],
+          "proposed_facts": [
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "provenance": "generated_proposal",
+              "consequence": "consequential",
+              "authorized": false,
+              "reason_codes": [
+                "unauthorized_certainty_upgrade",
+                "unauthorized_evidential_relation",
+                "unowned_stateful_world_assertion"
+              ],
+              "authority": "unauthorized",
+              "persistence": "do_not_persist",
+              "source_ref": "",
+              "outcome_classification": "consequentially_unresolved",
+              "semantic_identity": {}
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "semantic_identity": {
+                "relation_kind": "evidential"
+              },
+              "provenance": "generated_proposal",
+              "authority": "unauthorized",
+              "epistemic_status": "unresolved",
+              "relation_kind": "evidential",
+              "persistence": "do_not_persist",
+              "authorized": false,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "unauthorized_evidential_relation"
+              ]
+            },
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "established"
+              },
+              "provenance": "generated_proposal",
+              "authority": "unauthorized",
+              "epistemic_status": "unresolved",
+              "relation_kind": "epistemic_status",
+              "persistence": "do_not_persist",
+              "authorized": false,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "unauthorized_certainty_upgrade"
+              ]
+            },
+            {
+              "text": "The captain confirms that bandits murdered the missing patrol.",
+              "semantic_identity": {},
+              "provenance": "generated_proposal",
+              "authority": "unauthorized",
+              "epistemic_status": "unresolved",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "do_not_persist",
+              "authorized": false,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "unowned_stateful_world_assertion"
+              ]
+            }
+          ]
+        },
+        "violations": [
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "provenance": "generated_proposal",
+            "consequence": "consequential",
+            "authorized": false,
+            "reason_codes": [
+              "unauthorized_certainty_upgrade",
+              "unauthorized_evidential_relation",
+              "unowned_stateful_world_assertion"
+            ],
+            "authority": "unauthorized",
+            "persistence": "do_not_persist",
+            "source_ref": "",
+            "outcome_classification": "consequentially_unresolved",
+            "semantic_identity": {}
+          }
+        ],
+        "proposed_facts": [
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "provenance": "generated_proposal",
+            "consequence": "consequential",
+            "authorized": false,
+            "reason_codes": [
+              "unauthorized_certainty_upgrade",
+              "unauthorized_evidential_relation",
+              "unowned_stateful_world_assertion"
+            ],
+            "authority": "unauthorized",
+            "persistence": "do_not_persist",
+            "source_ref": "",
+            "outcome_classification": "consequentially_unresolved",
+            "semantic_identity": {}
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "semantic_identity": {
+              "relation_kind": "evidential"
+            },
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "evidential",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "unauthorized_evidential_relation"
+            ]
+          },
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "established"
+            },
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "epistemic_status",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "unauthorized_certainty_upgrade"
+            ]
+          },
+          {
+            "text": "The captain confirms that bandits murdered the missing patrol.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "unowned_stateful_world_assertion"
+            ]
+          }
+        ],
+        "accepted_realized_claims": []
+      }
+    },
+    "final_outputs": [
+      "Guard Captain says, \"I cannot answer that from what is settled here.\"",
+      "Guard Captain says, \"I cannot answer that from what is settled here.\""
+    ],
+    "inherited_acceptance_gap": false
+  },
+  {
+    "family": "discovery",
+    "candidate": "You discover a hidden map beneath the notice board.",
+    "full_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "You discover a hidden map beneath the notice board."
+    },
+    "reduced_context_audit": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "You discover a hidden map beneath the notice board."
+    },
+    "final_outputs": [
+      "You discover a hidden map beneath the notice board.",
+      "You discover a hidden map beneath the notice board."
+    ],
+    "inherited_acceptance_gap": true
+  },
+  {
+    "family": "state_change",
+    "candidate": "The captain gives you ten gold coins and a signed entry permit.",
+    "full_context_audit": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "Guard Captain says, \"No. I cannot answer that from what I know.\"",
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_601d8bc1627e",
+        "hard_valid": false,
+        "declaration_validation": {
+          "schema_version": 1,
+          "structured_contract_present": true,
+          "hard_valid": true,
+          "accepted_claims": [],
+          "rejected_claims": [],
+          "violations": []
+        },
+        "narration_validation": {
+          "decision_id": "rc_601d8bc1627e",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "world_truth",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ]
+        },
+        "violations": [
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "proposed_facts": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "world_truth",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          },
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "accepted_realized_claims": []
+      }
+    },
+    "reduced_context_audit": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "Guard Captain says, \"No. I cannot answer that from what I know.\"",
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_601d8bc1627e",
+        "hard_valid": false,
+        "declaration_validation": {
+          "schema_version": 1,
+          "structured_contract_present": true,
+          "hard_valid": true,
+          "accepted_claims": [],
+          "rejected_claims": [],
+          "violations": []
+        },
+        "narration_validation": {
+          "decision_id": "rc_601d8bc1627e",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "Guard Captain says, \"No.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "world_truth",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ]
+        },
+        "violations": [
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "proposed_facts": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "Guard Captain says, \"No.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "world_truth",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          },
+          {
+            "text": "I cannot answer that from what I know.",
+            "semantic_identity": {},
+            "provenance": "generated_proposal",
+            "authority": "unauthorized",
+            "epistemic_status": "unresolved",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "do_not_persist",
+            "authorized": false,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "ignorance_not_authorized_answer",
+              "undeclared_consequential_claim"
+            ]
+          }
+        ],
+        "accepted_realized_claims": []
+      }
+    },
+    "final_outputs": [
+      "Guard Captain says, \"I cannot answer that from what is settled here.\"",
+      "Guard Captain says, \"I cannot answer that from what is settled here.\""
+    ],
+    "inherited_acceptance_gap": false
+  }
+]

@@ -1,0 +1,115 @@
+{
+  "scenario_id": "S04",
+  "title": "The serjeant",
+  "catalog_heading": "S04 — The serjeant",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "development_visible",
+  "catalog_partition": "development-visible",
+  "evidence_status": "development_visible",
+  "evidence_status_note": "Developers may open this conversation while diagnosing a failure.",
+  "primary_capability": "corrections_and_clarifications",
+  "secondary_capabilities": ["intent_recognition", "response_relevance", "npc_dialogue_coherence", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. No interlocutor.",
+  "authoritative_facts": [
+    "gate_serjeant owns the route-change sentence.",
+    "The eastern choke from census delays is a visible fact. The route change is a consequence of that choke worsening.",
+    "The catalog does not authorize the route change is why the wagons are stuck.",
+    "Thoran's sentence is a different NPC's fact."
+  ],
+  "npc_knowledge": [
+    "The serjeant may report the route change.",
+    "The serjeant has no authored knowledge of Thoran's private awareness and does not know who gave the order."
+  ],
+  "expected_outcomes": [
+    "gate_serjeant is bound when named.",
+    "A wrong speaker is corrected by the second line.",
+    "The wagon question is answered from the census choke, not by repeating the route sentence alone.",
+    "The last line stays inside the owned sentence."
+  ],
+  "acceptable_variations": [
+    "On S04.1 a correct serjeant answer means S04.2 may simply confirm the serjeant and restate the fact. That confirmation passes."
+  ],
+  "unacceptable_behaviors": [
+    "Binding gate_guard or guard_captain after the player says Gate Serjeant.",
+    "Inventing an order, a meeting, or a clock.",
+    "Answering the wagon question with only the route changed and never mentioning the choke or the wagons."
+  ],
+  "required_evidence": [
+    "Shared packet plus speaker id. S04.2 records whether the speaker changed after the correction."
+  ],
+  "setup_dependencies": [
+    "Alias coverage for serjeant and gate serjeant is already authored. The scenario uses that ordinary address. It is not a request for a rank ontology."
+  ],
+  "determinism": "mixed",
+  "turns": [
+    {
+      "turn_id": "S04.1",
+      "catalog_heading": "S04.1 — primary: intent recognition",
+      "primary_capability": "intent_recognition",
+      "player_input": "Serjeant, did the patrol's route change?",
+      "communicative_act": "Question to gate_serjeant.",
+      "interpretation_pass": "Question to gate_serjeant.",
+      "response_pass": "The route changed after the Ash Compact census choke worsened.",
+      "authority_pass": "No extra cause, order, or destination.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Speaker id."]
+    },
+    {
+      "turn_id": "S04.2",
+      "catalog_heading": "S04.2 — primary: corrections and clarifications",
+      "primary_capability": "corrections_and_clarifications",
+      "player_input": "I said the Gate Serjeant, not the captain and not the guard.",
+      "communicative_act": "Addressee correction.",
+      "interpretation_pass": "Addressee correction.",
+      "response_pass": "The serjeant is the speaker, and the route-change fact is the content if anything is repeated.",
+      "authority_pass": "Thoran may be named only to set him aside. He does not become the answer.",
+      "acceptable_variations": ["A confirmation that restates the route-change fact passes when S04.1 already answered as the serjeant."],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the route question remains. lost if the correction starts a new topic.",
+      "required_evidence": ["Whether the speaker changed after the correction."]
+    },
+    {
+      "turn_id": "S04.3",
+      "catalog_heading": "S04.3 — primary: response relevance",
+      "primary_capability": "response_relevance",
+      "player_input": "Is that why the eastern wagons are stuck?",
+      "communicative_act": "A cause question about the wagons, using the census choke already in play.",
+      "interpretation_pass": "A cause question about the wagons, using the census choke already in play.",
+      "response_pass": "The census delays are why the eastern choke is tight. The route change is another result of that choke, not the cause of the jam, unless the reply explicitly says it does not know which caused which and states only the two owned pieces. A reply that only repeats the route-change sentence fails response.",
+      "authority_pass": "No blockade, no count of wagons, and no hour of delay.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Answering with only the route changed and never mentioning the choke or the wagons."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if that can still be the route change or the choke from S04.1. lost if that becomes Thoran or the stew.",
+      "required_evidence": ["Shared packet."]
+    },
+    {
+      "turn_id": "S04.4",
+      "catalog_heading": "S04.4 — primary: NPC dialogue coherence",
+      "primary_capability": "npc_dialogue_coherence",
+      "player_input": "Say that again, but only what you actually know.",
+      "communicative_act": "A request to restate the serjeant's own limited knowledge.",
+      "interpretation_pass": "A request to restate the serjeant's own limited knowledge.",
+      "response_pass": "The route-change sentence, and nothing past it. Uncertainty on the wagon cause may remain one clause.",
+      "authority_pass": "No new personnel and no new order.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved for the serjeant and the route sentence.",
+      "required_evidence": ["Speaker id."]
+    }
+  ]
+}

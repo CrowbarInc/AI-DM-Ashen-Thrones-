@@ -1,0 +1,58 @@
+EEEEEEEEEEE                                                              [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_generates_stable_summary_zip_manifest_and_required_sections _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+__ ERROR at setup of test_manifest_has_provenance_and_exact_archive_metrics ___
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_ ERROR at setup of test_behavioral_disagreements_and_review_decisions_are_on_front_page _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+___________ ERROR at setup of test_empty_decision_state_is_explicit ___________
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+____ ERROR at setup of test_new_and_preexisting_failures_are_distinguished ____
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_ ERROR at setup of test_sensitive_recursive_and_oversized_sources_are_explicitly_omitted _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_ ERROR at setup of test_missing_optional_source_is_reported_without_corrupting_bundle _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_ ERROR at setup of test_structural_only_campaign_has_lightweight_handoff_without_behavioral_claims _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_____ ERROR at setup of test_generation_does_not_modify_canonical_sources _____
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_ ERROR at setup of test_repeated_generation_is_byte_stable_for_fixed_inputs_and_timestamp _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+_ ERROR at setup of test_bundle_only_self_contained_review_answers_required_questions _
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_07\\export'
+=========================== short test summary info ===========================
+ERROR tests/test_review_handoff.py::test_generates_stable_summary_zip_manifest_and_required_sections
+ERROR tests/test_review_handoff.py::test_manifest_has_provenance_and_exact_archive_metrics
+ERROR tests/test_review_handoff.py::test_behavioral_disagreements_and_review_decisions_are_on_front_page
+ERROR tests/test_review_handoff.py::test_empty_decision_state_is_explicit - F...
+ERROR tests/test_review_handoff.py::test_new_and_preexisting_failures_are_distinguished
+ERROR tests/test_review_handoff.py::test_sensitive_recursive_and_oversized_sources_are_explicitly_omitted
+ERROR tests/test_review_handoff.py::test_missing_optional_source_is_reported_without_corrupting_bundle
+ERROR tests/test_review_handoff.py::test_structural_only_campaign_has_lightweight_handoff_without_behavioral_claims
+ERROR tests/test_review_handoff.py::test_generation_does_not_modify_canonical_sources
+ERROR tests/test_review_handoff.py::test_repeated_generation_is_byte_stable_for_fixed_inputs_and_timestamp
+ERROR tests/test_review_handoff.py::test_bundle_only_self_contained_review_answers_required_questions

@@ -1,0 +1,133 @@
+{
+  "probe": "P2",
+  "player": "Baker, which loaf do you usually keep for yourself?",
+  "scene": "baker",
+  "infrastructure_rerun": false,
+  "http_status": 200,
+  "error": null,
+  "upstream_api_error": null,
+  "meaningful_model_generation": true,
+  "emitted": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+  "sealed": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+  "accepted": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+  "c18_exact_equal": true,
+  "c18_mutation_blocked": false,
+  "provenance": "initial_generation",
+  "attempt": 1,
+  "acceptance": {
+    "why": "initial_hard_valid",
+    "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared."
+  },
+  "selected_envelope": "narration_only",
+  "response_operation": "incidental_dialogue",
+  "declaration_expectation": "reply_not_required",
+  "consequential_realization_required": false,
+  "declaration_channel_exposed": false,
+  "selector_projection_only": true,
+  "selector_authority_owner": "gm_resolution_decision",
+  "selector_reason": "ordinary_incidental_dialogue_reply_requires_no_declaration",
+  "provider_response_contracts": [
+    "narration_only"
+  ],
+  "declared_claims_in_any_generation_system_prompt": false,
+  "api_response_schema_present": false,
+  "normalized_declared_claims": [],
+  "normalized_empty_declarations": true,
+  "declaration_authorship": false,
+  "accepted_model_authored_declarations": false,
+  "provider_attempts": 1,
+  "retry": false,
+  "input_tokens": 23413,
+  "output_tokens": 85,
+  "total_tokens": 23498,
+  "initial_player_facing_text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+  "initial_structural_shape": {
+    "json_object": true,
+    "keys": [
+      "narration"
+    ]
+  },
+  "initial_declared_claims": [],
+  "initial_contract_failure": null,
+  "initial_contract_reason": null,
+  "retry_player_facing_text": null,
+  "retry_structural_shape": null,
+  "retry_declared_claims": null,
+  "validation_attempt_1_reasons": [],
+  "validation_attempt_2_reasons": null,
+  "regeneration_feedback": null,
+  "player_facing_leakage": [],
+  "authority_problems": [],
+  "temporal_after": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [
+      {
+        "semantic_identity": {},
+        "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+        "authority": "bounded_incidental",
+        "provenance": "bounded_incidental",
+        "epistemic_status": "",
+        "relation_kind": "ordinary_predicate",
+        "scene_id": "bread_stall",
+        "source_turn": 2
+      }
+    ],
+    "rejected_consequential": [],
+    "active_claim": null,
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "bread_stall",
+      "active_interlocutor": {
+        "id": "baker",
+        "label": "Baker",
+        "kind": "interlocutor",
+        "scene_id": "bread_stall",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_d4c97cad4722"
+    },
+    "turn_counter": 2,
+    "active_scene_id": "bread_stall"
+  },
+  "calls": [
+    {
+      "index": 2,
+      "kind": "generation",
+      "retry_attempt": 0,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "response_id": "resp_036b3829385bdcad006ac828ae977087d29808874f9edbe63c",
+      "input_chars": 100313,
+      "recipe_present": true,
+      "retry_context_present": false,
+      "provider_response_contract": "narration_only",
+      "exact_narration_only_contract_present": true,
+      "declared_claims_in_system_prompt": false,
+      "api_response_schema_present": false,
+      "create_kwarg_keys": [],
+      "input_tokens": 23413,
+      "output_tokens": 85,
+      "total_tokens": 23498,
+      "latency_seconds": 3.58,
+      "status": "completed",
+      "error": null,
+      "meaningful_generation": true
+    }
+  ],
+  "contract_id": "rc_d4c97cad4722",
+  "recipe_schema": "decision_facing_answer_recipe_v1",
+  "recipe_turn_operation": {
+    "projection_only": true,
+    "authority_owner": "gm_resolution_decision",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "semantic_ceiling": "transient_dialogue_not_durable_fact",
+    "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+  }
+}

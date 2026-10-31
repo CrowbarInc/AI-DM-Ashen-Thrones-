@@ -1,0 +1,103 @@
+{
+  "snapshot": {
+    "version": "ATGB-03B-1",
+    "run_id": "ec1a67ba444549dba86e429e5e5fe51d",
+    "requests": 1,
+    "request_upper_bound": 1,
+    "dispatched_requests": 1,
+    "pending_requests": 0,
+    "input_tokens": null,
+    "output_tokens": null,
+    "total_tokens": null,
+    "stopped": true,
+    "stop_reason": "provider usage accounting unavailable",
+    "records": [
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "ec1a67ba444549dba86e429e5e5fe51d",
+        "attempt_id": "5a8c55676a824ebab5173a2e35b93968",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:06:00.193746+00:00",
+        "time": "2026-10-19T09:06:07.604752+00:00",
+        "sent": true,
+        "request_id": null,
+        "model": "gpt-4.1-mini",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "usage_consistent": false,
+        "refusal": null,
+        "completion_status": "failed",
+        "dispatch_attempted": true,
+        "latency_ms": 6519.199,
+        "error": "provider_error"
+      }
+    ],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "ec1a67ba444549dba86e429e5e5fe51d",
+        "time": "2026-10-19T09:05:59.049282+00:00"
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "ec1a67ba444549dba86e429e5e5fe51d",
+        "attempt_id": "5a8c55676a824ebab5173a2e35b93968",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:06:00.193746+00:00",
+        "time": "2026-10-19T09:06:00.193746+00:00"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "ec1a67ba444549dba86e429e5e5fe51d",
+        "attempt_id": "5a8c55676a824ebab5173a2e35b93968",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:06:00.193746+00:00",
+        "time": "2026-10-19T09:06:01.084599+00:00"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "ec1a67ba444549dba86e429e5e5fe51d",
+        "attempt_id": "5a8c55676a824ebab5173a2e35b93968",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:06:00.193746+00:00",
+        "time": "2026-10-19T09:06:07.604752+00:00",
+        "sent": true,
+        "request_id": null,
+        "model": "gpt-4.1-mini",
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "usage_consistent": false,
+        "refusal": null,
+        "completion_status": "failed",
+        "dispatch_attempted": true,
+        "latency_ms": 6519.199,
+        "error": "provider_error"
+      }
+    ]
+  },
+  "end_to_end_ms": 7471.197,
+  "sdk_clients": [
+    {
+      "max_retries": 0
+    }
+  ],
+  "max_application_admissions": 2,
+  "sdk_transport_retries": 0,
+  "cost": null,
+  "cost_reason": "No configured price table; measured usage only."
+}

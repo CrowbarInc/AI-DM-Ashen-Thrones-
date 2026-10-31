@@ -1,0 +1,52 @@
+{
+  "case_id": "s02q0",
+  "family": "s02",
+  "partition": "holdout",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "c3c2a4d05bd00ed54b0715c31e02a28120bdc910e0b7c3512bfc50611a7786ef",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Dockworkers reportedly saw blue fire"
+    ],
+    "qualifiers": [
+      "reportedly"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s02"
+    ],
+    "answered_arguments": [
+      "agent",
+      "theme"
+    ],
+    "missing_arguments": [
+      "location",
+      "time"
+    ],
+    "conflict": false,
+    "reason": "The fact explicitly states that Dockworkers reportedly saw the blue fire, providing a direct answer with the qualifier 'reportedly'."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

@@ -1,0 +1,66 @@
+{
+  "campaign": {
+    "campaign_id": "atgb_r2_02",
+    "run_count": 1,
+    "turn_count": 2,
+    "gm_boundary": "Offline host grounding and existing resolver. No live model narration."
+  },
+  "evidence_scope": "deterministic_host_replay",
+  "semantic_behavioral_evidence": false,
+  "selected_evidence": {
+    "representative_success": {"example_id": "S03.3-after"},
+    "boundary_success": {"example_id": "two-npc-you"},
+    "representative_failure": {},
+    "severe_worst_failure": {},
+    "evaluator_disagreement": {},
+    "unexpected_unclassified": {},
+    "stress_probe": {}
+  },
+  "examples": [
+    {
+      "example_id": "S03.3-after",
+      "campaign_id": "atgb_r2_02",
+      "scenario_id": "S03.3",
+      "turn_index": 3,
+      "player_input": "If I ask you again later, will you still tell me that same thing?",
+      "player_input_classification": ["representative_player_behavior", "human_captured"],
+      "prior_context": "S03.1 and S03.2 already address the tavern runner. Active social target is tavern_runner.",
+      "exact_gm_output": "Host decision text is empty. Resolver hint: Player spoke with Tavern Runner. No authored answer was available. Narrate honest uncertainty or a bounded conversational reply without inventing facts the speaker does not have.",
+      "historical_result": "Before repair: Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "semantic_result": "grounding_pass_recipient_tavern_runner",
+      "human_review": {"status": "UNREVIEWED", "rationale": "Repair-effect replay awaits external review."},
+      "source_artifact_path": "artifacts/atgb/atgb_r2_02/historical_replay_after.json",
+      "evaluator_disagreement": {"present": false}
+    },
+    {
+      "example_id": "S05.3-after",
+      "campaign_id": "atgb_r2_02",
+      "scenario_id": "S05.3",
+      "turn_index": 3,
+      "player_input": "Tell me more about that.",
+      "player_input_classification": ["representative_player_behavior", "human_captured"],
+      "prior_context": "Runner told the patrol rumor. The following board question received a GM validation failure. Active social target remains tavern_runner.",
+      "exact_gm_output": "Host decision text is empty. Resolver hint is the same uncertainty line as S03.3. No rumor sentence is emitted. Subject of 'that' is not resolved.",
+      "historical_result": "Before repair: Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "semantic_result": "grounding_pass_subject_unresolved",
+      "human_review": {"status": "UNREVIEWED", "rationale": "Recipient repair is separate from subject understanding."},
+      "source_artifact_path": "artifacts/atgb/atgb_r2_02/historical_replay_after.json",
+      "evaluator_disagreement": {"present": false}
+    },
+    {
+      "example_id": "two-npc-you",
+      "campaign_id": "atgb_r2_02",
+      "scenario_id": "related-variation",
+      "turn_index": 1,
+      "player_input": "Can you tell me what happened?",
+      "player_input_classification": ["boundary_case", "synthetic_negative_control"],
+      "prior_context": "Porter Hale and Clerk Ivo are visible. No active social target. Provider candidate is Porter Hale.",
+      "exact_gm_output": "Grounding requires clarification. target_id is null. mutation_eligibility is false.",
+      "historical_result": "Not a historical ATGB turn.",
+      "semantic_result": "ambiguity_preserved",
+      "human_review": {"status": "UNREVIEWED", "rationale": "Related variation authored with this repair."},
+      "source_artifact_path": "tests/test_atgb_r2_02_speech_participant_grounding.py",
+      "evaluator_disagreement": {"present": false}
+    }
+  ]
+}

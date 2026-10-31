@@ -1,0 +1,46 @@
+from pathlib import Path
+import json,difflib
+out=Path('artifacts/atgb/atgb_r1_02')
+(out/'session_handoff.diff').write_text(''.join(difflib.unified_diff((out/'NEXT_SESSION_before.md').read_text(encoding='utf-8').splitlines(True),Path('docs/NEXT_SESSION.md').read_text(encoding='utf-8').splitlines(True),fromfile='before/docs/NEXT_SESSION.md',tofile='after/docs/NEXT_SESSION.md')),encoding='utf-8')
+files=[
+'game/conversational_orchestration.py','tests/test_atgb_r1_02_revision_boundary.py','tests/test_pr_ef_r4_authorization.py','tests/fixtures/pr_ef_r4_holdouts.json','docs/NEXT_SESSION.md',
+'development/reports/atgb_r1_01_s08_2_causal_trace.md','artifacts/atgb/atgb_03c/S08/transcript.md',
+'data/validation/atgb/visible/S08.json','artifacts/pr_eg_r6_r5/36_FINAL_VERDICT.md','artifacts/pr_eg_r6_r5/32_REPAIR_PRIORITIZATION.md']
+files += [p.as_posix() for p in Path('development/reports/atgb_r1_02').glob('*.md')]
+files += [(out/p).as_posix() for p in ['implementation.diff','session_handoff.diff','s08_2_trace.json','capture_trace.py','orchestration_before.py','baseline_hashes.json','preservation_check.json','test_commands.json','test_summary.json','targeted.xml','targeted.txt','targeted_exit.txt','final.xml','final.txt','final_exit.txt','pre_repair.xml','pre_repair.txt','pre_repair_exit.txt','verified.xml','verified.txt','verified_exit.txt','diagnose.txt','repository_status_before.txt','repository_status_after.txt','run_pre_repair_regression.py','build_evidence.py','prepare_reports.py']]
+config={
+'campaign_id':'atgb_r1_02_mechanical_revision_boundary',
+'campaign_name':'ATGB-R1-02 Mechanical Revision Boundary Repair',
+'campaign_date':'2026-10-18',
+'purpose':'Minimal mechanical revision-entry repair with deterministic regressions and separate downstream response inspection.',
+'objective_status':'B — CONDITIONAL; BOUNDED ROUTING REPAIR DEMONSTRATED; EXTERNAL REVIEW REQUIRED',
+'executive_summary':'S08.2 no longer enters pending-intention revision solely from “I meant” or a CORRECTION purpose. Implicit revisions require an existing intention referent and interpreted action components; explicit revision requests still reach established safeguards. Legitimate revision holdouts remain intact. Failure class: contract. Targeted tests: 133 passed. Broader: 443 passed / 9 failed; the same nine failures reproduce before repair (338 passed / 347 existing tests). No new failures in the matched slice. Routing PASS in both controlled S08.2 stubs. Empty-evidence response adequacy FAIL: “That has not been established in the information available to you.” Production adequacy NOT EVALUABLE because the historical interpretation/evidence refs were not retained and live calls are prohibited. Verdict B reflects the broader red regression surface and unestablished end-to-end adequacy, not a claim that unrelated failures were caused here. 3,564 protected files unchanged. No live provider calls, unrelated production edits authored, extra model authority or experimental integration. Stop for external review; no ATGB-R1-03.',
+'changes':{
+ 'production':['Only game/conversational_orchestration.py: revision regex/entry gate and CORRECTION fallthrough; existing action/status/scene/disclosure owners retained.'],
+ 'validation':['105 new deterministic boundary, counterexample, ambiguity, response-plan and API-state tests. Existing tests, frozen fixtures and ATGB judgments unchanged.'],
+ 'tooling':['Campaign-local offline trace/evidence/report scripts; no reusable tool or production framework changed.'],
+ 'documentation':['Eight requested reports plus index and canonical docs/NEXT_SESSION.md update.'],
+ 'generated_artifacts':['Exact test commands, exit codes, XML/logs, matched baseline failure evidence, S08.2 before/after trace, hashes, scoped diffs, repository status, standardized evidence packet and review ZIP.']},
+ 'testing':{
+ 'focused':'133 passed, 0 failed, exit 0: 105 new regressions + all 28 frozen PR-EF-R4 authorization tests.',
+ 'broader':'452 tests: 443 passed / 9 failed, exit 1. Matched pre-repair existing slice: 347 tests, 338 passed / identical 9 failures, exit 1. Exact IDs/logs and commands included.',
+ 'full_suite':'Not run; no full-suite-green claim.',
+ 'runtime_validation':'Two S08.2 response-plan stubs (GM/DESCRIPTION and GM/CORRECTION), preserved prior delivered context, empty selected evidence. Saved original source and repaired source both executed. Routing PASS, stub adequacy FAIL, production adequacy NOT EVALUABLE.',
+ 'model_runtime_boundary':'No live providers. Pytest live-model guard active. HTTP tests ran outside sandbox only to allow Windows local socketpair. Source-level trace has no provider calls.',
+ 'new_regressions':'No new failures in matched existing slice. All new tests pass. Initial three new API assertion errors corrected to allow existing delivered-history/save metadata writes while preserving gameplay/intention invariants.',
+ 'pre_existing_failures':'Nine in tests/test_pr_eg_r6_r2_r1_referents.py: eight clarification-vs-unknown failures and missing bound_referent_id in historical-id test. Pre-repair source reproduces all nine. Initial sandbox HTTP attempts interrupted on socketpair accept; environment issue, not game failure.'},
+ 'known_problems':{
+ 'campaign_specific':['Empty-evidence ordinary GM fallback is still inadequate for S08.2; no downstream repair authorized.','Raw historical provider record missing; actual new production response not evaluated.','Existing explicit instead/make-that/revise cues remain conservative and can be broad; no universal language classifier claim.'],
+ 'pre_existing':['Nine matched PR-EG referent failures remain.','PR-EG-R6-R4-R1 integration ban remains; R5 is diagnostic only.','Extensive dirty/untracked worktree predates this pass; no commit/push. Authenticated human ATGB review remains pending.']},
+ 'decisions_requiring_human_review':['Review the bounded repair and conditional verdict before any next pass.','Separately authorize a controlled new live S08.2 trial only after review if actual evidence selection/response adequacy should be assessed. No live call or ATGB-R1-03 is authorized by this package.'],
+ 'missing_concepts':['No new subsystem introduced. Downstream evidence selection/response sufficiency is an observed separate boundary, deferred.'],
+ 'does_not_prove':['End-to-end S08.2 success, broad conversational competence, independent held-out generalization, full-suite green, ATGB performance improvement or any measured latency/token saving.','No improvement is claimed for PR-EG-R6-R5 historical 0/25 correction results.'],
+ 'recommended_next_step':'Stop for external review of CURRENT_REVIEW ZIP. After acceptance, consider a separately authorized controlled live S08.2 trial. Do not begin ATGB-R1-03 or another repair in this pass.',
+ 'primary_report':'development/reports/atgb_r1_02_mechanical_revision_boundary.md',
+ 'evidence_packets':['artifacts/validation_evidence/atgb_r1_02'],
+ 'self_contained_review_test':'Bundle includes eight reports, source/diff/tests, exact commands/exits/counts, original transcript, before/after response-plan trace, matched nine baseline failures, protected hashes, authority/performance/limitations and repository status. ZIP CRC and included-source hashes verified during generation.',
+ 'configuration_source':'data/validation/review_handoffs/atgb_r1_02_mechanical_revision_boundary.json',
+ 'supporting_files':[{'path':p,'role':'bounded_repair_support','why':'Explicit implementation, validation, preserved-baseline or review provenance supporting the eight requested reports.','behavioral_evidence':p.endswith('s08_2_trace.json') or p.endswith('transcript.md'),'human_review_required':True} for p in files]
+}
+Path(config['configuration_source']).write_text(json.dumps(config,indent=2,ensure_ascii=False),encoding='utf-8')
+print('Explicit review configuration and handoff diff written.')

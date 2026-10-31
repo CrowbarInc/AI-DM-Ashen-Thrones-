@@ -1,6 +1,6 @@
 # BQ-C4 Final Graduation Decision
 
-**Date:** 2026-06-06T00:00:00Z
+**Date:** 2026-10-18T16:31:34Z
 **Protected replay only:** true
 
 ## Governance context (CO99)
@@ -21,21 +21,21 @@
 
 # Trajectory Activation
 
-- Snapshot count: `37`
+- Snapshot count: `43`
 - Trajectory available: `true`
-- Portfolio risk change: `20.8000`
-- Governance health change: `-18.9000`
-- Lifecycle health change: `-15.0000`
-- Operational readiness change: `-7.5000`
-- Effectiveness change: `-0.0400`
-- Maturity change: `-9.0000`
-- Stability change: `-25.0000`
+- Portfolio risk change: `-0.5000`
+- Governance health change: `-5.1000`
+- Lifecycle health change: `-21.0000`
+- Operational readiness change: `0.0000`
+- Effectiveness change: `0.0000`
+- Maturity change: `-0.9000`
+- Stability change: `-15.0000`
 - Message: Trajectory change detection active across baseline and current snapshots.
 
 # Confidence Recalculation
 
-- Calibration score: `53.0`
-- Largest calibration gap: `0.70`
+- Calibration score: `65.3`
+- Largest calibration gap: `0.52`
 - Graduation confidence ready: `false`
 - Forecast status: `calibrated`
 - Governance status: `overconfident`
@@ -44,27 +44,27 @@
 # Calibration Comparison
 
 - BQ-C3 calibration score: `57.3`
-- BQ-C4 calibration score: `53.0`
-- Score delta: `-4.3`
+- BQ-C4 calibration score: `65.3`
+- Score delta: `+8.0`
 - BQ-C3 largest gap: `0.61`
-- BQ-C4 largest gap: `0.70`
-- Gap delta: `+0.09`
+- BQ-C4 largest gap: `0.52`
+- Gap delta: `-0.09`
 - Trajectory activated: `true`
 
 # Graduation Readiness
 
-- Graduation readiness score: `93.5`
+- Graduation readiness score: `94.7`
 - Readiness level: `Ready for graduation`
 - Overall completion score: `96.2`
-- Overall maturity score: `68.5`
-- Operational readiness score: `91.3`
+- Overall maturity score: `76.8`
+- Operational readiness score: `100.0`
 - Program graduated: `false`
 - Critical blind spots: `0`
 
 # Remaining Blockers
 
-- calibration score below target (53.0 < 70)
-- largest calibration gap above target (0.70 > 0.20)
+- calibration score below target (65.3 < 70)
+- largest calibration gap above target (0.52 > 0.20)
 - graduation_confidence_ready is false
 - completion dimensions incomplete: governance
 

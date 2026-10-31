@@ -1,0 +1,3717 @@
+{
+  "turns": [
+    {
+      "conversation": "primary",
+      "turn": 1,
+      "session_projection_available": true,
+      "newly_observed_domains": [
+        "active_scene_id",
+        "visited_scene_ids",
+        "flags",
+        "inventory",
+        "clocks",
+        "npc_runtime",
+        "scene_runtime",
+        "scene_state",
+        "runtime_scene_overlays",
+        "clue_knowledge",
+        "lead_registry"
+      ],
+      "selected_topic": {
+        "id": "street",
+        "text": "The street beyond the gate is the north road.",
+        "clue_id": "north_road",
+        "clue_text": null
+      },
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 2,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Sergeant Mara what the street beyond the gate is called.",
+          "after": "What did you mean by north road?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 2,
+              "last_turn": 2
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 2,
+              "last_turn": 2
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure",
+          "before": null,
+          "after": {
+            "topic:mean_north_road": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "progress_score_total": 0.0,
+              "last_answer": "",
+              "last_turn": 2,
+              "speaker_targets": {
+                "sergeant_mara": {
+                  "repeat_count": 1,
+                  "low_progress_streak": 0,
+                  "patience": 3,
+                  "last_turn": 2
+                }
+              },
+              "previous_probe_dimension": "",
+              "last_probe_dimension": "general",
+              "last_player_input": "What did you mean by north road?"
+            }
+          }
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current",
+          "before": null,
+          "after": {
+            "topic_key": "topic:mean_north_road",
+            "speaker_key": "sergeant_mara",
+            "turn": 2,
+            "player_text": "What did you mean by north road?",
+            "interaction_kind": "social",
+            "interaction_mode": "social",
+            "social_intent_class": "social_exchange",
+            "npc_name": "Sergeant Mara"
+          }
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_last_topic_key",
+          "before": null,
+          "after": "topic:mean_north_road"
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 3,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 4,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "What did you mean by north road?",
+          "after": "I ask Sergeant Mara, do you prefer morning or evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 2,
+              "last_turn": 2
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 2,
+              "last_turn": 2
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 3,
+              "last_turn": 3
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 3,
+              "last_turn": 3
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_player_input",
+          "before": "What did you mean by north road?",
+          "after": "I ask Sergeant Mara, do you prefer morning or evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_turn",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/previous_probe_dimension",
+          "before": "",
+          "after": "general"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/repeat_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/last_turn",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/repeat_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/player_text",
+          "before": "What did you mean by north road?",
+          "after": "I ask Sergeant Mara, do you prefer morning or evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/turn",
+          "before": 2,
+          "after": 3
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 5,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Sergeant Mara, do you prefer morning or evening?",
+          "after": "Why do you prefer the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 3,
+              "last_turn": 3
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 3,
+              "last_turn": 3
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 4,
+              "last_turn": 4
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 4,
+              "last_turn": 4
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_player_input",
+          "before": "I ask Sergeant Mara, do you prefer morning or evening?",
+          "after": "Why do you prefer the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_probe_dimension",
+          "before": "general",
+          "after": "cause"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_turn",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/repeat_count",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/last_turn",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/repeat_count",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/player_text",
+          "before": "I ask Sergeant Mara, do you prefer morning or evening?",
+          "after": "Why do you prefer the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/turn",
+          "before": 3,
+          "after": 4
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 6,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "Why do you prefer the evening?",
+          "after": "I ask Sergeant Mara who forged the lantern."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 4,
+              "last_turn": 4
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 4,
+              "last_turn": 4
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 5,
+              "last_turn": 5
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 5,
+              "last_turn": 5
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Sergeant Mara what the street beyond the gate is called.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            }
+          ],
+          "after": [
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 4,
+          "after": 5
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 7,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 8,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 5,
+          "after": 6
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 5,
+          "after": 6
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/suspicion",
+          "before": 0,
+          "after": 1
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Sergeant Mara who forged the lantern.",
+          "after": "What did you mean by that?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 5,
+              "last_turn": 5
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 5,
+              "last_turn": 5
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 6,
+              "last_turn": 6
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 6,
+              "last_turn": 6
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "What did you mean by north road?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 5,
+          "after": 6
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_player_input",
+          "before": "Why do you prefer the evening?",
+          "after": "What did you mean by that?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_probe_dimension",
+          "before": "cause",
+          "after": "general"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_turn",
+          "before": 4,
+          "after": 6
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/previous_probe_dimension",
+          "before": "general",
+          "after": "cause"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/repeat_count",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/last_turn",
+          "before": 4,
+          "after": 6
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/repeat_count",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/player_text",
+          "before": "Why do you prefer the evening?",
+          "after": "What did you mean by that?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/turn",
+          "before": 4,
+          "after": 6
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 9,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 6,
+          "after": 7
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 6,
+          "after": 7
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "What did you mean by that?",
+          "after": "I ask Sergeant Mara when the gate is left unguarded."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 6,
+              "last_turn": 6
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 6,
+              "last_turn": 6
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 7,
+              "last_turn": 7
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 7,
+              "last_turn": 7
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Sergeant Mara, do you prefer morning or evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            }
+          ],
+          "after": [
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 6,
+          "after": 7
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 10,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 11,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 12,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 7,
+          "after": 8
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 7,
+          "after": 8
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Sergeant Mara when the gate is left unguarded.",
+          "after": "I ask Sergeant Mara what secret passage bypasses the gate."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 7,
+              "last_turn": 7
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 7,
+              "last_turn": 7
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 8,
+              "last_turn": 8
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 8,
+              "last_turn": 8
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "Why do you prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            },
+            {
+              "text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 8
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 7,
+          "after": 8
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 13,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": {
+        "id": "street",
+        "text": "The street beyond the gate is the north road.",
+        "clue_id": "north_road",
+        "clue_text": null
+      },
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 8,
+          "after": 9
+        },
+        {
+          "path": "/lead_registry/north_road/last_touched_turn",
+          "before": 1,
+          "after": 9
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 8,
+          "after": 9
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/trust",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Sergeant Mara what secret passage bypasses the gate.",
+          "after": "I ask Sergeant Mara about the north road again."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/npc_lead_discussions/sergeant_mara/north_road/last_discussed_turn",
+          "before": 1,
+          "after": 9
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/npc_lead_discussions/sergeant_mara/north_road/mention_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/npc_lead_discussions/sergeant_mara/north_road/player_acknowledged",
+          "before": false,
+          "after": true
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/npc_lead_discussions/sergeant_mara/north_road/player_acknowledged_turn",
+          "before": null,
+          "after": 9
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 8,
+              "last_turn": 8
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 8,
+              "last_turn": 8
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 9,
+              "last_turn": 9
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 9,
+              "last_turn": 9
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Sergeant Mara who forged the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            },
+            {
+              "text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 8
+            }
+          ],
+          "after": [
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            },
+            {
+              "text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 8
+            },
+            {
+              "text": "I ask Sergeant Mara about the north road again.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 9
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 8,
+          "after": 9
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 14,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "primary",
+      "turn": 15,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 9,
+          "after": 10
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/last_interaction_turn",
+          "before": 9,
+          "after": 10
+        },
+        {
+          "path": "/npc_runtime/sergeant_mara/suspicion",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Sergeant Mara about the north road again.",
+          "after": "I ask Sergeant Mara, do you still prefer the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 9,
+              "last_turn": 9
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 9,
+              "last_turn": 9
+            }
+          ],
+          "after": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 10,
+              "last_turn": 10
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 10,
+              "last_turn": 10
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            },
+            {
+              "text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 8
+            },
+            {
+              "text": "I ask Sergeant Mara about the north road again.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 9
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            },
+            {
+              "text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 8
+            },
+            {
+              "text": "I ask Sergeant Mara about the north road again.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 9
+            },
+            {
+              "text": "I ask Sergeant Mara, do you still prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 10
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 9,
+          "after": 10
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_player_input",
+          "before": "What did you mean by that?",
+          "after": "I ask Sergeant Mara, do you still prefer the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/last_turn",
+          "before": 6,
+          "after": 10
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/previous_probe_dimension",
+          "before": "cause",
+          "after": "general"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/repeat_count",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/last_turn",
+          "before": 6,
+          "after": 10
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean_north_road/speaker_targets/sergeant_mara/repeat_count",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/player_text",
+          "before": "What did you mean by that?",
+          "after": "I ask Sergeant Mara, do you still prefer the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/turn",
+          "before": 6,
+          "after": 10
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 1,
+      "session_projection_available": true,
+      "newly_observed_domains": [
+        "active_scene_id",
+        "visited_scene_ids",
+        "flags",
+        "inventory",
+        "clocks",
+        "npc_runtime",
+        "scene_runtime",
+        "scene_state",
+        "runtime_scene_overlays",
+        "clue_knowledge",
+        "lead_registry"
+      ],
+      "selected_topic": {
+        "id": "night_watch",
+        "text": "Guards watch the north gate throughout the night.",
+        "clue_id": null,
+        "clue_text": null
+      },
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 2,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/last_interaction_turn",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_passive",
+          "before": true,
+          "after": false
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Corporal Bren whether guards watch the north gate at night.",
+          "after": "What did you mean by that?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/passive_action_streak",
+          "before": 1,
+          "after": 0
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_contextual_leads",
+          "before": [
+            {
+              "key": "active_event_corporal_bren_mutters_word_is_guards",
+              "kind": "active_event",
+              "subject": "corporal bren mutters, \"word is, guards",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 1,
+              "last_turn": 1
+            }
+          ],
+          "after": [
+            {
+              "key": "active_event_corporal_bren_mutters_word_is_guards",
+              "kind": "active_event",
+              "subject": "corporal bren mutters, \"word is, guards",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 2,
+              "last_turn": 2
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure",
+          "before": null,
+          "after": {
+            "topic:mean": {
+              "repeat_count": 1,
+              "low_progress_streak": 0,
+              "progress_score_total": 0.0,
+              "last_answer": "",
+              "last_turn": 2,
+              "speaker_targets": {
+                "corporal_bren": {
+                  "repeat_count": 1,
+                  "low_progress_streak": 0,
+                  "patience": 3,
+                  "last_turn": 2
+                }
+              },
+              "previous_probe_dimension": "",
+              "last_probe_dimension": "general",
+              "last_player_input": "What did you mean by that?"
+            }
+          }
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current",
+          "before": null,
+          "after": {
+            "topic_key": "topic:mean",
+            "speaker_key": "corporal_bren",
+            "turn": 2,
+            "player_text": "What did you mean by that?",
+            "interaction_kind": "social",
+            "interaction_mode": "social",
+            "social_intent_class": "social_exchange",
+            "npc_name": "Corporal Bren"
+          }
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_last_topic_key",
+          "before": null,
+          "after": "topic:mean"
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 3,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/last_interaction_turn",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "What did you mean by that?",
+          "after": "I ask Corporal Bren who made the lantern."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 2,
+          "after": 3
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 4,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/last_interaction_turn",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Corporal Bren who made the lantern.",
+          "after": "I ask Corporal Bren, do you prefer the morning or the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean/last_player_input",
+          "before": "What did you mean by that?",
+          "after": "I ask Corporal Bren, do you prefer the morning or the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean/last_turn",
+          "before": 2,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean/previous_probe_dimension",
+          "before": "",
+          "after": "general"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean/repeat_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean/speaker_targets/corporal_bren/last_turn",
+          "before": 2,
+          "after": 4
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure/topic:mean/speaker_targets/corporal_bren/repeat_count",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/player_text",
+          "before": "What did you mean by that?",
+          "after": "I ask Corporal Bren, do you prefer the morning or the evening?"
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/topic_pressure_current/turn",
+          "before": 2,
+          "after": 4
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 5,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 6,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": {
+        "id": "street",
+        "text": "The street beyond the gate is the north road.",
+        "clue_id": "north_road",
+        "clue_text": null
+      },
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "path": "/clue_knowledge/north_road",
+          "before": null,
+          "after": {
+            "state": "discovered",
+            "source_scene": "waystation_courtyard",
+            "presentation": "explicit",
+            "text": "The street beyond the gate is the north road."
+          }
+        },
+        {
+          "path": "/lead_registry/north_road",
+          "before": null,
+          "after": {
+            "id": "north_road",
+            "title": "The street beyond the gate is the north road.",
+            "summary": "The street beyond the gate is the north road.",
+            "type": "rumor",
+            "lifecycle": "discovered",
+            "status": "active",
+            "confidence": "plausible",
+            "discovery_source": "clue_explicit",
+            "first_discovered_turn": 5,
+            "last_updated_turn": 5,
+            "committed_at_turn": null,
+            "commitment_source": null,
+            "commitment_strength": null,
+            "resolved_at_turn": null,
+            "resolution_type": null,
+            "resolution_summary": null,
+            "obsolete_reason": null,
+            "escalation_level": 0,
+            "escalation_reason": null,
+            "escalated_at_turn": null,
+            "unlocked_by_lead_id": null,
+            "obsolete_by_lead_id": null,
+            "next_step": "",
+            "related_clue_ids": [],
+            "related_npc_ids": [],
+            "related_location_ids": [],
+            "owner_faction_id": null,
+            "priority": 0,
+            "last_touched_turn": 5,
+            "stale_after_turns": null,
+            "parent_lead_id": null,
+            "supersedes": [],
+            "superseded_by": null,
+            "unlocks": [],
+            "blocked_by": [],
+            "related_faction_ids": [],
+            "related_scene_ids": [
+              "waystation_courtyard"
+            ],
+            "tags": [],
+            "evidence_clue_ids": [
+              "north_road"
+            ],
+            "consequence_ids": [],
+            "metadata": {}
+          }
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/last_interaction_turn",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/revealed_topics",
+          "before": [
+            "night_watch"
+          ],
+          "after": [
+            "night_watch",
+            "street"
+          ]
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/trust",
+          "before": 1,
+          "after": 2
+        },
+        {
+          "path": "/runtime_scene_overlays/waystation_courtyard/discovered_clues",
+          "before": [
+            "Guards watch the north gate throughout the night."
+          ],
+          "after": [
+            "Guards watch the north gate throughout the night.",
+            "The street beyond the gate is the north road."
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/discovered_clue_ids",
+          "before": [
+            "social_waystation_courtyard_corporal_bren_night_watch"
+          ],
+          "after": [
+            "social_waystation_courtyard_corporal_bren_night_watch",
+            "north_road"
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/discovered_clues",
+          "before": [
+            "Guards watch the north gate throughout the night."
+          ],
+          "after": [
+            "Guards watch the north gate throughout the night.",
+            "The street beyond the gate is the north road."
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Corporal Bren, do you prefer the morning or the evening?",
+          "after": "I ask Corporal Bren what the street outside the gate is named."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/npc_lead_discussions/corporal_bren/north_road",
+          "before": null,
+          "after": {
+            "npc_id": "corporal_bren",
+            "lead_id": "north_road",
+            "first_discussed_turn": 5,
+            "last_discussed_turn": 5,
+            "disclosure_level": "explicit",
+            "player_acknowledged": false,
+            "player_acknowledged_turn": null,
+            "mention_count": 1,
+            "last_scene_id": "waystation_courtyard"
+          }
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Corporal Bren whether guards watch the north gate at night.",
+              "passive": true,
+              "markers": [
+                "watch"
+              ],
+              "resolution_kind": null,
+              "turn": 1
+            },
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            }
+          ],
+          "after": [
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Corporal Bren what the street outside the gate is named.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 4,
+          "after": 5
+        }
+      ],
+      "knowledge_diff": [
+        {
+          "path": "/clue_knowledge/north_road",
+          "before": null,
+          "after": {
+            "state": "discovered",
+            "source_scene": "waystation_courtyard",
+            "presentation": "explicit",
+            "text": "The street beyond the gate is the north road."
+          }
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/revealed_topics",
+          "before": [
+            "night_watch"
+          ],
+          "after": [
+            "night_watch",
+            "street"
+          ]
+        }
+      ],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 7,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 8,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 9,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 10,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 5,
+          "after": 6
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/last_interaction_turn",
+          "before": 5,
+          "after": 6
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Corporal Bren what the street outside the gate is named.",
+          "after": "I ask Corporal Bren when the guards leave the gate unattended."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "What did you mean by that?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 2
+            },
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Corporal Bren what the street outside the gate is named.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Corporal Bren what the street outside the gate is named.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "I ask Corporal Bren when the guards leave the gate unattended.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 5,
+          "after": 6
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 11,
+      "session_projection_available": true,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": false,
+      "observed_session_diff": [
+        {
+          "path": "/clocks/time_pressure",
+          "before": 6,
+          "after": 7
+        },
+        {
+          "path": "/npc_runtime/corporal_bren/last_interaction_turn",
+          "before": 6,
+          "after": 7
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/last_player_action_text",
+          "before": "I ask Corporal Bren when the guards leave the gate unattended.",
+          "after": "I ask Corporal Bren what the password is."
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/recent_player_actions",
+          "before": [
+            {
+              "text": "I ask Corporal Bren who made the lantern.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 3
+            },
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Corporal Bren what the street outside the gate is named.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "I ask Corporal Bren when the guards leave the gate unattended.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            }
+          ],
+          "after": [
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Corporal Bren what the street outside the gate is named.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "I ask Corporal Bren when the guards leave the gate unattended.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Corporal Bren what the password is.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            }
+          ]
+        },
+        {
+          "path": "/scene_runtime/waystation_courtyard/repeated_action_count",
+          "before": 6,
+          "after": 7
+        }
+      ],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    },
+    {
+      "conversation": "secondary",
+      "turn": 12,
+      "session_projection_available": false,
+      "newly_observed_domains": [],
+      "selected_topic": null,
+      "reference_turn": true,
+      "observed_session_diff": [],
+      "knowledge_diff": [],
+      "reference_has_no_observed_new_knowledge": true,
+      "limitation": "Comparison covers exposed response domains only; omitted response fields are not interpreted as state changes."
+    }
+  ],
+  "final_persisted_sessions": {
+    "primary": {
+      "active_scene_id": "waystation_courtyard",
+      "visited_scene_ids": [
+        "waystation_courtyard"
+      ],
+      "flags": {},
+      "inventory": [],
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 10
+      },
+      "npc_runtime": {
+        "sergeant_mara": {
+          "attitude": 0,
+          "trust": 2,
+          "fear": 0,
+          "suspicion": 2,
+          "known_topics": [],
+          "revealed_topics": [
+            "street"
+          ],
+          "last_interaction_turn": 10
+        }
+      },
+      "scene_runtime": {
+        "waystation_courtyard": {
+          "discovered_clues": [
+            "The street beyond the gate is the north road."
+          ],
+          "discovered_clue_ids": [
+            "north_road"
+          ],
+          "pending_leads": [],
+          "revealed_hidden_facts": [],
+          "suspicion_flags": [],
+          "searched_targets": [],
+          "resolved_interactables": [],
+          "last_exploration_action_key": "sergeant_mara",
+          "repeated_action_count": 10,
+          "last_resolution_kind": "question",
+          "last_description_hash": null,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "consumed_action_ids": [],
+          "momentum_exchanges_since": 0,
+          "momentum_next_due_in": 2,
+          "momentum_last_kind": null,
+          "passive_action_streak": 0,
+          "recent_player_actions": [
+            {
+              "text": "I ask Sergeant Mara when the gate is left unguarded.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            },
+            {
+              "text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 8
+            },
+            {
+              "text": "I ask Sergeant Mara about the north road again.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 9
+            },
+            {
+              "text": "I ask Sergeant Mara, do you still prefer the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 10
+            }
+          ],
+          "last_player_action_text": "I ask Sergeant Mara, do you still prefer the evening?",
+          "last_player_action_passive": false,
+          "npc_lead_discussions": {
+            "sergeant_mara": {
+              "north_road": {
+                "npc_id": "sergeant_mara",
+                "lead_id": "north_road",
+                "first_discussed_turn": 1,
+                "last_discussed_turn": 9,
+                "disclosure_level": "explicit",
+                "player_acknowledged": true,
+                "player_acknowledged_turn": 9,
+                "mention_count": 2,
+                "last_scene_id": "waystation_courtyard"
+              }
+            }
+          },
+          "recent_contextual_leads": [
+            {
+              "key": "recent_named_figure_sergeant_mara",
+              "kind": "recent_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 10,
+              "last_turn": 10
+            },
+            {
+              "key": "visible_named_figure_sergeant_mara",
+              "kind": "visible_named_figure",
+              "subject": "Sergeant Mara",
+              "position": "",
+              "named": true,
+              "positioned": false,
+              "mentions": 10,
+              "last_turn": 10
+            }
+          ],
+          "topic_pressure": {
+            "topic:mean_north_road": {
+              "repeat_count": 5,
+              "low_progress_streak": 0,
+              "progress_score_total": 0.0,
+              "last_answer": "",
+              "last_turn": 10,
+              "speaker_targets": {
+                "sergeant_mara": {
+                  "repeat_count": 5,
+                  "low_progress_streak": 0,
+                  "patience": 3,
+                  "last_turn": 10
+                }
+              },
+              "previous_probe_dimension": "general",
+              "last_probe_dimension": "general",
+              "last_player_input": "I ask Sergeant Mara, do you still prefer the evening?"
+            }
+          },
+          "topic_pressure_last_topic_key": "topic:mean_north_road",
+          "topic_pressure_current": {
+            "topic_key": "topic:mean_north_road",
+            "speaker_key": "sergeant_mara",
+            "turn": 10,
+            "player_text": "I ask Sergeant Mara, do you still prefer the evening?",
+            "interaction_kind": "social",
+            "interaction_mode": "social",
+            "social_intent_class": "social_exchange",
+            "npc_name": "Sergeant Mara"
+          }
+        }
+      },
+      "scene_state": {
+        "active_scene_id": "waystation_courtyard",
+        "active_entities": [
+          "sergeant_mara"
+        ],
+        "entity_presence": {
+          "guard_captain": "offscene",
+          "tavern_runner": "offscene",
+          "sergeant_mara": "active"
+        },
+        "emergent_addressables": [],
+        "current_interlocutor": "sergeant_mara",
+        "promoted_actor_npc_map": {}
+      },
+      "runtime_scene_overlays": {
+        "waystation_courtyard": {
+          "scene_id": "waystation_courtyard",
+          "visible_facts_add": [],
+          "discovered_clues": [
+            "The street beyond the gate is the north road."
+          ],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        },
+        "waystation_street": {
+          "scene_id": "waystation_street",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        }
+      },
+      "clue_knowledge": {
+        "north_road": {
+          "state": "discovered",
+          "source_scene": "waystation_courtyard",
+          "presentation": "explicit",
+          "text": "The street beyond the gate is the north road."
+        }
+      },
+      "lead_registry": {
+        "north_road": {
+          "id": "north_road",
+          "title": "The street beyond the gate is the north road.",
+          "summary": "The street beyond the gate is the north road.",
+          "type": "rumor",
+          "lifecycle": "discovered",
+          "status": "active",
+          "confidence": "plausible",
+          "discovery_source": "clue_explicit",
+          "first_discovered_turn": 1,
+          "last_updated_turn": 1,
+          "committed_at_turn": null,
+          "commitment_source": null,
+          "commitment_strength": null,
+          "resolved_at_turn": null,
+          "resolution_type": null,
+          "resolution_summary": null,
+          "obsolete_reason": null,
+          "escalation_level": 0,
+          "escalation_reason": null,
+          "escalated_at_turn": null,
+          "unlocked_by_lead_id": null,
+          "obsolete_by_lead_id": null,
+          "next_step": "",
+          "related_clue_ids": [],
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "owner_faction_id": null,
+          "priority": 0,
+          "last_touched_turn": 9,
+          "stale_after_turns": null,
+          "parent_lead_id": null,
+          "supersedes": [],
+          "superseded_by": null,
+          "unlocks": [],
+          "blocked_by": [],
+          "related_faction_ids": [],
+          "related_scene_ids": [
+            "waystation_courtyard"
+          ],
+          "tags": [],
+          "evidence_clue_ids": [
+            "north_road"
+          ],
+          "consequence_ids": [],
+          "metadata": {}
+        }
+      },
+      "conversational_context": {
+        "last_executed_intention": {
+          "status": "executed",
+          "text": "I ask Sergeant Mara, do you still prefer the evening?",
+          "operation": "ASK",
+          "target": "sergeant_mara",
+          "scene_id": "waystation_courtyard"
+        },
+        "pending_intention": null,
+        "delivered_exchanges": [
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara what the street beyond the gate is called.",
+            "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "street beyond gate",
+            "topic_id": "street",
+            "requested_information": "general",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 1,
+            "active": false,
+            "authorization_source": "social.topic_revealed:street",
+            "adoption_turn_identity": "rc_8797359ea045"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "What did you mean by north road?",
+            "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "mean north road",
+            "topic_id": "",
+            "requested_information": "general",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 2,
+            "active": false,
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "adoption_turn_identity": "rc_769aa313ce23"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Can you repeat that?",
+            "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "Can you repeat that?",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 2,
+            "active": false,
+            "authorization_source": "conversational_decision:repeat_delivered_statement",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara, do you prefer morning or evening?",
+            "delivered_text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "subject": "morning evening",
+            "topic_id": "",
+            "requested_information": "opinion",
+            "supplied_text": "I prefer the evening.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 3,
+            "active": false,
+            "authorization_source": "conversational_continuity.bounded_personal_line",
+            "adoption_turn_identity": "rc_0c2b53cd274c"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Why do you prefer the evening?",
+            "delivered_text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "subject": "the evening",
+            "topic_id": "",
+            "requested_information": "opinion",
+            "supplied_text": "I prefer the evening.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 4,
+            "active": false,
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "adoption_turn_identity": "rc_f36978b6d9e7"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara who forged the lantern.",
+            "delivered_text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "subject": "the lantern",
+            "topic_id": "",
+            "requested_information": "maker",
+            "supplied_text": "I couldn't tell you.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 5,
+            "active": false,
+            "authorization_source": "dialogue_authority.player_line",
+            "adoption_turn_identity": "rc_62c8af82da18"
+          },
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "I ask Sergeant Mara whether guards watch the north gate at night.",
+            "delivered_text": "Which person, place, or thing do you mean?",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 5,
+            "active": false,
+            "authorization_source": "conversational_decision:unresolved_references",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "What did you mean by that?",
+            "delivered_text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "subject": "mean",
+            "topic_id": "",
+            "requested_information": "general",
+            "supplied_text": "I couldn't tell you.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 6,
+            "active": false,
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "adoption_turn_identity": "rc_3201858d696c"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara when the gate is left unguarded.",
+            "delivered_text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "subject": "gate left unguarded",
+            "topic_id": "",
+            "requested_information": "general",
+            "supplied_text": "I couldn't tell you.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 7,
+            "active": false,
+            "authorization_source": "dialogue_authority.knowledge_posture",
+            "adoption_turn_identity": "rc_4e103a23656e"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Promise me a reward if I carry a message for you.",
+            "delivered_text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "subject": "Promise me a reward if I carry a message for you.",
+            "topic_id": "",
+            "requested_information": "promise",
+            "supplied_text": "I can't promise you a reward for that.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 7,
+            "active": false,
+            "authorization_source": "conversational_decision:npc_request_declined",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Swear you will pay me ten silver if I do it.",
+            "delivered_text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "subject": "Swear you will pay me ten silver if I do it.",
+            "topic_id": "",
+            "requested_information": "promise",
+            "supplied_text": "I can't promise you a reward for that.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 7,
+            "active": false,
+            "authorization_source": "conversational_decision:npc_request_declined",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara what secret passage bypasses the gate.",
+            "delivered_text": "Sergeant Mara says, \"I couldn't answer that.\"",
+            "subject": "secret passage bypasses",
+            "topic_id": "",
+            "requested_information": "hidden",
+            "supplied_text": "I couldn't answer that.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 8,
+            "active": false,
+            "authorization_source": "dialogue_authority.player_line",
+            "adoption_turn_identity": "rc_6f5e3eda1916"
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara about the north road again.",
+            "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "the north road again",
+            "topic_id": "street",
+            "requested_information": "general",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 9,
+            "active": false,
+            "authorization_source": "social.topic_revealed:street",
+            "adoption_turn_identity": "rc_caac2f579d4b"
+          },
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "GM, what did Mara say about the road?",
+            "delivered_text": "Sergeant Mara said: \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 9,
+            "active": false,
+            "authorization_source": "conversational_decision:gm_recall_of_npc_statement",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara, do you still prefer the evening?",
+            "delivered_text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "subject": "still evening",
+            "topic_id": "",
+            "requested_information": "opinion",
+            "supplied_text": "I prefer the evening.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 10,
+            "active": true,
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "adoption_turn_identity": "rc_5c2308042732"
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "RESOLVED",
+          "owner": "GM",
+          "purpose": "ACTION_RESULT",
+          "subject": "I ask Sergeant Mara, do you still prefer the evening?",
+          "response": "Sergeant Mara says, \"I prefer the evening.\"",
+          "refusal_reason": null,
+          "scene_id": "waystation_courtyard",
+          "operation": "question"
+        },
+        "dialogue_commitments": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean north road",
+            "text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "expired",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "the lantern",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "gate left unguarded",
+            "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "secret passage bypasses",
+            "text": "Sergeant Mara says, \"I couldn't answer that.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "hidden"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "still evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 10,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "pending_clarification": null
+      }
+    },
+    "secondary": {
+      "active_scene_id": "waystation_courtyard",
+      "visited_scene_ids": [
+        "waystation_courtyard"
+      ],
+      "flags": {},
+      "inventory": [],
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 7
+      },
+      "npc_runtime": {
+        "corporal_bren": {
+          "attitude": 0,
+          "trust": 2,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [
+            "night_watch",
+            "street"
+          ],
+          "last_interaction_turn": 7
+        }
+      },
+      "scene_runtime": {
+        "waystation_courtyard": {
+          "discovered_clues": [
+            "Guards watch the north gate throughout the night.",
+            "The street beyond the gate is the north road."
+          ],
+          "discovered_clue_ids": [
+            "social_waystation_courtyard_corporal_bren_night_watch",
+            "north_road"
+          ],
+          "pending_leads": [],
+          "revealed_hidden_facts": [],
+          "suspicion_flags": [],
+          "searched_targets": [],
+          "resolved_interactables": [],
+          "last_exploration_action_key": "corporal_bren",
+          "repeated_action_count": 7,
+          "last_resolution_kind": "question",
+          "last_description_hash": null,
+          "last_perception_visible_facts": [],
+          "last_perception_narration": "",
+          "last_perception_turn": null,
+          "consumed_action_ids": [],
+          "momentum_exchanges_since": 0,
+          "momentum_next_due_in": 2,
+          "momentum_last_kind": null,
+          "passive_action_streak": 0,
+          "recent_player_actions": [
+            {
+              "text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 4
+            },
+            {
+              "text": "I ask Corporal Bren what the street outside the gate is named.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 5
+            },
+            {
+              "text": "I ask Corporal Bren when the guards leave the gate unattended.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 6
+            },
+            {
+              "text": "I ask Corporal Bren what the password is.",
+              "passive": false,
+              "markers": [],
+              "resolution_kind": null,
+              "turn": 7
+            }
+          ],
+          "last_player_action_text": "I ask Corporal Bren what the password is.",
+          "last_player_action_passive": false,
+          "npc_lead_discussions": {
+            "corporal_bren": {
+              "social_waystation_courtyard_corporal_bren_night_watch": {
+                "npc_id": "corporal_bren",
+                "lead_id": "social_waystation_courtyard_corporal_bren_night_watch",
+                "first_discussed_turn": 1,
+                "last_discussed_turn": 1,
+                "disclosure_level": "explicit",
+                "player_acknowledged": false,
+                "player_acknowledged_turn": null,
+                "mention_count": 1,
+                "last_scene_id": "waystation_courtyard"
+              },
+              "north_road": {
+                "npc_id": "corporal_bren",
+                "lead_id": "north_road",
+                "first_discussed_turn": 5,
+                "last_discussed_turn": 5,
+                "disclosure_level": "explicit",
+                "player_acknowledged": false,
+                "player_acknowledged_turn": null,
+                "mention_count": 1,
+                "last_scene_id": "waystation_courtyard"
+              }
+            }
+          },
+          "recent_contextual_leads": [
+            {
+              "key": "active_event_corporal_bren_mutters_word_is_guards",
+              "kind": "active_event",
+              "subject": "corporal bren mutters, \"word is, guards",
+              "position": "",
+              "named": false,
+              "positioned": false,
+              "mentions": 2,
+              "last_turn": 2
+            }
+          ],
+          "topic_pressure": {
+            "topic:mean": {
+              "repeat_count": 2,
+              "low_progress_streak": 0,
+              "progress_score_total": 0.0,
+              "last_answer": "",
+              "last_turn": 4,
+              "speaker_targets": {
+                "corporal_bren": {
+                  "repeat_count": 2,
+                  "low_progress_streak": 0,
+                  "patience": 3,
+                  "last_turn": 4
+                }
+              },
+              "previous_probe_dimension": "general",
+              "last_probe_dimension": "general",
+              "last_player_input": "I ask Corporal Bren, do you prefer the morning or the evening?"
+            }
+          },
+          "topic_pressure_last_topic_key": "topic:mean",
+          "topic_pressure_current": {
+            "topic_key": "topic:mean",
+            "speaker_key": "corporal_bren",
+            "turn": 4,
+            "player_text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+            "interaction_kind": "social",
+            "interaction_mode": "social",
+            "social_intent_class": "social_exchange",
+            "npc_name": "Corporal Bren"
+          }
+        }
+      },
+      "scene_state": {
+        "active_scene_id": "waystation_courtyard",
+        "active_entities": [
+          "corporal_bren"
+        ],
+        "entity_presence": {
+          "guard_captain": "offscene",
+          "tavern_runner": "offscene",
+          "corporal_bren": "active"
+        },
+        "emergent_addressables": [],
+        "current_interlocutor": "corporal_bren",
+        "promoted_actor_npc_map": {}
+      },
+      "runtime_scene_overlays": {
+        "waystation_courtyard": {
+          "scene_id": "waystation_courtyard",
+          "visible_facts_add": [],
+          "discovered_clues": [
+            "Guards watch the north gate throughout the night.",
+            "The street beyond the gate is the north road."
+          ],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        },
+        "waystation_street": {
+          "scene_id": "waystation_street",
+          "visible_facts_add": [],
+          "discovered_clues": [],
+          "state_flags": {},
+          "runtime_entities": [],
+          "mutations": {}
+        }
+      },
+      "clue_knowledge": {
+        "social_waystation_courtyard_corporal_bren_night_watch": {
+          "state": "discovered",
+          "source_scene": "waystation_courtyard",
+          "presentation": "explicit",
+          "text": "Guards watch the north gate throughout the night."
+        },
+        "north_road": {
+          "state": "discovered",
+          "source_scene": "waystation_courtyard",
+          "presentation": "explicit",
+          "text": "The street beyond the gate is the north road."
+        }
+      },
+      "lead_registry": {
+        "social_waystation_courtyard_corporal_bren_night_watch": {
+          "id": "social_waystation_courtyard_corporal_bren_night_watch",
+          "title": "Guards watch the north gate throughout the night.",
+          "summary": "Guards watch the north gate throughout the night.",
+          "type": "rumor",
+          "lifecycle": "discovered",
+          "status": "active",
+          "confidence": "plausible",
+          "discovery_source": "clue_explicit",
+          "first_discovered_turn": 1,
+          "last_updated_turn": 1,
+          "committed_at_turn": null,
+          "commitment_source": null,
+          "commitment_strength": null,
+          "resolved_at_turn": null,
+          "resolution_type": null,
+          "resolution_summary": null,
+          "obsolete_reason": null,
+          "escalation_level": 0,
+          "escalation_reason": null,
+          "escalated_at_turn": null,
+          "unlocked_by_lead_id": null,
+          "obsolete_by_lead_id": null,
+          "next_step": "",
+          "related_clue_ids": [],
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "owner_faction_id": null,
+          "priority": 0,
+          "last_touched_turn": 1,
+          "stale_after_turns": null,
+          "parent_lead_id": null,
+          "supersedes": [],
+          "superseded_by": null,
+          "unlocks": [],
+          "blocked_by": [],
+          "related_faction_ids": [],
+          "related_scene_ids": [
+            "waystation_courtyard"
+          ],
+          "tags": [],
+          "evidence_clue_ids": [
+            "social_waystation_courtyard_corporal_bren_night_watch"
+          ],
+          "consequence_ids": [],
+          "metadata": {}
+        },
+        "north_road": {
+          "id": "north_road",
+          "title": "The street beyond the gate is the north road.",
+          "summary": "The street beyond the gate is the north road.",
+          "type": "rumor",
+          "lifecycle": "discovered",
+          "status": "active",
+          "confidence": "plausible",
+          "discovery_source": "clue_explicit",
+          "first_discovered_turn": 5,
+          "last_updated_turn": 5,
+          "committed_at_turn": null,
+          "commitment_source": null,
+          "commitment_strength": null,
+          "resolved_at_turn": null,
+          "resolution_type": null,
+          "resolution_summary": null,
+          "obsolete_reason": null,
+          "escalation_level": 0,
+          "escalation_reason": null,
+          "escalated_at_turn": null,
+          "unlocked_by_lead_id": null,
+          "obsolete_by_lead_id": null,
+          "next_step": "",
+          "related_clue_ids": [],
+          "related_npc_ids": [],
+          "related_location_ids": [],
+          "owner_faction_id": null,
+          "priority": 0,
+          "last_touched_turn": 5,
+          "stale_after_turns": null,
+          "parent_lead_id": null,
+          "supersedes": [],
+          "superseded_by": null,
+          "unlocks": [],
+          "blocked_by": [],
+          "related_faction_ids": [],
+          "related_scene_ids": [
+            "waystation_courtyard"
+          ],
+          "tags": [],
+          "evidence_clue_ids": [
+            "north_road"
+          ],
+          "consequence_ids": [],
+          "metadata": {}
+        }
+      },
+      "conversational_context": {
+        "last_executed_intention": {
+          "status": "executed",
+          "text": "I ask Corporal Bren what the password is.",
+          "operation": "ASK",
+          "target": "corporal_bren",
+          "scene_id": "waystation_courtyard"
+        },
+        "pending_intention": null,
+        "delivered_exchanges": [
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Corporal Bren whether guards watch the north gate at night.",
+            "delivered_text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "subject": "guards north gate",
+            "topic_id": "night_watch",
+            "requested_information": "surveillance",
+            "supplied_text": "Word is, guards watch the north gate throughout the night.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 1,
+            "active": false,
+            "authorization_source": "social.topic_revealed:night_watch",
+            "adoption_turn_identity": "rc_2eb72f004b79"
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "What did you mean by that?",
+            "delivered_text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "subject": "mean",
+            "topic_id": "",
+            "requested_information": "general",
+            "supplied_text": "Word is, guards watch the north gate throughout the night.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 2,
+            "active": false,
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "adoption_turn_identity": "rc_d6e43446e1ae"
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Corporal Bren who made the lantern.",
+            "delivered_text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "subject": "made lantern",
+            "topic_id": "",
+            "requested_information": "maker",
+            "supplied_text": "I couldn't tell you.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 3,
+            "active": false,
+            "authorization_source": "dialogue_authority.player_line",
+            "adoption_turn_identity": "rc_93955eb999ab"
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Corporal Bren, do you prefer the morning or the evening?",
+            "delivered_text": "Corporal Bren says, \"I prefer the morning.\"",
+            "subject": "morning evening",
+            "topic_id": "",
+            "requested_information": "opinion",
+            "supplied_text": "I prefer the morning.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 4,
+            "active": false,
+            "authorization_source": "conversational_continuity.bounded_personal_line",
+            "adoption_turn_identity": "rc_efb9e6fe4954"
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Why that one, then?",
+            "delivered_text": "Corporal Bren says, \"I prefer the morning.\"",
+            "subject": "Why that one, then?",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "I prefer the morning.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 4,
+            "active": false,
+            "authorization_source": "conversational_decision:repeat_delivered_statement",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Corporal Bren what the street outside the gate is named.",
+            "delivered_text": "Corporal Bren mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "street outside gate",
+            "topic_id": "street",
+            "requested_information": "general",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 5,
+            "active": false,
+            "authorization_source": "social.topic_revealed:street",
+            "adoption_turn_identity": "rc_cf6c97f6c1e7"
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Say that again in plainer words.",
+            "delivered_text": "Corporal Bren mutters, \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "Say that again in plainer words.",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 5,
+            "active": false,
+            "authorization_source": "conversational_decision:repeat_delivered_statement",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "If I carry a message, will you promise me a reward?",
+            "delivered_text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "subject": "If I carry a message, will you promise me a reward?",
+            "topic_id": "",
+            "requested_information": "promise",
+            "supplied_text": "I can't promise you a reward for that.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 5,
+            "active": false,
+            "authorization_source": "conversational_decision:npc_request_declined",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Promise me a reward if I carry a message for you.",
+            "delivered_text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "subject": "Promise me a reward if I carry a message for you.",
+            "topic_id": "",
+            "requested_information": "promise",
+            "supplied_text": "I can't promise you a reward for that.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 5,
+            "active": false,
+            "authorization_source": "conversational_decision:npc_request_declined",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Corporal Bren when the guards leave the gate unattended.",
+            "delivered_text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "subject": "guards leave gate",
+            "topic_id": "",
+            "requested_information": "surveillance",
+            "supplied_text": "I couldn't tell you.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 6,
+            "active": false,
+            "authorization_source": "dialogue_authority.player_line",
+            "adoption_turn_identity": "rc_5b12844a58b8"
+          },
+          {
+            "speaker_id": "corporal_bren",
+            "speaker_name": "Corporal Bren",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Corporal Bren what the password is.",
+            "delivered_text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "subject": "that",
+            "topic_id": "",
+            "requested_information": "hidden",
+            "supplied_text": "I couldn't tell you.",
+            "uncertain": true,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 7,
+            "active": false,
+            "authorization_source": "dialogue_authority.player_line",
+            "adoption_turn_identity": "rc_e970d9dd4292"
+          },
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "GM, repeat what Bren said about the road.",
+            "delivered_text": "Corporal Bren said: \"Word is, the street beyond the gate is the north road.\"",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "Word is, the street beyond the gate is the north road.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 7,
+            "active": true,
+            "authorization_source": "conversational_decision:gm_recall_of_npc_statement",
+            "adoption_turn_identity": ""
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "ANSWER",
+          "owner": "GM",
+          "purpose": "EXPLANATION",
+          "subject": "GM, repeat what Bren said about the road.",
+          "response": "Corporal Bren said: \"Word is, the street beyond the gate is the north road.\"",
+          "refusal_reason": null,
+          "scene_id": "waystation_courtyard"
+        },
+        "dialogue_commitments": [
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "mean",
+            "text": "Corporal Bren mutters, \"Word is, guards watch the north gate throughout the night.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Corporal Bren says, \"I prefer the morning.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Corporal Bren says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "admitted_uncertainty",
+            "subject": "guards leave gate",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "surveillance"
+          },
+          {
+            "npc_id": "corporal_bren",
+            "kind": "refusal",
+            "subject": "that",
+            "text": "Corporal Bren says, \"I couldn't tell you.\"",
+            "canonical": false,
+            "turn": 7,
+            "status": "active",
+            "requested_information": "hidden"
+          }
+        ],
+        "pending_clarification": null
+      }
+    }
+  }
+}

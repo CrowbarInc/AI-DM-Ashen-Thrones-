@@ -1,0 +1,46 @@
+{
+  "narration": "The board itself lists grim new taxes, curfew regulations, and a posted warning about a patrol that has gone missing.",
+  "candidates": [
+    {
+      "claim_id": "rc_a83c5bcfc65e",
+      "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "extra_content_tokens": [
+        "gone",
+        "grim",
+        "itself",
+        "posted",
+        "regulations"
+      ],
+      "covered": false
+    },
+    {
+      "claim_id": "rc_280f5390057f",
+      "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "extra_content_tokens": [
+        "curfew",
+        "gone",
+        "grim",
+        "itself",
+        "regulations"
+      ],
+      "covered": false
+    },
+    {
+      "claim_id": "rc_315c2f595d6b",
+      "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
+      "extra_content_tokens": [
+        "about",
+        "curfew",
+        "gone",
+        "grim",
+        "itself",
+        "lists",
+        "posted",
+        "regulations",
+        "warning"
+      ],
+      "covered": false
+    }
+  ],
+  "condition": "More than one added content token rejects before later overlap checks; no synonym/entailment inference."
+}

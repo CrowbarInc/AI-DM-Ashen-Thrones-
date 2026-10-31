@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="62" time="12.953" timestamp="2026-10-18T17:30:48.451701-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_provider_accounting_integrity" name="test_success_has_durable_admission_before_dispatch_and_one_completion" time="1.354" /><testcase classname="tests.test_provider_accounting_integrity" name="test_failures_and_interruptions_stay_accounted[error0]" time="0.010" /><testcase classname="tests.test_provider_accounting_integrity" name="test_failures_and_interruptions_stay_accounted[error1]" time="0.011" /><testcase classname="tests.test_provider_accounting_integrity" name="test_failures_and_interruptions_stay_accounted[error2]" time="0.010" /><testcase classname="tests.test_provider_accounting_integrity" name="test_admitted_uncompleted_and_no_provider_usage" time="0.009" /><testcase classname="tests.test_provider_accounting_integrity" name="test_multiple_and_single_purpose_requests[expression]" time="0.015" /><testcase classname="tests.test_provider_accounting_integrity" name="test_multiple_and_single_purpose_requests[interpretation]" time="0.013" /><testcase classname="tests.test_provider_accounting_integrity" name="test_multiple_and_single_purpose_requests[narration]" time="0.013" /><testcase classname="tests.test_provider_accounting_integrity" name="test_concurrent_final_allowance_reserved_atomically" time="0.013" /><testcase classname="tests.test_provider_accounting_integrity" name="test_concurrent_token_reservations_preserve_limits" time="0.006" /><testcase classname="tests.test_provider_accounting_integrity" name="test_exhaustion_duplicate_identity_and_dispatch" time="0.008" /><testcase classname="tests.test_provider_accounting_integrity" name="test_partial_responses_and_missing_tokens_remain_unknown[None]" time="0.008" /><testcase classname="tests.test_provider_accounting_integrity" name="test_partial_responses_and_missing_tokens_remain_unknown[reply1]" time="0.007" /><testcase classname="tests.test_provider_accounting_integrity" name="test_partial_responses_and_missing_tokens_remain_unknown[reply2]" time="0.008" /><testcase classname="tests.test_provider_accounting_integrity" name="test_partial_responses_and_missing_tokens_remain_unknown[reply3]" time="0.007" /><testcase classname="tests.test_provider_accounting_integrity" name="test_ledger_write_failure_blocks_dispatch" time="0.005" /><testcase classname="tests.test_provider_accounting_integrity" name="test_existing_ledger_cannot_restart_with_reset_counter" time="0.004" /><testcase classname="tests.test_provider_accounting_integrity" name="test_lifecycle_reconciliation_refuses_incomplete_evidence[truncated]" time="0.009" /><testcase classname="tests.test_provider_accounting_integrity" name="test_lifecycle_reconciliation_refuses_incomplete_evidence[duplicate]" time="0.009" /><testcase classname="tests.test_provider_accounting_integrity" name="test_lifecycle_reconciliation_refuses_incomplete_evidence[snapshot]" time="0.009" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-expression]" time="0.017"><failure message="tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.&#10;site: game.expressive_dialogue.request_expression&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py&quot;, line 408, in pytest_runtestloop&#10;    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 118, in pytest_runtest_protocol&#10;    runtestprotocol(item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 139, in runtestprotocol&#10;    reports.append(call_and_report(item, &quot;call&quot;, log))&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 249, in call_and_report&#10;    call = CallInfo.from_call(&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 361, in from_call&#10;    result: TResult | None = func()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 250, in &lt;lambda&gt;&#10;    lambda: runtest_hook(item=item, **kwds),&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 184, in pytest_runtest_call&#10;    item.runtest()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 1707, in runtest&#10;    self.ihook.pytest_pyfunc_call(pyfuncitem=self)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 167, in pytest_pyfunc_call&#10;    result = testfunction(**testargs)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception&#10;    invoke()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 189, in &lt;lambda&gt;&#10;    invoke = lambda: request_expression({&quot;prompt&quot;: {&quot;system&quot;: &quot;system&quot;, &quot;user&quot;: &quot;user&quot;}})&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 79, in _blocked_expression&#10;    raise LiveModelCallForbidden(&quot;game.expressive_dialogue.request_expression&quot;)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 30, in __init__&#10;    stack = &quot;&quot;.join(traceback.format_stack(limit=25))">ledger = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/atgb03b_unit/test_each_dispatch_owner_accou0/requests.jsonl')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AB37758A70&gt;
+owner = 'expression', fail = False
+
+    @pytest.mark.parametrize("owner", ["expression", "interpretation", "contract", "candidate", "plan", "preflight", "narration"])
+    @pytest.mark.parametrize("fail", [False, True])
+    def test_each_dispatch_owner_accounts_success_or_provider_exception(ledger, monkeypatch, owner, fail):
+        import openai
+        from game import config
+        calls = []
+        def create(**kwargs):
+            calls.append(kwargs)
+            assert budget.snapshot()["requests"] == 1
+            assert json.loads(ledger.read_text().splitlines()[-1])["event"] == "dispatch_attempted"
+            if fail:
+                raise TimeoutError("sensitive content")
+            return response()
+        monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=create)))
+        monkeypatch.setattr(config, "get_openai_api_key", lambda: "stub-only")
+        if owner == "expression":
+            from game.expressive_dialogue import request_expression
+            invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+        elif owner == "interpretation":
+            from game import live_chat_interpretation as mod
+            monkeypatch.setattr(mod, "_contract", lambda: (None, None, None, None, "gpt-4.1-mini", None))
+            monkeypatch.setattr(mod, "production_interpretation_schema", lambda: {})
+            invoke = lambda: mod.request_interpretation([], estimated_input=10)
+        elif owner == "contract":
+            from game import semantic_interpreter as mod
+            monkeypatch.setattr(mod, "get_openai_api_key", lambda: "stub-only")
+            invoke = lambda: mod._invoke_interpretation_model([])
+        elif owner == "candidate":
+            from game.host_constrained_candidates import invoke_candidate_provider
+            invoke = lambda: invoke_candidate_provider({})
+        elif owner == "plan":
+            from game.unified_semantic_planning import _invoke_provider
+            invoke = lambda: _invoke_provider({})
+        elif owner == "preflight":
+            from game.api_upstream_preflight import run_upstream_api_preflight
+            invoke = lambda: run_upstream_api_preflight(api_key="stub-only", client_factory=lambda key: NS(responses=NS(create=create)))
+        else:
+            from tests.helpers.live_model_guard import production_call_gpt
+            invoke = lambda: production_call_gpt()([], purpose="narration")
+        try:
+&gt;           invoke()
+
+tests\test_provider_accounting_integrity.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_provider_accounting_integrity.py:189: in &lt;lambda&gt;
+    invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+_args = ({'prompt': {'system': 'system', 'user': 'user'}},), _kwargs = {}
+
+    def _blocked_expression(*_args, **_kwargs):
+&gt;       raise LiveModelCallForbidden("game.expressive_dialogue.request_expression")
+E       tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E       site: game.expressive_dialogue.request_expression
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py", line 408, in pytest_runtestloop
+E           item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E           runtestprotocol(item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 139, in runtestprotocol
+E           reports.append(call_and_report(item, "call", log))
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 249, in call_and_report
+E           call = CallInfo.from_call(
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+E           result: TResult | None = func()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 250, in &lt;lambda&gt;
+E           lambda: runtest_hook(item=item, **kwds),
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+E           item.runtest()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+E           self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+E           result = testfunction(**testargs)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception
+E           invoke()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 189, in &lt;lambda&gt;
+E           invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 79, in _blocked_expression
+E           raise LiveModelCallForbidden("game.expressive_dialogue.request_expression")
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+E           stack = "".join(traceback.format_stack(limit=25))
+
+tests\helpers\live_model_guard.py:79: LiveModelCallForbidden</failure></testcase><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-interpretation]" time="0.015" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-contract]" time="0.007"><failure message="tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.&#10;site: game.semantic_interpreter._invoke_interpretation_model&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py&quot;, line 408, in pytest_runtestloop&#10;    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 118, in pytest_runtest_protocol&#10;    runtestprotocol(item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 139, in runtestprotocol&#10;    reports.append(call_and_report(item, &quot;call&quot;, log))&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 249, in call_and_report&#10;    call = CallInfo.from_call(&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 361, in from_call&#10;    result: TResult | None = func()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 250, in &lt;lambda&gt;&#10;    lambda: runtest_hook(item=item, **kwds),&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 184, in pytest_runtest_call&#10;    item.runtest()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 1707, in runtest&#10;    self.ihook.pytest_pyfunc_call(pyfuncitem=self)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 167, in pytest_pyfunc_call&#10;    result = testfunction(**testargs)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception&#10;    invoke()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 198, in &lt;lambda&gt;&#10;    invoke = lambda: mod._invoke_interpretation_model([])&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 76, in _blocked_interpretation&#10;    raise LiveModelCallForbidden(&quot;game.semantic_interpreter._invoke_interpretation_model&quot;)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 30, in __init__&#10;    stack = &quot;&quot;.join(traceback.format_stack(limit=25))">ledger = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/atgb03b_unit/test_each_dispatch_owner_accou2/requests.jsonl')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AB3775BBC0&gt;
+owner = 'contract', fail = False
+
+    @pytest.mark.parametrize("owner", ["expression", "interpretation", "contract", "candidate", "plan", "preflight", "narration"])
+    @pytest.mark.parametrize("fail", [False, True])
+    def test_each_dispatch_owner_accounts_success_or_provider_exception(ledger, monkeypatch, owner, fail):
+        import openai
+        from game import config
+        calls = []
+        def create(**kwargs):
+            calls.append(kwargs)
+            assert budget.snapshot()["requests"] == 1
+            assert json.loads(ledger.read_text().splitlines()[-1])["event"] == "dispatch_attempted"
+            if fail:
+                raise TimeoutError("sensitive content")
+            return response()
+        monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=create)))
+        monkeypatch.setattr(config, "get_openai_api_key", lambda: "stub-only")
+        if owner == "expression":
+            from game.expressive_dialogue import request_expression
+            invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+        elif owner == "interpretation":
+            from game import live_chat_interpretation as mod
+            monkeypatch.setattr(mod, "_contract", lambda: (None, None, None, None, "gpt-4.1-mini", None))
+            monkeypatch.setattr(mod, "production_interpretation_schema", lambda: {})
+            invoke = lambda: mod.request_interpretation([], estimated_input=10)
+        elif owner == "contract":
+            from game import semantic_interpreter as mod
+            monkeypatch.setattr(mod, "get_openai_api_key", lambda: "stub-only")
+            invoke = lambda: mod._invoke_interpretation_model([])
+        elif owner == "candidate":
+            from game.host_constrained_candidates import invoke_candidate_provider
+            invoke = lambda: invoke_candidate_provider({})
+        elif owner == "plan":
+            from game.unified_semantic_planning import _invoke_provider
+            invoke = lambda: _invoke_provider({})
+        elif owner == "preflight":
+            from game.api_upstream_preflight import run_upstream_api_preflight
+            invoke = lambda: run_upstream_api_preflight(api_key="stub-only", client_factory=lambda key: NS(responses=NS(create=create)))
+        else:
+            from tests.helpers.live_model_guard import production_call_gpt
+            invoke = lambda: production_call_gpt()([], purpose="narration")
+        try:
+&gt;           invoke()
+
+tests\test_provider_accounting_integrity.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_provider_accounting_integrity.py:198: in &lt;lambda&gt;
+    invoke = lambda: mod._invoke_interpretation_model([])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+_args = ([],), _kwargs = {}
+
+    def _blocked_interpretation(*_args, **_kwargs):
+&gt;       raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E       tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E       site: game.semantic_interpreter._invoke_interpretation_model
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py", line 408, in pytest_runtestloop
+E           item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E           runtestprotocol(item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 139, in runtestprotocol
+E           reports.append(call_and_report(item, "call", log))
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 249, in call_and_report
+E           call = CallInfo.from_call(
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+E           result: TResult | None = func()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 250, in &lt;lambda&gt;
+E           lambda: runtest_hook(item=item, **kwds),
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+E           item.runtest()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+E           self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+E           result = testfunction(**testargs)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception
+E           invoke()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 198, in &lt;lambda&gt;
+E           invoke = lambda: mod._invoke_interpretation_model([])
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 76, in _blocked_interpretation
+E           raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+E           stack = "".join(traceback.format_stack(limit=25))
+
+tests\helpers\live_model_guard.py:76: LiveModelCallForbidden</failure></testcase><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-candidate]" time="0.018" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-plan]" time="0.022" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-preflight]" time="0.014" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[False-narration]" time="0.018" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-expression]" time="0.007"><failure message="tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.&#10;site: game.expressive_dialogue.request_expression&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py&quot;, line 408, in pytest_runtestloop&#10;    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 118, in pytest_runtest_protocol&#10;    runtestprotocol(item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 139, in runtestprotocol&#10;    reports.append(call_and_report(item, &quot;call&quot;, log))&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 249, in call_and_report&#10;    call = CallInfo.from_call(&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 361, in from_call&#10;    result: TResult | None = func()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 250, in &lt;lambda&gt;&#10;    lambda: runtest_hook(item=item, **kwds),&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 184, in pytest_runtest_call&#10;    item.runtest()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 1707, in runtest&#10;    self.ihook.pytest_pyfunc_call(pyfuncitem=self)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 167, in pytest_pyfunc_call&#10;    result = testfunction(**testargs)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception&#10;    invoke()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 189, in &lt;lambda&gt;&#10;    invoke = lambda: request_expression({&quot;prompt&quot;: {&quot;system&quot;: &quot;system&quot;, &quot;user&quot;: &quot;user&quot;}})&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 79, in _blocked_expression&#10;    raise LiveModelCallForbidden(&quot;game.expressive_dialogue.request_expression&quot;)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 30, in __init__&#10;    stack = &quot;&quot;.join(traceback.format_stack(limit=25))">ledger = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/atgb03b_unit/test_each_dispatch_owner_accou7/requests.jsonl')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AB37918560&gt;
+owner = 'expression', fail = True
+
+    @pytest.mark.parametrize("owner", ["expression", "interpretation", "contract", "candidate", "plan", "preflight", "narration"])
+    @pytest.mark.parametrize("fail", [False, True])
+    def test_each_dispatch_owner_accounts_success_or_provider_exception(ledger, monkeypatch, owner, fail):
+        import openai
+        from game import config
+        calls = []
+        def create(**kwargs):
+            calls.append(kwargs)
+            assert budget.snapshot()["requests"] == 1
+            assert json.loads(ledger.read_text().splitlines()[-1])["event"] == "dispatch_attempted"
+            if fail:
+                raise TimeoutError("sensitive content")
+            return response()
+        monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=create)))
+        monkeypatch.setattr(config, "get_openai_api_key", lambda: "stub-only")
+        if owner == "expression":
+            from game.expressive_dialogue import request_expression
+            invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+        elif owner == "interpretation":
+            from game import live_chat_interpretation as mod
+            monkeypatch.setattr(mod, "_contract", lambda: (None, None, None, None, "gpt-4.1-mini", None))
+            monkeypatch.setattr(mod, "production_interpretation_schema", lambda: {})
+            invoke = lambda: mod.request_interpretation([], estimated_input=10)
+        elif owner == "contract":
+            from game import semantic_interpreter as mod
+            monkeypatch.setattr(mod, "get_openai_api_key", lambda: "stub-only")
+            invoke = lambda: mod._invoke_interpretation_model([])
+        elif owner == "candidate":
+            from game.host_constrained_candidates import invoke_candidate_provider
+            invoke = lambda: invoke_candidate_provider({})
+        elif owner == "plan":
+            from game.unified_semantic_planning import _invoke_provider
+            invoke = lambda: _invoke_provider({})
+        elif owner == "preflight":
+            from game.api_upstream_preflight import run_upstream_api_preflight
+            invoke = lambda: run_upstream_api_preflight(api_key="stub-only", client_factory=lambda key: NS(responses=NS(create=create)))
+        else:
+            from tests.helpers.live_model_guard import production_call_gpt
+            invoke = lambda: production_call_gpt()([], purpose="narration")
+        try:
+&gt;           invoke()
+
+tests\test_provider_accounting_integrity.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_provider_accounting_integrity.py:189: in &lt;lambda&gt;
+    invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+_args = ({'prompt': {'system': 'system', 'user': 'user'}},), _kwargs = {}
+
+    def _blocked_expression(*_args, **_kwargs):
+&gt;       raise LiveModelCallForbidden("game.expressive_dialogue.request_expression")
+E       tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E       site: game.expressive_dialogue.request_expression
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py", line 408, in pytest_runtestloop
+E           item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E           runtestprotocol(item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 139, in runtestprotocol
+E           reports.append(call_and_report(item, "call", log))
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 249, in call_and_report
+E           call = CallInfo.from_call(
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+E           result: TResult | None = func()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 250, in &lt;lambda&gt;
+E           lambda: runtest_hook(item=item, **kwds),
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+E           item.runtest()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+E           self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+E           result = testfunction(**testargs)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception
+E           invoke()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 189, in &lt;lambda&gt;
+E           invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 79, in _blocked_expression
+E           raise LiveModelCallForbidden("game.expressive_dialogue.request_expression")
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+E           stack = "".join(traceback.format_stack(limit=25))
+
+tests\helpers\live_model_guard.py:79: LiveModelCallForbidden</failure></testcase><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-interpretation]" time="0.015" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-contract]" time="0.007"><failure message="tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.&#10;site: game.semantic_interpreter._invoke_interpretation_model&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py&quot;, line 408, in pytest_runtestloop&#10;    item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 118, in pytest_runtest_protocol&#10;    runtestprotocol(item, nextitem=nextitem)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 139, in runtestprotocol&#10;    reports.append(call_and_report(item, &quot;call&quot;, log))&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 249, in call_and_report&#10;    call = CallInfo.from_call(&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 361, in from_call&#10;    result: TResult | None = func()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 250, in &lt;lambda&gt;&#10;    lambda: runtest_hook(item=item, **kwds),&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py&quot;, line 184, in pytest_runtest_call&#10;    item.runtest()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 1707, in runtest&#10;    self.ihook.pytest_pyfunc_call(pyfuncitem=self)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py&quot;, line 512, in __call__&#10;    return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py&quot;, line 120, in _hookexec&#10;    return self._inner_hookexec(hook_name, methods, kwargs, firstresult)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py&quot;, line 121, in _multicall&#10;    res = hook_impl.function(*args)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py&quot;, line 167, in pytest_pyfunc_call&#10;    result = testfunction(**testargs)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception&#10;    invoke()&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py&quot;, line 198, in &lt;lambda&gt;&#10;    invoke = lambda: mod._invoke_interpretation_model([])&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 76, in _blocked_interpretation&#10;    raise LiveModelCallForbidden(&quot;game.semantic_interpreter._invoke_interpretation_model&quot;)&#10;  File &quot;C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py&quot;, line 30, in __init__&#10;    stack = &quot;&quot;.join(traceback.format_stack(limit=25))">ledger = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/development/tmp/atgb03b_unit/test_each_dispatch_owner_accou9/requests.jsonl')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001AB37919430&gt;
+owner = 'contract', fail = True
+
+    @pytest.mark.parametrize("owner", ["expression", "interpretation", "contract", "candidate", "plan", "preflight", "narration"])
+    @pytest.mark.parametrize("fail", [False, True])
+    def test_each_dispatch_owner_accounts_success_or_provider_exception(ledger, monkeypatch, owner, fail):
+        import openai
+        from game import config
+        calls = []
+        def create(**kwargs):
+            calls.append(kwargs)
+            assert budget.snapshot()["requests"] == 1
+            assert json.loads(ledger.read_text().splitlines()[-1])["event"] == "dispatch_attempted"
+            if fail:
+                raise TimeoutError("sensitive content")
+            return response()
+        monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=create)))
+        monkeypatch.setattr(config, "get_openai_api_key", lambda: "stub-only")
+        if owner == "expression":
+            from game.expressive_dialogue import request_expression
+            invoke = lambda: request_expression({"prompt": {"system": "system", "user": "user"}})
+        elif owner == "interpretation":
+            from game import live_chat_interpretation as mod
+            monkeypatch.setattr(mod, "_contract", lambda: (None, None, None, None, "gpt-4.1-mini", None))
+            monkeypatch.setattr(mod, "production_interpretation_schema", lambda: {})
+            invoke = lambda: mod.request_interpretation([], estimated_input=10)
+        elif owner == "contract":
+            from game import semantic_interpreter as mod
+            monkeypatch.setattr(mod, "get_openai_api_key", lambda: "stub-only")
+            invoke = lambda: mod._invoke_interpretation_model([])
+        elif owner == "candidate":
+            from game.host_constrained_candidates import invoke_candidate_provider
+            invoke = lambda: invoke_candidate_provider({})
+        elif owner == "plan":
+            from game.unified_semantic_planning import _invoke_provider
+            invoke = lambda: _invoke_provider({})
+        elif owner == "preflight":
+            from game.api_upstream_preflight import run_upstream_api_preflight
+            invoke = lambda: run_upstream_api_preflight(api_key="stub-only", client_factory=lambda key: NS(responses=NS(create=create)))
+        else:
+            from tests.helpers.live_model_guard import production_call_gpt
+            invoke = lambda: production_call_gpt()([], purpose="narration")
+        try:
+&gt;           invoke()
+
+tests\test_provider_accounting_integrity.py:212: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_provider_accounting_integrity.py:198: in &lt;lambda&gt;
+    invoke = lambda: mod._invoke_interpretation_model([])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+_args = ([],), _kwargs = {}
+
+    def _blocked_interpretation(*_args, **_kwargs):
+&gt;       raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E       tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E       site: game.semantic_interpreter._invoke_interpretation_model
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\main.py", line 408, in pytest_runtestloop
+E           item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E           runtestprotocol(item, nextitem=nextitem)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 139, in runtestprotocol
+E           reports.append(call_and_report(item, "call", log))
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 249, in call_and_report
+E           call = CallInfo.from_call(
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 361, in from_call
+E           result: TResult | None = func()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 250, in &lt;lambda&gt;
+E           lambda: runtest_hook(item=item, **kwds),
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\runner.py", line 184, in pytest_runtest_call
+E           item.runtest()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 1707, in runtest
+E           self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E           return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E           return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E           res = hook_impl.function(*args)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\_pytest\python.py", line 167, in pytest_pyfunc_call
+E           result = testfunction(**testargs)
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 212, in test_each_dispatch_owner_accounts_success_or_provider_exception
+E           invoke()
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_provider_accounting_integrity.py", line 198, in &lt;lambda&gt;
+E           invoke = lambda: mod._invoke_interpretation_model([])
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 76, in _blocked_interpretation
+E           raise LiveModelCallForbidden("game.semantic_interpreter._invoke_interpretation_model")
+E         File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\live_model_guard.py", line 30, in __init__
+E           stack = "".join(traceback.format_stack(limit=25))
+
+tests\helpers\live_model_guard.py:76: LiveModelCallForbidden</failure></testcase><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-candidate]" time="0.014" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-plan]" time="0.014" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-preflight]" time="0.014" /><testcase classname="tests.test_provider_accounting_integrity" name="test_each_dispatch_owner_accounts_success_or_provider_exception[True-narration]" time="0.015" /><testcase classname="tests.test_provider_accounting_integrity" name="test_early_return_adds_evidence_without_changing_response" time="0.008" /><testcase classname="tests.test_provider_accounting_integrity" name="test_conditional_gates_do_not_admit_requests" time="0.006" /><testcase classname="tests.test_provider_accounting_integrity" name="test_readiness_acceptance_is_not_live_execution" time="4.065" /><testcase classname="tests.test_provider_accounting_integrity" name="test_readiness_refuses_unsafe_or_unreviewed_sources[unwrapped]" time="0.360" /><testcase classname="tests.test_provider_accounting_integrity" name="test_readiness_refuses_unsafe_or_unreviewed_sources[new_site]" time="0.363" /><testcase classname="tests.test_provider_accounting_integrity" name="test_readiness_refuses_unsafe_or_unreviewed_sources[core]" time="0.363" /><testcase classname="tests.test_provider_accounting_integrity" name="test_readiness_refuses_unsafe_or_unreviewed_sources[manifest]" time="0.030" /><testcase classname="tests.test_atgb_accounting" name="test_missing_host_performance_never_becomes_zero" time="0.006" /><testcase classname="tests.test_atgb_accounting" name="test_no_provider_expression_and_multiple_requests[purposes0]" time="0.006" /><testcase classname="tests.test_atgb_accounting" name="test_no_provider_expression_and_multiple_requests[purposes1]" time="0.008" /><testcase classname="tests.test_atgb_accounting" name="test_no_provider_expression_and_multiple_requests[purposes2]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_host_disagreement_is_not_added_or_substituted" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[missing_file]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[partial_line]" time="0.009" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[missing_sent]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[missing_id]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[missing_usage]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[duplicate]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[counter]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[snapshot]" time="0.007" /><testcase classname="tests.test_atgb_accounting" name="test_incomplete_or_disagreeing_accounting_is_unavailable[stopped]" time="0.006" /><testcase classname="tests.test_atgb_accounting" name="test_budget_and_time_exhaustion_still_stop" time="0.001" /><testcase classname="tests.test_atgb_accounting" name="test_existing_request_guard_bounds_multiple_completed_attempts" time="0.020" /><testcase classname="tests.test_atgb_accounting" name="test_unfinished_admission_now_consumes_allowance" time="0.011" /><testcase classname="tests.test_atgb_accounting" name="test_readiness_verifies_repaired_dispatch_coverage" time="4.126" /><testcase classname="tests.test_atgb_accounting" name="test_live_runner_refuses_before_store_or_provider" time="0.010" /><testcase classname="tests.test_atgb_accounting" name="test_direct_worker_refuses_even_on_resume_before_game_import_or_reset" time="0.006" /><testcase classname="tests.test_atgb_accounting" name="test_interrupted_scenario_store_cannot_be_reused" time="0.048" /></testsuite></testsuites>

@@ -1,0 +1,690 @@
+{
+  "evidence_class": "recorded-provider output injected at wire; real HTTP/resolvers",
+  "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+  "raw": {
+    "communication": {
+      "recipient": "GM",
+      "purpose": "QUESTION",
+      "subject": "Whether guards watch the north gate at night",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Ask Sergeant Mara if guards watch the north gate at night"
+    },
+    "asserted_premises": [
+      {
+        "text": "Sergeant Mara is present and watching the road in the courtyard."
+      },
+      {
+        "text": "The north gate is a known location at the courtyard."
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "Sergeant Mara provides information about guard presence at the north gate during the night."
+      }
+    ],
+    "action_components": [
+      {
+        "order": 1,
+        "description": "Ask Sergeant Mara whether guards watch the north gate at night",
+        "target_ref": "sergeant_mara",
+        "operation_class": "ASK"
+      }
+    ],
+    "references": {
+      "permitted_entity_ids": [
+        "sergeant_mara"
+      ],
+      "unresolved_references": [
+        "north gate"
+      ]
+    },
+    "clarification_question": "",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    }
+  },
+  "result": {
+    "ok": true,
+    "gm_output": {
+      "player_facing_text": "Which person, place, or thing do you mean?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:unresolved_references",
+      "metadata": {
+        "accepted_response": {
+          "immutable": true,
+          "text": "Which person, place, or thing do you mean?",
+          "provenance": "authorized_host_speech",
+          "attempt": 0,
+          "player_input": "I ask Sergeant Mara whether guards watch the north gate at night.",
+          "turn_identity": "",
+          "speaker": "GM",
+          "addressee": "player",
+          "target": "",
+          "operation": "ask",
+          "authority_result": "accepted",
+          "grounding_result": "not_a_replacement_trigger",
+          "hard_validation": {
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": [],
+            "authority": [
+              "conversational_decision:unresolved_references"
+            ],
+            "gm_resolution_decision_audit": null
+          },
+          "interaction_completion": true,
+          "contract_satisfying": true,
+          "contract": {
+            "contract_id": "",
+            "operation": "",
+            "interlocutor_id": "",
+            "expected_resolution": ""
+          },
+          "resolution_kind": "conversational_clarify",
+          "generation_attempts": 0,
+          "skipped_mutators": [],
+          "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+          "authorization_source": "conversational_decision:unresolved_references",
+          "speaker_id": "",
+          "canonical": false,
+          "candidate_disposition": "host_selected"
+        },
+        "emission_debug": {
+          "accepted_response_provenance": "authorized_host_speech",
+          "generation_attempts": 0,
+          "legacy_emission_authority": false,
+          "semantic_degradation": false,
+          "semantic_degradation_reasons": [],
+          "resolution_contract_semantic": {
+            "status": "satisfied",
+            "reasons": [],
+            "preserved": true
+          }
+        }
+      }
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "I ask Sergeant Mara whether guards watch the north gate at night.",
+      "prompt": "I ask Sergeant Mara whether guards watch the north gate at night.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "I ask Sergeant Mara whether guards watch the north gate at night.",
+          "intent_family": "world_operation",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Ask Sergeant Mara if guards watch the north gate at night"
+            },
+            "asserted_premises": [
+              {
+                "text": "Sergeant Mara is present and watching the road in the courtyard.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "The north gate is a known location at the courtyard.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Sergeant Mara provides information about guard presence at the north gate during the night.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Ask Sergeant Mara whether guards watch the north gate at night",
+                "target_ref": "sergeant_mara",
+                "operation_class": "ASK"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "sergeant_mara"
+              ],
+              "unresolved_references": [
+                "north gate"
+              ]
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "NPC",
+              "purpose": "QUESTION",
+              "subject": "Whether guards watch the north gate at night",
+              "evidence_refs": []
+            },
+            "incidental_context": [],
+            "public_evidence": {},
+            "authorization_conflict": {
+              "provider_recipient": "GM",
+              "resolved_owner": "NPC",
+              "target_id": "sergeant_mara",
+              "conflict_status": "none"
+            }
+          },
+          "missing_information": [
+            "reference"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "unresolved_references",
+          "confidence": 0.7,
+          "ambiguity": null,
+          "player_facing_text": "Which person, place, or thing do you mean?",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": "",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "NEEDS_CLARIFICATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Whether guards watch the north gate at night\",\"evidence_refs\":[]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask Sergeant Mara if guards watch the north gate at night\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara is present and watching the road in the courtyard.\"},{\"text\":\"The north gate is a known location at the courtyard.\"}],\"requested_outcomes\":[{\"text\":\"Sergeant Mara provides information about guard presence at the north gate during the night.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask Sergeant Mara whether guards watch the north gate at night\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[\"north gate\"]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [],
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Ask Sergeant Mara if guards watch the north gate at night"
+            },
+            "asserted_premises": [
+              {
+                "text": "Sergeant Mara is present and watching the road in the courtyard.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "The north gate is a known location at the courtyard.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Sergeant Mara provides information about guard presence at the north gate during the night.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Ask Sergeant Mara whether guards watch the north gate at night",
+                "target_ref": "sergeant_mara",
+                "operation_class": "ASK"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "sergeant_mara"
+              ],
+              "unresolved_references": [
+                "north gate"
+              ]
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "QUESTION",
+              "subject": "Whether guards watch the north gate at night",
+              "evidence_refs": []
+            },
+            "incidental_context": [],
+            "public_evidence": {}
+          }
+        },
+        "stored_interpretation_bridge": {
+          "source": "stored_interpretation",
+          "accepted": false,
+          "reason": "unresolved_references",
+          "unresolved_references": [
+            "north gate"
+          ]
+        },
+        "provider_calls": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 31,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": false,
+          "provider_narration_skipped": false
+        }
+      }
+    }
+  },
+  "world_before": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "location": "frontier_gate",
+        "role": "guard",
+        "affiliation": "cinderwatch",
+        "disposition": "neutral",
+        "current_agenda": "patrol_gate",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "patrol",
+            "text": "A patrol went missing near the old milestone."
+          }
+        ],
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "role": "informant",
+        "affiliation": "ash_cowl",
+        "disposition": "friendly",
+        "current_agenda": "sell_rumors",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          }
+        ],
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "sergeant_mara",
+        "name": "Sergeant Mara",
+        "location": "waystation_courtyard",
+        "role": "guard",
+        "disposition": "neutral",
+        "topics": [
+          {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road"
+          },
+          {
+            "id": "night_watch",
+            "text": "Guards watch the north gate throughout the night."
+          }
+        ],
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "world_after": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "location": "frontier_gate",
+        "role": "guard",
+        "affiliation": "cinderwatch",
+        "disposition": "neutral",
+        "current_agenda": "patrol_gate",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "patrol",
+            "text": "A patrol went missing near the old milestone."
+          }
+        ],
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "role": "informant",
+        "affiliation": "ash_cowl",
+        "disposition": "friendly",
+        "current_agenda": "sell_rumors",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          }
+        ],
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "sergeant_mara",
+        "name": "Sergeant Mara",
+        "location": "waystation_courtyard",
+        "role": "guard",
+        "disposition": "neutral",
+        "topics": [
+          {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road"
+          },
+          {
+            "id": "night_watch",
+            "text": "Guards watch the north gate throughout the night."
+          }
+        ],
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_before": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T12:49:44.187642Z",
+    "campaign_started": true
+  },
+  "session_after": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T12:49:44.237733Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I ask Sergeant Mara whether guards watch the north gate at night.",
+          "delivered_text": "Which person, place, or thing do you mean?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:unresolved_references",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "I ask Sergeant Mara whether guards watch the north gate at night.",
+        "response": "Which person, place, or thing do you mean?",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "wire_calls": [
+    "interpretation"
+  ]
+}

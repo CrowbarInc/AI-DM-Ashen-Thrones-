@@ -1,0 +1,23 @@
+...................F.................F...F..............                 [100%]
+================================== FAILURES ===================================
+__________ test_provider_disabled_host_uses_chat_and_isolates_state ___________
+tests\test_atgb_infrastructure.py:263: in test_provider_disabled_host_uses_chat_and_isolates_state
+    assert fallback["response_text"] == "Provider calls are disabled for this run, so no live narration was generated."
+E   AssertionError: assert 'The controll...this session.' == 'Provider cal...as generated.'
+E     
+E     - Provider calls are disabled for this run, so no live narration was generated.
+E     + The controlled playtest request limit has been reached. Stop and export diagnostics; do not restart to continue this session.
+_____________ test_readiness_verifies_repaired_dispatch_coverage ______________
+tests\test_atgb_accounting.py:134: in test_readiness_verifies_repaired_dispatch_coverage
+    assert audit["ok"]
+E   assert False
+___ test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes ___
+tests\test_atgb_readiness.py:26: in test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes
+    assert run["turns"] == [] and run["stop_reason"] is None
+E   AssertionError: assert ([] == []
+E     
+E     Use -v to get more diff and 'worker_failed' is None)
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_infrastructure.py::test_provider_disabled_host_uses_chat_and_isolates_state
+FAILED tests/test_atgb_accounting.py::test_readiness_verifies_repaired_dispatch_coverage
+FAILED tests/test_atgb_readiness.py::test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes

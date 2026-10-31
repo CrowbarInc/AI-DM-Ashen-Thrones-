@@ -1,0 +1,3685 @@
+[
+  {
+    "case": "amber_copper",
+    "player": "I meant the copper reliquary.",
+    "identical_inputs_sha256": "7b8d4da2740ffa9ec7312d5997c7798167b0139805ff8502438247819926cc47",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {
+        "conversational_context": {
+          "delivered_exchanges": [
+            {
+              "speaker_id": "tavi",
+              "speaker_name": "Tavi",
+              "addressee": "player",
+              "ownership": "npc",
+              "player_text": "Tavi, who keeps the amber reliquary?",
+              "delivered_text": "Tavi says, \"I couldn't tell you.\"",
+              "subject": "",
+              "topic_id": "",
+              "requested_information": "",
+              "supplied_text": "I couldn't tell you.",
+              "uncertain": true,
+              "commitment": false,
+              "scene_id": "",
+              "turn": 1,
+              "active": true,
+              "authorized_proposition": "I couldn't tell you.",
+              "answer_sufficiency": "",
+              "unified_semantic_plan": {
+                "locked": true,
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "amber reliquary",
+                  "object_evidence": "amber reliquary",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "entity_roles": [],
+                "mentioned_entity_ids": [],
+                "correction_target": "",
+                "referent_operation": {
+                  "target_referent_id": "",
+                  "operation": "",
+                  "changed_fields": [],
+                  "follow_up_relationship": ""
+                },
+                "referent_eligible": true,
+                "plan_version": "pr-eg-r6-r2-r1.1",
+                "conversational_act": "information_question",
+                "addressee_id": "tavi",
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "question_text": "Tavi, who keeps the amber reliquary?",
+                "selected_source_ids": [],
+                "answer_sufficiency": "unknown",
+                "response_kind": "unknown",
+                "ambiguity_type": "",
+                "referenced_prior_proposition": "",
+                "rejected_source_ids": [],
+                "authorized_text": "",
+                "host_line": "Tavi says, \"I couldn't tell you.\"",
+                "reason": "no_relevant_source",
+                "epistemic_status": "none",
+                "canonical": false,
+                "referent_id": "5cf40e7849874a98aae172a0adef846c:1"
+              },
+              "proposition_id": "statement:bdab69250927",
+              "response_integrity_digest": "0949341f1189825570c3e69e1b15d997b63aa9846b0e339fdc8c214e9f18d6d5",
+              "authorization_source": "host",
+              "adoption_turn_identity": "",
+              "referent_id": "5cf40e7849874a98aae172a0adef846c:1"
+            }
+          ],
+          "question_referents": {
+            "version": 1,
+            "conversation_id": "5cf40e7849874a98aae172a0adef846c",
+            "active_id": "5cf40e7849874a98aae172a0adef846c:1",
+            "sequence": 1,
+            "records": [
+              {
+                "referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+                "conversation_id": "5cf40e7849874a98aae172a0adef846c",
+                "originating_turn_id": 1,
+                "delivery_id": "1:Tavi, who keeps the amber reliquary?",
+                "parent_referent_id": "",
+                "revision": 0,
+                "corrected_fields": [],
+                "addressee_id": "tavi",
+                "mentioned_entity_ids": [],
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "amber reliquary",
+                  "object_evidence": "amber reliquary",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "witness_text": "keeps  amber reliquary  ",
+                "answer_status": "unknown",
+                "epistemic_status": "none",
+                "correction_status": "original",
+                "focus_status": "active",
+                "follow_up_relationship": "",
+                "proposition_referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+                "source_plan_id": "0949341f1189825570c3e69e1b15d997b63aa9846b0e339fdc8c214e9f18d6d5",
+                "provenance": "host_interpretation",
+                "canonical": false
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "copper reliquary",
+        "object_evidence": "copper reliquary",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "correction",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+            "operation": "replace_object",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": ""
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "correction",
+        "addressee_id": "",
+        "addressee_reference": "",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "I meant the copper reliquary.",
+        "correction_of_prior_question": false,
+        "correction_target": "Tavi, who keeps the amber reliquary?",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "correction_target",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Which question are you correcting?",
+        "reason": "missing_correction_target",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.108
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "keeper_of(night_drum)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "direct"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "correction",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+            "operation": "replace_object",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": ""
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        },
+        "bound_referent_id": "5cf40e7849874a98aae172a0adef846c:1",
+        "referent_prior_answer_status": "unknown",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "copper reliquary",
+        "requested_relationship": "keeper_of(copper_reliquary)",
+        "question_text": "I meant the copper reliquary.",
+        "correction_of_prior_question": true,
+        "correction_target": "keeps  amber reliquary  ",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [
+          "fact"
+        ],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [
+          "fact"
+        ],
+        "answer_sufficiency": "direct",
+        "response_kind": "direct",
+        "ambiguity_type": "",
+        "authorized_text": "The miller keeps the copper reliquary.",
+        "epistemic_status": "npc_knowledge",
+        "canonical": false,
+        "host_line": "Tavi mutters, \"Word is, the miller keeps the copper reliquary.\"",
+        "reason": "authorized_direct",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.694
+      }
+    }
+  },
+  {
+    "case": "aqueduct_attribution",
+    "player": "Who told you?",
+    "identical_inputs_sha256": "663498632fa069a80ca663b2b84c85b135a823ac81259c759a2451d6f73e6abe",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {
+        "conversational_context": {
+          "delivered_exchanges": [
+            {
+              "speaker_id": "tavi",
+              "speaker_name": "Tavi",
+              "addressee": "player",
+              "ownership": "npc",
+              "player_text": "Tavi, what is the aqueduct called?",
+              "delivered_text": "Tavi says, \"I couldn't tell you.\"",
+              "subject": "",
+              "topic_id": "",
+              "requested_information": "",
+              "supplied_text": "I couldn't tell you.",
+              "uncertain": true,
+              "commitment": false,
+              "scene_id": "",
+              "turn": 1,
+              "active": true,
+              "authorized_proposition": "I couldn't tell you.",
+              "answer_sufficiency": "",
+              "unified_semantic_plan": {
+                "locked": true,
+                "request_proposition": {
+                  "predicate": "name",
+                  "predicate_evidence": "called",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "aqueduct",
+                  "object_evidence": "aqueduct",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "entity_roles": [],
+                "mentioned_entity_ids": [],
+                "correction_target": "",
+                "referent_operation": {
+                  "target_referent_id": "",
+                  "operation": "",
+                  "changed_fields": [],
+                  "follow_up_relationship": ""
+                },
+                "referent_eligible": true,
+                "plan_version": "pr-eg-r6-r2-r1.1",
+                "conversational_act": "information_question",
+                "addressee_id": "tavi",
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "question_text": "Tavi, what is the aqueduct called?",
+                "selected_source_ids": [],
+                "answer_sufficiency": "unknown",
+                "response_kind": "unknown",
+                "ambiguity_type": "",
+                "referenced_prior_proposition": "",
+                "rejected_source_ids": [],
+                "authorized_text": "",
+                "host_line": "Tavi says, \"I couldn't tell you.\"",
+                "reason": "no_relevant_source",
+                "epistemic_status": "none",
+                "canonical": false,
+                "referent_id": "61317d87533a4d5e808c204358b5a0dc:1"
+              },
+              "proposition_id": "statement:bdab69250927",
+              "response_integrity_digest": "6a200b13dac5323d1d6d63425a5d9c9abb9babed36a8f60390c97e662f808c3f",
+              "authorization_source": "host",
+              "adoption_turn_identity": "",
+              "referent_id": "61317d87533a4d5e808c204358b5a0dc:1"
+            }
+          ],
+          "question_referents": {
+            "version": 1,
+            "conversation_id": "61317d87533a4d5e808c204358b5a0dc",
+            "active_id": "61317d87533a4d5e808c204358b5a0dc:1",
+            "sequence": 1,
+            "records": [
+              {
+                "referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+                "conversation_id": "61317d87533a4d5e808c204358b5a0dc",
+                "originating_turn_id": 1,
+                "delivery_id": "1:Tavi, what is the aqueduct called?",
+                "parent_referent_id": "",
+                "revision": 0,
+                "corrected_fields": [],
+                "addressee_id": "tavi",
+                "mentioned_entity_ids": [],
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "request_proposition": {
+                  "predicate": "name",
+                  "predicate_evidence": "called",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "aqueduct",
+                  "object_evidence": "aqueduct",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "witness_text": "called  aqueduct  ",
+                "answer_status": "unknown",
+                "epistemic_status": "none",
+                "correction_status": "original",
+                "focus_status": "active",
+                "follow_up_relationship": "",
+                "proposition_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+                "source_plan_id": "6a200b13dac5323d1d6d63425a5d9c9abb9babed36a8f60390c97e662f808c3f",
+                "provenance": "host_interpretation",
+                "canonical": false
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "follow_up",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "informant",
+        "predicate_evidence": "told",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "aqueduct",
+        "object_evidence": "aqueduct",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "source_attribution"
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "informant",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "aqueduct",
+          "object_evidence": "aqueduct",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "informant",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "aqueduct",
+            "object_evidence": "aqueduct",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": "source_attribution"
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Who told you?",
+        "correction_of_prior_question": false,
+        "correction_target": "Tavi, what is the aqueduct called?",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.122
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "informant",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "aqueduct",
+          "object_evidence": "aqueduct",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "keeper_of(night_drum)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "informant",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "aqueduct",
+            "object_evidence": "aqueduct",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": "source_attribution"
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": "source_attribution"
+        },
+        "bound_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+        "proposition_referent_id": "61317d87533a4d5e808c204358b5a0dc:1",
+        "referent_prior_answer_status": "unknown",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "aqueduct",
+        "requested_relationship": "informant_of(aqueduct)",
+        "question_text": "Who told you?",
+        "correction_of_prior_question": false,
+        "correction_target": "called  aqueduct  ",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I was saying I do not know the answer to that question.\"",
+        "reason": "referenced_answer_unknown",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.221
+      }
+    }
+  },
+  {
+    "case": "north_road",
+    "player": "I wasn't asking about the bell. I meant the north road.",
+    "identical_inputs_sha256": "51f22d94dc9ccc0b7018f15c1b5e252c1a93042908373437d088da3111145e4c",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {
+        "conversational_context": {
+          "delivered_exchanges": [
+            {
+              "speaker_id": "tavi",
+              "speaker_name": "Tavi",
+              "addressee": "player",
+              "ownership": "npc",
+              "player_text": "Tavi, who keeps the bell?",
+              "delivered_text": "Tavi says, \"I couldn't tell you.\"",
+              "subject": "",
+              "topic_id": "",
+              "requested_information": "",
+              "supplied_text": "I couldn't tell you.",
+              "uncertain": true,
+              "commitment": false,
+              "scene_id": "",
+              "turn": 1,
+              "active": true,
+              "authorized_proposition": "I couldn't tell you.",
+              "answer_sufficiency": "",
+              "unified_semantic_plan": {
+                "locked": true,
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "bell",
+                  "object_evidence": "bell",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "entity_roles": [],
+                "mentioned_entity_ids": [],
+                "correction_target": "",
+                "referent_operation": {
+                  "target_referent_id": "",
+                  "operation": "",
+                  "changed_fields": [],
+                  "follow_up_relationship": ""
+                },
+                "referent_eligible": true,
+                "plan_version": "pr-eg-r6-r2-r1.1",
+                "conversational_act": "information_question",
+                "addressee_id": "tavi",
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "question_text": "Tavi, who keeps the bell?",
+                "selected_source_ids": [],
+                "answer_sufficiency": "unknown",
+                "response_kind": "unknown",
+                "ambiguity_type": "",
+                "referenced_prior_proposition": "",
+                "rejected_source_ids": [],
+                "authorized_text": "",
+                "host_line": "Tavi says, \"I couldn't tell you.\"",
+                "reason": "no_relevant_source",
+                "epistemic_status": "none",
+                "canonical": false,
+                "referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1"
+              },
+              "proposition_id": "statement:bdab69250927",
+              "response_integrity_digest": "af7c50930592c202a801d5d876f4622ff83e4ac259f3d5151b025389c318857c",
+              "authorization_source": "host",
+              "adoption_turn_identity": "",
+              "referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1"
+            }
+          ],
+          "question_referents": {
+            "version": 1,
+            "conversation_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585",
+            "active_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+            "sequence": 1,
+            "records": [
+              {
+                "referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+                "conversation_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585",
+                "originating_turn_id": 1,
+                "delivery_id": "1:Tavi, who keeps the bell?",
+                "parent_referent_id": "",
+                "revision": 0,
+                "corrected_fields": [],
+                "addressee_id": "tavi",
+                "mentioned_entity_ids": [],
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "bell",
+                  "object_evidence": "bell",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "witness_text": "keeps  bell  ",
+                "answer_status": "unknown",
+                "epistemic_status": "none",
+                "correction_status": "original",
+                "focus_status": "active",
+                "follow_up_relationship": "",
+                "proposition_referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+                "source_plan_id": "af7c50930592c202a801d5d876f4622ff83e4ac259f3d5151b025389c318857c",
+                "provenance": "host_interpretation",
+                "canonical": false
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "north road",
+        "object_evidence": "north road",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "north road",
+          "object_evidence": "north road",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "correction",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "north road",
+            "object_evidence": "north road",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+            "operation": "replace_object",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": ""
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "correction",
+        "addressee_id": "",
+        "addressee_reference": "",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "I wasn't asking about the bell. I meant the north road.",
+        "correction_of_prior_question": false,
+        "correction_target": "Tavi, who keeps the bell?",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "correction_target",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Which question are you correcting?",
+        "reason": "missing_correction_target",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.084
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "north road",
+          "object_evidence": "north road",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "keeper_of(night_drum)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unrelated"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "correction",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "north road",
+            "object_evidence": "north road",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+            "operation": "replace_object",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": ""
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        },
+        "bound_referent_id": "bd8ad85f3bcf4677b6b0cdaec3b9f585:1",
+        "referent_prior_answer_status": "unknown",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "north road",
+        "requested_relationship": "keeper_of(north_road)",
+        "question_text": "I wasn't asking about the bell. I meant the north road.",
+        "correction_of_prior_question": true,
+        "correction_target": "keeps  bell  ",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.254
+      }
+    }
+  },
+  {
+    "case": "multiple_npc",
+    "player": "Mara, what did Oren say about the road?",
+    "identical_inputs_sha256": "01b80b561394c862093af70c8b17758a0d3c7acf186b3402e3dddbdf7d462e81",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {}
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "information_question",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "say",
+        "predicate_evidence": "say",
+        "subject": "Oren",
+        "subject_evidence": "Oren",
+        "object": "road",
+        "object_evidence": "road",
+        "missing_argument": "predicate",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": ""
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "say",
+          "predicate_evidence": "say",
+          "subject": "Oren",
+          "subject_evidence": "Oren",
+          "object": "road",
+          "object_evidence": "road",
+          "missing_argument": "predicate",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "say",
+            "predicate_evidence": "say",
+            "subject": "Oren",
+            "subject_evidence": "Oren",
+            "object": "road",
+            "object_evidence": "road",
+            "missing_argument": "predicate",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [],
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          }
+        },
+        "mentioned_entity_ids": [
+          "oren"
+        ],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "mara",
+        "addressee_reference": "Mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, what did Oren say about the road?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Mara says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.104
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "say",
+          "predicate_evidence": "say",
+          "subject": "Oren",
+          "subject_evidence": "Oren",
+          "object": "road",
+          "object_evidence": "road",
+          "missing_argument": "predicate",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "say",
+            "predicate_evidence": "say",
+            "subject": "Oren",
+            "subject_evidence": "Oren",
+            "object": "road",
+            "object_evidence": "road",
+            "missing_argument": "predicate",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [],
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": ""
+        },
+        "referent_eligible": true,
+        "mentioned_entity_ids": [
+          "oren"
+        ],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "information_question",
+        "addressee_id": "mara",
+        "addressee_reference": "Mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, what did Oren say about the road?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Mara says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.094
+      }
+    }
+  },
+  {
+    "case": "partial_follow_up",
+    "player": "Who told you?",
+    "identical_inputs_sha256": "6a903b1c728bf91312d8735fbdd58510cb5f3a9502c813a9932e95135e6019c7",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Someone keeps the bell.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {
+        "conversational_context": {
+          "delivered_exchanges": [
+            {
+              "speaker_id": "tavi",
+              "speaker_name": "Tavi",
+              "addressee": "player",
+              "ownership": "npc",
+              "player_text": "Tavi, who keeps the bell?",
+              "delivered_text": "Tavi says, \"Someone keeps the bell. I couldn't say more than that.\"",
+              "subject": "",
+              "topic_id": "",
+              "requested_information": "",
+              "supplied_text": "Someone keeps the bell. I couldn't say more than that.",
+              "uncertain": true,
+              "commitment": false,
+              "scene_id": "",
+              "turn": 1,
+              "active": true,
+              "authorized_proposition": "Someone keeps the bell. I couldn't say more than that.",
+              "answer_sufficiency": "",
+              "unified_semantic_plan": {
+                "locked": true,
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "bell",
+                  "object_evidence": "bell",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "entity_roles": [],
+                "mentioned_entity_ids": [],
+                "correction_target": "",
+                "referent_operation": {
+                  "target_referent_id": "",
+                  "operation": "",
+                  "changed_fields": [],
+                  "follow_up_relationship": ""
+                },
+                "referent_eligible": true,
+                "plan_version": "pr-eg-r6-r2-r1.1",
+                "conversational_act": "information_question",
+                "addressee_id": "tavi",
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "question_text": "Tavi, who keeps the bell?",
+                "selected_source_ids": [
+                  "fact"
+                ],
+                "answer_sufficiency": "partial",
+                "response_kind": "partial",
+                "ambiguity_type": "",
+                "referenced_prior_proposition": "",
+                "rejected_source_ids": [],
+                "authorized_text": "Someone keeps the bell.",
+                "host_line": "Tavi says, \"Someone keeps the bell. I couldn't say more than that.\"",
+                "reason": "authorized_partial",
+                "epistemic_status": "npc_knowledge",
+                "canonical": false,
+                "referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1"
+              },
+              "proposition_id": "statement:0783a05f47ce",
+              "response_integrity_digest": "144cf65f8b662c8300b440ec679b87067a8844aa591333cd7b07fcaeac8de605",
+              "authorization_source": "host",
+              "adoption_turn_identity": "",
+              "referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1"
+            }
+          ],
+          "question_referents": {
+            "version": 1,
+            "conversation_id": "7816d3e1a844416d8b41e4a698c4b9e2",
+            "active_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+            "sequence": 1,
+            "records": [
+              {
+                "referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+                "conversation_id": "7816d3e1a844416d8b41e4a698c4b9e2",
+                "originating_turn_id": 1,
+                "delivery_id": "1:Tavi, who keeps the bell?",
+                "parent_referent_id": "",
+                "revision": 0,
+                "corrected_fields": [],
+                "addressee_id": "tavi",
+                "mentioned_entity_ids": [],
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "bell",
+                  "object_evidence": "bell",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "witness_text": "keeps  bell  ",
+                "answer_status": "partial",
+                "epistemic_status": "npc_knowledge",
+                "correction_status": "original",
+                "focus_status": "active",
+                "follow_up_relationship": "",
+                "proposition_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+                "source_plan_id": "144cf65f8b662c8300b440ec679b87067a8844aa591333cd7b07fcaeac8de605",
+                "provenance": "host_interpretation",
+                "canonical": false
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "follow_up",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "informant",
+        "predicate_evidence": "told",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "bell",
+        "object_evidence": "bell",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "source_attribution"
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "informant",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "bell",
+          "object_evidence": "bell",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "informant",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "bell",
+            "object_evidence": "bell",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": "source_attribution"
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Who told you?",
+        "correction_of_prior_question": false,
+        "correction_target": "Tavi, who keeps the bell?",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.091
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "informant",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "bell",
+          "object_evidence": "bell",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "keeper_of(night_drum)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "informant",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "bell",
+            "object_evidence": "bell",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": "source_attribution"
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": "source_attribution"
+        },
+        "bound_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+        "proposition_referent_id": "7816d3e1a844416d8b41e4a698c4b9e2:1",
+        "referent_prior_answer_status": "partial",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "bell",
+        "requested_relationship": "informant_of(bell)",
+        "question_text": "Who told you?",
+        "correction_of_prior_question": false,
+        "correction_target": "keeps  bell  ",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.191
+      }
+    }
+  },
+  {
+    "case": "ambiguous_alternative",
+    "player": "And the other one?",
+    "identical_inputs_sha256": "983f6bc96f9651cbb21861ef721c6188a970b90274eb77d77f02c59bfeac038e",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {
+        "conversational_context": {
+          "delivered_exchanges": [
+            {
+              "speaker_id": "tavi",
+              "speaker_name": "Tavi",
+              "addressee": "player",
+              "ownership": "npc",
+              "player_text": "Tavi, who keeps the bell?",
+              "delivered_text": "Tavi says, \"I couldn't tell you.\"",
+              "subject": "",
+              "topic_id": "",
+              "requested_information": "",
+              "supplied_text": "I couldn't tell you.",
+              "uncertain": true,
+              "commitment": false,
+              "scene_id": "",
+              "turn": 1,
+              "active": true,
+              "authorized_proposition": "I couldn't tell you.",
+              "answer_sufficiency": "",
+              "unified_semantic_plan": {
+                "locked": true,
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "bell",
+                  "object_evidence": "bell",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "entity_roles": [],
+                "mentioned_entity_ids": [],
+                "correction_target": "",
+                "referent_operation": {
+                  "target_referent_id": "",
+                  "operation": "",
+                  "changed_fields": [],
+                  "follow_up_relationship": ""
+                },
+                "referent_eligible": true,
+                "plan_version": "pr-eg-r6-r2-r1.1",
+                "conversational_act": "information_question",
+                "addressee_id": "tavi",
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "question_text": "Tavi, who keeps the bell?",
+                "selected_source_ids": [],
+                "answer_sufficiency": "unknown",
+                "response_kind": "unknown",
+                "ambiguity_type": "",
+                "referenced_prior_proposition": "",
+                "rejected_source_ids": [],
+                "authorized_text": "",
+                "host_line": "Tavi says, \"I couldn't tell you.\"",
+                "reason": "no_relevant_source",
+                "epistemic_status": "none",
+                "canonical": false,
+                "referent_id": "5ebb6a77475241fc884a71ec7982faad:1"
+              },
+              "proposition_id": "statement:bdab69250927",
+              "response_integrity_digest": "af7c50930592c202a801d5d876f4622ff83e4ac259f3d5151b025389c318857c",
+              "authorization_source": "host",
+              "adoption_turn_identity": "",
+              "referent_id": "5ebb6a77475241fc884a71ec7982faad:1"
+            }
+          ],
+          "question_referents": {
+            "version": 1,
+            "conversation_id": "5ebb6a77475241fc884a71ec7982faad",
+            "active_id": "5ebb6a77475241fc884a71ec7982faad:1",
+            "sequence": 1,
+            "records": [
+              {
+                "referent_id": "5ebb6a77475241fc884a71ec7982faad:1",
+                "conversation_id": "5ebb6a77475241fc884a71ec7982faad",
+                "originating_turn_id": 1,
+                "delivery_id": "1:Tavi, who keeps the bell?",
+                "parent_referent_id": "",
+                "revision": 0,
+                "corrected_fields": [],
+                "addressee_id": "tavi",
+                "mentioned_entity_ids": [],
+                "requested_subject": "night drum",
+                "requested_relationship": "keeper_of(night_drum)",
+                "request_proposition": {
+                  "predicate": "keeper",
+                  "predicate_evidence": "keeps",
+                  "subject": "",
+                  "subject_evidence": "",
+                  "object": "bell",
+                  "object_evidence": "bell",
+                  "missing_argument": "subject",
+                  "temporal": "",
+                  "spatial": "",
+                  "epistemic": "npc_knowledge",
+                  "prior_reference": "",
+                  "negated": false
+                },
+                "witness_text": "keeps  bell  ",
+                "answer_status": "unknown",
+                "epistemic_status": "none",
+                "correction_status": "original",
+                "focus_status": "active",
+                "follow_up_relationship": "",
+                "proposition_referent_id": "5ebb6a77475241fc884a71ec7982faad:1",
+                "source_plan_id": "af7c50930592c202a801d5d876f4622ff83e4ac259f3d5151b025389c318857c",
+                "provenance": "host_interpretation",
+                "canonical": false
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "follow_up",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "informant",
+        "predicate_evidence": "told",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "bell",
+        "object_evidence": "bell",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "5ebb6a77475241fc884a71ec7982faad:1",
+        "operation": "",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": "alternative_argument"
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "informant",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "bell",
+          "object_evidence": "bell",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "informant",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "bell",
+            "object_evidence": "bell",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "5ebb6a77475241fc884a71ec7982faad:1",
+            "operation": "",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": "alternative_argument"
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "And the other one?",
+        "correction_of_prior_question": false,
+        "correction_target": "Tavi, who keeps the bell?",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.106
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "informant",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "bell",
+          "object_evidence": "bell",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "informant",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "bell",
+            "object_evidence": "bell",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "5ebb6a77475241fc884a71ec7982faad:1",
+            "operation": "",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": "alternative_argument"
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "5ebb6a77475241fc884a71ec7982faad:1",
+          "operation": "",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": "alternative_argument"
+        },
+        "referent_eligible": false,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "",
+        "addressee_reference": "",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "keeps  bell  ",
+        "referenced_prior_proposition": "keeper_of(night_drum)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "correction_target",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Which earlier question do you mean?",
+        "reason": "ambiguous_alternative_argument",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.203
+      }
+    }
+  },
+  {
+    "case": "public_answer",
+    "player": "Tavi, who keeps the copper reliquary?",
+    "identical_inputs_sha256": "fae358ecf699cba46ac356dcb0c0890b805db722f9cfc4eeb5f54eedd324462f",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "public"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {}
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "information_question",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "copper reliquary",
+        "object_evidence": "copper reliquary",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": ""
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "direct"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Tavi, who keeps the copper reliquary?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "selected_source_ids": [
+          "fact"
+        ],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [
+          "fact"
+        ],
+        "answer_sufficiency": "direct",
+        "response_kind": "direct",
+        "ambiguity_type": "",
+        "authorized_text": "The miller keeps the copper reliquary.",
+        "epistemic_status": "npc_knowledge",
+        "canonical": false,
+        "host_line": "Tavi mutters, \"Word is, the miller keeps the copper reliquary.\"",
+        "reason": "authorized_direct",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.127
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "fact",
+            "coverage": "direct"
+          }
+        ],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": ""
+        },
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "information_question",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Tavi, who keeps the copper reliquary?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "selected_source_ids": [
+          "fact"
+        ],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [
+          "fact"
+        ],
+        "answer_sufficiency": "direct",
+        "response_kind": "direct",
+        "ambiguity_type": "",
+        "authorized_text": "The miller keeps the copper reliquary.",
+        "epistemic_status": "npc_knowledge",
+        "canonical": false,
+        "host_line": "Tavi mutters, \"Word is, the miller keeps the copper reliquary.\"",
+        "reason": "authorized_direct",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.132
+      }
+    }
+  },
+  {
+    "case": "restricted_answer",
+    "player": "Tavi, who keeps the copper reliquary?",
+    "identical_inputs_sha256": "829740eee8aa4e403e273f2d88ccb4a7de49708b95fa35fbf53ac0acd64af54a",
+    "initial_state": [
+      {
+        "npcs": [
+          {
+            "id": "tavi",
+            "name": "Tavi",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "The miller keeps the copper reliquary.",
+                "disclosure": "secret"
+              }
+            ]
+          },
+          {
+            "id": "mara",
+            "name": "Mara",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": [
+              {
+                "id": "fact",
+                "text": "Oren says the road is flooded."
+              }
+            ]
+          },
+          {
+            "id": "oren",
+            "name": "Oren",
+            "location": "ash_market",
+            "aliases": [],
+            "topics": []
+          }
+        ]
+      },
+      {
+        "scene": {
+          "id": "ash_market",
+          "location": "Ash Market",
+          "summary": "A public market.",
+          "visible_facts": [],
+          "addressables": [
+            {
+              "id": "tavi",
+              "name": "Tavi",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "mara",
+              "name": "Mara",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            },
+            {
+              "id": "oren",
+              "name": "Oren",
+              "scene_id": "ash_market",
+              "kind": "npc",
+              "addressable": true,
+              "aliases": []
+            }
+          ],
+          "exits": []
+        }
+      },
+      {}
+    ],
+    "proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "information_question",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "copper reliquary",
+        "object_evidence": "copper reliquary",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": ""
+      }
+    },
+    "runs": {
+      "r6_r2": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          }
+        },
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Tavi, who keeps the copper reliquary?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.892
+      },
+      "durable": {
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [],
+        "provider_proposal": {
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "night drum",
+          "requested_relationship": "keeper_of(night_drum)",
+          "question_text": "Mara, who manages the ferry schedules?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [],
+          "proposed_coverage": [],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.8,
+          "request_proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "fact",
+              "proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "miller",
+                "subject_evidence": "miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          }
+        },
+        "referent_operation": {
+          "target_referent_id": "",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": ""
+        },
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "information_question",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Tavi, who keeps the copper reliquary?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 0,
+        "provider_usage": {},
+        "latency_ms": 0.185
+      }
+    }
+  }
+]

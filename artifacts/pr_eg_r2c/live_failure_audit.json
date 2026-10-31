@@ -1,0 +1,94 @@
+[
+  {
+    "conversation": "primary",
+    "turn": 3,
+    "flags": [
+      "missing_requested_answer:north road"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "dialogue_authority.knowledge_posture"
+  },
+  {
+    "conversation": "primary",
+    "turn": 7,
+    "flags": [
+      "missing_requested_answer:throughout the night"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "dialogue_authority.knowledge_posture"
+  },
+  {
+    "conversation": "primary",
+    "turn": 8,
+    "flags": [
+      "missing_requested_answer:throughout the night"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 13,
+    "flags": [
+      "missing_requested_answer:north road"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "dialogue_authority.knowledge_posture"
+  },
+  {
+    "conversation": "primary",
+    "turn": 14,
+    "flags": [
+      "missing_requested_answer:north road",
+      "delivered_history_mismatch"
+    ],
+    "adjudication": "Content failure retained. delivered_history_mismatch compares the bounded retained NPC history with a GM recall; the history limit can evict the new GM row. This is not evidence of persisting a rejected NPC candidate.",
+    "source": "conversational_decision:gm_recall_of_npc_statement"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 1,
+    "flags": [
+      "missing_requested_answer:throughout the night"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 2,
+    "flags": [
+      "missing_requested_answer:throughout the night"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 6,
+    "flags": [
+      "missing_requested_answer:north road"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "dialogue_authority.knowledge_posture"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 7,
+    "flags": [
+      "missing_requested_answer:north road"
+    ],
+    "adjudication": "Content failure retained.",
+    "source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 12,
+    "flags": [
+      "missing_requested_answer:north road",
+      "delivered_history_mismatch"
+    ],
+    "adjudication": "Content failure retained. delivered_history_mismatch compares the bounded retained NPC history with a GM recall; the history limit can evict the new GM row. This is not evidence of persisting a rejected NPC candidate.",
+    "source": "conversational_decision:gm_recall_of_npc_statement"
+  }
+]

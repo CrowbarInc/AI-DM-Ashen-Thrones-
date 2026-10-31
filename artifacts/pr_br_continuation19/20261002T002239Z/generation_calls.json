@@ -1,0 +1,44 @@
+[
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_excerpt": "\"Can't say I've caught wind of much conversation about the gate tonight,\" the tavern runner replies, eyes flicking to the crowded approach. \"Most travelers seem too busy with their own troubles, and rumors run thin in this weather. If you want something more certain, you might try asking the gate serjeant or the guard captain. They might have a clearer picture.\"",
+    "feedback_excerpt": ""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_excerpt": "\"I can't say exactly who told me,\" the tavern runner replies, eyes darting briefly to the crowded line near the gate. \"Most of what I know comes from whispers and passing travelers, not a single source. If you want something solid, you might try asking the gate serjeant or the guard captain—they tend to hear more official news.\"",
+    "feedback_excerpt": ""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_excerpt": "\"Most haven't come through from the north road today,\" the tavern runner replies, wiping a hand on their stained apron. \"Traffic's thin, given the rain and the tightening of patrols. A few travelers passed westward earlier, but no large groups or caravans. The gate serjeant keeps an eye for anything unusual—if you want a more definite answer, they might be your next call.\"",
+    "feedback_excerpt": ""
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model_player_facing_excerpt": "The tavern runner shakes their head and says, \"I haven't seen anyone come through from the north road today. Travelers seem fewer than usual, probably because of the rain and the tension at the gate. If you need solid news, you might want to check with the gate serjeant or the guard captain—they usually have the latest official updates.\"",
+    "feedback_excerpt": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: wrong_interlocutor. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response."
+  },
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_excerpt": "The notice board, slick with rain at Cinderwatch's gate, bears several official postings. It lists new taxes recently imposed on the region and outlines stricter curfew rules taking effect immediately. Most prominent is a stark warning about a patrol that has gone missing. The announcement specifies that the missing patrol was last seen taking the northwest mud track past the crates near the gate. Such notices have the town's residents murmuring—some glance anxiously toward the mud-choked approaches as the rain continues to fall.",
+    "feedback_excerpt": ""
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model_player_facing_excerpt": "The notice board near the cinderwatch gate lists the current taxes and curfew rules. A separate posting warns that a patrol is missing and reminds travelers and residents to stay vigilant. Despite the rain and the crowd, these official postings draw many eyes, underscoring the tense atmosphere around the gate district.",
+    "feedback_excerpt": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response."
+  }
+]

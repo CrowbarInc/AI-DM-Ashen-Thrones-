@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution",
+    "-q",
+    "--tb=short",
+    "--basetemp=development/tmp/pr_play_07/entry_accounting",
+    "--junitxml=artifacts\\pr_play_07\\entry_accounting.xml",
+    "-p",
+    "tests.helpers.pr_play_07_entry_source"
+  ],
+  "exit": 1,
+  "seconds": 10.48399999999674
+}

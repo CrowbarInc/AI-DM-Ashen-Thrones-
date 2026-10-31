@@ -1,0 +1,1591 @@
+[
+  {
+    "log_index": 0,
+    "timestamp": "2026-09-26T01:44:59.723460Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "",
+    "resolution_kind": "scene_opening",
+    "action_id": "campaign_start_opening_scene",
+    "target_actor_or_npc": null,
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "opening_deterministic_fallback",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": "frontier_gate",
+      "activate_scene_id": "frontier_gate"
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": ""
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_primary_turn"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "default"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "primary_turn"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": false
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.upstream_prepared_opening_fallback.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": "gate_terminal_repair"
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "opening_deterministic_fallback"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "opening_fallback_selection",
+            "sealed_fallback_replacement",
+            "finalize_packaging"
+          ]
+        }
+      ],
+      "producer_repair_kind": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.producer_repair_kind",
+          "value": "first_mention_enforcement"
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_primary_turn",
+      "model_route_family": "default",
+      "model_route_purpose": "primary_turn",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "You stand just outside Cinderwatch's eastern gate, where soot-dark stone meets rain-slick mud. Frayed banners flap in the chilly wind overhead, casting shifting shadows on the crowded scene. Refugees clad in threadbare garments jostle with laden wagons attempting to push through the gate's narrow choke, while guards maintain a firm hold to keep the passage orderly. Nearby, a well-appointed townhouse bears noble colors, its polished windows marking a sharp contrast against the grit and damp. A solitary figure dressed in tattered clothes stands apart, eyes quietly flickering between the arrival’s packs and faces rather than the gate queue itself. A notice board dominates one side of the square, prominently listing new taxes, strict curfews, and a dire warning about a missing patrol, drawing anxious glances now and then. Close to a rain barrel, a tavern runner calls out brisk offers of hot stew and recent rumors to the gathering crowd, their voice slicing through the constant murmur of the gate district. Within this pressing tide of travelers and watchers, the tension of watchful eyes and unspoken concerns coils tightly beneath the rain’s steady drum."
+  },
+  {
+    "log_index": 1,
+    "timestamp": "2026-09-26T01:47:08.813195Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "I'm new to the city, so I approach the notice board with curiosity; it's too early to be thrown in the dungeons for breaking simple rules.",
+    "resolution_kind": "social_probe",
+    "action_id": "social_probe_notice_board_with_curiosity",
+    "target_actor_or_npc": null,
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "generated_candidate",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.unknown_legacy_keys.noncombat_resolution.narration_constraints.reply_kind",
+          "value": "reaction"
+        },
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "resolution.social.reply_kind",
+          "value": "reaction"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": "reaction"
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_primary_turn"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "default"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "primary_turn"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": false
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": null
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "generated_candidate"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "finalize_packaging"
+          ]
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_primary_turn",
+      "model_route_family": "default",
+      "model_route_purpose": "primary_turn",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "The notice board before you is weathered but well-used, plastered with official decrees and handwritten scraps. Prominently listed are the new taxes imposed this month, a schedule for the town's strict curfew hours, and a prominently posted warning about a patrol recently gone missing near the northwest mud track past the nearby crates. A gate serjeant watches the crowd carefully, occasionally glancing at the roster of patrolling guards pinned nearby. Despite the rain and muddy chaos, the board's announcements are clearly meant to keep the city’s uneasy order intact."
+  },
+  {
+    "log_index": 2,
+    "timestamp": "2026-09-26T01:48:46.419128Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "I examine the curfew section more carefully. I need to know what times are limited, and potentially what parts of Cinderwatch.",
+    "resolution_kind": "discover_clue",
+    "action_id": "notice_board",
+    "target_actor_or_npc": null,
+    "interactable_target": "notice_board",
+    "route_reason": null,
+    "final_emitted_source": "passive_scene_pressure_fallback",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": ""
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_strict_social"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "high_precision"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "strict_social"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": true
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": "gate_terminal_repair"
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "passive_scene_pressure_fallback"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ]
+        }
+      ],
+      "producer_repair_kind": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.producer_repair_kind",
+          "value": "visibility_enforcement"
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_strict_social",
+      "model_route_family": "high_precision",
+      "model_route_purpose": "strict_social",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. A gate serjeant manages the crowd and keeps one eye on the roster board. The missing patrol was last seen taking the northwest mud track past the crates."
+  },
+  {
+    "log_index": 3,
+    "timestamp": "2026-09-26T01:49:48.334002Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "Moving away from the board, I approach the tavern runner I passed earlier. \"Friend, I'm new to Cinderwatch. What should I stranger know to get around in this city?\"",
+    "resolution_kind": "social_probe",
+    "action_id": "social_probe_tavern_runner_i_passed_earl",
+    "target_actor_or_npc": "tavern_runner",
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "minimal_social_emergency_fallback",
+    "topic_key": null,
+    "topic_revealed": [
+      {
+        "path": "resolution.social.topic_revealed",
+        "value": null
+      }
+    ],
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.unknown_legacy_keys.noncombat_resolution.narration_constraints.reply_kind",
+          "value": "refusal"
+        },
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "resolution.social.reply_kind",
+          "value": "refusal"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[2].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": "refusal"
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "topic_revealed": [
+        {
+          "path": "resolution.social.topic_revealed",
+          "value": null
+        }
+      ],
+      "prior_same_dimension_answer_exists": [
+        {
+          "path": "resolution.social.social_escalation.prior_same_dimension_answer_exists",
+          "value": false
+        },
+        {
+          "path": "resolution.social.prior_same_dimension_answer_exists",
+          "value": false
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_strict_social"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "high_precision"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "strict_social"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": true
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": "strict_social_deterministic_fallback"
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "minimal_social_emergency_fallback"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ]
+        }
+      ],
+      "producer_repair_kind": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.producer_repair_kind",
+          "value": "visibility_enforcement"
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_strict_social",
+      "model_route_family": "high_precision",
+      "model_route_purpose": "strict_social",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "Tavern Runner mutters, \"Word is, the missing patrol was last seen taking the northwest mud track past the crates.\""
+  },
+  {
+    "log_index": 4,
+    "timestamp": "2026-09-26T01:51:06.080592Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "\"A missing patrol? That's strange. How many soldiers disappeared?\"",
+    "resolution_kind": "question",
+    "action_id": "question_tavern_runner",
+    "target_actor_or_npc": "tavern_runner",
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "generated_candidate",
+    "topic_key": null,
+    "topic_revealed": [
+      {
+        "path": "resolution.social.topic_revealed",
+        "value": null
+      }
+    ],
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.unknown_legacy_keys.noncombat_resolution.narration_constraints.reply_kind",
+          "value": "refusal"
+        },
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "resolution.social.reply_kind",
+          "value": "answer"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[2].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": "answer"
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "topic_revealed": [
+        {
+          "path": "resolution.social.topic_revealed",
+          "value": null
+        }
+      ],
+      "prior_same_dimension_answer_exists": [
+        {
+          "path": "resolution.social.social_escalation.prior_same_dimension_answer_exists",
+          "value": false
+        },
+        {
+          "path": "resolution.social.prior_same_dimension_answer_exists",
+          "value": false
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_strict_social"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "high_precision"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "strict_social"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": true
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": null
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "generated_candidate"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "finalize_packaging"
+          ]
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_strict_social",
+      "model_route_family": "high_precision",
+      "model_route_purpose": "strict_social",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "Tavern Runner says, \"No. I cannot answer that from what I know.\""
+  },
+  {
+    "log_index": 5,
+    "timestamp": "2026-09-26T01:51:43.428043Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "\"Well, is there a reward for who finds out? Or perhaps, can turn in useful information to the watch?\"",
+    "resolution_kind": "question",
+    "action_id": "question_gate_guard",
+    "target_actor_or_npc": "gate_guard",
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "deterministic_social_fallback",
+    "topic_key": null,
+    "topic_revealed": [
+      {
+        "path": "resolution.social.topic_revealed",
+        "value": null
+      }
+    ],
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.unknown_legacy_keys.noncombat_resolution.narration_constraints.reply_kind",
+          "value": "refusal"
+        },
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "resolution.social.reply_kind",
+          "value": "refusal"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[2].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": "refusal"
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "topic_revealed": [
+        {
+          "path": "resolution.social.topic_revealed",
+          "value": null
+        }
+      ],
+      "prior_same_dimension_answer_exists": [
+        {
+          "path": "resolution.social.social_escalation.prior_same_dimension_answer_exists",
+          "value": false
+        },
+        {
+          "path": "resolution.social.prior_same_dimension_answer_exists",
+          "value": false
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_strict_social"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "high_precision"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "strict_social"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": true
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": null
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "deterministic_social_fallback"
+        }
+      ],
+      "producer_repair_kind": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.producer_repair_kind",
+          "value": "strict_social_repair"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ]
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_strict_social",
+      "model_route_family": "high_precision",
+      "model_route_purpose": "strict_social",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "Gate Guard shrugs."
+  },
+  {
+    "log_index": 6,
+    "timestamp": "2026-09-26T01:52:17.267804Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "Inclined to take this matter into my own hands, I proceed North-West, as the runner directed.",
+    "resolution_kind": null,
+    "action_id": null,
+    "target_actor_or_npc": null,
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "generated_candidate",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": null,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_primary_turn"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "default"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "primary_turn"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": false
+        }
+      ],
+      "reply_kind": [
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": ""
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": null
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "generated_candidate"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "finalize_packaging"
+          ]
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_primary_turn",
+      "model_route_family": "default",
+      "model_route_purpose": "primary_turn",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "You thread your way through the crowd, the drizzle mixing with the pervasive mud underfoot. Turning northwest, the runners’ directions lead you past weather-beaten crates piled along the edge of the gate district. The mud track stretches ahead, uneven and slick, flanked by the grimy backsides of storage sheds and flickering lanterns hung on crooked poles. A faint scent of damp wood and smoke hangs in the air. As you proceed, occasional broken patrol banners flutter on nails driven into crates, hinting at the vanished unit’s last known path. The sound of dripping water and distant murmurs accompany your cautious steps into the uncertain stretch where the missing soldiers were last seen."
+  },
+  {
+    "log_index": 7,
+    "timestamp": "2026-09-26T01:53:15.357419Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "As I pass the crates, can I tell whether any of them have been opened or rummaged through?",
+    "resolution_kind": "adjudication_query",
+    "action_id": "adjudication_query",
+    "target_actor_or_npc": null,
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "anti_reset_local_continuation_fallback",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "reply_kind": [
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": ""
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": "gate_terminal_repair"
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "anti_reset_local_continuation_fallback"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ]
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": null,
+      "model_route_reason": null,
+      "model_route_family": null,
+      "model_route_purpose": null,
+      "model_retry_attempt": null,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "The missing patrol was last seen taking the northwest mud track past the crates."
+  },
+  {
+    "log_index": 8,
+    "timestamp": "2026-09-26T01:53:59.421203Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "I move closer to one of the broken banners, studying it carefully. How was this thing destroyed?",
+    "resolution_kind": "custom",
+    "action_id": "i_move_closer_to_one_of_the_broken_banne",
+    "target_actor_or_npc": null,
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "anti_reset_local_continuation_fallback",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "reply_kind": [
+        {
+          "path": "resolution.metadata.emission_debug.dialogue_social_plan.reply_kind",
+          "value": "unknown"
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": ""
+        }
+      ],
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_primary_turn"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "default"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "primary_turn"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": false
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": "gate_terminal_repair"
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "anti_reset_local_continuation_fallback"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": false
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ]
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_primary_turn",
+      "model_route_family": "default",
+      "model_route_purpose": "primary_turn",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "The guard says, \"I do not know enough to answer that.\""
+  },
+  {
+    "log_index": 9,
+    "timestamp": "2026-09-26T01:54:18.201243Z",
+    "session_id": "735ebd1cfb4567c4f97df6dc",
+    "scene_id": "frontier_gate",
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "player_text": "Not deterred, I continue following the path.",
+    "resolution_kind": null,
+    "action_id": null,
+    "target_actor_or_npc": null,
+    "interactable_target": null,
+    "route_reason": null,
+    "final_emitted_source": "anti_reset_local_continuation_fallback",
+    "topic_key": null,
+    "topic_revealed": null,
+    "clue_or_lead_changes": [],
+    "transition_result": {
+      "resolved_transition": null,
+      "target_scene_id": null,
+      "activate_scene_id": null
+    },
+    "integrity_validation_evidence": {
+      "narrative_authority_failed": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failed",
+          "value": false
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failed",
+          "value": false
+        }
+      ],
+      "narrative_authority_failure_reasons": [
+        {
+          "path": "resolution.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.metadata.emission_debug.narrative_authority_failure_reasons",
+          "value": []
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.narrative_authority_failure_reasons",
+          "value": []
+        }
+      ],
+      "selected_model": [
+        {
+          "path": "gm_output.metadata.selected_model",
+          "value": "gpt-4.1-mini"
+        }
+      ],
+      "model_route_reason": [
+        {
+          "path": "gm_output.metadata.model_route_reason",
+          "value": "purpose_primary_turn"
+        }
+      ],
+      "model_route_family": [
+        {
+          "path": "gm_output.metadata.model_route_family",
+          "value": "default"
+        }
+      ],
+      "model_route_purpose": [
+        {
+          "path": "gm_output.metadata.model_route_purpose",
+          "value": "primary_turn"
+        }
+      ],
+      "model_retry_attempt": [
+        {
+          "path": "gm_output.metadata.model_retry_attempt",
+          "value": 0
+        }
+      ],
+      "model_escalated": [
+        {
+          "path": "gm_output.metadata.model_escalated",
+          "value": false
+        }
+      ],
+      "reply_kind": [
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[0].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.metadata.stage_diff_telemetry.snapshots[1].reply_kind",
+          "value": null
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.reply_kind",
+          "value": ""
+        }
+      ],
+      "realization_fallback_family": [
+        {
+          "path": "gm_output.upstream_prepared_emission.realization_fallback_family",
+          "value": "upstream_prepared_emission"
+        },
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.realization_fallback_family",
+          "value": "gate_terminal_repair"
+        }
+      ],
+      "final_emitted_source": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emitted_source",
+          "value": "anti_reset_local_continuation_fallback"
+        }
+      ],
+      "referential_clarity_replacement_applied": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.referential_clarity_replacement_applied",
+          "value": true
+        }
+      ],
+      "final_emission_mutation_lineage": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.final_emission_mutation_lineage",
+          "value": [
+            "sealed_fallback_replacement",
+            "finalize_packaging",
+            "post_gate_mutation_detected"
+          ]
+        }
+      ],
+      "producer_repair_kind": [
+        {
+          "path": "gm_output.internal_state.emission_debug_lane._final_emission_meta.producer_repair_kind",
+          "value": "referential_clarity_enforcement"
+        }
+      ]
+    },
+    "model_route_evidence": {
+      "selected_model": "gpt-4.1-mini",
+      "model_route_reason": "purpose_primary_turn",
+      "model_route_family": "default",
+      "model_route_purpose": "primary_turn",
+      "model_retry_attempt": 0,
+      "gm_raw_output_meta": {
+        "has_output": true
+      }
+    },
+    "final_player_facing_output": "The guard says, \"I do not know enough to answer that.\""
+  }
+]

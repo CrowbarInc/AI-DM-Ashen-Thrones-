@@ -1,0 +1,543 @@
+...........F....FFFFFFFFFFFFFFFFFFF.FF.FFF.............FFFFFF            [100%]
+================================== FAILURES ===================================
+______________ test_p1_p2_p3_and_consequential_selection_matrix _______________
+tests\test_pr_bw_narration_only_envelope.py:93: in test_p1_p2_p3_and_consequential_selection_matrix
+    p1 = _selected(_load("P1", "gm_resolution_decision.json"), _load("P1", "resolution_contract.json"))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_bw_narration_only_envelope.py:27: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P1\\gm_resolution_decision.json'
+___________________ test_t1_narration_only_initial_contract ___________________
+tests\test_pr_by_narration_only_retry_contract.py:125: in test_t1_narration_only_initial_contract
+    decision, contract, _resolution_row = _p2()
+                                          ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+___________ test_t2_narration_rejection_retry_stays_narration_only ____________
+tests\test_pr_by_narration_only_retry_contract.py:142: in test_t2_narration_rejection_retry_stays_narration_only
+    decision, _contract, resolution = _p2()
+                                      ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t3_pr_bx_unauthorized_resolution_decision_fact_preserves_narration_only _
+tests\test_pr_by_narration_only_retry_contract.py:158: in test_t3_pr_bx_unauthorized_resolution_decision_fact_preserves_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[ungrounded_authoritative_rule] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[wrong_interlocutor] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[unsolicited_npc_speech] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[structured_envelope] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[malformed_or_truncated] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[hidden_information] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[player_text_splice] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[interaction_incomplete] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[locate_present_interlocutor] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[consequential_invention] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[mechanical_contradiction] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t4_other_narration_failure_reasons_stay_narration_only[impossible_entity_state] _
+tests\test_pr_by_narration_only_retry_contract.py:186: in test_t4_other_narration_failure_reasons_stay_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+____________ test_t4_mixed_reasons_do_not_reintroduce_declarations ____________
+tests\test_pr_by_narration_only_retry_contract.py:197: in test_t4_mixed_reasons_do_not_reintroduce_declarations
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_______ test_t5_malformed_narration_only_output_retries_narration_only ________
+tests\test_pr_by_narration_only_retry_contract.py:207: in test_t5_malformed_narration_only_output_retries_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+_ test_t6_smuggled_declarations_stay_rejected_and_retry_stays_narration_only __
+tests\test_pr_by_narration_only_retry_contract.py:218: in test_t6_smuggled_declarations_stay_rejected_and_retry_stays_narration_only
+    _decision, _contract, resolution = _p2()
+                                       ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+____________ test_t7_structured_retry_keeps_declaration_machinery _____________
+tests\test_pr_by_narration_only_retry_contract.py:235: in test_t7_structured_retry_keeps_declaration_machinery
+    decision = _load("P1", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P1\\gm_resolution_decision.json'
+_____________ test_t9_selected_envelope_is_invariant_across_retry _____________
+tests\test_pr_by_narration_only_retry_contract.py:348: in test_t9_selected_envelope_is_invariant_across_retry
+    decision = _load(probe, "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+__________ test_t10_retry_construction_does_not_reclassify_the_turn ___________
+tests\test_pr_by_narration_only_retry_contract.py:368: in test_t10_retry_construction_does_not_reclassify_the_turn
+    decision, contract, resolution = _p2()
+                                     ^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:71: in _p2
+    decision = _load("P2", "gm_resolution_decision.json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_by_narration_only_retry_contract.py:57: in _load
+    return json.loads((LIVE / probe / name).read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'artifacts\\pr_bv_turn_operation_projection_micro_live\\evidence\\P2\\gm_resolution_decision.json'
+__________ test_sixteen_turn_counterfactual_classifies_c17_boundary ___________
+tests\test_pr_br_continuation18_immutable_boundary.py:132: in test_sixteen_turn_counterfactual_classifies_c17_boundary
+    rows = _rows()
+           ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+____________ test_seven_downstream_created_failures_stay_preserved ____________
+tests\test_pr_br_continuation18_immutable_boundary.py:220: in test_seven_downstream_created_failures_stay_preserved
+    rows = [row for row in _rows() if (row["source"], row["turn"]) in DOWNSTREAM_CREATED]
+                           ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+______________ test_c16_turn3_locate_false_positive_is_soft_only ______________
+tests\test_pr_br_continuation18_immutable_boundary.py:229: in test_c16_turn3_locate_false_positive_is_soft_only
+    row = next(item for item in _rows() if item["source"] == "c16" and item["turn"] == 3)
+                                ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+___________ test_raw_chat_stub_preserves_valid_and_contains_invalid ___________
+tests\test_pr_br_continuation18_immutable_boundary.py:561: in test_raw_chat_stub_preserves_valid_and_contains_invalid
+    assert "can't say what the stew costs" in visible
+E   assert "can't say what the stew costs" in 'Tavern Runner mutters, "Word is, hot stew and rumors for coin."'
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_frontier_gate_tavern_runner_stew
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+______________ test_each_hard_invalid_initial_is_blocked[c16-1] _______________
+tests\test_pr_br_continuation18_immutable_boundary.py:586: in test_each_hard_invalid_initial_is_blocked
+    row = next(item for item in _rows() if item["source"] == source and item["turn"] == turn)
+                                ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+_____________ test_each_hard_invalid_initial_is_blocked[smoke-4] ______________
+tests\test_pr_br_continuation18_immutable_boundary.py:586: in test_each_hard_invalid_initial_is_blocked
+    row = next(item for item in _rows() if item["source"] == source and item["turn"] == turn)
+                                ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+_____________ test_each_hard_invalid_initial_is_blocked[smoke-5] ______________
+tests\test_pr_br_continuation18_immutable_boundary.py:586: in test_each_hard_invalid_initial_is_blocked
+    row = next(item for item in _rows() if item["source"] == source and item["turn"] == turn)
+                                ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+_____________ test_each_hard_invalid_initial_is_blocked[smoke-7] ______________
+tests\test_pr_br_continuation18_immutable_boundary.py:586: in test_each_hard_invalid_initial_is_blocked
+    row = next(item for item in _rows() if item["source"] == source and item["turn"] == turn)
+                                ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+_____________ test_each_hard_invalid_initial_is_blocked[smoke-9] ______________
+tests\test_pr_br_continuation18_immutable_boundary.py:586: in test_each_hard_invalid_initial_is_blocked
+    row = next(item for item in _rows() if item["source"] == source and item["turn"] == turn)
+                                ^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:97: in _rows
+    return _load(C16_PATH, "c16") + _load(SMOKE_PATH, "smoke")
+           ^^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr_br_continuation18_immutable_boundary.py:56: in _load
+    payload = json.loads(path.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\pr_br_continuation16\\20261001T113214Z\\turns.json'
+=========================== short test summary info ===========================
+FAILED tests/test_pr_bw_narration_only_envelope.py::test_p1_p2_p3_and_consequential_selection_matrix
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t1_narration_only_initial_contract
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t2_narration_rejection_retry_stays_narration_only
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t3_pr_bx_unauthorized_resolution_decision_fact_preserves_narration_only
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[ungrounded_authoritative_rule]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[wrong_interlocutor]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[unsolicited_npc_speech]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[structured_envelope]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[malformed_or_truncated]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[hidden_information]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[player_text_splice]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[interaction_incomplete]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[locate_present_interlocutor]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[consequential_invention]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[mechanical_contradiction]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_other_narration_failure_reasons_stay_narration_only[impossible_entity_state]
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t4_mixed_reasons_do_not_reintroduce_declarations
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t5_malformed_narration_only_output_retries_narration_only
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t6_smuggled_declarations_stay_rejected_and_retry_stays_narration_only
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t7_structured_retry_keeps_declaration_machinery
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t9_selected_envelope_is_invariant_across_retry
+FAILED tests/test_pr_by_narration_only_retry_contract.py::test_t10_retry_construction_does_not_reclassify_the_turn
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_sixteen_turn_counterfactual_classifies_c17_boundary
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_seven_downstream_created_failures_stay_preserved
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_c16_turn3_locate_false_positive_is_soft_only
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[c16-1]
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-4]
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-5]
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-7]
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_each_hard_invalid_initial_is_blocked[smoke-9]

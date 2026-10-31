@@ -1,0 +1,44 @@
+{
+  "scene": {
+    "id": "seat_shop",
+    "location": "Reedbank seat shop",
+    "summary": "A narrow shop smells of damp rush. Linden, a chair-seater, is seating a wooden chair with green rush. Bundles of dried rush lean against the wall. An open side door looks out toward the osier rack. Linden is an ordinary worker with no special charge.",
+    "mode": "social",
+    "visible_facts": [
+      "Linden is seating a wooden chair with green rush.",
+      "Bundles of dried rush lean against the shop wall."
+    ],
+    "opening_seed_facts": [],
+    "journal_seed_facts": [],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "exits": [
+      {
+        "label": "Go out to the osier rack",
+        "target_scene_id": "osier_rack"
+      }
+    ],
+    "enemies": [],
+    "actions": [],
+    "addressables": [
+      {
+        "id": "linden",
+        "name": "Linden",
+        "scene_id": "seat_shop",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": [
+          "chair-seater",
+          "chair-seater",
+          "chair seater"
+        ],
+        "aliases": [
+          "chair-seater",
+          "chair seater"
+        ]
+      }
+    ],
+    "interactables": []
+  }
+}

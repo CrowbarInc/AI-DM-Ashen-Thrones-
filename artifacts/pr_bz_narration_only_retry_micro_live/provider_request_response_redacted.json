@@ -1,0 +1,110 @@
+{
+  "attempt_1_request": {
+    "measurements": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "input_chars": 100313,
+      "recipe_present": true,
+      "retry_context_present": false
+    },
+    "contract": {
+      "provider_response_contract": "narration_only",
+      "exact_narration_only_contract_present": true,
+      "declared_claims_in_system_prompt": false,
+      "system_prompt_chars": 4166,
+      "response_contract_tail": "ly. Do not choose the player's next action or turn a lead into a mandatory path unless authoritative state already imposes that constraint.\nQuestion resolution rule: direct answer (first sentence). Scene momentum rule: every 2-3 exchanges tag scene_momentum:<kind>, including consequence_or_opportunity.\n\nNARRATION-ONLY RESPONSE CONTRACT: Return valid JSON only in this exact shape: {\"narration\": \"player-facing response\"}. Do not include other fields. The application will normalize this internally."
+    },
+    "create_kwarg_keys": [],
+    "api_response_schema_present": false,
+    "decision_facing_answer_recipe": {
+      "schema": "decision_facing_answer_recipe_v1",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+      "required_content": [
+        {
+          "claim_id": "rc_9ab69105465f",
+          "role": "MUST_STATE",
+          "text": "A baker stands beside loaves at a bread stall.",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "ordinary_predicate"
+        },
+        {
+          "claim_id": "rc_2bb408577206",
+          "role": "MUST_STATE",
+          "text": "Baker exists",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "observation"
+        }
+      ],
+      "permitted_content": [],
+      "permitted_inference": {
+        "allowed": false,
+        "qualified_observations": [],
+        "may_infer_claims": []
+      },
+      "inference_modality": "none",
+      "unresolved_content": [],
+      "forbidden_upgrades": [
+        "unauthorized_consequential_fact",
+        "generated_content_as_authored_world_fact",
+        "durable_preference_without_authorized_claim",
+        "generated_dialogue_as_authored_world_fact"
+      ],
+      "declaration_guidance": {
+        "consequential_authorized_claim": "Listed claims may be realized with source_claim_id and their provenance. The turn-local reply is narration, not a new authored world fact.",
+        "bounded_inference": "not permitted on this turn",
+        "epistemic_premise": "No player hypothesis, NPC claim, or unresolved premise is authorized on this turn.",
+        "epistemic_claims": [],
+        "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+      },
+      "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+      "answer_strategy": "Have baker reply in ordinary dialogue: a direct answer, a refusal, a hesitation, or an admission that they do not know."
+    },
+    "provider_input_redaction": "Full prompt omitted from review bundle; no credentials observed in captured request."
+  },
+  "attempt_1_response": {
+    "response_id": "resp_036b3829385bdcad006ac828ae977087d29808874f9edbe63c",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 23413,
+      "output_tokens": 85,
+      "total_tokens": 23498,
+      "input_tokens_details": {
+        "cache_write_tokens": 0,
+        "cached_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "raw_output": "{\"narration\": \"The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \\\"I don't have a particular favorite to keep for myself,\\\" they say carefully. \\\"Every loaf here is made with care, but I try not to show any preference.\\\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.\"}",
+    "parsed": {
+      "structural_shape": {
+        "json_object": true,
+        "keys": [
+          "narration"
+        ]
+      },
+      "provider_response_contract": "narration_only",
+      "declared_claims": [],
+      "normalized_empty_declarations": true,
+      "declaration_authorship": false,
+      "structured_contract_failure": null,
+      "structured_contract_reason": null,
+      "player_facing_text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared."
+    }
+  }
+}

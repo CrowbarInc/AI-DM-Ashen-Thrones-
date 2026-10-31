@@ -1,0 +1,129 @@
+{
+  "contract_id": "rc_d4c97cad4722",
+  "resolution_method": "ask",
+  "outcome_classification": "epistemically_qualified",
+  "established_fact_refs": [
+    "scene_world_authored_corpus",
+    "contract_discourse_ref"
+  ],
+  "proposed_facts": [
+    {
+      "text": "A baker stands beside loaves at a bread stall.",
+      "provenance": "authored_world_fact",
+      "consequence": "consequential",
+      "authorized": true,
+      "reason_codes": [
+        "authored_state_source"
+      ],
+      "authority": "world_truth",
+      "persistence": "world_truth",
+      "source_ref": "scene.visible_facts.0",
+      "outcome_classification": "established_or_retrieved",
+      "semantic_identity": {}
+    },
+    {
+      "text": "Baker exists",
+      "provenance": "authored_world_fact",
+      "consequence": "consequential",
+      "authorized": true,
+      "reason_codes": [
+        "authored_world_npc"
+      ],
+      "authority": "world_truth",
+      "persistence": "world_truth",
+      "source_ref": "world.npcs.0",
+      "outcome_classification": "established_or_retrieved",
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "baker",
+        "subject_aliases": [
+          "Baker"
+        ],
+        "relation": "exists",
+        "value": "present",
+        "authority": "world_truth"
+      }
+    }
+  ],
+  "permitted_state_mutations": [],
+  "persistence_policy": "claim_only",
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+  ],
+  "unresolved_consequential_questions": [],
+  "unresolved_qualifiers": [],
+  "answer_relations": [],
+  "epistemic_acts": [
+    {
+      "act": "establish",
+      "source_ref": "scene.visible_facts.0",
+      "authority": "world_truth",
+      "semantic_identity": {}
+    },
+    {
+      "act": "establish",
+      "source_ref": "world.npcs.0",
+      "authority": "world_truth",
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "baker",
+        "subject_aliases": [
+          "Baker"
+        ],
+        "relation": "exists",
+        "value": "present",
+        "authority": "world_truth"
+      }
+    }
+  ],
+  "realization_claims": [
+    {
+      "claim_id": "rc_9ab69105465f",
+      "semantic_identity": {},
+      "provenance": "authored_world_fact",
+      "authority": "world_truth",
+      "epistemic_status": "established",
+      "modality": "",
+      "realization_role": "MUST_STATE",
+      "persistence": "world_truth",
+      "source_ref": "scene.visible_facts.0",
+      "text": "A baker stands beside loaves at a bread stall.",
+      "relation_kind": "ordinary_predicate",
+      "premise_claim_ids": []
+    },
+    {
+      "claim_id": "rc_2bb408577206",
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "baker",
+        "subject_aliases": [
+          "Baker"
+        ],
+        "relation": "exists",
+        "value": "present",
+        "authority": "world_truth"
+      },
+      "provenance": "authored_world_fact",
+      "authority": "world_truth",
+      "epistemic_status": "established",
+      "modality": "",
+      "realization_role": "MUST_STATE",
+      "persistence": "world_truth",
+      "source_ref": "world.npcs.0",
+      "text": "Baker exists",
+      "relation_kind": "observation",
+      "premise_claim_ids": []
+    }
+  ],
+  "executable_obligations": {
+    "primary": null,
+    "mutation_owner": null,
+    "sequence": [],
+    "supporting": []
+  },
+  "authority_algorithm": "proposition_claim_control_v1"
+}

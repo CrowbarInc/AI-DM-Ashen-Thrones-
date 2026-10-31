@@ -1,0 +1,91 @@
+{
+  "case": "valid_structured",
+  "functions": [
+    "api.start_campaign",
+    "api._run_resolved_turn_pipeline",
+    "api._build_gpt_narration_from_authoritative_state",
+    "api._complete_opening_turn_persistence_like_chat",
+    "world.advance_world_tick",
+    "gm.call_gpt"
+  ],
+  "new_campaign": true,
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "active_scene_id": "frontier_gate",
+    "log_length": 0,
+    "campaign_can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "status_code": 200,
+  "response": {
+    "ok": true,
+    "status": null,
+    "player_facing_text": "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.",
+    "provenance": "initial_generation",
+    "authorization_source": "initial_generation",
+    "structured_contract_failure": null,
+    "structured_contract_reason": null,
+    "resolution_kind": "scene_opening"
+  },
+  "after": {
+    "campaign_started": true,
+    "turn_counter": 1,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 1
+    },
+    "active_scene_id": "frontier_gate",
+    "log_length": 1,
+    "campaign_can_start": false,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 3,
+        "agenda_progress": 1
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 3,
+        "agenda_progress": 1
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 2,
+        "agenda_progress": 1
+      }
+    ],
+    "event_types": [
+      "faction_pressure",
+      "faction_pressure"
+    ]
+  },
+  "sdk_mock_calls": 1
+}

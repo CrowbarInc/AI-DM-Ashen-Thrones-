@@ -1,0 +1,52 @@
+........................................................................ [ 58%]
+FFFF...............................................                      [100%]
+================================== FAILURES ===================================
+_________ test_historical_control_through_current_request_and_host[0] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:56: in test_historical_control_through_current_request_and_host
+    contexts = json.loads((HISTORY/'context_and_original_logs.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\context_and_original_logs.json'
+_________ test_historical_control_through_current_request_and_host[1] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:56: in test_historical_control_through_current_request_and_host
+    contexts = json.loads((HISTORY/'context_and_original_logs.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\context_and_original_logs.json'
+_________ test_historical_control_through_current_request_and_host[2] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:56: in test_historical_control_through_current_request_and_host
+    contexts = json.loads((HISTORY/'context_and_original_logs.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\context_and_original_logs.json'
+_________ test_historical_control_through_current_request_and_host[3] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:56: in test_historical_control_through_current_request_and_host
+    contexts = json.loads((HISTORY/'context_and_original_logs.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\context_and_original_logs.json'
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[0]
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[1]
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[2]
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[3]

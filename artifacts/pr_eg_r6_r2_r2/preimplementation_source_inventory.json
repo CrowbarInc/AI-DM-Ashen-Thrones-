@@ -1,0 +1,770 @@
+[
+  {
+    "file": "artifacts\\pr_eg_r6_r2_r2\\baseline_sources\\game\\conversational_continuity.py",
+    "sha256": "b08b968c59d52cdc351e97209d73176a1c5e3f091f8fe413e2854088e474badd",
+    "symbols": [
+      {
+        "line": 118,
+        "definition": "def is_incidental_personal(player_text: str) -> bool:"
+      },
+      {
+        "line": 131,
+        "definition": "def is_unhelpful_personal_ignorance(text: str, authority: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 147,
+        "definition": "def bounded_personal_line(name: str, npc_id: str, kind: str) -> str:"
+      },
+      {
+        "line": 157,
+        "definition": "def _core_statement(text: str) -> str:"
+      },
+      {
+        "line": 164,
+        "definition": "def _quote_span(text: str) -> str:"
+      },
+      {
+        "line": 171,
+        "definition": "def record_delivered_exchange("
+      },
+      {
+        "line": 288,
+        "definition": "def delivered_exchanges(session: Mapping[str, Any] | None) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 300,
+        "definition": "def last_delivered_exchange(session: Mapping[str, Any] | None) -> dict[str, Any] | None:"
+      },
+      {
+        "line": 305,
+        "definition": "def _supplied_overlap(text: str, exchange: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 312,
+        "definition": "def _blob(row: Mapping[str, Any]) -> str:"
+      },
+      {
+        "line": 319,
+        "definition": "def _tokens(text: str) -> list[str]:"
+      },
+      {
+        "line": 330,
+        "definition": "def reference_subject_tokens(text: str, names: str = \"\") -> set[str]:"
+      },
+      {
+        "line": 339,
+        "definition": "def _best_exchange(text: str, rows: list[dict[str, Any]], npc_id: str = \"\") -> dict[str, Any] | str | None:"
+      },
+      {
+        "line": 384,
+        "definition": "def _proposition_key(row: Mapping[str, Any]) -> tuple[str, str]:"
+      },
+      {
+        "line": 396,
+        "definition": "def recall_kind(player_text: str) -> str:"
+      },
+      {
+        "line": 410,
+        "definition": "def _equivalent_rows(exchange: Mapping[str, Any], rows: list[dict[str, Any]]) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 415,
+        "definition": "def _quote_many(exchange: Mapping[str, Any], rows: list[dict[str, Any]]) -> str:"
+      },
+      {
+        "line": 434,
+        "definition": "def _npc_quote(name: str, exchange: Mapping[str, Any]) -> str:"
+      },
+      {
+        "line": 443,
+        "definition": "def _gm_quote(exchange: Mapping[str, Any]) -> str:"
+      },
+      {
+        "line": 451,
+        "definition": "def _absent_line(exchange: Mapping[str, Any]) -> str:"
+      },
+      {
+        "line": 465,
+        "definition": "def _ambiguous_line(rows: list[dict[str, Any]]) -> str:"
+      },
+      {
+        "line": 476,
+        "definition": "def _present(scene: Mapping[str, Any] | None, world: Mapping[str, Any] | None) -> dict[str, dict[str, Any]]:"
+      },
+      {
+        "line": 482,
+        "definition": "def _active_id(session: Mapping[str, Any] | None, present: Mapping[str, Mapping[str, Any]]) -> str:"
+      },
+      {
+        "line": 499,
+        "definition": "def _pending_blocks(session: Mapping[str, Any] | None, text: str) -> bool:"
+      },
+      {
+        "line": 515,
+        "definition": "def _names_other(text: str, present: Mapping[str, Mapping[str, Any]], active: str) -> bool:"
+      },
+      {
+        "line": 532,
+        "definition": "def _vocative(text: str, present: Mapping[str, Mapping[str, Any]]) -> str:"
+      },
+      {
+        "line": 540,
+        "definition": "def _unique_named(text: str, present: Mapping[str, Mapping[str, Any]]) -> str:"
+      },
+      {
+        "line": 550,
+        "definition": "def _named(present: Mapping[str, Mapping[str, Any]], npc_id: str) -> str:"
+      },
+      {
+        "line": 555,
+        "definition": "def supplied_clarification("
+      },
+      {
+        "line": 581,
+        "definition": "def find_reusable_commitment(session: Mapping[str, Any] | None, npc_id: str, player_text: str,"
+      },
+      {
+        "line": 611,
+        "definition": "def continuity_directive("
+      },
+      {
+        "line": 899,
+        "definition": "def active_followup_target("
+      }
+    ]
+  },
+  {
+    "file": "artifacts\\pr_eg_r6_r2_r2\\baseline_sources\\game\\conversational_referents.py",
+    "sha256": "503fa5648a82742673ba99670758017f7dfebcea1274e8ceb006347878126568",
+    "symbols": [
+      {
+        "line": 27,
+        "definition": "def operation_schema():"
+      },
+      {
+        "line": 37,
+        "definition": "def clean_operation(raw):"
+      },
+      {
+        "line": 52,
+        "definition": "def state(session):"
+      },
+      {
+        "line": 58,
+        "definition": "def active(session):"
+      },
+      {
+        "line": 64,
+        "definition": "def as_prior(record):"
+      },
+      {
+        "line": 71,
+        "definition": "def context(session):"
+      },
+      {
+        "line": 86,
+        "definition": "def bind(plan, session, utterance, participants, explicit_addressee=''):"
+      },
+      {
+        "line": 206,
+        "definition": "def commit(session: dict[str, Any], row: dict[str, Any], plan: Mapping[str, Any], adoption):"
+      }
+    ]
+  },
+  {
+    "file": "artifacts\\pr_eg_r6_r2_r2\\baseline_sources\\game\\dialogue_authority.py",
+    "sha256": "f2a8c3f4fca505e9fb845fa643f88dc79ab51a83f098e141f314f3ac57a491cb",
+    "symbols": [
+      {
+        "line": 123,
+        "definition": "def authorize_npc_disclosure(npc: Mapping[str, Any] | None, topic: Any) -> dict[str, Any]:"
+      },
+      {
+        "line": 163,
+        "definition": "def npc_source_permitted(npc: Mapping[str, Any] | None, topic: Any) -> bool:"
+      },
+      {
+        "line": 184,
+        "definition": "def _norm(text: str) -> str:"
+      },
+      {
+        "line": 188,
+        "definition": "def contains_protected_disclosure(text: str) -> bool:"
+      },
+      {
+        "line": 192,
+        "definition": "def is_host_operation(text: str) -> bool:"
+      },
+      {
+        "line": 199,
+        "definition": "def is_bounded_expression(text: str) -> bool:"
+      },
+      {
+        "line": 206,
+        "definition": "def proposition_covered_by_source(proposition: str, delivered: str, source_text: str) -> bool:"
+      },
+      {
+        "line": 220,
+        "definition": "def consequential_addition(line: str, covered: str = \"\") -> bool:"
+      },
+      {
+        "line": 235,
+        "definition": "def provenance_record("
+      },
+      {
+        "line": 265,
+        "definition": "def _npc_topics(npc: Mapping[str, Any] | None) -> list[Mapping[str, Any]]:"
+      },
+      {
+        "line": 270,
+        "definition": "def historical_disclosure_permitted(row: Mapping[str, Any], npc: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 316,
+        "definition": "def commitment_disclosure_permitted(row: Mapping[str, Any], npc: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 332,
+        "definition": "def requested_information(player_text: str) -> str:"
+      },
+      {
+        "line": 347,
+        "definition": "def subject_phrase(player_text: str, *, speaker_name: str = \"\") -> str:"
+      },
+      {
+        "line": 377,
+        "definition": "def _specific_overlap(question: str, fact: str) -> bool:"
+      },
+      {
+        "line": 383,
+        "definition": "def classify_answer_sufficiency(player_text: str, topic_text: str) -> str:"
+      },
+      {
+        "line": 405,
+        "definition": "def _partial_answer_line(name: str, fact: str, player_text: str) -> str:"
+      },
+      {
+        "line": 416,
+        "definition": "def _single_partial_topic(npc: Mapping[str, Any] | None, player_text: str) -> dict[str, str] | None:"
+      },
+      {
+        "line": 438,
+        "definition": "def topic_supports_requested_information(player_text: str, topic_text: str) -> bool:"
+      },
+      {
+        "line": 453,
+        "definition": "def is_ordinary_personal_question(player_text: str) -> bool:"
+      },
+      {
+        "line": 458,
+        "definition": "def is_consequential_request(player_text: str) -> bool:"
+      },
+      {
+        "line": 462,
+        "definition": "def _posture_for(kind: str, *, topic_text: str, plan_kind: str) -> str:"
+      },
+      {
+        "line": 476,
+        "definition": "def _player_line(name: str, posture: str, subject: str) -> str:"
+      },
+      {
+        "line": 486,
+        "definition": "def visible_supporting_sentence(scene: Mapping[str, Any] | None, player_text: str) -> str:"
+      },
+      {
+        "line": 509,
+        "definition": "def build_dialogue_authority("
+      },
+      {
+        "line": 707,
+        "definition": "def attach_dialogue_authority("
+      },
+      {
+        "line": 752,
+        "definition": "def authority_codes(record: Mapping[str, Any] | None) -> dict[str, Any]:"
+      },
+      {
+        "line": 766,
+        "definition": "def select_host_speech("
+      },
+      {
+        "line": 834,
+        "definition": "def response_class(text: str) -> str:"
+      },
+      {
+        "line": 847,
+        "definition": "def dialogue_rejection_reasons("
+      },
+      {
+        "line": 874,
+        "definition": "def _bucket(session: Mapping[str, Any] | None) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 886,
+        "definition": "def active_commitments("
+      },
+      {
+        "line": 904,
+        "definition": "def remember_dialogue_commitment("
+      }
+    ]
+  },
+  {
+    "file": "artifacts\\pr_eg_r6_r2_r2\\baseline_sources\\game\\immutable_valid_response.py",
+    "sha256": "7169bef0dfb68fb8e6fcb8ad4d6564a033f411d0bbd673eca4e00571c0226c79",
+    "symbols": [
+      {
+        "line": 31,
+        "definition": "def seal_delivery_contract(gm: dict[str, Any]) -> None:"
+      },
+      {
+        "line": 49,
+        "definition": "def verify_delivery_record(record: Mapping[str, Any]) -> bool:"
+      },
+      {
+        "line": 196,
+        "definition": "def mutator_statuses_are_complete() -> bool:"
+      },
+      {
+        "line": 200,
+        "definition": "def normalize_presentation(text: str | None) -> str:"
+      },
+      {
+        "line": 206,
+        "definition": "def semantic_equal(left: str | None, right: str | None) -> bool:"
+      },
+      {
+        "line": 210,
+        "definition": "def accepted_record(gm: Mapping[str, Any] | None) -> dict[str, Any] | None:"
+      },
+      {
+        "line": 225,
+        "definition": "def response_is_immutable(gm: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 230,
+        "definition": "def leave_text_unchanged(gm: Any, mutator_name: str) -> bool:"
+      },
+      {
+        "line": 238,
+        "definition": "def note_mutator_skipped(gm: dict[str, Any], mutator_name: str) -> None:"
+      },
+      {
+        "line": 252,
+        "definition": "def effects_allowed(gm: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 270,
+        "definition": "def mark_candidate_rejected(gm: dict[str, Any], text: str, reasons: list[str] | None = None) -> dict[str, Any]:"
+      },
+      {
+        "line": 285,
+        "definition": "def _words(text: str | None) -> set[str]:"
+      },
+      {
+        "line": 293,
+        "definition": "def _catalog_ids(label: str, referents: list[Mapping[str, Any]] | None) -> set[str]:"
+      },
+      {
+        "line": 320,
+        "definition": "def _unresolved_explicit_addressee(contract: Mapping[str, Any] | None) -> str:"
+      },
+      {
+        "line": 340,
+        "definition": "def _unresolved_addressee_conflict(speaker: str, requested: str) -> bool:"
+      },
+      {
+        "line": 354,
+        "definition": "def _speaker_conflicts("
+      },
+      {
+        "line": 373,
+        "definition": "def _outside_quotes(text: str) -> str:"
+      },
+      {
+        "line": 377,
+        "definition": "def same_clause_locates(text: str | None, labels: list[str]) -> bool:"
+      },
+      {
+        "line": 391,
+        "definition": "def _explicit_addressee(player_text: str, referents: list[Mapping[str, Any]] | None) -> str:"
+      },
+      {
+        "line": 416,
+        "definition": "def _speech_shell(text: str) -> bool:"
+      },
+      {
+        "line": 432,
+        "definition": "def _speaker_constraint_label(contract: Mapping[str, Any] | None) -> str:"
+      },
+      {
+        "line": 471,
+        "definition": "def _player_sensory_dimensions(player_text: str) -> list[str]:"
+      },
+      {
+        "line": 483,
+        "definition": "def _dimension_satisfied(text: str, name: str) -> bool:"
+      },
+      {
+        "line": 513,
+        "definition": "def _perception_dimension_miss("
+      },
+      {
+        "line": 545,
+        "definition": "def _contract_label(contract: Mapping[str, Any] | None) -> str:"
+      },
+      {
+        "line": 561,
+        "definition": "def _unresolved_travel_arrival(text: str, resolution: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 583,
+        "definition": "def _mechanical_success(resolution: Mapping[str, Any] | None) -> bool | None:"
+      },
+      {
+        "line": 597,
+        "definition": "def _malformed(text: str) -> bool:"
+      },
+      {
+        "line": 615,
+        "definition": "def _operation(contract: Mapping[str, Any] | None) -> str:"
+      },
+      {
+        "line": 619,
+        "definition": "def validate_generated_response("
+      },
+      {
+        "line": 818,
+        "definition": "def _with_retry_authority("
+      },
+      {
+        "line": 841,
+        "definition": "def regeneration_feedback("
+      },
+      {
+        "line": 968,
+        "definition": "def safe_nonresolution("
+      },
+      {
+        "line": 1029,
+        "definition": "def _label_repeats_player(line: str | None, player_text: str | None) -> bool:"
+      },
+      {
+        "line": 1039,
+        "definition": "def player_utterance_in_line(line: str | None, player_text: str | None) -> bool:"
+      },
+      {
+        "line": 1045,
+        "definition": "def _contract_from_resolution(resolution: Mapping[str, Any] | None) -> dict[str, Any]:"
+      },
+      {
+        "line": 1051,
+        "definition": "def lifecycle_applies(resolution: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 1066,
+        "definition": "def _referents_for("
+      },
+      {
+        "line": 1093,
+        "definition": "def _authored_corpus(scene: Mapping[str, Any] | None, extra: str = \"\") -> str:"
+      },
+      {
+        "line": 1106,
+        "definition": "def _scene_id_for_social_projection("
+      },
+      {
+        "line": 1122,
+        "definition": "def _project_authorized_social_answer_before_seal("
+      },
+      {
+        "line": 1235,
+        "definition": "def _unsupported_perception("
+      },
+      {
+        "line": 1270,
+        "definition": "def _visible_facts(scene: Mapping[str, Any] | None) -> list[str]:"
+      },
+      {
+        "line": 1280,
+        "definition": "def seal_accepted_response("
+      },
+      {
+        "line": 1347,
+        "definition": "def restore_accepted_text(gm: dict[str, Any] | None) -> dict[str, Any]:"
+      },
+      {
+        "line": 1406,
+        "definition": "def _structured_contract_failed(candidate: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 1413,
+        "definition": "def candidate_entered_structured_envelope_path(candidate: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 1433,
+        "definition": "def adopt_host_speech("
+      },
+      {
+        "line": 1469,
+        "definition": "def seal_host_speech("
+      },
+      {
+        "line": 1603,
+        "definition": "def run_preserve_if_valid("
+      },
+      {
+        "line": 2160,
+        "definition": "def provenance_is_safe(gm: Mapping[str, Any] | None) -> bool:"
+      },
+      {
+        "line": 2165,
+        "definition": "def commit_text(gm: Mapping[str, Any] | None) -> str:"
+      }
+    ]
+  },
+  {
+    "file": "artifacts\\pr_eg_r6_r2_r2\\baseline_sources\\game\\semantic_correspondence.py",
+    "sha256": "c387a521557ba96a5befd3335d13ad7ce44bfc6406af8e8143f2ccea45847b78",
+    "symbols": [
+      {
+        "line": 15,
+        "definition": "def object_schema(properties):"
+      },
+      {
+        "line": 19,
+        "definition": "def proposition_schema():"
+      },
+      {
+        "line": 24,
+        "definition": "def role_schema():"
+      },
+      {
+        "line": 28,
+        "definition": "def source_schema():"
+      },
+      {
+        "line": 32,
+        "definition": "def normalize(value):"
+      },
+      {
+        "line": 36,
+        "definition": "def clean_proposition(raw: Any):"
+      },
+      {
+        "line": 51,
+        "definition": "def witnessed(prop, text, *, prior_text=''):"
+      },
+      {
+        "line": 64,
+        "definition": "def argument_identity(reference, evidence, participants):"
+      },
+      {
+        "line": 79,
+        "definition": "def coverage(request, source, *, question, source_text, participants=(), prior_text=''):"
+      }
+    ]
+  },
+  {
+    "file": "artifacts\\pr_eg_r6_r2_r2\\baseline_sources\\game\\unified_semantic_planning.py",
+    "sha256": "ac024e7b69b2aff02019070833eb5bf7b0265e8b32f0d7b786f8ab4f757fbde1",
+    "symbols": [
+      {
+        "line": 89,
+        "definition": "def unified_semantic_planning_enabled() -> bool:"
+      },
+      {
+        "line": 95,
+        "definition": "def plan_proposer(fn: Callable[[Mapping[str, Any]], Mapping[str, Any]] | None) -> Iterator[None]:"
+      },
+      {
+        "line": 106,
+        "definition": "def _clean(text: Any, limit: int = 400) -> str:"
+      },
+      {
+        "line": 110,
+        "definition": "def _stem(token: str) -> str:"
+      },
+      {
+        "line": 121,
+        "definition": "def _same(left: str, right: str) -> bool:"
+      },
+      {
+        "line": 131,
+        "definition": "def _tokens(text: str) -> list[str]:"
+      },
+      {
+        "line": 145,
+        "definition": "def _covers(needles: list[str], hay: list[str]) -> int:"
+      },
+      {
+        "line": 153,
+        "definition": "def _snake(text: str) -> str:"
+      },
+      {
+        "line": 158,
+        "definition": "def parse_relationship(relationship: str) -> tuple[list[str], list[str]]:"
+      },
+      {
+        "line": 172,
+        "definition": "def _scene_id(scene: Mapping[str, Any] | None) -> str:"
+      },
+      {
+        "line": 181,
+        "definition": "def _scene_summary(scene: Mapping[str, Any] | None) -> str:"
+      },
+      {
+        "line": 190,
+        "definition": "def present_participants("
+      },
+      {
+        "line": 225,
+        "definition": "def _labels(participant: Mapping[str, Any]) -> list[str]:"
+      },
+      {
+        "line": 231,
+        "definition": "def match_addressees(text: str, participants: list[Mapping[str, Any]]) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 243,
+        "definition": "def direct_addressees(text: str, participants: list[Mapping[str, Any]]) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 252,
+        "definition": "def prior_semantic_plan(session: Mapping[str, Any] | None) -> dict[str, Any]:"
+      },
+      {
+        "line": 272,
+        "definition": "def _looks_like_information(text: str) -> bool:"
+      },
+      {
+        "line": 278,
+        "definition": "def is_migrated_information_turn("
+      },
+      {
+        "line": 299,
+        "definition": "def migrated_turn_should_abstain_legacy("
+      },
+      {
+        "line": 312,
+        "definition": "def _relationship_from_text(text: str, prior: Mapping[str, Any], act: str) -> tuple[str, str]:"
+      },
+      {
+        "line": 369,
+        "definition": "def deterministic_semantic_proposal(context: Mapping[str, Any]) -> dict[str, Any]:"
+      },
+      {
+        "line": 408,
+        "definition": "def _proposal_schema() -> dict[str, Any]:"
+      },
+      {
+        "line": 461,
+        "definition": "def _provider_context(context: Mapping[str, Any]) -> dict[str, Any]:"
+      },
+      {
+        "line": 499,
+        "definition": "def _invoke_provider(payload: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:"
+      },
+      {
+        "line": 607,
+        "definition": "def propose_semantic_plan(context: Mapping[str, Any]) -> dict[str, Any]:"
+      },
+      {
+        "line": 636,
+        "definition": "def validate_plan_schema(payload: Mapping[str, Any] | None) -> tuple[dict[str, Any] | None, str]:"
+      },
+      {
+        "line": 731,
+        "definition": "def _topic_rows(npc: Mapping[str, Any] | None) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 758,
+        "definition": "def _npc_by_id(world: Mapping[str, Any] | None, npc_id: str) -> dict[str, Any] | None:"
+      },
+      {
+        "line": 765,
+        "definition": "def _name_tautology(text: str) -> bool:"
+      },
+      {
+        "line": 769,
+        "definition": "def classify_source_coverage(relationship: str, question: str, source_text: str) -> str:"
+      },
+      {
+        "line": 806,
+        "definition": "def _conservative(host: str, proposed: str) -> str:"
+      },
+      {
+        "line": 813,
+        "definition": "def _host_line(name: str, kind: str, fact: str = \"\", *, ambiguity: str = \"\") -> str:"
+      },
+      {
+        "line": 835,
+        "definition": "def _other_sources(prior: Mapping[str, Any], sources: list[dict[str, Any]]) -> list[dict[str, Any]]:"
+      },
+      {
+        "line": 848,
+        "definition": "def authorize_information_turn("
+      },
+      {
+        "line": 1104,
+        "definition": "def _addressee_id(named: list[dict[str, Any]], prior: Mapping[str, Any], plan: Mapping[str, Any], resolved: str) -> str:"
+      },
+      {
+        "line": 1109,
+        "definition": "def _speaker_name(named: list[dict[str, Any]], prior: Mapping[str, Any], plan: Mapping[str, Any]) -> str:"
+      },
+      {
+        "line": 1115,
+        "definition": "def _name_for(participants: list[Mapping[str, Any]], npc_id: str) -> str:"
+      },
+      {
+        "line": 1122,
+        "definition": "def _ground_addressee("
+      },
+      {
+        "line": 1149,
+        "definition": "def _select("
+      },
+      {
+        "line": 1188,
+        "definition": "def _locked("
+      },
+      {
+        "line": 1261,
+        "definition": "def stage_delivered_plan(session: dict[str, Any] | None, player_text: str, plan: Mapping[str, Any]) -> None:"
+      },
+      {
+        "line": 1270,
+        "definition": "def take_staged_plan(session: Mapping[str, Any] | None, player_text: str) -> dict[str, Any] | None:"
+      },
+      {
+        "line": 1286,
+        "definition": "def store_binding(session: dict[str, Any] | None, player_text: str, locked: Mapping[str, Any]) -> None:"
+      },
+      {
+        "line": 1295,
+        "definition": "def consume_binding(session: Mapping[str, Any] | None, player_text: str) -> dict[str, Any] | None:"
+      },
+      {
+        "line": 1312,
+        "definition": "def planning_decision("
+      },
+      {
+        "line": 1399,
+        "definition": "def locked_plan_for_social_turn("
+      },
+      {
+        "line": 1436,
+        "definition": "def _from_existing_plan(plan: Mapping[str, Any]) -> dict[str, Any]:"
+      },
+      {
+        "line": 1459,
+        "definition": "def authority_record_from_plan("
+      },
+      {
+        "line": 1523,
+        "definition": "def delivered_plan_fields(plan: Mapping[str, Any] | None) -> dict[str, Any] | None:"
+      }
+    ]
+  }
+]

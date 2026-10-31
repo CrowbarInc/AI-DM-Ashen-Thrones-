@@ -1,0 +1,9 @@
+# 07 — Provider Accounting
+
+Authoritative current ledger: artifacts/atgb/atgb_r1_09/admission_ledger.json. Four authorized measured admissions; zero attempted dispatches, zero admissions, zero successful responses, zero failed dispatches. Each L1–L4 is NOT_RUN_PHASE_A_BLOCKED with zero retries. Four admissions remain unused; they do not authorize automatic continuation after this handoff.
+
+Zero input/output/total tokens and zero provider cost are attributable to this pass because no inference was dispatched. These are no-call totals, not estimates from missing usage. There is no provider usage report or model-returned version. Dispatch latency is not applicable. Diagnostic latencies are separate in readiness_diagnostics.json. No configured price table or fabricated token-price calculation was needed.
+
+Phase A created and closed one SDK client without calling it; this consumed no admission. The first local diagnostic script stopped on an inspection AttributeError before networking and inference; the inspection was corrected and the completed DNS/TCP/TLS check set ran once. That is an offline diagnostic-tool repair, not a trial/provider retry. No credential value was logged. No model-based health check, paid probe, model listing, responses/chat/embedding request, extra generation, trial continuation or model escalation occurred. No SDK, application, runner or orchestration retries occurred. No response-counter discrepancy exists for this no-dispatch pass; historical discrepancies are preserved separately.
+
+Budget compliance: PASS (0/4; 0/1 each trial). Phase A failure triggered the mandatory stop before live execution; the isolated-failure continuation and two-provider-failure policy were never reached. No interpretation of historical accounting was used to reset or hide current admissions.

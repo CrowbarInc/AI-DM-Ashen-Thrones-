@@ -1,0 +1,101 @@
+{
+  "live_calls": 0,
+  "provider": "stubbed call_gpt",
+  "cases": [
+    {
+      "id": "A_quiet_wait",
+      "setup": "Office facts only. Faction pressure and agenda zeroed. No projects. No pending leads.",
+      "input": "I wait.",
+      "provider_text": "The lamp stays steady over the desk.",
+      "expected": "Time advances by the existing every-chat rule. No invented consequential event. Quiet narration stays.",
+      "observed": {
+        "time_pressure": "0 to 1",
+        "current_date": "Day 1",
+        "world_tick_events": [],
+        "event_log": [],
+        "npc_locations_unchanged": true,
+        "pressure_rewriter_called": false,
+        "immutable_hard_valid": true,
+        "player_facing_text": "The lamp stays steady over the desk."
+      },
+      "result": "matches the existing contract"
+    },
+    {
+      "id": "B_scheduled_event",
+      "setup": "House Verevin pressure set to 2, one below PRESSURE_THRESHOLD_EVENT. Other factions held at 0.",
+      "input": "I wait.",
+      "provider_text": "The lamp stays steady over the desk.",
+      "expected": "The due tick is evaluated and the authorized state is observable.",
+      "observed": {
+        "time_pressure": "0 to 1",
+        "world_tick_events": ["House Verevin's pressure mounts."],
+        "event_log_matches_tick": true,
+        "faction_pressure_after": 3,
+        "player_facing_text": "The lamp stays steady over the desk.",
+        "narration_contains_event_text": false
+      },
+      "result": "State records the authorized event. Valid narration is not overwritten with it. That matches provider-describes, engine-does-not-invent."
+    },
+    {
+      "id": "C_active_npc",
+      "setup": "tavern_runner availability mobile, agenda_move_to_scene_id scene_investigate, location frontier_gate. Faction thresholds held off.",
+      "input": "I wait.",
+      "provider_text": "The lamp stays steady over the desk.",
+      "expected": "The NPC acts through the existing tick. The player does not have to initiate the move.",
+      "observed": {
+        "event": "Tavern Runner moves off-screen to scene_investigate.",
+        "location_after": "scene_investigate",
+        "player_facing_text": "The lamp stays steady over the desk.",
+        "pressure_rewriter_called": false
+      },
+      "result": "The move is authorized, durable, and labeled off-screen. It does not become an interruption phrase."
+    },
+    {
+      "id": "D_tense_scene",
+      "setup": "The single-wait target fixture. Guard and runner sentences are visible facts. World NPCs remain at frontier_gate.",
+      "input": "I wait.",
+      "expected": "Pressure rules are evaluated. Tension alone does not authorize an invented event.",
+      "observed": {
+        "tension_facts_present": true,
+        "passive_streak": 1,
+        "pressure_rewriter_called": false,
+        "reason": "hard-valid unresolved line sealed before pressure rewrite",
+        "faction_events_stored": true,
+        "player_facing_text": "Rain beads on the checkpoint while nobody moves first.",
+        "interruption_phrases": []
+      },
+      "result": "Tension is recorded as streak and as tick events. No invented confrontation is emitted."
+    },
+    {
+      "id": "E_repeated_waiting",
+      "setup": "Quiet compass fact. Factions held below the event threshold. Two passive turns.",
+      "inputs": ["I wait.", "I hold position and watch."],
+      "expected": "Time and world processes continue. Narration changes when an existing mechanic requires it. No arbitrary interruption.",
+      "observed": {
+        "time_pressure_after": 2,
+        "tick_events": [],
+        "turn1_text": "The lamp stays steady over the desk.",
+        "turn2_reason": "scene_stall because momentum is due",
+        "turn2_text": "A brass compass sits beside a blot of spilled ink on the desk reads a little finer when you let the noise thin. A brass compass sits beside a blot of spilled ink on the desk stands out more sharply on a second pass.",
+        "turn2_debug": "passive_scene_pressure:fallback:streak=2"
+      },
+      "result": "The second turn leaves atmosphere because scene momentum is due, and the replacement is grounded perception, not a forced encounter."
+    },
+    {
+      "id": "F_valid_atmosphere",
+      "setup": "Existing suspicious-figure lead for the tattered man, plus default faction rows that do cross the pressure threshold.",
+      "input": "I wait.",
+      "provider_text": "The square stays hushed except for the scrape of boots on wet stone.",
+      "expected": "Valid environmental narration is not overwritten to inject drama.",
+      "observed": {
+        "immutable_hard_valid": true,
+        "pressure_rewriter_called": false,
+        "faction_events_stored": true,
+        "lead_retained": "the tattered man",
+        "player_facing_text": "The square stays hushed except for the scrape of boots on wet stone.",
+        "tattered_man_in_text": false
+      },
+      "result": "Matches the PR-CK sibling locks. The lead and the tick events do not replace the valid line."
+    }
+  ]
+}

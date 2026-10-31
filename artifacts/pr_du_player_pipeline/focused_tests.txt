@@ -1,0 +1,4 @@
+tests/test_pr_du_player_pipeline.py -q --tb=short --basetemp=codex_pytest_tmp_prdu10 => 3 passed
+tests/test_pr_du_player_pipeline.py tests/test_pr_dq_vertical_slice.py tests/test_pr_dq_ic_ooc_messages.py tests/test_pr_dr_live_vertical_slice.py tests/test_pr_ds_operation_compatibility.py -q --tb=short --basetemp=codex_pytest_tmp_prdu_final => 45 passed
+Attempted broader authority/conversation batch => interrupted after no output
+FastAPI TestClient attempt => hung before route execution in Windows socketpair/anyio startup

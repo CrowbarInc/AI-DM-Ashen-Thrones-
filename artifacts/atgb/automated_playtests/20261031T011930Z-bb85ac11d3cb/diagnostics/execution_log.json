@@ -1,0 +1,40 @@
+{
+  "steps": [
+    {
+      "action": "initialize_campaign",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "capture_baseline",
+      "ok": true,
+      "http_status": null
+    },
+    {
+      "action": "start_campaign",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "observe_scene",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "verify_state",
+      "ok": true,
+      "http_status": 200
+    },
+    {
+      "action": "capture_final_state",
+      "ok": true,
+      "http_status": null
+    }
+  ],
+  "cleanup": {
+    "owned": true,
+    "pid": 1844,
+    "stopped": true,
+    "exit_code": 1
+  }
+}

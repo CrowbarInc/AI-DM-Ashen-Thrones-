@@ -1,0 +1,22 @@
+--- before/game/dialogue_authority.py
++++ after/game/dialogue_authority.py
+@@ -639,8 +639,8 @@
+     record = social.get("dialogue_authority") if isinstance(social.get("dialogue_authority"), Mapping) else None
+     if not isinstance(record, Mapping):
+         return None
+-    text = " ".join(str(line or "").split())
+-    if not text:
++    text = str(line or "")
++    if not text.strip():
+         return None
+     posture = str(record.get("knowledge_posture") or "")
+     if posture == "established":
+@@ -669,7 +669,7 @@
+         "npc_id": npc_id,
+         "kind": kind,
+         "subject": subject,
+-        "text": text[:180],
++        "text": text,
+         "canonical": False,
+         "turn": int(turn or 0),
+         "status": "active",

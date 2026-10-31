@@ -1,0 +1,24 @@
+{
+  "command": ".\\.venv\\Scripts\\python.exe -m pytest <tests/test_pr_br_*.py> tests/test_pr_bs_decision_facing_answer_recipe.py tests/test_pr_bt_policy_instruction_deduplication.py tests/test_pr_bt_selective_epistemic_guidance.py tests/test_prompt_context.py tests/test_prompt_and_guard.py tests/test_prompt_compression.py tests/test_prompt_context_public_prompt_boundary.py tests/test_prompt_context_ctir_boundary.py tests/test_prompt_context_ctir_consumption.py tests/test_realization_authority.py tests/test_realization_provenance.py tests/test_realization_provenance_audit.py tests/test_realization_layer_audit.py tests/test_response_policy_contracts.py tests/test_response_policy_enforcement_mutation.py tests/test_fallback_behavior_validator.py tests/test_fallback_behavior_repairs.py tests/test_fallback_behavior_gate.py tests/test_final_emission_sealed_fallback.py tests/test_final_emission_visibility_fallback.py tests/test_schema_contracts.py tests/test_runtime_schema_boundaries.py tests/test_turn_trace_contract.py -q --tb=line --durations=15 -k \"not test_call_gpt_provider_failure_metadata_has_provider_family\" -o faulthandler_timeout=60 -o faulthandler_exit_on_timeout=true --junitxml=artifacts/pr_bt_selective_epistemic_guidance/regression.xml --basetemp=artifacts/pr_bt_selective_epistemic_guidance/pytest_basetemp",
+  "environment": "TMP and TEMP pointed at artifacts/pr_bt_selective_epistemic_guidance/pytest_tmp. Run outside the sandbox, matching the PR-BT regression completion gate.",
+  "model_api_calls": 0,
+  "tests": 917,
+  "passed": 916,
+  "failed": 1,
+  "skipped": 0,
+  "errors": 0,
+  "time_seconds": 33.306,
+  "deselected": "test_call_gpt_provider_failure_metadata_has_provider_family",
+  "failure": {
+    "id": "tests/test_pr_bt_policy_instruction_deduplication.py::test_pr_bt_provider_requests_remove_at_least_12000_chars_each",
+    "assertion": "121438 - 110405 >= 12000",
+    "note": "Pre-existing absolute floor. The PR-BT regression completion gate already failed this test at P2 savings of 11585. This slice did not edit the assertion."
+  },
+  "c18": {
+    "test": "tests/test_pr_br_structured_chat_path.py::test_raw_chat_accepts_authorized_fact_and_seals_it",
+    "result": "PASS",
+    "statement": "ACCEPTED RESPONSE == SEALED RESPONSE == EMITTED RESPONSE",
+    "immutable_boundary_file": "tests/test_pr_br_continuation18_immutable_boundary.py",
+    "immutable_boundary_result": "all collected cases passed"
+  }
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "event": "attempt",
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "user_chars": 436,
+      "contains_resolution_contract": false,
+      "contains_gm_resolution_decision": false,
+      "contains_clay_kiln_or_scene_summary_marker": true,
+      "user_excerpt": "{\"utterance\": \"Who cracked the chapel bell, and when did it happen?\", \"abstention_reason\": \"insufficient_discourse_context\", \"candidates\": [{\"id\": \"chapel_close\", \"type\": \"place\", \"label\": \"Brineward chapel close\", \"aliases\": []}], \"discourse\": {\"scene_id\": \"chapel_close\", \"active_interlocutor\": null, \"active_claim\": null, \"active_actionable_lead\": null, \"active_inspected\": null, \"last_attempted_action\": null}, \"recent_visible\": []}"
+    },
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[],\"raw_target_text\":\"Who cracked the chapel bell, and when did it happen?\",\"proposed_target_id\":null,\"interlocutor_id\":null,\"conversational_subject\":\"chapel bell\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Identify the person who cracked the chapel bell and the time of the event.\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":true,\"ambiguous\":true,\"confidence\":null}"
+  }
+]

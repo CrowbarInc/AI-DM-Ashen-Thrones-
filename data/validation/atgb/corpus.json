@@ -1,0 +1,78 @@
+{
+  "benchmark_version": "ATGB-02",
+  "scenario_version": "ATGB-01",
+  "rubric_version": "atgb-rubric-01",
+  "partition_revision": "ATGB-02-s07-held-out",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "source_design": "development/reports/atgb_01_conversational_benchmark_design.md",
+  "expected_turns": {
+    "development_visible": 25,
+    "related_variation": 4,
+    "held_out": 8,
+    "total": 37
+  },
+  "catalog_discrepancy": "The ATGB-01 catalog classifies S07 as development-visible and counts 29 development-visible turns, 4 related-variation turns, and 4 held-out turns. ATGB-02 moves S07, unchanged, into the held-out partition. The adopted counts are 25, 4, and 8. Scenario text and per-scenario turn counts were not edited to force those totals.",
+  "held_out_evidence_status": "held_out_previously_exposed",
+  "held_out_evidence_note": "S07, S09, and S10 appeared in the ATGB-01 design review. The held-out partition is kept for later evaluation discipline. These turns are not fully independent unseen evaluation data. A later held-out environment could provide stronger evidence.",
+  "environments": {
+    "frontier_gate": {
+      "location_id": "frontier_gate",
+      "label": "Cinderwatch's eastern gate",
+      "note": "Initial benchmark environment. Fixtures name this id. The runner does not special-case it.",
+      "shared_facts": [
+        {
+          "id": "visible_notice_board",
+          "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+        },
+        {
+          "id": "visible_serjeant",
+          "text": "A gate serjeant manages the crowd and watches the roster board."
+        },
+        {
+          "id": "visible_runner_offer",
+          "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+        },
+        {
+          "id": "visible_crowd",
+          "text": "Threadbare watchers and refugees stand along the muddy line."
+        },
+        {
+          "id": "visible_census_choke",
+          "text": "Ash Compact census delays have tightened the eastern caravan choke."
+        },
+        {
+          "id": "visible_banners",
+          "text": "Frayed banners are in the opening description."
+        },
+        {
+          "id": "clue_notice_patrol_route",
+          "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+        },
+        {
+          "id": "topic_watch_command",
+          "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+        },
+        {
+          "id": "topic_route_change",
+          "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+        },
+        {
+          "id": "topic_patrol_rumor",
+          "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+        },
+        {
+          "id": "exits",
+          "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+        },
+        {
+          "id": "hidden_facts",
+          "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+        },
+        {
+          "id": "unauthored",
+          "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "campaign_id": "pr-br-continuation-8",
+  "campaign_name": "PR-BR Continuation 8 — Independent 10-Turn Smoke",
+  "campaign_date": "2026-09-29",
+  "purpose": "Independent smoke of the Continuation 7 build. No production repair. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Preflight 198 passed. API healthy. One 2×5 smoke on /api/chat: 10 completed, 0 aborted, 12 model calls, 2 retries. Manual human-DM 3/10. Evaluator 7/10, false PASS 4, false FAIL 0. Recurring family: a usable model answer is replaced by stock inability, clarification, or non-match after social or action lines are parsed as object inspection. Valid-answer destruction 7. Generic fallback collapse 6. Referent loss 6. Action collapse 3. Claim clipping 0. Player-visible truncation 0. Scene-momentum splice 0. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT YET AUTHORIZED. No semantic repair or rerun. No 4×10 gate. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted PR-BR tree.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [
+    "artifacts/pr_br_continuation8/20260929T102429Z"
+  ],
+  "changes": {
+    "production": [
+      "None. Validation only."
+    ],
+    "validation": [
+      "Preflight rerun of the Continuation 7 regression band: 198 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation8_smoke.py records the smoke. It does not change resolution semantics."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 8 section"
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation8/20260929T102429Z transcript, traces, manual assessment"
+    ]
+  },
+  "testing": {
+    "focused": "198 passed, 0 failed before the smoke.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "10 completed smoke turns, 0 aborted, 12 model calls, 2 retries. No 4×10 gate.",
+    "model_runtime_boundary": "gpt-4.1-mini via call_gpt. Token telemetry unavailable.",
+    "new_regressions": "None added.",
+    "pre_existing_failures": "None in the 198-test band."
+  },
+  "decisions_requiring_human_review": [
+    "The smoke does not support a full synthetic gate.",
+    "PR-BR remains open. Do not start PR-BS from this packet."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Usable model answers were replaced by stock inability, clarification, or non-match lines on 7 of 10 turns.",
+      "Social and action lines were parsed as object inspection, including target duty and a whole previous player sentence.",
+      "The evaluator false-PASSed 4 of those failures.",
+      "Precedence diagnostics reported destroyed false on the destroyed turns."
+    ],
+    "pre_existing": [
+      "call_gpt does not record token usage.",
+      "Continuation 7 residuals (claim clipping, mid-token tail) were not re-observed in this sample."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove 4×10 synthetic-gate health.",
+    "Does not authorize a human playtest.",
+    "Ten turns do not measure how often the replacement family appears outside the frontier gate."
+  ],
+  "recommended_next_step": "Human review of this packet. Do not run the 4×10 gate. Do not start a repair from this validation run unless a later continuation is authorized.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/transcript.md",
+      "role": "live_transcript",
+      "why": "Player-visible smoke transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/turns.json",
+      "role": "live_trace",
+      "why": "Contracts, model candidates, final text, and precedence traces.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/summary.json",
+      "role": "cost_accounting",
+      "why": "Completed turns, model calls, retries.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/provenance.json",
+      "role": "provenance",
+      "why": "HEAD, preflight, and confirmation the full gate was not run.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/personas.json",
+      "role": "smoke_configuration",
+      "why": "Persona objectives and agendas.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/MANUAL_ASSESSMENT.md",
+      "role": "manual_assessment",
+      "why": "Per-turn human-DM review and evaluator disagreements.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

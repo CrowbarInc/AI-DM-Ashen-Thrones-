@@ -1,0 +1,12 @@
+{
+  "stage": "A",
+  "command_started": false,
+  "live_provider_calls": 0,
+  "action": ".venv/Scripts/python.exe artifacts/atgb/atgb_03/execute.py A",
+  "destination": "OpenAI https://api.openai.com/v1",
+  "reason": "Automatic approval review rejected live provider calls because benchmark/gameplay payload export to OpenAI requires explicit user authorization for that destination.",
+  "next_action": "Obtain explicit approval to send the frozen benchmark inputs, authored world/scenario context and isolated conversation history to OpenAI under the declared ceilings. Do not bypass the rejection.",
+  "stage_a_acceptance": "not_evaluated",
+  "stage_b": "not_started",
+  "human_review": "pending_no_live_transcripts"
+}

@@ -1,0 +1,1076 @@
+[
+  {
+    "case": "A",
+    "baseline": {
+      "conversation": "continuity_0",
+      "turn": 2,
+      "player": "I meant the copper reliquary.",
+      "speech": "Which information do you mean?",
+      "plan": {
+        "locked": true,
+        "request_proposition": {
+          "predicate": "keep",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "mentioned_entity_ids": [],
+        "correction_target": "keep(amber_reliquary)",
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "",
+        "requested_subject": "copper reliquary",
+        "requested_relationship": "keep(copper_reliquary)",
+        "question_text": "I meant the copper reliquary.",
+        "selected_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "proposition",
+        "referenced_prior_proposition": "keep(amber_reliquary)",
+        "rejected_source_ids": [],
+        "authorized_text": "",
+        "host_line": "Which information do you mean?",
+        "reason": "invalid_role_or_prior_binding",
+        "epistemic_status": "none",
+        "canonical": false
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true
+      }
+    },
+    "final": {
+      "conversation": "continuity_0",
+      "turn": 2,
+      "player": "I meant the copper reliquary.",
+      "speech": "Tavi mutters, \"Word is, the miller keeps the copper reliquary.\"",
+      "plan": {
+        "request_proposition": {
+          "predicate": "keeps",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "copper reliquary",
+          "object_evidence": "copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "keeps(subject)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "copper",
+            "proposition": {
+              "predicate": "keeps",
+              "predicate_evidence": "keeps",
+              "subject": "The miller",
+              "subject_evidence": "The miller",
+              "object": "copper reliquary",
+              "object_evidence": "copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "copper",
+            "coverage": "direct"
+          },
+          {
+            "source_id": "road",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "ferry",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "quay",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "jade",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "ivory",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "roster",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "referent_operation": {
+            "target_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+            "operation": "replace_object",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": ""
+          },
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "copper",
+              "proposition": {
+                "predicate": "keeps",
+                "predicate_evidence": "keeps",
+                "subject": "The miller",
+                "subject_evidence": "The miller",
+                "object": "copper reliquary",
+                "object_evidence": "copper reliquary",
+                "missing_argument": "",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "correction",
+          "addressee_reference": "tavi",
+          "addressee_id": "tavi",
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "question_text": "I meant the copper reliquary.",
+          "correction_of_prior_question": true,
+          "correction_target": "f849e6d12d57406aafde80d230e36364:1",
+          "referenced_prior_proposition": "f849e6d12d57406aafde80d230e36364:1",
+          "candidate_source_ids": [
+            "copper"
+          ],
+          "proposed_coverage": [
+            {
+              "source_id": "copper",
+              "coverage": "direct"
+            }
+          ],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.95
+        },
+        "referent_operation": {
+          "target_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        },
+        "bound_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+        "referent_prior_answer_status": "unknown",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "copper reliquary",
+        "requested_relationship": "keeps_of(copper_reliquary)",
+        "question_text": "I meant the copper reliquary.",
+        "correction_of_prior_question": true,
+        "correction_target": "keeps  amber reliquary  ",
+        "referenced_prior_proposition": "keeps(subject)",
+        "selected_source_ids": [
+          "copper"
+        ],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [
+          "copper"
+        ],
+        "answer_sufficiency": "direct",
+        "response_kind": "direct",
+        "ambiguity_type": "",
+        "authorized_text": "The miller keeps the copper reliquary.",
+        "epistemic_status": "npc_knowledge",
+        "canonical": false,
+        "host_line": "Tavi mutters, \"Word is, the miller keeps the copper reliquary.\"",
+        "reason": "authorized_direct",
+        "provider_calls": 1,
+        "provider_usage": {
+          "purpose": "semantic_plan",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_0297ac528cdf748d006ad3ee9392f087d284e822a7c5ac903a",
+          "input_tokens": 2311,
+          "output_tokens": 374,
+          "total_tokens": 2685,
+          "latency_ms": 2609.464,
+          "usage_consistent": true
+        },
+        "latency_ms": 2612.11
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true,
+        "reload": true
+      }
+    }
+  },
+  {
+    "case": "B",
+    "baseline": {
+      "conversation": "continuity_0",
+      "turn": 5,
+      "player": "Who told you?",
+      "speech": "Which information do you mean?",
+      "plan": {
+        "locked": true,
+        "request_proposition": {
+          "predicate": "tell",
+          "predicate_evidence": "told",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "you",
+          "object_evidence": "you",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "mentioned_entity_ids": [],
+        "correction_target": "Tavi, what is the aqueduct called?",
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "",
+        "requested_subject": "you",
+        "requested_relationship": "tell(you)",
+        "question_text": "Who told you?",
+        "selected_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "proposition",
+        "referenced_prior_proposition": "call(the_aqueduct)",
+        "rejected_source_ids": [],
+        "authorized_text": "",
+        "host_line": "Which information do you mean?",
+        "reason": "invalid_role_or_prior_binding",
+        "epistemic_status": "none",
+        "canonical": false
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true
+      }
+    },
+    "final": {
+      "conversation": "continuity_0",
+      "turn": 5,
+      "player": "Who told you?",
+      "speech": "Tavi says, \"I don't know who told me.\"",
+      "plan": {
+        "request_proposition": {
+          "predicate": "who_told",
+          "predicate_evidence": "Who told you",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "aqueduct",
+          "object_evidence": "aqueduct",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "is_called(object)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "copper",
+            "proposition": {
+              "predicate": "who_told",
+              "predicate_evidence": "Who told you",
+              "subject": "you",
+              "subject_evidence": "you",
+              "object": "",
+              "object_evidence": "",
+              "missing_argument": "subject",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "is_called(object)",
+              "negated": false
+            }
+          },
+          {
+            "source_id": "road",
+            "proposition": {
+              "predicate": "who_told",
+              "predicate_evidence": "Who told you",
+              "subject": "you",
+              "subject_evidence": "you",
+              "object": "",
+              "object_evidence": "",
+              "missing_argument": "subject",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "is_called(object)",
+              "negated": false
+            }
+          },
+          {
+            "source_id": "ferry",
+            "proposition": {
+              "predicate": "who_told",
+              "predicate_evidence": "Who told you",
+              "subject": "you",
+              "subject_evidence": "you",
+              "object": "",
+              "object_evidence": "",
+              "missing_argument": "subject",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "is_called(object)",
+              "negated": false
+            }
+          },
+          {
+            "source_id": "quay",
+            "proposition": {
+              "predicate": "who_told",
+              "predicate_evidence": "Who told you",
+              "subject": "you",
+              "subject_evidence": "you",
+              "object": "",
+              "object_evidence": "",
+              "missing_argument": "subject",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "is_called(object)",
+              "negated": false
+            }
+          }
+        ],
+        "provider_proposal": {
+          "referent_operation": {
+            "target_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": "source_attribution"
+          },
+          "request_proposition": {
+            "predicate": "who_told",
+            "predicate_evidence": "Who told you",
+            "subject": "you",
+            "subject_evidence": "you",
+            "object": "",
+            "object_evidence": "",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "is_called(object)",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [
+            {
+              "source_id": "copper",
+              "proposition": {
+                "predicate": "who_told",
+                "predicate_evidence": "Who told you",
+                "subject": "you",
+                "subject_evidence": "you",
+                "object": "",
+                "object_evidence": "",
+                "missing_argument": "subject",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "is_called(object)",
+                "negated": false
+              }
+            },
+            {
+              "source_id": "road",
+              "proposition": {
+                "predicate": "who_told",
+                "predicate_evidence": "Who told you",
+                "subject": "you",
+                "subject_evidence": "you",
+                "object": "",
+                "object_evidence": "",
+                "missing_argument": "subject",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "is_called(object)",
+                "negated": false
+              }
+            },
+            {
+              "source_id": "ferry",
+              "proposition": {
+                "predicate": "who_told",
+                "predicate_evidence": "Who told you",
+                "subject": "you",
+                "subject_evidence": "you",
+                "object": "",
+                "object_evidence": "",
+                "missing_argument": "subject",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "is_called(object)",
+                "negated": false
+              }
+            },
+            {
+              "source_id": "quay",
+              "proposition": {
+                "predicate": "who_told",
+                "predicate_evidence": "Who told you",
+                "subject": "you",
+                "subject_evidence": "you",
+                "object": "",
+                "object_evidence": "",
+                "missing_argument": "subject",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "is_called(object)",
+                "negated": false
+              }
+            }
+          ],
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "follow_up",
+          "addressee_reference": "tavi",
+          "addressee_id": "tavi",
+          "requested_subject": "subject",
+          "requested_relationship": "who_told(subject)",
+          "question_text": "Who told you?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "is_called(object)",
+          "candidate_source_ids": [
+            "copper",
+            "road",
+            "ferry",
+            "quay"
+          ],
+          "proposed_coverage": [
+            {
+              "source_id": "copper",
+              "coverage": "unknown"
+            },
+            {
+              "source_id": "road",
+              "coverage": "unknown"
+            },
+            {
+              "source_id": "ferry",
+              "coverage": "unknown"
+            },
+            {
+              "source_id": "quay",
+              "coverage": "unknown"
+            }
+          ],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.9
+        },
+        "referent_operation": {
+          "target_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": "source_attribution"
+        },
+        "bound_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+        "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+        "referent_prior_answer_status": "unknown",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "follow_up",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "aqueduct",
+        "requested_relationship": "who_told_of(aqueduct)",
+        "question_text": "Who told you?",
+        "correction_of_prior_question": false,
+        "correction_target": "called aqueduct   ",
+        "referenced_prior_proposition": "is_called(object)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I was saying I do not know the answer to that question.\"",
+        "reason": "referenced_answer_unknown",
+        "provider_calls": 1,
+        "provider_usage": {
+          "purpose": "semantic_plan",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_0f2dc6cdf84a7cf0006ad3ee9d6e9887d2bcbc34ff1d181a58",
+          "input_tokens": 2854,
+          "output_tokens": 574,
+          "total_tokens": 3428,
+          "latency_ms": 3782.811,
+          "usage_consistent": true
+        },
+        "latency_ms": 3785.759
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true,
+        "reload": true
+      }
+    }
+  },
+  {
+    "case": "C",
+    "baseline": {
+      "conversation": "continuity_0",
+      "turn": 7,
+      "player": "I wasn't asking about the bell. I meant the north road.",
+      "speech": "Which information do you mean?",
+      "plan": {
+        "locked": true,
+        "request_proposition": {
+          "predicate": "keep",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "the north road",
+          "object_evidence": "the north road",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "mentioned_entity_ids": [],
+        "correction_target": "keep(the_bell)",
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "",
+        "requested_subject": "the north road",
+        "requested_relationship": "keep(the_north_road)",
+        "question_text": "I wasn't asking about the bell. I meant the north road.",
+        "selected_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "proposition",
+        "referenced_prior_proposition": "keep(the_bell)",
+        "rejected_source_ids": [],
+        "authorized_text": "",
+        "host_line": "Which information do you mean?",
+        "reason": "invalid_role_or_prior_binding",
+        "epistemic_status": "none",
+        "canonical": false
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true
+      }
+    },
+    "final": {
+      "conversation": "continuity_0",
+      "turn": 7,
+      "player": "I wasn't asking about the bell. I meant the north road.",
+      "speech": "Tavi says, \"I couldn't tell you.\"",
+      "plan": {
+        "request_proposition": {
+          "predicate": "keeps",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "north road",
+          "object_evidence": "north road",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "keeps(subject)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "source_relevance": [
+          {
+            "source_id": "copper",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "road",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "ferry",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "quay",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "jade",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "ivory",
+            "coverage": "unknown"
+          },
+          {
+            "source_id": "roster",
+            "coverage": "unknown"
+          }
+        ],
+        "provider_proposal": {
+          "referent_operation": {
+            "target_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+            "operation": "replace_object",
+            "changed_fields": [
+              "object"
+            ],
+            "follow_up_relationship": ""
+          },
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "kept",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "north road",
+            "object_evidence": "north road",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [],
+          "source_propositions": [],
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "correction",
+          "addressee_reference": "tavi",
+          "addressee_id": "tavi",
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "question_text": "I wasn't asking about the bell. I meant the north road.",
+          "correction_of_prior_question": true,
+          "correction_target": "f849e6d12d57406aafde80d230e36364:5",
+          "referenced_prior_proposition": "keeps(subject)",
+          "candidate_source_ids": [
+            "road"
+          ],
+          "proposed_coverage": [
+            {
+              "source_id": "road",
+              "coverage": "related_but_nonanswer"
+            }
+          ],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.95
+        },
+        "referent_operation": {
+          "target_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        },
+        "bound_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+        "referent_prior_answer_status": "unknown",
+        "referent_eligible": true,
+        "mentioned_entity_ids": [],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_id": "tavi",
+        "addressee_reference": "Tavi",
+        "requested_subject": "north road",
+        "requested_relationship": "keeps_of(north_road)",
+        "question_text": "I wasn't asking about the bell. I meant the north road.",
+        "correction_of_prior_question": true,
+        "correction_target": "keeps  bell  ",
+        "referenced_prior_proposition": "keeps(subject)",
+        "selected_source_ids": [],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [],
+        "answer_sufficiency": "unknown",
+        "response_kind": "unknown",
+        "ambiguity_type": "",
+        "authorized_text": "",
+        "epistemic_status": "none",
+        "canonical": false,
+        "host_line": "Tavi says, \"I couldn't tell you.\"",
+        "reason": "no_relevant_source",
+        "provider_calls": 1,
+        "provider_usage": {
+          "purpose": "semantic_plan",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_0fbc1b9b34848705006ad3eea62cb487d28c3a3a711299d0b1",
+          "input_tokens": 3268,
+          "output_tokens": 275,
+          "total_tokens": 3543,
+          "latency_ms": 2227.363,
+          "usage_consistent": true
+        },
+        "latency_ms": 2229.445
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true,
+        "reload": true
+      }
+    }
+  },
+  {
+    "case": "D",
+    "baseline": {
+      "conversation": "continuity_0",
+      "turn": 8,
+      "player": "Mara, what did Oren say about the road?",
+      "speech": "Which information do you mean?",
+      "plan": {
+        "locked": true,
+        "request_proposition": {
+          "predicate": "say_about",
+          "predicate_evidence": "say about",
+          "subject": "Oren",
+          "subject_evidence": "Oren",
+          "object": "the road",
+          "object_evidence": "the road",
+          "missing_argument": "object",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [
+          {
+            "role": "addressee",
+            "entity_id": "mara",
+            "reference": "Mara",
+            "evidence": "Mara"
+          },
+          {
+            "role": "requested_object",
+            "entity_id": "",
+            "reference": "the road",
+            "evidence": "the road"
+          }
+        ],
+        "mentioned_entity_ids": [
+          "mara",
+          "oren"
+        ],
+        "correction_target": "I wasn't asking about the bell. I meant the north road.",
+        "plan_version": "pr-eg-r6-r2.1",
+        "conversational_act": "information_question",
+        "addressee_id": "",
+        "requested_subject": "Oren",
+        "requested_relationship": "say_about(the_road)",
+        "question_text": "Mara, what did Oren say about the road?",
+        "selected_source_ids": [],
+        "answer_sufficiency": "clarification",
+        "response_kind": "clarification",
+        "ambiguity_type": "proposition",
+        "referenced_prior_proposition": "keep(the_north_road)",
+        "rejected_source_ids": [],
+        "authorized_text": "",
+        "host_line": "Which information do you mean?",
+        "reason": "invalid_role_or_prior_binding",
+        "epistemic_status": "none",
+        "canonical": false
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true
+      }
+    },
+    "final": {
+      "conversation": "continuity_0",
+      "turn": 8,
+      "player": "Mara, what did Oren say about the road?",
+      "speech": "Mara mutters, \"Word is, oren says the north road is flooded.\"",
+      "plan": {
+        "request_proposition": {
+          "predicate": "say_about",
+          "predicate_evidence": "say about",
+          "subject": "Oren",
+          "subject_evidence": "Oren",
+          "object": "road",
+          "object_evidence": "road",
+          "missing_argument": "object",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [
+          {
+            "role": "mentioned_npc",
+            "entity_id": "mara",
+            "reference": "Mara",
+            "evidence": "Mara"
+          },
+          {
+            "role": "mentioned_npc",
+            "entity_id": "oren",
+            "reference": "Oren",
+            "evidence": "Oren"
+          }
+        ],
+        "source_propositions": [
+          {
+            "source_id": "road",
+            "proposition": {
+              "predicate": "say_about",
+              "predicate_evidence": "says",
+              "subject": "Oren",
+              "subject_evidence": "Oren",
+              "object": "north road",
+              "object_evidence": "north road",
+              "missing_argument": "object",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "source_relevance": [
+          {
+            "source_id": "road",
+            "coverage": "direct"
+          }
+        ],
+        "provider_proposal": {
+          "referent_operation": {
+            "target_referent_id": "",
+            "operation": "",
+            "changed_fields": [],
+            "follow_up_relationship": ""
+          },
+          "request_proposition": {
+            "predicate": "say_about",
+            "predicate_evidence": "say about",
+            "subject": "Oren",
+            "subject_evidence": "Oren",
+            "object": "road",
+            "object_evidence": "road",
+            "missing_argument": "object",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "entity_roles": [
+            {
+              "role": "mentioned_npc",
+              "entity_id": "mara",
+              "reference": "Mara",
+              "evidence": "Mara"
+            },
+            {
+              "role": "mentioned_npc",
+              "entity_id": "oren",
+              "reference": "Oren",
+              "evidence": "Oren"
+            }
+          ],
+          "source_propositions": [
+            {
+              "source_id": "road",
+              "proposition": {
+                "predicate": "say_about",
+                "predicate_evidence": "says",
+                "subject": "Oren",
+                "subject_evidence": "Oren",
+                "object": "north road",
+                "object_evidence": "north road",
+                "missing_argument": "object",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              }
+            }
+          ],
+          "plan_version": "pr-eg-r6-r2-r1.1",
+          "conversational_act": "information_question",
+          "addressee_reference": "Mara",
+          "addressee_id": "mara",
+          "requested_subject": "Oren",
+          "requested_relationship": "say_about(object)",
+          "question_text": "Mara, what did Oren say about the road?",
+          "correction_of_prior_question": false,
+          "correction_target": "",
+          "referenced_prior_proposition": "",
+          "candidate_source_ids": [
+            "road"
+          ],
+          "proposed_coverage": [
+            {
+              "source_id": "road",
+              "coverage": "direct"
+            }
+          ],
+          "ambiguity_type": "",
+          "clarification_needed": false,
+          "interpretation_confidence": 0.95
+        },
+        "referent_operation": {
+          "target_referent_id": "",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": ""
+        },
+        "referent_eligible": true,
+        "mentioned_entity_ids": [
+          "oren"
+        ],
+        "locked": true,
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "information_question",
+        "addressee_id": "mara",
+        "addressee_reference": "Mara",
+        "requested_subject": "Oren",
+        "requested_relationship": "say_about(object)",
+        "question_text": "Mara, what did Oren say about the road?",
+        "correction_of_prior_question": false,
+        "correction_target": "keeps  north road  ",
+        "referenced_prior_proposition": "keeps_of(north_road)",
+        "selected_source_ids": [
+          "road"
+        ],
+        "rejected_source_ids": [],
+        "candidate_source_ids": [
+          "road"
+        ],
+        "answer_sufficiency": "direct",
+        "response_kind": "direct",
+        "ambiguity_type": "",
+        "authorized_text": "Oren says the north road is flooded.",
+        "epistemic_status": "npc_knowledge",
+        "canonical": false,
+        "host_line": "Mara mutters, \"Word is, oren says the north road is flooded.\"",
+        "reason": "authorized_direct",
+        "provider_calls": 1,
+        "provider_usage": {
+          "purpose": "semantic_plan",
+          "sent": true,
+          "configured_model": "gpt-4.1-mini",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "request_id": "resp_0fe66ad420984b3d006ad3eea9780087d2b5de21730599715c",
+          "input_tokens": 3352,
+          "output_tokens": 344,
+          "total_tokens": 3696,
+          "latency_ms": 2731.807,
+          "usage_consistent": true
+        },
+        "latency_ms": 2734.037
+      },
+      "checks": {
+        "http": true,
+        "no_secret": true,
+        "sealed": true,
+        "exact": true,
+        "history_exact": true,
+        "canonical": true,
+        "no_secret_clue": true,
+        "reload": true
+      }
+    }
+  }
+]

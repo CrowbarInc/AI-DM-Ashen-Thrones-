@@ -1,0 +1,1537 @@
+[
+  {
+    "conversation": "primary",
+    "turn": 1,
+    "player": "I ask Warden Rell what the street beyond the gate is called.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "name of the street beyond the gate",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell the name of the street beyond the gate."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player character is in the Waystation courtyard near the gate where Warden Rell is watching the road."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Warden Rell provides the name of the street beyond the gate."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell what the street beyond the gate is called.",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "street beyond gate",
+      "requested_information": "general",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:warden_rell:street",
+        "npc:warden_rell:night_watch"
+      ],
+      "selected_source": "npc:warden_rell:street",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "primary",
+    "turn": 2,
+    "player": "What did you mean by north road?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "mean north road",
+      "requested_information": "general",
+      "reference": "delivered_speech",
+      "candidate_sources": [],
+      "selected_source": "delivered:warden_rell:1:social.topic_revealed:street",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 3,
+    "player": "Can you repeat that?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_answer",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "primary",
+    "turn": 4,
+    "player": "I ask Warden Rell, do you prefer morning or evening?",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Warden Rell's preference for morning or evening",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell whether she prefers morning or evening."
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [
+        {
+          "text": "Warden Rell states her preference between morning or evening."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell if she prefers morning or evening.",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "morning evening",
+      "requested_information": "opinion",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "conversational_continuity.bounded_personal_line"
+  },
+  {
+    "conversation": "primary",
+    "turn": 5,
+    "player": "Why do you prefer the evening?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "the evening",
+      "requested_information": "opinion",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 6,
+    "player": "I ask Warden Rell who forged the lantern.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Who forged the lantern?",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell who forged the lantern."
+      },
+      "asserted_premises": [
+        {
+          "text": "There is a lit lantern hanging beside the courtyard gate."
+        },
+        {
+          "text": "Warden Rell is present and watching the road."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Warden Rell provides information about who forged the lantern."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell who forged the lantern.",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "the lantern",
+      "requested_information": "maker",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "primary",
+    "turn": 7,
+    "player": "I ask Warden Rell if guards watch the north gate during the night.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Who forged the lantern?",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell who forged the lantern."
+      },
+      "asserted_premises": [
+        {
+          "text": "There is a lit lantern hanging beside the courtyard gate."
+        },
+        {
+          "text": "Warden Rell is present and watching the road."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Warden Rell provides information about who forged the lantern."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell who forged the lantern.",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "guards north gate",
+      "requested_information": "surveillance",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:warden_rell:night_watch"
+      ],
+      "selected_source": "npc:warden_rell:night_watch",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:night_watch"
+  },
+  {
+    "conversation": "primary",
+    "turn": 8,
+    "player": "What did you mean by that?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "mean",
+      "requested_information": "general",
+      "reference": "delivered_speech",
+      "candidate_sources": [],
+      "selected_source": "delivered:warden_rell:6:social.topic_revealed:night_watch",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "primary",
+    "turn": 9,
+    "player": "I ask Warden Rell when the gate is left unguarded.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "When the gate is left unguarded",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell when the gate is left unguarded"
+      },
+      "asserted_premises": [
+        {
+          "text": "Warden Rell is present and watching the road in the courtyard."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information from Warden Rell about when the gate is left unguarded."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell when the gate is left unguarded",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "gate left unguarded",
+      "requested_information": "general",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.knowledge_posture"
+  },
+  {
+    "conversation": "primary",
+    "turn": 10,
+    "player": "I ask one of them whether guards watch the north gate.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Whether guards watch the north gate",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask one of the NPCs whether guards watch the north gate"
+      },
+      "asserted_premises": [
+        {
+          "text": "The player character is in the Waystation courtyard where Warden Rell watches the road."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about guard presence at the north gate"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask an NPC whether guards watch the north gate",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "conversational_clarify",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:unresolved_addressee"
+  },
+  {
+    "conversation": "primary",
+    "turn": 11,
+    "player": "Can you repeat that?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_clarify",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:repeat_pending_clarification"
+  },
+  {
+    "conversation": "primary",
+    "turn": 12,
+    "player": "I ask Warden Rell if guards watch the north gate during the night.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "When the gate is left unguarded",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell when the gate is left unguarded"
+      },
+      "asserted_premises": [
+        {
+          "text": "Warden Rell is present and watching the road in the courtyard."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information from Warden Rell about when the gate is left unguarded."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell when the gate is left unguarded",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "guards north gate",
+      "requested_information": "surveillance",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:warden_rell:night_watch"
+      ],
+      "selected_source": "npc:warden_rell:night_watch",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:night_watch"
+  },
+  {
+    "conversation": "primary",
+    "turn": 13,
+    "player": "I ask Warden Rell what secret passage bypasses the gate.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Which person is being asked about guards watching the north gate during the night?",
+        "evidence_refs": [
+          "reply:2",
+          "reply:3"
+        ]
+      },
+      "communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM to clarify which NPC is being addressed with the question about guards watching the north gate at night."
+      },
+      "asserted_premises": [
+        {
+          "text": "The previous GM responses asked which person is meant: Warden Rell or Sentry Elin."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Clarification on which NPC the question is directed to before proceeding."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM to clarify which NPC is being asked about guards watching the north gate during the night.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell",
+          "sentry_elin"
+        ],
+        "unresolved_references": [
+          "Which person is being asked?"
+        ]
+      },
+      "clarification_question": "Which NPC do you want to ask about guards watching the north gate during the night?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [
+      "Which person is being asked?"
+    ],
+    "reconciliation": {
+      "annotations": [
+        {
+          "annotation": "Which person is being asked?",
+          "role": "subject",
+          "status": "NOT_APPLICABLE",
+          "explicit": false,
+          "candidates": [],
+          "source": "npc:warden_rell:night_watch"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "warden_rell",
+        "candidate_target_ids": [],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "warden_rell",
+            "label": "Warden Rell"
+          },
+          {
+            "entity_id": "sentry_elin",
+            "label": "Sentry Elin"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK",
+      "target_handoff": {
+        "status": "RESOLVABLE",
+        "target_id": "warden_rell"
+      }
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "secret passage bypasses",
+      "requested_information": "hidden",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "primary",
+    "turn": 14,
+    "player": "I ask Warden Rell about the north road again.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "secret passage bypassing the gate",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell about a secret passage that bypasses the gate."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player wants to know if there is a secret passage that bypasses the gate."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Warden Rell provides information about any secret passage bypassing the gate."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell what secret passage bypasses the gate.",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "the north road again",
+      "requested_information": "general",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:warden_rell:street",
+        "npc:warden_rell:night_watch"
+      ],
+      "selected_source": "npc:warden_rell:street",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "primary",
+    "turn": 15,
+    "player": "GM, what did Rell say about the road?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_answer",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:gm_recall_of_npc_statement"
+  },
+  {
+    "conversation": "primary",
+    "turn": 16,
+    "player": "I ask Warden Rell, do you still prefer the evening?",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Warden Rell's preference for the evening",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Warden Rell if she still prefers the evening."
+      },
+      "asserted_premises": [
+        {
+          "text": "Warden Rell has a preference about the time of day, possibly evening."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Warden Rell responds whether she still prefers the evening."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Warden Rell if she still prefers the evening.",
+          "target_ref": "warden_rell",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "warden_rell"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "warden_rell",
+    "selected_subject": {
+      "speaker_id": "warden_rell",
+      "addressee": "player",
+      "requested_subject": "still evening",
+      "requested_information": "opinion",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 1,
+    "player": "I ask Keeper Nara if guards watch the north gate during the night.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Whether guards watch the north gate during the night",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara if guards watch the north gate during the night"
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara watches the road in the courtyard."
+        },
+        {
+          "text": "The courtyard gate is visible and lit by a lantern."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Information from Keeper Nara about guard presence at the north gate during the night"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara if guards watch the north gate during the night",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "courtyard_gate",
+          "courtyard_lantern",
+          "keeper_nara",
+          "sentry_elin"
+        ],
+        "unresolved_references": [
+          "north gate"
+        ]
+      },
+      "clarification_question": "Does 'north gate' refer to the courtyard gate or another gate not currently visible?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [
+      "north gate"
+    ],
+    "reconciliation": {
+      "annotations": [
+        {
+          "annotation": "north gate",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": "npc.authored_subject"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "keeper_nara",
+        "candidate_target_ids": [
+          "keeper_nara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "keeper_nara",
+            "label": "Keeper Nara"
+          },
+          {
+            "entity_id": "sentry_elin",
+            "label": "Sentry Elin"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "guards north gate",
+      "requested_information": "surveillance",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:keeper_nara:night_watch"
+      ],
+      "selected_source": "npc:keeper_nara:night_watch",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:night_watch"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 2,
+    "player": "What did you mean by that?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "mean",
+      "requested_information": "general",
+      "reference": "delivered_speech",
+      "candidate_sources": [],
+      "selected_source": "delivered:keeper_nara:1:social.topic_revealed:night_watch",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.reuse_prior_speech"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 3,
+    "player": "I ask Keeper Nara who made the lantern.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Who made the lantern?",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara who made the lantern."
+      },
+      "asserted_premises": [
+        {
+          "text": "There is a lit lantern hanging beside the gate in the courtyard."
+        },
+        {
+          "text": "Keeper Nara is present and watching the road."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Keeper Nara provides information about who made the lantern."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara who made the lantern.",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara",
+          "courtyard_lantern"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "made lantern",
+      "requested_information": "maker",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 4,
+    "player": "I ask Keeper Nara, do you prefer the morning or the evening?",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Keeper Nara's preference for morning or evening",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara whether she prefers the morning or the evening."
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara is present and watching the road in the courtyard."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Keeper Nara responds with her preference between morning or evening."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara if she prefers the morning or the evening.",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "morning evening",
+      "requested_information": "opinion",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "conversational_continuity.bounded_personal_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 5,
+    "player": "Why that one, then?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_answer",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 6,
+    "player": "I ask Keeper Nara what the street outside the gate is named.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Keeper Nara's preference for morning or evening",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara whether she prefers the morning or the evening."
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara is present and watching the road in the courtyard."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Keeper Nara responds with her preference between morning or evening."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara if she prefers the morning or the evening.",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "street outside gate",
+      "requested_information": "general",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:keeper_nara:street",
+        "npc:keeper_nara:night_watch"
+      ],
+      "selected_source": "npc:keeper_nara:street",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 7,
+    "player": "Say that again in plainer words.",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_answer",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:repeat_delivered_statement"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 8,
+    "player": "I ask one of them about the north road.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "north road location",
+        "evidence_refs": [
+          "npc:keeper_nara:street"
+        ]
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara about the north road."
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara watches the road in the courtyard."
+        },
+        {
+          "text": "The street beyond the gate is called the north road."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Obtain information about the north road from Keeper Nara."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara about the north road.",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "conversational_clarify",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:unresolved_addressee"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 9,
+    "player": "What did you mean by that?",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_clarify",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:repeat_pending_clarification"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 10,
+    "player": "I ask Keeper Nara what the street beyond the gate is called.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Name of the street outside the gate",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara the name of the street outside the gate."
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara is present and watching the road outside the gate."
+        },
+        {
+          "text": "The player character can speak to Keeper Nara."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Keeper Nara provides the name of the street outside the gate."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara what the street outside the gate is named.",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "street beyond gate",
+      "requested_information": "general",
+      "reference": "current_request",
+      "candidate_sources": [
+        "npc:keeper_nara:street",
+        "npc:keeper_nara:night_watch"
+      ],
+      "selected_source": "npc:keeper_nara:street",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "social.topic_revealed:street"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 11,
+    "player": "I ask Keeper Nara when the guards leave the gate unattended.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "Name of the street beyond the gate",
+        "evidence_refs": [
+          "npc:keeper_nara:street"
+        ]
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara what the street beyond the gate is called"
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara is present and watching the road."
+        },
+        {
+          "text": "The player character can speak to Keeper Nara."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Keeper Nara provides the name of the street beyond the gate."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara what the street beyond the gate is called",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "guards leave gate",
+      "requested_information": "surveillance",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 12,
+    "player": "I ask Keeper Nara what the password is.",
+    "raw_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "When the guards leave the gate unattended",
+        "evidence_refs": []
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask Keeper Nara when the guards leave the gate unattended"
+      },
+      "asserted_premises": [
+        {
+          "text": "Keeper Nara watches the road at the courtyard gate."
+        },
+        {
+          "text": "The player wants to know the timing or conditions when the guards leave the gate unattended."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Obtain information from Keeper Nara about when the guards leave the gate unattended."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask Keeper Nara when the guards leave the gate unattended",
+          "target_ref": "keeper_nara",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "keeper_nara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "unresolved_annotations": [],
+    "reconciliation": {
+      "annotations": [],
+      "addressee": null,
+      "operation": "ASK"
+    },
+    "selected_handler": "question",
+    "resolver_invoked": null,
+    "selected_addressee": "keeper_nara",
+    "selected_subject": {
+      "speaker_id": "keeper_nara",
+      "addressee": "player",
+      "requested_subject": "that",
+      "requested_information": "hidden",
+      "reference": "current_request",
+      "candidate_sources": [],
+      "selected_source": "",
+      "ambiguous": false,
+      "ownership": "npc"
+    },
+    "adoption_source": "dialogue_authority.player_line"
+  },
+  {
+    "conversation": "secondary",
+    "turn": 13,
+    "player": "GM, repeat what Nara said about the road.",
+    "raw_interpretation": null,
+    "unresolved_annotations": null,
+    "reconciliation": null,
+    "selected_handler": "conversational_answer",
+    "resolver_invoked": false,
+    "selected_addressee": null,
+    "selected_subject": null,
+    "adoption_source": "conversational_decision:gm_recall_of_npc_statement"
+  }
+]

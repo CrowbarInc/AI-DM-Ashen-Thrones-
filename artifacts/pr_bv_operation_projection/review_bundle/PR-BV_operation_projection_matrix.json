@@ -1,0 +1,183 @@
+{
+  "fixtures": [
+    {
+      "fixture_id": "P1",
+      "decision_shape": "qualified_possibilities_infer",
+      "response_operation": "bounded_interpretation",
+      "declaration_expectation": "optional_bounded_inference",
+      "semantic_ceiling": "interpret_observations_not_unauthorized_cause",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.epistemic_acts.semantic_identity.scope"
+      ],
+      "expected_operation": "bounded_interpretation",
+      "expected_declaration_expectation": "optional_bounded_inference",
+      "expected_ceiling": "interpret_observations_not_unauthorized_cause",
+      "matches_expected": true,
+      "provider_chars_before": 97812,
+      "provider_chars_after": 98442,
+      "net_char_change": 630,
+      "instruction": "Interpret what the listed observations may indicate. Do not explain an unauthorized cause, actor, time, or history. A bounded inference may be proposed as gm_inference, inferred, possible, or left in narration. Do not declare a new world fact merely to answer.",
+      "notes": "Live repaired-chain decision. Interpretation is not an explanation. Request-classification truncation is unchanged."
+    },
+    {
+      "fixture_id": "P2",
+      "decision_shape": "interlocutor_without_inference_or_mutation",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "semantic_ceiling": "transient_dialogue_not_durable_fact",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "resolution_contract.interlocutor_id",
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.permitted_state_mutations"
+      ],
+      "expected_operation": "incidental_dialogue",
+      "expected_declaration_expectation": "reply_not_required",
+      "expected_ceiling": "transient_dialogue_not_durable_fact",
+      "matches_expected": true,
+      "provider_chars_before": 110405,
+      "provider_chars_after": 111060,
+      "net_char_change": 655,
+      "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated.",
+      "notes": "Turn-local. Listed claims may still be restated. The reply itself is not a declaration."
+    },
+    {
+      "fixture_id": "P3",
+      "decision_shape": "player_hypothesis_in_contract_text",
+      "response_operation": "player_hypothesis_discussion",
+      "declaration_expectation": "hypothesis_discussion_not_required",
+      "semantic_ceiling": "conditional_hypothesis_not_established",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "resolution_contract.raw_input"
+      ],
+      "expected_operation": "player_hypothesis_discussion",
+      "expected_declaration_expectation": "hypothesis_discussion_not_required",
+      "expected_ceiling": "conditional_hypothesis_not_established",
+      "matches_expected": true,
+      "provider_chars_before": 99752,
+      "provider_chars_after": 100389,
+      "net_char_change": 637,
+      "instruction": "Discuss whether the player's hypothesis fits the listed observations, conditionally. Do not establish the hypothesis, an actor, a motive, a tool, or timing. No declaration is needed merely to discuss it. Realize only claims already listed.",
+      "notes": "Detected by the existing player_hypothesis_claims classifier on resolution_contract.raw_input. No new claim is added."
+    },
+    {
+      "fixture_id": "G4_consequential_control",
+      "decision_shape": "authorized_state_mutation_with_interlocutor",
+      "response_operation": "consequential_realization",
+      "declaration_expectation": "required_for_authorized_realization",
+      "semantic_ceiling": "authorized_consequential_state_only",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "gm_resolution_decision.permitted_state_mutations",
+        "gm_resolution_decision.outcome_classification",
+        "gm_resolution_decision.realization_claims.source_ref",
+        "gm_resolution_decision.executable_obligations.mutation_owner"
+      ],
+      "expected_operation": "consequential_realization",
+      "expected_declaration_expectation": "required_for_authorized_realization",
+      "expected_ceiling": "authorized_consequential_state_only",
+      "matches_expected": true,
+      "provider_chars_before": null,
+      "provider_chars_after": null,
+      "net_char_change": null,
+      "instruction": "Realize the consequential state this decision authorizes. Declare those authorized claims with source_claim_id and their provenance. Do not add a further cause, actor, or history.",
+      "notes": "Interlocutor is present and still loses to explicit mutation authority. Not a global anti-declaration rule. Provider size not reconstructed."
+    },
+    {
+      "fixture_id": "G1_ordinary_npc",
+      "decision_shape": "interlocutor_without_inference_or_mutation",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "semantic_ceiling": "transient_dialogue_not_durable_fact",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "resolution_contract.interlocutor_id",
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.permitted_state_mutations"
+      ],
+      "expected_operation": "incidental_dialogue",
+      "expected_declaration_expectation": "reply_not_required",
+      "expected_ceiling": "transient_dialogue_not_durable_fact",
+      "matches_expected": true,
+      "provider_chars_before": null,
+      "provider_chars_after": null,
+      "net_char_change": null,
+      "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated.",
+      "notes": "Same turn_operation as P2. Nouns differ. Provider size not reconstructed."
+    },
+    {
+      "fixture_id": "G2_observational_interpretation",
+      "decision_shape": "qualified_possibilities_infer",
+      "response_operation": "bounded_interpretation",
+      "declaration_expectation": "optional_bounded_inference",
+      "semantic_ceiling": "interpret_observations_not_unauthorized_cause",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.epistemic_acts.semantic_identity.scope"
+      ],
+      "expected_operation": "bounded_interpretation",
+      "expected_declaration_expectation": "optional_bounded_inference",
+      "expected_ceiling": "interpret_observations_not_unauthorized_cause",
+      "matches_expected": true,
+      "provider_chars_before": null,
+      "provider_chars_after": null,
+      "net_char_change": null,
+      "instruction": "Interpret what the listed observations may indicate. Do not explain an unauthorized cause, actor, time, or history. A bounded inference may be proposed as gm_inference, inferred, possible, or left in narration. Do not declare a new world fact merely to answer.",
+      "notes": "Same turn_operation as P1. Provider size not reconstructed."
+    },
+    {
+      "fixture_id": "G3_player_hypothesis",
+      "decision_shape": "player_hypothesis_in_contract_text",
+      "response_operation": "player_hypothesis_discussion",
+      "declaration_expectation": "hypothesis_discussion_not_required",
+      "semantic_ceiling": "conditional_hypothesis_not_established",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "resolution_contract.raw_input"
+      ],
+      "expected_operation": "player_hypothesis_discussion",
+      "expected_declaration_expectation": "hypothesis_discussion_not_required",
+      "expected_ceiling": "conditional_hypothesis_not_established",
+      "matches_expected": true,
+      "provider_chars_before": null,
+      "provider_chars_after": null,
+      "net_char_change": null,
+      "instruction": "Discuss whether the player's hypothesis fits the listed observations, conditionally. Do not establish the hypothesis, an actor, a motive, a tool, or timing. No declaration is needed merely to discuss it. Realize only claims already listed.",
+      "notes": "Same turn_operation as P3. Provider size not reconstructed."
+    },
+    {
+      "fixture_id": "G5_direct_observation",
+      "decision_shape": "perceive_or_inspect_without_interpretation",
+      "response_operation": "direct_observation",
+      "declaration_expectation": "observations_only",
+      "semantic_ceiling": "direct_observations_only",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "source_authority_fields": [
+        "resolution_contract.operation",
+        "resolution_contract.dimensions",
+        "gm_resolution_decision.epistemic_acts"
+      ],
+      "expected_operation": "direct_observation",
+      "expected_declaration_expectation": "observations_only",
+      "expected_ceiling": "direct_observations_only",
+      "matches_expected": true,
+      "provider_chars_before": null,
+      "provider_chars_after": null,
+      "net_char_change": null,
+      "instruction": "State the authorized observations. Do not add an inference, a cause, or a new world fact. Realize only the listed observation claims.",
+      "notes": "No infer act, no hypothesis, no interlocutor, no mutation. Provider size not reconstructed."
+    }
+  ]
+}

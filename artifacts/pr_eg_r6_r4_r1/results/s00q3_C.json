@@ -1,0 +1,54 @@
+{
+  "case_id": "s00q3",
+  "family": "s00",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "96f114a29ce33cf1710e69fcc0b1e2b95936d257902313fa70b9adc13e17e294",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "The surveyor keeps the amber lens in a padded case"
+    ],
+    "qualifiers": [
+      "in a padded case",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f00",
+      "f01"
+    ],
+    "selected_source_ids": [
+      "s00"
+    ],
+    "answered_arguments": [
+      "keeper"
+    ],
+    "missing_arguments": [
+      "owner"
+    ],
+    "conflict": false,
+    "reason": "The facts establish that the surveyor keeps the amber lens in a padded case, but ownership is not recorded, so the owner is unknown."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

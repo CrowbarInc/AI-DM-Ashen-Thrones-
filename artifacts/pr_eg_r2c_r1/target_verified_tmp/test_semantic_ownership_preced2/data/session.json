@@ -1,0 +1,69 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:21:59.310144Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:21:59.310144Z",
+    "campaign_started": true,
+    "interaction_context": {
+      "active_interaction_kind": "social",
+      "active_interaction_target_id": "sergeant_mara"
+    },
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Could you interpret the situation for me?",
+          "delivered_text": "Which person, object, or pending action do you mean?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "AMBIGUOUS",
+        "purpose": "CLARIFICATION",
+        "subject": "Could you interpret the situation for me?",
+        "response": "Which person, object, or pending action do you mean?",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "ae95c6bcde86ce14577aefad596b36b327400d3d0e8bba433a23c2507837e19f",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

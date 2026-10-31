@@ -1,0 +1,49 @@
+{
+  "case_id": "s12q2",
+  "family": "s12",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "f3bf31e510f1eed6f88ed00e8c84e1ee7c5afcd0d13420ac0172123541336458",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "the marsh ferrymen"
+    ],
+    "qualifiers": [
+      "each spring"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s12"
+    ],
+    "answered_arguments": [
+      "licensor",
+      "licensee"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 directly states that the reed guild licenses the marsh ferrymen each spring."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

@@ -1,0 +1,11 @@
+Command: python -m pytest tests/test_pr_ef_r4_authorization.py tests/test_pr_eb_conversational_continuity.py tests/test_pr_br_continuation16_interaction_completion.py tests/test_pr_ea_conversational_orchestration.py tests/test_pr_br_continuation22_commitment.py tests/test_atgb_r1_02_revision_boundary.py tests/test_atgb_r1_07_correction_contract.py tests/test_pr_ck_ordinary_resolver_selection.py tests/test_pr_ef_r2_social_authority.py tests/test_directed_social_routing.py tests/test_vocative_direct_address_recovery.py tests/test_pr_br_continuation25_semantic_ownership.py tests/test_atgb_r2_02_speech_participant_grounding.py --tb=no -q
+
+Result: 2 failed, 351 passed in 8.73s
+
+Preexisting on b012c3d sources for the two production files:
+- tests/test_pr_br_continuation22_commitment.py::test_raw_chat_stub_covers_commitment_and_addressee
+- tests/test_directed_social_routing.py::test_chat_hailing_runner_with_can_you_question_routes_social
+
+New tests: 46 passed.
+Full suite: not run.
+Live provider calls: none.

@@ -1,0 +1,157 @@
+{
+  "verdict": "C \u2014 REPAIR INCOMPLETE",
+  "gates": {
+    "1_topic_selection": false,
+    "2_reference_grounding": false,
+    "3_historical_recall": true,
+    "4_authorized_disclosure": false,
+    "5_information_integrity": true,
+    "6_persistence": true,
+    "7_state_integrity": true,
+    "8_regression": true,
+    "9_live_qualification": false,
+    "10_performance": true
+  },
+  "regression": {
+    "baseline_counts": {
+      "passed": 550,
+      "failed": 26
+    },
+    "final_counts": {
+      "passed": 584,
+      "failed": 25
+    },
+    "new_failures": []
+  },
+  "metrics": {
+    "turns": 27,
+    "provider_calls": 14,
+    "interpretation_calls": 14,
+    "narration_calls": 0,
+    "retry_calls": 0,
+    "input_tokens": 26111,
+    "output_tokens": 2654,
+    "calls_per_turn": 0.5185185185185185,
+    "input_tokens_per_turn": 967.074074074074,
+    "output_tokens_per_turn": 98.29629629629629,
+    "average_latency_ms": 1137.7451555583523,
+    "maximum_latency_ms": 2912.667099997634,
+    "failed_turns": [
+      7,
+      8
+    ],
+    "high_cost_outliers": [
+      {
+        "turn": 1,
+        "elapsed_ms": 2912.667099997634,
+        "calls": 1,
+        "input_tokens": 1711
+      },
+      {
+        "turn": 1,
+        "elapsed_ms": 2471.3910999998916,
+        "calls": 1,
+        "input_tokens": 1713
+      },
+      {
+        "turn": 11,
+        "elapsed_ms": 2333.687900012592,
+        "calls": 1,
+        "input_tokens": 1897
+      }
+    ]
+  },
+  "bundle_bytes": 7540814,
+  "omitted": [
+    {
+      "path": "artifacts/pr_eg_r2c_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/01_EXECUTIVE_SUMMARY.md; canonical reference retained",
+      "size_bytes": 1191,
+      "sha256": "a92c29d26b79e31b479b473810b7d9a2749dc099f9ec75463c3be9ceee8586bd"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/live_attempt_1/live_freeze.json",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/live_freeze.json; canonical reference retained",
+      "size_bytes": 135,
+      "sha256": "8f9e46f8a5ab1bd0394f092a016cc0948c16d60a3a907f77acd7851b7c6d3fe0"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/live_attempt_1/live_plan.json",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/live_plan.json; canonical reference retained",
+      "size_bytes": 2538,
+      "sha256": "db0ff9e9f2b9c15ab25658c55cd795f000c25464e4f896e1a47615c2048c526d"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/live_attempt_2/live_freeze.json",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/live_freeze.json; canonical reference retained",
+      "size_bytes": 135,
+      "sha256": "8f9e46f8a5ab1bd0394f092a016cc0948c16d60a3a907f77acd7851b7c6d3fe0"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/live_attempt_2/live_plan.json",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/live_plan.json; canonical reference retained",
+      "size_bytes": 2538,
+      "sha256": "db0ff9e9f2b9c15ab25658c55cd795f000c25464e4f896e1a47615c2048c526d"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/qualification_before_generic_compatibility_fix/final_verified.xml",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/final_verified.xml; canonical reference retained",
+      "size_bytes": 80610,
+      "sha256": "97a272da9c69edc3038030a16a14f40031ad070a4dd8bc13cbe56e58af2b209e"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/qualification_before_generic_compatibility_fix/final_verified_console.txt",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/final_verified_console.txt; canonical reference retained",
+      "size_bytes": 15777,
+      "sha256": "56afb5117720cf96c745ebe9b9f292e9decd2d25a5bcb669fa03e3a88d3dfd6a"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/live_attempt_4/complete_final.xml",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/complete_final.xml; canonical reference retained",
+      "size_bytes": 104769,
+      "sha256": "6adcd7e8f6ba74efade4205d122abc499a0ee3eadce689fd86147bae8865fe2c"
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/live_attempt_4/complete_final_console.txt",
+      "role": "evidence",
+      "why": "R2C-R1 source, frozen expectation, exact test result, actual transcript or derived audit.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "reason": "duplicate content of artifacts/pr_eg_r2c_r1/complete_final_console.txt; canonical reference retained",
+      "size_bytes": 23887,
+      "sha256": "5c6a002009972bf691a9e08cf88b898ad14ae12b7f288b502546b80ba523e077"
+    }
+  ]
+}

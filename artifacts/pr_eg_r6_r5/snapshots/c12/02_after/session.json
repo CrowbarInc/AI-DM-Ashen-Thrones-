@@ -1,0 +1,236 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-19T00:43:08.344522Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-19T00:43:08.344522Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Ansel, what did you tell Brea about the yard gate?",
+          "delivered_text": "I can't reliably answer that just now.",
+          "subject": "Ansel, what did you tell Brea about the yard gate?",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "unified_semantic_plan": {
+            "locked": true,
+            "request_proposition": {
+              "predicate": "tell",
+              "predicate_evidence": "told Brea",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [
+                {
+                  "name": "speaker",
+                  "value": "ansel",
+                  "entity_id": "ansel",
+                  "evidence": "Ansel"
+                },
+                {
+                  "name": "recipient",
+                  "value": "brea",
+                  "entity_id": "brea",
+                  "evidence": "Brea"
+                },
+                {
+                  "name": "topic",
+                  "value": "yard gate",
+                  "entity_id": "",
+                  "evidence": "yard gate"
+                }
+              ],
+              "requested_role": "message_content",
+              "object_evidence": "",
+              "subject_evidence": "",
+              "object": "",
+              "missing_argument": "",
+              "subject": ""
+            },
+            "entity_roles": [],
+            "mentioned_entity_ids": [
+              "ansel",
+              "brea"
+            ],
+            "correction_target": "",
+            "referent_operation": {
+              "target_referent_id": "",
+              "operation": "",
+              "changed_fields": [],
+              "follow_up_relationship": "",
+              "changed_roles": [],
+              "evidence": "",
+              "target_evidence": ""
+            },
+            "referent_eligible": false,
+            "plan_version": "pr-eg-r6-r2-r2.1",
+            "conversational_act": "information_question",
+            "addressee_id": "",
+            "requested_subject": "yard gate",
+            "requested_relationship": "tell(yard_gate)",
+            "question_text": "Ansel, what did you tell Brea about the yard gate?",
+            "selected_source_ids": [],
+            "answer_sufficiency": "unknown",
+            "answer_status": "unknown",
+            "response_kind": "unknown",
+            "ambiguity_type": "",
+            "referenced_prior_proposition": "",
+            "rejected_source_ids": [],
+            "authorized_text": "",
+            "host_line": "I can't reliably answer that just now.",
+            "reason": "unwitnessed_referent_request",
+            "epistemic_status": "none",
+            "canonical": false
+          },
+          "proposition_id": "",
+          "response_integrity_digest": "6d64a0eda3014e0593e8a45216e21d93f4783c72924a9041577d8796fd5bc6c2",
+          "authorization_source": "conversational_decision:unified_semantic_plan_rejected",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Brea, what did you tell Ansel about the yard gate?",
+          "delivered_text": "I can't reliably answer that just now.",
+          "subject": "Brea, what did you tell Ansel about the yard gate?",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "unified_semantic_plan": {
+            "locked": true,
+            "request_proposition": {
+              "predicate": "tell",
+              "predicate_evidence": "told Ansel",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [
+                {
+                  "name": "speaker",
+                  "value": "brea",
+                  "entity_id": "brea",
+                  "evidence": "Brea"
+                },
+                {
+                  "name": "recipient",
+                  "value": "ansel",
+                  "entity_id": "ansel",
+                  "evidence": "Ansel"
+                },
+                {
+                  "name": "topic",
+                  "value": "yard gate",
+                  "entity_id": "",
+                  "evidence": "yard gate"
+                }
+              ],
+              "requested_role": "message_content",
+              "object_evidence": "",
+              "subject_evidence": "",
+              "object": "",
+              "missing_argument": "",
+              "subject": ""
+            },
+            "entity_roles": [],
+            "mentioned_entity_ids": [
+              "ansel",
+              "brea"
+            ],
+            "correction_target": "Ansel, what did you tell Brea about the yard gate?",
+            "referent_operation": {
+              "target_referent_id": "",
+              "operation": "",
+              "changed_fields": [],
+              "follow_up_relationship": "",
+              "changed_roles": [],
+              "evidence": "",
+              "target_evidence": ""
+            },
+            "referent_eligible": false,
+            "plan_version": "pr-eg-r6-r2-r2.1",
+            "conversational_act": "information_question",
+            "addressee_id": "",
+            "requested_subject": "yard gate",
+            "requested_relationship": "tell(yard_gate)",
+            "question_text": "Brea, what did you tell Ansel about the yard gate?",
+            "selected_source_ids": [],
+            "answer_sufficiency": "unknown",
+            "answer_status": "unknown",
+            "response_kind": "unknown",
+            "ambiguity_type": "",
+            "referenced_prior_proposition": "tell(yard_gate)",
+            "rejected_source_ids": [],
+            "authorized_text": "",
+            "host_line": "I can't reliably answer that just now.",
+            "reason": "unwitnessed_referent_request",
+            "epistemic_status": "none",
+            "canonical": false
+          },
+          "proposition_id": "",
+          "response_integrity_digest": "9862b6164e51f0c29d2d05cc6a37bd4b0ceec7936b4faff9c375e98d9c4be4ae",
+          "authorization_source": "conversational_decision:unified_semantic_plan_rejected",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Brea, what did you tell Ansel about the yard gate?",
+        "response": "I can't reliably answer that just now.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "39cbe6cfd6444d32a9e74129455424b718d8d244da01bb92cbf5d4eea034a919",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

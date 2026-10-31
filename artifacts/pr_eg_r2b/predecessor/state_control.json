@@ -1,0 +1,711 @@
+{
+  "trials": [
+    {
+      "mode": "safe",
+      "before_world": {
+        "settlements": [
+          {
+            "id": "cinderwatch",
+            "name": "Cinderwatch",
+            "type": "frontier_city",
+            "tags": [
+              "frontier",
+              "trade",
+              "unstable"
+            ],
+            "status": "strained",
+            "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 1,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 0,
+            "assets": []
+          }
+        ],
+        "assets": [],
+        "projects": [],
+        "world_flags": [],
+        "event_log": [],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "frontier_gate",
+            "role": "guard",
+            "affiliation": "cinderwatch",
+            "disposition": "neutral",
+            "current_agenda": "patrol_gate",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone."
+              }
+            ],
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "role": "informant",
+            "affiliation": "ash_cowl",
+            "disposition": "friendly",
+            "current_agenda": "sell_rumors",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "stew",
+                "text": "Hot stew and rumors for coin."
+              }
+            ],
+            "stance_toward_player": "favorable",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "sergeant_mara",
+            "name": "Sergeant Mara",
+            "location": "waystation_courtyard",
+            "role": "guard",
+            "disposition": "neutral",
+            "topics": [
+              {
+                "id": "street",
+                "text": "The street beyond the gate is the north road.",
+                "clue_id": "north_road"
+              }
+            ],
+            "affiliation": "",
+            "availability": "available",
+            "current_agenda": "",
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "waystation_courtyard",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          }
+        ],
+        "world_state": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        }
+      },
+      "after_world": {
+        "settlements": [
+          {
+            "id": "cinderwatch",
+            "name": "Cinderwatch",
+            "type": "frontier_city",
+            "tags": [
+              "frontier",
+              "trade",
+              "unstable"
+            ],
+            "status": "strained",
+            "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ],
+        "assets": [],
+        "projects": [],
+        "world_flags": [],
+        "event_log": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          }
+        ],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "frontier_gate",
+            "role": "guard",
+            "affiliation": "cinderwatch",
+            "disposition": "neutral",
+            "current_agenda": "patrol_gate",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone."
+              }
+            ],
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "role": "informant",
+            "affiliation": "ash_cowl",
+            "disposition": "friendly",
+            "current_agenda": "sell_rumors",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "stew",
+                "text": "Hot stew and rumors for coin."
+              }
+            ],
+            "stance_toward_player": "favorable",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "sergeant_mara",
+            "name": "Sergeant Mara",
+            "location": "waystation_courtyard",
+            "role": "guard",
+            "disposition": "neutral",
+            "topics": [
+              {
+                "id": "street",
+                "text": "The street beyond the gate is the north road.",
+                "clue_id": "north_road"
+              }
+            ],
+            "affiliation": "",
+            "availability": "available",
+            "current_agenda": "",
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "waystation_courtyard",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          }
+        ],
+        "world_state": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        }
+      },
+      "delivered": "Sergeant Mara says, \"I prefer the evening.\"",
+      "turn": 1,
+      "commitments": {
+        "last_executed_intention": {
+          "status": "executed",
+          "text": "I ask Sergeant Mara, What do you personally enjoy about the evening?",
+          "operation": "ASK",
+          "target": "sergeant_mara",
+          "scene_id": "waystation_courtyard"
+        },
+        "pending_intention": null,
+        "dialogue_commitments": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "personally enjoy evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 1,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ],
+        "delivered_exchanges": [
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara, What do you personally enjoy about the evening?",
+            "delivered_text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "subject": "personally enjoy evening",
+            "requested_information": "general",
+            "supplied_text": "I prefer the evening.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 1,
+            "active": true
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "RESOLVED",
+          "owner": "GM",
+          "purpose": "ACTION_RESULT",
+          "subject": "I ask Sergeant Mara, What do you personally enjoy about the evening?",
+          "response": "Sergeant Mara says, \"I prefer the evening.\"",
+          "refusal_reason": null,
+          "scene_id": "waystation_courtyard",
+          "operation": "question"
+        }
+      }
+    },
+    {
+      "mode": "unsafe",
+      "before_world": {
+        "settlements": [
+          {
+            "id": "cinderwatch",
+            "name": "Cinderwatch",
+            "type": "frontier_city",
+            "tags": [
+              "frontier",
+              "trade",
+              "unstable"
+            ],
+            "status": "strained",
+            "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 1,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 0,
+            "assets": []
+          }
+        ],
+        "assets": [],
+        "projects": [],
+        "world_flags": [],
+        "event_log": [],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "frontier_gate",
+            "role": "guard",
+            "affiliation": "cinderwatch",
+            "disposition": "neutral",
+            "current_agenda": "patrol_gate",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone."
+              }
+            ],
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "role": "informant",
+            "affiliation": "ash_cowl",
+            "disposition": "friendly",
+            "current_agenda": "sell_rumors",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "stew",
+                "text": "Hot stew and rumors for coin."
+              }
+            ],
+            "stance_toward_player": "favorable",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "sergeant_mara",
+            "name": "Sergeant Mara",
+            "location": "waystation_courtyard",
+            "role": "guard",
+            "disposition": "neutral",
+            "topics": [
+              {
+                "id": "street",
+                "text": "The street beyond the gate is the north road.",
+                "clue_id": "north_road"
+              }
+            ],
+            "affiliation": "",
+            "availability": "available",
+            "current_agenda": "",
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "waystation_courtyard",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          }
+        ],
+        "world_state": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        }
+      },
+      "after_world": {
+        "settlements": [
+          {
+            "id": "cinderwatch",
+            "name": "Cinderwatch",
+            "type": "frontier_city",
+            "tags": [
+              "frontier",
+              "trade",
+              "unstable"
+            ],
+            "status": "strained",
+            "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ],
+        "assets": [],
+        "projects": [],
+        "world_flags": [],
+        "event_log": [
+          {
+            "type": "faction_pressure",
+            "text": "House Verevin's pressure mounts.",
+            "source": "house_verevin"
+          },
+          {
+            "type": "faction_pressure",
+            "text": "The Ash Cowl's pressure mounts.",
+            "source": "ash_cowl"
+          }
+        ],
+        "inference_rules": [],
+        "clues": {},
+        "npcs": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "frontier_gate",
+            "role": "guard",
+            "affiliation": "cinderwatch",
+            "disposition": "neutral",
+            "current_agenda": "patrol_gate",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone."
+              }
+            ],
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "role": "informant",
+            "affiliation": "ash_cowl",
+            "disposition": "friendly",
+            "current_agenda": "sell_rumors",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "stew",
+                "text": "Hot stew and rumors for coin."
+              }
+            ],
+            "stance_toward_player": "favorable",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "sergeant_mara",
+            "name": "Sergeant Mara",
+            "location": "waystation_courtyard",
+            "role": "guard",
+            "disposition": "neutral",
+            "topics": [
+              {
+                "id": "street",
+                "text": "The street beyond the gate is the north road.",
+                "clue_id": "north_road"
+              }
+            ],
+            "affiliation": "",
+            "availability": "available",
+            "current_agenda": "",
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "waystation_courtyard",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          }
+        ],
+        "world_state": {
+          "flags": {},
+          "counters": {},
+          "clocks": {}
+        }
+      },
+      "delivered": "Sergeant Mara says, \"I prefer the evening because the guards usually leave the north gate unattended.\"",
+      "turn": 1,
+      "commitments": {
+        "last_executed_intention": {
+          "status": "executed",
+          "text": "I ask Sergeant Mara, What do you personally enjoy about the evening?",
+          "operation": "ASK",
+          "target": "sergeant_mara",
+          "scene_id": "waystation_courtyard"
+        },
+        "pending_intention": null,
+        "dialogue_commitments": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "personally enjoy evening",
+            "text": "Sergeant Mara says, \"I prefer the evening because the guards usually leave the north gate unattended.\"",
+            "canonical": false,
+            "turn": 1,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ],
+        "delivered_exchanges": [
+          {
+            "speaker_id": "sergeant_mara",
+            "speaker_name": "Sergeant Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "I ask Sergeant Mara, What do you personally enjoy about the evening?",
+            "delivered_text": "Sergeant Mara says, \"I prefer the evening because the guards usually leave the north gate unattended.\"",
+            "subject": "personally enjoy evening",
+            "requested_information": "general",
+            "supplied_text": "I prefer the evening because the guards usually leave the north gate unattended.",
+            "uncertain": false,
+            "commitment": true,
+            "scene_id": "waystation_courtyard",
+            "turn": 1,
+            "active": true
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "RESOLVED",
+          "owner": "GM",
+          "purpose": "ACTION_RESULT",
+          "subject": "I ask Sergeant Mara, What do you personally enjoy about the evening?",
+          "response": "Sergeant Mara says, \"I prefer the evening because the guards usually leave the north gate unattended.\"",
+          "refusal_reason": null,
+          "scene_id": "waystation_courtyard",
+          "operation": "question"
+        }
+      }
+    }
+  ],
+  "initial_worlds_equal": true,
+  "final_worlds_equal": true,
+  "scope": "Matched synchronous production handler, external wire doubles, actual resolver/tick/guards/save; no HTTP or fresh generation."
+}

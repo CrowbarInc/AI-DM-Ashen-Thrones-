@@ -1,0 +1,49 @@
+{
+  "response_id": "resp_0f789a2e76b1c9b5006ac59c43106887d2b841b5ab7d301445",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "usage": {
+    "input_tokens": 23479,
+    "output_tokens": 99,
+    "total_tokens": 23578,
+    "input_tokens_details": {
+      "cache_write_tokens": 0,
+      "cached_tokens": 0
+    },
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "latency_seconds": 1.662,
+  "input_chars": 101106,
+  "recipe_present": true,
+  "retry_context_present": true,
+  "provider_response_contract": "structured_realization",
+  "declared_claims_in_system_prompt": true,
+  "api_response_schema_present": false,
+  "error": null,
+  "parsed": {
+    "player_facing_text": "The bell's wooden yoke is clearly split, and the leather hanger is torn. These signs mark significant wear or damage, though what exactly caused this damage remains uncertain.",
+    "declared_claims": [],
+    "normalized_empty_declarations": null,
+    "declaration_authorship": null,
+    "structured_contract_failure": null,
+    "structured_contract_reason": null,
+    "provider_response_contract": "structured_realization",
+    "tags": [],
+    "metadata_keys": [
+      "output_form",
+      "provider_response_contract",
+      "realization_envelope"
+    ],
+    "structural_shape": {
+      "json_object": true,
+      "keys": [
+        "declared_claims",
+        "narration",
+        "player_facing_text",
+        "tags"
+      ]
+    },
+    "raw_output": "{\n  \"declared_claims\": [],\n  \"narration\": \"The bell's wooden yoke is clearly split, and the leather hanger is torn. These signs mark significant wear or damage, though what exactly caused this damage remains uncertain.\",\n  \"player_facing_text\": \"The bell's wooden yoke is clearly split, and the leather hanger is torn. These signs mark significant wear or damage, though what exactly caused this damage remains uncertain.\",\n  \"tags\": []\n}"
+  }
+}

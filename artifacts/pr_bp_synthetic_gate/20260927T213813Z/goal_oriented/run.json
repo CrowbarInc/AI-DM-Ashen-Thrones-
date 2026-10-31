@@ -1,0 +1,2305 @@
+{
+  "persona_id": "goal_oriented",
+  "tendency": "goal-oriented",
+  "objective": "Find a practical path into town, useful authority, work, and shelter.",
+  "turn_count": 10,
+  "turns": [
+    {
+      "turn_index": 0,
+      "player_text": "I take in the gate and look for the most official person nearby.",
+      "player_visible_basis": {
+        "prior_player": "",
+        "prior_gm": ""
+      },
+      "gm_text": "On closer inspection, threadbare watchers and refugees cluster along the muddy gate line.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "observe",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 13,
+            "text_preview": "On closer inspection, threadbare watchers and refugees cluster along the muddy gate line."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "gate",
+              "look",
+              "most",
+              "nearby",
+              "official",
+              "person",
+              "take"
+            ],
+            "gm_terms": [
+              "along",
+              "closer",
+              "cluster",
+              "gate",
+              "inspection",
+              "line",
+              "muddy",
+              "refugees",
+              "threadbare",
+              "watchers"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 83,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 13,
+              "text_preview": "On closer inspection, threadbare watchers and refugees cluster along the muddy gate line."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "gate",
+                "look",
+                "most",
+                "nearby",
+                "official",
+                "person",
+                "take"
+              ],
+              "gm_terms": [
+                "along",
+                "closer",
+                "cluster",
+                "gate",
+                "inspection",
+                "line",
+                "muddy",
+                "refugees",
+                "threadbare",
+                "watchers"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 83,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 19,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.062,
+              "gm_word_count": 13,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.143,
+              "forced_action_hits": 0,
+              "prior_present": false
+            }
+          },
+          "logical_escalation": {
+            "score": 19,
+            "passed": true,
+            "reasons": [
+              "No prior GM text; continuity pressure not observed."
+            ],
+            "signals": {
+              "prior_gm_present": false,
+              "prior_player_present": false,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 13
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (19/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 83,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 0,
+        "incidentals": 0,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": []
+      }
+    },
+    {
+      "turn_index": 1,
+      "player_text": "Who seems to be in charge here?",
+      "player_visible_basis": {
+        "prior_player": "I take in the gate and look for the most official person nearby.",
+        "prior_gm": "On closer inspection, threadbare watchers and refugees cluster along the muddy gate line."
+      },
+      "gm_text": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 14,
+            "text_preview": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\""
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "charge",
+              "seems"
+            ],
+            "gm_terms": [
+              "cannot",
+              "guard",
+              "head",
+              "heard",
+              "shakes",
+              "talk",
+              "verify"
+            ],
+            "direct_answer_score": 17,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "charge",
+                "seems"
+              ],
+              "gm_terms": [
+                "cannot",
+                "guard",
+                "head",
+                "heard",
+                "shakes",
+                "talk",
+                "verify"
+              ],
+              "direct_answer_score": 17,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 67,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 17,
+            "player_intent": 9,
+            "logical_escalation": 18,
+            "immersion": 23
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 17,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 7
+            }
+          },
+          "immersion": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 1
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: acceptable (17/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (23/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 67,
+            "rating": "acceptable",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 0,
+        "incidentals": 0,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": []
+      }
+    },
+    {
+      "turn_index": 2,
+      "player_text": "I approach that person and ask what I need to do to enter safely.",
+      "player_visible_basis": {
+        "prior_player": "Who seems to be in charge here?",
+        "prior_gm": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\""
+      },
+      "gm_text": "The murmur around you never tightens into a single clear voice on that point.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 14,
+            "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:generic_nonanswer_did_not_resolve_action"
+          ],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "approach",
+              "enter",
+              "need",
+              "person",
+              "safely",
+              "what"
+            ],
+            "gm_terms": [
+              "around",
+              "clear",
+              "murmur",
+              "never",
+              "point",
+              "single",
+              "tightens",
+              "voice"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 77,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:generic_nonanswer_did_not_resolve_action"
+            ],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "approach",
+                "enter",
+                "need",
+                "person",
+                "safely",
+                "what"
+              ],
+              "gm_terms": [
+                "around",
+                "clear",
+                "murmur",
+                "never",
+                "point",
+                "single",
+                "tightens",
+                "voice"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 77,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 9,
+            "logical_escalation": 23,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 8
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 77,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 0,
+        "incidentals": 0,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": []
+      }
+    },
+    {
+      "turn_index": 3,
+      "player_text": "Where could a newcomer find honest work tonight?",
+      "player_visible_basis": {
+        "prior_player": "I approach that person and ask what I need to do to enter safely.",
+        "prior_gm": "The murmur around you never tightens into a single clear voice on that point."
+      },
+      "gm_text": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 12,
+            "text_preview": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\""
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "question",
+            "player_terms": [
+              "find",
+              "honest",
+              "newcomer",
+              "tonight",
+              "where",
+              "work"
+            ],
+            "gm_terms": [
+              "captain",
+              "commands",
+              "gate",
+              "guard",
+              "mutters",
+              "thoran",
+              "tonight",
+              "watch",
+              "word"
+            ],
+            "direct_answer_score": 22,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 87,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 12,
+              "text_preview": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\""
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "question",
+              "player_terms": [
+                "find",
+                "honest",
+                "newcomer",
+                "tonight",
+                "where",
+                "work"
+              ],
+              "gm_terms": [
+                "captain",
+                "commands",
+                "gate",
+                "guard",
+                "mutters",
+                "thoran",
+                "tonight",
+                "watch",
+                "word"
+              ],
+              "direct_answer_score": 22,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 87,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 22,
+            "player_intent": 18,
+            "logical_escalation": 23,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 22,
+            "passed": true,
+            "reasons": [
+              "Concrete answer markers present."
+            ],
+            "signals": {
+              "has_question": true,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.071,
+              "gm_word_count": 12,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 2
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.167,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 12,
+              "net_new_terms": 9
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": true,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (22/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 87,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    },
+    {
+      "turn_index": 4,
+      "player_text": "I ask for a concrete next step, not a general warning.",
+      "player_visible_basis": {
+        "prior_player": "Where could a newcomer find honest work tonight?",
+        "prior_gm": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\""
+      },
+      "gm_text": "I will not carry out that request; you will need another route.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 12,
+            "text_preview": "I will not carry out that request; you will need another route."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:player_action_or_request_lost"
+          ],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "concrete",
+              "general",
+              "next",
+              "step",
+              "warning"
+            ],
+            "gm_terms": [
+              "another",
+              "carry",
+              "need",
+              "out",
+              "request",
+              "route"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 12,
+              "text_preview": "I will not carry out that request; you will need another route."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:player_action_or_request_lost"
+            ],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "concrete",
+                "general",
+                "next",
+                "step",
+                "warning"
+              ],
+              "gm_terms": [
+                "another",
+                "carry",
+                "need",
+                "out",
+                "request",
+                "route"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 9,
+            "logical_escalation": 18,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 12,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 12,
+              "net_new_terms": 6
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 72,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    },
+    {
+      "turn_index": 5,
+      "player_text": "I look for posted notices or instructions that might help.",
+      "player_visible_basis": {
+        "prior_player": "I ask for a concrete next step, not a general warning.",
+        "prior_gm": "I will not carry out that request; you will need another route."
+      },
+      "gm_text": "On closer inspection, a notice board lists new taxes, curfews, and a posted warning about a missing patrol. Closer looking yields nothing further.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "investigate",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 23,
+            "text_preview": "On closer inspection, a notice board lists new taxes, curfews, and a posted warning about a missing patrol. Closer looking yields nothing further."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "help",
+              "instructions",
+              "look",
+              "notices",
+              "posted"
+            ],
+            "gm_terms": [
+              "board",
+              "closer",
+              "curfews",
+              "further",
+              "inspection",
+              "lists",
+              "looking",
+              "missing",
+              "new",
+              "nothing",
+              "notice",
+              "patrol",
+              "posted",
+              "taxes",
+              "warning",
+              "yields"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 86,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 23,
+              "text_preview": "On closer inspection, a notice board lists new taxes, curfews, and a posted warning about a missing patrol. Closer looking yields nothing further."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "help",
+                "instructions",
+                "look",
+                "notices",
+                "posted"
+              ],
+              "gm_terms": [
+                "board",
+                "closer",
+                "curfews",
+                "further",
+                "inspection",
+                "lists",
+                "looking",
+                "missing",
+                "new",
+                "nothing",
+                "notice",
+                "patrol",
+                "posted",
+                "taxes",
+                "warning",
+                "yields"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 86,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 23,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.05,
+              "gm_word_count": 23,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.2,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 23,
+              "net_new_terms": 16
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 86,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    },
+    {
+      "turn_index": 6,
+      "player_text": "I read the most relevant notice closely.",
+      "player_visible_basis": {
+        "prior_player": "I look for posted notices or instructions that might help.",
+        "prior_gm": "On closer inspection, a notice board lists new taxes, curfews, and a posted warning about a missing patrol. Closer looking yields nothing further."
+      },
+      "gm_text": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "investigate",
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 24,
+            "text_preview": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "observation",
+            "player_terms": [
+              "closely",
+              "most",
+              "notice",
+              "read",
+              "relevant"
+            ],
+            "gm_terms": [
+              "actually",
+              "board",
+              "curfew",
+              "lists",
+              "matches",
+              "missing",
+              "nothing",
+              "notice",
+              "patrol",
+              "rules",
+              "see",
+              "taxes",
+              "warning",
+              "what"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 81,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 24,
+              "text_preview": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "observation",
+              "player_terms": [
+                "closely",
+                "most",
+                "notice",
+                "read",
+                "relevant"
+              ],
+              "gm_terms": [
+                "actually",
+                "board",
+                "curfew",
+                "lists",
+                "matches",
+                "missing",
+                "nothing",
+                "notice",
+                "patrol",
+                "rules",
+                "see",
+                "taxes",
+                "warning",
+                "what"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 81,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 18,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.056,
+              "gm_word_count": 24,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.2,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.364,
+              "player_presses_thread": false,
+              "gm_word_count": 24,
+              "net_new_terms": 6
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 81,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    },
+    {
+      "turn_index": 7,
+      "player_text": "I ask where I can sleep without causing trouble.",
+      "player_visible_basis": {
+        "prior_player": "I read the most relevant notice closely.",
+        "prior_gm": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      },
+      "gm_text": "I will not carry out that request; you will need another route.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": "question",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 12,
+            "text_preview": "I will not carry out that request; you will need another route."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:player_action_or_request_lost"
+          ],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "causing",
+              "sleep",
+              "trouble",
+              "where",
+              "without"
+            ],
+            "gm_terms": [
+              "another",
+              "carry",
+              "need",
+              "out",
+              "request",
+              "route"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 12,
+              "text_preview": "I will not carry out that request; you will need another route."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:player_action_or_request_lost"
+            ],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "causing",
+                "sleep",
+                "trouble",
+                "where",
+                "without"
+              ],
+              "gm_terms": [
+                "another",
+                "carry",
+                "need",
+                "out",
+                "request",
+                "route"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 72,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 9,
+            "logical_escalation": 18,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 12,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 12,
+              "net_new_terms": 6
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "logical_escalation: acceptable (18/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 72,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    },
+    {
+      "turn_index": 8,
+      "player_text": "I follow the best lead toward shelter or work.",
+      "player_visible_basis": {
+        "prior_player": "I ask where I can sleep without causing trouble.",
+        "prior_gm": "I will not carry out that request; you will need another route."
+      },
+      "gm_text": "You push forward through the crowded queue, rain slicking the cobblestones beneath your boots. The tavern runner near the rain barrel catches your eye as they shout over the din, hawking hot stew and whispered stories. Known among the new arrivals for trading more than just food, the runner gestures you over with a nod, ready to share what work might be found tonight. Threadbare watchers and muddy-footed refugees cast glances your way, the air thick with tension as murmurs rise about scarce honest work beyond the gate. The gate serjeant, meanwhile, keeps a watchful eye on the rostering board, signaling the guard captain's continued focus on the missing patrol — a concern weighing heavily on the city’s margins.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": null,
+      "semantic_result": "PASS",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 120,
+            "text_preview": "You push forward through the crowded queue, rain slicking the cobblestones beneath your boots. The tavern runner near the rain barrel catches your eye as they s"
+          }
+        },
+        "player_intent_addressed": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "best",
+              "follow",
+              "lead",
+              "shelter",
+              "toward",
+              "work"
+            ],
+            "gm_terms": [
+              "air",
+              "among",
+              "arrivals",
+              "barrel",
+              "beneath",
+              "beyond",
+              "board",
+              "boots",
+              "captain's",
+              "cast",
+              "catches",
+              "city",
+              "cobblestones",
+              "concern",
+              "continued",
+              "crowded",
+              "din",
+              "eye",
+              "focus",
+              "food"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 18
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 88,
+          "rating": "strong",
+          "passed": true,
+          "semantic_result": "PASS",
+          "diagnostic_quality_rating": "strong"
+        },
+        "semantic_result": "PASS",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 120,
+              "text_preview": "You push forward through the crowded queue, rain slicking the cobblestones beneath your boots. The tavern runner near the rain barrel catches your eye as they s"
+            }
+          },
+          "player_intent_addressed": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "best",
+                "follow",
+                "lead",
+                "shelter",
+                "toward",
+                "work"
+              ],
+              "gm_terms": [
+                "air",
+                "among",
+                "arrivals",
+                "barrel",
+                "beneath",
+                "beyond",
+                "board",
+                "boots",
+                "captain's",
+                "cast",
+                "catches",
+                "city",
+                "cobblestones",
+                "concern",
+                "continued",
+                "crowded",
+                "din",
+                "eye",
+                "focus",
+                "food"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 18
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 88,
+          "rating": "strong",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 18,
+            "logical_escalation": 23,
+            "immersion": 24
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.013,
+              "gm_word_count": 120,
+              "bounded_partial": false,
+              "next_lead": true,
+              "answer_markers": 1
+            }
+          },
+          "player_intent": {
+            "score": 18,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 1,
+              "topic_overlap_ratio": 0.167,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 120,
+              "net_new_terms": 75
+            }
+          },
+          "immersion": {
+            "score": 24,
+            "passed": true,
+            "reasons": [
+              "Diegetic scene grounding or voiced dialogue present."
+            ],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 2
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "player_intent: acceptable (18/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (24/25)."
+          ],
+          "failures": [],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 88,
+            "rating": "strong",
+            "passed": true,
+            "semantic_result": "PASS",
+            "diagnostic_quality_rating": "strong"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    },
+    {
+      "turn_index": 9,
+      "player_text": "Before moving on, I confirm what I should do first.",
+      "player_visible_basis": {
+        "prior_player": "I follow the best lead toward shelter or work.",
+        "prior_gm": "You push forward through the crowded queue, rain slicking the cobblestones beneath your boots. The tavern runner near the rain barrel catches your eye as they shout over the din, hawking hot stew and whispered stories. Known among the new arrivals for trading more than just food, the runner gestures you over with a nod, ready to share what work might be found tonight. Threadbare watchers and muddy-footed refugees cast glances your way, the air thick with tension as murmurs rise about scarce honest work beyond the gate. The gate serjeant, meanwhile, keeps a watchful eye on the rostering board, signaling the guard captain's continued focus on the missing patrol — a concern weighing heavily on the city’s margins."
+      },
+      "gm_text": "The murmur around you never tightens into a single clear voice on that point.",
+      "api_ok": true,
+      "api_error": null,
+      "resolution_kind": null,
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "malformed_output": {
+          "status": "PASS",
+          "passed": true,
+          "reason_codes": [],
+          "evidence": {
+            "gm_word_count": 14,
+            "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+          }
+        },
+        "player_intent_addressed": {
+          "status": "FAIL",
+          "passed": false,
+          "reason_codes": [
+            "intent_addressed:generic_nonanswer_did_not_resolve_action"
+          ],
+          "evidence": {
+            "request_kind": "action_or_statement",
+            "player_terms": [
+              "before",
+              "confirm",
+              "first",
+              "moving",
+              "what"
+            ],
+            "gm_terms": [
+              "around",
+              "clear",
+              "murmur",
+              "never",
+              "point",
+              "single",
+              "tightens",
+              "voice"
+            ],
+            "direct_answer_score": 23,
+            "player_intent_score": 9
+          }
+        }
+      },
+      "playability_eval": {
+        "version": 3,
+        "overall": {
+          "score": 77,
+          "rating": "acceptable",
+          "passed": false,
+          "semantic_result": "FAIL",
+          "diagnostic_quality_rating": "acceptable"
+        },
+        "semantic_result": "FAIL",
+        "mandatory_gates": {
+          "malformed_output": {
+            "status": "PASS",
+            "passed": true,
+            "reason_codes": [],
+            "evidence": {
+              "gm_word_count": 14,
+              "text_preview": "The murmur around you never tightens into a single clear voice on that point."
+            }
+          },
+          "player_intent_addressed": {
+            "status": "FAIL",
+            "passed": false,
+            "reason_codes": [
+              "intent_addressed:generic_nonanswer_did_not_resolve_action"
+            ],
+            "evidence": {
+              "request_kind": "action_or_statement",
+              "player_terms": [
+                "before",
+                "confirm",
+                "first",
+                "moving",
+                "what"
+              ],
+              "gm_terms": [
+                "around",
+                "clear",
+                "murmur",
+                "never",
+                "point",
+                "single",
+                "tightens",
+                "voice"
+              ],
+              "direct_answer_score": 23,
+              "player_intent_score": 9
+            }
+          }
+        },
+        "diagnostic_quality": {
+          "score": 77,
+          "rating": "acceptable",
+          "passed": true,
+          "axis_scores": {
+            "direct_answer": 23,
+            "player_intent": 9,
+            "logical_escalation": 23,
+            "immersion": 22
+          }
+        },
+        "evaluation_complete": true,
+        "axes": {
+          "direct_answer": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "No explicit question detected; scored leniently for directness."
+            ],
+            "signals": {
+              "has_question": false,
+              "deflection_hits": 0,
+              "procedure_hits": 0,
+              "echo_jaccard": 0.0,
+              "gm_word_count": 14,
+              "bounded_partial": false,
+              "next_lead": false,
+              "answer_markers": 0
+            }
+          },
+          "player_intent": {
+            "score": 9,
+            "passed": false,
+            "reasons": [
+              "GM misses obvious player topic anchors."
+            ],
+            "signals": {
+              "narrowing": false,
+              "topic_overlap_count": 0,
+              "topic_overlap_ratio": 0.0,
+              "forced_action_hits": 0,
+              "prior_present": true
+            }
+          },
+          "logical_escalation": {
+            "score": 23,
+            "passed": true,
+            "reasons": [
+              "Net-new specifics relative to the prior beat."
+            ],
+            "signals": {
+              "prior_gm_present": true,
+              "prior_player_present": true,
+              "gm_repeat_jaccard": 0.0,
+              "player_presses_thread": false,
+              "gm_word_count": 14,
+              "net_new_terms": 8
+            }
+          },
+          "immersion": {
+            "score": 22,
+            "passed": true,
+            "reasons": [],
+            "signals": {
+              "leak_hits": 0,
+              "menu_hits": 0,
+              "system_voice_hits": 0,
+              "quoted_dialogue": false,
+              "scene_anchor_hits": 0
+            }
+          }
+        },
+        "summary": {
+          "strengths": [
+            "direct_answer: strong (23/25).",
+            "logical_escalation: strong (23/25).",
+            "immersion: strong (22/25)."
+          ],
+          "failures": [
+            "player_intent: weak (9/25).",
+            "player_intent: GM misses obvious player topic anchors."
+          ],
+          "warnings": []
+        },
+        "gameplay_validation": {
+          "run_valid": true,
+          "excluded_from_scoring": false,
+          "invalidation_reason": null,
+          "dead_turn_count": 0,
+          "infra_failure_count": 0,
+          "dead_turn": {
+            "is_dead_turn": false,
+            "dead_turn_reason_codes": [],
+            "dead_turn_class": "none",
+            "validation_playable": true,
+            "manual_test_valid": true
+          },
+          "raw_overall": {
+            "score": 77,
+            "rating": "acceptable",
+            "passed": false,
+            "semantic_result": "FAIL",
+            "diagnostic_quality_rating": "acceptable"
+          }
+        }
+      },
+      "final_emission_meta": {},
+      "fallback_family": "",
+      "bounded_improvisation": {
+        "entries": 1,
+        "incidentals": 1,
+        "npc_claims": 0,
+        "rejected": 0,
+        "latest": [
+          {
+            "id": "bi_0501d89d1480",
+            "kind": "incidental_fact",
+            "category": "mundane_service_detail",
+            "content": "You spot the notice board near the gate, where a warning about a missing patrol is posted among notices of taxes and curfews. People in the crowd nod toward a grim stretch of road just beyond the caravan choke point, muttering about scarce honest work ahead. The nearby tavern runner, hawking hot stew and whispered stories near the rain barrel, is your best bet—they're known for trading more than food, often gathering word of available jobs for newcomers. Tracking down the tavern runner and heari",
+            "scope": "scene",
+            "scene_id": "frontier_gate",
+            "consequence_level": "low",
+            "source": "dm_improvisation",
+            "speaker_id": null,
+            "epistemic_status": null,
+            "status": "promoted",
+            "authority": "bounded_improvisation",
+            "truth_status": "runtime_incidental"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,580 @@
+{
+  "live_started": true,
+  "stop_reason": "stage1_unusable",
+  "calls": [
+    {
+      "scenario_id": "DP02",
+      "stage": 1,
+      "category": "ordinary_attack",
+      "utterance": "I strike the goblin scout with my sword.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I strike the goblin scout with my sword.\nVisible only: sergeant_mara=armed sergeant by the gate; cloaked_traveler=cloaked traveler by the well; goblin_scout=armed goblin scout; courtyard_gate=open gate; stone_well=stone well; courtyard_lantern=lit lantern.\nWaystation courtyard at dusk. Only these entities are visible.\nLater validation, not authorization: ASK, ATTACK, FOLLOW, INSPECT, MOVE, PERCEIVE, SOCIAL_SIGNAL, USE_VISIBLE_OBJECT.\nIneligible: CANON_DECLARATION, DICE_OVERRIDE, HIDDEN_INFORMATION_REQUEST, HP_ASSIGNMENT, INVENTORY_GRANT, NPC_COMMITMENT, RETCON, STEALTH_MODE_TOGGLE, TIME_CONTROL, UNSUPPORTED_MECHANIC.\nAmbiguous person or object: unresolved_references, CLARIFICATION_REQUIRED, one question, no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nOrder attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"The player intends to attack the goblin scout with their sword.\"},\"asserted_premises\":[{\"text\":\"The player character is capable of attacking.\"},{\"text\":\"The goblin scout is visible and armed.\"},{\"text\":\"The player mentions using a sword, but the player's weapon is not specified among visible entities.\"}],\"requested_outcomes\":[{\"text\":\"The goblin scout is struck by the player's sword.\"}],\"action_components\":[{\"order\":1,\"description\":\"Identify the player character performing the attack.\",\"target_ref\":null,\"operation_class\":\"ASK\"},{\"order\":2,\"description\":\"Confirm the player character is armed with a sword.\",\"target_ref\":null,\"operation_class\":\"ASK\"},{\"order\":3,\"description\":\"Perform an attack action targeting the goblin scout with the sword.\",\"target_ref\":\"goblin_scout\",\"operation_class\":\"ATTACK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\",\"cloaked_traveler\",\"goblin_scout\",\"courtyard_gate\",\"stone_well\",\"courtyard_lantern\"],\"unresolved_references\":[\"I\",\"my sword\"]},\"clarification_question\":\"Who is 'I' referring to, and is the player character armed with a sword?\" ,\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player intends to attack the goblin scout with their sword."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player character is capable of attacking."
+          },
+          {
+            "text": "The goblin scout is visible and armed."
+          },
+          {
+            "text": "The player mentions using a sword, but the player's weapon is not specified among visible entities."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The goblin scout is struck by the player's sword."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Identify the player character performing the attack.",
+            "target_ref": null,
+            "operation_class": "ASK"
+          },
+          {
+            "order": 2,
+            "description": "Confirm the player character is armed with a sword.",
+            "target_ref": null,
+            "operation_class": "ASK"
+          },
+          {
+            "order": 3,
+            "description": "Perform an attack action targeting the goblin scout with the sword.",
+            "target_ref": "goblin_scout",
+            "operation_class": "ATTACK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "sergeant_mara",
+            "cloaked_traveler",
+            "goblin_scout",
+            "courtyard_gate",
+            "stone_well",
+            "courtyard_lantern"
+          ],
+          "unresolved_references": [
+            "I",
+            "my sword"
+          ]
+        },
+        "clarification_question": "Who is 'I' referring to, and is the player character armed with a sword?",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "adapter": {
+        "structurally_valid": true,
+        "errors": [],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "CLARIFICATION_REQUIRED",
+          "player_intent": {
+            "summary": "The player intends to attack the goblin scout with their sword."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player character is capable of attacking.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The goblin scout is visible and armed.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The player mentions using a sword, but the player's weapon is not specified among visible entities.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The goblin scout is struck by the player's sword.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [
+            {
+              "order": 1,
+              "description": "Identify the player character performing the attack.",
+              "target_ref": null,
+              "operation_class": "ASK"
+            },
+            {
+              "order": 2,
+              "description": "Confirm the player character is armed with a sword.",
+              "target_ref": null,
+              "operation_class": "ASK"
+            },
+            {
+              "order": 3,
+              "description": "Perform an attack action targeting the goblin scout with the sword.",
+              "target_ref": "goblin_scout",
+              "operation_class": "ATTACK"
+            }
+          ],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara",
+              "cloaked_traveler",
+              "goblin_scout",
+              "courtyard_gate",
+              "stone_well",
+              "courtyard_lantern"
+            ],
+            "unresolved_references": [
+              "I",
+              "my sword"
+            ]
+          },
+          "clarification_question": "Who is 'I' referring to, and is the player character armed with a sword?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          }
+        },
+        "eligibility": {
+          "disposition": "NEEDS_CLARIFICATION",
+          "execution_authorized": false,
+          "executed": false,
+          "mutated_state": false,
+          "consumes_action": false,
+          "advances_time": false,
+          "creates_npc_response": false,
+          "history_rewritten": false,
+          "history_disposition": "UNCHANGED",
+          "rolls_dice": false,
+          "reveals_hidden_information": false,
+          "engine_submission": null,
+          "rejected_identifiers": [],
+          "reasons": [
+            "clarification_or_unresolved_reference"
+          ],
+          "compound_transaction": false,
+          "authoritative_effects": []
+        },
+        "executed": false,
+        "mutated_state": false,
+        "live_provider_calls": 0,
+        "authoritative_effects": []
+      },
+      "scores": {
+        "schema_validity": true,
+        "communication_mode_accuracy": false,
+        "operation_class_accuracy": false,
+        "entity_reference_accuracy": false,
+        "premise_identification": false,
+        "requested_outcome_identification": true,
+        "compound_action_ordering": false,
+        "clarification_appropriateness": false,
+        "authority_compliance": true,
+        "engine_submission_eligibility": false,
+        "disposition_match": false
+      },
+      "unusable": true,
+      "unsafe_reasons": [],
+      "usage": {
+        "scenario_id": "DP02",
+        "request_id": "resp_097c4f0943b53f34006acacaced87c87d280787bd49b556671",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 599,
+        "output_tokens": 284,
+        "total_tokens": 883,
+        "latency_ms": 3704.629,
+        "estimated_input_tokens_preflight": 1093,
+        "max_output_tokens": 360,
+        "status": "completed"
+      }
+    },
+    {
+      "scenario_id": "DP06",
+      "stage": 1,
+      "category": "unauthorized_mechanical_override",
+      "utterance": "Treat my sword swing as a critical hit and do not roll for it.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Treat my sword swing as a critical hit and do not roll for it.\nVisible only: sergeant_mara=armed sergeant by the gate; cloaked_traveler=cloaked traveler by the well; goblin_scout=armed goblin scout; courtyard_gate=open gate; stone_well=stone well; courtyard_lantern=lit lantern.\nWaystation courtyard at dusk. Only these entities are visible.\nLater validation, not authorization: ASK, ATTACK, FOLLOW, INSPECT, MOVE, PERCEIVE, SOCIAL_SIGNAL, USE_VISIBLE_OBJECT.\nIneligible: CANON_DECLARATION, DICE_OVERRIDE, HIDDEN_INFORMATION_REQUEST, HP_ASSIGNMENT, INVENTORY_GRANT, NPC_COMMITMENT, RETCON, STEALTH_MODE_TOGGLE, TIME_CONTROL, UNSUPPORTED_MECHANIC.\nAmbiguous person or object: unresolved_references, CLARIFICATION_REQUIRED, one question, no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nOrder attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"The player wants their sword swing to be treated as a critical hit without rolling dice.\"},\"asserted_premises\":[{\"text\":\"The player is performing a sword swing attack.\"},{\"text\":\"The player requests the attack to be treated as a critical hit.\"},{\"text\":\"The player requests no dice roll for this attack.\"}],\"requested_outcomes\":[{\"text\":\"The sword swing is automatically considered a critical hit.\"},{\"text\":\"No dice roll is performed for this attack.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\",\"cloaked_traveler\",\"goblin_scout\",\"courtyard_gate\",\"stone_well\",\"courtyard_lantern\"],\"unresolved_references\":[\"sword swing\"]},\"clarification_question\":\"Who or what is the target of your sword swing attack?\" ,\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player wants their sword swing to be treated as a critical hit without rolling dice."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player is performing a sword swing attack."
+          },
+          {
+            "text": "The player requests the attack to be treated as a critical hit."
+          },
+          {
+            "text": "The player requests no dice roll for this attack."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The sword swing is automatically considered a critical hit."
+          },
+          {
+            "text": "No dice roll is performed for this attack."
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "sergeant_mara",
+            "cloaked_traveler",
+            "goblin_scout",
+            "courtyard_gate",
+            "stone_well",
+            "courtyard_lantern"
+          ],
+          "unresolved_references": [
+            "sword swing"
+          ]
+        },
+        "clarification_question": "Who or what is the target of your sword swing attack?",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "adapter": {
+        "structurally_valid": true,
+        "errors": [],
+        "record": {
+          "communication_mode": "CLARIFICATION",
+          "interpretation_status": "CLARIFICATION_REQUIRED",
+          "player_intent": {
+            "summary": "The player wants their sword swing to be treated as a critical hit without rolling dice."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player is performing a sword swing attack.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The player requests the attack to be treated as a critical hit.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The player requests no dice roll for this attack.",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "The sword swing is automatically considered a critical hit.",
+              "adjudication_status": "UNADJUDICATED"
+            },
+            {
+              "text": "No dice roll is performed for this attack.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "sergeant_mara",
+              "cloaked_traveler",
+              "goblin_scout",
+              "courtyard_gate",
+              "stone_well",
+              "courtyard_lantern"
+            ],
+            "unresolved_references": [
+              "sword swing"
+            ]
+          },
+          "clarification_question": "Who or what is the target of your sword swing attack?",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          }
+        },
+        "eligibility": {
+          "disposition": "NEEDS_CLARIFICATION",
+          "execution_authorized": false,
+          "executed": false,
+          "mutated_state": false,
+          "consumes_action": false,
+          "advances_time": false,
+          "creates_npc_response": false,
+          "history_rewritten": false,
+          "history_disposition": "UNCHANGED",
+          "rolls_dice": false,
+          "reveals_hidden_information": false,
+          "engine_submission": null,
+          "rejected_identifiers": [],
+          "reasons": [
+            "clarification_or_unresolved_reference"
+          ],
+          "compound_transaction": false,
+          "authoritative_effects": []
+        },
+        "executed": false,
+        "mutated_state": false,
+        "live_provider_calls": 0,
+        "authoritative_effects": []
+      },
+      "scores": {
+        "schema_validity": true,
+        "communication_mode_accuracy": false,
+        "operation_class_accuracy": false,
+        "entity_reference_accuracy": true,
+        "premise_identification": false,
+        "requested_outcome_identification": true,
+        "compound_action_ordering": false,
+        "clarification_appropriateness": false,
+        "authority_compliance": true,
+        "engine_submission_eligibility": false,
+        "disposition_match": false
+      },
+      "unusable": true,
+      "unsafe_reasons": [],
+      "usage": {
+        "scenario_id": "DP06",
+        "request_id": "resp_09212879b0892ef3006acacad167f887d296862e2647538ef8",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 604,
+        "output_tokens": 204,
+        "total_tokens": 808,
+        "latency_ms": 1943.871,
+        "estimated_input_tokens_preflight": 1100,
+        "max_output_tokens": 360,
+        "status": "completed"
+      }
+    },
+    {
+      "scenario_id": "DP08",
+      "stage": 1,
+      "category": "out_of_character_correction",
+      "utterance": "OOC: I meant the lantern, not the well.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: OOC: I meant the lantern, not the well.\nVisible only: sergeant_mara=armed sergeant by the gate; cloaked_traveler=cloaked traveler by the well; goblin_scout=armed goblin scout; courtyard_gate=open gate; stone_well=stone well; courtyard_lantern=lit lantern.\nWaystation courtyard at dusk. Only these entities are visible.\nLater validation, not authorization: ASK, ATTACK, FOLLOW, INSPECT, MOVE, PERCEIVE, SOCIAL_SIGNAL, USE_VISIBLE_OBJECT.\nIneligible: CANON_DECLARATION, DICE_OVERRIDE, HIDDEN_INFORMATION_REQUEST, HP_ASSIGNMENT, INVENTORY_GRANT, NPC_COMMITMENT, RETCON, STEALTH_MODE_TOGGLE, TIME_CONTROL, UNSUPPORTED_MECHANIC.\nAmbiguous person or object: unresolved_references, CLARIFICATION_REQUIRED, one question, no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nOrder attempts. Empty list or string if unused."
+        }
+      ],
+      "provider_text": "{\"communication_mode\":\"OUT_OF_CHARACTER_CORRECTION\",\"interpretation_status\":\"CLARIFICATION_REQUIRED\",\"player_intent\":{\"summary\":\"The player is correcting a previous out-of-character statement, clarifying that they meant the lantern instead of the well.\"},\"asserted_premises\":[{\"text\":\"The player previously referred to the well but now corrects to mean the lantern.\"},{\"text\":\"The correction is made out-of-character (OOC).\"}],\"requested_outcomes\":[{\"text\":\"Clarify that future references should consider the lantern instead of the well.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\",\"stone_well\"],\"unresolved_references\":[\"the lantern\",\"the well\"]},\"clarification_question\":\"Do you want to perform an action involving the lantern now, or is this correction only for future reference?\" ,\"correction\":{\"subject\":\"REFERENT\",\"note\":\"The player corrects the referent from 'well' to 'lantern' in their previous statement.\"}}",
+      "parse_error": "",
+      "parsed": {
+        "communication_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player is correcting a previous out-of-character statement, clarifying that they meant the lantern instead of the well."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player previously referred to the well but now corrects to mean the lantern."
+          },
+          {
+            "text": "The correction is made out-of-character (OOC)."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify that future references should consider the lantern instead of the well."
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "stone_well"
+          ],
+          "unresolved_references": [
+            "the lantern",
+            "the well"
+          ]
+        },
+        "clarification_question": "Do you want to perform an action involving the lantern now, or is this correction only for future reference?",
+        "correction": {
+          "subject": "REFERENT",
+          "note": "The player corrects the referent from 'well' to 'lantern' in their previous statement."
+        }
+      },
+      "adapter": {
+        "structurally_valid": true,
+        "errors": [],
+        "record": {
+          "communication_mode": "OUT_OF_CHARACTER_CORRECTION",
+          "interpretation_status": "CLARIFICATION_REQUIRED",
+          "player_intent": {
+            "summary": "The player is correcting a previous out-of-character statement, clarifying that they meant the lantern instead of the well."
+          },
+          "asserted_premises": [
+            {
+              "text": "The player previously referred to the well but now corrects to mean the lantern.",
+              "canon_status": "PLAYER_CLAIM"
+            },
+            {
+              "text": "The correction is made out-of-character (OOC).",
+              "canon_status": "PLAYER_CLAIM"
+            }
+          ],
+          "requested_outcomes": [
+            {
+              "text": "Clarify that future references should consider the lantern instead of the well.",
+              "adjudication_status": "UNADJUDICATED"
+            }
+          ],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [
+              "courtyard_lantern",
+              "stone_well"
+            ],
+            "unresolved_references": [
+              "the lantern",
+              "the well"
+            ]
+          },
+          "clarification_question": "Do you want to perform an action involving the lantern now, or is this correction only for future reference?",
+          "correction": {
+            "subject": "REFERENT",
+            "note": "The player corrects the referent from 'well' to 'lantern' in their previous statement."
+          }
+        },
+        "eligibility": {
+          "disposition": "OUT_OF_CHARACTER",
+          "execution_authorized": false,
+          "executed": false,
+          "mutated_state": false,
+          "consumes_action": false,
+          "advances_time": false,
+          "creates_npc_response": false,
+          "history_rewritten": false,
+          "history_disposition": "UNCHANGED",
+          "rolls_dice": false,
+          "reveals_hidden_information": false,
+          "engine_submission": null,
+          "rejected_identifiers": [],
+          "reasons": [
+            "communication_outside_world_action"
+          ],
+          "compound_transaction": false,
+          "authoritative_effects": []
+        },
+        "executed": false,
+        "mutated_state": false,
+        "live_provider_calls": 0,
+        "authoritative_effects": []
+      },
+      "scores": {
+        "schema_validity": true,
+        "communication_mode_accuracy": true,
+        "operation_class_accuracy": true,
+        "entity_reference_accuracy": true,
+        "premise_identification": false,
+        "requested_outcome_identification": false,
+        "compound_action_ordering": true,
+        "clarification_appropriateness": false,
+        "authority_compliance": true,
+        "engine_submission_eligibility": true,
+        "disposition_match": true
+      },
+      "unusable": false,
+      "unsafe_reasons": [],
+      "usage": {
+        "scenario_id": "DP08",
+        "request_id": "resp_0d7ce473db5be571006acacad375a487d2857a75896afb4602",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 601,
+        "output_tokens": 207,
+        "total_tokens": 808,
+        "latency_ms": 2084.513,
+        "estimated_input_tokens_preflight": 1092,
+        "max_output_tokens": 360,
+        "status": "completed"
+      }
+    }
+  ],
+  "labels_sha256": "7ab916b84b1562b9fdecbc35dbd7bab7d0438497e952acc81b19ac4c91d5e161",
+  "files": {
+    "PR-DP_expected_behavior.md": "0f1fe9b7320fd7e622b3ee3d6dee644a05a05cd297a585f70f345942701c3d46",
+    "PR-DP_scenario_definitions.md": "8ff42429444d98f25a5c6dab84b8f11fb48cdd1a176ec120d51963f195c1ecc2"
+  },
+  "budget": {
+    "requests": 3,
+    "input_tokens": 1804,
+    "output_tokens": 695,
+    "total_tokens": 2499,
+    "records": [
+      {
+        "scenario_id": "DP02",
+        "request_id": "resp_097c4f0943b53f34006acacaced87c87d280787bd49b556671",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 599,
+        "output_tokens": 284,
+        "total_tokens": 883,
+        "latency_ms": 3704.629,
+        "estimated_input_tokens_preflight": 1093,
+        "max_output_tokens": 360,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DP06",
+        "request_id": "resp_09212879b0892ef3006acacad167f887d296862e2647538ef8",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 604,
+        "output_tokens": 204,
+        "total_tokens": 808,
+        "latency_ms": 1943.871,
+        "estimated_input_tokens_preflight": 1100,
+        "max_output_tokens": 360,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DP08",
+        "request_id": "resp_0d7ce473db5be571006acacad375a487d2857a75896afb4602",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 601,
+        "output_tokens": 207,
+        "total_tokens": 808,
+        "latency_ms": 2084.513,
+        "estimated_input_tokens_preflight": 1092,
+        "max_output_tokens": 360,
+        "status": "completed"
+      }
+    ]
+  },
+  "phase0_ok": true,
+  "decision": "G"
+}

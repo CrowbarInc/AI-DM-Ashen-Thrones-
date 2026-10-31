@@ -1,0 +1,1370 @@
+{
+  "development": {
+    "A": {
+      "evaluated": 72,
+      "not_evaluated": 0,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 5,
+          "REJECT": 0,
+          "ABSTAIN": 25
+        },
+        "REJECT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 39
+        },
+        "ABSTAIN": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 3
+        }
+      },
+      "accuracy": 0.1111111111111111,
+      "unsafe_accepts": 0,
+      "unsafe_n": 39,
+      "unsafe_acceptance_rate": 0.0,
+      "safe_accepts": 5,
+      "safe_n": 30,
+      "safe_rejections": 0,
+      "safe_abstentions": 25,
+      "unsafe_accepts_by_risk": {},
+      "unsafe_accepts_by_category": {},
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {
+        "paraphrase": 13,
+        "incidental": 3,
+        "borderline": 3,
+        "rumor": 2,
+        "commitment": 2,
+        "hidden": 1,
+        "historical_A1_compact_1": 1
+      },
+      "failures": [
+        {
+          "id": "paraphrase01",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase02",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase04",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase05",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase07",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase10",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase11",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase13",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase14",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase17",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase19",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase20",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion11",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion13",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion14",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental02",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental04",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline01",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline07",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline10",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor07",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment01",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment05",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "historical_A1_compact_101",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        }
+      ]
+    },
+    "B": {
+      "evaluated": 72,
+      "not_evaluated": 0,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 5,
+          "REJECT": 0,
+          "ABSTAIN": 25
+        },
+        "REJECT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 39
+        },
+        "ABSTAIN": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 3
+        }
+      },
+      "accuracy": 0.1111111111111111,
+      "unsafe_accepts": 0,
+      "unsafe_n": 39,
+      "unsafe_acceptance_rate": 0.0,
+      "safe_accepts": 5,
+      "safe_n": 30,
+      "safe_rejections": 0,
+      "safe_abstentions": 25,
+      "unsafe_accepts_by_risk": {},
+      "unsafe_accepts_by_category": {},
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {
+        "paraphrase": 13,
+        "incidental": 3,
+        "borderline": 3,
+        "rumor": 2,
+        "commitment": 2,
+        "hidden": 1,
+        "historical_A1_compact_1": 1
+      },
+      "failures": [
+        {
+          "id": "paraphrase01",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase02",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase04",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase05",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase07",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase10",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase11",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase13",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase14",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase17",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase19",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase20",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion11",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion13",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion14",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental02",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental04",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline01",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline07",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline10",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor07",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment01",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment05",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden08",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden10",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed05",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "historical_A1_compact_101",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        }
+      ]
+    },
+    "C": {
+      "evaluated": 60,
+      "not_evaluated": 12,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 28,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        },
+        "REJECT": {
+          "ACCEPT": 3,
+          "REJECT": 19,
+          "ABSTAIN": 8
+        },
+        "ABSTAIN": {
+          "ACCEPT": 1,
+          "REJECT": 1,
+          "ABSTAIN": 0
+        }
+      },
+      "accuracy": 0.7833333333333333,
+      "unsafe_accepts": 3,
+      "unsafe_n": 30,
+      "unsafe_acceptance_rate": 0.1,
+      "safe_accepts": 28,
+      "safe_n": 28,
+      "safe_rejections": 0,
+      "safe_abstentions": 0,
+      "unsafe_accepts_by_risk": {
+        "high": 3
+      },
+      "unsafe_accepts_by_category": {
+        "commitment": 3
+      },
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {},
+      "failures": [
+        {
+          "id": "expansion07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion11",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion13",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion14",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline04",
+          "gold": "ABSTAIN",
+          "actual": "REJECT"
+        },
+        {
+          "id": "borderline05",
+          "gold": "ABSTAIN",
+          "actual": "ACCEPT"
+        },
+        {
+          "id": "rumor01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment04",
+          "gold": "REJECT",
+          "actual": "ACCEPT"
+        },
+        {
+          "id": "commitment08",
+          "gold": "REJECT",
+          "actual": "ACCEPT"
+        },
+        {
+          "id": "commitment10",
+          "gold": "REJECT",
+          "actual": "ACCEPT"
+        }
+      ]
+    },
+    "D": {
+      "evaluated": 60,
+      "not_evaluated": 12,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 28,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        },
+        "REJECT": {
+          "ACCEPT": 3,
+          "REJECT": 19,
+          "ABSTAIN": 8
+        },
+        "ABSTAIN": {
+          "ACCEPT": 1,
+          "REJECT": 1,
+          "ABSTAIN": 0
+        }
+      },
+      "accuracy": 0.7833333333333333,
+      "unsafe_accepts": 3,
+      "unsafe_n": 30,
+      "unsafe_acceptance_rate": 0.1,
+      "safe_accepts": 28,
+      "safe_n": 28,
+      "safe_rejections": 0,
+      "safe_abstentions": 0,
+      "unsafe_accepts_by_risk": {
+        "high": 3
+      },
+      "unsafe_accepts_by_category": {
+        "commitment": 3
+      },
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {},
+      "failures": [
+        {
+          "id": "expansion07",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion08",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion11",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion13",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion14",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline04",
+          "gold": "ABSTAIN",
+          "actual": "REJECT"
+        },
+        {
+          "id": "borderline05",
+          "gold": "ABSTAIN",
+          "actual": "ACCEPT"
+        },
+        {
+          "id": "rumor01",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor02",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor04",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment04",
+          "gold": "REJECT",
+          "actual": "ACCEPT"
+        },
+        {
+          "id": "commitment08",
+          "gold": "REJECT",
+          "actual": "ACCEPT"
+        },
+        {
+          "id": "commitment10",
+          "gold": "REJECT",
+          "actual": "ACCEPT"
+        }
+      ]
+    }
+  },
+  "holdout": {
+    "A": {
+      "evaluated": 30,
+      "not_evaluated": 0,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 12
+        },
+        "REJECT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 16
+        },
+        "ABSTAIN": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 2
+        }
+      },
+      "accuracy": 0.06666666666666667,
+      "unsafe_accepts": 0,
+      "unsafe_n": 16,
+      "unsafe_acceptance_rate": 0.0,
+      "safe_accepts": 0,
+      "safe_n": 12,
+      "safe_rejections": 0,
+      "safe_abstentions": 12,
+      "unsafe_accepts_by_risk": {},
+      "unsafe_accepts_by_category": {},
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {
+        "paraphrase": 6,
+        "incidental": 3,
+        "rumor": 1,
+        "commitment": 1,
+        "hidden": 1
+      },
+      "failures": [
+        {
+          "id": "paraphrase03",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase06",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase12",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase15",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase18",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion09",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion12",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion15",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction09",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental03",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental06",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden03",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden09",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        }
+      ]
+    },
+    "B": {
+      "evaluated": 30,
+      "not_evaluated": 0,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 12
+        },
+        "REJECT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 16
+        },
+        "ABSTAIN": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 2
+        }
+      },
+      "accuracy": 0.06666666666666667,
+      "unsafe_accepts": 0,
+      "unsafe_n": 16,
+      "unsafe_acceptance_rate": 0.0,
+      "safe_accepts": 0,
+      "safe_n": 12,
+      "safe_rejections": 0,
+      "safe_abstentions": 12,
+      "unsafe_accepts_by_risk": {},
+      "unsafe_accepts_by_category": {},
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {
+        "paraphrase": 6,
+        "incidental": 3,
+        "rumor": 1,
+        "commitment": 1,
+        "hidden": 1
+      },
+      "failures": [
+        {
+          "id": "paraphrase03",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase06",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase12",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase15",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "paraphrase18",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion09",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion12",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "expansion15",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "contradiction09",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental03",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental06",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "incidental09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "borderline06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "rumor09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "commitment09",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden03",
+          "gold": "ACCEPT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden06",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "hidden09",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        },
+        {
+          "id": "mixed03",
+          "gold": "REJECT",
+          "actual": "ABSTAIN"
+        }
+      ]
+    },
+    "C": {
+      "evaluated": 0,
+      "not_evaluated": 30,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        },
+        "REJECT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        },
+        "ABSTAIN": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        }
+      },
+      "accuracy": null,
+      "unsafe_accepts": 0,
+      "unsafe_n": 0,
+      "unsafe_acceptance_rate": null,
+      "safe_accepts": 0,
+      "safe_n": 0,
+      "safe_rejections": 0,
+      "safe_abstentions": 0,
+      "unsafe_accepts_by_risk": {},
+      "unsafe_accepts_by_category": {},
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {},
+      "failures": []
+    },
+    "D": {
+      "evaluated": 0,
+      "not_evaluated": 30,
+      "matrix": {
+        "ACCEPT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        },
+        "REJECT": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        },
+        "ABSTAIN": {
+          "ACCEPT": 0,
+          "REJECT": 0,
+          "ABSTAIN": 0
+        }
+      },
+      "accuracy": null,
+      "unsafe_accepts": 0,
+      "unsafe_n": 0,
+      "unsafe_acceptance_rate": null,
+      "safe_accepts": 0,
+      "safe_n": 0,
+      "safe_rejections": 0,
+      "safe_abstentions": 0,
+      "unsafe_accepts_by_risk": {},
+      "unsafe_accepts_by_category": {},
+      "safe_rejections_by_category": {},
+      "safe_abstentions_by_category": {},
+      "failures": []
+    }
+  }
+}

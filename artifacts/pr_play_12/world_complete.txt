@@ -1,0 +1,97 @@
+........................................................................ [ 58%]
+FFFF.....................FF......................F.                      [100%]
+================================== FAILURES ===================================
+_________ test_historical_control_through_current_request_and_host[0] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:54: in test_historical_control_through_current_request_and_host
+    controls = json.loads((HISTORY/'adapter_controls.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\adapter_controls.json'
+_________ test_historical_control_through_current_request_and_host[1] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:54: in test_historical_control_through_current_request_and_host
+    controls = json.loads((HISTORY/'adapter_controls.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\adapter_controls.json'
+_________ test_historical_control_through_current_request_and_host[2] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:54: in test_historical_control_through_current_request_and_host
+    controls = json.loads((HISTORY/'adapter_controls.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\adapter_controls.json'
+_________ test_historical_control_through_current_request_and_host[3] _________
+tests\test_atgb_r2_04_question_evidence_contract.py:54: in test_historical_control_through_current_request_and_host
+    controls = json.loads((HISTORY/'adapter_controls.json').read_text(encoding='utf-8'))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_03\\adapter_controls.json'
+_______________ test_s03_3_replay_keeps_the_established_runner ________________
+tests\test_atgb_r2_02_speech_participant_grounding.py:129: in test_s03_3_replay_keeps_the_established_runner
+    row = _traces()["S03.3"]
+          ^^^^^^^^^
+tests\test_atgb_r2_02_speech_participant_grounding.py:38: in _traces
+    rows = json.loads(TRACES.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_01\\representative_traces.json'
+______ test_s05_3_replay_grounds_recipient_without_answering_the_subject ______
+tests\test_atgb_r2_02_speech_participant_grounding.py:168: in test_s05_3_replay_grounds_recipient_without_answering_the_subject
+    row = _traces()["S05.3"]
+          ^^^^^^^^^
+tests\test_atgb_r2_02_speech_participant_grounding.py:38: in _traces
+    rows = json.loads(TRACES.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_01\\representative_traces.json'
+_______ test_bridge_still_rejects_an_absent_target_and_an_ambiguous_you _______
+tests\test_atgb_r2_02_speech_participant_grounding.py:413: in test_bridge_still_rejects_an_absent_target_and_an_ambiguous_you
+    row = copy.deepcopy(_traces()["S03.3"]["adapted_interpretation"])
+                        ^^^^^^^^^
+tests\test_atgb_r2_02_speech_participant_grounding.py:38: in _traces
+    rows = json.loads(TRACES.read_text(encoding="utf-8"))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r2_01\\representative_traces.json'
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[0]
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[1]
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[2]
+FAILED tests/test_atgb_r2_04_question_evidence_contract.py::test_historical_control_through_current_request_and_host[3]
+FAILED tests/test_atgb_r2_02_speech_participant_grounding.py::test_s03_3_replay_keeps_the_established_runner
+FAILED tests/test_atgb_r2_02_speech_participant_grounding.py::test_s05_3_replay_grounds_recipient_without_answering_the_subject
+FAILED tests/test_atgb_r2_02_speech_participant_grounding.py::test_bridge_still_rejects_an_absent_target_and_an_ambiguous_you

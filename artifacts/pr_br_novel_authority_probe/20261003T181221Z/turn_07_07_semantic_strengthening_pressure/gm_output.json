@@ -1,0 +1,491 @@
+{
+  "player_facing_text": "No one here can answer that from what is settled here.",
+  "tags": [
+    "scene_momentum:new_information"
+  ],
+  "scene_update": null,
+  "activate_scene_id": null,
+  "new_scene_draft": null,
+  "world_updates": null,
+  "suggested_action": null,
+  "debug_notes": "Response adheres strictly to authorized visible facts without conjecture or unauthorized narrative claims; offers a delicate uncertainty with a natural next lead. | model_route:retry_escalation:purpose_retry_escalation:gpt-4.1-mini | model_escalated:retry_attempt",
+  "metadata": {
+    "output_form": "structured",
+    "selected_model": "gpt-4.1-mini",
+    "model_route_reason": "purpose_retry_escalation",
+    "model_route_family": "retry_escalation",
+    "model_route_purpose": "retry_escalation",
+    "model_retry_attempt": 1,
+    "model_escalated": true,
+    "model_escalation_trigger": "retry_attempt",
+    "emission_debug": {
+      "live_resolution_mode": {
+        "mode": "grounded_information_request",
+        "reason_codes": [
+          "default_existing_resolution",
+          "contract_dimension:time"
+        ],
+        "target": "Who cracked the chapel bell, and when did it happen?",
+        "speaker_id": "",
+        "topic": "Who cracked the chapel bell, and when did it happen",
+        "improvisation_opportunity_detected": false,
+        "proposal_created": false,
+        "proposal_reason": "not_improvable_mode",
+        "response_complete": true,
+        "response_completeness_reason": "not_gap_mode",
+        "requested_dimension": "time",
+        "contract_id": "rc_14c614ee83fe"
+      },
+      "accepted_response_provenance": "safe_nonresolution",
+      "generation_attempts": 2,
+      "legacy_emission_authority": false,
+      "semantic_degradation": false,
+      "semantic_degradation_reasons": [],
+      "resolution_contract_semantic": {
+        "status": "unsatisfied",
+        "reasons": [
+          "dimension_not_addressed"
+        ],
+        "contract_id": "rc_14c614ee83fe",
+        "operation": "ask",
+        "target": null,
+        "dimension": "time",
+        "discourse_referent": null,
+        "candidate_answer_target": null,
+        "target_compatible": null,
+        "operation_compatible": false,
+        "dimension_compatible": false,
+        "resolution_kind": "unrelated",
+        "valid_inability": false,
+        "valid_refusal": false,
+        "valid_clarification": false,
+        "necessary_clarification": false
+      },
+      "opening_upstream_prepared_present": false,
+      "opening_upstream_prepared_len": 0,
+      "opening_upstream_prepared_promoted": false,
+      "opening_raw_text_source": "gm_player_facing_text",
+      "pre_gate_text_len": 54,
+      "post_final_emission_gate_text_len": 54,
+      "narration_state_consistency_before_preview": "No one here can answer that from what is settled here.",
+      "resolution_contract": {
+        "contract_id": "rc_14c614ee83fe",
+        "turn_index": 1,
+        "request_kind": "inquiry",
+        "operation": "ask",
+        "target_ref": {
+          "type": "claim",
+          "id_or_text": null,
+          "source": "unresolved"
+        },
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": "time",
+        "dimensions": [
+          "time"
+        ],
+        "expected_resolution": "answer",
+        "epistemic_mode": "npc_claim",
+        "discourse_ref": null,
+        "referent_provenance": "unresolved",
+        "ambiguous": false,
+        "raw_input": "Who cracked the chapel bell, and when did it happen?",
+        "construction": {
+          "cues": [
+            "time",
+            "pronoun"
+          ],
+          "referent_slot": null,
+          "referent_reason": "claim_unresolved",
+          "ambiguity_detected": false,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": false,
+          "fast_path_abstained": true,
+          "fast_path_abstention_reason": "insufficient_discourse_context",
+          "model_interpreter_invoked": true,
+          "model_proposal_rejected": true,
+          "clarification_after_model": true,
+          "interpretation_api_calls": 1,
+          "interpretation_error": "ambiguous_referent",
+          "canonical_candidates": [
+            {
+              "id": "chapel_close",
+              "type": "place",
+              "label": "Brineward chapel close"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "ask",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": null,
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "abstained",
+          "validation_result": {
+            "status": "abstained",
+            "reason": "insufficient_discourse_context",
+            "failed_fields": [
+              "raw_target_text"
+            ],
+            "clarification_required": true,
+            "model_interpretation_appropriate": true,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "unresolved",
+            "discourse_commit_allowed": false,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": "insufficient_discourse_context",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "discourse_commit_allowed": false,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "unresolved"
+          },
+          "authoritative": false,
+          "semantic_completeness": "not_applied",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "Who cracked the chapel bell, and when did it happen?",
+            "source": "deterministic_fast_path",
+            "primary_operation": "ask",
+            "supporting_operations": [],
+            "raw_target_text": null,
+            "proposed_target_id": null,
+            "target_capture": "none",
+            "has_determiner": false,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": "time",
+            "dimensions": [
+              "time"
+            ],
+            "expected_resolution": "answer",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": true,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "ask",
+          "resolution_subject": "social",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 52,
+          "provenance_excerpt": "Who cracked the chapel bell, and when did it happen?",
+          "secondary_operations": [],
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved"
+        },
+        "retry_preserved": true
+      },
+      "outcome_precedence": {
+        "downgrade_attempted": false,
+        "downgrade_rejected": false,
+        "downgrade_reason": null,
+        "recovery_used": false,
+        "recovery_source": null,
+        "destroyed": false,
+        "scene_momentum_appended": false,
+        "final_outcome_kind": "unrelated",
+        "final_satisfaction": "unsatisfied",
+        "replacement_reason": "resolution_content_preserved"
+      },
+      "post_narration_state_consistency_text_len": 54,
+      "narration_state_consistency_changed_text": false,
+      "narration_state_consistency_after_preview": "No one here can answer that from what is settled here.",
+      "accepted_emitted_equality": {
+        "exact_match": true,
+        "semantic_match": true,
+        "presentation_only": false,
+        "mutation_blocked": false,
+        "attempted_text": "No one here can answer that from what is settled here."
+      },
+      "accepted_emitted_report": {
+        "immutable": true,
+        "exact_match": true,
+        "semantic_match": true,
+        "presentation_only": false,
+        "mutation_blocked": false,
+        "accepted_response_text": "No one here can answer that from what is settled here.",
+        "emitted_response_text": "No one here can answer that from what is settled here."
+      },
+      "legacy_would_emit": "No one here can answer that from what is settled here.",
+      "legacy_comparison": {
+        "downgrade_attempted": false,
+        "downgrade_rejected": false,
+        "downgrade_reason": null,
+        "recovery_used": false,
+        "recovery_source": null,
+        "destroyed": false,
+        "scene_momentum_appended": false,
+        "final_outcome_kind": "unrelated",
+        "final_satisfaction": "unsatisfied"
+      },
+      "gm_output_player_facing_len": 54,
+      "final_emission_text_preview": "No one here can answer that from what is settled here.",
+      "response_payload_text_preview": "No one here can answer that from what is settled here.",
+      "log_payload_text_preview": "No one here can answer that from what is settled here.",
+      "canonical_gm_object_id": 2011553797120
+    },
+    "hard_validation_attempt_1": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "The chapel bell here in Brineward chapel close is clearly cracked, but no one among the few people nearby or the quiet sparrows picking at the gravel seems to know who damaged it or when it happened. This detail remains unspoken and unseen, leaving the culprit and timing a mystery for now. To learn more, you might consider investigating the area around the bell or speaking with local workers who might have noticed something unusual."
+    },
+    "hard_validation_attempt_2": {
+      "hard_valid": false,
+      "reasons": [
+        "unauthorized_resolution_decision_fact"
+      ],
+      "soft_flags": [],
+      "text": "The cracked chapel bell stands quietly in its wooden frame within the chapel close, yet no one present speaks openly of who might have caused its damage or exactly when it occurred. The sparrows picking at the gravel nearby seem as unaffected by this mystery as the empty close itself. At present, no clear evidence or rumor from this spot provides a name or time for the cracking of the bell. Examining the surroundings more closely or seeking testimony in neighboring quarters might yield further clues."
+    },
+    "regeneration_feedback": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth.",
+    "regeneration_invoked": true,
+    "generation_attempt_count": 2,
+    "accepted_response": {
+      "immutable": true,
+      "text": "No one here can answer that from what is settled here.",
+      "provenance": "safe_nonresolution",
+      "attempt": 2,
+      "player_input": "Who cracked the chapel bell, and when did it happen?",
+      "turn_identity": "rc_14c614ee83fe",
+      "speaker": "",
+      "addressee": "",
+      "target": "",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "rc_14c614ee83fe",
+        "operation": "ask",
+        "interlocutor_id": "",
+        "expected_resolution": "answer"
+      },
+      "resolution_kind": "",
+      "generation_attempts": 2,
+      "skipped_mutators": [
+        "apply_response_policy_enforcement",
+        "apply_authored_knowledge_realization_to_gm",
+        "apply_stay_leave_narration_agreement_to_gm",
+        "apply_destination_arrival_realization_to_gm",
+        "apply_perception_non_invention_to_gm",
+        "apply_repeated_description_guard",
+        "apply_final_emission_gate",
+        "enforce_emitted_contract_monotonicity",
+        "apply_spoken_state_refinement_cash_out"
+      ]
+    },
+    "rejected_attempt_2_reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "skipped_semantic_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ],
+    "live_resolution_mode": {
+      "mode": "grounded_information_request",
+      "reason_codes": [
+        "default_existing_resolution",
+        "contract_dimension:time"
+      ],
+      "target": "Who cracked the chapel bell, and when did it happen?",
+      "speaker_id": "",
+      "topic": "Who cracked the chapel bell, and when did it happen",
+      "proposal_kind": null,
+      "proposal_category": null,
+      "epistemic_status": null,
+      "requested_dimension": "time",
+      "contract_id": "rc_14c614ee83fe"
+    },
+    "narration_seam": {
+      "path_kind": "resolved_turn_ctir_bundle",
+      "ctir_backed": true,
+      "bundle_required": true,
+      "plan_driven": true,
+      "emergency_nonplan_output": false,
+      "explicit_nonplan_model_narration": false,
+      "same_turn_retry_messages_reused": true,
+      "continuation": {
+        "is_continuation_turn": false,
+        "continuation_path_kind": null,
+        "requires_plan_driven_continuation": false,
+        "allows_nonplan_output": true,
+        "reason_codes": [
+          "opening_reason:scene_entry",
+          "turn_is_scene_opening"
+        ],
+        "continuation_plan_verified": true,
+        "continuation_plan_failure_reason": null,
+        "continuation_source": "narrative_plan_bundle",
+        "continuation_enforcement_applied": false
+      }
+    },
+    "planner_convergence_report": {
+      "enabled": true,
+      "owner_module": "game.api",
+      "path_label": "continuation",
+      "ctir_present": true,
+      "ctir_stamp": "1:1d45b0ddbc0:ed7190ff",
+      "narrative_plan_present": true,
+      "narrative_plan_stamp": "1:1d45b0ddbc0:ed7190ff",
+      "stamp_matches": true,
+      "prompt_consumes_plan": true,
+      "raw_state_prompt_bypass_detected": false,
+      "emergency_nonplan_allowed": false,
+      "failure_codes": []
+    }
+  },
+  "retry_exhausted": true,
+  "targeted_retry_terminal": true,
+  "scene_state_anchor_contract": {
+    "enabled": true,
+    "required_any_of": [
+      "location",
+      "actor",
+      "player_action"
+    ],
+    "minimum_anchor_hits": 1,
+    "scene_id": "chapel_close",
+    "scene_location_label": "Brineward chapel close",
+    "location_tokens": [
+      "chapel_close",
+      "chapel close",
+      "brineward chapel close",
+      "brineward chapel"
+    ],
+    "actor_tokens": [
+      "guard captain",
+      "tavern runner"
+    ],
+    "player_action_tokens": [
+      "cracked",
+      "chapel",
+      "bell",
+      "did",
+      "happen"
+    ],
+    "preferred_repair_order": [
+      "actor",
+      "player_action",
+      "location"
+    ],
+    "debug_reason": "scene_state_anchor: loc=4 actor=2 player_action=5 enabled=True",
+    "debug_sources": {
+      "location": [
+        "scene.id",
+        "scene.location"
+      ],
+      "actor": [
+        "visible_entity_aliases"
+      ],
+      "player_action": [
+        "scene_runtime.last_player_action_text"
+      ]
+    }
+  },
+  "conversational_memory_window": {
+    "enabled": true,
+    "window_version": "v1",
+    "prioritize_recent_turns": true,
+    "prioritize_active_scene_entities": true,
+    "deprioritize_stale_inactive_elements": true,
+    "allow_explicit_reintroduction": true,
+    "recent_turn_window": 6,
+    "soft_memory_limit": 12,
+    "stale_after_turns": 18,
+    "active_scene_entity_ids": [],
+    "anchored_interlocutor_id": "",
+    "active_interaction_target_id": "",
+    "explicit_reintroduced_entity_ids": [],
+    "explicit_reintroduced_topics": [],
+    "selection_debug": {
+      "matched_entity_ids": [],
+      "matched_topics": [],
+      "matched_grounded_ids": [],
+      "callback_marker_hit": null,
+      "source_of_activity_anchor": "none",
+      "source_of_recentness": "session.turn_counter",
+      "source_of_reintroductions": "player_text+visibility_aliases"
+    }
+  },
+  "selected_conversational_memory": [],
+  "upstream_prepared_emission": {
+    "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+    "prepared_action_fallback_text": "You act on that move, and the situation answers that move right away.",
+    "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
+    "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
+    "semantic_mutation_write_sites": [
+      {
+        "mutation_id": "07046bbcdb25",
+        "write_site_family": "repair",
+        "write_site_file": "game/upstream_response_repairs.py",
+        "write_site_function": "build_upstream_prepared_emission_payload",
+        "before_semantic_hash": "e3b0c44298fc1c14",
+        "after_semantic_hash": "75e471cc6f23dc31",
+        "selected_active_stream": false,
+        "candidate_only": true,
+        "owner": "game.upstream_response_repairs",
+        "source": "prepared_answer_fallback_text",
+        "mutation_reason": "candidate_creation:answer_upstream_prepared_repair",
+        "compatibility_status": "diagnostic_only"
+      },
+      {
+        "mutation_id": "634bea14f879",
+        "write_site_family": "repair",
+        "write_site_file": "game/upstream_response_repairs.py",
+        "write_site_function": "build_upstream_prepared_emission_payload",
+        "before_semantic_hash": "e3b0c44298fc1c14",
+        "after_semantic_hash": "9d0a8c3e14ad45c9",
+        "selected_active_stream": false,
+        "candidate_only": true,
+        "owner": "game.upstream_response_repairs",
+        "source": "prepared_action_fallback_text",
+        "mutation_reason": "candidate_creation:action_outcome_upstream_prepared_repair",
+        "compatibility_status": "diagnostic_only"
+      }
+    ],
+    "realization_fallback_family": "upstream_prepared_emission"
+  }
+}

@@ -1,0 +1,820 @@
+{
+  "campaign_id": "pr_play_05",
+  "campaign_name": "PR-PLAY-05 \u2014 Opening Regression Closure and Generation Diagnostics",
+  "campaign_date": "2026-10-27",
+  "purpose": "Bounded offline regression closure and opt-in structural diagnostics; no live authority.",
+  "objective_status": "B \u2014 Conditionally ready for one controlled live opening after external review",
+  "executive_summary": "Two obsolete placeholder/journal fixtures repaired with valid declared structured openings. Three rich emission failures reproduced on hash-verified pre04 API and explicitly excluded, unchanged and unskipped. Existing ledger now retains structural SDK extraction/parsing/finish and final acceptance/commit evidence. 39 focused checks pass; broader 238 pass and 5 demonstrated preexisting failures. No live calls, prompt/schema/model/cap changes, extra provider operations, normal-save/frozen/experimental changes, commit or push.",
+  "primary_report": "development/campaigns/product_realization/pr_play_05/08_final_verdict_and_handoff.md",
+  "supporting_files": [
+    {
+      "path": "game/api.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "game/gm.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "tools/atgb/accounting.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "tests/test_start_campaign_api.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "tests/test_pr_play_05_diagnostics.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "tests/test_pr_play_05_emission_evidence.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "tests/helpers/pr_play_05_http_capture.py",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/01_baseline_and_failure_reproduction.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/02_placeholder_test_closure.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/03_rich_text_emission_investigation.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/04_provider_diagnostic_implementation.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/05_diagnostic_validation_matrix.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/06_integrated_regression_and_performance.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/07_live_test_readiness.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/08_final_verdict_and_handoff.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_05/PR_PLAY_05_LIVE_OPENING_TEST.txt",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/head.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/status_before.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/status_after.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_hashes.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/integrity.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/scope_verification.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/historical_facts.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/comparison_provenance.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/reconstruct_pre04_api.patch",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/source.diff",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/performance.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission_comparison.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/test_totals.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/integrated.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/integrated.xml",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/placeholder_http.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_remaining.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_remaining.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_accounting.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_accounting.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission.xml",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission_pre04.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission_pre04.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/run_checks.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/run_additional.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/prepare_comparison.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/finalize_evidence.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/measure.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/write_reports.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/package.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_1.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_1.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_2.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_2.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_3.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_3.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_4.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_4.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_5.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry_5.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_1.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_1.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_2.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_2.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_3.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_3.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_4.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_4.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_5.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/fixed_5.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_1.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_1.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_2.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_2.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_3.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_3.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_4.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_4.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_5.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/pre04_5.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_1.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_1.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_2.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_2.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_3.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_3.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_4.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_4.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_5.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/baseline_5.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_1.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_1.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_2.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_2.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_3.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_3.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_4.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_4.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_5.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/repeat_5.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_export.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_export.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_http.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_http.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_ordinary.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_ordinary.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_provider.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_provider.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_structured.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/regression_structured.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/provider_final.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/provider_final.txt",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry/docs/NEXT_SESSION.md",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry/game/api.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry/game/gm.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry/game/provider_budget.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry/tests/test_start_campaign_api.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/entry/tools/atgb/accounting.py",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/entry_1/test_start_campaign_emits_opening_and_sets_started.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/entry_2/test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/entry_3/test_start_campaign_promotes_valid_upstream_prepared_scene_opening.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/entry_4/test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/entry_5/test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/fixed_1/test_start_campaign_emits_opening_and_sets_started.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/fixed_2/test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/fixed_3/test_start_campaign_promotes_valid_upstream_prepared_scene_opening.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/fixed_4/test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_absent.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/http/fixed_5/test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/budget.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/concurrent.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D1.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D10.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D2.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D3.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D4.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D5.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D6.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D7.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D8.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/D9.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/extraction.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/placeholder.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/repeat.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/retry.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/diagnostics/validation.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission/prepared.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission/reconcile.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission/rich.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission_pre04/prepared.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission_pre04/reconcile.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "artifacts/pr_play_05/emission_pre04/rich.json",
+      "role": "review_evidence",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "source_or_report",
+      "why": "Explicit PR-PLAY-05 report, exact source/fixture, bounded regression result, diagnostic boundary or integrity evidence."
+    }
+  ],
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "Supported SDK output-text extraction; opt-in existing ledger observations; correlated final opening acceptance/commit disposition."
+    ],
+    "validation": [
+      "Two journal fixtures repaired with actual structured declarations; D1\u2013D10/native SDK/HTTP/repeated/retry/concurrent/budget controls; rich contract assertions retained."
+    ],
+    "tooling": [
+      "Existing accounting reader recognizes explicit diagnostic observations without changing request lifecycle counts."
+    ],
+    "documentation": [
+      "Eight reports, exact one-Start PowerShell procedure, canonical NEXT_SESSION."
+    ],
+    "generated_artifacts": [
+      "Isolated pre04 comparison, HTTP response excerpts, structural diagnostics, test logs, entry-to-final diff and protected hashes."
+    ]
+  },
+  "testing": {
+    "focused": "39 passed; all 18 PR-PLAY-04 checks retained. Three rich boundary capture controls also pass on current and pre04 source.",
+    "broader": "238 passed / 5 demonstrated preexisting failures; exact files and logs in report 06.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Production endpoint, SDK extraction/parser/validation/commit and guarded HTTP controls; synthetic SDK transport only.",
+    "model_runtime_boundary": "No live provider calls or connectivity diagnostics. Structural evidence only; no ATGB/gameplay-quality or independent-generalization result.",
+    "new_regressions": "None identified within the tested slice.",
+    "pre_existing_failures": "Three rich emission/telemetry/prepared precedence conflicts; stale accounting attestation; existing stew-price conversation assertion. All reproduced on earlier source; explicitly excluded."
+  },
+  "decisions_requiring_human_review": [
+    "Review verdict B and the preexisting exclusions; accept or decline the single-Start operator procedure. No live attempt performed or scheduled."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Original generation cause remains unknown; metadata may still be insufficient to explain specific raw content. No raw-capture mode added."
+    ],
+    "pre_existing": [
+      "Rich emission preservation/prepared promotion/telemetry conflicts; stale frozen source attestation; conversation assertion. Extensive dirty entry tree retained."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Live generation success, historical confirmed truncation, rendered UI behavior, statistical reliability, full-suite or benchmark acceptance."
+  ],
+  "recommended_next_step": "External review of this package, then separately approved operator execution of PR_PLAY_05_LIVE_OPENING_TEST.txt, exactly one Start and stop/export.",
+  "self_contained_review_test": "Eight reports, exact manual commands, actual HTTP bodies, boundary comparisons and D1\u2013D10 results are included with source hashes. No secrets or unrelated campaign saves included."
+}

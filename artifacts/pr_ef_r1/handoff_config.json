@@ -1,0 +1,676 @@
+{
+  "campaign_id": "pr_ef_r1_semantic_handoff_20261016",
+  "campaign_name": "PR-EF-R1 — Semantic Ownership & Production Handoff Repair",
+  "campaign_date": "2026-10-16",
+  "purpose": "Bounded repair and fresh production qualification; stop before PR-EG.",
+  "objective_status": "REQUIRES FURTHER REPAIR",
+  "executive_summary": "# 01 — Executive Summary\n\n**C — REQUIRES FURTHER REPAIR. Stop before PR-EG.**\n\nRepaired same-call semantic ownership guidance/normalization, structured pending continuation, movement handoff, speech-versus-travel scope abstention, GM clarification, ambiguity safety and causal answer relevance. Successful authoritative clue discovery now uses its existing public result without redundant narration/retry, through the retained final-emission path.\n\nExact-final-code sample 5 passes all ten turns using fresh provider outputs through production /api/chat, one continuous disposable campaign, including NPC follow-up, inspection, causal explanation, withdrawal, save/load and reachable movement. Samples 3 and 4 also pass, with meaningfully different phrasing, before a subsequent ambiguity-only gate fix. Earlier failed attempts remain preserved. This establishes the formerly missing scenario evidence, not universal competence.\n\nRemaining correctness failures include a resolved NPC receiving unidentified-person prose, generic no-one response to another NPC request and a captured ancillary gesture blocking supported dialogue. Final-prompt holdouts were not freshly resampled after later refinements: final holdout behavior is recorded-provider evidence. These gaps and a new presentation assertion prevent an unqualified acceptance claim.\n\nRegression: 271 passing / 30 failing before; 293 passing / 26 failing after, including 18 new passing R1 checks. Five inherited failures resolve; one new wording-sensitive failure remains. No new authority/persistence failing ID in the final comparison. Active data unchanged: True.\n",
+  "changes": {
+    "production": [
+      "Schema presentation, prompt/context and conservative label reconciliation.",
+      "Semantic continuation, ambiguity/scope and public causal evidence.",
+      "Retain bridge action/context and successful discovery emission.",
+      "Consume grounded normalized movement in existing contract.",
+      "Carry authored visible target labels."
+    ],
+    "validation": [
+      "18 R1 checks; 24 fresh semantic holdouts and final recorded audit; five continuous fresh-provider HTTP conversations."
+    ],
+    "documentation": [
+      "15 required reports, full evidence, exact test comparison and bounded source diff."
+    ]
+  },
+  "testing": {
+    "focused": "18 R1 tests pass.",
+    "broader": "271 pass/30 fail -> 293 pass/26 fail; 5 inherited failures resolved, 1 new presentation failure.",
+    "full_suite": "Not run; established comparison family only.",
+    "runtime_validation": "Exact-final sample 5 passes 10/10; 3/4 also pass before final ambiguity-only gate. Failed samples retained.",
+    "model_runtime_boundary": "gpt-4.1-mini; 75 requests within 80 ceiling; disposable authored data only.",
+    "new_regressions": "['tests.test_pr_du_player_pipeline::test_pr_du_four_action_sequence_and_ooc_through_production_chat']",
+    "pre_existing_failures": "25 inherited failing IDs remain."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Resolved NPC sometimes receives unidentified-person or generic no-one fallback.",
+      "Captured ancillary gesture blocks ASK; final-prompt holdouts not freshly resampled.",
+      "New notice-board presentation assertion."
+    ],
+    "pre_existing": [
+      "25 inherited failures and intermittent Windows file replacement denial."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review conservative C recommendation and remaining correctness defects before PR-EG."
+  ],
+  "missing_concepts": [
+    "Formal campaign-start workflow and PR-EG dialogue quality deferred."
+  ],
+  "does_not_prove": [
+    "General conversational competence.",
+    "Fresh final-prompt holdout accuracy.",
+    "No regressions outside the comparison family."
+  ],
+  "recommended_next_step": "External review of PR-EF-R1. Repair remaining conversational defects before PR-EG.",
+  "primary_report": "artifacts/pr_ef_r1/REVIEW.md",
+  "evidence_packets": [],
+  "max_file_bytes": 16777216,
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_ef_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/03_SEMANTIC_OWNERSHIP_DIAGNOSIS.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/04_INTERPRETATION_CONTRACT_CHANGES.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/05_CONTINUATION_AND_CONTEXT_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/06_PRODUCTION_HANDOFF_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/07_GROUNDED_ANSWER_RELEVANCE.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/08_SEMANTIC_HOLDOUT_RESULTS.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/09_FRESH_LIVE_CONVERSATION_TRANSCRIPTS.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/10_AUTHORITY_AND_PERSISTENCE_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/11_PERFORMANCE_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/12_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/13_REMAINING_ISSUES.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/14_FINAL_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/15_CHANGED_FILE_INVENTORY.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/active_data_hashes_before.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/active_data_preservation.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/availability.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/availability.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/baseline.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/BASELINE.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/baseline_command.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/baseline_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/baseline_output.txt",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/baseline_profile.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/baseline_recorded_holdouts.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/budget.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/bundle_verification.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_1.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_1.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_2.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_2.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_3.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_3.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_4.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_4.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_5.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/conversation_5.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/evidence_encoding_conversion.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/final_command.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/final_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/final_output.txt",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/final_profile.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/focused_final.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/focused_initial.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/holdouts_1.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/holdouts_1.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/holdouts_2.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/holdouts_3.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/independent_holdouts.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/intermediate_final2_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/intermediate_final2_output.txt",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/intermediate_final_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/intermediate_final_output.txt",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/new_final.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/new_initial.xml",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/operation_handoff_audit.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/ORIGINAL_REQUEST.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/performance_comparison.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/post_recorded_holdouts.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/probe_availability.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/pr_ef_r1_only.patch",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/regression_comparison.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/replay_post.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/REVIEW.md",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r1/revision.txt",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/run_baseline.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/run_final.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/semantic_audit.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_hashes.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/status_before.txt",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/transcript_audit.json",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/api.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/conversational_orchestration.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/live_chat_interpretation.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/ordinary_semantic_ownership.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/player_interpretation_bridge.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/scene_destination_binding.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r1/source_before/social.py",
+      "role": "evidence",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/ordinary_semantic_ownership.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/player_interpretation_bridge.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_ef_r1_semantic_handoff.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/validate_pr_ef_r1.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/build_pr_ef_r1_review.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/replay_pr_ef_r1_baseline.py",
+      "role": "source",
+      "why": "PR-EF-R1 report, reproducible source, baseline or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "ZIP includes all 15 reports, complete exact-final raw/provider/HTTP/state records, earlier failures, usage, JUnit, snapshots, bounded diff and changed source/tests/tools with SHA-256 manifest. No dependencies, .env or active saves."
+}

@@ -1,0 +1,82 @@
+{
+  "enabled": false,
+  "trace": {
+    "trigger_source": "none",
+    "active_target_id": null,
+    "active_npc_reply_kind": null,
+    "question_detected_from_player_text": false,
+    "answer_pressure_followup_detected": false,
+    "strict_social_answer_seek_override": false,
+    "same_interlocutor_followup": false,
+    "answer_pressure_suppressed_because": [
+      "no_active_interlocutor",
+      "no_prior_log_exchange",
+      "not_question_or_answer_pressure"
+    ],
+    "answer_pressure_family": null,
+    "answer_pressure_anchor_kind": null,
+    "contradiction_followup_detected": false,
+    "explanation_followup_detected": false,
+    "insufficiency_followup_detected": false,
+    "short_followup_anchor_detected": false,
+    "anchor_tokens_extracted": [],
+    "anchor_token_matched": null,
+    "anchor_followup_detected": false,
+    "explanation_of_recent_anchor_followup": false,
+    "recent_reference_clarification_detected": false,
+    "recent_reference_kind": null,
+    "recent_reference_phrase_matched": null,
+    "clarification_prompt_shape": null,
+    "correction_reask_followup_detected": false,
+    "answer_pressure_reasons": [],
+    "partial_answer_permitted": false
+  },
+  "player_direct_question": false,
+  "answer_required": false,
+  "answer_must_come_first": false,
+  "expected_voice": "either",
+  "expected_answer_shape": "direct",
+  "allowed_partial_reasons": [],
+  "forbid_deflection": false,
+  "forbid_generic_nonanswer": false,
+  "require_concrete_payload": false,
+  "concrete_payload_any_of": [],
+  "answer_exposition_plan": {
+    "enabled": false,
+    "answer_required": false,
+    "answer_intent": "none",
+    "source": {
+      "derived_from_ctir": true,
+      "ctir_sections": [],
+      "derivation_codes": [
+        "answer_exposition_plan:derive"
+      ]
+    },
+    "facts": [],
+    "constraints": {
+      "forbid_invention": true,
+      "forbid_hidden_truth_leak": true,
+      "forbid_prompt_layer_reasoning": true,
+      "allowed_partial_reasons": []
+    },
+    "voice": {
+      "expected_voice": "either",
+      "delivery_mode": "plain_answer"
+    },
+    "delivery": {
+      "answer_must_come_first": false,
+      "max_sentences_hint": null,
+      "must_include_fact_ids": [],
+      "optional_fact_ids": [],
+      "forbidden_moves": [
+        "no_generic_fallback",
+        "no_resultless_outcome"
+      ]
+    },
+    "debug": {
+      "derivation_codes": [
+        "answer_exposition_plan:derive"
+      ]
+    }
+  }
+}

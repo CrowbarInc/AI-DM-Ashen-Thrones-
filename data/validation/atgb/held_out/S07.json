@@ -1,0 +1,112 @@
+{
+  "scenario_id": "S07",
+  "title": "In the queue",
+  "catalog_heading": "S07 — In the queue",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "held_out",
+  "catalog_partition": "development-visible",
+  "partition_note": "ATGB-02 moves this four-turn initiative scenario from development-visible to held-out. The player lines and behavioral criteria are unchanged.",
+  "evidence_status": "held_out_previously_exposed",
+  "evidence_status_note": "S07 was printed in the ATGB-01 review catalog as a development-visible scenario. The held-out partition is preserved for later discipline. It is not fully independent unseen evaluation data.",
+  "primary_capability": "initiative_and_naturalness",
+  "secondary_capabilities": ["response_relevance", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate, opening description available, including rain and frayed banners. The runner is visibly hawking.",
+  "authoritative_facts": [
+    "Rain, queue, frayed banners, stew, and rumor.",
+    "No patrol question has been asked."
+  ],
+  "npc_knowledge": [
+    "No one is required to volunteer the route clue, Thoran, or the route change."
+  ],
+  "expected_outcomes": [
+    "Small talk stays small.",
+    "The banner remark does not become a dossier.",
+    "The shout is identified as stew and rumor.",
+    "The correction drops the rumor."
+  ],
+  "acceptable_variations": [
+    "One grounded hook, such as the crush or the runner's shout, may appear inside S07.1. It is an offer, not a briefing."
+  ],
+  "unacceptable_behaviors": [
+    "An unprompted patrol report.",
+    "A three-item command menu.",
+    "Anti-echo that consumes the whole reply.",
+    "Invented crowd dialogue about why refugees fled."
+  ],
+  "required_evidence": ["Shared packet. Narration-quality notes sit in the severity field, not in a second score."],
+  "setup_dependencies": [
+    "Local small talk has no separate mechanical owner. Success is a non-mutating conversational reply. The scenario does not require a mood system."
+  ],
+  "determinism": "provider-dependent for naturalness. Host lane may show non-mutation and must leave naturalness unchecked.",
+  "turns": [
+    {
+      "turn_id": "S07.1",
+      "catalog_heading": "S07.1 — primary: initiative and naturalness",
+      "primary_capability": "initiative_and_naturalness",
+      "player_input": "Miserable rain for a queue this long.",
+      "communicative_act": "In-character remark, not an investigation command.",
+      "interpretation_pass": "In-character remark, not an investigation command.",
+      "response_pass": "A human-scale reply about the rain or the queue. At most one grounded hook.",
+      "authority_pass": "No travel and no new fact.",
+      "acceptable_variations": ["One grounded hook, such as the crush or the runner's shout, may appear. It is an offer, not a briefing."],
+      "unacceptable_behaviors": ["An unprompted patrol report."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Shared packet."]
+    },
+    {
+      "turn_id": "S07.2",
+      "catalog_heading": "S07.2 — primary: initiative and naturalness",
+      "primary_capability": "initiative_and_naturalness",
+      "player_input": "The banners look about finished.",
+      "communicative_act": "Continuation of the observation. Frayed banners are already in the opening.",
+      "interpretation_pass": "Continuation of the observation. Frayed banners are already in the opening.",
+      "response_pass": "Stays with that observation for a beat. Does not open the missing-patrol briefing.",
+      "authority_pass": "No new heraldry and no noble house.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["A mechanical action menu."],
+      "clarification_expected": "none",
+      "clarification_notes": "unnecessary_fail if the player is asked to choose a mechanical action.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the queue conversation is still the conversation.",
+      "required_evidence": ["Shared packet."]
+    },
+    {
+      "turn_id": "S07.3",
+      "catalog_heading": "S07.3 — primary: initiative and naturalness",
+      "primary_capability": "initiative_and_naturalness",
+      "player_input": "The one shouting — what's he offering?",
+      "communicative_act": "A shift to the runner's visible offer.",
+      "interpretation_pass": "A shift to the runner's visible offer. Binding tavern_runner is appropriate. A GM description of the shout also passes if the offer is right.",
+      "response_pass": "Hot stew and rumor.",
+      "authority_pass": "No price and no patrol destination beyond the fact that a rumor is on offer. Inventing a second hawker is an authority failure.",
+      "acceptable_variations": ["A GM description of the shout passes if the offer is right."],
+      "unacceptable_behaviors": ["Inventing a second hawker."],
+      "clarification_expected": "none",
+      "clarification_notes": "none, unless several people are shouting, which the visible scene does not support.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved for the gate. The player did not ask to leave.",
+      "required_evidence": ["Shared packet."]
+    },
+    {
+      "turn_id": "S07.4",
+      "catalog_heading": "S07.4 — primary: response relevance",
+      "primary_capability": "response_relevance",
+      "player_input": "Leave the rumor. I only wanted to know what he's selling.",
+      "communicative_act": "Correction toward the food offer. The visible offer includes both stew and rumor, and the player now narrows it.",
+      "interpretation_pass": "Correction toward the food offer.",
+      "response_pass": "Stew, without the patrol story.",
+      "authority_pass": "No price and no bowl placed in inventory.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Delivering the patrol story."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the shouting runner from S07.3 is still the seller.",
+      "required_evidence": ["Shared packet."]
+    }
+  ]
+}

@@ -1,0 +1,1854 @@
+{
+  "campaign_id": "atgb_03c_live_baseline_continuation",
+  "campaign_name": "ATGB-03C Initial Live Conversational Baseline Continuation",
+  "campaign_date": "2026-10-18",
+  "purpose": "Capture the remaining approved live conversations using verified ATGB-03B accounting without changing gameplay.",
+  "objective_status": "24/24 CONTINUATION TURNS CAPTURED; HUMAN REVIEW PENDING; OPENING DELIVERY LIMITED",
+  "executive_summary": "24 new turns; 37/37 unique baseline turns available. S04 full trial 2 is separate from original partial trial 1. 23 admissions reconciled. S07/S09 opening delivery absent before first turn; inspect setup caveats before scoring. All judgments pending; no gameplay-performance result or improvement claim.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "No criteria or rubric changes. Provider-disabled readiness and dispatch-owner tests rerun."
+    ],
+    "tooling": [
+      "Campaign-only preparation/execution/packaging wrappers under artifacts/atgb/atgb_03c; reviewed harness unchanged."
+    ],
+    "documentation": [
+      "Execution report, coverage summary, current session orientation."
+    ],
+    "generated_artifacts": [
+      "Seven scenario evidence packages, raw ledgers, isolation/preflight evidence, opening context analysis, approved scoring worksheets and review ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "104 checks: 103 pass, 1 Windows reset failure; targeted reset reproducibility retry passes. All evidence retained.",
+    "broader": "No broad regression rerun; production source unchanged.",
+    "full_suite": "Not run.",
+    "runtime_validation": "24 live API player turns; ten final provider-disabled preflights; per-live-scenario preflights.",
+    "model_runtime_boundary": "OpenAI gpt-4.1-mini; unchanged model routing; TestClient production API, no browser render check.",
+    "new_regressions": "No production change. Opening setup limitations are exposed, not repaired.",
+    "pre_existing_failures": "Historical unrelated regression failures unchanged; Windows reset denial retained."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "S07/S09 authored opening context was not delivered before fixture turns; dependent outcomes unmeasured.",
+      "Every human judgment remains pending.",
+      "Dollar expenditure and SDK transport retry counts unavailable."
+    ],
+    "pre_existing": [
+      "Original S04 partial telemetry remains unavailable and completion-only historical ledger cannot certify admissions.",
+      "Extensive pre-existing dirty worktree and transient Windows reset write denials."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review exact exchanges and opening setup limitations; assign interpretation, response and authority separately with uncertain/not evaluated where unsupported.",
+    "Do not treat this captured baseline as completed gameplay-performance measurement before human review. No repair campaign authorized."
+  ],
+  "missing_concepts": [
+    "Delivered opening context is not part of the approved silent-reset chat worker. No new opening injection implemented."
+  ],
+  "does_not_prove": [
+    "Conversational improvement, judged gameplay success, independent held-out generalization, multi-environment performance, full regression, browser rendering or absolute SDK transport request bounds."
+  ],
+  "recommended_next_step": "Stop and await human review. Score only supported criteria; retain original/continuation version provenance and separate historical partial S04.",
+  "primary_report": "development/reports/atgb_03c_live_baseline_continuation.md",
+  "evidence_packets": [
+    "artifacts/atgb/atgb_03c/behavioral_evidence"
+  ],
+  "self_contained_review_test": "Bundle verification checks required review sections, every packaged canonical hash, exact approved lines and order, 24 new and 37 unique worksheet rows with no human judgments, original partial S04 separation, lifecycle reconciliation, starting-state evidence and all seven transcripts.",
+  "configuration_source": "artifacts/atgb/atgb_03c/provenance_before.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_03/S01/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/accounting_readiness.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/accounting_readiness_final.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/baseline_coverage.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/baseline_coverage.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/behavioral_evidence/evidence_manifest.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/behavioral_evidence/evidence_summary.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/campaign_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/campaign_usage.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_review_source.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/continuation_review_source.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/continuation_worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/continuation_worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/execute.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/export_authorization.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/finalize.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/focused.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/focused_unsandboxed.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/focused_unsandboxed.xml",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/initial_git_status.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/live_console.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/opening_context.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_console.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_final/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_final/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_final/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_final/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_final_console.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_verified/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_verified/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_verified/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_verified/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preflight_verified_console.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/prepare.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/preservation_checks.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/provenance_before.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/provider_accounting.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/reset_retry.txt",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/reset_retry.xml",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/execution_status.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/provider_usage.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/report.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/result.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/review_status.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/atgb-job.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/atgb-worker.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/combat.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/session.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/session_log.jsonl",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/transcript.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/wall_clock.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/worksheet.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/worksheet.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/scenario_readiness.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/turn_latency.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/validation_results.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/verify_bundle.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/campaign.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/character.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/conditions.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/market_quarter.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/old_milestone.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/world.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/README.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_execution.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_03_initial_live_baseline.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_03b_provider_accounting_integrity.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/__init__.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/accounting.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/baseline.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/budget.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/fixtures.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/preflight.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/provider_accounting_integrity.json",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/results.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/worksheet.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_atgb.py",
+      "role": "live_conversation_review_evidence",
+      "why": "Review capture, provenance, safeguards, setup limitations and pending human judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

@@ -1,0 +1,583 @@
+{
+  "status": "completed",
+  "mode": "baseline",
+  "model": "gpt-4.1-mini",
+  "summary": {
+    "turns": 30,
+    "conversations": [
+      "labeled_harbor_direct",
+      "labeled_harbor_gap"
+    ],
+    "integrity_failures": [
+      {
+        "conversation": "labeled_harbor_gap",
+        "turn": 1,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "harbor bell"
+        ]
+      },
+      {
+        "conversation": "labeled_harbor_gap",
+        "turn": 3,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "harbor bell"
+        ]
+      },
+      {
+        "conversation": "labeled_harbor_gap",
+        "turn": 15,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "unattended"
+        ]
+      },
+      {
+        "conversation": "labeled_harbor_direct",
+        "turn": 1,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "harbor bell"
+        ]
+      }
+    ],
+    "intent": {
+      "n": 29,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "addressee": {
+      "n": 29,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "subject": {
+      "n": 29,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "relevance": {
+      "n": 29,
+      "ok": 23,
+      "rate": 0.7931034482758621
+    },
+    "sufficiency": {
+      "n": 29,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "corrections": {
+      "n": 4,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "followups": {
+      "n": 8,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "recovery": {
+      "n": 4,
+      "ok": 0,
+      "rate": 0.0
+    },
+    "quality_mean": 0.1,
+    "playability_mean": 0.1,
+    "quality_ge_2": 1,
+    "playability_ge_2": 1,
+    "quality_n": 30,
+    "provider_calls": 31,
+    "calls_per_turn_mean": 1.0333333333333334,
+    "input_tokens_mean": 1352.0645161290322,
+    "input_tokens_p95": 1984,
+    "output_tokens_mean": 128.51612903225808,
+    "turn_input_tokens_mean": 1746.4166666666667,
+    "turn_input_tokens_p95": 2089,
+    "latency_mean_ms": 2111.9924333333333,
+    "latency_median_ms": 2326.5355,
+    "latency_p95_ms": 4273.394,
+    "latency_max_ms": 4347.101,
+    "provider_latency_p95_ms": 2588.907,
+    "retry_calls": 0,
+    "models": [
+      "gpt-4.1-mini-2025-04-14"
+    ]
+  },
+  "budget": {
+    "requests": 31,
+    "input_tokens": 41914,
+    "output_tokens": 3984,
+    "total_tokens": 45898,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0ba22190443dd53f006ad3b490caf087d29e704d74e4a93daa",
+        "input_tokens": 1896,
+        "output_tokens": 192,
+        "total_tokens": 2088,
+        "latency_ms": 2588.907,
+        "estimated_input_tokens": 3208,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_001bdd03a94ee703006ad3b4937c2887d2bf363cd1e9088a15",
+        "input_tokens": 193,
+        "output_tokens": 14,
+        "total_tokens": 207,
+        "latency_ms": 1509.649,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0bcb20e39eee1c7e006ad3b494f49887d29bc1f880bce02b6d",
+        "input_tokens": 1918,
+        "output_tokens": 203,
+        "total_tokens": 2121,
+        "latency_ms": 2141.529,
+        "estimated_input_tokens": 3236,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_02e5d41aa00f4ae5006ad3b497360887d2a05debae588e6bf0",
+        "input_tokens": 1933,
+        "output_tokens": 205,
+        "total_tokens": 2138,
+        "latency_ms": 2203.356,
+        "estimated_input_tokens": 3243,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a636b9cceda873b006ad3b499cc6487d29f943c5777bb748b",
+        "input_tokens": 1956,
+        "output_tokens": 169,
+        "total_tokens": 2125,
+        "latency_ms": 2137.231,
+        "estimated_input_tokens": 3269,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a438da4702f3827006ad3b49c073087d29a0ebb054b2fcd35",
+        "input_tokens": 1958,
+        "output_tokens": 170,
+        "total_tokens": 2128,
+        "latency_ms": 2677.795,
+        "estimated_input_tokens": 3270,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_012a50d51d51599b006ad3b49ec73087d2a2e3be0332a3aed3",
+        "input_tokens": 158,
+        "output_tokens": 21,
+        "total_tokens": 179,
+        "latency_ms": 1059.248,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_032feb04a2bc1bda006ad3b49febe487d296221dfca1d1abc2",
+        "input_tokens": 1987,
+        "output_tokens": 185,
+        "total_tokens": 2172,
+        "latency_ms": 2378.042,
+        "estimated_input_tokens": 3316,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0160d7f6357d3c78006ad3b4a2699487d29556ed6ba0492c2a",
+        "input_tokens": 1883,
+        "output_tokens": 204,
+        "total_tokens": 2087,
+        "latency_ms": 2561.133,
+        "estimated_input_tokens": 3189,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0d665616a6c362f1006ad3b4a4feec87d285c3144b4763886c",
+        "input_tokens": 156,
+        "output_tokens": 9,
+        "total_tokens": 165,
+        "latency_ms": 1655.524,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0c24252dc550aaf9006ad3b4a6c6cc87d2b95097123e822b6e",
+        "input_tokens": 1842,
+        "output_tokens": 180,
+        "total_tokens": 2022,
+        "latency_ms": 2072.81,
+        "estimated_input_tokens": 3131,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_075fb9476dcbc33a006ad3b4a8dcac87d2adf6eecbbf3fc611",
+        "input_tokens": 164,
+        "output_tokens": 13,
+        "total_tokens": 177,
+        "latency_ms": 1151.944,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a93c2bb41a9408f006ad3b4aa55d487d2b7ba9cba253e80ba",
+        "input_tokens": 1891,
+        "output_tokens": 176,
+        "total_tokens": 2067,
+        "latency_ms": 2064.711,
+        "estimated_input_tokens": 3182,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0ebe3fd52326b7dc006ad3b4ac5e3487d290dd5da732cf4015",
+        "input_tokens": 157,
+        "output_tokens": 9,
+        "total_tokens": 166,
+        "latency_ms": 1042.825,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a0d6daa9fdac7ae006ad3b4ad9c1887d2ba7384b6585e98ff",
+        "input_tokens": 1878,
+        "output_tokens": 178,
+        "total_tokens": 2056,
+        "latency_ms": 2423.976,
+        "estimated_input_tokens": 3166,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_04573d90f5afae5c006ad3b4b052d887d28d37d18279c28073",
+        "input_tokens": 1809,
+        "output_tokens": 187,
+        "total_tokens": 1996,
+        "latency_ms": 2456.422,
+        "estimated_input_tokens": 3094,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_055a859aa010acc7006ad3b4b30b3487d29bef3f5edb43a713",
+        "input_tokens": 1925,
+        "output_tokens": 192,
+        "total_tokens": 2117,
+        "latency_ms": 2421.65,
+        "estimated_input_tokens": 3233,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0526071ab17de716006ad3b4b56c1887d2b04fc95527a10f82",
+        "input_tokens": 1994,
+        "output_tokens": 182,
+        "total_tokens": 2176,
+        "latency_ms": 2065.023,
+        "estimated_input_tokens": 3339,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0d4118cf4d5c58e8006ad3b4b793bc87d2a6fb5a797c342f0e",
+        "input_tokens": 1975,
+        "output_tokens": 190,
+        "total_tokens": 2165,
+        "latency_ms": 2243.785,
+        "estimated_input_tokens": 3315,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0a9a914be129ad6f006ad3b4ba670887d29c796e56aa7499ba",
+        "input_tokens": 1917,
+        "output_tokens": 168,
+        "total_tokens": 2085,
+        "latency_ms": 2299.548,
+        "estimated_input_tokens": 3236,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_057340a505acd2a5006ad3b4bc5d8487d2ab1c671a884567f8",
+        "input_tokens": 158,
+        "output_tokens": 8,
+        "total_tokens": 166,
+        "latency_ms": 1222.359,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_005f4225680cb535006ad3b4bdab7087d282e52e2b10f3b2da",
+        "input_tokens": 1984,
+        "output_tokens": 167,
+        "total_tokens": 2151,
+        "latency_ms": 1870.175,
+        "estimated_input_tokens": 3317,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0800466464c243f7006ad3b4bfbc2c87d2bbc2cea447dc7256",
+        "input_tokens": 1896,
+        "output_tokens": 182,
+        "total_tokens": 2078,
+        "latency_ms": 2118.979,
+        "estimated_input_tokens": 3201,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_07ce129899f0e88f006ad3b4c1e60487d29083b02fc71add57",
+        "input_tokens": 156,
+        "output_tokens": 10,
+        "total_tokens": 166,
+        "latency_ms": 987.276,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_05d705bb2168a4cf006ad3b4c3138087d2bc21af43589e31af",
+        "input_tokens": 1838,
+        "output_tokens": 166,
+        "total_tokens": 2004,
+        "latency_ms": 2101.0,
+        "estimated_input_tokens": 3123,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0116c512e103703a006ad3b4c5365887d29b7d522ca06fbaf8",
+        "input_tokens": 162,
+        "output_tokens": 11,
+        "total_tokens": 173,
+        "latency_ms": 1244.404,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0fff801527d65952006ad3b4c6968887d2a64968824b8247e7",
+        "input_tokens": 1922,
+        "output_tokens": 209,
+        "total_tokens": 2131,
+        "latency_ms": 2250.821,
+        "estimated_input_tokens": 3239,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0388b85acea2dc50006ad3b4c8e06887d2b6e311fb356a9cd0",
+        "input_tokens": 1959,
+        "output_tokens": 197,
+        "total_tokens": 2156,
+        "latency_ms": 2655.407,
+        "estimated_input_tokens": 3297,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0d14882d115574bd006ad3b4cbe17087d2b3d9a10a3642f514",
+        "input_tokens": 189,
+        "output_tokens": 9,
+        "total_tokens": 198,
+        "latency_ms": 1318.476,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "interpretation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_02167e94eb13d773006ad3b4cd07dc87d29f36c01c1c2fceee",
+        "input_tokens": 1898,
+        "output_tokens": 169,
+        "total_tokens": 2067,
+        "latency_ms": 2024.889,
+        "estimated_input_tokens": 3217,
+        "max_output_tokens": 320,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0849d52c92baaa2d006ad3b4cf103c87d28677b1499a0c221e",
+        "input_tokens": 162,
+        "output_tokens": 9,
+        "total_tokens": 171,
+        "latency_ms": 1107.573,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      }
+    ]
+  }
+}

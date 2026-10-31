@@ -1,0 +1,2134 @@
+[
+  {
+    "family": "s00",
+    "category": "custody",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s00",
+        "text": "The surveyor keeps the amber lens in a padded case. Ownership is not recorded.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "keep",
+            "roles": {
+              "keeper": "surveyor",
+              "object": "amber lens",
+              "container": "padded case"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s00q0",
+        "family": "s00",
+        "partition": "development",
+        "category": "custody",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who keeps the amber lens?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "surveyor"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "keep",
+          "known_roles": {
+            "object": "amber lens",
+            "container": "padded case"
+          },
+          "requested_roles": [
+            "keeper"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s00q1",
+        "family": "s00",
+        "partition": "development",
+        "category": "custody",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who has custody of the amber lens?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "surveyor"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "keep",
+          "known_roles": {
+            "object": "amber lens",
+            "container": "padded case"
+          },
+          "requested_roles": [
+            "keeper"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s00q2",
+        "family": "s00",
+        "partition": "development",
+        "category": "custody",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What holds the lens while it is stored?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "padded case"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "keep",
+          "known_roles": {
+            "keeper": "surveyor",
+            "object": "amber lens"
+          },
+          "requested_roles": [
+            "container"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s00q3",
+        "family": "s00",
+        "partition": "development",
+        "category": "custody",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who keeps the lens, and who owns it?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "surveyor"
+          ],
+          "qualifiers": [],
+          "forbidden": [
+            "owner"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "keep",
+          "known_roles": {
+            "object": "amber lens",
+            "container": "padded case"
+          },
+          "requested_roles": [
+            "keeper"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s00q4",
+        "family": "s00",
+        "partition": "development",
+        "category": "custody",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who is paid to protect the amber lens?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "surveyor"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "keep",
+          "known_roles": {
+            "keeper": "surveyor",
+            "object": "amber lens",
+            "container": "padded case"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s03",
+    "category": "negation",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s03",
+        "text": "Mara did not sell the ivory key to Tovin; she lent him a copper whistle.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "lend",
+            "roles": {
+              "lender": "Mara",
+              "borrower": "Tovin",
+              "object": "copper whistle"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s03q0",
+        "family": "s03",
+        "partition": "development",
+        "category": "negation",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What did Mara lend to Tovin?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "copper whistle"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "lender": "Mara",
+            "borrower": "Tovin"
+          },
+          "requested_roles": [
+            "object"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s03q1",
+        "family": "s03",
+        "partition": "development",
+        "category": "negation",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who borrowed the copper whistle from Mara?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Tovin"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "lender": "Mara",
+            "object": "copper whistle"
+          },
+          "requested_roles": [
+            "borrower"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s03q2",
+        "family": "s03",
+        "partition": "development",
+        "category": "negation",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who lent Tovin the whistle?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Mara"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "borrower": "Tovin",
+            "object": "copper whistle"
+          },
+          "requested_roles": [
+            "lender"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s03q3",
+        "family": "s03",
+        "partition": "development",
+        "category": "negation",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who bought the ivory key from Mara?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Tovin"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "lender": "Mara",
+            "borrower": "Tovin",
+            "object": "copper whistle"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s03q4",
+        "family": "s03",
+        "partition": "development",
+        "category": "negation",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What did Tovin borrow, and what was its purchase price?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "copper whistle"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "lender": "Mara",
+            "borrower": "Tovin"
+          },
+          "requested_roles": [
+            "object"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s06",
+    "category": "unless",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s06",
+        "text": "Neri ferries passengers across the inlet unless the red flag is raised.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "ferry",
+            "roles": {
+              "ferryman": "Neri",
+              "passengers": "passengers",
+              "route": "inlet"
+            },
+            "qualifiers": [
+              "unless the red flag is raised"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s06q0",
+        "family": "s06",
+        "partition": "development",
+        "category": "unless",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who carries passengers across the inlet?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Neri"
+          ],
+          "qualifiers": [
+            "unless the red flag is raised"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ferry",
+          "known_roles": {
+            "passengers": "passengers",
+            "route": "inlet"
+          },
+          "requested_roles": [
+            "ferryman"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s06q1",
+        "family": "s06",
+        "partition": "development",
+        "category": "unless",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who operates the inlet crossing when no red flag is up?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Neri"
+          ],
+          "qualifiers": [
+            "unless the red flag is raised"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ferry",
+          "known_roles": {
+            "passengers": "passengers",
+            "route": "inlet"
+          },
+          "requested_roles": [
+            "ferryman"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s06q2",
+        "family": "s06",
+        "partition": "development",
+        "category": "unless",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What stops Neri from ferrying passengers?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "the red flag is raised"
+          ],
+          "qualifiers": [
+            "unless the red flag is raised"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ferry",
+          "known_roles": {
+            "ferryman": "Neri",
+            "passengers": "passengers",
+            "route": "inlet"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s06q3",
+        "family": "s06",
+        "partition": "development",
+        "category": "unless",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who raises the red flag?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Neri"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ferry",
+          "known_roles": {
+            "ferryman": "Neri",
+            "passengers": "passengers",
+            "route": "inlet"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s06q4",
+        "family": "s06",
+        "partition": "development",
+        "category": "unless",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who runs the ferry and how much is the fare?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Neri"
+          ],
+          "qualifiers": [
+            "unless the red flag is raised"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ferry",
+          "known_roles": {
+            "passengers": "passengers",
+            "route": "inlet"
+          },
+          "requested_roles": [
+            "ferryman"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s09",
+    "category": "might_spatial",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s09",
+        "text": "Joss might shelter the courier in the abandoned mill tonight.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "belief",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "shelter",
+            "roles": {
+              "host": "Joss",
+              "guest": "courier",
+              "place": "abandoned mill"
+            },
+            "qualifiers": [
+              "might",
+              "tonight"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s09q0",
+        "family": "s09",
+        "partition": "development",
+        "category": "might_spatial",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who might give the courier shelter?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Joss"
+          ],
+          "qualifiers": [
+            "might",
+            "tonight"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "shelter",
+          "known_roles": {
+            "guest": "courier",
+            "place": "abandoned mill"
+          },
+          "requested_roles": [
+            "host"
+          ],
+          "qualifiers": [
+            "might"
+          ]
+        }
+      },
+      {
+        "id": "s09q1",
+        "family": "s09",
+        "partition": "development",
+        "category": "might_spatial",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Where could Joss shelter the courier tonight?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "abandoned mill"
+          ],
+          "qualifiers": [
+            "might",
+            "tonight"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "shelter",
+          "known_roles": {
+            "host": "Joss",
+            "guest": "courier"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": [
+            "tonight"
+          ]
+        }
+      },
+      {
+        "id": "s09q2",
+        "family": "s09",
+        "partition": "development",
+        "category": "might_spatial",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who may be Joss's guest tonight?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "courier"
+          ],
+          "qualifiers": [
+            "might",
+            "tonight"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "shelter",
+          "known_roles": {
+            "host": "Joss",
+            "place": "abandoned mill"
+          },
+          "requested_roles": [
+            "guest"
+          ],
+          "qualifiers": [
+            "tonight"
+          ]
+        }
+      },
+      {
+        "id": "s09q3",
+        "family": "s09",
+        "partition": "development",
+        "category": "might_spatial",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who sheltered the courier last week?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Joss"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "shelter",
+          "known_roles": {
+            "host": "Joss",
+            "guest": "courier",
+            "place": "abandoned mill"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s09q4",
+        "family": "s09",
+        "partition": "development",
+        "category": "might_spatial",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who might shelter the courier and what is the courier's name?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Joss"
+          ],
+          "qualifiers": [
+            "might",
+            "tonight"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "shelter",
+          "known_roles": {
+            "guest": "courier",
+            "place": "abandoned mill"
+          },
+          "requested_roles": [
+            "host"
+          ],
+          "qualifiers": [
+            "might"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "family": "s12",
+    "category": "licensing",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s12",
+        "text": "The reed guild licenses the marsh ferrymen each spring; the harbor watch issues no such licenses.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "license",
+            "roles": {
+              "licensor": "reed guild",
+              "licensee": "marsh ferrymen"
+            },
+            "qualifiers": [
+              "each spring"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s12q0",
+        "family": "s12",
+        "partition": "development",
+        "category": "licensing",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who licenses the marsh ferrymen?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "reed guild"
+          ],
+          "qualifiers": [
+            "each spring"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "license",
+          "known_roles": {
+            "licensee": "marsh ferrymen"
+          },
+          "requested_roles": [
+            "licensor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s12q1",
+        "family": "s12",
+        "partition": "development",
+        "category": "licensing",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Whose permission lets the marsh ferrymen operate?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "reed guild"
+          ],
+          "qualifiers": [
+            "each spring"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "license",
+          "known_roles": {
+            "licensee": "marsh ferrymen"
+          },
+          "requested_roles": [
+            "licensor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s12q2",
+        "family": "s12",
+        "partition": "development",
+        "category": "licensing",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Whom does the reed guild license?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "marsh ferrymen"
+          ],
+          "qualifiers": [
+            "each spring"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "license",
+          "known_roles": {
+            "licensor": "reed guild"
+          },
+          "requested_roles": [
+            "licensee"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s12q3",
+        "family": "s12",
+        "partition": "development",
+        "category": "licensing",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who licenses the reed guild?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "marsh ferrymen"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "license",
+          "known_roles": {
+            "licensor": "reed guild",
+            "licensee": "marsh ferrymen"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s12q4",
+        "family": "s12",
+        "partition": "development",
+        "category": "licensing",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who licenses the ferrymen and how much is the fee?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "reed guild"
+          ],
+          "qualifiers": [
+            "each spring"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "license",
+          "known_roles": {
+            "licensee": "marsh ferrymen"
+          },
+          "requested_roles": [
+            "licensor"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s15",
+    "category": "hereditary_right",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s15",
+        "text": "The Yarrow family holds hereditary rights to gather reeds on the south bank, not to own the bank.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "hold_right",
+            "roles": {
+              "holder": "Yarrow family",
+              "right": "gather reeds",
+              "place": "south bank"
+            },
+            "qualifiers": [
+              "hereditary"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s15q0",
+        "family": "s15",
+        "partition": "development",
+        "category": "hereditary_right",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who holds hereditary reed gathering rights?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Yarrow family"
+          ],
+          "qualifiers": [
+            "hereditary"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "hold_right",
+          "known_roles": {
+            "right": "gather reeds",
+            "place": "south bank"
+          },
+          "requested_roles": [
+            "holder"
+          ],
+          "qualifiers": [
+            "hereditary"
+          ]
+        }
+      },
+      {
+        "id": "s15q1",
+        "family": "s15",
+        "partition": "development",
+        "category": "hereditary_right",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Which family inherits permission to harvest south bank reeds?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Yarrow family"
+          ],
+          "qualifiers": [
+            "hereditary"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "hold_right",
+          "known_roles": {
+            "right": "gather reeds",
+            "place": "south bank"
+          },
+          "requested_roles": [
+            "holder"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s15q2",
+        "family": "s15",
+        "partition": "development",
+        "category": "hereditary_right",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What can the Yarrows gather under their hereditary right?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "reeds"
+          ],
+          "qualifiers": [
+            "hereditary"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "hold_right",
+          "known_roles": {
+            "holder": "Yarrow family",
+            "right": "gather reeds",
+            "place": "south bank"
+          },
+          "requested_roles": [],
+          "qualifiers": [
+            "hereditary"
+          ]
+        }
+      },
+      {
+        "id": "s15q3",
+        "family": "s15",
+        "partition": "development",
+        "category": "hereditary_right",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who owns the south bank?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Yarrow family"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "hold_right",
+          "known_roles": {
+            "holder": "Yarrow family",
+            "right": "gather reeds",
+            "place": "south bank"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s15q4",
+        "family": "s15",
+        "partition": "development",
+        "category": "hereditary_right",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who holds the gathering right and who owns the land?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Yarrow family"
+          ],
+          "qualifiers": [
+            "hereditary"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "hold_right",
+          "known_roles": {
+            "right": "gather reeds",
+            "place": "south bank"
+          },
+          "requested_roles": [
+            "holder"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s18",
+    "category": "loan_roles",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s18",
+        "text": "Owner Tessa lent borrower Ull the silver compass until the next market day.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "lend",
+            "roles": {
+              "owner": "Tessa",
+              "borrower": "Ull",
+              "object": "silver compass"
+            },
+            "qualifiers": [
+              "until the next market day"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s18q0",
+        "family": "s18",
+        "partition": "development",
+        "category": "loan_roles",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who borrowed Tessa's compass?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Ull"
+          ],
+          "qualifiers": [
+            "until the next market day"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "owner": "Tessa",
+            "object": "silver compass"
+          },
+          "requested_roles": [
+            "borrower"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s18q1",
+        "family": "s18",
+        "partition": "development",
+        "category": "loan_roles",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Whose compass is Ull using on loan?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Tessa"
+          ],
+          "qualifiers": [
+            "until the next market day"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "borrower": "Ull",
+            "object": "silver compass"
+          },
+          "requested_roles": [
+            "owner"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s18q2",
+        "family": "s18",
+        "partition": "development",
+        "category": "loan_roles",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "When must Ull return the compass?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "the next market day"
+          ],
+          "qualifiers": [
+            "until the next market day"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "owner": "Tessa",
+            "borrower": "Ull",
+            "object": "silver compass"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s18q3",
+        "family": "s18",
+        "partition": "development",
+        "category": "loan_roles",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who borrowed the compass from Ull?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Tessa"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "owner": "Tessa",
+            "borrower": "Ull",
+            "object": "silver compass"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s18q4",
+        "family": "s18",
+        "partition": "development",
+        "category": "loan_roles",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who borrowed it and why was it needed?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Ull"
+          ],
+          "qualifiers": [
+            "until the next market day"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "lend",
+          "known_roles": {
+            "owner": "Tessa",
+            "object": "silver compass"
+          },
+          "requested_roles": [
+            "borrower"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s21",
+    "category": "unfamiliar_vouch",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s21",
+        "text": "Arbiter Fen vouches for the weights used by the saffron sellers, not for their goods.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "vouch",
+            "roles": {
+              "voucher": "Arbiter Fen",
+              "certified_object": "weights",
+              "user": "saffron sellers"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s21q0",
+        "family": "s21",
+        "partition": "development",
+        "category": "unfamiliar_vouch",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who vouches for the saffron sellers' weights?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Arbiter Fen"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "vouch",
+          "known_roles": {
+            "certified_object": "weights",
+            "user": "saffron sellers"
+          },
+          "requested_roles": [
+            "voucher"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s21q1",
+        "family": "s21",
+        "partition": "development",
+        "category": "unfamiliar_vouch",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who attests that the sellers' weights can be trusted?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Arbiter Fen"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "vouch",
+          "known_roles": {
+            "certified_object": "weights",
+            "user": "saffron sellers"
+          },
+          "requested_roles": [
+            "voucher"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s21q2",
+        "family": "s21",
+        "partition": "development",
+        "category": "unfamiliar_vouch",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What does Fen vouch for?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "weights"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "vouch",
+          "known_roles": {
+            "voucher": "Arbiter Fen",
+            "user": "saffron sellers"
+          },
+          "requested_roles": [
+            "certified_object"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s21q3",
+        "family": "s21",
+        "partition": "development",
+        "category": "unfamiliar_vouch",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who certifies the quality of the saffron?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Arbiter Fen"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "vouch",
+          "known_roles": {
+            "voucher": "Arbiter Fen",
+            "certified_object": "weights",
+            "user": "saffron sellers"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s21q4",
+        "family": "s21",
+        "partition": "development",
+        "category": "unfamiliar_vouch",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who vouches for the weights and when were they inspected?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Arbiter Fen"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "vouch",
+          "known_roles": {
+            "certified_object": "weights",
+            "user": "saffron sellers"
+          },
+          "requested_roles": [
+            "voucher"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s24",
+    "category": "unfamiliar_delegate",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s24",
+        "text": "Abbess Irra delegated the ringing of the storm bell to novice Pell, but retained authority to close the shrine.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "delegate",
+            "roles": {
+              "delegator": "Abbess Irra",
+              "delegate": "novice Pell",
+              "task": "ringing of the storm bell"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s24q0",
+        "family": "s24",
+        "partition": "development",
+        "category": "unfamiliar_delegate",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who delegated the storm bell duty?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Abbess Irra"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "delegate",
+          "known_roles": {
+            "delegate": "novice Pell",
+            "task": "ringing of the storm bell"
+          },
+          "requested_roles": [
+            "delegator"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s24q1",
+        "family": "s24",
+        "partition": "development",
+        "category": "unfamiliar_delegate",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who was entrusted with ringing the storm bell?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "novice Pell"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "delegate",
+          "known_roles": {
+            "delegator": "Abbess Irra",
+            "task": "ringing of the storm bell"
+          },
+          "requested_roles": [
+            "delegate"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s24q2",
+        "family": "s24",
+        "partition": "development",
+        "category": "unfamiliar_delegate",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who retained authority to close the shrine?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Abbess Irra"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "delegate",
+          "known_roles": {
+            "delegate": "novice Pell",
+            "task": "ringing of the storm bell"
+          },
+          "requested_roles": [
+            "delegator"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s24q3",
+        "family": "s24",
+        "partition": "development",
+        "category": "unfamiliar_delegate",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who delegated shrine closing to Pell?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Abbess Irra"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "delegate",
+          "known_roles": {
+            "delegator": "Abbess Irra",
+            "delegate": "novice Pell",
+            "task": "ringing of the storm bell"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s24q4",
+        "family": "s24",
+        "partition": "development",
+        "category": "unfamiliar_delegate",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who rings the storm bell and when is the next storm?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "novice Pell"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "delegate",
+          "known_roles": {
+            "delegator": "Abbess Irra",
+            "task": "ringing of the storm bell"
+          },
+          "requested_roles": [
+            "delegate"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s27",
+    "category": "private_knowledge",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s27",
+        "text": "The private survey diary locates the buried mint beneath the tannery.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "unknown",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "locate",
+            "roles": {
+              "document": "private survey diary",
+              "object": "buried mint",
+              "place": "tannery"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s27q0",
+        "family": "s27",
+        "partition": "development",
+        "category": "private_knowledge",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Where is the buried mint?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "tannery"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "locate",
+          "known_roles": {
+            "document": "private survey diary",
+            "object": "buried mint",
+            "place": "tannery"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s27q1",
+        "family": "s27",
+        "partition": "development",
+        "category": "private_knowledge",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Which building conceals the mint?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "tannery"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "locate",
+          "known_roles": {
+            "document": "private survey diary",
+            "object": "buried mint",
+            "place": "tannery"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s27q2",
+        "family": "s27",
+        "partition": "development",
+        "category": "private_knowledge",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who wrote the survey diary?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "locate",
+          "known_roles": {
+            "document": "private survey diary",
+            "object": "buried mint",
+            "place": "tannery"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s27q3",
+        "family": "s27",
+        "partition": "development",
+        "category": "private_knowledge",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Does the diary reveal a mint beneath the tannery?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "tannery"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "locate",
+          "known_roles": {
+            "document": "private survey diary",
+            "object": "buried mint",
+            "place": "tannery"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s27q4",
+        "family": "s27",
+        "partition": "development",
+        "category": "private_knowledge",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who can guide me to the buried mint?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "locate",
+          "known_roles": {
+            "document": "private survey diary",
+            "object": "buried mint",
+            "place": "tannery"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s30",
+    "category": "explicit_negative",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s30",
+        "text": "Senn does not guard the granary. The watch rota assigns Senn to the ferry landing instead.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "guard",
+            "roles": {
+              "guard": "Senn",
+              "protected_place": "granary"
+            },
+            "qualifiers": [
+              "does not"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s30q0",
+        "family": "s30",
+        "partition": "development",
+        "category": "explicit_negative",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who is explicitly said not to guard the granary?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Senn"
+          ],
+          "qualifiers": [
+            "does not"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "protected_place": "granary"
+          },
+          "requested_roles": [
+            "guard"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s30q1",
+        "family": "s30",
+        "partition": "development",
+        "category": "explicit_negative",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Which person has no granary guard duty according to this record?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Senn"
+          ],
+          "qualifiers": [
+            "does not"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "protected_place": "granary"
+          },
+          "requested_roles": [
+            "guard"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s30q2",
+        "family": "s30",
+        "partition": "development",
+        "category": "explicit_negative",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Where is Senn assigned on the watch rota?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "ferry landing"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "guard": "Senn",
+            "protected_place": "granary"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s30q3",
+        "family": "s30",
+        "partition": "development",
+        "category": "explicit_negative",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who guards the granary?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Senn"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "guard": "Senn",
+            "protected_place": "granary"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s30q4",
+        "family": "s30",
+        "partition": "development",
+        "category": "explicit_negative",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who is not guarding the granary and who replaces that person?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Senn"
+          ],
+          "qualifiers": [
+            "does not"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "protected_place": "granary"
+          },
+          "requested_roles": [
+            "guard"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s33",
+    "category": "bounded_narration",
+    "partition": "development",
+    "sources": [
+      {
+        "id": "s33",
+        "text": "Authorized narration describes a dry fountain beside the copper stair. It names no builder.",
+        "npc": "vesper",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "bounded_expression",
+        "supported_claims": [
+          {
+            "relationship": "describe",
+            "roles": {
+              "object": "dry fountain",
+              "landmark": "copper stair"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s33q0",
+        "family": "s33",
+        "partition": "development",
+        "category": "bounded_narration",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What stands beside the copper stair?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "dry fountain"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "describe",
+          "known_roles": {
+            "landmark": "copper stair"
+          },
+          "requested_roles": [
+            "object"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s33q1",
+        "family": "s33",
+        "partition": "development",
+        "category": "bounded_narration",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Which landmark is next to the dry fountain?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "copper stair"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "describe",
+          "known_roles": {
+            "object": "dry fountain"
+          },
+          "requested_roles": [
+            "landmark"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s33q2",
+        "family": "s33",
+        "partition": "development",
+        "category": "bounded_narration",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Where is the dry fountain described?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "beside the copper stair"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "describe",
+          "known_roles": {
+            "object": "dry fountain",
+            "landmark": "copper stair"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s33q3",
+        "family": "s33",
+        "partition": "development",
+        "category": "bounded_narration",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "Who built the dry fountain?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "describe",
+          "known_roles": {
+            "object": "dry fountain",
+            "landmark": "copper stair"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s33q4",
+        "family": "s33",
+        "partition": "development",
+        "category": "bounded_narration",
+        "npc": "vesper",
+        "context": "experiment",
+        "question": "What stands beside the stair and who built it?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "dry fountain"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "describe",
+          "known_roles": {
+            "landmark": "copper stair"
+          },
+          "requested_roles": [
+            "object"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  }
+]

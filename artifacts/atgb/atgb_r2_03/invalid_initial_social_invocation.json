@@ -1,0 +1,123 @@
+{
+  "classification": "synthetic in-memory resolver control; not historical full-state replay",
+  "session_before": {
+    "active_scene_id": "frontier_gate",
+    "turn_counter": 2,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": "tavern_runner",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged"
+    },
+    "npc_runtime": {
+      "tavern_runner": {
+        "revealed_topics": [
+          "patrol_rumor"
+        ]
+      }
+    }
+  },
+  "normalized_action": {
+    "id": "tavern_runner",
+    "label": "Tavern Runner",
+    "type": "question",
+    "prompt": "Tell me more about that.",
+    "target_id": "tavern_runner",
+    "targetEntityId": "tavern_runner",
+    "metadata": {
+      "stored_interpretation": {
+        "operation": "ASK",
+        "target_ref": "tavern_runner",
+        "visible_surface_inspection": false,
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        }
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "public_conversation_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    }
+  },
+  "bridge_metadata": {
+    "source": "stored_interpretation",
+    "accepted": true,
+    "operation": "ASK",
+    "target_ref": "tavern_runner",
+    "engine_type": "question",
+    "visible_surface_inspection": false
+  },
+  "resolution": {
+    "kind": "social_probe",
+    "action_id": "social",
+    "label": "Social action",
+    "prompt": "{'active_scene_id': 'frontier_gate', 'turn_counter': 2, 'clocks': {'suspicion': 0, 'unrest': 0, 'danger': 0}, 'interaction_context': {'active_interaction_target_id': 'tavern_runner', 'active_interaction_kind': 'social', 'interaction_mode': 'social', 'engagement_level': 'engaged'}, 'npc_runtime': {'tavern_runner': {'revealed_topics': ['patrol_rumor']}}}",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "clue_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "hint": "No matching NPC found in this scene. Narrate that the player's social attempt has no clear target or the intended person is not present.",
+    "social": {
+      "social_intent_class": "social_exchange",
+      "npc_id": null,
+      "npc_name": null,
+      "target_resolved": false,
+      "skill_check": null,
+      "npc_reply_expected": false,
+      "reply_kind": "reaction",
+      "offscene_target": false,
+      "target_source": "none",
+      "target_reason": "empty scene_id",
+      "target_candidate_id": null,
+      "target_candidate_valid": false,
+      "stale_interlocutor_cleared": false,
+      "declared_switch_detected": false,
+      "declared_switch_target_actor_id": null,
+      "continuity_overridden_by_declared_switch": false,
+      "spoken_vocative_detected": false,
+      "spoken_vocative_target_actor_id": null,
+      "continuity_overridden_by_spoken_vocative": false
+    },
+    "requires_check": false
+  },
+  "session_after": {
+    "active_scene_id": "frontier_gate",
+    "turn_counter": 2,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": "tavern_runner",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged"
+    },
+    "npc_runtime": {
+      "tavern_runner": {
+        "revealed_topics": [
+          "patrol_rumor"
+        ]
+      }
+    }
+  },
+  "world_changed_in_memory": false
+}

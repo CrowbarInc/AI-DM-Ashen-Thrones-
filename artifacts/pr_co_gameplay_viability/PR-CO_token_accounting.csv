@@ -1,0 +1,19 @@
+row_type,turn,request_index,kind,retry_attempt,retry_reason,model,input_tokens,output_tokens,cached_input_tokens,total_tokens,latency_seconds,usable_provider_output,validation_or_use,tokens_note
+request,startup,1,preflight,0,,gpt-4.1-mini-2025-04-14,24,2,0,26,2.545,true,preflight_healthy,measured
+request,T1,2,generation,0,,gpt-4.1-mini-2025-04-14,30970,128,0,31098,3.365,true,hard_invalid,measured
+request,T1,3,generation,1,hard_invalid,gpt-4.1-mini-2025-04-14,38464,67,0,38531,2.155,true,hard_invalid,measured
+request,T2,4,interpretation,0,,gpt-4.1-mini-2025-04-14,900,130,0,1030,2.382,true,proposal_returned,measured
+request,T2,5,generation,0,,gpt-4.1-mini-2025-04-14,29914,128,0,30042,2.942,true,hard_invalid,measured
+request,T2,6,generation,1,hard_invalid,gpt-4.1-mini-2025-04-14,37347,132,0,37479,2.415,true,hard_invalid,measured
+request,T3,7,generation,0,,gpt-4.1-mini-2025-04-14,35302,120,0,35422,3.108,true,hard_invalid,measured
+request,T3,8,generation,1,hard_invalid,gpt-4.1-mini-2025-04-14,43230,43,0,43273,2.841,true,hard_invalid,measured
+request,T4,9,interpretation,0,,gpt-4.1-mini-2025-04-14,960,97,0,1057,2.022,true,proposal_returned,measured
+request,T4,10,generation,0,,gpt-4.1-mini-2025-04-14,32342,1156,0,33498,8.214,true,hard_invalid,measured
+request,T4,11,generation,1,hard_invalid,gpt-4.1-mini-2025-04-14,40247,2292,0,42539,17.068,true,hard_invalid,measured
+request,T5,12,interpretation,0,,gpt-4.1-mini-2025-04-14,927,115,0,1042,1.514,true,proposal_returned_generation_not_sent,measured
+turn_aggregate,T1,,generation_plus_retry,,hard_invalid,gpt-4.1-mini-2025-04-14,69434,195,0,69629,5.520,true,both_generations_rejected,failed_attempt_tokens=69629
+turn_aggregate,T2,,interpretation_plus_two_generations,,hard_invalid,gpt-4.1-mini-2025-04-14,68161,390,0,68551,7.739,true,both_generations_rejected,failed_attempt_tokens=67521
+turn_aggregate,T3,,generation_plus_retry,,hard_invalid,gpt-4.1-mini-2025-04-14,78532,163,0,78695,5.949,true,both_generations_rejected,failed_attempt_tokens=78695
+turn_aggregate,T4,,interpretation_plus_two_generations,,hard_invalid,gpt-4.1-mini-2025-04-14,73549,3545,0,77094,27.304,true,both_generations_rejected,failed_attempt_tokens=76037
+turn_aggregate,T5,,interpretation_only,,budget_block,gpt-4.1-mini-2025-04-14,927,115,0,1042,1.514,true,no_generation,failed_attempt_tokens=0
+probe_total,T1-T5,12,all,, ,gpt-4.1-mini-2025-04-14,290627,4410,0,295037,50.571,true,see_report,retry_tokens=161822

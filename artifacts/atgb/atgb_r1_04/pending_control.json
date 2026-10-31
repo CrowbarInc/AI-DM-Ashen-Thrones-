@@ -1,0 +1,1120 @@
+{
+  "evidence_scope": "structural_only",
+  "input_classification": "synthetic_positive_control",
+  "before": {
+    "session": {
+      "active_scene_id": "waystation_courtyard",
+      "visited_scene_ids": [
+        "waystation_courtyard"
+      ],
+      "turn_counter": 0,
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "npc_runtime": {},
+      "scene_runtime": {},
+      "scene_state": {
+        "active_scene_id": "waystation_courtyard"
+      },
+      "flags": {},
+      "inventory": [],
+      "last_saved_at": "2026-10-19T09:26:48.334642Z",
+      "campaign_started": true,
+      "conversational_context": {
+        "pending_clarification": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "waystation_courtyard",
+          "original_text": "I ask one of them what happened.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "target_resolution": "ambiguous"
+        },
+        "pending_intention": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "waystation_courtyard",
+          "original_text": "I ask one of them what happened.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "target_resolution": "ambiguous"
+        },
+        "delivered_exchanges": [
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "I ask one of them what happened.",
+            "delivered_text": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 0,
+            "active": true,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "e2acecae8467ad1d341d99e619a42407d69a177dba2f2fbcda18c433a7c78211",
+            "authorization_source": "conversational_decision:unresolved_addressee",
+            "adoption_turn_identity": ""
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "CLARIFY",
+          "owner": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "I ask one of them what happened.",
+          "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "refusal_reason": null,
+          "scene_id": "waystation_courtyard"
+        }
+      }
+    },
+    "world": {
+      "settlements": [
+        {
+          "id": "cinderwatch",
+          "name": "Cinderwatch",
+          "type": "frontier_city",
+          "tags": [
+            "frontier",
+            "trade",
+            "unstable"
+          ],
+          "status": "strained",
+          "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 1,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 0,
+          "assets": []
+        }
+      ],
+      "assets": [],
+      "projects": [],
+      "world_flags": [],
+      "event_log": [],
+      "inference_rules": [],
+      "clues": {},
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "role": "guard",
+          "affiliation": "cinderwatch",
+          "disposition": "neutral",
+          "current_agenda": "patrol_gate",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "patrol",
+              "text": "A patrol went missing near the old milestone."
+            }
+          ],
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "role": "informant",
+          "affiliation": "ash_cowl",
+          "disposition": "friendly",
+          "current_agenda": "sell_rumors",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "stew",
+              "text": "Hot stew and rumors for coin."
+            }
+          ],
+          "stance_toward_player": "favorable",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara",
+          "location": "waystation_courtyard",
+          "role": "guard",
+          "disposition": "neutral",
+          "topics": [
+            {
+              "id": "street",
+              "text": "The street beyond the gate is the north road.",
+              "clue_id": "north_road"
+            }
+          ],
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "waystation_courtyard",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "corporal_bren",
+          "name": "Corporal Bren",
+          "location": "waystation_courtyard",
+          "role": "guard",
+          "description": "",
+          "disposition": "neutral",
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "waystation_courtyard",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": [],
+          "topics": []
+        }
+      ],
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks": {}
+      }
+    },
+    "scene": {
+      "scene": {
+        "id": "waystation_courtyard",
+        "location": "Waystation courtyard",
+        "summary": "A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road.",
+        "visible_facts": [
+          "A soot-streaked lantern burns beside the courtyard gate.",
+          "The side gate is barred from the other side.",
+          "Sergeant Mara looks concerned as she watches the road."
+        ],
+        "interactables": [
+          {
+            "id": "courtyard_lantern",
+            "label": "courtyard lantern",
+            "type": "examine",
+            "description": "A soot-streaked lantern burns beside the courtyard gate.",
+            "reveals_clue": "lantern_mark"
+          }
+        ],
+        "exits": [
+          {
+            "id": "courtyard_gate",
+            "label": "Courtyard gate",
+            "target_scene_id": "waystation_street",
+            "aliases": [
+              "gate",
+              "courtyard gate"
+            ]
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "lantern_mark",
+            "text": "A small maker's mark is stamped beneath the lantern."
+          }
+        ],
+        "hidden_facts": [],
+        "actions": [],
+        "objects": [],
+        "discovered_clues": [],
+        "runtime_entities": []
+      }
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          },
+          "type": "melee"
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          },
+          "type": "ranged"
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "notes": "Default template character. Import a custom sheet for campaign play."
+    },
+    "combat": {
+      "in_combat": false,
+      "player_turn_used": false,
+      "round": 0
+    }
+  },
+  "after": {
+    "session": {
+      "active_scene_id": "waystation_courtyard",
+      "visited_scene_ids": [
+        "waystation_courtyard"
+      ],
+      "turn_counter": 0,
+      "clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "npc_runtime": {},
+      "scene_runtime": {},
+      "scene_state": {
+        "active_scene_id": "waystation_courtyard"
+      },
+      "flags": {},
+      "inventory": [],
+      "last_saved_at": "2026-10-19T09:26:48.359239Z",
+      "campaign_started": true,
+      "conversational_context": {
+        "pending_clarification": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "waystation_courtyard",
+          "original_text": "I ask one of them what happened.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "target_resolution": "ambiguous",
+          "revised_text": "Instead, make that a question about the lamp."
+        },
+        "pending_intention": {
+          "kind": "ambiguous_addressee",
+          "operation": "ASK",
+          "status": "pending",
+          "scene_id": "waystation_courtyard",
+          "original_text": "I ask one of them what happened.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "target_resolution": "ambiguous",
+          "revised_text": "Instead, make that a question about the lamp."
+        },
+        "delivered_exchanges": [
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "I ask one of them what happened.",
+            "delivered_text": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 0,
+            "active": false,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "e2acecae8467ad1d341d99e619a42407d69a177dba2f2fbcda18c433a7c78211",
+            "authorization_source": "conversational_decision:unresolved_addressee",
+            "adoption_turn_identity": ""
+          },
+          {
+            "speaker_id": "",
+            "speaker_name": "",
+            "addressee": "player",
+            "ownership": "gm",
+            "player_text": "Instead, make that a question about the lamp.",
+            "delivered_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "waystation_courtyard",
+            "turn": 0,
+            "active": true,
+            "authorized_proposition": "",
+            "answer_sufficiency": "",
+            "proposition_id": "",
+            "response_integrity_digest": "be28292a093c588d4cb04a67e24cbe7bf5501f65c257c7119d70b1f4082efcf8",
+            "authorization_source": "conversational_decision:pending_intention_revised",
+            "adoption_turn_identity": ""
+          }
+        ],
+        "last_gm_exchange": {
+          "category": "CLARIFY",
+          "owner": "GM",
+          "purpose": "CORRECTION",
+          "subject": "Instead, make that a question about the lamp.",
+          "response": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "refusal_reason": null,
+          "scene_id": "waystation_courtyard"
+        }
+      }
+    },
+    "world": {
+      "settlements": [
+        {
+          "id": "cinderwatch",
+          "name": "Cinderwatch",
+          "type": "frontier_city",
+          "tags": [
+            "frontier",
+            "trade",
+            "unstable"
+          ],
+          "status": "strained",
+          "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+        }
+      ],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "type": "noble_house",
+          "attitude": "wary",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Expand territory",
+          "current_plan": "Gathering influence",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "type": "criminal_syndicate",
+          "attitude": "opportunistic",
+          "influence": 3,
+          "pressure": 2,
+          "goal": "Control black market",
+          "current_plan": "Establishing smuggling routes",
+          "agenda_progress": 0,
+          "assets": []
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "type": "religious_order",
+          "attitude": "suspicious",
+          "influence": 2,
+          "pressure": 1,
+          "goal": "Suppress dangerous magic",
+          "current_plan": "Watching newcomers",
+          "agenda_progress": 0,
+          "assets": []
+        }
+      ],
+      "assets": [],
+      "projects": [],
+      "world_flags": [],
+      "event_log": [],
+      "inference_rules": [],
+      "clues": {},
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "role": "guard",
+          "affiliation": "cinderwatch",
+          "disposition": "neutral",
+          "current_agenda": "patrol_gate",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "patrol",
+              "text": "A patrol went missing near the old milestone."
+            }
+          ],
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "role": "informant",
+          "affiliation": "ash_cowl",
+          "disposition": "friendly",
+          "current_agenda": "sell_rumors",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "stew",
+              "text": "Hot stew and rumors for coin."
+            }
+          ],
+          "stance_toward_player": "favorable",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "frontier_gate",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara",
+          "location": "waystation_courtyard",
+          "role": "guard",
+          "disposition": "neutral",
+          "topics": [
+            {
+              "id": "street",
+              "text": "The street beyond the gate is the north road.",
+              "clue_id": "north_road"
+            }
+          ],
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "waystation_courtyard",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": []
+        },
+        {
+          "id": "corporal_bren",
+          "name": "Corporal Bren",
+          "location": "waystation_courtyard",
+          "role": "guard",
+          "description": "",
+          "disposition": "neutral",
+          "affiliation": "",
+          "availability": "available",
+          "current_agenda": "",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "origin_kind": "npc",
+          "origin_scene_id": "waystation_courtyard",
+          "promoted_from_actor_id": null,
+          "promotion_reason": null,
+          "promotion_turn": null,
+          "tags": [],
+          "topics": []
+        }
+      ],
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks": {}
+      }
+    },
+    "scene": {
+      "scene": {
+        "id": "waystation_courtyard",
+        "location": "Waystation courtyard",
+        "summary": "A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road.",
+        "visible_facts": [
+          "A soot-streaked lantern burns beside the courtyard gate.",
+          "The side gate is barred from the other side.",
+          "Sergeant Mara looks concerned as she watches the road."
+        ],
+        "interactables": [
+          {
+            "id": "courtyard_lantern",
+            "label": "courtyard lantern",
+            "type": "examine",
+            "description": "A soot-streaked lantern burns beside the courtyard gate.",
+            "reveals_clue": "lantern_mark"
+          }
+        ],
+        "exits": [
+          {
+            "id": "courtyard_gate",
+            "label": "Courtyard gate",
+            "target_scene_id": "waystation_street",
+            "aliases": [
+              "gate",
+              "courtyard gate"
+            ]
+          }
+        ],
+        "discoverable_clues": [
+          {
+            "id": "lantern_mark",
+            "text": "A small maker's mark is stamped beneath the lantern."
+          }
+        ],
+        "hidden_facts": [],
+        "actions": [],
+        "objects": [],
+        "discovered_clues": [],
+        "runtime_entities": []
+      }
+    },
+    "character": {
+      "id": "galinor",
+      "name": "Galinor",
+      "class": "Wizard",
+      "level": 1,
+      "ancestry": "Human",
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "ac": {
+        "normal": 12,
+        "touch": 12,
+        "flat_footed": 10
+      },
+      "initiative_bonus": 2,
+      "speed": 30,
+      "ability_scores": {
+        "str": 10,
+        "dex": 14,
+        "con": 12,
+        "int": 18,
+        "wis": 12,
+        "cha": 10
+      },
+      "saves": {
+        "fort": 1,
+        "ref": 2,
+        "will": 3
+      },
+      "bab": 0,
+      "cmb": 0,
+      "cmd": 12,
+      "skills": {
+        "knowledge_arcana": 8,
+        "spellcraft": 8,
+        "perception": 4,
+        "sense_motive": 4,
+        "stealth": 4,
+        "diplomacy": 4,
+        "intimidate": 2,
+        "bluff": 2
+      },
+      "attacks": [
+        {
+          "id": "quarterstaff",
+          "name": "Quarterstaff",
+          "attack_bonus": 0,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 6,
+            "bonus": 0,
+            "type": "bludgeoning"
+          },
+          "type": "melee"
+        },
+        {
+          "id": "crossbow",
+          "name": "Light Crossbow",
+          "attack_bonus": 2,
+          "damage": {
+            "dice_count": 1,
+            "dice_sides": 8,
+            "bonus": 0,
+            "type": "piercing"
+          },
+          "type": "ranged"
+        }
+      ],
+      "conditions": [],
+      "inventory": [
+        {
+          "id": "spellbook",
+          "name": "Spellbook",
+          "quantity": 1,
+          "usable": false
+        }
+      ],
+      "spells": {
+        "prepared": [
+          {
+            "id": "daze",
+            "name": "Daze",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "detect_magic",
+            "name": "Detect Magic",
+            "cast": false,
+            "level": 0
+          },
+          {
+            "id": "magic_missile",
+            "name": "Magic Missile",
+            "cast": false,
+            "level": 1
+          },
+          {
+            "id": "shield",
+            "name": "Shield",
+            "cast": false,
+            "level": 1
+          }
+        ],
+        "slots": {
+          "0": 3,
+          "1": 1
+        }
+      },
+      "notes": "Default template character. Import a custom sheet for campaign play."
+    },
+    "combat": {
+      "in_combat": false,
+      "player_turn_used": false,
+      "round": 0
+    }
+  },
+  "response": {
+    "ok": true,
+    "gm_output": {
+      "player_facing_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:pending_intention_revised",
+      "metadata": {
+        "accepted_response": {
+          "addressee": "player",
+          "adoption_status": "candidate_accepted",
+          "attempt": 0,
+          "authority_result": "accepted",
+          "authorization_provenance": {
+            "addressee": "player",
+            "authority_category": "host_operation",
+            "authorized_proposition": "",
+            "epistemic_status": "none",
+            "operation": "ask",
+            "policy_version": "pr-eg-r6-r1-r1",
+            "provenance_id": "2608602d877553f8",
+            "source_id": "",
+            "speaker_id": "",
+            "validation": "host_operation"
+          },
+          "authorization_source": "conversational_decision:pending_intention_revised",
+          "candidate_disposition": "host_selected",
+          "canonical": false,
+          "contract": {
+            "contract_id": "",
+            "expected_resolution": "",
+            "interlocutor_id": "",
+            "operation": ""
+          },
+          "contract_satisfying": true,
+          "generation_attempts": 0,
+          "grounding_result": "not_a_replacement_trigger",
+          "hard_validation": {
+            "authority": [
+              "conversational_decision:pending_intention_revised"
+            ],
+            "gm_resolution_decision_audit": null,
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": []
+          },
+          "immutable": true,
+          "interaction_completion": true,
+          "operation": "ask",
+          "player_input": "Instead, make that a question about the lamp.",
+          "provenance": "authorized_host_speech",
+          "resolution_kind": "conversational_clarify",
+          "speaker": "GM",
+          "speaker_id": "",
+          "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+          "subject": "",
+          "target": "",
+          "text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "turn_identity": "",
+          "integrity_digest": "be28292a093c588d4cb04a67e24cbe7bf5501f65c257c7119d70b1f4082efcf8"
+        },
+        "emission_debug": {
+          "accepted_response_provenance": "authorized_host_speech",
+          "generation_attempts": 0,
+          "legacy_emission_authority": false,
+          "semantic_degradation": false,
+          "semantic_degradation_reasons": [],
+          "resolution_contract_semantic": {
+            "status": "satisfied",
+            "reasons": [],
+            "preserved": true
+          },
+          "accepted_emitted_equality": {
+            "exact_match": true,
+            "semantic_match": true,
+            "presentation_only": false,
+            "mutation_blocked": false,
+            "attempted_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+          }
+        }
+      }
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "Instead, make that a question about the lamp.",
+      "prompt": "Instead, make that a question about the lamp.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "Instead, make that a question about the lamp.",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "pending_intention_revised",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": {
+                "kind": "ambiguous_addressee",
+                "operation": "ASK",
+                "status": "pending",
+                "scene_id": "waystation_courtyard",
+                "original_text": "I ask one of them what happened.",
+                "choices": [
+                  {
+                    "entity_id": "sergeant_mara",
+                    "label": "Sergeant Mara"
+                  },
+                  {
+                    "entity_id": "corporal_bren",
+                    "label": "Corporal Bren"
+                  }
+                ],
+                "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+                "target_resolution": "ambiguous",
+                "revised_text": "Instead, make that a question about the lamp."
+              },
+              "pending_intention": {
+                "kind": "ambiguous_addressee",
+                "operation": "ASK",
+                "status": "pending",
+                "scene_id": "waystation_courtyard",
+                "original_text": "I ask one of them what happened.",
+                "choices": [
+                  {
+                    "entity_id": "sergeant_mara",
+                    "label": "Sergeant Mara"
+                  },
+                  {
+                    "entity_id": "corporal_bren",
+                    "label": "Corporal Bren"
+                  }
+                ],
+                "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+                "target_resolution": "ambiguous",
+                "revised_text": "Instead, make that a question about the lamp."
+              }
+            }
+          },
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CORRECTION",
+          "authorization": null
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\": \"OTHER\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Revise pending ask\"}, \"asserted_premises\": [], \"requested_outcomes\": [], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"NONE\", \"note\": \"\"}, \"communication\": {\"recipient\": \"GM\", \"purpose\": \"CORRECTION\", \"subject\": \"pending ask\", \"evidence_refs\": []}}",
+          "provider_requests": [],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Revise pending ask"
+            },
+            "asserted_premises": [],
+            "requested_outcomes": [],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CORRECTION",
+              "subject": "pending ask",
+              "evidence_refs": []
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {}
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 4,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": false,
+          "provider_narration_skipped": false
+        }
+      }
+    }
+  },
+  "provider_admissions": 0
+}

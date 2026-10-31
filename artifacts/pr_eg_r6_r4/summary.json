@@ -1,0 +1,1339 @@
+{
+  "verdict": "C — INCONCLUSIVE / FURTHER DISCOVERY REQUIRED",
+  "core": {
+    "A": {
+      "answer_success": 158,
+      "class_correct": 160,
+      "relevance_correct": 165,
+      "sufficiency_correct": 160,
+      "roles_correct": 158,
+      "qualifiers_correct": 168,
+      "authorization_correct": 168,
+      "false_acceptance": 0,
+      "false_rejection": 3,
+      "unsupported_binding": 0,
+      "omitted_binding": 10,
+      "n": 168,
+      "success_wilson95": [
+        0.8939,
+        0.9674
+      ],
+      "errors": {
+        "": 168
+      },
+      "failure_attribution": {
+        "E03": 10
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 56,
+          "success": 48
+        },
+        "PARTIAL": {
+          "n": 32,
+          "success": 30
+        },
+        "RELATED_NONANSWER": {
+          "n": 32,
+          "success": 32
+        },
+        "UNKNOWN": {
+          "n": 32,
+          "success": 32
+        },
+        "RESTRICTED": {
+          "n": 16,
+          "success": 16
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 0,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 168,
+        "usage_samples": 168,
+        "input_tokens": 274529,
+        "output_tokens": 35778,
+        "mean_input": 1634.1,
+        "p95_input": 1700,
+        "mean_output": 212.96,
+        "mean_latency_ms": 2418.91,
+        "p95_latency_ms": 3059.366
+      }
+    },
+    "B": {
+      "answer_success": 160,
+      "class_correct": 160,
+      "relevance_correct": 160,
+      "sufficiency_correct": 160,
+      "roles_correct": 160,
+      "qualifiers_correct": 168,
+      "authorization_correct": 168,
+      "false_acceptance": 0,
+      "false_rejection": 8,
+      "unsupported_binding": 0,
+      "omitted_binding": 8,
+      "n": 168,
+      "success_wilson95": [
+        0.9089,
+        0.9757
+      ],
+      "errors": {
+        "": 168
+      },
+      "failure_attribution": {
+        "E02": 8
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 56,
+          "success": 48
+        },
+        "PARTIAL": {
+          "n": 32,
+          "success": 32
+        },
+        "RELATED_NONANSWER": {
+          "n": 32,
+          "success": 32
+        },
+        "UNKNOWN": {
+          "n": 32,
+          "success": 32
+        },
+        "RESTRICTED": {
+          "n": 16,
+          "success": 16
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 0,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 0,
+        "usage_samples": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "mean_input": 0,
+        "p95_input": 0,
+        "mean_output": 0,
+        "mean_latency_ms": 0.05,
+        "p95_latency_ms": 0.096
+      }
+    },
+    "C": {
+      "answer_success": 53,
+      "class_correct": 53,
+      "relevance_correct": 53,
+      "sufficiency_correct": 85,
+      "roles_correct": 85,
+      "qualifiers_correct": 168,
+      "authorization_correct": 168,
+      "false_acceptance": 0,
+      "false_rejection": 83,
+      "unsupported_binding": 0,
+      "omitted_binding": 75,
+      "n": 168,
+      "success_wilson95": [
+        0.25,
+        0.3892
+      ],
+      "errors": {
+        "": 168
+      },
+      "failure_attribution": {
+        "E03": 89,
+        "E14": 26
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 56,
+          "success": 4
+        },
+        "PARTIAL": {
+          "n": 32,
+          "success": 1
+        },
+        "RELATED_NONANSWER": {
+          "n": 32,
+          "success": 0
+        },
+        "UNKNOWN": {
+          "n": 32,
+          "success": 32
+        },
+        "RESTRICTED": {
+          "n": 16,
+          "success": 16
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 0,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 168,
+        "usage_samples": 168,
+        "input_tokens": 100649,
+        "output_tokens": 18521,
+        "mean_input": 599.1,
+        "p95_input": 665,
+        "mean_output": 110.24,
+        "mean_latency_ms": 1840.94,
+        "p95_latency_ms": 2705.773
+      }
+    }
+  },
+  "all_diagnostic": {
+    "A": {
+      "answer_success": 158,
+      "class_correct": 160,
+      "relevance_correct": 165,
+      "sufficiency_correct": 160,
+      "roles_correct": 158,
+      "qualifiers_correct": 176,
+      "authorization_correct": 176,
+      "false_acceptance": 8,
+      "false_rejection": 3,
+      "unsupported_binding": 8,
+      "omitted_binding": 10,
+      "n": 176,
+      "success_wilson95": [
+        0.8441,
+        0.9343
+      ],
+      "errors": {
+        "": 176
+      },
+      "failure_attribution": {
+        "E03": 10,
+        "E10": 8
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 56,
+          "success": 48
+        },
+        "PARTIAL": {
+          "n": 32,
+          "success": 30
+        },
+        "RELATED_NONANSWER": {
+          "n": 32,
+          "success": 32
+        },
+        "UNKNOWN": {
+          "n": 32,
+          "success": 32
+        },
+        "RESTRICTED": {
+          "n": 16,
+          "success": 16
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 8,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 176,
+        "usage_samples": 176,
+        "input_tokens": 287596,
+        "output_tokens": 37615,
+        "mean_input": 1634.07,
+        "p95_input": 1700,
+        "mean_output": 213.72,
+        "mean_latency_ms": 2423.56,
+        "p95_latency_ms": 3059.366
+      }
+    },
+    "B": {
+      "answer_success": 168,
+      "class_correct": 168,
+      "relevance_correct": 168,
+      "sufficiency_correct": 168,
+      "roles_correct": 168,
+      "qualifiers_correct": 176,
+      "authorization_correct": 176,
+      "false_acceptance": 0,
+      "false_rejection": 8,
+      "unsupported_binding": 0,
+      "omitted_binding": 8,
+      "n": 176,
+      "success_wilson95": [
+        0.9129,
+        0.9768
+      ],
+      "errors": {
+        "": 176
+      },
+      "failure_attribution": {
+        "E02": 8
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 56,
+          "success": 48
+        },
+        "PARTIAL": {
+          "n": 32,
+          "success": 32
+        },
+        "RELATED_NONANSWER": {
+          "n": 32,
+          "success": 32
+        },
+        "UNKNOWN": {
+          "n": 32,
+          "success": 32
+        },
+        "RESTRICTED": {
+          "n": 16,
+          "success": 16
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 8,
+          "success": 8
+        }
+      },
+      "cost": {
+        "calls": 0,
+        "usage_samples": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "mean_input": 0,
+        "p95_input": 0,
+        "mean_output": 0,
+        "mean_latency_ms": 0.06,
+        "p95_latency_ms": 0.096
+      }
+    },
+    "C": {
+      "answer_success": 61,
+      "class_correct": 61,
+      "relevance_correct": 61,
+      "sufficiency_correct": 93,
+      "roles_correct": 93,
+      "qualifiers_correct": 176,
+      "authorization_correct": 176,
+      "false_acceptance": 0,
+      "false_rejection": 83,
+      "unsupported_binding": 0,
+      "omitted_binding": 75,
+      "n": 176,
+      "success_wilson95": [
+        0.2802,
+        0.4195
+      ],
+      "errors": {
+        "": 176
+      },
+      "failure_attribution": {
+        "E03": 89,
+        "E14": 26
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 56,
+          "success": 4
+        },
+        "PARTIAL": {
+          "n": 32,
+          "success": 1
+        },
+        "RELATED_NONANSWER": {
+          "n": 32,
+          "success": 0
+        },
+        "UNKNOWN": {
+          "n": 32,
+          "success": 32
+        },
+        "RESTRICTED": {
+          "n": 16,
+          "success": 16
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 8,
+          "success": 8
+        }
+      },
+      "cost": {
+        "calls": 176,
+        "usage_samples": 176,
+        "input_tokens": 105436,
+        "output_tokens": 19602,
+        "mean_input": 599.07,
+        "p95_input": 665,
+        "mean_output": 111.38,
+        "mean_latency_ms": 1839.92,
+        "p95_latency_ms": 2705.773
+      }
+    }
+  },
+  "partitions": {
+    "development": {
+      "A": {
+        "answer_success": 39,
+        "class_correct": 40,
+        "relevance_correct": 41,
+        "sufficiency_correct": 40,
+        "roles_correct": 39,
+        "qualifiers_correct": 42,
+        "authorization_correct": 42,
+        "false_acceptance": 0,
+        "false_rejection": 1,
+        "unsupported_binding": 0,
+        "omitted_binding": 3,
+        "n": 42,
+        "success_wilson95": [
+          0.8099,
+          0.9754
+        ],
+        "errors": {
+          "": 42
+        },
+        "failure_attribution": {
+          "E03": 3
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 14,
+            "success": 12
+          },
+          "PARTIAL": {
+            "n": 8,
+            "success": 7
+          },
+          "RELATED_NONANSWER": {
+            "n": 8,
+            "success": 8
+          },
+          "UNKNOWN": {
+            "n": 8,
+            "success": 8
+          },
+          "RESTRICTED": {
+            "n": 4,
+            "success": 4
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 42,
+          "usage_samples": 42,
+          "input_tokens": 68547,
+          "output_tokens": 8845,
+          "mean_input": 1632.07,
+          "p95_input": 1690,
+          "mean_output": 210.6,
+          "mean_latency_ms": 2555.81,
+          "p95_latency_ms": 3771.531
+        }
+      },
+      "B": {
+        "answer_success": 40,
+        "class_correct": 40,
+        "relevance_correct": 40,
+        "sufficiency_correct": 40,
+        "roles_correct": 40,
+        "qualifiers_correct": 42,
+        "authorization_correct": 42,
+        "false_acceptance": 0,
+        "false_rejection": 2,
+        "unsupported_binding": 0,
+        "omitted_binding": 2,
+        "n": 42,
+        "success_wilson95": [
+          0.8421,
+          0.9868
+        ],
+        "errors": {
+          "": 42
+        },
+        "failure_attribution": {
+          "E02": 2
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 14,
+            "success": 12
+          },
+          "PARTIAL": {
+            "n": 8,
+            "success": 8
+          },
+          "RELATED_NONANSWER": {
+            "n": 8,
+            "success": 8
+          },
+          "UNKNOWN": {
+            "n": 8,
+            "success": 8
+          },
+          "RESTRICTED": {
+            "n": 4,
+            "success": 4
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 0,
+          "usage_samples": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "mean_input": 0,
+          "p95_input": 0,
+          "mean_output": 0,
+          "mean_latency_ms": 0.06,
+          "p95_latency_ms": 0.093
+        }
+      },
+      "C": {
+        "answer_success": 14,
+        "class_correct": 14,
+        "relevance_correct": 14,
+        "sufficiency_correct": 22,
+        "roles_correct": 22,
+        "qualifiers_correct": 42,
+        "authorization_correct": 42,
+        "false_acceptance": 0,
+        "false_rejection": 20,
+        "unsupported_binding": 0,
+        "omitted_binding": 18,
+        "n": 42,
+        "success_wilson95": [
+          0.2101,
+          0.4845
+        ],
+        "errors": {
+          "": 42
+        },
+        "failure_attribution": {
+          "E03": 21,
+          "E14": 7
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 14,
+            "success": 2
+          },
+          "PARTIAL": {
+            "n": 8,
+            "success": 0
+          },
+          "RELATED_NONANSWER": {
+            "n": 8,
+            "success": 0
+          },
+          "UNKNOWN": {
+            "n": 8,
+            "success": 8
+          },
+          "RESTRICTED": {
+            "n": 4,
+            "success": 4
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 42,
+          "usage_samples": 42,
+          "input_tokens": 25077,
+          "output_tokens": 4483,
+          "mean_input": 597.07,
+          "p95_input": 655,
+          "mean_output": 106.74,
+          "mean_latency_ms": 1974.08,
+          "p95_latency_ms": 3504.136
+        }
+      }
+    },
+    "validation": {
+      "A": {
+        "answer_success": 59,
+        "class_correct": 60,
+        "relevance_correct": 62,
+        "sufficiency_correct": 60,
+        "roles_correct": 59,
+        "qualifiers_correct": 63,
+        "authorization_correct": 63,
+        "false_acceptance": 0,
+        "false_rejection": 1,
+        "unsupported_binding": 0,
+        "omitted_binding": 4,
+        "n": 63,
+        "success_wilson95": [
+          0.8478,
+          0.975
+        ],
+        "errors": {
+          "": 63
+        },
+        "failure_attribution": {
+          "E03": 4
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 21,
+            "success": 18
+          },
+          "PARTIAL": {
+            "n": 12,
+            "success": 11
+          },
+          "RELATED_NONANSWER": {
+            "n": 12,
+            "success": 12
+          },
+          "UNKNOWN": {
+            "n": 12,
+            "success": 12
+          },
+          "RESTRICTED": {
+            "n": 6,
+            "success": 6
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 63,
+          "usage_samples": 63,
+          "input_tokens": 102845,
+          "output_tokens": 13360,
+          "mean_input": 1632.46,
+          "p95_input": 1690,
+          "mean_output": 212.06,
+          "mean_latency_ms": 2369.71,
+          "p95_latency_ms": 3015.563
+        }
+      },
+      "B": {
+        "answer_success": 60,
+        "class_correct": 60,
+        "relevance_correct": 60,
+        "sufficiency_correct": 60,
+        "roles_correct": 60,
+        "qualifiers_correct": 63,
+        "authorization_correct": 63,
+        "false_acceptance": 0,
+        "false_rejection": 3,
+        "unsupported_binding": 0,
+        "omitted_binding": 3,
+        "n": 63,
+        "success_wilson95": [
+          0.8691,
+          0.9837
+        ],
+        "errors": {
+          "": 63
+        },
+        "failure_attribution": {
+          "E02": 3
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 21,
+            "success": 18
+          },
+          "PARTIAL": {
+            "n": 12,
+            "success": 12
+          },
+          "RELATED_NONANSWER": {
+            "n": 12,
+            "success": 12
+          },
+          "UNKNOWN": {
+            "n": 12,
+            "success": 12
+          },
+          "RESTRICTED": {
+            "n": 6,
+            "success": 6
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 0,
+          "usage_samples": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "mean_input": 0,
+          "p95_input": 0,
+          "mean_output": 0,
+          "mean_latency_ms": 0.06,
+          "p95_latency_ms": 0.096
+        }
+      },
+      "C": {
+        "answer_success": 18,
+        "class_correct": 18,
+        "relevance_correct": 18,
+        "sufficiency_correct": 30,
+        "roles_correct": 30,
+        "qualifiers_correct": 63,
+        "authorization_correct": 63,
+        "false_acceptance": 0,
+        "false_rejection": 33,
+        "unsupported_binding": 0,
+        "omitted_binding": 30,
+        "n": 63,
+        "success_wilson95": [
+          0.189,
+          0.407
+        ],
+        "errors": {
+          "": 63
+        },
+        "failure_attribution": {
+          "E03": 32,
+          "E14": 13
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 21,
+            "success": 0
+          },
+          "PARTIAL": {
+            "n": 12,
+            "success": 0
+          },
+          "RELATED_NONANSWER": {
+            "n": 12,
+            "success": 0
+          },
+          "UNKNOWN": {
+            "n": 12,
+            "success": 12
+          },
+          "RESTRICTED": {
+            "n": 6,
+            "success": 6
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 63,
+          "usage_samples": 63,
+          "input_tokens": 37640,
+          "output_tokens": 6858,
+          "mean_input": 597.46,
+          "p95_input": 655,
+          "mean_output": 108.86,
+          "mean_latency_ms": 1770.79,
+          "p95_latency_ms": 2631.963
+        }
+      }
+    },
+    "holdout": {
+      "A": {
+        "answer_success": 60,
+        "class_correct": 60,
+        "relevance_correct": 62,
+        "sufficiency_correct": 60,
+        "roles_correct": 60,
+        "qualifiers_correct": 63,
+        "authorization_correct": 63,
+        "false_acceptance": 0,
+        "false_rejection": 1,
+        "unsupported_binding": 0,
+        "omitted_binding": 3,
+        "n": 63,
+        "success_wilson95": [
+          0.8691,
+          0.9837
+        ],
+        "errors": {
+          "": 63
+        },
+        "failure_attribution": {
+          "E03": 3
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 21,
+            "success": 18
+          },
+          "PARTIAL": {
+            "n": 12,
+            "success": 12
+          },
+          "RELATED_NONANSWER": {
+            "n": 12,
+            "success": 12
+          },
+          "UNKNOWN": {
+            "n": 12,
+            "success": 12
+          },
+          "RESTRICTED": {
+            "n": 6,
+            "success": 6
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 63,
+          "usage_samples": 63,
+          "input_tokens": 103137,
+          "output_tokens": 13573,
+          "mean_input": 1637.1,
+          "p95_input": 1700,
+          "mean_output": 215.44,
+          "mean_latency_ms": 2376.84,
+          "p95_latency_ms": 2887.088
+        }
+      },
+      "B": {
+        "answer_success": 60,
+        "class_correct": 60,
+        "relevance_correct": 60,
+        "sufficiency_correct": 60,
+        "roles_correct": 60,
+        "qualifiers_correct": 63,
+        "authorization_correct": 63,
+        "false_acceptance": 0,
+        "false_rejection": 3,
+        "unsupported_binding": 0,
+        "omitted_binding": 3,
+        "n": 63,
+        "success_wilson95": [
+          0.8691,
+          0.9837
+        ],
+        "errors": {
+          "": 63
+        },
+        "failure_attribution": {
+          "E02": 3
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 21,
+            "success": 18
+          },
+          "PARTIAL": {
+            "n": 12,
+            "success": 12
+          },
+          "RELATED_NONANSWER": {
+            "n": 12,
+            "success": 12
+          },
+          "UNKNOWN": {
+            "n": 12,
+            "success": 12
+          },
+          "RESTRICTED": {
+            "n": 6,
+            "success": 6
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 0,
+          "usage_samples": 0,
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "mean_input": 0,
+          "p95_input": 0,
+          "mean_output": 0,
+          "mean_latency_ms": 0.05,
+          "p95_latency_ms": 0.084
+        }
+      },
+      "C": {
+        "answer_success": 21,
+        "class_correct": 21,
+        "relevance_correct": 21,
+        "sufficiency_correct": 33,
+        "roles_correct": 33,
+        "qualifiers_correct": 63,
+        "authorization_correct": 63,
+        "false_acceptance": 0,
+        "false_rejection": 30,
+        "unsupported_binding": 0,
+        "omitted_binding": 27,
+        "n": 63,
+        "success_wilson95": [
+          0.2295,
+          0.4563
+        ],
+        "errors": {
+          "": 63
+        },
+        "failure_attribution": {
+          "E03": 36,
+          "E14": 6
+        },
+        "classes": {
+          "DIRECT": {
+            "n": 21,
+            "success": 2
+          },
+          "PARTIAL": {
+            "n": 12,
+            "success": 1
+          },
+          "RELATED_NONANSWER": {
+            "n": 12,
+            "success": 0
+          },
+          "UNKNOWN": {
+            "n": 12,
+            "success": 12
+          },
+          "RESTRICTED": {
+            "n": 6,
+            "success": 6
+          },
+          "CLARIFICATION_REQUIRED": {
+            "n": 0,
+            "success": 0
+          }
+        },
+        "cost": {
+          "calls": 63,
+          "usage_samples": 63,
+          "input_tokens": 37932,
+          "output_tokens": 7180,
+          "mean_input": 602.1,
+          "p95_input": 665,
+          "mean_output": 113.97,
+          "mean_latency_ms": 1822.33,
+          "p95_latency_ms": 2550.01
+        }
+      }
+    }
+  },
+  "paired": {
+    "validation": {
+      "B": {
+        "wins": 4,
+        "losses": 3,
+        "net": 1
+      },
+      "C": {
+        "wins": 0,
+        "losses": 41,
+        "net": -41
+      }
+    },
+    "holdout": {
+      "B": {
+        "wins": 3,
+        "losses": 3,
+        "net": 0
+      },
+      "C": {
+        "wins": 0,
+        "losses": 39,
+        "net": -39
+      }
+    }
+  },
+  "secondary": {
+    "A": {
+      "answer_success": 15,
+      "class_correct": 16,
+      "relevance_correct": 18,
+      "sufficiency_correct": 18,
+      "roles_correct": 18,
+      "qualifiers_correct": 22,
+      "authorization_correct": 22,
+      "false_acceptance": 3,
+      "false_rejection": 2,
+      "unsupported_binding": 2,
+      "omitted_binding": 2,
+      "n": 22,
+      "success_wilson95": [
+        0.4732,
+        0.8364
+      ],
+      "errors": {
+        "": 22
+      },
+      "failure_attribution": {
+        "E03": 2,
+        "E10": 2,
+        "E02": 3
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 7,
+          "success": 4
+        },
+        "PARTIAL": {
+          "n": 4,
+          "success": 3
+        },
+        "RELATED_NONANSWER": {
+          "n": 4,
+          "success": 4
+        },
+        "UNKNOWN": {
+          "n": 4,
+          "success": 4
+        },
+        "RESTRICTED": {
+          "n": 2,
+          "success": 0
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 1,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 22,
+        "usage_samples": 22,
+        "input_tokens": 33676,
+        "output_tokens": 4820,
+        "mean_input": 1530.73,
+        "p95_input": 1547,
+        "mean_output": 219.09,
+        "mean_latency_ms": 0.17,
+        "p95_latency_ms": 0.377
+      }
+    },
+    "B": {
+      "answer_success": 9,
+      "class_correct": 9,
+      "relevance_correct": 11,
+      "sufficiency_correct": 12,
+      "roles_correct": 12,
+      "qualifiers_correct": 22,
+      "authorization_correct": 22,
+      "false_acceptance": 0,
+      "false_rejection": 10,
+      "unsupported_binding": 0,
+      "omitted_binding": 9,
+      "n": 22,
+      "success_wilson95": [
+        0.2326,
+        0.6127
+      ],
+      "errors": {
+        "": 22
+      },
+      "failure_attribution": {
+        "E02": 13
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 7,
+          "success": 1
+        },
+        "PARTIAL": {
+          "n": 4,
+          "success": 0
+        },
+        "RELATED_NONANSWER": {
+          "n": 4,
+          "success": 4
+        },
+        "UNKNOWN": {
+          "n": 4,
+          "success": 4
+        },
+        "RESTRICTED": {
+          "n": 2,
+          "success": 0
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 1,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 0,
+        "usage_samples": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "mean_input": 0,
+        "p95_input": 0,
+        "mean_output": 0,
+        "mean_latency_ms": 0.05,
+        "p95_latency_ms": 0.077
+      }
+    },
+    "C": {
+      "answer_success": 5,
+      "class_correct": 5,
+      "relevance_correct": 6,
+      "sufficiency_correct": 12,
+      "roles_correct": 12,
+      "qualifiers_correct": 22,
+      "authorization_correct": 22,
+      "false_acceptance": 0,
+      "false_rejection": 10,
+      "unsupported_binding": 0,
+      "omitted_binding": 9,
+      "n": 22,
+      "success_wilson95": [
+        0.1012,
+        0.4344
+      ],
+      "errors": {
+        "": 22
+      },
+      "failure_attribution": {
+        "E03": 10,
+        "E14": 5,
+        "E02": 2
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 7,
+          "success": 1
+        },
+        "PARTIAL": {
+          "n": 4,
+          "success": 0
+        },
+        "RELATED_NONANSWER": {
+          "n": 4,
+          "success": 0
+        },
+        "UNKNOWN": {
+          "n": 4,
+          "success": 4
+        },
+        "RESTRICTED": {
+          "n": 2,
+          "success": 0
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 1,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 22,
+        "usage_samples": 22,
+        "input_tokens": 13715,
+        "output_tokens": 2464,
+        "mean_input": 623.41,
+        "p95_input": 687,
+        "mean_output": 112,
+        "mean_latency_ms": 1835.85,
+        "p95_latency_ms": 2381.764
+      }
+    }
+  },
+  "supplemental": {
+    "A": {
+      "answer_success": 32,
+      "class_correct": 32,
+      "relevance_correct": 32,
+      "sufficiency_correct": 33,
+      "roles_correct": 33,
+      "qualifiers_correct": 35,
+      "authorization_correct": 35,
+      "false_acceptance": 0,
+      "false_rejection": 2,
+      "unsupported_binding": 0,
+      "omitted_binding": 2,
+      "n": 35,
+      "success_wilson95": [
+        0.7762,
+        0.9704
+      ],
+      "errors": {
+        "": 35
+      },
+      "failure_attribution": {
+        "E03": 3
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 22,
+          "success": 21
+        },
+        "PARTIAL": {
+          "n": 4,
+          "success": 3
+        },
+        "RELATED_NONANSWER": {
+          "n": 9,
+          "success": 8
+        },
+        "UNKNOWN": {
+          "n": 0,
+          "success": 0
+        },
+        "RESTRICTED": {
+          "n": 0,
+          "success": 0
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 0,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 35,
+        "usage_samples": 35,
+        "input_tokens": 58480,
+        "output_tokens": 7887,
+        "mean_input": 1670.86,
+        "p95_input": 1988,
+        "mean_output": 225.34,
+        "mean_latency_ms": 2613.5,
+        "p95_latency_ms": 3996.747
+      }
+    },
+    "B": {
+      "answer_success": 35,
+      "class_correct": 35,
+      "relevance_correct": 35,
+      "sufficiency_correct": 35,
+      "roles_correct": 35,
+      "qualifiers_correct": 35,
+      "authorization_correct": 35,
+      "false_acceptance": 0,
+      "false_rejection": 0,
+      "unsupported_binding": 0,
+      "omitted_binding": 0,
+      "n": 35,
+      "success_wilson95": [
+        0.9011,
+        1.0
+      ],
+      "errors": {
+        "": 35
+      },
+      "failure_attribution": {},
+      "classes": {
+        "DIRECT": {
+          "n": 22,
+          "success": 22
+        },
+        "PARTIAL": {
+          "n": 4,
+          "success": 4
+        },
+        "RELATED_NONANSWER": {
+          "n": 9,
+          "success": 9
+        },
+        "UNKNOWN": {
+          "n": 0,
+          "success": 0
+        },
+        "RESTRICTED": {
+          "n": 0,
+          "success": 0
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 0,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 0,
+        "usage_samples": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "mean_input": 0,
+        "p95_input": 0,
+        "mean_output": 0,
+        "mean_latency_ms": 0.12,
+        "p95_latency_ms": 0.399
+      }
+    },
+    "C": {
+      "answer_success": 9,
+      "class_correct": 9,
+      "relevance_correct": 9,
+      "sufficiency_correct": 18,
+      "roles_correct": 18,
+      "qualifiers_correct": 35,
+      "authorization_correct": 35,
+      "false_acceptance": 0,
+      "false_rejection": 17,
+      "unsupported_binding": 0,
+      "omitted_binding": 17,
+      "n": 35,
+      "success_wilson95": [
+        0.1416,
+        0.4207
+      ],
+      "errors": {
+        "": 35
+      },
+      "failure_attribution": {
+        "E03": 20,
+        "E14": 6
+      },
+      "classes": {
+        "DIRECT": {
+          "n": 22,
+          "success": 5
+        },
+        "PARTIAL": {
+          "n": 4,
+          "success": 4
+        },
+        "RELATED_NONANSWER": {
+          "n": 9,
+          "success": 0
+        },
+        "UNKNOWN": {
+          "n": 0,
+          "success": 0
+        },
+        "RESTRICTED": {
+          "n": 0,
+          "success": 0
+        },
+        "CLARIFICATION_REQUIRED": {
+          "n": 0,
+          "success": 0
+        }
+      },
+      "cost": {
+        "calls": 35,
+        "usage_samples": 35,
+        "input_tokens": 22255,
+        "output_tokens": 4663,
+        "mean_input": 635.86,
+        "p95_input": 953,
+        "mean_output": 133.23,
+        "mean_latency_ms": 2110.7,
+        "p95_latency_ms": 3379.069
+      }
+    }
+  },
+  "provider_payload_access_violations": [],
+  "invalid_attempt_records": 264,
+  "scoring_amendment": "False acceptance excludes omitted bindings; identity uses case/article normalization; one supplemental spatial annotation was incomplete. Frozen labels and initial scores preserved.",
+  "comparability_amendment": "Eight ambiguity cases excluded from architectural ranking post hoc; B/C consumed a gold ambiguity bit A did not. No A/B verdict permitted."
+}

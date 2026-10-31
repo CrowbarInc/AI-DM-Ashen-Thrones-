@@ -1,0 +1,83 @@
+--- baseline/game/api.py
++++ final/game/api.py
+@@ -793,6 +793,16 @@
+     }
+     session = load_session()
+     context_changed = _apply_conversational_context_update(session, decision)
++    if decision.intent_family != "ooc_help":
++        from game.immutable_valid_response import seal_host_speech
++
++        seal_host_speech(
++            gm, text=gm["player_facing_text"],
++            source="conversational_decision:" + str(decision.reason),
++            speaker_id=str(decision.proposed_target or "") if decision.communication_owner == "NPC" else "",
++            speaker_name=next((ref.split(":", 1)[1] for ref in decision.context_references if ref.startswith("name:")), "") if decision.communication_owner == "NPC" else "GM",
++            resolution=resolution, player_text=original_text,
++        )
+     if decision.reason == "npc_request_declined" and decision.proposed_target:
+         from game.dialogue_authority import remember_dialogue_commitment
+ 
+@@ -821,6 +831,7 @@
+         scene_id=str(session.get("active_scene_id") or ""),
+         turn=int(session.get("turn_counter") or 0),
+         ownership="npc" if decision.communication_owner == "NPC" else "gm",
++        adoption=(gm.get("metadata") or {}).get("accepted_response"),
+         social={
+             "npc_id": decision.proposed_target,
+             "npc_name": next((ref.split(":", 1)[1] for ref in decision.context_references if ref.startswith("name:")), ""),
+@@ -3664,6 +3675,14 @@
+ 
+     retry_attempt = 0
+     _previous_narration_text = ""
++    from game.immutable_valid_response import adopt_host_speech
++
++    adopted_speech = adopt_host_speech(
++        gm if isinstance(gm, dict) else _gm_for_skipped_provider_narration("", reason="authorized_host_speech"),
++        resolution=resolution, player_text=str(user_text or ""), session=session,
++    )
++    if adopted_speech is not None:
++        gm = adopted_speech
+     if gm is None:
+         skipped = deterministic_provider_skip_line(
+             resolution=resolution if isinstance(resolution, dict) else None,
+@@ -5937,17 +5956,10 @@
+     if mark_campaign_started:
+         session["campaign_started"] = True
+     if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) and isinstance(gm, dict):
+-        from game.conversational_continuity import bounded_personal_line, is_unhelpful_personal_ignorance
+         from game.dialogue_authority import remember_dialogue_commitment
+-
+-        social_payload = resolution.get("social")
+-        authority = social_payload.get("dialogue_authority") if isinstance(social_payload, dict) else None
+-        spoken = str(gm.get("player_facing_text") or "")
+-        if is_unhelpful_personal_ignorance(spoken, authority if isinstance(authority, dict) else None):
+-            kind = str((authority or {}).get("requested_information") or "opinion")
+-            name = str(social_payload.get("npc_name") or "They")
+-            npc_id = str(social_payload.get("npc_id") or "")
+-            gm["player_facing_text"] = bounded_personal_line(name, npc_id, kind)
++        from game.immutable_valid_response import restore_accepted_text
++
++        restore_accepted_text(gm)
+         remember_dialogue_commitment(
+             session,
+             social=resolution.get("social"),
+@@ -5957,6 +5969,11 @@
+         )
+     from game.conversational_continuity import record_delivered_exchange
+ 
++    speech_adoption = (gm.get("metadata") or {}).get("accepted_response") or {}
++    # This cycle binds host-owned dialogue. Legacy non-social mechanical
++    # finalization retains its separate resolver presentation behavior.
++    if speech_adoption.get("speech_adoption") != "AUTHORIZED_HOST_SPEECH":
++        speech_adoption = None
+     record_delivered_exchange(
+         session,
+         player_text=str(player_text_for_eval or ""),
+@@ -5964,6 +5981,7 @@
+         social=resolution.get("social") if isinstance(resolution, dict) else None,
+         scene_id=str(scene["scene"].get("id") or ""),
+         turn=int(session.get("turn_counter") or 0),
++        adoption=speech_adoption,
+     )
+     session.setdefault("conversational_context", {})["last_gm_exchange"] = {
+         "category": "RESOLVED", "owner": "GM", "purpose": "ACTION_RESULT",

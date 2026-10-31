@@ -1,0 +1,1003 @@
+[
+  {
+    "function": "planning_decision",
+    "file": "game\\unified_semantic_planning.py",
+    "line": 1275,
+    "return": null,
+    "locals": {
+      "player_text": "Instead, make that a question about the lamp."
+    }
+  },
+  {
+    "function": "public_conversation_evidence",
+    "file": "game\\conversational_orchestration.py",
+    "line": 308,
+    "return": {
+      "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+      "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+      "visible:1": "The side gate is barred from the other side.",
+      "visible:2": "Sergeant Mara looks concerned as she watches the road.",
+      "reply:0": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+    },
+    "locals": {
+      "evidence": {
+        "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+        "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+        "visible:1": "The side gate is barred from the other side.",
+        "visible:2": "Sergeant Mara looks concerned as she watches the road.",
+        "reply:0": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      }
+    }
+  },
+  {
+    "function": "request_interpretation",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 214,
+    "return": {
+      "ok": true,
+      "sent": true,
+      "text": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Reformulate previous ambiguous question to be about the lamp\",\"evidence_refs\":[\"visible:0\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Change the previous ambiguous question about what happened to a question about the lamp.\"},\"asserted_premises\":[{\"text\":\"Previous question was ambiguous about which person to ask.\"},{\"text\":\"There is a lit lantern hanging beside the courtyard gate.\"}],\"requested_outcomes\":[{\"text\":\"Clarify information about the lamp instead of asking about what happened.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask about the lamp (courtyard lantern).\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Change question target from person to lamp.\"}}",
+      "usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "10c270632d2a4f7db5b64cf412f22525",
+        "attempt_id": "8c5fcf52ce8445eeb9090971d2de6083",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:37:58.566450+00:00",
+        "time": "2026-10-19T09:38:02.215472+00:00",
+        "sent": true,
+        "request_id": "resp_0ec4f9127ddd0c15006ad5e4f85ad887d2aa43d7e030657b5c",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 1837,
+        "output_tokens": 209,
+        "total_tokens": 2046,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2596.488
+      }
+    },
+    "locals": {
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Instead, make that a question about the lamp.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road.\nPermitted entity references: corporal_bren=Corporal Bren (npc); courtyard_gate=Courtyard gate [gate | courtyard gate] (exit); courtyard_lantern=courtyard lantern (inspect_target); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"I ask one of them what happened.\", \"gm\": \"Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.\"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.\", \"visible:0\": \"A soot-streaked lantern burns beside the courtyard gate.\", \"visible:1\": \"The side gate is barred from the other side.\", \"visible:2\": \"Sergeant Mara looks concerned as she watches the road.\", \"reply:0\": \"Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"CLARIFY\", \"last_response_owner\": \"GM\", \"last_subject\": \"I ask one of them what happened.\", \"pending_kind\": \"ambiguous_addressee\", \"pending_scene_id\": \"waystation_courtyard\", \"pending_steps\": [], \"pending_choices\": [{\"entity_id\": \"sergeant_mara\", \"label\": \"Sergeant Mara\"}, {\"entity_id\": \"corporal_bren\", \"label\": \"Corporal Bren\"}]}"
+        }
+      ],
+      "estimated_input": 3138,
+      "record": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "10c270632d2a4f7db5b64cf412f22525",
+        "attempt_id": "8c5fcf52ce8445eeb9090971d2de6083",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:37:58.566450+00:00",
+        "time": "2026-10-19T09:38:02.215472+00:00",
+        "sent": true,
+        "request_id": "resp_0ec4f9127ddd0c15006ad5e4f85ad887d2aa43d7e030657b5c",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 1837,
+        "output_tokens": 209,
+        "total_tokens": 2046,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2596.488
+      }
+    }
+  },
+  {
+    "function": "assess_addressee_grounding",
+    "file": "game\\ordinary_semantic_ownership.py",
+    "line": 643,
+    "return": {
+      "communication_ownership": "gm_directed",
+      "intent_purpose": "request_information",
+      "target_resolution": "none_required",
+      "target_provenance": "none",
+      "target_id": null,
+      "candidate_target_ids": [
+        "courtyard_lantern"
+      ],
+      "operation_eligibility": "not_assessed",
+      "mutation_eligibility": true,
+      "conflict_status": "none",
+      "conflict_details": {},
+      "pending_intention_relationship": "none",
+      "allowed_operation": null,
+      "clarification": "",
+      "choices": [
+        {
+          "entity_id": "sergeant_mara",
+          "label": "Sergeant Mara"
+        },
+        {
+          "entity_id": "corporal_bren",
+          "label": "Corporal Bren"
+        }
+      ],
+      "direct_address": false
+    },
+    "locals": {
+      "player_text": "Instead, make that a question about the lamp.",
+      "text": "Instead, make that a question about the lamp."
+    }
+  },
+  {
+    "function": "_blocked",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 187,
+    "return": {
+      "status": "blocked",
+      "reason": "clarification_required",
+      "player_facing_text": "I need a clearer action or target before I change anything in the scene.",
+      "tags": [
+        "interpretation_clarification",
+        "non_mutating"
+      ],
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Change the previous ambiguous question about what happened to a question about the lamp."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous question was ambiguous about which person to ask.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "There is a lit lantern hanging beside the courtyard gate.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify information about the lamp instead of asking about what happened.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask about the lamp (courtyard lantern).",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Change question target from person to lamp."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Reformulate previous ambiguous question to be about the lamp",
+          "evidence_refs": [
+            "visible:0"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+        }
+      },
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Reformulate previous ambiguous question to be about the lamp\",\"evidence_refs\":[\"visible:0\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Change the previous ambiguous question about what happened to a question about the lamp.\"},\"asserted_premises\":[{\"text\":\"Previous question was ambiguous about which person to ask.\"},{\"text\":\"There is a lit lantern hanging beside the courtyard gate.\"}],\"requested_outcomes\":[{\"text\":\"Clarify information about the lamp instead of asking about what happened.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask about the lamp (courtyard lantern).\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Change question target from person to lamp.\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "10c270632d2a4f7db5b64cf412f22525",
+          "attempt_id": "8c5fcf52ce8445eeb9090971d2de6083",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:37:58.566450+00:00",
+          "time": "2026-10-19T09:38:02.215472+00:00",
+          "sent": true,
+          "request_id": "resp_0ec4f9127ddd0c15006ad5e4f85ad887d2aa43d7e030657b5c",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 1837,
+          "output_tokens": 209,
+          "total_tokens": 2046,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2596.488
+        }
+      ],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "eligibility_disposition": "NEEDS_CLARIFICATION",
+      "model_communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED"
+    },
+    "locals": {
+      "reason": "clarification_required"
+    }
+  },
+  {
+    "function": "interpret_production_turn",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 297,
+    "return": {
+      "status": "blocked",
+      "reason": "clarification_required",
+      "player_facing_text": "I need a clearer action or target before I change anything in the scene.",
+      "tags": [
+        "interpretation_clarification",
+        "non_mutating"
+      ],
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Change the previous ambiguous question about what happened to a question about the lamp."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous question was ambiguous about which person to ask.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "There is a lit lantern hanging beside the courtyard gate.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify information about the lamp instead of asking about what happened.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask about the lamp (courtyard lantern).",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Change question target from person to lamp."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Reformulate previous ambiguous question to be about the lamp",
+          "evidence_refs": [
+            "visible:0"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+        }
+      },
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Reformulate previous ambiguous question to be about the lamp\",\"evidence_refs\":[\"visible:0\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Change the previous ambiguous question about what happened to a question about the lamp.\"},\"asserted_premises\":[{\"text\":\"Previous question was ambiguous about which person to ask.\"},{\"text\":\"There is a lit lantern hanging beside the courtyard gate.\"}],\"requested_outcomes\":[{\"text\":\"Clarify information about the lamp instead of asking about what happened.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask about the lamp (courtyard lantern).\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Change question target from person to lamp.\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "10c270632d2a4f7db5b64cf412f22525",
+          "attempt_id": "8c5fcf52ce8445eeb9090971d2de6083",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:37:58.566450+00:00",
+          "time": "2026-10-19T09:38:02.215472+00:00",
+          "sent": true,
+          "request_id": "resp_0ec4f9127ddd0c15006ad5e4f85ad887d2aa43d7e030657b5c",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 1837,
+          "output_tokens": 209,
+          "total_tokens": 2046,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2596.488
+        }
+      ],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "eligibility_disposition": "NEEDS_CLARIFICATION",
+      "model_communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED"
+    },
+    "locals": {
+      "player_text": "Instead, make that a question about the lamp.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Instead, make that a question about the lamp.\nVisible scene: Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road.\nPermitted entity references: corporal_bren=Corporal Bren (npc); courtyard_gate=Courtyard gate [gate | courtyard gate] (exit); courtyard_lantern=courtyard lantern (inspect_target); sergeant_mara=Sergeant Mara (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"I ask one of them what happened.\", \"gm\": \"Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.\"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.\", \"visible:0\": \"A soot-streaked lantern burns beside the courtyard gate.\", \"visible:1\": \"The side gate is barred from the other side.\", \"visible:2\": \"Sergeant Mara looks concerned as she watches the road.\", \"reply:0\": \"Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"CLARIFY\", \"last_response_owner\": \"GM\", \"last_subject\": \"I ask one of them what happened.\", \"pending_kind\": \"ambiguous_addressee\", \"pending_scene_id\": \"waystation_courtyard\", \"pending_steps\": [], \"pending_choices\": [{\"entity_id\": \"sergeant_mara\", \"label\": \"Sergeant Mara\"}, {\"entity_id\": \"corporal_bren\", \"label\": \"Corporal Bren\"}]}"
+        }
+      ],
+      "evidence": {
+        "scene": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.",
+        "visible:0": "A soot-streaked lantern burns beside the courtyard gate.",
+        "visible:1": "The side gate is barred from the other side.",
+        "visible:2": "Sergeant Mara looks concerned as she watches the road.",
+        "reply:0": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted."
+      },
+      "leaks": [],
+      "call": {
+        "ok": true,
+        "sent": true,
+        "text": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Reformulate previous ambiguous question to be about the lamp\",\"evidence_refs\":[\"visible:0\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Change the previous ambiguous question about what happened to a question about the lamp.\"},\"asserted_premises\":[{\"text\":\"Previous question was ambiguous about which person to ask.\"},{\"text\":\"There is a lit lantern hanging beside the courtyard gate.\"}],\"requested_outcomes\":[{\"text\":\"Clarify information about the lamp instead of asking about what happened.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask about the lamp (courtyard lantern).\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Change question target from person to lamp.\"}}",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "10c270632d2a4f7db5b64cf412f22525",
+          "attempt_id": "8c5fcf52ce8445eeb9090971d2de6083",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:37:58.566450+00:00",
+          "time": "2026-10-19T09:38:02.215472+00:00",
+          "sent": true,
+          "request_id": "resp_0ec4f9127ddd0c15006ad5e4f85ad887d2aa43d7e030657b5c",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 1837,
+          "output_tokens": 209,
+          "total_tokens": 2046,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2596.488
+        }
+      },
+      "raw": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Reformulate previous ambiguous question to be about the lamp\",\"evidence_refs\":[\"visible:0\"]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Change the previous ambiguous question about what happened to a question about the lamp.\"},\"asserted_premises\":[{\"text\":\"Previous question was ambiguous about which person to ask.\"},{\"text\":\"There is a lit lantern hanging beside the courtyard gate.\"}],\"requested_outcomes\":[{\"text\":\"Clarify information about the lamp instead of asking about what happened.\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask about the lamp (courtyard lantern).\",\"target_ref\":\"courtyard_lantern\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"courtyard_lantern\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Change question target from person to lamp.\"}}",
+      "parsed": {
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Reformulate previous ambiguous question to be about the lamp",
+          "evidence_refs": [
+            "visible:0"
+          ]
+        },
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Change the previous ambiguous question about what happened to a question about the lamp."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous question was ambiguous about which person to ask."
+          },
+          {
+            "text": "There is a lit lantern hanging beside the courtyard gate."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify information about the lamp instead of asking about what happened."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask about the lamp (courtyard lantern).",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Change question target from person to lamp."
+        }
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Reformulate previous ambiguous question to be about the lamp",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Change the previous ambiguous question about what happened to a question about the lamp."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous question was ambiguous about which person to ask.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "There is a lit lantern hanging beside the courtyard gate.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify information about the lamp instead of asking about what happened.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask about the lamp (courtyard lantern).",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Change question target from person to lamp."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Reformulate previous ambiguous question to be about the lamp",
+          "evidence_refs": [
+            "visible:0"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+        }
+      },
+      "text": "I need a clearer action or target before I change anything in the scene."
+    }
+  },
+  {
+    "function": "assess_addressee_grounding",
+    "file": "game\\ordinary_semantic_ownership.py",
+    "line": 643,
+    "return": {
+      "communication_ownership": "gm_directed",
+      "intent_purpose": "request_information",
+      "target_resolution": "none_required",
+      "target_provenance": "none",
+      "target_id": null,
+      "candidate_target_ids": [
+        "courtyard_lantern"
+      ],
+      "operation_eligibility": "not_assessed",
+      "mutation_eligibility": true,
+      "conflict_status": "none",
+      "conflict_details": {},
+      "pending_intention_relationship": "none",
+      "allowed_operation": null,
+      "clarification": "",
+      "choices": [
+        {
+          "entity_id": "sergeant_mara",
+          "label": "Sergeant Mara"
+        },
+        {
+          "entity_id": "corporal_bren",
+          "label": "Corporal Bren"
+        }
+      ],
+      "direct_address": false
+    },
+    "locals": {
+      "player_text": "Instead, make that a question about the lamp.",
+      "text": "Instead, make that a question about the lamp."
+    }
+  },
+  {
+    "function": "assess_addressee_grounding",
+    "file": "game\\ordinary_semantic_ownership.py",
+    "line": 643,
+    "return": {
+      "communication_ownership": "gm_directed",
+      "intent_purpose": "request_information",
+      "target_resolution": "none_required",
+      "target_provenance": "none",
+      "target_id": null,
+      "candidate_target_ids": [
+        "courtyard_lantern"
+      ],
+      "operation_eligibility": "not_assessed",
+      "mutation_eligibility": true,
+      "conflict_status": "none",
+      "conflict_details": {},
+      "pending_intention_relationship": "none",
+      "allowed_operation": null,
+      "clarification": "",
+      "choices": [
+        {
+          "entity_id": "sergeant_mara",
+          "label": "Sergeant Mara"
+        },
+        {
+          "entity_id": "corporal_bren",
+          "label": "Corporal Bren"
+        }
+      ],
+      "direct_address": false
+    },
+    "locals": {
+      "player_text": "Instead, make that a question about the lamp.",
+      "text": "Instead, make that a question about the lamp."
+    }
+  },
+  {
+    "function": "_pending_revision_decision",
+    "file": "game\\conversational_orchestration.py",
+    "line": 391,
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "Instead, make that a question about the lamp.",
+      "intent_family": "clarification",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "pending_intention_revised",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+      "context_update": {
+        "conversational_context": {
+          "pending_clarification": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "waystation_courtyard",
+            "original_text": "I ask one of them what happened.",
+            "choices": [
+              {
+                "entity_id": "sergeant_mara",
+                "label": "Sergeant Mara"
+              },
+              {
+                "entity_id": "corporal_bren",
+                "label": "Corporal Bren"
+              }
+            ],
+            "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "target_resolution": "ambiguous",
+            "revised_text": "Instead, make that a question about the lamp."
+          },
+          "pending_intention": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "waystation_courtyard",
+            "original_text": "I ask one of them what happened.",
+            "choices": [
+              {
+                "entity_id": "sergeant_mara",
+                "label": "Sergeant Mara"
+              },
+              {
+                "entity_id": "corporal_bren",
+                "label": "Corporal Bren"
+              }
+            ],
+            "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "target_resolution": "ambiguous",
+            "revised_text": "Instead, make that a question about the lamp."
+          }
+        }
+      },
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CORRECTION",
+      "authorization": null
+    },
+    "locals": {
+      "text": "Instead, make that a question about the lamp.",
+      "purpose": "CLARIFICATION",
+      "components": [
+        {
+          "order": 1,
+          "description": "Ask about the lamp (courtyard lantern).",
+          "target_ref": "courtyard_lantern",
+          "operation_class": "ASK"
+        }
+      ],
+      "pending": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "target_resolution": "ambiguous"
+      }
+    }
+  },
+  {
+    "function": "_communication_decision",
+    "file": "game\\conversational_orchestration.py",
+    "line": 461,
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "Instead, make that a question about the lamp.",
+      "intent_family": "clarification",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "pending_intention_revised",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+      "context_update": {
+        "conversational_context": {
+          "pending_clarification": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "waystation_courtyard",
+            "original_text": "I ask one of them what happened.",
+            "choices": [
+              {
+                "entity_id": "sergeant_mara",
+                "label": "Sergeant Mara"
+              },
+              {
+                "entity_id": "corporal_bren",
+                "label": "Corporal Bren"
+              }
+            ],
+            "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "target_resolution": "ambiguous",
+            "revised_text": "Instead, make that a question about the lamp."
+          },
+          "pending_intention": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "waystation_courtyard",
+            "original_text": "I ask one of them what happened.",
+            "choices": [
+              {
+                "entity_id": "sergeant_mara",
+                "label": "Sergeant Mara"
+              },
+              {
+                "entity_id": "corporal_bren",
+                "label": "Corporal Bren"
+              }
+            ],
+            "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "target_resolution": "ambiguous",
+            "revised_text": "Instead, make that a question about the lamp."
+          }
+        }
+      },
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CORRECTION",
+      "authorization": null
+    },
+    "locals": {
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Change the previous ambiguous question about what happened to a question about the lamp."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous question was ambiguous about which person to ask.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "There is a lit lantern hanging beside the courtyard gate.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify information about the lamp instead of asking about what happened.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask about the lamp (courtyard lantern).",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Change question target from person to lamp."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Reformulate previous ambiguous question to be about the lamp",
+          "evidence_refs": [
+            "visible:0"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+        }
+      },
+      "text": "Instead, make that a question about the lamp.",
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Reformulate previous ambiguous question to be about the lamp",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "purpose": "CLARIFICATION",
+      "grounding": {
+        "communication_ownership": "gm_directed",
+        "intent_purpose": "request_information",
+        "target_resolution": "none_required",
+        "target_provenance": "none",
+        "target_id": null,
+        "candidate_target_ids": [
+          "courtyard_lantern"
+        ],
+        "operation_eligibility": "not_assessed",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "none",
+        "allowed_operation": null,
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": false
+      },
+      "components": [
+        {
+          "order": 1,
+          "description": "Ask about the lamp (courtyard lantern).",
+          "target_ref": "courtyard_lantern",
+          "operation_class": "ASK"
+        }
+      ]
+    }
+  },
+  {
+    "function": "decision_from_interpretation_record",
+    "file": "game\\conversational_orchestration.py",
+    "line": 2187,
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "Instead, make that a question about the lamp.",
+      "intent_family": "clarification",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "pending_intention_revised",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+      "context_update": {
+        "conversational_context": {
+          "pending_clarification": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "waystation_courtyard",
+            "original_text": "I ask one of them what happened.",
+            "choices": [
+              {
+                "entity_id": "sergeant_mara",
+                "label": "Sergeant Mara"
+              },
+              {
+                "entity_id": "corporal_bren",
+                "label": "Corporal Bren"
+              }
+            ],
+            "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "target_resolution": "ambiguous",
+            "revised_text": "Instead, make that a question about the lamp."
+          },
+          "pending_intention": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "waystation_courtyard",
+            "original_text": "I ask one of them what happened.",
+            "choices": [
+              {
+                "entity_id": "sergeant_mara",
+                "label": "Sergeant Mara"
+              },
+              {
+                "entity_id": "corporal_bren",
+                "label": "Corporal Bren"
+              }
+            ],
+            "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+            "target_resolution": "ambiguous",
+            "revised_text": "Instead, make that a question about the lamp."
+          }
+        }
+      },
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CORRECTION",
+      "authorization": null
+    },
+    "locals": {
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Change the previous ambiguous question about what happened to a question about the lamp."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous question was ambiguous about which person to ask.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "There is a lit lantern hanging beside the courtyard gate.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify information about the lamp instead of asking about what happened.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask about the lamp (courtyard lantern).",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Change question target from person to lamp."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Reformulate previous ambiguous question to be about the lamp",
+          "evidence_refs": [
+            "visible:0"
+          ]
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": "ASK"
+        },
+        "public_evidence": {
+          "visible:0": "A soot-streaked lantern burns beside the courtyard gate."
+        }
+      },
+      "player_text": "Instead, make that a question about the lamp.",
+      "text": "Instead, make that a question about the lamp."
+    }
+  }
+]

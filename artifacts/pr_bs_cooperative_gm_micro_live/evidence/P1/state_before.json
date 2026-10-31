@@ -1,0 +1,84 @@
+{
+  "temporal": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [],
+    "active_claim": null,
+    "discourse_focus": {},
+    "turn_counter": 1,
+    "active_scene_id": "chapel_belfry"
+  },
+  "scene": {
+    "id": "chapel_belfry",
+    "location": "Chapel belfry",
+    "summary": "A bronze bell hangs from a timber frame.",
+    "visible_facts": [
+      "The bell's wooden yoke is split.",
+      "The bell's leather hanger is torn."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [
+      {
+        "id": "chapel_bell",
+        "label": "chapel bell",
+        "aliases": [
+          "bell",
+          "wooden yoke",
+          "yoke",
+          "leather hanger",
+          "hanger"
+        ]
+      }
+    ],
+    "addressables": []
+  },
+  "world": {
+    "npcs": [],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "clues": {},
+    "world_flags": [],
+    "assets": []
+  }
+}

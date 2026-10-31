@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-08T23:35:03.998638+00:00",
+  "source_decisions": "artifacts/pr_bv_turn_operation_projection_micro_live/evidence",
+  "selection": [
+    {
+      "probe": "P1",
+      "expected_envelope": "structured_realization",
+      "selected_envelope": "structured_realization",
+      "response_operation": "bounded_interpretation",
+      "declaration_expectation": "optional_bounded_inference",
+      "consequential_realization_required": false,
+      "declaration_channel_exposed": true,
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "reason": "structured_declaration_channel_still_available"
+    },
+    {
+      "probe": "P2",
+      "expected_envelope": "narration_only",
+      "selected_envelope": "narration_only",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "consequential_realization_required": false,
+      "declaration_channel_exposed": false,
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "reason": "ordinary_incidental_dialogue_reply_requires_no_declaration"
+    },
+    {
+      "probe": "P3",
+      "expected_envelope": "structured_realization",
+      "selected_envelope": "structured_realization",
+      "response_operation": "player_hypothesis_discussion",
+      "declaration_expectation": "hypothesis_discussion_not_required",
+      "consequential_realization_required": false,
+      "declaration_channel_exposed": true,
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "reason": "structured_declaration_channel_still_available"
+    }
+  ],
+  "narration_only_response_contract": "NARRATION-ONLY RESPONSE CONTRACT: Return valid JSON only in this exact shape: {\"narration\": \"player-facing response\"}. Do not include other fields. The application will normalize this internally.",
+  "declared_claims_in_narration_only_system_prompt": false,
+  "normalization": {
+    "declared_claims": [],
+    "normalized_empty_declarations": true,
+    "declaration_authorship": false,
+    "player_facing_text": "The baker glances at the cooling rack."
+  },
+  "smuggled_declaration_rejected": true,
+  "failures": [],
+  "passed": true
+}

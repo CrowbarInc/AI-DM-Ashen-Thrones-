@@ -1,0 +1,68 @@
+[
+  {
+    "area": "Questions and plans",
+    "source": "game/unified_semantic_planning.py",
+    "symbol": "def prior_semantic_plan",
+    "finding": "Before: latest delivered plan, with question text/relationship but no question identity. Now active referent first; bounded legacy history fallback remains for old saves."
+  },
+  {
+    "area": "Delivered dialogue",
+    "source": "game/conversational_continuity.py",
+    "symbol": "def record_delivered_exchange",
+    "finding": "Existing bounded delivered_exchanges (32 rows), exact speech, turn and sealed response digest. New referent ID links the question without duplicating authorized speech."
+  },
+  {
+    "area": "Discourse slots",
+    "source": "game/discourse_state.py",
+    "symbol": "DISCOURSE_FOCUS_KEY",
+    "finding": "Stable active interlocutor/claim/lead/action slots exist, but represent other responsibilities; no correction lineage or missing question argument."
+  },
+  {
+    "area": "Commitments",
+    "source": "game/dialogue_authority.py",
+    "symbol": "COMMITMENT_KEY",
+    "finding": "NPC speech commitments and their epistemics remain separately owned; referents create no promises."
+  },
+  {
+    "area": "Historical propositions",
+    "source": "game/expressive_dialogue.py",
+    "symbol": "def proposition_identity",
+    "finding": "Existing proposition identity describes authorized speech/content. A player question needs independent identity even when no answer exists."
+  },
+  {
+    "area": "History permission",
+    "source": "game/dialogue_authority.py",
+    "symbol": "def historical_disclosure_permitted",
+    "finding": "Verified speech remains subject to disclosure checks; referent existence is not a truth or permission record."
+  },
+  {
+    "area": "Clarification routing",
+    "source": "game/conversational_orchestration.py",
+    "symbol": "class ConversationalDecision",
+    "finding": "Existing CLARIFY/EXECUTE decisions and pending context remain. New accepted unresolved questions carry clarification answer_status; malformed proposals preserve previous focus."
+  },
+  {
+    "area": "Topic focus",
+    "source": "game/prompt_context.py",
+    "symbol": "def _memory_window_focus_topic_tokens",
+    "finding": "Existing lexical/topic anchors support legacy prompting. They cannot replace an accepted unified referent."
+  },
+  {
+    "area": "Entity roles",
+    "source": "game/semantic_correspondence.py",
+    "symbol": "def proposition_schema",
+    "finding": "Existing binary proposition/evidence schema is reused, not a second world or source fact store."
+  },
+  {
+    "area": "Persistence",
+    "source": "game/storage.py",
+    "symbol": "def load_session",
+    "finding": "Session persistence envelopes already preserve conversational_context; no separate save format or migration engine needed."
+  },
+  {
+    "area": "New question memory",
+    "source": "game/conversational_referents.py",
+    "symbol": "KEY =",
+    "finding": "Separate compact index holds intent metadata and links existing delivery identity/digest; necessary because unknown speech is not a stable question."
+  }
+]

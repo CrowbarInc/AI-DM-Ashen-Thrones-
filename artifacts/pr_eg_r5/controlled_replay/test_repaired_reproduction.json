@@ -1,0 +1,502 @@
+{
+  "candidate": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+  "gate": {
+    "addressee": "player",
+    "adoption_status": "safe_fallback_selected",
+    "attempt": 1,
+    "authority_result": "safe_nonresolution",
+    "authorization_source": "host_terminal_safety",
+    "candidate_disposition": "rejected",
+    "contract": {
+      "contract_id": "rc_dbe7e0c70ca4",
+      "expected_resolution": "clarification",
+      "interlocutor_id": "",
+      "operation": "unresolved"
+    },
+    "contract_satisfying": false,
+    "generation_attempts": 1,
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "authority": [
+        "host_terminal_safety"
+      ],
+      "decision_acceptance_why": "controlled_validation_failure",
+      "gm_resolution_decision_audit": {
+        "acceptance_why": "controlled_validation_failure",
+        "attempt_1": {
+          "gm_resolution_decision_audit": {
+            "claim_results": [
+              {
+                "authority": "claim_only",
+                "authorized": true,
+                "epistemic_status": "hearsay",
+                "persistence": "claim_only",
+                "provenance": "npc_claim",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "relation_kind": "epistemic_status",
+                "semantic_identity": {
+                  "epistemic_status": "hearsay",
+                  "relation_kind": "epistemic_status"
+                },
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell."
+              }
+            ],
+            "decision_id": "rc_dbe7e0c70ca4",
+            "hard_valid": true,
+            "proposed_facts": [
+              {
+                "authority": "claim_only",
+                "authorized": true,
+                "consequence": "epistemic",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "claim_only",
+                "provenance": "npc_claim",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "semantic_identity": {
+                  "epistemic_status": "hearsay",
+                  "relation_kind": "epistemic_status"
+                },
+                "source_ref": "",
+                "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell."
+              }
+            ],
+            "violations": []
+          },
+          "reasons": [
+            "conflicting_target_authorities",
+            "wrong_interlocutor"
+          ],
+          "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\""
+        },
+        "attempt_2": null,
+        "decision_id": "rc_dbe7e0c70ca4",
+        "retry_context_present": true,
+        "source": "decision_review"
+      },
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": []
+    },
+    "immutable": true,
+    "interaction_completion": false,
+    "operation": "unresolved",
+    "player_input": "I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job?",
+    "provenance": "safe_nonresolution",
+    "rejected_candidate": {
+      "hard_invalid_reasons": [
+        "conflicting_target_authorities"
+      ],
+      "immutable": false,
+      "provenance": "rejected",
+      "text": "I cannot provide a validated response to that request."
+    },
+    "resolution_kind": "question",
+    "speaker": "GM",
+    "speaker_id": "",
+    "subject": "",
+    "target": "",
+    "text": "I cannot provide a validated response to that request.",
+    "turn_identity": "rc_dbe7e0c70ca4",
+    "integrity_digest": "1e22be8618a13afc04f89710df27368f635550f25419e3d5c323e184dccc24cf"
+  },
+  "final": {
+    "player_facing_text": "I cannot provide a validated response to that request.",
+    "metadata": {
+      "hard_validation_attempt_1": {
+        "hard_valid": false,
+        "reasons": [
+          "conflicting_target_authorities",
+          "wrong_interlocutor"
+        ],
+        "soft_flags": [],
+        "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_dbe7e0c70ca4",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "hearsay",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ]
+        }
+      },
+      "accepted_response": {
+        "addressee": "player",
+        "adoption_status": "safe_fallback_selected",
+        "attempt": 1,
+        "authority_result": "safe_nonresolution",
+        "authorization_source": "host_terminal_safety",
+        "candidate_disposition": "rejected",
+        "contract": {
+          "contract_id": "rc_dbe7e0c70ca4",
+          "expected_resolution": "clarification",
+          "interlocutor_id": "",
+          "operation": "unresolved"
+        },
+        "contract_satisfying": false,
+        "generation_attempts": 1,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            "host_terminal_safety"
+          ],
+          "decision_acceptance_why": "controlled_validation_failure",
+          "gm_resolution_decision_audit": {
+            "acceptance_why": "controlled_validation_failure",
+            "attempt_1": {
+              "gm_resolution_decision_audit": {
+                "claim_results": [
+                  {
+                    "authority": "claim_only",
+                    "authorized": true,
+                    "epistemic_status": "hearsay",
+                    "persistence": "claim_only",
+                    "provenance": "npc_claim",
+                    "reason_codes": [
+                      "epistemically_qualified"
+                    ],
+                    "relation_kind": "epistemic_status",
+                    "semantic_identity": {
+                      "epistemic_status": "hearsay",
+                      "relation_kind": "epistemic_status"
+                    },
+                    "source_ref": "",
+                    "source_scene": "",
+                    "source_turn": null,
+                    "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell."
+                  }
+                ],
+                "decision_id": "rc_dbe7e0c70ca4",
+                "hard_valid": true,
+                "proposed_facts": [
+                  {
+                    "authority": "claim_only",
+                    "authorized": true,
+                    "consequence": "epistemic",
+                    "outcome_classification": "epistemically_qualified",
+                    "persistence": "claim_only",
+                    "provenance": "npc_claim",
+                    "reason_codes": [
+                      "epistemically_qualified"
+                    ],
+                    "semantic_identity": {
+                      "epistemic_status": "hearsay",
+                      "relation_kind": "epistemic_status"
+                    },
+                    "source_ref": "",
+                    "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell."
+                  }
+                ],
+                "violations": []
+              },
+              "reasons": [
+                "conflicting_target_authorities",
+                "wrong_interlocutor"
+              ],
+              "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\""
+            },
+            "attempt_2": null,
+            "decision_id": "rc_dbe7e0c70ca4",
+            "retry_context_present": true,
+            "source": "decision_review"
+          },
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": false,
+        "operation": "unresolved",
+        "player_input": "I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job?",
+        "provenance": "safe_nonresolution",
+        "rejected_candidate": {
+          "hard_invalid_reasons": [
+            "conflicting_target_authorities"
+          ],
+          "immutable": false,
+          "provenance": "rejected",
+          "text": "I cannot provide a validated response to that request."
+        },
+        "resolution_kind": "question",
+        "speaker": "GM",
+        "speaker_id": "",
+        "subject": "",
+        "target": "",
+        "text": "I cannot provide a validated response to that request.",
+        "turn_identity": "rc_dbe7e0c70ca4",
+        "integrity_digest": "1e22be8618a13afc04f89710df27368f635550f25419e3d5c323e184dccc24cf",
+        "skipped_mutators": [
+          "_preserve_authoritative_resolution_facts_after_gate"
+        ]
+      },
+      "regeneration_feedback": "The previous attempt was rejected for: conflicting_target_authorities, wrong_interlocutor. The response assigns the answer to the wrong speaker. Preserve the bound interlocutor. Do not answer as a different person, and do not turn an observation into unrelated NPC speech. Keep the same resolution contract, operation, target, and dimension. Answer again. Do not rewrite a name into the previous sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"clarification\", \"operation\": \"unresolved\", \"target\": null, \"interlocutor\": null, \"subject\": \"I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules \", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"clarification\", \"authority\": \"unknown_allowed\", \"constraint\": \"The player wants to speak with both. That person is not available. Say so, or ask who they mean. Do not invent them. Do not answer as a different person.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_dbe7e0c70ca4\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Keeper Nara exists as keeper\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}}, {\"text\": \"Clerk Oren exists as clerk\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}}], \"realization_claims\": [{\"claim_id\": \"rc_9cdf942be847\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_18ff40a480b6\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Keeper Nara exists as keeper\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6efecc186d5d\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.1\", \"text\": \"Clerk Oren exists as clerk\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.1\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"accepted_realization_claims\": [{\"claim_id\": \"rc_9cdf942be847\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_18ff40a480b6\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Keeper Nara exists as keeper\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6efecc186d5d\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.1\", \"text\": \"Clerk Oren exists as clerk\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"rejected_declarations\": [], \"validation_failure\": {\"reasons\": [\"conflicting_target_authorities\", \"wrong_interlocutor\"], \"violations\": []}, \"structured_envelope_schema\": {\"declared_claims\": [{\"declaration_mode\": \"realize|propose\", \"source_claim_id\": \"claim_id_from_gm_resolution_decision or null\", \"premise_claim_ids\": [\"claim ids of propositions this epistemic claim depends on\"], \"text\": \"short internal claim\", \"relation_kind\": \"observation|causal|evidential|epistemic_status|ordinary_predicate|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}",
+      "regeneration_invoked": false,
+      "emission_debug": {
+        "accepted_response_provenance": "safe_nonresolution",
+        "generation_attempts": 1,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "legitimate_nonresolution",
+          "reasons": [],
+          "preserved": false
+        },
+        "accepted_emitted_equality": {
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": false,
+          "attempted_text": "I cannot provide a validated response to that request."
+        },
+        "opening_upstream_prepared_present": false,
+        "opening_upstream_prepared_len": 0,
+        "opening_upstream_prepared_promoted": false,
+        "opening_raw_text_source": "gm_player_facing_text",
+        "pre_gate_text_len": 54,
+        "post_final_emission_gate_text_len": 54,
+        "narration_state_consistency_before_preview": "I cannot provide a validated response to that request.",
+        "best_safe_candidate": "I cannot provide a validated response to that request.",
+        "best_safe_rank": 2,
+        "best_safe_contract_id": "rc_dbe7e0c70ca4",
+        "best_safe_coverage": {
+          "contract_id": "rc_dbe7e0c70ca4",
+          "operation": "unresolved",
+          "target": "",
+          "interlocutor": null,
+          "dimension": null,
+          "expected_resolution": "clarification",
+          "required_dimensions": [],
+          "covered_dimensions": [],
+          "complete": true
+        },
+        "replacement_decision": "accepted",
+        "replacement_reason": "no_incumbent",
+        "initial_safe_candidate": "I cannot provide a validated response to that request.",
+        "outcome_precedence": {
+          "downgrade_attempted": false,
+          "downgrade_rejected": false,
+          "downgrade_reason": null,
+          "recovery_used": false,
+          "recovery_source": null,
+          "destroyed": false,
+          "scene_momentum_appended": false,
+          "final_outcome_kind": "inability",
+          "final_satisfaction": "legitimate_nonresolution",
+          "replacement_reason": "resolution_content_preserved"
+        },
+        "post_narration_state_consistency_text_len": 54,
+        "narration_state_consistency_changed_text": false,
+        "narration_state_consistency_after_preview": "I cannot provide a validated response to that request.",
+        "accepted_emitted_report": {
+          "immutable": true,
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": false,
+          "metadata_mutation_blocked": true,
+          "accepted_response_text": "I cannot provide a validated response to that request.",
+          "emitted_response_text": "I cannot provide a validated response to that request."
+        },
+        "temporal_provenance_commit": {
+          "sealed_text": "I cannot provide a validated response to that request.",
+          "accepted_claim_count": 0,
+          "rejected_discarded_claim_count": 0,
+          "bucket_counts": {
+            "gm_inferences": 0,
+            "player_hypotheses": 0,
+            "accepted_incidentals": 0,
+            "rejected_consequential": 0
+          }
+        }
+      },
+      "decision_review": {
+        "governing_decision_contract_id": "rc_dbe7e0c70ca4",
+        "outcome_classification": "established_or_retrieved",
+        "attempt_1": {
+          "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.\"",
+          "reasons": [
+            "conflicting_target_authorities",
+            "wrong_interlocutor"
+          ],
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_dbe7e0c70ca4",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "Clerk Oren mutters, \"Word is, the bell beside the ferry is called the harbor bell.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "hearsay",
+                "relation_kind": "epistemic_status",
+                "persistence": "claim_only",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ]
+              }
+            ]
+          }
+        },
+        "retry_context": "The previous attempt was rejected for: conflicting_target_authorities, wrong_interlocutor. The response assigns the answer to the wrong speaker. Preserve the bound interlocutor. Do not answer as a different person, and do not turn an observation into unrelated NPC speech. Keep the same resolution contract, operation, target, and dimension. Answer again. Do not rewrite a name into the previous sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"clarification\", \"operation\": \"unresolved\", \"target\": null, \"interlocutor\": null, \"subject\": \"I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules \", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"clarification\", \"authority\": \"unknown_allowed\", \"constraint\": \"The player wants to speak with both. That person is not available. Say so, or ask who they mean. Do not invent them. Do not answer as a different person.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_dbe7e0c70ca4\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Keeper Nara exists as keeper\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}}, {\"text\": \"Clerk Oren exists as clerk\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}}], \"realization_claims\": [{\"claim_id\": \"rc_9cdf942be847\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_18ff40a480b6\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Keeper Nara exists as keeper\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6efecc186d5d\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.1\", \"text\": \"Clerk Oren exists as clerk\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.1\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"accepted_realization_claims\": [{\"claim_id\": \"rc_9cdf942be847\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_18ff40a480b6\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"keeper_nara\", \"subject_aliases\": [\"Keeper Nara\"], \"relation\": \"exists\", \"value\": \"keeper\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Keeper Nara exists as keeper\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6efecc186d5d\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"clerk_oren\", \"subject_aliases\": [\"Clerk Oren\"], \"relation\": \"exists\", \"value\": \"clerk\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.1\", \"text\": \"Clerk Oren exists as clerk\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"rejected_declarations\": [], \"validation_failure\": {\"reasons\": [\"conflicting_target_authorities\", \"wrong_interlocutor\"], \"violations\": []}, \"structured_envelope_schema\": {\"declared_claims\": [{\"declaration_mode\": \"realize|propose\", \"source_claim_id\": \"claim_id_from_gm_resolution_decision or null\", \"premise_claim_ids\": [\"claim ids of propositions this epistemic claim depends on\"], \"text\": \"short internal claim\", \"relation_kind\": \"observation|causal|evidential|epistemic_status|ordinary_predicate|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}",
+        "attempt_2": null,
+        "acceptance": {
+          "why": "controlled_validation_failure",
+          "text": "I cannot provide a validated response to that request."
+        }
+      },
+      "skipped_semantic_mutators": [
+        "apply_final_emission_gate",
+        "_preserve_accepted_bounded_resolution_after_gate",
+        "_preserve_physical_action_resolution_after_gate",
+        "preserve_interaction_obligation_after_gate",
+        "_preserve_resolution_contract_after_gate",
+        "_preserve_authoritative_resolution_facts_after_gate"
+      ]
+    },
+    "_final_delivery_seal": "{\"addressee\":\"player\",\"adoption_status\":\"safe_fallback_selected\",\"attempt\":1,\"authority_result\":\"safe_nonresolution\",\"authorization_source\":\"host_terminal_safety\",\"candidate_disposition\":\"rejected\",\"contract\":{\"contract_id\":\"rc_dbe7e0c70ca4\",\"expected_resolution\":\"clarification\",\"interlocutor_id\":\"\",\"operation\":\"unresolved\"},\"contract_satisfying\":false,\"generation_attempts\":1,\"grounding_result\":\"not_a_replacement_trigger\",\"hard_validation\":{\"authority\":[\"host_terminal_safety\"],\"decision_acceptance_why\":\"controlled_validation_failure\",\"gm_resolution_decision_audit\":{\"acceptance_why\":\"controlled_validation_failure\",\"attempt_1\":{\"gm_resolution_decision_audit\":{\"claim_results\":[{\"authority\":\"claim_only\",\"authorized\":true,\"epistemic_status\":\"hearsay\",\"persistence\":\"claim_only\",\"provenance\":\"npc_claim\",\"reason_codes\":[\"epistemically_qualified\"],\"relation_kind\":\"epistemic_status\",\"semantic_identity\":{\"epistemic_status\":\"hearsay\",\"relation_kind\":\"epistemic_status\"},\"source_ref\":\"\",\"source_scene\":\"\",\"source_turn\":null,\"text\":\"Clerk Oren mutters, \\\"Word is, the bell beside the ferry is called the harbor bell.\"}],\"decision_id\":\"rc_dbe7e0c70ca4\",\"hard_valid\":true,\"proposed_facts\":[{\"authority\":\"claim_only\",\"authorized\":true,\"consequence\":\"epistemic\",\"outcome_classification\":\"epistemically_qualified\",\"persistence\":\"claim_only\",\"provenance\":\"npc_claim\",\"reason_codes\":[\"epistemically_qualified\"],\"semantic_identity\":{\"epistemic_status\":\"hearsay\",\"relation_kind\":\"epistemic_status\"},\"source_ref\":\"\",\"text\":\"Clerk Oren mutters, \\\"Word is, the bell beside the ferry is called the harbor bell.\"}],\"violations\":[]},\"reasons\":[\"conflicting_target_authorities\",\"wrong_interlocutor\"],\"text\":\"Clerk Oren mutters, \\\"Word is, the bell beside the ferry is called the harbor bell.\\\"\"},\"attempt_2\":null,\"decision_id\":\"rc_dbe7e0c70ca4\",\"retry_context_present\":true,\"source\":\"decision_review\"},\"hard_valid\":true,\"reasons\":[],\"soft_flags\":[]},\"immutable\":true,\"interaction_completion\":false,\"operation\":\"unresolved\",\"player_input\":\"I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job?\",\"provenance\":\"safe_nonresolution\",\"rejected_candidate\":{\"hard_invalid_reasons\":[\"conflicting_target_authorities\"],\"immutable\":false,\"provenance\":\"rejected\",\"text\":\"I cannot provide a validated response to that request.\"},\"resolution_kind\":\"question\",\"speaker\":\"GM\",\"speaker_id\":\"\",\"subject\":\"\",\"target\":\"\",\"text\":\"I cannot provide a validated response to that request.\",\"turn_identity\":\"rc_dbe7e0c70ca4\"}",
+    "scene_update": null,
+    "world_updates": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "suggested_action": null,
+    "upstream_prepared_emission": {
+      "prepared_answer_fallback_text": "Clerk Oren says, \"Which do you mean? I cannot tell which one that refers to.\"",
+      "prepared_action_fallback_text": "You mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job, and you turn up a concrete clue.",
+      "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
+      "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
+      "semantic_mutation_write_sites": [
+        {
+          "mutation_id": "88cf4edf54bc",
+          "write_site_family": "repair",
+          "write_site_file": "game/upstream_response_repairs.py",
+          "write_site_function": "build_upstream_prepared_emission_payload",
+          "before_semantic_hash": "e3b0c44298fc1c14",
+          "after_semantic_hash": "10765689743b3919",
+          "selected_active_stream": false,
+          "candidate_only": true,
+          "owner": "game.upstream_response_repairs",
+          "source": "prepared_answer_fallback_text",
+          "mutation_reason": "candidate_creation:answer_upstream_prepared_repair",
+          "compatibility_status": "diagnostic_only"
+        },
+        {
+          "mutation_id": "f10019dfa0d7",
+          "write_site_family": "repair",
+          "write_site_file": "game/upstream_response_repairs.py",
+          "write_site_function": "build_upstream_prepared_emission_payload",
+          "before_semantic_hash": "e3b0c44298fc1c14",
+          "after_semantic_hash": "3859795ea1c2fc9c",
+          "selected_active_stream": false,
+          "candidate_only": true,
+          "owner": "game.upstream_response_repairs",
+          "source": "prepared_action_fallback_text",
+          "mutation_reason": "candidate_creation:action_outcome_upstream_prepared_repair",
+          "compatibility_status": "diagnostic_only"
+        }
+      ],
+      "realization_fallback_family": "upstream_prepared_emission"
+    },
+    "_player_facing_emission_finalized": true
+  },
+  "delivered_history": {
+    "speaker_id": "",
+    "speaker_name": "",
+    "addressee": "player",
+    "ownership": "gm",
+    "player_text": "I mean both of your repeated statements about the harbor bell. Could you please stop repeating that and clearly answer: do either of you manage ferry schedules and harbor coordination, or is that someone else's job?",
+    "delivered_text": "I cannot provide a validated response to that request.",
+    "subject": "",
+    "topic_id": "",
+    "requested_information": "",
+    "supplied_text": "",
+    "uncertain": true,
+    "commitment": false,
+    "scene_id": "",
+    "turn": 0,
+    "active": true,
+    "authorized_proposition": "",
+    "answer_sufficiency": "",
+    "proposition_id": "",
+    "response_integrity_digest": "1e22be8618a13afc04f89710df27368f635550f25419e3d5c323e184dccc24cf",
+    "authorization_source": "host_terminal_safety",
+    "adoption_turn_identity": "rc_dbe7e0c70ca4"
+  },
+  "sequence": [
+    "run_preserve_if_valid",
+    "_finalize_player_facing_for_turn",
+    "_preserve_authoritative_resolution_facts_after_gate",
+    "record_delivered_exchange"
+  ],
+  "original_source": "artifacts/pr_eg_r4/turns.jsonl:B_skeptical:9"
+}

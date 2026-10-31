@@ -1,0 +1,109 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "ansel",
+      "name": "Ansel",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "gate",
+          "text": "Ansel told Brea the yard gate sticks at dawn.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "oil",
+          "text": "The hinge oil is kept in the green tin.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "hymn",
+          "text": "The yard cipher is iron hymn.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    },
+    {
+      "id": "brea",
+      "name": "Brea",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "gate",
+          "text": "Brea told Ansel the yard gate sticks at dusk.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "broom",
+          "text": "The yard broom hangs by the cistern.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "hymn",
+          "text": "The yard cipher is iron hymn.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    },
+    {
+      "id": "cole",
+      "name": "Cole",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "lamp",
+          "text": "Cole lights the yard lamp at sunset.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "hymn",
+          "text": "The yard cipher is iron hymn.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

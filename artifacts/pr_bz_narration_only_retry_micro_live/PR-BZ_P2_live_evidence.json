@@ -1,0 +1,184 @@
+{
+  "gate": "PR-BZ",
+  "mode": "NARRATION-ONLY RETRY MICRO-LIVE VALIDATION",
+  "probe": "P2",
+  "reconstruction": {
+    "source": "artifacts/pr_bx_narration_only_micro_live",
+    "player_input": "Baker, which loaf do you usually keep for yourself?",
+    "scene": "Bread stall. Visible fact: a baker stands beside loaves. No authored loaf preference.",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequentiality_classification": {
+      "consequential_realization_required": false,
+      "semantic_ceiling": "transient_dialogue_not_durable_fact"
+    }
+  },
+  "selected_envelope": "narration_only",
+  "provider_response_contracts": [
+    "narration_only"
+  ],
+  "provider_attempt_count": 1,
+  "provider_attempts": {
+    "attempt_1": {
+      "response_id": "resp_036b3829385bdcad006ac828ae977087d29808874f9edbe63c",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "usage": {
+        "input_tokens": 23413,
+        "output_tokens": 85,
+        "total_tokens": 23498,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "response_shape": {
+        "json_object": true,
+        "keys": [
+          "narration"
+        ]
+      },
+      "raw_output": "{\"narration\": \"The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \\\"I don't have a particular favorite to keep for myself,\\\" they say carefully. \\\"Every loaf here is made with care, but I try not to show any preference.\\\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.\"}",
+      "narration": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared."
+    },
+    "attempt_2": null
+  },
+  "declaration_validation_result": {
+    "schema_version": 1,
+    "structured_contract_present": true,
+    "hard_valid": true,
+    "accepted_claims": [],
+    "rejected_claims": [],
+    "violations": []
+  },
+  "narration_validation_result": {
+    "decision_id": "rc_d4c97cad4722",
+    "hard_valid": true,
+    "violations": [],
+    "proposed_facts": [
+      {
+        "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+        "provenance": "bounded_incidental",
+        "consequence": "low",
+        "authorized": true,
+        "reason_codes": [
+          "bounded_incidental_texture"
+        ],
+        "authority": "bounded_incidental",
+        "persistence": "runtime_incidental",
+        "source_ref": "",
+        "outcome_classification": "epistemically_qualified",
+        "semantic_identity": {}
+      },
+      {
+        "text": "\"I don't have a particular favorite to keep for myself,\" they say carefully.",
+        "provenance": "npc_claim",
+        "consequence": "epistemic",
+        "authorized": true,
+        "reason_codes": [
+          "epistemically_qualified"
+        ],
+        "authority": "claim_only",
+        "persistence": "claim_only",
+        "source_ref": "",
+        "outcome_classification": "epistemically_qualified",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hearsay"
+        }
+      }
+    ],
+    "claim_results": [
+      {
+        "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+        "semantic_identity": {},
+        "provenance": "bounded_incidental",
+        "authority": "bounded_incidental",
+        "epistemic_status": "",
+        "relation_kind": "ordinary_predicate",
+        "persistence": "runtime_incidental",
+        "authorized": true,
+        "source_ref": "",
+        "source_turn": null,
+        "source_scene": "",
+        "reason_codes": [
+          "bounded_incidental_texture"
+        ]
+      },
+      {
+        "text": "\"I don't have a particular favorite to keep for myself,\" they say carefully.",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "hearsay"
+        },
+        "provenance": "npc_claim",
+        "authority": "claim_only",
+        "epistemic_status": "hearsay",
+        "relation_kind": "epistemic_status",
+        "persistence": "claim_only",
+        "authorized": true,
+        "source_ref": "",
+        "source_turn": null,
+        "source_scene": "",
+        "reason_codes": [
+          "epistemically_qualified"
+        ]
+      }
+    ]
+  },
+  "regeneration_trigger": null,
+  "regeneration_feedback": null,
+  "final_accepted_result": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+  "emitted_player_facing_narration": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+  "c18": {
+    "accepted": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+    "sealed": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+    "emitted": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+    "exact_equal": true
+  },
+  "integrity": {
+    "player_facing_leakage": [],
+    "authority_problems": [],
+    "accepted_model_authored_declarations": false,
+    "temporal_after": {
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [
+        {
+          "semantic_identity": {},
+          "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+          "authority": "bounded_incidental",
+          "provenance": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "bread_stall",
+          "source_turn": 2
+        }
+      ],
+      "rejected_consequential": [],
+      "active_claim": null,
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "bread_stall",
+        "active_interlocutor": {
+          "id": "baker",
+          "label": "Baker",
+          "kind": "interlocutor",
+          "scene_id": "bread_stall",
+          "turn_index": 2,
+          "source": "resolution_contract"
+        },
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 2,
+        "last_committed_contract_id": "rc_d4c97cad4722"
+      },
+      "turn_counter": 2,
+      "active_scene_id": "bread_stall"
+    }
+  }
+}

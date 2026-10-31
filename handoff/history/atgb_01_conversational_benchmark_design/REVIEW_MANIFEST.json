@@ -1,0 +1,127 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "atgb_01_conversational_benchmark_design",
+  "campaign_name": "ATGB-01 Conversational Benchmark Design",
+  "generated_at": "2026-10-18T21:10:00+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 8959,
+      "sha256": "e8359870a0e6820cc855030144e50905a238e74028729b3d969f9460a415c4b3"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "bundle_path": "support/development/reports/atgb_01_conversational_benchmark_design.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 35114,
+      "sha256": "1c757d2b68c138bc94159482f0ca39172d2e0b4f7c72364ffdbdb61342825784"
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "scenario_catalog",
+      "why": "Ten proposed conversations, 37 scored turns, facts, and pass criteria.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/reports/atgb_01_scenario_catalog.md",
+      "bundle_path": "support/development/reports/atgb_01_scenario_catalog.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 45142,
+      "sha256": "07c0a5d56c3ef29d635c7c1d675156b71c3db6534db3874b3c10326180c69f4e"
+    },
+    {
+      "path": "development/reports/atgb_01_implementation_feasibility.md",
+      "role": "feasibility_assessment",
+      "why": "Existing chat, reset, telemetry, and evidence-packet reuse, and the small driver that would still be required after adoption.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/reports/atgb_01_implementation_feasibility.md",
+      "bundle_path": "support/development/reports/atgb_01_implementation_feasibility.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 8201,
+      "sha256": "4f3b35955207bafdd97929fe84b9054fc8a1dc0cc527507c64a12e28974fd81e"
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "specialized_authority",
+      "why": "ATGB governance. This proposal does not adopt a corpus and does not amend the standard.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/validation_evidence_standard.md",
+      "bundle_path": "support/docs/validation_evidence_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 13513,
+      "sha256": "a81921eebb41cc8bff5ee4101e9b25a4c913c96d76cecb344a519cccd8e25fae"
+    },
+    {
+      "path": "docs/playability_validation.md",
+      "role": "specialized_authority",
+      "why": "Playability remains evaluate_playability. ATGB must not become a second scorer.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "docs/playability_validation.md",
+      "bundle_path": "support/docs/playability_validation.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 7910,
+      "sha256": "c11c986e2d7732a0bb6bfcdc331d764cec5a22b3bcf50c267e2e50e1beda8035"
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "session_orientation",
+      "why": "Points at the proposal and leaves the PR-BL versus PR-EG discrepancy unresolved.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/NEXT_SESSION.md",
+      "bundle_path": "support/docs/NEXT_SESSION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 52619,
+      "sha256": "0b1529ec146f0b7ee103c22451bfa2ca8c397323fa5f964c6dfb7fe244c2ef28"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 8,
+    "zip_size_bytes": "000000071252",
+    "uncompressed_payload_bytes": 171458,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "data/validation/review_handoffs/atgb_01_conversational_benchmark_design.json",
+    "canonical_repository_root": "."
+  }
+}

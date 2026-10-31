@@ -1,0 +1,145 @@
+--- cycle_baseline/game/player_interpretation_bridge.py
++++ final/game/player_interpretation_bridge.py
+@@ -80,6 +80,117 @@
+     if isinstance(interpretation.get("record"), dict):
+         return interpretation["record"]
+     return interpretation
++
++
++def reconcile_reference_annotations(record: dict, *, player_text: str, scene: dict | None,
++                                    world: dict | None, session: dict | None = None) -> tuple[dict, dict]:
++    """Reconcile proposals against existing grounding; never select facts or effects.
++
++    Subject presence is independent of knowledge/disclosure eligibility. Authored
++    topics establish vocabulary only; the social resolver still owns disclosure.
++    Unidentified annotations stay unresolved, including provider/player conflicts.
++    """
++    import copy
++    import re
++    from game.ordinary_semantic_ownership import assess_addressee_grounding
++    from game.conversational_orchestration import _place_match
++
++    result = copy.deepcopy(record)
++    refs = result.get("references") or {}
++    unresolved = refs.get("unresolved_references") or []
++    evidence = {"annotations": [], "addressee": None, "operation": None}
++    operation, target_id = _single_component(result)
++    evidence["operation"] = operation
++    if (result.get("interpretation_status") not in {"INTERPRETED", "CLARIFICATION_REQUIRED"}
++            or operation not in CONNECTED_OPERATIONS
++            or (not unresolved and result.get("interpretation_status") == "INTERPRETED")):
++        return result, evidence
++    catalog = visible_catalog(scene, world)
++    grounding = None
++    if operation == "ASK":
++        grounding = assess_addressee_grounding(player_text, scene=scene, world=world,
++                                               session=session, proposed_target_id=target_id)
++        evidence["addressee"] = grounding
++    grounded_id = str((grounding or {}).get("target_id") or "")
++    addressee_ok = bool(grounding and grounding.get("operation_eligibility") == "executable")
++    if operation == "ASK" and addressee_ok and grounding.get("direct_address") and not target_id:
++        # Reuse the existing addressee resolver for a missing proposed target.
++        result["action_components"][0]["target_ref"] = grounded_id
++        if grounded_id not in refs.get("permitted_entity_ids", []):
++            refs.setdefault("permitted_entity_ids", []).append(grounded_id)
++        evidence["target_handoff"] = {"status": "RESOLVABLE", "target_id": grounded_id}
++    speaker = (catalog.get(grounded_id) or {}).get("row") or {}
++    current = _scene_obj(scene)
++    # Engine-owned authored/visible passages, never provider subject/summary.
++    passages = [("scene", str(current.get("summary") or ""))]
++    passages += [("scene.visible_fact", str(v)) for v in current.get("visible_facts") or []]
++    if addressee_ok:
++        passages += [("npc.authored_subject", str(t.get("text") or ""))
++                     for t in speaker.get("topics") or [] if isinstance(t, dict)]
++    def mentioned(phrase, text):
++        return bool(phrase and re.search(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", text, re.I))
++    remaining = []
++    for annotation in unresolved:
++        phrase = str(annotation).strip()
++        explicit = mentioned(phrase, player_text)
++        candidates = [entity_id for entity_id, info in catalog.items()
++                      if any(_place_match(phrase, str(label)) for label in
++                             [info["row"].get("name"), info["row"].get("label"),
++                              *info["row"].get("aliases", [])] if label)]
++        status, source, role = "MISSING", None, "subject" if operation == "ASK" else "target"
++        # These are role identifiers, not entity names or free-text matches.
++        # Their proposed role grants nothing: the existing engine resolver must
++        # independently confirm the player-addressed person.
++        if operation == "ASK" and not explicit and phrase in {"npc_to_ask", "addressee", "interlocutor"}:
++            role = "addressee"
++            if addressee_ok and grounding.get("direct_address"):
++                status, source = "GROUNDED", grounding.get("target_provenance")
++        if operation == "ASK" and not addressee_ok and grounding.get("target_resolution") == "ambiguous":
++            from game.interaction_completion import addressed_person_nominal
++            nominal = addressed_person_nominal(player_text)
++            if mentioned(phrase, nominal):
++                status, role = "AMBIGUOUS", "addressee"
++        if operation == "ASK" and grounded_id in candidates:
++            role = "addressee"
++            if addressee_ok and explicit and len(candidates) == 1:
++                status, source = "GROUNDED", grounding.get("target_provenance")
++        elif explicit and len(candidates) == 1 and (operation == "ASK" or candidates[0] == target_id):
++            status, source = "GROUNDED", "visible_catalog:" + candidates[0]
++        elif len(candidates) > 1:
++            status = "AMBIGUOUS"
++        elif operation == "ASK" and addressee_ok and explicit:
++            source = next((owner for owner, text in passages if mentioned(phrase, text)), None)
++            if source:
++                status = "GROUNDED"
++        if status == "MISSING" and operation == "ASK" and addressee_ok and not explicit and not candidates:
++            from game.conversational_continuity import _DEICTIC
++            from game.social import _next_topic_to_reveal
++            # An unmentioned noun cannot veto a uniquely supported explicit
++            # question. Ask the existing read-only selector for eligibility;
++            # no fact is adopted here and disclosure still runs in the resolver.
++            if not _DEICTIC.search(player_text):
++                selection = {}
++                supported = _next_topic_to_reveal(
++                    speaker, ((session or {}).get("npc_runtime") or {}).get(grounded_id) or {},
++                    player_text=player_text, allow_revealed=True, selection=selection)
++                if supported and not selection.get("ambiguous"):
++                    status, source = "NOT_APPLICABLE", selection.get("selected_source")
++        if status not in {"GROUNDED", "NOT_APPLICABLE"}:
++            remaining.append(annotation)
++        evidence["annotations"].append(dict(annotation=annotation, role=role, status=status,
++                                              explicit=explicit, candidates=candidates, source=source))
++    result["references"]["unresolved_references"] = remaining
++    if (operation == "ASK" and addressee_ok and grounding.get("direct_address")
++            and not remaining and result.get("interpretation_status") == "CLARIFICATION_REQUIRED"):
++        from game.conversational_continuity import _DEICTIC
++        # Do not override a potentially unresolved deictic subject merely
++        # because the person addressed is known.
++        if not _DEICTIC.search(player_text):
++            result["interpretation_status"] = "INTERPRETED"
++            result["clarification_question"] = ""
++            result["communication_mode"] = "IN_WORLD_ACTION"
++            evidence["status_reconciled"] = "explicit_addressee_no_remaining_reference"
++    return result, evidence
+ 
+ 
+ def normalized_action_from_interpretation(
+@@ -113,6 +224,8 @@
+             "reason": "not_interpreted",
+             "interpretation_status": record.get("interpretation_status"),
+         }
++    record, reconciliation = reconcile_reference_annotations(
++        record, player_text=player_text, scene=scene, world=world, session=session)
+     refs = record.get("references") if isinstance(record.get("references"), dict) else {}
+     unresolved = refs.get("unresolved_references") if isinstance(refs, dict) else []
+     if unresolved:
+@@ -121,6 +234,7 @@
+             "accepted": False,
+             "reason": "unresolved_references",
+             "unresolved_references": list(unresolved),
++            "reference_reconciliation": reconciliation,
+         }
+     operation, target_ref = _single_component(record)
+     if operation not in CONNECTED_OPERATIONS:
+@@ -208,6 +322,7 @@
+                 "operation": operation,
+                 "target_ref": target_id,
+                 "visible_surface_inspection": visible_surface_inspection,
++                "reference_reconciliation": record.get("reference_reconciliation") or reconciliation,
+             }
+         },
+     }

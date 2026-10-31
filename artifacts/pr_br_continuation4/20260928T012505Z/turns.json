@@ -1,0 +1,970 @@
+[
+  {
+    "probe_id": "claim_attempt_runner",
+    "player_text": "I stop beside the tavern runner and ask what rumor they have been calling out to the yard.",
+    "gm_text": "Tavern Runner shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "\"From what I heard, the patrol vanished near some muddy footprints northwest of the crates,\" the tavern runner calls out, their voice carrying across the rain-soaked yard. \"No one seems to know where they went after that.\"",
+        "proposal_count": 0
+      }
+    ],
+    "contract": {
+      "contract_id": "rc_445974f309df",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "interlocutor",
+        "id_or_text": "tavern_runner",
+        "source": "inherited_discourse"
+      },
+      "interlocutor_id": "tavern_runner",
+      "conversational_subject": "tavern_runner",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "npc_claim",
+      "discourse_ref": {
+        "type": "interlocutor",
+        "id": "tavern_runner",
+        "label": "tavern_runner",
+        "source_turn": null
+      },
+      "referent_provenance": "inherited_discourse",
+      "ambiguous": false,
+      "raw_input": "I stop beside the tavern runner and ask what rumor they have been calling out to the yard.",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "active_interlocutor",
+        "referent_reason": "active_interlocutor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      }
+    },
+    "contract_id": "rc_445974f309df",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "tavern_runner",
+      "source": "inherited_discourse"
+    },
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": "active_interlocutor",
+      "referent_reason": "active_interlocutor",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false
+    },
+    "ambiguous": false,
+    "expected_resolution": "answer",
+    "epistemic_mode": "npc_claim",
+    "obligation": {
+      "kind": "question",
+      "target": "what rumor they have been calling out to the yard",
+      "interlocutor_id": "tavern_runner",
+      "subject": "what rumor they have been calling out to the yard",
+      "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+      "claim_id": null,
+      "resolution_mode": "npc_claim_response",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_445974f309df"
+    },
+    "live_resolution_mode": null,
+    "final_emission": {},
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_445974f309df"
+    },
+    "active_claim": null,
+    "actionable_lead": null,
+    "active_inspected": null,
+    "claim_ledger_tail": null,
+    "catalog_fallback": [
+      "minimal_social_emergency",
+      "ownership_terminal"
+    ],
+    "assessment": {
+      "contract_id": "rc_445974f309df",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "active_interlocutor",
+        "referent_reason": "active_interlocutor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "contract_unchecked"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "question"
+  },
+  {
+    "probe_id": "claim_attempt_serjeant",
+    "player_text": "I leave the runner and ask the gate serjeant what travelers have been repeating as they come through.",
+    "gm_text": "Gate Serjeant mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "\"I can't say for certain what travelers have been repeating,\" the gate serjeant responds, glancing briefly at the muddy line of arrivals. \"No reports come here beyond official word, and no one shares much aloud at the gate. If you want rumors, you’ll need to listen to the runners or those inside the city.\"",
+        "proposal_count": 0
+      }
+    ],
+    "contract": {
+      "contract_id": "rc_e6d0a73430a1",
+      "turn_index": 2,
+      "request_kind": "clarification",
+      "operation": "perceive",
+      "target_ref": {
+        "type": "object",
+        "id_or_text": null,
+        "source": "unresolved"
+      },
+      "interlocutor_id": "gate_serjeant",
+      "conversational_subject": null,
+      "dimension": "use",
+      "dimensions": [
+        "use",
+        "wear"
+      ],
+      "expected_resolution": "clarification",
+      "epistemic_mode": "bounded_incidental",
+      "discourse_ref": null,
+      "referent_provenance": "unresolved",
+      "ambiguous": false,
+      "raw_input": "I leave the runner and ask the gate serjeant what travelers have been repeating as they come through.",
+      "construction": {
+        "cues": [
+          "use",
+          "wear",
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "inspected_unresolved",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      }
+    },
+    "contract_id": "rc_e6d0a73430a1",
+    "operation": "perceive",
+    "request_kind": "clarification",
+    "dimension": "use",
+    "dimensions": [
+      "use",
+      "wear"
+    ],
+    "referent_provenance": "unresolved",
+    "discourse_ref": null,
+    "target_ref": {
+      "type": "object",
+      "id_or_text": null,
+      "source": "unresolved"
+    },
+    "construction": {
+      "cues": [
+        "use",
+        "wear",
+        "pronoun"
+      ],
+      "referent_slot": null,
+      "referent_reason": "inspected_unresolved",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false
+    },
+    "ambiguous": false,
+    "expected_resolution": "clarification",
+    "epistemic_mode": "bounded_incidental",
+    "obligation": {
+      "kind": "clarification",
+      "target": "gate serjeant what travelers have been repeating a",
+      "interlocutor_id": "gate_serjeant",
+      "subject": "what travelers have been repeating as they come through",
+      "requested_outcome": "clarify the referenced subject or state that it cannot be identified",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 2,
+      "resolution_contract_id": "rc_e6d0a73430a1"
+    },
+    "live_resolution_mode": null,
+    "final_emission": {},
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "Gate Serjeant",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_31c07095f9",
+        "label": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_e6d0a73430a1"
+    },
+    "active_claim": {
+      "id": "emitted_31c07095f9",
+      "label": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "emitted_npc_claim"
+    },
+    "actionable_lead": null,
+    "active_inspected": null,
+    "claim_ledger_tail": null,
+    "catalog_fallback": [],
+    "assessment": {
+      "contract_id": "rc_e6d0a73430a1",
+      "dimension": "use",
+      "dimensions": [
+        "use",
+        "wear"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "unresolved",
+      "assessment_status": "unsatisfied",
+      "assessment_reasons": [
+        "clarification_missing"
+      ],
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "use",
+          "wear",
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "inspected_unresolved",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "response_missed_contract"
+    },
+    "semantic_result": "FAIL",
+    "resolution_kind": "question"
+  },
+  {
+    "probe_id": "indirect_source",
+    "player_text": "Who did he hear that from?",
+    "gm_text": "Gate Serjeant mutters, \"Word is, the patrol route changed after the Ash Compact census choke worsened.\"",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "\"The runner,\" the gate serjeant says quietly, \"is a regular at the nearby tavern—you’ll find they often carry the freshest whispers and half-heard stories. It was from them that the word came regarding the patrol vanishing near those muddy footprints northwest of the crates.\"",
+        "proposal_count": 0
+      }
+    ],
+    "contract": {
+      "contract_id": "rc_dbf34e037cbd",
+      "turn_index": 3,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "claim",
+        "id_or_text": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "source": "inherited_discourse"
+      },
+      "interlocutor_id": "gate_serjeant",
+      "conversational_subject": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "dimension": "source",
+      "dimensions": [
+        "source"
+      ],
+      "expected_resolution": "answer",
+      "epistemic_mode": "npc_claim",
+      "discourse_ref": {
+        "type": "claim",
+        "id": "emitted_31c07095f9",
+        "label": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+        "source_turn": 2
+      },
+      "referent_provenance": "inherited_discourse",
+      "ambiguous": false,
+      "raw_input": "Who did he hear that from?",
+      "construction": {
+        "cues": [
+          "source",
+          "pronoun"
+        ],
+        "referent_slot": "active_claim",
+        "referent_reason": "unique_active_claim",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": true
+      }
+    },
+    "contract_id": "rc_dbf34e037cbd",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": "source",
+    "dimensions": [
+      "source"
+    ],
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "claim",
+      "id": "emitted_31c07095f9",
+      "label": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "source_turn": 2
+    },
+    "target_ref": {
+      "type": "claim",
+      "id_or_text": "Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.",
+      "source": "inherited_discourse"
+    },
+    "construction": {
+      "cues": [
+        "source",
+        "pronoun"
+      ],
+      "referent_slot": "active_claim",
+      "referent_reason": "unique_active_claim",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": true
+    },
+    "ambiguous": false,
+    "expected_resolution": "answer",
+    "epistemic_mode": "npc_claim",
+    "obligation": {
+      "kind": "follow_up",
+      "target": "gate_serjeant",
+      "interlocutor_id": "gate_serjeant",
+      "subject": null,
+      "requested_outcome": "answer, qualify, refuse, or redirect the follow-up about the established claim",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 3,
+      "resolution_contract_id": "rc_dbf34e037cbd"
+    },
+    "live_resolution_mode": null,
+    "final_emission": {},
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "Gate Serjeant",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_f14c556ed8",
+        "label": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_dbf34e037cbd"
+    },
+    "active_claim": {
+      "id": "emitted_f14c556ed8",
+      "label": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "emitted_npc_claim"
+    },
+    "actionable_lead": null,
+    "active_inspected": null,
+    "claim_ledger_tail": null,
+    "catalog_fallback": [],
+    "assessment": {
+      "contract_id": "rc_dbf34e037cbd",
+      "dimension": "source",
+      "dimensions": [
+        "source"
+      ],
+      "operation": "ask",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "unsatisfied",
+      "assessment_reasons": [
+        "generic_scene_replaced_dimension",
+        "dimension_not_addressed"
+      ],
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "source",
+          "pronoun"
+        ],
+        "referent_slot": "active_claim",
+        "referent_reason": "unique_active_claim",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": true
+      },
+      "failure_locus": "response_missed_contract"
+    },
+    "semantic_result": "FAIL",
+    "resolution_kind": "question"
+  },
+  {
+    "probe_id": "indirect_confidence",
+    "player_text": "Does he trust the story?",
+    "gm_text": "Gate Serjeant shrugs, eyes narrowing slightly. \"I can't say for sure if I trust it,\" they mutter. \"It's just word that the patrol route changed once the Ash Compact census choke tightened. Nothing confirmed beyond the rumor.\" \"If you want certainty, you might need to follow up where those muddy footprints lead.\"",
+    "model_calls": 2,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "The gate serjeant shrugs, glancing back at the notice board with a frown. \"Trust? I don't know if anyone around here truly does. The patrol route changed because of the census choke, that's all I can say for certain. Whether the rest is true or just whispers swirling in the rain—that's beyond what I can vouch for.\"",
+        "proposal_count": 0
+      },
+      {
+        "purpose": "retry_escalation",
+        "retry_attempt": 1,
+        "retry_reason": "validator_voice",
+        "strict_social": false,
+        "model_player_facing_excerpt": "The gate serjeant shrugs, eyes narrowing slightly. \"I can't say for sure if I trust it,\" they mutter. \"It's just word that the patrol route changed once the Ash Compact census choke tightened. Nothing confirmed beyond the rumor.\" Their gaze flicks toward the muddy path northwest of the crates. \"If you want certainty, you might need to follow up where those muddy footprints lead.\"",
+        "proposal_count": 0
+      }
+    ],
+    "contract": {
+      "contract_id": "rc_e0c0f1d8baea",
+      "turn_index": 4,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "claim",
+        "id_or_text": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+        "source": "inherited_discourse"
+      },
+      "interlocutor_id": "gate_serjeant",
+      "conversational_subject": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+      "dimension": "confidence",
+      "dimensions": [
+        "confidence"
+      ],
+      "expected_resolution": "answer",
+      "epistemic_mode": "npc_claim",
+      "discourse_ref": {
+        "type": "claim",
+        "id": "emitted_f14c556ed8",
+        "label": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+        "source_turn": 3
+      },
+      "referent_provenance": "inherited_discourse",
+      "ambiguous": false,
+      "raw_input": "Does he trust the story?",
+      "construction": {
+        "cues": [
+          "confidence",
+          "pronoun"
+        ],
+        "referent_slot": "active_claim",
+        "referent_reason": "unique_active_claim",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": true
+      }
+    },
+    "contract_id": "rc_e0c0f1d8baea",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": "confidence",
+    "dimensions": [
+      "confidence"
+    ],
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "claim",
+      "id": "emitted_f14c556ed8",
+      "label": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+      "source_turn": 3
+    },
+    "target_ref": {
+      "type": "claim",
+      "id_or_text": "Word is, the patrol route changed after the Ash Compact census choke worsened.",
+      "source": "inherited_discourse"
+    },
+    "construction": {
+      "cues": [
+        "confidence",
+        "pronoun"
+      ],
+      "referent_slot": "active_claim",
+      "referent_reason": "unique_active_claim",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": true
+    },
+    "ambiguous": false,
+    "expected_resolution": "answer",
+    "epistemic_mode": "npc_claim",
+    "obligation": {
+      "kind": "follow_up",
+      "target": "gate_serjeant",
+      "interlocutor_id": "gate_serjeant",
+      "subject": null,
+      "requested_outcome": "answer, qualify, refuse, or redirect the follow-up about the established claim",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 4,
+      "resolution_contract_id": "rc_e0c0f1d8baea"
+    },
+    "live_resolution_mode": null,
+    "final_emission": {},
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "Gate Serjeant",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_0deff53c05",
+        "label": "I can't say for sure if I trust it,",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_e0c0f1d8baea"
+    },
+    "active_claim": {
+      "id": "emitted_0deff53c05",
+      "label": "I can't say for sure if I trust it,",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 4,
+      "source": "emitted_npc_claim"
+    },
+    "actionable_lead": null,
+    "active_inspected": null,
+    "claim_ledger_tail": null,
+    "catalog_fallback": [],
+    "assessment": {
+      "contract_id": "rc_e0c0f1d8baea",
+      "dimension": "confidence",
+      "dimensions": [
+        "confidence"
+      ],
+      "operation": "ask",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "covered:confidence"
+      ],
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "confidence",
+          "pronoun"
+        ],
+        "referent_slot": "active_claim",
+        "referent_reason": "unique_active_claim",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": true
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "question"
+  },
+  {
+    "probe_id": "inspect_object",
+    "player_text": "I stop at the posted sheet and look it over.",
+    "gm_text": "Gate Serjeant says, \"I couldn't tell you the requested information; you will need another source.\"",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "\"That posted sheet? It's official—listing the new taxes, curfew rules, and a warning about the missing patrol,\" the gate serjeant says, eyes flicking briefly to the paper before returning to the crowd. \"Beyond that, I don't have extra details to offer.\"",
+        "proposal_count": 0
+      }
+    ],
+    "contract": {
+      "contract_id": "rc_b00e06d5a727",
+      "turn_index": 5,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "object",
+        "id_or_text": "posted sheet",
+        "source": "explicit_player"
+      },
+      "interlocutor_id": "gate_serjeant",
+      "conversational_subject": "posted sheet",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I stop at the posted sheet and look it over.",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "explicit_target",
+        "referent_reason": "explicit_current_turn_target",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      }
+    },
+    "contract_id": "rc_b00e06d5a727",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "explicit_player"
+    },
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": "explicit_target",
+      "referent_reason": "explicit_current_turn_target",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false
+    },
+    "ambiguous": false,
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "obligation": {
+      "kind": "question",
+      "target": "gate_serjeant",
+      "interlocutor_id": "gate_serjeant",
+      "subject": "gate_serjeant",
+      "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 5,
+      "resolution_contract_id": "rc_b00e06d5a727"
+    },
+    "live_resolution_mode": null,
+    "final_emission": {},
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "Gate Serjeant",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_0deff53c05",
+        "label": "I can't say for sure if I trust it,",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 5,
+      "last_committed_contract_id": "rc_b00e06d5a727"
+    },
+    "active_claim": {
+      "id": "emitted_0deff53c05",
+      "label": "I can't say for sure if I trust it,",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 4,
+      "source": "emitted_npc_claim"
+    },
+    "actionable_lead": null,
+    "active_inspected": null,
+    "claim_ledger_tail": null,
+    "catalog_fallback": [],
+    "assessment": {
+      "contract_id": "rc_b00e06d5a727",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "explicit_target",
+        "referent_reason": "explicit_current_turn_target",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "contract_unchecked"
+    },
+    "semantic_result": "FAIL",
+    "resolution_kind": "social_probe"
+  },
+  {
+    "probe_id": "wear_use",
+    "player_text": "Does it look like people have handled it recently?",
+    "gm_text": "Gate Serjeant says, \"Which do you mean? I cannot tell which one that refers to.\"",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "The gate serjeant glances toward the notice board before replying, \"I can't say for certain if it has been handled recently. The board isn't freshly scrawled or torn, but given the rain and the crowd, any signs could have been covered up quickly. If you want a clearer picture, you might want to inspect the area near the crates where muddy footprints have been noticed recently.\"",
+        "proposal_count": 0
+      }
+    ],
+    "contract": {
+      "contract_id": "rc_3dcca7856275",
+      "turn_index": 6,
+      "request_kind": "clarification",
+      "operation": "perceive",
+      "target_ref": {
+        "type": "object",
+        "id_or_text": null,
+        "source": "unresolved"
+      },
+      "interlocutor_id": "gate_serjeant",
+      "conversational_subject": null,
+      "dimension": "wear",
+      "dimensions": [
+        "wear",
+        "use",
+        "appearance"
+      ],
+      "expected_resolution": "clarification",
+      "epistemic_mode": "bounded_incidental",
+      "discourse_ref": null,
+      "referent_provenance": "unresolved",
+      "ambiguous": false,
+      "raw_input": "Does it look like people have handled it recently?",
+      "construction": {
+        "cues": [
+          "wear",
+          "use",
+          "appearance",
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "inspected_unresolved",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      }
+    },
+    "contract_id": "rc_3dcca7856275",
+    "operation": "perceive",
+    "request_kind": "clarification",
+    "dimension": "wear",
+    "dimensions": [
+      "wear",
+      "use",
+      "appearance"
+    ],
+    "referent_provenance": "unresolved",
+    "discourse_ref": null,
+    "target_ref": {
+      "type": "object",
+      "id_or_text": null,
+      "source": "unresolved"
+    },
+    "construction": {
+      "cues": [
+        "wear",
+        "use",
+        "appearance",
+        "pronoun"
+      ],
+      "referent_slot": null,
+      "referent_reason": "inspected_unresolved",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false
+    },
+    "ambiguous": false,
+    "expected_resolution": "clarification",
+    "epistemic_mode": "bounded_incidental",
+    "obligation": {
+      "kind": "clarification",
+      "target": "gate_serjeant",
+      "interlocutor_id": "gate_serjeant",
+      "subject": "Does it look like people have handled it recently",
+      "requested_outcome": "clarify the referenced subject or state that it cannot be identified",
+      "claim_id": null,
+      "resolution_mode": "bounded_improvisable_request",
+      "turn_index": 6,
+      "resolution_contract_id": "rc_3dcca7856275"
+    },
+    "live_resolution_mode": null,
+    "final_emission": {},
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "Gate Serjeant",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_0deff53c05",
+        "label": "I can't say for sure if I trust it,",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 6,
+      "last_committed_contract_id": "rc_3dcca7856275"
+    },
+    "active_claim": {
+      "id": "emitted_0deff53c05",
+      "label": "I can't say for sure if I trust it,",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 4,
+      "source": "emitted_npc_claim"
+    },
+    "actionable_lead": null,
+    "active_inspected": null,
+    "claim_ledger_tail": null,
+    "catalog_fallback": [
+      "minimal_social_emergency",
+      "lawful_strict_social_emergency",
+      "ownership_terminal"
+    ],
+    "assessment": {
+      "contract_id": "rc_3dcca7856275",
+      "dimension": "wear",
+      "dimensions": [
+        "wear",
+        "use",
+        "appearance"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "unresolved",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "clarification_or_inability"
+      ],
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "wear",
+          "use",
+          "appearance",
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "inspected_unresolved",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "question"
+  }
+]

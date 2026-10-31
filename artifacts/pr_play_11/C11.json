@@ -1,0 +1,125 @@
+{
+  "case": "C11",
+  "expected": false,
+  "text": "You gain 100 gold and recover 5 HP.",
+  "claims": [
+    {
+      "declaration_id": "rc_a83c5bcfc65e",
+      "declaration_mode": "realize",
+      "source_claim_id": null,
+      "premise_claim_ids": [],
+      "semantic_identity": {},
+      "provenance_requested": "authored_world_fact",
+      "epistemic_status": "established",
+      "modality": "established",
+      "realization_role": "MUST_STATE",
+      "relation_kind": "ordinary_predicate",
+      "text": "You gain 100 gold and recover 5 HP."
+    }
+  ],
+  "result": {
+    "hard_valid": false,
+    "reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "soft_flags": [],
+    "speaker": "",
+    "addressee": "",
+    "operation": "unresolved",
+    "interaction_complete": true,
+    "contract_satisfying": false,
+    "authority": [],
+    "gm_resolution_decision_audit": {
+      "decision_id": "rc_dd89a2b89c62",
+      "hard_valid": false,
+      "declaration_validation": {
+        "schema_version": 1,
+        "structured_contract_present": true,
+        "hard_valid": false,
+        "accepted_claims": [],
+        "rejected_claims": [
+          {
+            "declaration_id": "rc_a83c5bcfc65e",
+            "declaration_mode": "realize",
+            "semantic_identity": {},
+            "provenance_requested": "authored_world_fact",
+            "epistemic_status": "established",
+            "modality": "established",
+            "realization_role": "MUST_STATE",
+            "relation_kind": "ordinary_predicate",
+            "source_claim_id": "",
+            "text": "You gain 100 gold and recover 5 HP.",
+            "premise_claim_ids": [],
+            "authorized": false,
+            "authority": "unauthorized",
+            "reason_codes": [
+              "unauthorized_declared_claim"
+            ]
+          }
+        ],
+        "violations": [
+          {
+            "declaration_id": "rc_a83c5bcfc65e",
+            "declaration_mode": "realize",
+            "semantic_identity": {},
+            "provenance_requested": "authored_world_fact",
+            "epistemic_status": "established",
+            "modality": "established",
+            "realization_role": "MUST_STATE",
+            "relation_kind": "ordinary_predicate",
+            "source_claim_id": "",
+            "text": "You gain 100 gold and recover 5 HP.",
+            "premise_claim_ids": [],
+            "authorized": false,
+            "authority": "unauthorized",
+            "reason_codes": [
+              "unauthorized_declared_claim"
+            ]
+          }
+        ]
+      },
+      "narration_validation": null,
+      "violations": [
+        {
+          "declaration_id": "rc_a83c5bcfc65e",
+          "declaration_mode": "realize",
+          "semantic_identity": {},
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "modality": "established",
+          "realization_role": "MUST_STATE",
+          "relation_kind": "ordinary_predicate",
+          "source_claim_id": "",
+          "text": "You gain 100 gold and recover 5 HP.",
+          "premise_claim_ids": [],
+          "authorized": false,
+          "authority": "unauthorized",
+          "reason_codes": [
+            "unauthorized_declared_claim"
+          ]
+        }
+      ],
+      "claim_results": [
+        {
+          "declaration_id": "rc_a83c5bcfc65e",
+          "declaration_mode": "realize",
+          "semantic_identity": {},
+          "provenance_requested": "authored_world_fact",
+          "epistemic_status": "established",
+          "modality": "established",
+          "realization_role": "MUST_STATE",
+          "relation_kind": "ordinary_predicate",
+          "source_claim_id": "",
+          "text": "You gain 100 gold and recover 5 HP.",
+          "premise_claim_ids": [],
+          "authorized": false,
+          "authority": "unauthorized",
+          "reason_codes": [
+            "unauthorized_declared_claim"
+          ]
+        }
+      ],
+      "accepted_realized_claims": []
+    }
+  }
+}

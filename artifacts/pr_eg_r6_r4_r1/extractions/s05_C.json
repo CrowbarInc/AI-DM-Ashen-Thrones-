@@ -1,0 +1,55 @@
+{
+  "family": "s05",
+  "architecture": "C",
+  "source_ids": [
+    "s05"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f1",
+        "source_id": "s05",
+        "relationship": "will open",
+        "roles": [
+          {
+            "name": "agent",
+            "value": "The river council",
+            "evidence": "The river council will open the sluice tomorrow at noon"
+          },
+          {
+            "name": "object",
+            "value": "the sluice",
+            "evidence": "The river council will open the sluice tomorrow at noon"
+          },
+          {
+            "name": "time",
+            "value": "tomorrow at noon",
+            "evidence": "The river council will open the sluice tomorrow at noon"
+          }
+        ],
+        "unknown_roles": [
+          "condition"
+        ],
+        "qualifiers": [
+          "if the water falls"
+        ],
+        "negated": false,
+        "temporal": "future",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "The river council will open the sluice tomorrow at noon, if the water falls."
+      },
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "scope_anchor_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

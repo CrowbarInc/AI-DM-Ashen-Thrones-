@@ -1,0 +1,75 @@
+{
+  "live_calls": 0,
+  "provider": "stubbed call_gpt",
+  "clocks_added": false,
+  "controls": [
+    {
+      "id": "A_no_due_world_event",
+      "test": "test_quiet_wait_with_no_due_world_event_keeps_narration",
+      "setup": "Default office scene. Faction pressure and agenda held at 0. Projects empty. NPCs available at frontier_gate.",
+      "input": "I wait.",
+      "provider_text": "The lamp stays steady over the desk.",
+      "asserts": [
+        "HTTP 200",
+        "time_pressure 1",
+        "current_date Day 1",
+        "world_tick_events empty",
+        "event_log empty",
+        "player text remains the lamp line",
+        "no passive_scene_pressure tag",
+        "NPC ids and locations unchanged"
+      ],
+      "result": "passed"
+    },
+    {
+      "id": "B_faction_threshold_crossed",
+      "test": "test_faction_threshold_wait_records_event_without_narrating_it",
+      "setup": "House Verevin pressure 2. Ash Cowl and Ordo Pyric pressure 0. Agenda 0.",
+      "input": "I wait.",
+      "provider_text": "The lamp stays steady over the desk.",
+      "asserts": [
+        "world_tick_events is exactly House Verevin's pressure mounts.",
+        "event_log matches that event",
+        "Verevin pressure 3",
+        "Ash Cowl and Ordo Pyric pressure 1, below the event threshold",
+        "player text remains the lamp line",
+        "event text is not copied into narration"
+      ],
+      "result": "passed"
+    },
+    {
+      "id": "C_seeded_mobile_npc_agenda",
+      "test": "test_seeded_mobile_npc_moves_offscreen_on_wait",
+      "setup": "Factions held at 0. tavern_runner availability mobile, agenda_move_to_scene_id scene_investigate, location frontier_gate.",
+      "input": "I wait.",
+      "provider_text": "The lamp stays steady over the desk.",
+      "asserts": [
+        "event text Tavern Runner moves off-screen to scene_investigate.",
+        "tavern_runner location becomes scene_investigate",
+        "guard_captain stays at frontier_gate",
+        "no new NPC id",
+        "player text remains the lamp line"
+      ],
+      "result": "passed"
+    },
+    {
+      "id": "D_repeated_passive_turns",
+      "test": "test_repeated_quiet_waits_ground_stall_without_a_new_event",
+      "shared_companion": "test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall",
+      "setup": "Factions held at 0 so no threshold event fires. Default office visible facts. Two passive turns.",
+      "inputs": ["I wait.", "I hold position and watch."],
+      "provider_text": "The lamp stays steady over the desk.",
+      "asserts": [
+        "time_pressure 2",
+        "both tick event lists empty",
+        "momentum is due after the first exchange",
+        "second line leaves the lamp sentence and includes a seeded visible fact",
+        "passive_scene_pressure tag and streak=2",
+        "stored passive_action_streak 2",
+        "validate_generated_response hard_valid",
+        "no obsolete interruption phrase"
+      ],
+      "result": "passed"
+    }
+  ]
+}

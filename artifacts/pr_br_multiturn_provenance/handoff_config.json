@@ -1,0 +1,834 @@
+{
+  "campaign_id": "pr-br-multiturn-provenance",
+  "campaign_name": "PR-BR Multi-turn Provenance and Recursive Authority",
+  "campaign_date": "2026-10-03",
+  "purpose": "Small multi-turn live validation of provenance survival and recursive authority. Two isolated four-turn sequences. No production edits.",
+  "primary_report": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/validation_report.md",
+  "executive_summary": "Eight gameplay turns, two isolated sequences, scored 4 PASS and 4 FAIL. Linden's brine-cask statement stayed hearsay through movement, the osier-rack transition was recorded on GMResolutionDecision, and a footprint sentence was rejected. Sequence A did not hold. An unfired-jar inference was audited as authored world truth, the next turn used it as the event, and the following turn said it was clear the jar was never fired in a kiln while validation rejected the uncertainty sentence. Scene JSON did not gain the kiln fact. Narration and the audit label did. Exact model/API calls: 15 (8 initial generations, 4 retries, 2 interpretations, 1 preflight). Decision C. Multi-turn validation reproduced recursive authority failure. Return to architectural review.",
+  "objective_status": "recursive_authority_failure_reproduced_return_to_architectural_review",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Ran 8 gameplay turns in two isolated sequences. No failed turn was rerun. No production code was changed."
+    ],
+    "tooling": [
+      "Added a measurement harness under artifacts/pr_br_multiturn_provenance/. It is not production."
+    ],
+    "documentation": [
+      "Wrote the 22-section validation report beside the turn artifacts."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_multiturn_provenance/20261003T223147Z/ holds both initial states, all eight turn artifacts, call logs, and the report."
+    ]
+  },
+  "testing": {
+    "focused": "Not run. This cycle was live measurement only.",
+    "broader": "Not run. The 4x10 gate was not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "8 POST /api/chat turns. Manual 4 PASS / 4 FAIL. Passes: A1, B1, B2, B4. Fails: A2, A3, A4, B3.",
+    "model_runtime_boundary": "8 gameplay turns. 8 initial generation calls. 4 retry generation calls. 2 interpretation calls. 1 startup preflight. 0 other model calls. 15 total model/API calls. 0 reruns.",
+    "new_regressions": "No production patch. Live finding: narrated-fact identity match labels causal add-ons as authored world truth, and preservation drops the hedged sentence.",
+    "pre_existing_failures": "Split-quotation attributed testimony and guard_captain versus gate_guard were not repaired, not reinterpreted, and did not appear in these scenes."
+  },
+  "self_contained_review_test": "Bundle contains the validation report, both initial states, all eight turn artifacts, call logs, the harness, and the production modules that classify narrated facts and preserve sentences.",
+  "decisions_requiring_human_review": [
+    "C. MULTI-TURN VALIDATION REPRODUCED RECURSIVE AUTHORITY FAILURE; RETURN TO ARCHITECTURAL REVIEW.",
+    "Review classify_narrated_fact: a sentence that contains an authorized observation plus a new cause, certainty, or corroborating clue currently inherits world_truth when subject and value terms match.",
+    "Review preservation: unsupported_narrator_lead removed the uncertainty sentences on A4 and kept the kiln certainty.",
+    "B3 is a separate mixed-intent gap. Travel and the location mutation held. The thanks was not an obligation and was not spoken.",
+    "Do not start a broader release-candidate gate, the 4x10 gate, or PR-BS on this evidence."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "A2 audited the unfired/process-disruption sentence as authored_world_fact world_truth.",
+      "A3 used leave-the-jar-unfired as the event and recorded only an unresolved actor.",
+      "A4 emitted that it was clear the jar was never fired in a kiln and that the coil-pots show no signs of firing. The uncertainty sentence was rejected.",
+      "Scene visible facts did not gain those propositions. Narration and later prompts did.",
+      "B3 committed osier_rack and recorded the location mutation. The thanks and both referents were unspoken. Supporting obligations were empty.",
+      "Rejected proposals and B1 incidental lines were not written to the bounded ledger."
+    ],
+    "pre_existing": [
+      "Split quotation / attributed-testimony edge case remains unrepaired.",
+      "guard_captain versus gate_guard addressability mismatch remains unrepaired."
+    ]
+  },
+  "missing_concepts": [
+    "A narrated sentence needs a split between the authorized observation and any additional cause, certainty, or corroborating clue.",
+    "Hedged unknown-cause or unknown-actor sentences should not be deleted as narrator leads while the assertive version of the same idea is kept.",
+    "Rejected consequential proposals and accepted mundane incidental details need a ledger if later turns are to respect them as policy rather than as raw transcript.",
+    "A mixed utterance still needs one supporting social obligation when travel is the primary act."
+  ],
+  "does_not_prove": [
+    "Does not prove the commit store will adopt the kiln sentence on a fifth turn. Scene JSON did not adopt it in four turns.",
+    "Does not prove a rejected footprint would be blocked later. The rejection was not stored, and no fifth turn was run.",
+    "Does not rerun the 4x10 gate.",
+    "Does not show the two known deterministic failures are fixed.",
+    "Does not authorize PR-BS or a broader release-candidate gate."
+  ],
+  "recommended_next_step": "C. MULTI-TURN VALIDATION REPRODUCED RECURSIVE AUTHORITY FAILURE; RETURN TO ARCHITECTURAL REVIEW.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/control/ack.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/control/status.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/generation_calls.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/interpretation_calls.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/preflight_calls.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/run_manifest.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A0_authoritative.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A0_initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A1/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B0_authoritative.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B0_initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/generation_prompts.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/state_after.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/state_before.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/campaign.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/character.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/combat.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/conditions.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/scenes/clay_shed.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/scenes/frontier_gate.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/scenes/market_quarter.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/scenes/old_milestone.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/session.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/session_log.jsonl",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_a/data/world.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/campaign.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/character.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/combat.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/conditions.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/scenes/frontier_gate.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/scenes/market_quarter.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/scenes/old_milestone.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/scenes/osier_rack.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/scenes/seat_shop.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/session.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/session_log.jsonl",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/storage_b/data/world.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/summary_rows.json",
+      "role": "turn_artifact",
+      "why": "Saved multi-turn live evidence: state, contract, decision, generation, or call log.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/run_live.py",
+      "role": "validation_harness",
+      "why": "Measurement harness. Fresh seeds, carried state, and capture path. Not production.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Narrated-fact classification, identity match, narrator-lead rejection, and movement decision reconciliation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "production_code",
+      "why": "Bounded sentence preservation that kept the initial generation after retry failure on A2-A4.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "sequence": "B",
+  "scene": {
+    "scene": {
+      "id": "seat_shop",
+      "location": "Reedbank seat shop",
+      "summary": "A narrow shop smells of damp rush. Linden, a chair-seater, is seating a wooden chair with green rush. Bundles of dried rush lean against the wall. An open side door looks out toward the osier rack. Linden is an ordinary worker with no special charge.",
+      "mode": "social",
+      "visible_facts": [
+        "Linden is seating a wooden chair with green rush.",
+        "Bundles of dried rush lean against the shop wall."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Go out to the osier rack",
+          "target_scene_id": "osier_rack"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "linden",
+          "name": "Linden",
+          "scene_id": "seat_shop",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "chair-seater",
+            "chair-seater",
+            "chair seater"
+          ],
+          "aliases": [
+            "chair-seater",
+            "chair seater"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [
+    {
+      "scene": {
+        "id": "osier_rack",
+        "location": "Reedbank osier rack",
+        "summary": "Split withies hang in rows from a long drying rack behind the seat shop. The ground under the rack is pale and dry.",
+        "mode": "exploration",
+        "visible_facts": [
+          "Split withies hang in rows from the drying rack.",
+          "The ground under the osier rack is pale and dry."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to the seat shop",
+            "target_scene_id": "seat_shop"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [],
+        "interactables": []
+      }
+    }
+  ],
+  "world": {
+    "settlements": [
+      {
+        "id": "reedbank",
+        "name": "Reedbank",
+        "type": "riverside_hamlet",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hamlet of small craft sheds along a slow river."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "linden",
+        "name": "Linden",
+        "location": "seat_shop",
+        "role": "chair-seater",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "chair-seater",
+          "chair seater"
+        ],
+        "topics": [
+          {
+            "id": "work",
+            "text": "Linden seats wooden chairs with woven rush."
+          },
+          {
+            "id": "brine_hearsay",
+            "text": "Linden heard a carter claim that the brine cask at the curing house was found unbunged. Linden did not see the cask and does not know whether that claim is true."
+          }
+        ],
+        "knowledge_scope": [
+          "rush_seating"
+        ],
+        "information_reliability": "partial",
+        "stance_toward_player": "neutral",
+        "origin_kind": "authored_background"
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign": {
+    "title": "Ashen Thrones",
+    "premise": "Galinor is spending an ordinary day in Reedbank, a riverside hamlet of small craft sheds.",
+    "tone": "ordinary craft work in a quiet hamlet",
+    "player_character": "Galinor",
+    "character_role": "A traveler passing through Reedbank.",
+    "starting_context": "Galinor is spending an ordinary day in Reedbank, a riverside hamlet of small craft sheds.",
+    "character_secret": {
+      "title": "None",
+      "description": "No secret is in play for this validation.",
+      "implications": [],
+      "hidden_truth": ""
+    },
+    "world_pressures": [
+      "Ordinary craft work and the weather in a riverside hamlet."
+    ],
+    "environmental_threats": [],
+    "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+    "campaign_structure": "A short ordinary day in Reedbank.",
+    "long_term_goals": [
+      "Get through an ordinary day in Reedbank."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary craft shed in Reedbank.",
+      "People present are ordinary workers unless the scene says otherwise.",
+      "Do not invent a cause, an actor, an organization, or a hidden place for an unexplained condition."
+    ]
+  },
+  "note": "Controlled seed. Unused holding scenes exist only so the default exit graph validates. Their prose, clues, and addressables were cleared. No facts were inserted between turns."
+}

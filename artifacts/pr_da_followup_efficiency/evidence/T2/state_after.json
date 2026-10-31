@@ -1,0 +1,258 @@
+{
+  "turn_counter": 3,
+  "active_scene_id": "frontier_gate",
+  "interaction_context": {
+    "active_interaction_target_id": null,
+    "active_interaction_kind": "social",
+    "interaction_mode": "social",
+    "engagement_level": "focused",
+    "conversation_privacy": null,
+    "player_position_context": null
+  },
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 3,
+    "last_committed_contract_id": "rc_bb4f0e625ef1"
+  },
+  "active_interlocutor_id": "guard_captain",
+  "conversation_fields_empty": true,
+  "known_clues": {},
+  "scene_runtime": {
+    "discovered_clues": [],
+    "discovered_clue_ids": [],
+    "pending_leads": [],
+    "revealed_hidden_facts": [],
+    "suspicion_flags": [],
+    "searched_targets": [],
+    "resolved_interactables": [],
+    "last_exploration_action_key": "question_npc",
+    "repeated_action_count": 1,
+    "last_resolution_kind": "question",
+    "last_description_hash": "1aaf8d7e8135abc6593be76547611cfe",
+    "last_perception_visible_facts": [],
+    "last_perception_narration": "",
+    "last_perception_turn": null,
+    "consumed_action_ids": [],
+    "momentum_exchanges_since": 1,
+    "momentum_next_due_in": 2,
+    "momentum_last_kind": null,
+    "passive_action_streak": 2,
+    "recent_player_actions": [
+      {
+        "text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+        "passive": true,
+        "markers": [
+          "watch"
+        ],
+        "resolution_kind": null,
+        "turn": 2
+      },
+      {
+        "text": "Does the rain make it harder to keep watch?",
+        "passive": true,
+        "markers": [
+          "watch"
+        ],
+        "resolution_kind": null,
+        "turn": 3
+      }
+    ],
+    "last_player_action_text": "Does the rain make it harder to keep watch?",
+    "last_player_action_passive": true,
+    "topic_pressure": {
+      "topic:captain_guard_prefer": {
+        "repeat_count": 2,
+        "low_progress_streak": 0,
+        "progress_score_total": 0.0,
+        "last_answer": "",
+        "last_turn": 3,
+        "speaker_targets": {
+          "guard_captain": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 2
+          },
+          "__scene__": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 3
+          }
+        },
+        "previous_probe_dimension": "general",
+        "last_probe_dimension": "general",
+        "last_player_input": "Does the rain make it harder to keep watch?"
+      }
+    },
+    "topic_pressure_last_topic_key": "topic:captain_guard_prefer",
+    "topic_pressure_current": {
+      "topic_key": "topic:captain_guard_prefer",
+      "speaker_key": "__scene__",
+      "turn": 3,
+      "player_text": "Does the rain make it harder to keep watch?",
+      "interaction_kind": "observe",
+      "interaction_mode": "activity",
+      "social_intent_class": "social_exchange",
+      "npc_name": ""
+    },
+    "recent_contextual_leads": [
+      {
+        "key": "active_event_guard_captain_shrugs_slightly_water_dripping_from_the_brim_of_their_helmet_as_rain_spatters_the_soot_dark_stone_of_cinderwatchs_eastern_gate",
+        "kind": "active_event",
+        "subject": "guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of cinderwatch's eastern gate",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 2
+      },
+      {
+        "key": "active_event_keeps_you_sharp_or_maybe_just_miserable_enough_to_stay_alert_their_gaze_flickers_briefly_to_the_frayed_banners_hanging_overhead_and_then_back_to_the_queue_clogged_with_refugees_and_wagons",
+        "kind": "active_event",
+        "subject": "keeps you sharp, or maybe just miserable enough to stay alert.\" their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 2
+      },
+      {
+        "key": "active_event_guard_captain_glances_toward_the_rain_slicked_stone_and_the_frayed_banners_overhead",
+        "kind": "active_event",
+        "subject": "guard captain glances toward the rain-slicked stone and the frayed banners overhead",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 3
+      },
+      {
+        "key": "active_event_still_that_sharp_discomfort_in_the_cold",
+        "kind": "active_event",
+        "subject": "still, that sharp discomfort in the cold",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 3
+      }
+    ]
+  },
+  "npc_runtime": {
+    "guard_captain": {
+      "attitude": 0,
+      "trust": 0,
+      "fear": 0,
+      "suspicion": 0,
+      "known_topics": [],
+      "revealed_topics": [],
+      "last_interaction_turn": 2
+    },
+    "tavern_runner": {
+      "attitude": 0,
+      "trust": 0,
+      "fear": 0,
+      "suspicion": 0,
+      "known_topics": [],
+      "revealed_topics": [],
+      "last_interaction_turn": null
+    }
+  },
+  "scene": {
+    "id": "frontier_gate",
+    "location": "Cinderwatch Gate District",
+    "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+    "mode": "social",
+    "visible_facts": [
+      "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+      "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+      "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+      "A tavern runner shouts offers of hot stew and paid rumor.",
+      "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+      "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+    ],
+    "hidden_facts": [
+      "An agent of a noble house is watching new arrivals from the square's edge.",
+      "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+      "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+      "A spotter above the lane is matching faces to a written list paid for in silver."
+    ],
+    "addressable_ids": [
+      "guard_captain",
+      "tavern_runner",
+      "refugee",
+      "threadbare_watcher"
+    ]
+  },
+  "world_npc_ids": [
+    "guard_captain",
+    "tavern_runner"
+  ],
+  "character": {
+    "name": "Galinor",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "conditions": []
+  },
+  "log_player_inputs": [
+    "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+    "Does the rain make it harder to keep watch?"
+  ]
+}

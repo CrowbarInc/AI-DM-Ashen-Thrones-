@@ -1,0 +1,15 @@
+{
+  "test": "test_supported_data_directory_in_fresh_process",
+  "result": "passed",
+  "production_owner": "game.storage + game.campaign_reset.apply_new_campaign_hard_reset",
+  "environment": "ASHEN_DATA_DIR set before fresh interpreter import",
+  "assertions": [
+    "configured directory bound",
+    "real reset succeeds",
+    "campaign_started false",
+    "empty transcript",
+    "session written only to disposable directory"
+  ],
+  "normal_data_integrity": "445-file protected manifest unchanged; see integrity.json",
+  "ui_sequence": "New Campaign followed by separate Start Campaign; UI not exercised"
+}

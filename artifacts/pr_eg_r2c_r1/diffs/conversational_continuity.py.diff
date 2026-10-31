@@ -1,0 +1,229 @@
+--- baseline/game/conversational_continuity.py
++++ final/game/conversational_continuity.py
+@@ -19,7 +19,7 @@
+ from typing import Any, Mapping
+ 
+ DELIVERED_KEY = "delivered_exchanges"
+-MAX_DELIVERED = 8
++MAX_DELIVERED = 32
+ 
+ _STOP = frozenset(
+     {
+@@ -60,7 +60,7 @@
+ )
+ _HIDDEN = re.compile(r"\b(?:passwords?|passcodes?)\b", re.IGNORECASE)
+ _REPEAT = re.compile(
+-    r"\b(?:say that again|plainer words|in other words|go back to|back to the)\b",
++    r"\b(?:repeat|say (?:that|it) again|(?:simpler|plainer|plain|other) words|go back to|back to the)\b",
+     re.IGNORECASE,
+ )
+ _EARLIER = re.compile(
+@@ -205,8 +205,9 @@
+         "player_text": str(player_text or "")[:400],
+         "delivered_text": delivered,
+         "subject": str((authority or {}).get("subject") or "")[:80],
++        "topic_id": str((payload.get("topic_revealed") or {}).get("id") or ""),
+         "requested_information": str((authority or {}).get("requested_information") or ""),
+-        "supplied_text": supplied[:240],
++        "supplied_text": supplied,
+         "uncertain": bool(_UNCERTAIN.search(supplied or delivered)),
+         "commitment": bool(authority) and str((authority or {}).get("knowledge_posture") or "") not in {"", "established"},
+         "scene_id": str(scene_id or ""),
+@@ -279,68 +280,68 @@
+     return found
+ 
+ 
++def reference_subject_tokens(text: str, names: str = "") -> set[str]:
++    """Subject evidence from the request, excluding speech acts and names."""
++    structural = {"repeat", "recall", "simpler", "plain", "can", "going", "return",
++                  "statement", "remark", "thing", "previous", "personally", "whether",
++                  "sergeant", "corporal", "captain", "game", "master", "exactly",
++                  "she", "her", "him", "his", "earlier", "speech", "one", "why"}
++    return set(_tokens(text)) - set(_tokens(names)) - structural
++
++
+ def _best_exchange(text: str, rows: list[dict[str, Any]], npc_id: str = "") -> dict[str, Any] | str | None:
++    from game.dialogue_authority import topic_supports_requested_information
+     pool = [row for row in rows if row.get("ownership") == "npc"]
+-    if npc_id:
+-        owned = [row for row in pool if str(row.get("speaker_id") or "") == npc_id]
+-        if owned:
+-            pool = owned
++    names = " ".join(str(row.get("speaker_name") or "") for row in pool)
++    named = {str(row.get("speaker_id")) for row in pool
++             if any(re.search(rf"\b{re.escape(word)}\b", text, re.I)
++                    for word in str(row.get("speaker_name") or "").split()
++                    if word.lower() not in {"sergeant", "corporal", "captain"})}
++    if len(named) > 1:
++        return "ambiguous"
++    constrained = next(iter(named)) if named else npc_id
++    if constrained:
++        pool = [row for row in pool if row.get("speaker_id") == constrained]
+     if not pool:
+         return None
+-    wanted = _WANTED.search(text)
+-    if wanted:
+-        needle = wanted.group(1).strip().lower()
+-        hits = [row for row in pool if needle and needle in _blob(row)]
+-        if len(hits) == 1:
+-            return hits[0]
+-        if len(hits) > 1:
+-            return hits[-1]
+-    scored: list[tuple[int, dict[str, Any]]] = []
+-    tokens = _tokens(text)
+-    for row in pool:
+-        supplied = set(_tokens(str(row.get("supplied_text") or "") + " " + str(row.get("subject") or "")))
+-        mentioned = set(_tokens(str(row.get("player_text") or "") + " " + str(row.get("delivered_text") or "")))
+-        score = sum(2 for token in tokens if token in supplied) + sum(1 for token in tokens if token in mentioned)
+-        if str(row.get("requested_information") or "") == "surveillance" and _SURVEILLANCE.search(text):
+-            score += 3
+-        if row.get("uncertain") and not any(token in supplied for token in tokens):
+-            score = min(score, 1)
+-        scored.append((score, row))
+-    positive = [item for item in scored if item[0] > 0]
+-    if not positive:
+-        speakers = {str(row.get("speaker_id") or "") for row in pool}
+-        if len(speakers) > 1 and not npc_id:
++    tokens = reference_subject_tokens(text, names)
++    if not tokens:
++        if not constrained and len({row.get("speaker_id") for row in pool}) > 1:
+             return "ambiguous"
+         return pool[-1]
+-    positive.sort(key=lambda item: (item[0], 0 if item[1].get("uncertain") else 1))
+-    if (
+-        len(positive) >= 2
+-        and positive[-1][0] == positive[-2][0]
+-        and positive[-1][1].get("speaker_id") != positive[-2][1].get("speaker_id")
+-    ):
++    scored = []
++    for row in pool:
++        supplied = str(row.get("supplied_text") or "")
++        if not row.get("uncertain") and not topic_supports_requested_information(text, supplied):
++            continue
++        overlap = tokens & reference_subject_tokens(str(row.get("subject") or "") + " " + supplied, names)
++        if not overlap:
++            overlap = tokens & reference_subject_tokens(str(row.get("player_text") or ""), names)
++        if overlap:
++            scored.append((len(overlap), row))
++    if not scored:
++        return None
++    best = max(score for score, _ in scored)
++    winners = [row for score, row in scored if score == best]
++    if len({(row.get("speaker_id"), row.get("supplied_text")) for row in winners}) > 1:
+         return "ambiguous"
+-    return positive[-1][1]
++    return winners[-1]
+ 
+ 
+ def _npc_quote(name: str, exchange: Mapping[str, Any]) -> str:
+-    supplied = str(exchange.get("supplied_text") or "").strip()
++    # Faithful repetition needs neither generation nor factual reauthorization.
++    delivered = str(exchange.get("delivered_text") or "").strip()
++    if delivered:
++        return delivered
+     speaker = name or str(exchange.get("speaker_name") or "They")
+-    supplied = _core_statement(supplied)
+-    if exchange.get("uncertain") or _UNCERTAIN.search(supplied):
+-        inner = "I meant that I don't know."
+-    else:
+-        inner = f"I meant this: {supplied}"
+-        if inner[-1:] not in ".?!":
+-            inner += "."
+-    return f'{speaker} says, "{inner}"'
++    return f'{speaker} says, "{str(exchange.get("supplied_text") or "")}"'
+ 
+ 
+ def _gm_quote(exchange: Mapping[str, Any]) -> str:
+     name = str(exchange.get("speaker_name") or "They")
+-    supplied = str(exchange.get("supplied_text") or "").strip()
+-    supplied = _core_statement(supplied)
+-    if exchange.get("uncertain") or not supplied:
+-        return f"{name} said they could not answer that. They have not spoken again."
++    delivered = str(exchange.get("delivered_text") or "")
++    spans = re.findall(r'["“]([^"”]+)', delivered)
++    supplied = spans[-1] if spans else str(exchange.get("supplied_text") or "").strip()
+     return f'{name} said: "{supplied}"'
+ 
+ 
+@@ -461,8 +462,10 @@
+     if (_GM.search(text) or _THIRD.search(text)) and not _YOU.search(text):
+         return ""
+     found = _best_exchange(text, delivered_exchanges(session), npc_id)
++    if found == "ambiguous":
++        return f'{npc_name or "They"} says, "Which earlier remark do you mean?"'
+     if not isinstance(found, dict):
+-        return ""
++        return f'{npc_name or "They"} says, "Which statement do you mean?"'
+     if npc_id and str(found.get("speaker_id") or "") not in {"", npc_id}:
+         return ""
+     return _npc_quote(npc_name or str(found.get("speaker_name") or "They"), found)
+@@ -522,8 +525,8 @@
+     if _names_other(text, present, active):
+         return None
+     rows = delivered_exchanges(session)
+-    found = _best_exchange(text, rows, active)
+-    if found == "ambiguous" and (_MEANING.search(text) or _REPEAT.search(text) or _DEICTIC.search(text)):
++    found = _best_exchange(text, rows, "" if _GM.search(text) else active)
++    if found == "ambiguous" and (_GM.search(text) or _MEANING.search(text) or _REPEAT.search(text) or _DEICTIC.search(text)):
+         return {
+             "action": "clarify",
+             "owner": "gm",
+@@ -550,10 +553,16 @@
+             "reason": "conversational_continuity_ask",
+         }
+ 
+-    gm_about_speech = bool(_GM.search(text) or (_THIRD.search(text) and not _YOU.search(text) and (_MEANING.search(text) or _EARLIER.search(text))))
++    gm_about_speech = bool(
++        (_GM.search(text) and re.search(r"\b(?:said|say|mean|meant|repeat|recall|earlier)\b", text, re.I))
++        or (_THIRD.search(text) and not _YOU.search(text) and (_MEANING.search(text) or _EARLIER.search(text)))
++    )
+     if gm_about_speech:
+         if not exchange:
+-            return None
++            if not _GM.search(text) or not re.search(r"\b(?:say|said|repeat|recall)\b", text, re.I):
++                return None
++            return {"action": "clarify", "owner": "gm", "npc_id": "", "npc_name": "",
++                    "line": "Which earlier statement do you mean?", "reason": "missing_delivered_reference"}
+         return {
+             "action": "answer",
+             "owner": "gm",
+@@ -561,6 +570,12 @@
+             "npc_name": str(exchange.get("speaker_name") or ""),
+             "line": _gm_quote(exchange),
+             "reason": "gm_recall_of_npc_statement",
++            "topic_grounding": {
++                "speaker_id": exchange.get("speaker_id"), "ownership": "gm",
++                "reference": "delivered_speech", "topic_id": exchange.get("topic_id"),
++                "selected_source": exchange.get("authorization_source"),
++                "delivered_turn": exchange.get("turn"), "canonical": False,
++            },
+         }
+     if _FEELING.search(text):
+         if exchange and speaker_present:
+@@ -627,6 +642,14 @@
+             "reason": "absent_npc_reference",
+         }
+     if _EARLIER.search(text):
++        if not exchange and not speaker_present:
++            speakers = {str(row.get("speaker_id") or ""): str(row.get("speaker_name") or "")
++                        for row in rows if row.get("ownership") == "npc"}
++            if len(speakers) == 1:
++                old_id, old_name = next(iter(speakers.items()))
++                return {"action": "clarify", "owner": "gm", "npc_id": old_id,
++                        "npc_name": old_name, "line": f"{old_name} is not here. Which earlier statement do you mean?",
++                        "reason": "missing_absent_reference"}
+         if exchange and not speaker_present:
+             return {
+                 "action": "clarify",
+@@ -682,8 +705,9 @@
+         return None
+     if is_incidental_personal(text) and speaker_present:
+         return _ask()
+-    if _DEICTIC.search(text) and _QUESTION.search(text) and speaker_present and exchange:
+-        if str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
++    if (_DEICTIC.search(text) and _QUESTION.search(text) and speaker_present
++            and (exchange or any(row.get("ownership") == "npc" and row.get("speaker_id") == speaker_id for row in rows))):
++        if exchange and str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
+             return {
+                 "action": "answer",
+                 "owner": "npc",

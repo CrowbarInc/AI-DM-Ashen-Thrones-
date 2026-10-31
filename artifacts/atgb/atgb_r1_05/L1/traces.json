@@ -1,0 +1,677 @@
+[
+  {
+    "function": "planning_decision",
+    "file": "game\\unified_semantic_planning.py",
+    "line": 1275,
+    "return": null,
+    "locals": {
+      "player_text": "I meant the people, not the weather."
+    }
+  },
+  {
+    "function": "public_conversation_evidence",
+    "file": "game\\conversational_orchestration.py",
+    "line": 308,
+    "return": {
+      "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+      "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+    },
+    "locals": {
+      "evidence": {
+        "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+        "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      }
+    }
+  },
+  {
+    "function": "request_interpretation",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 214,
+    "return": {
+      "ok": true,
+      "sent": true,
+      "text": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification of referent 'the people' versus 'the weather' in previous utterance\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that 'the people' were meant, not 'the weather'.\"},\"asserted_premises\":[{\"text\":\"Previous mention or confusion about 'the weather'.\"},{\"text\":\"Current utterance corrects that to mean 'the people'.\"}],\"requested_outcomes\":[{\"text\":\"GM understands that the player refers to 'the people' rather than 'the weather'.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Correcting referent from 'weather' to 'people'.\"}}",
+      "usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "9e32bb44539b4358b27959da543c9174",
+        "attempt_id": "c0b587e4a1364460af5412f76e48e864",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:37:19.397619+00:00",
+        "time": "2026-10-19T09:37:23.478026+00:00",
+        "sent": true,
+        "request_id": "resp_0f3926ccbf8e50b2006ad5e4d1c44087d2b9b4d411f4bc307f",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 2004,
+        "output_tokens": 211,
+        "total_tokens": 2215,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2995.613
+      }
+    },
+    "locals": {
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I meant the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+        }
+      ],
+      "estimated_input": 3410,
+      "record": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "9e32bb44539b4358b27959da543c9174",
+        "attempt_id": "c0b587e4a1364460af5412f76e48e864",
+        "purpose": "interpretation",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T09:37:19.397619+00:00",
+        "time": "2026-10-19T09:37:23.478026+00:00",
+        "sent": true,
+        "request_id": "resp_0f3926ccbf8e50b2006ad5e4d1c44087d2b9b4d411f4bc307f",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 2004,
+        "output_tokens": 211,
+        "total_tokens": 2215,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2995.613
+      }
+    }
+  },
+  {
+    "function": "_blocked",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 187,
+    "return": {
+      "status": "blocked",
+      "reason": "clarification_required",
+      "player_facing_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "tags": [
+        "interpretation_clarification",
+        "non_mutating"
+      ],
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that 'the people' were meant, not 'the weather'."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous mention or confusion about 'the weather'.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "Current utterance corrects that to mean 'the people'.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Correcting referent from 'weather' to 'people'."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification of referent 'the people' versus 'the weather' in previous utterance\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that 'the people' were meant, not 'the weather'.\"},\"asserted_premises\":[{\"text\":\"Previous mention or confusion about 'the weather'.\"},{\"text\":\"Current utterance corrects that to mean 'the people'.\"}],\"requested_outcomes\":[{\"text\":\"GM understands that the player refers to 'the people' rather than 'the weather'.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Correcting referent from 'weather' to 'people'.\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "9e32bb44539b4358b27959da543c9174",
+          "attempt_id": "c0b587e4a1364460af5412f76e48e864",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:37:19.397619+00:00",
+          "time": "2026-10-19T09:37:23.478026+00:00",
+          "sent": true,
+          "request_id": "resp_0f3926ccbf8e50b2006ad5e4d1c44087d2b9b4d411f4bc307f",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2004,
+          "output_tokens": 211,
+          "total_tokens": 2215,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2995.613
+        }
+      ],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": ""
+      },
+      "eligibility_disposition": "NEEDS_CLARIFICATION",
+      "model_communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED"
+    },
+    "locals": {
+      "reason": "clarification_required"
+    }
+  },
+  {
+    "function": "interpret_production_turn",
+    "file": "game\\live_chat_interpretation.py",
+    "line": 297,
+    "return": {
+      "status": "blocked",
+      "reason": "clarification_required",
+      "player_facing_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "tags": [
+        "interpretation_clarification",
+        "non_mutating"
+      ],
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that 'the people' were meant, not 'the weather'."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous mention or confusion about 'the weather'.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "Current utterance corrects that to mean 'the people'.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Correcting referent from 'weather' to 'people'."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification of referent 'the people' versus 'the weather' in previous utterance\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that 'the people' were meant, not 'the weather'.\"},\"asserted_premises\":[{\"text\":\"Previous mention or confusion about 'the weather'.\"},{\"text\":\"Current utterance corrects that to mean 'the people'.\"}],\"requested_outcomes\":[{\"text\":\"GM understands that the player refers to 'the people' rather than 'the weather'.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Correcting referent from 'weather' to 'people'.\"}}",
+      "provider_requests": [
+        {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "9e32bb44539b4358b27959da543c9174",
+          "attempt_id": "c0b587e4a1364460af5412f76e48e864",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:37:19.397619+00:00",
+          "time": "2026-10-19T09:37:23.478026+00:00",
+          "sent": true,
+          "request_id": "resp_0f3926ccbf8e50b2006ad5e4d1c44087d2b9b4d411f4bc307f",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2004,
+          "output_tokens": 211,
+          "total_tokens": 2215,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2995.613
+        }
+      ],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": ""
+      },
+      "eligibility_disposition": "NEEDS_CLARIFICATION",
+      "model_communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED"
+    },
+    "locals": {
+      "player_text": "I meant the people, not the weather.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I meant the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+        }
+      ],
+      "evidence": {
+        "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+        "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      },
+      "leaks": [],
+      "call": {
+        "ok": true,
+        "sent": true,
+        "text": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification of referent 'the people' versus 'the weather' in previous utterance\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that 'the people' were meant, not 'the weather'.\"},\"asserted_premises\":[{\"text\":\"Previous mention or confusion about 'the weather'.\"},{\"text\":\"Current utterance corrects that to mean 'the people'.\"}],\"requested_outcomes\":[{\"text\":\"GM understands that the player refers to 'the people' rather than 'the weather'.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Correcting referent from 'weather' to 'people'.\"}}",
+        "usage": {
+          "event": "completed",
+          "version": "ATGB-03B-1",
+          "run_id": "9e32bb44539b4358b27959da543c9174",
+          "attempt_id": "c0b587e4a1364460af5412f76e48e864",
+          "purpose": "interpretation",
+          "owner": "live_chat_interpretation.request_interpretation",
+          "configured_model": "gpt-4.1-mini",
+          "admitted_at": "2026-10-19T09:37:19.397619+00:00",
+          "time": "2026-10-19T09:37:23.478026+00:00",
+          "sent": true,
+          "request_id": "resp_0f3926ccbf8e50b2006ad5e4d1c44087d2b9b4d411f4bc307f",
+          "model": "gpt-4.1-mini-2025-04-14",
+          "input_tokens": 2004,
+          "output_tokens": 211,
+          "total_tokens": 2215,
+          "usage_consistent": true,
+          "refusal": null,
+          "completion_status": "completed",
+          "dispatch_attempted": true,
+          "latency_ms": 2995.613
+        }
+      },
+      "raw": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification of referent 'the people' versus 'the weather' in previous utterance\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that 'the people' were meant, not 'the weather'.\"},\"asserted_premises\":[{\"text\":\"Previous mention or confusion about 'the weather'.\"},{\"text\":\"Current utterance corrects that to mean 'the people'.\"}],\"requested_outcomes\":[{\"text\":\"GM understands that the player refers to 'the people' rather than 'the weather'.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Correcting referent from 'weather' to 'people'.\"}}",
+      "parsed": {
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+          "evidence_refs": []
+        },
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that 'the people' were meant, not 'the weather'."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous mention or confusion about 'the weather'."
+          },
+          {
+            "text": "Current utterance corrects that to mean 'the people'."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "GM understands that the player refers to 'the people' rather than 'the weather'."
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Correcting referent from 'weather' to 'people'."
+        }
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+        "evidence_refs": []
+      },
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that 'the people' were meant, not 'the weather'."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous mention or confusion about 'the weather'.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "Current utterance corrects that to mean 'the people'.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Correcting referent from 'weather' to 'people'."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?"
+    }
+  },
+  {
+    "function": "assess_addressee_grounding",
+    "file": "game\\ordinary_semantic_ownership.py",
+    "line": 643,
+    "return": {
+      "communication_ownership": "gm_directed",
+      "intent_purpose": "request_information",
+      "target_resolution": "none_required",
+      "target_provenance": "none",
+      "target_id": null,
+      "candidate_target_ids": [],
+      "operation_eligibility": "not_assessed",
+      "mutation_eligibility": true,
+      "conflict_status": "none",
+      "conflict_details": {},
+      "pending_intention_relationship": "none",
+      "allowed_operation": null,
+      "clarification": "",
+      "choices": [
+        {
+          "entity_id": "gate_guard",
+          "label": "Gate Guard"
+        },
+        {
+          "entity_id": "gate_serjeant",
+          "label": "Gate Serjeant"
+        },
+        {
+          "entity_id": "tavern_runner",
+          "label": "Tavern Runner"
+        }
+      ],
+      "direct_address": false
+    },
+    "locals": {
+      "player_text": "I meant the people, not the weather.",
+      "text": "I meant the people, not the weather."
+    }
+  },
+  {
+    "function": "_pending_revision_decision",
+    "file": "game\\conversational_orchestration.py",
+    "line": 391,
+    "return": null,
+    "locals": {
+      "text": "I meant the people, not the weather.",
+      "purpose": "CLARIFICATION",
+      "components": [],
+      "pending": null
+    }
+  },
+  {
+    "function": "_communication_decision",
+    "file": "game\\conversational_orchestration.py",
+    "line": 461,
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "I meant the people, not the weather.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "locals": {
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that 'the people' were meant, not 'the weather'."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous mention or confusion about 'the weather'.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "Current utterance corrects that to mean 'the people'.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Correcting referent from 'weather' to 'people'."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "text": "I meant the people, not the weather.",
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+        "evidence_refs": []
+      },
+      "purpose": "CLARIFICATION",
+      "grounding": {
+        "communication_ownership": "gm_directed",
+        "intent_purpose": "request_information",
+        "target_resolution": "none_required",
+        "target_provenance": "none",
+        "target_id": null,
+        "candidate_target_ids": [],
+        "operation_eligibility": "not_assessed",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "none",
+        "allowed_operation": null,
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "gate_guard",
+            "label": "Gate Guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "direct_address": false
+      },
+      "answer": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "components": []
+    }
+  },
+  {
+    "function": "decision_from_interpretation_record",
+    "file": "game\\conversational_orchestration.py",
+    "line": 2187,
+    "return": {
+      "category": "CLARIFY",
+      "primary_intention": "I meant the people, not the weather.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "locals": {
+      "record": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "Clarify that 'the people' were meant, not 'the weather'."
+        },
+        "asserted_premises": [
+          {
+            "text": "Previous mention or confusion about 'the weather'.",
+            "canon_status": "PLAYER_CLAIM"
+          },
+          {
+            "text": "Current utterance corrects that to mean 'the people'.",
+            "canon_status": "PLAYER_CLAIM"
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+            "adjudication_status": "UNADJUDICATED"
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "Correcting referent from 'weather' to 'people'."
+        },
+        "communication": {
+          "recipient": "GM",
+          "purpose": "CLARIFICATION",
+          "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+          "evidence_refs": []
+        },
+        "incidental_context": [],
+        "reference_reconciliation": {
+          "annotations": [],
+          "addressee": null,
+          "operation": ""
+        },
+        "public_evidence": {}
+      },
+      "player_text": "I meant the people, not the weather.",
+      "text": "I meant the people, not the weather."
+    }
+  }
+]

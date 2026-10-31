@@ -1,0 +1,108 @@
+{
+  "temporal": {
+    "gm_inferences": [],
+    "player_hypotheses": [],
+    "accepted_incidentals": [],
+    "rejected_consequential": [],
+    "active_claim": null,
+    "discourse_focus": {},
+    "turn_counter": 1,
+    "active_scene_id": "bread_stall"
+  },
+  "scene": {
+    "id": "bread_stall",
+    "location": "Bread stall",
+    "summary": "A baker stands at a bread stall.",
+    "visible_facts": [
+      "A baker stands beside loaves at a bread stall."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [],
+    "addressables": [
+      {
+        "id": "baker",
+        "name": "Baker",
+        "scene_id": "bread_stall",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": [
+          "baker",
+          "vendor"
+        ],
+        "aliases": [
+          "baker"
+        ]
+      }
+    ]
+  },
+  "world": {
+    "npcs": [
+      {
+        "id": "baker",
+        "name": "Baker",
+        "location": "bread_stall",
+        "topics": [],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "bread_stall",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "clues": {},
+    "world_flags": [],
+    "assets": []
+  }
+}

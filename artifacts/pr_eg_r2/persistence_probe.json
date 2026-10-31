@@ -1,0 +1,63 @@
+{
+  "roundtrip_equal": true,
+  "world_unchanged": true,
+  "saved_context": {
+    "dialogue_commitments": [
+      {
+        "npc_id": "sergeant_mara",
+        "kind": "opinion",
+        "subject": "the evening",
+        "text": "Sergeant Mara says, \"I prefer the evening. It feels restful to me.\"",
+        "canonical": false,
+        "turn": 1,
+        "status": "revised",
+        "requested_information": "opinion"
+      },
+      {
+        "npc_id": "sergeant_mara",
+        "kind": "opinion",
+        "subject": "the evening",
+        "text": "Sergeant Mara says, \"I prefer the morning. It feels restful to me.\"",
+        "canonical": false,
+        "turn": 2,
+        "status": "active",
+        "requested_information": "opinion"
+      }
+    ],
+    "delivered_exchanges": [
+      {
+        "speaker_id": "sergeant_mara",
+        "speaker_name": "Sergeant Mara",
+        "addressee": "player",
+        "ownership": "npc",
+        "player_text": "Why do you prefer the evening?",
+        "delivered_text": "Sergeant Mara says, \"I prefer the evening. It feels restful to me.\"",
+        "subject": "the evening",
+        "requested_information": "opinion",
+        "supplied_text": "I prefer the evening. It feels restful to me.",
+        "uncertain": false,
+        "commitment": true,
+        "scene_id": "waystation_courtyard",
+        "turn": 1,
+        "active": false
+      },
+      {
+        "speaker_id": "sergeant_mara",
+        "speaker_name": "Sergeant Mara",
+        "addressee": "player",
+        "ownership": "npc",
+        "player_text": "Why do you prefer the evening?",
+        "delivered_text": "Sergeant Mara says, \"I prefer the morning. It feels restful to me.\"",
+        "subject": "the evening",
+        "requested_information": "opinion",
+        "supplied_text": "I prefer the morning. It feels restful to me.",
+        "uncertain": false,
+        "commitment": true,
+        "scene_id": "waystation_courtyard",
+        "turn": 2,
+        "active": true
+      }
+    ]
+  },
+  "note": "Opposite preferences were inserted directly into existing trusted recorder: records revise, no semantic contradiction rejection. This is not a delivered production conversation."
+}

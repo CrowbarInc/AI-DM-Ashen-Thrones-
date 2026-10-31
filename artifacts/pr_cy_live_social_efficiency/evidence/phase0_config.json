@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-10T14:04:33.824721+00:00",
+  "provider": "OpenAI",
+  "billing_path": "OpenAI Python SDK Responses API via client.responses.create.",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "base_url_override_present": false,
+  "models": {
+    "MODEL_NAME": "gpt-4.1-mini",
+    "DEFAULT_MODEL_NAME": "gpt-4.1-mini",
+    "HIGH_PRECISION_MODEL_NAME": "gpt-4.1-mini",
+    "RETRY_ESCALATION_MODEL_NAME": "gpt-4.1-mini"
+  },
+  "enable_model_routing": true,
+  "required_response_model": "gpt-4.1-mini-2025-04-14",
+  "api_key_present": true,
+  "api_key_length": 164,
+  "startup_preflight": "skipped by ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT=1; no billable preflight request used.",
+  "live_interpretation": "disabled by ASHEN_DISABLE_LIVE_INTERPRETATION=1 to preserve gameplay request budget.",
+  "hard_budget": {
+    "max_completed_gameplay_turns": 2,
+    "max_provider_requests": 3,
+    "max_combined_tokens": 110000
+  },
+  "unknown_unpriced_or_substituted_models": []
+}

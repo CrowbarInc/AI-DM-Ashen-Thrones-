@@ -1,0 +1,460 @@
+{
+  "world_tick_events": [],
+  "metadata": {
+    "resolution_contract": {
+      "contract_id": "rc_6da6aeed4ee0",
+      "turn_index": 2,
+      "request_kind": "clarification",
+      "operation": "ask",
+      "target_ref": null,
+      "interlocutor_id": null,
+      "conversational_subject": "If the damage happened the way you just suggested, who could have caused it?",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "clarification",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "unresolved",
+      "ambiguous": false,
+      "raw_input": "If the damage happened the way you just suggested, who could have caused it?",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "no_referent",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": false,
+        "fast_path_abstained": true,
+        "fast_path_abstention_reason": "insufficient_discourse_context",
+        "model_interpreter_invoked": true,
+        "model_proposal_rejected": true,
+        "clarification_after_model": true,
+        "interpretation_api_calls": 1,
+        "interpretation_error": "ambiguous_referent",
+        "canonical_candidates": [
+          {
+            "id": "observatory_service_room",
+            "type": "place",
+            "label": "Rookhaven observatory service room"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "ask",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": null,
+        "canonicalization_attempted": true,
+        "canonical_target_found": false,
+        "operation_conflict": false,
+        "validation_status": "abstained",
+        "validation_result": {
+          "status": "abstained",
+          "reason": "insufficient_discourse_context",
+          "failed_fields": [
+            "raw_target_text"
+          ],
+          "clarification_required": true,
+          "model_interpretation_appropriate": true,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "unresolved",
+          "discourse_commit_allowed": false,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": "insufficient_discourse_context",
+        "failed_fields": [
+          "raw_target_text"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "discourse_commit_allowed": false,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "unresolved",
+          "entity_class": "ambiguous_unresolved",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": null,
+          "entity_id": null,
+          "label": null,
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [],
+          "claim_binding": "none"
+        },
+        "authoritative": false,
+        "semantic_completeness": "not_applied",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "If the damage happened the way you just suggested, who could have caused it?",
+          "source": "deterministic_fast_path",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "clarification",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": true,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "commitment_status": "hypothetical",
+        "primary_operation": "ask",
+        "resolution_subject": "social",
+        "resolution_subject_coherence": "accepted",
+        "semantic_input_length": 76,
+        "provenance_excerpt": "If the damage happened the way you just suggested, who could have caused it?",
+        "secondary_operations": [],
+        "executable_obligations": {
+          "primary": null,
+          "mutation_owner": null,
+          "sequence": [],
+          "supporting": []
+        },
+        "requested_addressee": null,
+        "addressee_binding_status": "unresolved"
+      },
+      "retry_preserved": true
+    },
+    "interaction_obligation": {
+      "kind": "clarification",
+      "target": null,
+      "interlocutor_id": null,
+      "subject": "If the damage happened the way you just suggested, who could have caused it",
+      "requested_outcome": "clarify the referenced subject or state that it cannot be identified",
+      "claim_id": null,
+      "resolution_mode": "authoritative_mechanical_action",
+      "turn_index": 2,
+      "resolution_contract_id": "rc_6da6aeed4ee0",
+      "executable_obligations": {
+        "primary": null,
+        "mutation_owner": null,
+        "sequence": [],
+        "supporting": []
+      }
+    },
+    "gm_resolution_decision": {
+      "contract_id": "rc_6da6aeed4ee0",
+      "resolution_method": "ask",
+      "outcome_classification": "established_or_retrieved",
+      "established_fact_refs": [
+        "scene_world_authored_corpus"
+      ],
+      "proposed_facts": [
+        {
+          "text": "The roof-hatch counterweight lies on the stone floor, and one link of its hanging chain is snapped.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "roof_hatch_chain",
+            "subject_aliases": [
+              "roof-hatch chain",
+              "hatch chain",
+              "chain",
+              "counterweight chain",
+              "counterweight"
+            ],
+            "relation": "observation",
+            "value": "snapped link",
+            "value_aliases": [
+              "snapped",
+              "snapped link",
+              "broken link",
+              "counterweight lies"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "A chalk star chart rests on a lectern.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.1",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        },
+        {
+          "text": "A wool cover lies folded over a stool.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.2",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        }
+      ],
+      "permitted_state_mutations": [],
+      "persistence_policy": "do_not_persist",
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+        "Cause, actor, and time may be called unknown. That does not deny an established condition."
+      ],
+      "unresolved_consequential_questions": [],
+      "unresolved_qualifiers": [
+        "actor"
+      ],
+      "answer_relations": [],
+      "epistemic_acts": [
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.0",
+          "authority": "world_truth",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "roof_hatch_chain",
+            "subject_aliases": [
+              "roof-hatch chain",
+              "hatch chain",
+              "chain",
+              "counterweight chain",
+              "counterweight"
+            ],
+            "relation": "observation",
+            "value": "snapped link",
+            "value_aliases": [
+              "snapped",
+              "snapped link",
+              "broken link",
+              "counterweight lies"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.1",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "establish",
+          "source_ref": "scene.visible_facts.2",
+          "authority": "world_truth",
+          "semantic_identity": {}
+        },
+        {
+          "act": "leave_unresolved",
+          "authority": "observation",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "unresolved",
+            "unresolved_qualifiers": [
+              "actor"
+            ]
+          }
+        }
+      ],
+      "executable_obligations": {
+        "primary": null,
+        "mutation_owner": null,
+        "sequence": [],
+        "supporting": []
+      },
+      "authority_algorithm": "proposition_claim_control_v1"
+    },
+    "ordinary_contract_established": true,
+    "semantic_owner": "resolution_contract",
+    "contract_before_resolver": true,
+    "contract_construction_source": "deterministic",
+    "selected_resolver": "social",
+    "adjudication_resolver_family": null,
+    "emission_debug": {
+      "dialogue_social_plan": {
+        "version": 1,
+        "applies": false,
+        "speaker_id": null,
+        "speaker_name": null,
+        "speaker_source": "unresolved",
+        "dialogue_intent": null,
+        "reply_kind": "unknown",
+        "pressure_state": "none",
+        "relationship_codes": [
+          "unknown"
+        ],
+        "tone_bounds": [
+          "neutral"
+        ],
+        "prohibited_content_codes": [
+          "no_narrator_override",
+          "no_ooc_instructions",
+          "no_player_agency_override",
+          "no_prompt_text"
+        ],
+        "derivation_codes": [
+          "dialogue_social_plan:v1",
+          "intent:ctir_only",
+          "referent_tracking:consumed",
+          "session_hints:bounded",
+          "speaker:unresolved"
+        ],
+        "validator": {
+          "validated": true,
+          "errors": [],
+          "reject_field_names": [
+            "dialogue",
+            "dialogue_line",
+            "gm_guidance",
+            "instructions",
+            "message",
+            "narration",
+            "player_facing_text",
+            "prompt",
+            "system_prompt",
+            "text"
+          ],
+          "allowed_reply_kinds": [
+            "answer",
+            "explanation",
+            "reaction",
+            "refusal",
+            "unknown"
+          ],
+          "allowed_pressure_states": [
+            "high",
+            "low",
+            "moderate",
+            "none"
+          ],
+          "allowed_tone_codes": [
+            "cold",
+            "deferential",
+            "direct",
+            "evasive",
+            "guarded",
+            "hostile",
+            "neutral",
+            "threatening",
+            "warm"
+          ],
+          "allowed_relationship_codes": [
+            "engagement_engaged",
+            "engagement_focused",
+            "engagement_none",
+            "fear_high",
+            "fear_low",
+            "friendly",
+            "hostile",
+            "neutral",
+            "suspicion_high",
+            "suspicion_low",
+            "trust_high",
+            "trust_low",
+            "unfriendly",
+            "unknown"
+          ],
+          "allowed_speaker_alias_resolution_sources": [
+            "continuity_snapshot",
+            "interaction_continuity_contract",
+            "manual_bundle_override",
+            "referent_tracking"
+          ]
+        },
+        "bounded_session_hints": {
+          "active_interaction_target_id": null,
+          "active_interaction_target_name": null,
+          "active_interaction_kind": "investigate",
+          "interaction_mode": "activity",
+          "engagement_level": "focused",
+          "conversation_privacy": null,
+          "player_position_context": null
+        }
+      },
+      "scene_state_anchor": {
+        "enabled": true,
+        "scene_id": "observatory_service_room",
+        "counts": {
+          "location": 6,
+          "actor": 2,
+          "player_action": 6
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "interaction_kind": "unknown",
+        "pressure_focus_allowed": false,
+        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=15 ambient=1"
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      },
+      "selected_conversational_memory": [
+        {
+          "kind": "recent_turn",
+          "entity_ids": [],
+          "topic_tokens": [],
+          "source_turn": 1,
+          "text": "P: I examine the snapped counterweight chain and the roof-hatch mechanism. What does the damage suggest? | G: The roof-hatch counterweight rests upon the stone floor, and one link of its hanging chain is visibly snapped. Nearby, a chalk star chart lies on a lectern, and a wool cover is folded over a stool.",
+          "score": 103.71428571428571,
+          "why_selected": [
+            "recency",
+            "recent_turn_kind"
+          ]
+        }
+      ],
+      "conversational_memory": {
+        "selected_count": 1
+      }
+    }
+  },
+  "prompt": "If the damage happened the way you just suggested, who could have caused it?"
+}

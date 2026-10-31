@@ -1,0 +1,53 @@
+{
+  "case_id": "s23q4",
+  "family": "s23",
+  "partition": "holdout",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "319b1d46702c19f2491e7687c04f4570ddd4b75afeda0ccdbda64280c795b828",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "The toll court impounded a wool barge"
+    ],
+    "qualifiers": [
+      "pending settlement of the disputed levy",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s23"
+    ],
+    "answered_arguments": [
+      "agent"
+    ],
+    "missing_arguments": [
+      "levy amount"
+    ],
+    "conflict": false,
+    "reason": "The fact states that the toll court impounded the wool barge, but the amount of the levy is not specified."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

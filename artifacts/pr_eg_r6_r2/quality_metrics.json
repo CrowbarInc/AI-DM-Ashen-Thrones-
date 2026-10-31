@@ -1,0 +1,250 @@
+{
+  "method": "Local implementing-agent transcript assessment. No external scoring calls; automatic approval review rejected external payload egress. Not independent human adjudication; null metrics excluded, per-row reasons and index annotations preserved. No tuning against scores.",
+  "datasets": {
+    "matched_legacy": {
+      "intent": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "addressee": {
+        "correct": 10,
+        "denominator": 10,
+        "rate": 1.0
+      },
+      "entity_roles": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "relationship": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "relevance": {
+        "correct": 5,
+        "denominator": 10,
+        "rate": 0.5
+      },
+      "sufficiency": {
+        "correct": 5,
+        "denominator": 10,
+        "rate": 0.5
+      },
+      "correction": {
+        "correct": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "follow_up": {
+        "correct": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "recovery": {
+        "correct": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "clarification": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "false_clarification": {
+        "denominator": 0,
+        "rate": null,
+        "count": 0
+      },
+      "quality_mean": 1.5,
+      "playability_mean": 1.5,
+      "scored_turns": 10
+    },
+    "matched_r2": {
+      "intent": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "addressee": {
+        "correct": 6,
+        "denominator": 10,
+        "rate": 0.6
+      },
+      "entity_roles": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "relationship": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "relevance": {
+        "correct": 6,
+        "denominator": 10,
+        "rate": 0.6
+      },
+      "sufficiency": {
+        "correct": 6,
+        "denominator": 10,
+        "rate": 0.6
+      },
+      "correction": {
+        "correct": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "follow_up": {
+        "correct": 0,
+        "denominator": 1,
+        "rate": 0.0
+      },
+      "recovery": {
+        "correct": 0,
+        "denominator": 2,
+        "rate": 0.0
+      },
+      "clarification": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "false_clarification": {
+        "denominator": 0,
+        "rate": null,
+        "count": 0
+      },
+      "quality_mean": 1.6,
+      "playability_mean": 1.6,
+      "scored_turns": 10
+    },
+    "matched_r6": {
+      "intent": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "addressee": {
+        "correct": 9,
+        "denominator": 10,
+        "rate": 0.9
+      },
+      "entity_roles": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "relationship": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "relevance": {
+        "correct": 5,
+        "denominator": 10,
+        "rate": 0.5
+      },
+      "sufficiency": {
+        "correct": 5,
+        "denominator": 10,
+        "rate": 0.5
+      },
+      "correction": {
+        "correct": 1,
+        "denominator": 2,
+        "rate": 0.5
+      },
+      "follow_up": {
+        "correct": 1,
+        "denominator": 1,
+        "rate": 1.0
+      },
+      "recovery": {
+        "correct": 1,
+        "denominator": 2,
+        "rate": 0.5
+      },
+      "clarification": {
+        "correct": 0,
+        "denominator": 0,
+        "rate": null
+      },
+      "false_clarification": {
+        "denominator": 0,
+        "rate": null,
+        "count": 0
+      },
+      "quality_mean": 1.5,
+      "playability_mean": 1.5,
+      "scored_turns": 10
+    },
+    "pr_eg_r6_r2": {
+      "intent": {
+        "correct": 80,
+        "denominator": 117,
+        "rate": 0.6837606837606838
+      },
+      "addressee": {
+        "correct": 86,
+        "denominator": 122,
+        "rate": 0.7049180327868853
+      },
+      "entity_roles": {
+        "correct": 52,
+        "denominator": 117,
+        "rate": 0.4444444444444444
+      },
+      "relationship": {
+        "correct": 73,
+        "denominator": 116,
+        "rate": 0.6293103448275862
+      },
+      "relevance": {
+        "correct": 77,
+        "denominator": 122,
+        "rate": 0.6311475409836066
+      },
+      "sufficiency": {
+        "correct": 76,
+        "denominator": 122,
+        "rate": 0.6229508196721312
+      },
+      "correction": {
+        "correct": 0,
+        "denominator": 12,
+        "rate": 0.0
+      },
+      "follow_up": {
+        "correct": 0,
+        "denominator": 23,
+        "rate": 0.0
+      },
+      "recovery": {
+        "correct": 0,
+        "denominator": 12,
+        "rate": 0.0
+      },
+      "clarification": {
+        "correct": 5,
+        "denominator": 42,
+        "rate": 0.11904761904761904
+      },
+      "false_clarification": {
+        "denominator": 122,
+        "rate": 0.2786885245901639,
+        "count": 34
+      },
+      "substantive_turns_excluding_padding": 104,
+      "relevance_excluding_padding": {
+        "correct": 59,
+        "denominator": 104
+      },
+      "quality_mean": 1.5737704918032787,
+      "playability_mean": 1.5737704918032787,
+      "scored_turns": 122
+    }
+  }
+}

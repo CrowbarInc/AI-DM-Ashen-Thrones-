@@ -1,0 +1,31 @@
+[
+  {
+    "command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_04_readiness.py -k 'fresh_import_safety or sequential_modes_and_failure_restoration or failed_import_restores_configuration' -q --tb=short --basetemp=development/tmp/atgb_r1_05 --junitxml=artifacts/atgb/atgb_r1_05/readiness_tests.xml",
+    "exit_code": 0,
+    "passed": 10
+  },
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_05/run_trial.py L1",
+    "outcome": "initial launch rejected before process creation; later explicit user approval; approved live launch exit 0"
+  },
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_05/run_trial.py L1 --preview",
+    "outcome": "two local-only previews in distinct directories; initial failed closed, corrected ready; zero admissions"
+  },
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_05/run_trial.py L2",
+    "exit_code": 0,
+    "admissions": 1,
+    "sdk_retries": 0
+  },
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_05/run_trial.py L4",
+    "exit_code": 0,
+    "admissions": 1,
+    "sdk_retries": 0
+  },
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_05/package_review.py",
+    "purpose": "offline evidence/report generation and review verification; no provider execution"
+  }
+]

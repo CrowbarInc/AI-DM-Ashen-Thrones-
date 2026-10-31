@@ -1,0 +1,38 @@
+{
+  "case_id": "s06q1",
+  "family": "s06",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "952223b8d8c36de3634170acc222bb0e9cfd2a9b692bf8119b9d35ee9ac2f63d",
+  "answer": {
+    "response_class": "UNKNOWN",
+    "values": [],
+    "qualifiers": [],
+    "selected_source_ids": [],
+    "selected_fact_ids": [],
+    "answered_arguments": [],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "provider_failure"
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": false,
+    "false_rejection": true,
+    "unsupported_inference": false,
+    "earliest_failure": "F05"
+  },
+  "provider_error": "APIConnectionError"
+}

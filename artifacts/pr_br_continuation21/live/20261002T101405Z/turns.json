@@ -1,0 +1,569 @@
+[
+  {
+    "turn": 1,
+    "player_text": "I step closer to the ragged stranger, curiosity pulling me through the crowd despite the rain, and ask, “Stranger, what news do you watch for here? The flow of people or something beyond this gate?”",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "interlocutor_id": "refugee",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "refugee",
+      "label": "refugee",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "refugee",
+      "source": "inherited_discourse"
+    },
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "refugee",
+      "entity_id": null,
+      "label": "refugee",
+      "explicit_new_interlocutor": false,
+      "authority_reasons": [
+        "identity:discourse"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "\"I don't watch much beyond this gate,\" the ragged stranger admits, gaze flickering uneasily to the flow of faces and packs. \"Mostly, I keep to myself, and the people moving through—there's enough trouble here without chasing shadows. If you're looking for something specific, you might have better luck with the gate serjeant or that tavern runner over by the barrel.\"",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "\"I don't watch much beyond this gate,\" the ragged stranger admits, gaze flickering uneasily to the flow of faces and packs. \"Mostly, I keep to myself, and the people moving through—there's enough trouble here without chasing shadows. If you're looking for something specific, you might have better luck with the gate serjeant or that tavern runner over by the barrel.\"",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "\"I don't watch much beyond this gate,\" the ragged stranger admits, gaze flickering uneasily to the flow of faces and packs. \"Mostly, I keep to myself, and the people moving through—there's enough trouble here without chasing shadows. If you're looking for something specific, you might have better luck with the gate serjeant or that tavern runner over by the barrel.\"",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "\"I don't watch much beyond this gate,\" the ragged stranger admits, gaze flickering uneasily to the flow of faces and packs. \"Mostly, I keep to myself, and the people moving through—there's enough trouble here without chasing shadows. If you're looking for something specific, you might have better luck with the gate serjeant or that tavern runner over by the barrel.\""
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "If you're looking for something specific, you might have better luck with the gate serjeant or that tavern runner over by the barrel.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "offline_evaluator": {
+      "semantic_result": "PASS",
+      "score": 81
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "refugee",
+        "label": "refugee",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_488ae7d795ed"
+    }
+  },
+  {
+    "turn": 2,
+    "player_text": "I nod thoughtfully at the ragged stranger, then turn toward the gate serjeant, seeking a moment to speak with him despite the pressing crowd. I ask, “Serjeant, with patrols missing and curfew set, what dangers are we facing here at Cinderwatch? And might there be refuge or aid available for travelers caught in this turmoil?”",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "interlocutor_id": "gate_serjeant",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Gate Serjeant",
+      "source": "explicit_player"
+    },
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": "here at Cinderwa",
+      "proposed_span": "here at Cinderwa",
+      "bound_interlocutor_id": "gate_serjeant",
+      "entity_id": null,
+      "label": "Gate Serjeant",
+      "explicit_new_interlocutor": true,
+      "authority_reasons": [
+        "identity:established"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "\"With patrols missing and curfew set, it’s not my place to speculate beyond what’s posted,\" the gate serjeant says, eyes briefly flicking to the notice board at the side of the gate. \"The threat assessments come from higher command, and for now, all we can do is enforce the curfew and report any suspicious movements promptly.\"\n\nTheir tone carries the weight of duty, but also a measured caution not to reveal more than protocol allows.",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "\"With patrols missing and curfew set, it’s not my place to speculate beyond what’s posted,\" the gate serjeant says, eyes briefly flicking to the notice board at the side of the gate. \"The threat assessments come from higher command, and for now, all we can do is enforce the curfew and report any suspicious movements promptly.\"\n\nTheir tone carries the weight of duty, but also a measured caution not to reveal more than protocol allows.",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "\"With patrols missing and curfew set, it’s not my place to speculate beyond what’s posted,\" the gate serjeant says, eyes briefly flicking to the notice board at the side of the gate. \"The threat assessments come from higher command, and for now, all we can do is enforce the curfew and report any suspicious movements promptly.\"\n\nTheir tone carries the weight of duty, but also a measured caution not to reveal more than protocol allows.",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "\"With patrols missing and curfew set, it’s not my place to speculate beyond what’s posted,\" the gate serjeant says, eyes briefly flicking to the notice board at the side of the gate. \"The threat assessments come from higher command, and for now, all we can do is enforce the curfew and report any suspicious movements promptly.\"\n\nTheir tone carries the weight of duty, but also a measured caution not to reveal more than protocol allows."
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "offline_evaluator": {
+      "semantic_result": "PASS",
+      "score": 81
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "Gate Serjeant",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_be61508a0434"
+    }
+  },
+  {
+    "turn": 3,
+    "player_text": "I glance over at the notice board again, carefully reading the posted taxes, curfew regulations, and the warning about the missing patrol. Then I turn to the tavern runner weaving through the crowd and ask, “What rumors have you heard recently, and do you know if there’s a place inside the town where a traveler can find shelter and food?”",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "interlocutor_id": "tavern_runner",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Tavern Runner",
+      "source": "explicit_player"
+    },
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "tavern_runner",
+      "entity_id": null,
+      "label": "Tavern Runner",
+      "explicit_new_interlocutor": true,
+      "authority_reasons": [
+        "identity:established"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of the crates by the gate. Hardly anyone knows more than that, but it's the talk around here.\" They glance towards the gate and the crowded approach. \"As for shelter, if you head inside the town, there’s an inn near the market square—simple fare and a warm bed, if a traveler has coin.\"",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of the crates by the gate. Hardly anyone knows more than that, but it's the talk around here.\" They glance towards the gate and the crowded approach. \"As for shelter, if you head inside the town, there’s an inn near the market square—simple fare and a warm bed, if a traveler has coin.\"",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of the crates by the gate. Hardly anyone knows more than that, but it's the talk around here.\" They glance towards the gate and the crowded approach. \"As for shelter, if you head inside the town, there’s an inn near the market square—simple fare and a warm bed, if a traveler has coin.\"",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of the crates by the gate. Hardly anyone knows more than that, but it's the talk around here.\" They glance towards the gate and the crowded approach. \"As for shelter, if you head inside the town, there’s an inn near the market square—simple fare and a warm bed, if a traveler has coin.\""
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of the crates by the gate.",
+        "kind": "npc_claim",
+        "epistemic_status": "hearsay",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      },
+      {
+        "text": "Hardly anyone knows more than that, but it's the talk around here.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "offline_evaluator": {
+      "semantic_result": "PASS",
+      "score": 81
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "bi_ac666d758300",
+        "label": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of t",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "claim_ledger",
+        "epistemic_status": "hearsay"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_78f7c0228df4"
+    }
+  },
+  {
+    "turn": 4,
+    "player_text": "I thank the tavern runner and ask them, \"Is the inn near the market square the best place, or do any other spots offer food and shelter for those without coin? Also, might anyone there share more about the missing patrol or this muddy footprint rumor?",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "interlocutor_id": "tavern_runner",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": 4
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Tavern Runner",
+      "source": "inherited_discourse"
+    },
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "tavern_runner",
+      "entity_id": null,
+      "label": "Tavern Runner",
+      "explicit_new_interlocutor": false,
+      "authority_reasons": [
+        "identity:discourse"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "\"The inn near the market square is probably your best bet,\" the tavern runner says, voice lowered. \"It’s simple fare and a warm bed, but for those without coin, options are scarce around here. Some travelers try to find corners or shelters on the town’s edges, but anything truly safe usually asks for some payment. If you plan to linger, you might find folks willing to trade tasks or information for a meal and roof, but it’s not guaranteed.\" They glance toward the congested approach and then back to you. \"For more on the missing patrol or that muddy footprint rumor, the guard captain keeps a firmer grip on official news, but they’ll only share with someone who’s earned some trust.\"",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "\"The inn near the market square is probably your best bet,\" the tavern runner says, voice lowered. \"It’s simple fare and a warm bed, but for those without coin, options are scarce around here. Some travelers try to find corners or shelters on the town’s edges, but anything truly safe usually asks for some payment. If you plan to linger, you might find folks willing to trade tasks or information for a meal and roof, but it’s not guaranteed.\" They glance toward the congested approach and then back to you. \"For more on the missing patrol or that muddy footprint rumor, the guard captain keeps a firmer grip on official news, but they’ll only share with someone who’s earned some trust.\"",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "\"The inn near the market square is probably your best bet,\" the tavern runner says, voice lowered. \"It’s simple fare and a warm bed, but for those without coin, options are scarce around here. Some travelers try to find corners or shelters on the town’s edges, but anything truly safe usually asks for some payment. If you plan to linger, you might find folks willing to trade tasks or information for a meal and roof, but it’s not guaranteed.\" They glance toward the congested approach and then back to you. \"For more on the missing patrol or that muddy footprint rumor, the guard captain keeps a firmer grip on official news, but they’ll only share with someone who’s earned some trust.\"",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [
+        "low_confidence_locate"
+      ],
+      "text": "\"The inn near the market square is probably your best bet,\" the tavern runner says, voice lowered. \"It’s simple fare and a warm bed, but for those without coin, options are scarce around here. Some travelers try to find corners or shelters on the town’s edges, but anything truly safe usually asks for some payment. If you plan to linger, you might find folks willing to trade tasks or information for a meal and roof, but it’s not guaranteed.\" They glance toward the congested approach and then back to you. \"For more on the missing patrol or that muddy footprint rumor, the guard captain keeps a firmer grip on official news, but they’ll only share with someone who’s earned some trust.\""
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "\"It’s simple fare and a warm bed, but for those without coin, options are scarce around here.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      },
+      {
+        "text": "If you plan to linger, you might find folks willing to trade tasks or information for a meal and roof, but it’s not guaranteed.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      },
+      {
+        "text": "\"For more on the missing patrol or that muddy footprint rumor, the guard captain keeps a firmer grip on official news, but they’ll only share with someone who’s earned some trust.",
+        "kind": "npc_claim",
+        "epistemic_status": "rumor",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "offline_evaluator": {
+      "semantic_result": "FAIL",
+      "score": 83
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "bi_ac666d758300",
+        "label": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of t",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "claim_ledger",
+        "epistemic_status": "hearsay"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 5,
+      "last_committed_contract_id": "rc_fa2032a5a333"
+    }
+  },
+  {
+    "turn": 5,
+    "player_text": "I nod at the tavern runner and say, \"Thank you for the guidance. I will make my way to the inn near the market square for rest and warmth first.\" Then I proceed toward the town gates, aiming to enter Cinderwatch and find the inn to see if I can barter or earn a meal and shelter, while keeping an eye out for anyone who might share useful information about the missing patrol.",
+    "operation": "act",
+    "dimension": null,
+    "dimensions": [],
+    "interlocutor_id": "inc_ec1197ac5e",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "inc_ec1197ac5e",
+      "label": "inn to see",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "inn to see",
+      "source": "explicit_player"
+    },
+    "entity_binding": {
+      "status": "bound_incidental",
+      "entity_class": "permitted_bounded_incidental",
+      "proposed_interlocutor": "inn to see",
+      "proposed_span": "the inn to see",
+      "bound_interlocutor_id": "inc_ec1197ac5e",
+      "entity_id": "inc_ec1197ac5e",
+      "label": "inn to see",
+      "explicit_new_interlocutor": true,
+      "authority_reasons": [
+        "scene:populated",
+        "pr_bn:accepted"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "action_outcome",
+    "initial_generation": "Stepping through the well-worn gates into Cinderwatch's Market Quarter, Galinor is greeted by a bustling scene alive with a mix of sailors, merchants, and local townsfolk. Colorful canvases snap in the gusty breeze above market stalls crafted from reclaimed timber and rough stone. The air is sharp with the scent of spiced meats and the tang of sea salt. Not far off, a house marked by the banners of a prominent moneylender stands out among the haphazard rooftops, a symbol of the fragile power held within the town. As the crowd shifts under vigilant watch of a few armed figures, whispers circulate of an abandoned fortress beyond the outskirts where caravan guards swap tales. Ahead lies the promise of an inn where bartering a favor or a story might secure warmth and shelter. Eyes itch to catch any sign or rumor about the missing patrol that has set the town on edge.",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "Stepping through the well-worn gates into Cinderwatch's Market Quarter, Galinor is greeted by a bustling scene alive with a mix of sailors, merchants, and local townsfolk. Colorful canvases snap in the gusty breeze above market stalls crafted from reclaimed timber and rough stone. The air is sharp with the scent of spiced meats and the tang of sea salt. Not far off, a house marked by the banners of a prominent moneylender stands out among the haphazard rooftops, a symbol of the fragile power held within the town. As the crowd shifts under vigilant watch of a few armed figures, whispers circulate of an abandoned fortress beyond the outskirts where caravan guards swap tales. Ahead lies the promise of an inn where bartering a favor or a story might secure warmth and shelter. Eyes itch to catch any sign or rumor about the missing patrol that has set the town on edge.",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "Stepping through the well-worn gates into Cinderwatch's Market Quarter, Galinor is greeted by a bustling scene alive with a mix of sailors, merchants, and local townsfolk. Colorful canvases snap in the gusty breeze above market stalls crafted from reclaimed timber and rough stone. The air is sharp with the scent of spiced meats and the tang of sea salt. Not far off, a house marked by the banners of a prominent moneylender stands out among the haphazard rooftops, a symbol of the fragile power held within the town. As the crowd shifts under vigilant watch of a few armed figures, whispers circulate of an abandoned fortress beyond the outskirts where caravan guards swap tales. Ahead lies the promise of an inn where bartering a favor or a story might secure warmth and shelter. Eyes itch to catch any sign or rumor about the missing patrol that has set the town on edge.",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "Stepping through the well-worn gates into Cinderwatch's Market Quarter, Galinor is greeted by a bustling scene alive with a mix of sailors, merchants, and local townsfolk. Colorful canvases snap in the gusty breeze above market stalls crafted from reclaimed timber and rough stone. The air is sharp with the scent of spiced meats and the tang of sea salt. Not far off, a house marked by the banners of a prominent moneylender stands out among the haphazard rooftops, a symbol of the fragile power held within the town. As the crowd shifts under vigilant watch of a few armed figures, whispers circulate of an abandoned fortress beyond the outskirts where caravan guards swap tales. Ahead lies the promise of an inn where bartering a favor or a story might secure warmth and shelter. Eyes itch to catch any sign or rumor about the missing patrol that has set the town on edge."
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "Stepping through the well-worn gates into Cinderwatch's Market Quarter, Galinor is greeted by a bustling scene alive with a mix of sailors, merchants, and local townsfolk.",
+        "kind": "incidental_fact",
+        "epistemic_status": "world_truth",
+        "grounded": false,
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "text": "Ahead lies the promise of an inn where bartering a favor or a story might secure warmth and shelter.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      },
+      {
+        "text": "Eyes itch to catch any sign or rumor about the missing patrol that has set the town on edge.",
+        "kind": "npc_claim",
+        "epistemic_status": "rumor",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "offline_evaluator": {
+      "semantic_result": "FAIL",
+      "score": 87
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "market_quarter",
+      "active_interlocutor": {
+        "id": "inc_ec1197ac5e",
+        "label": "inn to see",
+        "kind": "interlocutor",
+        "scene_id": "market_quarter",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "bi_ac666d758300",
+        "label": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of t",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "claim_ledger",
+        "epistemic_status": "hearsay"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": {
+        "id": "rc_1673a8b88fda",
+        "label": "I nod at the tavern runner and say, Then I proceed toward the town gates, aiming to enter Cinderwatch and find the inn to see if I can barter or earn a meal and",
+        "kind": "act",
+        "scene_id": "market_quarter",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 6,
+      "last_committed_contract_id": "rc_1673a8b88fda"
+    }
+  },
+  {
+    "turn": 6,
+    "player_text": "I approach the inn near the market square with a careful, friendly demeanor, looking to speak with the innkeeper. I ask, \"Good evening, friend. I am a traveler seeking a warm meal and a place to rest. Might there be some task or trade that could earn me shelter here?\" I keep an ear open for any talk or clues about the missing patrol as I gauge the atmosphere inside.",
+    "operation": "act",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "interlocutor_id": null,
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "inc_ec1197ac5e",
+      "label": "inn to see",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "inn to see",
+      "source": "explicit_player"
+    },
+    "entity_binding": {
+      "status": "unresolved",
+      "entity_class": "ambiguous_unresolved",
+      "proposed_interlocutor": "innkeeper",
+      "proposed_span": "the innkeeper",
+      "bound_interlocutor_id": null,
+      "entity_id": null,
+      "label": null,
+      "explicit_new_interlocutor": true,
+      "authority_reasons": [
+        "scene:mixed"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "action_outcome",
+    "initial_generation": "You step into the inn near the market square, but the usual innkeeper is nowhere to be found. The common room hums with quiet murmurs from the few scattered patrons, mostly focused on their own business. No one steps forward to offer tasks or trade for shelter. It seems the inn is not currently staffed in a way to engage newcomers seeking work. You might try asking the tavern runner outside again or seek out other local contacts in the market quarter who might have opportunity to offer.",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "You step into the inn near the market square, but the usual innkeeper is nowhere to be found. The common room hums with quiet murmurs from the few scattered patrons, mostly focused on their own business. No one steps forward to offer tasks or trade for shelter. It seems the inn is not currently staffed in a way to engage newcomers seeking work. You might try asking the tavern runner outside again or seek out other local contacts in the market quarter who might have opportunity to offer.",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "You step into the inn near the market square, but the usual innkeeper is nowhere to be found. The common room hums with quiet murmurs from the few scattered patrons, mostly focused on their own business. No one steps forward to offer tasks or trade for shelter. It seems the inn is not currently staffed in a way to engage newcomers seeking work. You might try asking the tavern runner outside again or seek out other local contacts in the market quarter who might have opportunity to offer.",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "You step into the inn near the market square, but the usual innkeeper is nowhere to be found. The common room hums with quiet murmurs from the few scattered patrons, mostly focused on their own business. No one steps forward to offer tasks or trade for shelter. It seems the inn is not currently staffed in a way to engage newcomers seeking work. You might try asking the tavern runner outside again or seek out other local contacts in the market quarter who might have opportunity to offer."
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [
+      {
+        "text": "You might try asking the tavern runner outside again or seek out other local contacts in the market quarter who might have opportunity to offer.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 1,
+    "offline_evaluator": {
+      "semantic_result": "FAIL",
+      "score": 86
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "market_quarter",
+      "active_interlocutor": null,
+      "active_claim": {
+        "id": "bi_ac666d758300",
+        "label": "The tavern runner approaches with an easy step, lowering their voice as they say, \"I heard the patrol disappeared near some muddy footprints just northwest of t",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "claim_ledger",
+        "epistemic_status": "hearsay"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": {
+        "id": "rc_bd2f7055a1c7",
+        "label": "I approach the inn near the market square with a careful, friendly demeanor, looking to speak with the innkeeper. I ask, I keep an ear open for any talk or clue",
+        "kind": "act",
+        "scene_id": "market_quarter",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 6,
+      "last_committed_contract_id": "rc_bd2f7055a1c7"
+    }
+  }
+]

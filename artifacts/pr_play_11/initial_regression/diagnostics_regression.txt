@@ -1,0 +1,129 @@
+.......................................FFFFFFF.......................... [ 88%]
+.........                                                                [100%]
+================================== FAILURES ===================================
+_______________________ test_opening_fixtures[minimal] ________________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 3b786561c4f5f02a94602779
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "dc6b82c7a3b2acc74c611b61f0f0a2eabc7a0b66df0ddd315f9f80041aba4d78", "text_preview": "Canvases snap in the wind over the market stalls holds the eye, while a moneylender's house flies noble colors stays imp…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_______________________ test_opening_fixtures[typical] ________________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 08d838cff3ef460891faf23c
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_________________________ test_opening_fixtures[rich] _________________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started e0caa34e541d2ebf10a433c3
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+___________________ test_opening_fixtures[multiple_details] ___________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started d33387c667d53779b5534e08
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_________________________ test_opening_fixtures[npc] __________________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 6ab661834712be8cc7715c4a
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_____________________ test_opening_fixtures[declarations] _____________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 11dbd2bd12cb3eae4dcd274c
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+_______________________ test_opening_fixtures[over_600] _______________________
+tests\test_pr_play_06_opening_budget.py:35: in test_opening_fixtures
+    text = captured.pop('fixture')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'fixture'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started 717555ec2e7495879753ff52
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[RETRY SKIPPED: NONRETRYABLE UPSTREAM ERROR]
+FALLBACK SELECTED {"event": "FALLBACK_SELECTED", "source": "fallback", "stage": "fallback_selector", "content_fingerprint": "4e2b0aa55f93ee105367b4fd32f19150af3254f9155c961e25e3aa62740fe260", "text_preview": "A tavern runner shouts offers of hot stew and paid rumor sharpens when you look again, and a well-appointed townhouse ov…"}
+[FAST FALLBACK INVOKED] failure_class=unknown_api_error reason=nonretryable_upstream_error
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+============================== warnings summary ===============================
+tests/test_pr_play_05_diagnostics.py::test_invalid_placeholder_over_http
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[minimal]
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[typical]
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[rich]
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[multiple_details]
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[npc] - ...
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[declarations]
+FAILED tests/test_pr_play_06_opening_budget.py::test_opening_fixtures[over_600]

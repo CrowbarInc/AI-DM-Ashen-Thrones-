@@ -1,0 +1,44 @@
+{
+  "provider": "OpenAI Responses",
+  "configured_model": "gpt-4.1-mini",
+  "routing_models": [
+    "gpt-4.1-mini",
+    "gpt-4.1-mini"
+  ],
+  "endpoint": "https://api.openai.com/v1/",
+  "sdk_version": "2.48.0",
+  "httpx_version": "0.28.1",
+  "transport": "HTTPTransport",
+  "trust_env": true,
+  "timeout": {
+    "connect": 45.0,
+    "read": 45.0,
+    "write": 45.0,
+    "pool": 45.0
+  },
+  "sdk_retries": 0,
+  "sdk_retries_note": "Measured-runner setting from R1-05/08; constructor only, no requests",
+  "credential_present": true,
+  "flags": {
+    "ASHEN_DISABLE_LIVE_INTERPRETATION": null,
+    "ASHEN_DISABLE_PROVIDER_CALLS": null,
+    "ASHEN_DISABLE_PROVIDER_RETRIES": null,
+    "ASHEN_DISABLE_EXPRESSION_GENERATION": null,
+    "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT": null
+  },
+  "proxy_configuration": {},
+  "certificate_override_presence": {
+    "SSL_CERT_FILE": false,
+    "SSL_CERT_DIR": false,
+    "REQUESTS_CA_BUNDLE": false,
+    "CURL_CA_BUNDLE": false
+  },
+  "ssl_default_verify_paths": {
+    "cafile": null,
+    "capath": null,
+    "openssl_cafile_env": "SSL_CERT_FILE",
+    "openssl_cafile": "C:\\Program Files\\Common Files\\SSL\\cert.pem",
+    "openssl_capath_env": "SSL_CERT_DIR",
+    "openssl_capath": "C:\\Program Files\\Common Files\\SSL\\certs"
+  }
+}

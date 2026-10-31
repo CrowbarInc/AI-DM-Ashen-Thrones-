@@ -1,0 +1,14 @@
+[
+  ".venv/Scripts/python.exe",
+  "-m",
+  "pytest",
+  "tests/test_model_routing_config.py",
+  "tests/test_model_routing_runtime.py",
+  "tests/test_model_routing_escalation.py",
+  "tests/test_pr_dh_live_interpretation.py",
+  "-q",
+  "--basetemp",
+  "development/tmp/pr_play_02_compatibility",
+  "--junitxml",
+  "artifacts/pr_play_02/compatibility.xml"
+]

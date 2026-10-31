@@ -1,0 +1,3 @@
+# 14 — Multi-Role Alignment
+
+Speaker/recipient/message: s01. Owner/borrower: s18. Creditor/debtor: s13/s19. Buyer/seller: s17. Guard/protected party: s10/s30. Unfamiliar roles include licensor/licensee, guarantor, recognizer, hereditary right holder, redeemer/tender/compensation, voucher/certified object, sentence commuter, impounder and delegator/delegate. Reversed speaker/recipient or simultaneous buyer/seller swaps are negative questions. Exact requested answer values detect many directional errors; arbitrary extracted role-name equivalence is not reliably scored without adjudication. The reference role-name metric is labeled exact agreement, not semantic role preservation.

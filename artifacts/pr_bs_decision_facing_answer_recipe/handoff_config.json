@@ -1,0 +1,119 @@
+{
+  "campaign_id": "pr-bs-decision-facing-answer-recipe",
+  "campaign_name": "PR-BS Decision-Facing Answer Recipe",
+  "campaign_date": "2026-10-04",
+  "purpose": "PR-BS. MODE: BOUNDED IMPLEMENTATION + DETERMINISTIC VALIDATION. MODEL/API CALLS: ZERO. Implement a compact decision-facing answer recipe projected from existing GM authority, with deterministic A1/B1 fixtures and no live gameplay.",
+  "primary_report": "PR-BS_decision_facing_answer_recipe_implementation.md",
+  "configuration_source": "artifacts/pr_bs_decision_facing_answer_recipe/handoff_config.json",
+  "executive_summary": "PR-BS. MODE: BOUNDED IMPLEMENTATION + DETERMINISTIC VALIDATION. MODEL/API CALLS: ZERO. Implementation result: the realization payload now includes decision_facing_answer_recipe, a projection of GMResolutionDecision, with a useful A1 bounded-inference path and a B1 mundane-dialogue path. Original overreach and authored-world-fact preference declarations remain rejected. Deterministic test totals: 9 passed in tests/test_pr_bs_decision_facing_answer_recipe.py; broad suite 534 passed in 38.30s (469 PR-BR tests including C18, 9 recipe tests, 56 prompt/guard tests), 0 failed. Before/after payload result: A1 authority slice 23452 to 17329 chars (−6123); B1 23494 to 17114 chars (−6380). Architecture status: A — PR-BR REMAINS CLOSED. Decision: A — READY FOR MICRO LIVE. MICRO LIVE is recommended and was not run.",
+  "objective_status": "ready_for_micro_live",
+  "changes": {
+    "production": [
+      "Added build_decision_facing_answer_recipe and prompt_decision_projection in game/gm_resolution_decision.py.",
+      "Shipped the recipe from narration_authority_fields through game/prompt_context.py.",
+      "Stopped duplicating the full decision and resolution contract inside the provider copy of mechanical_resolution.",
+      "Clarified the system-prompt declaration rule so ordinary NPC dialogue is narration or incidental improvisation."
+    ],
+    "validation": [
+      "Added tests/test_pr_bs_decision_facing_answer_recipe.py.",
+      "Ran the PR-BR deterministic regression set, the C18 immutable-boundary file, and prompt/guard tests. No model calls."
+    ],
+    "tooling": [
+      "Added artifacts/pr_bs_decision_facing_answer_recipe/measure_payload.py for deterministic char counts."
+    ],
+    "documentation": [
+      "Added PR-BS_decision_facing_answer_recipe_implementation.md."
+    ],
+    "generated_artifacts": [
+      "Recorded payload_before.json, payload_after.json, a1_recipe.json, and b1_recipe.json."
+    ]
+  },
+  "testing": {
+    "focused": "python -m pytest tests/test_pr_bs_decision_facing_answer_recipe.py --override-ini=addopts= -q --tb=short: 9 passed.",
+    "broader": "python -m pytest tests/test_pr_br_*.py tests/test_pr_bs_decision_facing_answer_recipe.py tests/test_prompt_and_guard.py --override-ini=addopts= -q --tb=line: 534 passed in 38.30s. Includes 469 PR-BR tests and tests/test_pr_br_continuation18_immutable_boundary.py.",
+    "full_suite": "Not run. The broad PR-BR plus prompt/guard set covers the touched authority, declaration, immutable-response, and prompt surfaces.",
+    "runtime_validation": "Not run. Live gameplay validation was out of scope.",
+    "model_runtime_boundary": "MODEL/API CALLS: ZERO. No tokenizer call.",
+    "new_regressions": "None. 0 failed in the 534-test run.",
+    "pre_existing_failures": "None observed in the suites that were run."
+  },
+  "self_contained_review_test": "Bundle includes the implementation report, before/after payload measurements, A1 and B1 recipe projections, the measurement script, and the deterministic test module.",
+  "decisions_requiring_human_review": [
+    "A — READY FOR MICRO LIVE. Deterministic implementation succeeded and authority boundaries remain intact.",
+    "Architecture status: A — PR-BR REMAINS CLOSED.",
+    "MICRO LIVE is recommended. Do not treat this bundle as that live run."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Retry still teaches avoidance more than the remaining authorized answer. The recipe is present because retry resends the original messages. Remaining-authority retry guidance was not implemented.",
+      "Response policy, turn packet, and the long instruction list were not compacted.",
+      "emission_debug remains on the provider mechanical-resolution copy."
+    ],
+    "pre_existing": [
+      "Some narration phrasings outside the original rejected A1 envelope are still not treated as consequential claims. They do not become authorized world truth. The validator was not changed."
+    ]
+  },
+  "missing_concepts": [
+    "Retry remaining-authorized-answer guidance.",
+    "Further provider-context canonicalization of response policy and turn packet.",
+    "Debug-only provider-context scrub."
+  ],
+  "does_not_prove": [
+    "Does not prove first-pass model cooperation. No model was called.",
+    "Does not prove live gameplay usefulness.",
+    "Does not reopen or re-close PR-BR by new integrity evidence. PR-BR remains closed.",
+    "Does not prove the full live 90k-character payload, only the authority slice this change touches."
+  ],
+  "recommended_next_step": "Run a 2–4 turn micro live validation: one bounded interpretation of the split yoke and torn hanger, one mundane baker question, and optionally one player hypothesis that must stay conditional. Do not start retry redesign before that.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_bs_decision_facing_answer_recipe/payload_before.json",
+      "role": "payload_measurement",
+      "why": "Deterministic before sizes for the A1 and B1 authority slices.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_bs_decision_facing_answer_recipe/payload_after.json",
+      "role": "payload_measurement",
+      "why": "Deterministic after sizes and before/after deltas.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_bs_decision_facing_answer_recipe/a1_recipe.json",
+      "role": "recipe_projection",
+      "why": "A1 decision-facing answer recipe projected from the saved closeout decision.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_bs_decision_facing_answer_recipe/b1_recipe.json",
+      "role": "recipe_projection",
+      "why": "B1 decision-facing answer recipe projected from the saved closeout decision.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_bs_decision_facing_answer_recipe/measure_payload.py",
+      "role": "measurement_method",
+      "why": "Deterministic json.dumps measurement used for the after snapshot. No model or tokenizer.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_bs_decision_facing_answer_recipe/_measure_before.py",
+      "role": "measurement_method",
+      "why": "Reconstruction of the pre-change authority slice so the before numbers can be reproduced.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_bs_decision_facing_answer_recipe.py",
+      "role": "deterministic_fixture",
+      "why": "Projection ownership, A1 acceptance and preserved rejection, B1 dialogue path, epistemic ceiling, and payload-size tests.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

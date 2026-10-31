@@ -1,0 +1,765 @@
+[
+  {
+    "n": 1,
+    "player": "I study the missing-patrol notice closely, looking for route details, names, and any handwritten additions.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+    "op": "inspect",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "consequential_invention"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "consequential_invention"
+    ],
+    "rejected2": [
+      "consequential_invention"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "I approach the unnaturally still watcher and say quietly, \"You've been studying the lists and faces, not the gate. Who are you looking for?\"",
+    "op": "ask",
+    "target": "threadbare_watcher",
+    "interlocutor": "threadbare_watcher",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "threadbare_watcher",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I find the gate serjeant and say, \"I'm willing to search for your missing patrol. Show me their patrol orders and tell me where they were meant to report back.\"",
+    "op": "ask",
+    "target": "Gate Serjeant",
+    "interlocutor": "gate_serjeant",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I pass through the gate and follow the northwest track beyond the crates, staff ready, watching the verges and mud for where the patrol left the road.",
+    "op": "ask",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "I mark the roadside tree with my knife, then follow the patrol's bootprints into the shadowed verge, pausing at each broken twig to check for blood or signs of pursuit.",
+    "op": "inspect",
+    "target": "Follow the missing patrol rumor",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "consequential_invention"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "consequential_invention"
+    ],
+    "rejected2": [
+      "consequential_invention"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "old_milestone",
+      "label": "Follow the missing patrol rumor",
+      "kind": "place",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I press deeper along the bootprints rather than searching the same ground, moving until the trail forks, ends, or reaches a new landmark.",
+    "op": "ask",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "old_milestone",
+      "label": "Follow the missing patrol rumor",
+      "kind": "place",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "I kneel by the stone marker, wipe mud from its glyphs, and compare the bootprint depth on both forks to learn which way most of the patrol hurried.",
+    "op": "inspect",
+    "target": "Follow the missing patrol rumor",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "old_milestone",
+      "label": "Follow the missing patrol rumor",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I take the northwest fork now, following the deepest prints at a brisk pace; I leave the watchtower for later unless this trail circles back toward it.",
+    "op": "ask",
+    "target": "Follow the missing patrol rumor",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content",
+      "source",
+      "time",
+      "use"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:not_referential_entity"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "old_milestone",
+      "label": "Follow the missing patrol rumor",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:environmental_change"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "I slow before the bend, move into cover, and listen for voices or movement before peering around to see where the remaining prints lead.",
+    "op": "perceive",
+    "target": "Follow the missing patrol rumor",
+    "interlocutor": null,
+    "dimension": "sound",
+    "dimensions": [
+      "sound"
+    ],
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "old_milestone",
+      "label": "Follow the missing patrol rumor",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  }
+]

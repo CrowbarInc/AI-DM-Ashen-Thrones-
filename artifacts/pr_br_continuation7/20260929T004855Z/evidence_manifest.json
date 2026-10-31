@@ -1,0 +1,57 @@
+{
+  "campaign": {
+    "campaign_id": "pr-br-continuation-7",
+    "run_count": 1,
+    "turn_count": 5,
+    "gm_boundary": "live gpt-4.1-mini via /api/chat, isolated storage, 5 completed turns, 0 aborted, 5 model calls, 0 retries"
+  },
+  "selected_evidence": {
+    "representative_success": {"example_id": "t4_sheet_content"},
+    "representative_failure": {"example_id": "t5_truncated_tail"},
+    "evaluator_disagreement": {"example_id": "t5_truncated_tail"},
+    "unexpected_unclassified": {"example_id": "t2_clipped_repeat"},
+    "stress_probe": {"example_id": "t1_rumor"}
+  },
+  "examples": [
+    {
+      "example_id": "t1_rumor",
+      "player_input_classification": ["ask_rumor"],
+      "player_input": "What rumor are the travelers here repeating?",
+      "exact_gm_output": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. From what I saw, there's talk of strange delays farther along the eastern caravan routes, possibly tied to increased Ash Compact census checks that have tightened the choke point. The accounts are fragmented and conflicting—some mention an ambush, others hint at bureaucratic snares. If you want clearer answers, keeping an ear on the threadbare watchers and refugees there might be your best next step.",
+      "semantic_result": "PASS",
+      "human_review": {"status": "ACCEPTABLE", "rationale": "The rumor is stated. The hedge is not an explicit non-answer."},
+      "evaluator_disagreement": {"present": false},
+      "source_artifact_path": "artifacts/pr_br_continuation7/20260929T004855Z/transcript.md"
+    },
+    {
+      "example_id": "t2_clipped_repeat",
+      "player_input_classification": ["repeat_rumor"],
+      "player_input": "Could you repeat that rumor?",
+      "exact_gm_output": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol.",
+      "semantic_result": "PASS",
+      "human_review": {"status": "ACCEPTABLE", "rationale": "Core rumor restated without splice. Stored claim label is clipped, so the rest of the rumor was not repeated."},
+      "evaluator_disagreement": {"present": false},
+      "source_artifact_path": "artifacts/pr_br_continuation7/20260929T004855Z/transcript.md"
+    },
+    {
+      "example_id": "t4_sheet_content",
+      "player_input_classification": ["sheet_content"],
+      "player_input": "What does it actually say?",
+      "exact_gm_output": "The notice board currently shows three main things: updated taxes that local merchants and travelers must pay, new curfew rules that restrict movement after dark, and a posted warning about a recently missing patrol.",
+      "semantic_result": "PASS",
+      "human_review": {"status": "ACCEPTABLE", "rationale": "Useful sheet content reached the player and was not replaced by inability."},
+      "evaluator_disagreement": {"present": false},
+      "source_artifact_path": "artifacts/pr_br_continuation7/20260929T004855Z/transcript.md"
+    },
+    {
+      "example_id": "t5_truncated_tail",
+      "player_input_classification": ["wear_use"],
+      "player_input": "Does it look like people handle it often?",
+      "exact_gm_output": "The posted sheet looks well-handled enough to remain legible despite the weather, though it's smeared from repeated touches. Judging by the worn edges and the steady presence of a gate serjeant keeping an eye on it, the notice board is frequently consulted by travelers and locals alike. Still, the recent warning about the missing patrol has unsettled both the crowd and the guards, making this handling more tense and vigilant than usual. To learn how often exactly or who maintains it, shadowing t",
+      "semantic_result": "PASS",
+      "human_review": {"status": "ACCEPTABLE_WITH_TAIL_DEFECT", "rationale": "Wear and frequent handling are answered. The last sentence is cut mid-word. Evaluator PASS does not record that cut."},
+      "evaluator_disagreement": {"present": true, "note": "Binary semantic PASS agrees the wear question was answered. The evaluator does not fail the mid-word cut."},
+      "source_artifact_path": "artifacts/pr_br_continuation7/20260929T004855Z/transcript.md"
+    }
+  ]
+}

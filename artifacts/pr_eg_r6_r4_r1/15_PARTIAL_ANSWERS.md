@@ -1,0 +1,3 @@
+# 15 — Partial Answers
+
+Every ordinary positive source family includes a conjunction with a missing role, amount, reason, date or informant. Bridge guard and shift schedule are s10q3. The prediction must return PARTIAL and only the allowed answering values while naming unanswered arguments. Raw answered_arguments and missing_arguments are preserved; exact correctness of their arbitrary role names remains unadjudicated. A single-request proposition can return DIRECT to only the first conjunct and fails the frozen class rubric. Conflict questions are PARTIAL, not silently settled world facts. See class-specific counts in summary.json.

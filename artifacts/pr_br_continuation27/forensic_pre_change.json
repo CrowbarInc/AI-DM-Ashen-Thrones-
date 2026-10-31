@@ -1,0 +1,279 @@
+{
+  "turn_3_deterministic": {
+    "label": "c26_turn_3",
+    "full_length": 250,
+    "raw": "I approach the lone figure in threadbare clothes cautiously, keeping my voice low to avoid drawing attention. \"The patrol near the gate\u2014do you know what happened to them? I've heard unsettling things and seek shelter or guidance for a weary traveler.",
+    "truncated_length": 240,
+    "truncated": "I approach the lone figure in threadbare clothes cautiously, keeping my voice low to avoid drawing attention. \"The patrol near the gate\u2014do you know what happened to them? I've heard unsettling things and seek shelter or guidance for a weary",
+    "truncation_boundary": 240,
+    "dropped_suffix": " traveler.",
+    "clauses_full": [
+      "I approach the lone figure in threadbare clothes cautiously, keeping my voice low to avoid drawing attention.",
+      "\"The patrol near the gate\u2014do you know what happened to them?",
+      "I've heard unsettling things and seek shelter or guidance for a weary traveler."
+    ],
+    "clauses_truncated": [
+      "I approach the lone figure in threadbare clothes cautiously, keeping my voice low to avoid drawing attention.",
+      "\"The patrol near the gate\u2014do you know what happened to them?",
+      "I've heard unsettling things and seek shelter or guidance for a weary"
+    ],
+    "operation": "ask",
+    "commitment": "executed_now",
+    "proposed_operation": "ask",
+    "resolution_subject": "place_location",
+    "interlocutor_id": null,
+    "target_ref": null,
+    "raw_input_stored": "I approach the lone figure in threadbare clothes cautiously, keeping my voice low to avoid drawing attention. \"The patrol near the gate\u2014do you know what happened to them? I've heard unsettling things and seek shelter or guidance for a weary",
+    "raw_input_length": 240,
+    "validation_status": "abstained",
+    "proposal_source": "deterministic_fast_path",
+    "model_interpreter_invoked": false,
+    "selected_resolver": "adjudication",
+    "resolver_family": "place_location",
+    "select_resolver_family": "place_location",
+    "subject_on_truncated_semantic_input": {
+      "derived": "place_location",
+      "reason": "topic_place_vocabulary_outranks_unmatched_social_frame",
+      "steps": [
+        {
+          "check": "explicit_social_address",
+          "matched": false
+        },
+        {
+          "check": "uncommitted_non_question",
+          "matched": false,
+          "commitment": "executed_now"
+        },
+        {
+          "check": "place_vocabulary_or_existence",
+          "place_re": true,
+          "place_match": "shelter",
+          "existence_question": false,
+          "operation_is_ask": true
+        }
+      ],
+      "strong_addressed_ask": false,
+      "quoted_spans": [
+        "The patrol near the gate\u2014do you know what happened to them? I've heard unsettling things and seek shelter or guidance for a weary"
+      ],
+      "families": [],
+      "presence": false,
+      "roll": false,
+      "state": false,
+      "feasibility": false
+    },
+    "subject_if_full_text_were_used_with_same_operation": {
+      "derived": "place_location",
+      "reason": "topic_place_vocabulary_outranks_unmatched_social_frame",
+      "steps": [
+        {
+          "check": "explicit_social_address",
+          "matched": false
+        },
+        {
+          "check": "uncommitted_non_question",
+          "matched": false,
+          "commitment": "executed_now"
+        },
+        {
+          "check": "place_vocabulary_or_existence",
+          "place_re": true,
+          "place_match": "shelter",
+          "existence_question": false,
+          "operation_is_ask": true
+        }
+      ],
+      "strong_addressed_ask": false,
+      "quoted_spans": [
+        "The patrol near the gate\u2014do you know what happened to them? I've heard unsettling things and seek shelter or guidance for a weary traveler."
+      ],
+      "families": [],
+      "presence": false,
+      "roll": false,
+      "state": false,
+      "feasibility": false
+    }
+  },
+  "turn_4_deterministic": {
+    "label": "c26_turn_4",
+    "full_length": 423,
+    "raw": "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice. \"The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind those crates\u2014crowded, noisy, but dry. If you're looking for passage or safety, that's where folks gather.\" I ask if they have any more details about the tunnels or what to expect there.",
+    "truncated_length": 240,
+    "truncated": "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice. \"The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind th",
+    "truncation_boundary": 240,
+    "dropped_suffix": "ose crates\u2014crowded, noisy, but dry. If you're looking for passage or safety, that's where folks gather.\" I ask if they have any more details about the tunnels or what to expect there.",
+    "clauses_full": [
+      "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice.",
+      "\"The patrol got themselves too close to the old tunnels beneath the gate.",
+      "That's where the trouble lies.",
+      "Shelter?",
+      "Your best bet is the tavern behind those crates\u2014crowded, noisy, but dry.",
+      "If you're looking for passage or safety, that's where folks gather.\" I ask if they have any more details about the tunnels or what to expect there."
+    ],
+    "clauses_truncated": [
+      "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice.",
+      "\"The patrol got themselves too close to the old tunnels beneath the gate.",
+      "That's where the trouble lies.",
+      "Shelter?",
+      "Your best bet is the tavern behind th"
+    ],
+    "operation": "ask",
+    "commitment": "executed_now",
+    "proposed_operation": "ask",
+    "resolution_subject": "place_location",
+    "interlocutor_id": null,
+    "target_ref": null,
+    "raw_input_stored": "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice. \"The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind th",
+    "raw_input_length": 240,
+    "validation_status": "abstained",
+    "proposal_source": "deterministic_fast_path",
+    "model_interpreter_invoked": false,
+    "selected_resolver": "adjudication",
+    "resolver_family": "place_location",
+    "select_resolver_family": "place_location",
+    "subject_on_truncated_semantic_input": {
+      "derived": "place_location",
+      "reason": "topic_place_vocabulary_outranks_unmatched_social_frame",
+      "steps": [
+        {
+          "check": "explicit_social_address",
+          "matched": false
+        },
+        {
+          "check": "uncommitted_non_question",
+          "matched": false,
+          "commitment": "executed_now"
+        },
+        {
+          "check": "place_vocabulary_or_existence",
+          "place_re": true,
+          "place_match": "Shelter",
+          "existence_question": false,
+          "operation_is_ask": true
+        }
+      ],
+      "strong_addressed_ask": true,
+      "quoted_spans": [
+        "The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind th"
+      ],
+      "families": [],
+      "presence": false,
+      "roll": false,
+      "state": false,
+      "feasibility": false
+    },
+    "subject_if_full_text_were_used_with_same_operation": {
+      "derived": "social",
+      "reason": "explicit_social_address",
+      "steps": [
+        {
+          "check": "explicit_social_address",
+          "matched": true
+        }
+      ],
+      "strong_addressed_ask": true,
+      "quoted_spans": [
+        "The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind those crates\u2014crowded, noisy, but dry. If you're looking for passage or safety, that's where folks gather.",
+        " I ask if they have any more details about the tunnels or what to expect there."
+      ],
+      "families": [
+        "ask"
+      ],
+      "presence": false,
+      "roll": false,
+      "state": false,
+      "feasibility": false
+    }
+  },
+  "turn_4_stubbed_inspect_proposal": {
+    "label": "c26_turn_4_stub_inspect",
+    "full_length": 423,
+    "raw": "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice. \"The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind those crates\u2014crowded, noisy, but dry. If you're looking for passage or safety, that's where folks gather.\" I ask if they have any more details about the tunnels or what to expect there.",
+    "truncated_length": 240,
+    "truncated": "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice. \"The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind th",
+    "truncation_boundary": 240,
+    "dropped_suffix": "ose crates\u2014crowded, noisy, but dry. If you're looking for passage or safety, that's where folks gather.\" I ask if they have any more details about the tunnels or what to expect there.",
+    "clauses_full": [
+      "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice.",
+      "\"The patrol got themselves too close to the old tunnels beneath the gate.",
+      "That's where the trouble lies.",
+      "Shelter?",
+      "Your best bet is the tavern behind those crates\u2014crowded, noisy, but dry.",
+      "If you're looking for passage or safety, that's where folks gather.\" I ask if they have any more details about the tunnels or what to expect there."
+    ],
+    "clauses_truncated": [
+      "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice.",
+      "\"The patrol got themselves too close to the old tunnels beneath the gate.",
+      "That's where the trouble lies.",
+      "Shelter?",
+      "Your best bet is the tavern behind th"
+    ],
+    "operation": "ask",
+    "commitment": "executed_now",
+    "proposed_operation": "inspect",
+    "resolution_subject": "place_location",
+    "interlocutor_id": null,
+    "target_ref": null,
+    "raw_input_stored": "The threadbare figure's eyes narrow briefly, then they speak in a quiet, gravelly voice. \"The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind th",
+    "raw_input_length": 240,
+    "validation_status": "validated",
+    "proposal_source": "model_assisted",
+    "model_interpreter_invoked": true,
+    "selected_resolver": "adjudication",
+    "resolver_family": "place_location",
+    "select_resolver_family": "place_location",
+    "subject_on_truncated_semantic_input": {
+      "derived": "place_location",
+      "reason": "topic_place_vocabulary_outranks_unmatched_social_frame",
+      "steps": [
+        {
+          "check": "explicit_social_address",
+          "matched": false
+        },
+        {
+          "check": "uncommitted_non_question",
+          "matched": false,
+          "commitment": "executed_now"
+        },
+        {
+          "check": "place_vocabulary_or_existence",
+          "place_re": true,
+          "place_match": "Shelter",
+          "existence_question": false,
+          "operation_is_ask": true
+        }
+      ],
+      "strong_addressed_ask": true,
+      "quoted_spans": [
+        "The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind th"
+      ],
+      "families": [],
+      "presence": false,
+      "roll": false,
+      "state": false,
+      "feasibility": false
+    },
+    "subject_if_full_text_were_used_with_same_operation": {
+      "derived": "social",
+      "reason": "explicit_social_address",
+      "steps": [
+        {
+          "check": "explicit_social_address",
+          "matched": true
+        }
+      ],
+      "strong_addressed_ask": true,
+      "quoted_spans": [
+        "The patrol got themselves too close to the old tunnels beneath the gate. That's where the trouble lies. Shelter? Your best bet is the tavern behind those crates\u2014crowded, noisy, but dry. If you're looking for passage or safety, that's where folks gather.",
+        " I ask if they have any more details about the tunnels or what to expect there."
+      ],
+      "families": [
+        "ask"
+      ],
+      "presence": false,
+      "roll": false,
+      "state": false,
+      "feasibility": false
+    }
+  }
+}

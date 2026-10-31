@@ -4174,6 +4174,29 @@ def _provider_response_contract_from_messages(messages: List[Dict[str, str]] | N
     return "narration_only" if NARRATION_ONLY_RESPONSE_CONTRACT in system else "structured_realization"
 
 
+def _requested_response_type_from_messages(messages: List[Dict[str, str]]) -> str | None:
+    """Read the existing host-authored response contract, not the player text."""
+    for message in reversed(messages):
+        if message.get("role") != "user":
+            continue
+        try:
+            payload = json.loads(message.get("content") or "")
+        except (ValueError, TypeError):
+            continue
+        if isinstance(payload, dict):
+            contract = payload.get("response_type_contract")
+            return contract.get("required_response_type") if isinstance(contract, dict) else None
+    return None
+
+
+def _opening_max_output_tokens() -> int:
+    """Bound the structured opening allowance independently of ordinary narration."""
+    value = int(os.environ.get("ASHEN_OPENING_MAX_OUTPUT_TOKENS", "3000") or "3000")
+    if not 1 <= value <= 4096:
+        raise ValueError("ASHEN_OPENING_MAX_OUTPUT_TOKENS must be between 1 and 4096")
+    return value
+
+
 # Top-level provider fields that mirror a response_policy child. The smaller
 # interaction_continuity snapshot is intentionally absent: it is not equal to
 # response_policy.interaction_continuity.
@@ -5052,6 +5075,98 @@ def _log_model_route(
     )
 
 
+def _extract_provider_response_text(response) -> tuple[str, dict]:
+    """Responses SDK output_text convenience property and typed message output.
+
+    Never stringify an SDK object: its repr is not generated narration.
+    """
+    output = getattr(response, "output", None)
+    segments = [segment for item in (output or [])
+                if getattr(item, "type", None) == "message"
+                for segment in (getattr(item, "content", None) or [])]
+    text_segments = [segment.text for segment in segments
+                     if getattr(segment, "type", None) == "output_text"
+                     and isinstance(getattr(segment, "text", None), str)]
+    text = getattr(response, "output_text", None)
+    source = "output_text"
+    if not isinstance(text, str):
+        text = "".join(text_segments)
+        source = "output_message_content" if text_segments else "unavailable"
+    return text, {
+        "content_segment_count": len(segments) if output is not None else None,
+        "provider_content_present": bool(segments or text),
+        "extraction_source": source,
+        "extraction_succeeded": source != "unavailable",
+        "extracted_content_length": len(text), "extracted_content_empty": not bool(text.strip()),
+    }
+
+
+def _generation_response_diagnostic(response, text, extraction, parsed, *, maximum, contract):
+    """Observe the actual parser result; JSON syntax is separate from the contract."""
+    from game.structured_player_output import classify_model_output
+
+    classified = classify_model_output(text)
+    # Match the production parser's supported fenced JSON handling.
+    raw = text.strip()
+    fence = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", raw, re.DOTALL | re.IGNORECASE)
+    if fence:
+        raw = fence.group(1).strip()
+    try:
+        value = json.loads(raw)
+        json_ok = True
+    except (ValueError, TypeError):
+        value, json_ok = None, False
+    envelope_present = (isinstance(value, dict) and
+                        (("narration" in value) if contract == "narration_only"
+                         else {"declared_claims", "narration"} <= value.keys()))
+    meta = parsed.get("metadata") or {}
+    reason = meta.get("structured_contract_reason")
+    valid = not bool(meta.get("structured_output_rejected") or meta.get("structured_contract_failure"))
+    status = getattr(response, "status", None)
+    status = status if status in {"completed", "incomplete", "failed", "cancelled", "queued", "in_progress"} else None
+    incomplete = getattr(getattr(response, "incomplete_details", None), "reason", None)
+    incomplete = incomplete if incomplete in {"max_output_tokens", "content_filter"} else None
+    usage = getattr(response, "usage", None)
+    counts = {key: getattr(usage, key, None) for key in ("input_tokens", "output_tokens", "total_tokens")}
+    counts = {key: val if type(val) is int and val >= 0 else None for key, val in counts.items()}
+    reached = counts["output_tokens"] >= maximum if maximum is not None and counts["output_tokens"] is not None else None
+    if not extraction["extraction_succeeded"]:
+        category = "extraction_failure" if extraction["provider_content_present"] else "empty_provider_content"
+    elif extraction["extracted_content_empty"]:
+        category = "empty_provider_content"
+    elif not json_ok:
+        category = "json_parse_failure"
+    elif not envelope_present:
+        category = "missing_structured_envelope"
+    elif not valid:
+        category = "structured_validation_failure"
+    elif status in {"incomplete", "failed", "cancelled", "queued", "in_progress"}:
+        category = "provider_not_completed"
+    else:
+        category = "accepted_structured_response"
+    def safe_identifier(value):
+        return value if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,200}", value) else None
+    semantic_fields = value if isinstance(value, dict) else {}
+    return {**extraction, **counts,
+            "narration_present": isinstance(semantic_fields.get("narration"), str),
+            "narration_length": len(semantic_fields["narration"]) if isinstance(semantic_fields.get("narration"), str) else None,
+            "player_facing_text_present": isinstance(semantic_fields.get("player_facing_text"), str),
+            "player_facing_text_length": len(semantic_fields["player_facing_text"]) if isinstance(semantic_fields.get("player_facing_text"), str) else None,
+            "declarations_present": isinstance(semantic_fields.get("declared_claims"), list),
+            "declaration_count": len(semantic_fields["declared_claims"]) if isinstance(semantic_fields.get("declared_claims"), list) else None,
+            "provider_request_id": safe_identifier(getattr(response, "_request_id", None)),
+            "provider_response_id": safe_identifier(getattr(response, "id", None)),
+            "provider_status": status, "provider_finish_reason": incomplete,
+            "provider_output_limit_exhausted": incomplete == "max_output_tokens" if incomplete else None,
+            "requested_max_output_tokens": maximum, "output_limit_reached": reached,
+            "possible_output_truncation": bool(reached and not valid),
+            "json_parsing_succeeded": json_ok, "expected_envelope_present": envelope_present,
+            "recognized_envelope_keys": sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict) else [],
+            "parser_output_form": classified["form"], "structured_validation_result": valid,
+            "rejection_reason": reason, "classification": category,
+            "provider_response_contract": contract}
+
+
 def call_gpt(
     messages: List[Dict[str, str]],
     *,
@@ -5074,8 +5189,7 @@ def call_gpt(
     )
     from game.provider_budget import (
         accounting_active,
-        begin_request,
-        finish_request,
+        admit_request,
         provider_retries_disabled,
     )
 
@@ -5150,50 +5264,85 @@ def call_gpt(
     )
     pinned_model = os.environ.get("ASHEN_PIN_PROVIDER_MODEL", "").strip()
     selected_model = pinned_model or route.selected_model
-    narration_cap = int(os.environ.get("ASHEN_NARRATION_MAX_OUTPUT_TOKENS", "600") or "600")
+    requested_response_type = _requested_response_type_from_messages(messages)
+    is_opening = requested_response_type == "scene_opening"
+    if is_opening:
+        # Free-text authored claims are checked by lexical coverage, not a
+        # synonym/entailment model. Supply that existing constraint at generation.
+        messages = [*messages[:1], {"role": "system", "content": (
+            "Opening authored-fact realization: when a supplied authorized claim has an empty "
+            "semantic_identity, use its exact text as a separate narration sentence. Keep sensory "
+            "texture in separate sentences; do not paraphrase or embellish posted information, "
+            "history, causes, or gameplay consequences inside that fact sentence. When declaring "
+            "a supplied claim, reference its claim_id in source_claim_id and preserve its provenance, "
+            "epistemic status, modality, and premise references. A source reference does not authorize "
+            "additional prose. Do not invent claim identifiers or semantic identities. Harmless "
+            "sensory expression may remain plain narration within the existing authority rules."
+        )}, *messages[1:]]
+    narration_cap = (_opening_max_output_tokens() if is_opening else
+                     int(os.environ.get("ASHEN_NARRATION_MAX_OUTPUT_TOKENS", "600") or "600"))
+    estimated_input = 1
     if accounting_active():
         blob = json.dumps(messages, ensure_ascii=False).encode("utf-8")
         estimated_input = max(1, (len(blob) // 3) + 64)
-        refusal = begin_request(purpose=purpose or "narration", estimated_input=estimated_input, max_output=narration_cap)
-        if refusal:
-            finish_request(
-                {
-                    "purpose": purpose or "narration",
-                    "sent": False,
-                    "model": selected_model,
-                    "input_tokens": None,
-                    "output_tokens": None,
-                    "total_tokens": None,
-                    "refusal": refusal,
-                }
-            )
-            return _attach_model_route_metadata(
-                {
-                    "player_facing_text": (
-                        "The action was resolved, but live narration was not requested because it would exceed the provider budget."
-                    ),
-                    "tags": ["provider_budget_refused", "deterministic_fallback"],
-                    "scene_update": None,
-                    "activate_scene_id": None,
-                    "new_scene_draft": None,
-                    "world_updates": None,
-                    "suggested_action": None,
-                    "debug_notes": f"provider_budget_refused:{refusal}",
-                    "metadata": {"provider_budget_refusal": refusal},
-                },
-                selected_model=selected_model,
-                route_reason=route.route_reason,
-                route_family=route.route_family,
-                purpose=purpose,
-                retry_attempt=retry_attempt,
-                retry_reason=retry_reason,
-                strict_social=strict_social,
-                force_high_precision=force_high_precision,
-            )
+    attempt = admit_request(owner="gm.call_gpt", model=selected_model, purpose=purpose or "narration", estimated_input=estimated_input, max_output=narration_cap)
+    refusal = attempt.refusal
+    if refusal:
+        from game.provider_budget import sdk_retry_options, PLAYTEST_STOP_MESSAGE
+        attempt.finish(
+            {
+                "purpose": purpose or "narration",
+                "sent": False,
+                "model": selected_model,
+                "input_tokens": None,
+                "output_tokens": None,
+                "total_tokens": None,
+                "refusal": refusal,
+            }
+        )
+        return _attach_model_route_metadata(
+            {
+                "player_facing_text": (
+                    PLAYTEST_STOP_MESSAGE if sdk_retry_options() else "The action was resolved, but live narration was not requested because it would exceed the provider budget."
+                ),
+                "tags": ["provider_budget_refused", "deterministic_fallback"],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": f"provider_budget_refused:{refusal}",
+                "metadata": {"provider_budget_refusal": refusal},
+            },
+            selected_model=selected_model,
+            route_reason=route.route_reason,
+            route_family=route.route_family,
+            purpose=purpose,
+            retry_attempt=retry_attempt,
+            retry_reason=retry_reason,
+            strict_social=strict_social,
+            force_high_precision=force_high_precision,
+        )
     request_sent = False
+    from game.provider_budget import generation_diagnostics_enabled, record_generation_diagnostic
+    diagnostic_context = {"stage": "provider_response", "logical_operation": purpose,
+                          "requested_response_type": None, "provider_model": selected_model}
+    if generation_diagnostics_enabled():
+        for message in reversed(messages):
+            try:
+                payload = json.loads(message.get("content") or "")
+            except (ValueError, TypeError):
+                continue
+            if isinstance(payload, dict):
+                requested = (payload.get("response_type_contract") or {}).get("required_response_type")
+                if requested in {"scene_opening", "answer", "clarification", "action_result", "npc_dialogue"}:
+                    diagnostic_context["requested_response_type"] = requested
+                    diagnostic_context["logical_operation"] = requested
+                break
     try:
         from openai import OpenAI
-        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
+        from game.provider_budget import sdk_retry_options
+        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
         _log_model_route(
             selected_model=selected_model,
             route_family=route.route_family,
@@ -5204,20 +5353,17 @@ def call_gpt(
             force_high_precision=force_high_precision,
         )
         create_kwargs = {"model": selected_model, "input": messages}
-        if accounting_active():
+        if accounting_active() or is_opening:
             create_kwargs["max_output_tokens"] = narration_cap
         request_sent = True
         stamp = _PROVIDER_CALL_STAMP.get()
         if isinstance(stamp, dict):
             stamp["sent"] = True
             stamp["started"] = time.perf_counter()
-        resp = client.responses.create(**create_kwargs)
+        resp = attempt.dispatch(client.responses.create, **create_kwargs)
         if isinstance(stamp, dict):
             stamp["latency_ms"] = max(0, int(round((time.perf_counter() - float(stamp.get("started") or time.perf_counter())) * 1000)))
-        text = getattr(resp, 'output_text', None)
-        if text is None:
-            # Fallback to stringifying the response if expected attribute missing.
-            text = str(resp)
+        text, extraction = _extract_provider_response_text(resp)
         usage = getattr(resp, "usage", None)
         incoming = getattr(usage, "input_tokens", None) if usage is not None else None
         outgoing = getattr(usage, "output_tokens", None) if usage is not None else None
@@ -5227,7 +5373,7 @@ def call_gpt(
             stamp["output_tokens"] = None if outgoing is None else int(outgoing)
         if accounting_active():
             returned_model = str(getattr(resp, "model", "") or "")
-            finish_request(
+            attempt.finish(
                 {
                     "purpose": purpose or "narration",
                     "sent": True,
@@ -5242,12 +5388,30 @@ def call_gpt(
                 }
             )
         provider_response_contract = _provider_response_contract_from_messages(messages)
-        return _attach_model_route_metadata(
-            _safe_json(
-                text.strip(),
-                require_structured_claims=True,
+        parsed_response = _safe_json(
+            text.strip(), require_structured_claims=True,
+            provider_response_contract=provider_response_contract,
+        )
+        # A complete JSON fragment cannot override an explicit incomplete opening.
+        # Preserve the normal parser diagnostics, then fail through the existing
+        # structured-contract rejection/rollback path without retrying.
+        if generation_diagnostics_enabled():
+            record_generation_diagnostic({**diagnostic_context, **_generation_response_diagnostic(
+                resp, text, extraction, parsed_response,
+                maximum=create_kwargs.get("max_output_tokens"), contract=provider_response_contract,
+            )}, attempt)
+            if is_opening:
+                from game.provider_budget import capture_opening_response
+                capture_opening_response(text, attempt)
+        if is_opening and getattr(resp, "status", None) in {
+            "incomplete", "failed", "cancelled", "queued", "in_progress"
+        }:
+            parsed_response = _structured_contract_failure(
+                "structured", "provider_opening_not_completed",
                 provider_response_contract=provider_response_contract,
-            ),
+            )
+        return _attach_model_route_metadata(
+            parsed_response,
             selected_model=route.selected_model,
             route_reason=route.route_reason,
             route_family=route.route_family,
@@ -5258,6 +5422,11 @@ def call_gpt(
             force_high_precision=force_high_precision,
         )
     except Exception as e:
+        record_generation_diagnostic({**diagnostic_context, "classification": "provider_error",
+                                     "provider_status": None, "provider_finish_reason": None,
+                                     "input_tokens": None, "output_tokens": None, "total_tokens": None,
+                                     "requested_max_output_tokens": narration_cap if accounting_active() or is_opening else None,
+                                     "rejection_reason": "provider_error"}, attempt)
         stamp = _PROVIDER_CALL_STAMP.get()
         if isinstance(stamp, dict):
             stamp["sent"] = bool(request_sent)
@@ -5265,7 +5434,7 @@ def call_gpt(
             if isinstance(started, float):
                 stamp["latency_ms"] = max(0, int(round((time.perf_counter() - started) * 1000)))
         if accounting_active() and request_sent:
-            finish_request(
+            attempt.finish(
                 {
                     "purpose": purpose or "narration",
                     "sent": True,

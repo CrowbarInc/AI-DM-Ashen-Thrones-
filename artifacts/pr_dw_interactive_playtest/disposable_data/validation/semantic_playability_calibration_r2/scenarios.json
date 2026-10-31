@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.semantic_playability_calibration.r2",
+  "description": "PR-AC multi-turn semantic playability calibration fixtures. Isolated from the Round #1 evaluator corpus.",
+  "method_note": "Round #1 comparison cases reuse the exact playability-validation prompts. New MT cases are short gameplay arcs with scripted player lines only; they do not prescribe GM prose.",
+  "scenarios": [
+    {
+      "case_id": "R2-P1",
+      "family": "round1_comparison",
+      "scenario": "p1_direct_answer",
+      "initial_objective": "Get a usable answer to who commands the watch, then a bounded answer about the chapel relic.",
+      "behaviors": ["intent_understanding", "knowledge_boundaries", "conversational_quality"],
+      "content": "frontier_gate opening",
+      "player_prompts": [
+        "Who commands the watch here?",
+        "Who stole the relic from the chapel?"
+      ]
+    },
+    {
+      "case_id": "R2-P2",
+      "family": "round1_comparison",
+      "scenario": "p2_respect_intent",
+      "initial_objective": "Ask broadly about a thief, then narrow to who was seen near the dye vats.",
+      "behaviors": ["intent_understanding", "world_coherence", "conversational_quality"],
+      "content": "frontier_gate opening",
+      "player_prompts": [
+        "Tell me about the thief.",
+        "Who exactly was seen near the dye vats?"
+      ]
+    },
+    {
+      "case_id": "R2-P3",
+      "family": "round1_comparison",
+      "scenario": "p3_logical_escalation",
+      "initial_objective": "Observe the gate, then press for what is posted on the notice.",
+      "behaviors": ["scene_grounding", "intent_understanding", "multi_turn_continuity"],
+      "content": "frontier_gate opening / notice board",
+      "player_prompts": [
+        "What do I see at the gate?",
+        "I press again: what is actually posted on the notice?"
+      ]
+    },
+    {
+      "case_id": "R2-P4",
+      "family": "round1_comparison",
+      "scenario": "p4_immersion",
+      "initial_objective": "Glance at the notice and receive an observation of that object.",
+      "behaviors": ["scene_grounding", "intent_understanding"],
+      "content": "frontier_gate notice board",
+      "player_prompts": [
+        "I glance at the notice."
+      ]
+    },
+    {
+      "case_id": "R2-MT01",
+      "family": "multi_turn_arc",
+      "scenario": "notice_patrol_inquiry",
+      "initial_objective": "Learn what the notice says about the missing patrol and decide whether to follow that lead.",
+      "behaviors": [
+        "scene_grounding",
+        "intent_understanding",
+        "npc_interaction",
+        "state_narration_consistency",
+        "multi_turn_continuity",
+        "player_agency",
+        "world_coherence"
+      ],
+      "content": "frontier_gate notice board, Guard Captain, notice_patrol_route clue, old_milestone exit",
+      "player_prompts": [
+        "I look around the gate.",
+        "I step closer and read the notice board carefully.",
+        "That missing patrol warning matters. What exactly does it say about where they were last seen?",
+        "I turn to the Guard Captain. \"What's being done about the missing patrol?\"",
+        "I don't want to rush the northwest track yet. Who last spoke to that patrol before they left?",
+        "Earlier the notice mentioned a mud track. Is that still the official last position?",
+        "Fine. I'll follow the missing patrol rumor along that northwest mud track.",
+        "After I start that way, I pause and check whether anything about the patrol warning has changed."
+      ]
+    },
+    {
+      "case_id": "R2-MT02",
+      "family": "multi_turn_arc",
+      "scenario": "watch_command_continuity",
+      "initial_objective": "Identify who commands the watch and get usable next information from the Guard Captain.",
+      "behaviors": [
+        "npc_interaction",
+        "intent_understanding",
+        "multi_turn_continuity",
+        "knowledge_boundaries",
+        "conversational_quality",
+        "player_agency"
+      ],
+      "content": "frontier_gate Guard Captain, watch command, census delay visible fact",
+      "player_prompts": [
+        "I approach the Guard Captain.",
+        "Who commands the watch here?",
+        "I need a name or rank, not atmosphere. Who is actually in charge of this gate?",
+        "What do you know about the missing patrol posted on the board?",
+        "Never mind the patrol for a moment. What's causing the census delays at this choke point?",
+        "Back to the watch: you still haven't told me who commands it.",
+        "Would the tavern runner know more than you do about the patrol?",
+        "I wait for a clear answer before I decide whether to stay or leave."
+      ]
+    },
+    {
+      "case_id": "R2-MT03",
+      "family": "multi_turn_arc",
+      "scenario": "runner_rumor_decline_path",
+      "initial_objective": "Talk to the tavern runner about stew and street rumor, declining the official patrol path.",
+      "behaviors": [
+        "player_agency",
+        "npc_interaction",
+        "intent_understanding",
+        "scene_grounding",
+        "multi_turn_continuity",
+        "world_coherence"
+      ],
+      "content": "frontier_gate Tavern Runner, ragged stranger, notice board as rejected path",
+      "player_prompts": [
+        "I glance around for someone selling food or gossip rather than official business.",
+        "I walk over to the tavern runner. \"What's in the stew, and what rumors are worth a coin?\"",
+        "I'm not here for the missing patrol. Tell me what travelers are actually talking about.",
+        "If you were going to point me at that notice board, don't. I want street rumor, not the posted warning.",
+        "See that ragged stranger hanging back from the queue? What's their story?",
+        "You mentioned travelers talking. Repeat the most useful thing you already told me.",
+        "I'll stay at the gate a bit longer instead of entering Cinderwatch."
+      ]
+    },
+    {
+      "case_id": "R2-MT04",
+      "family": "multi_turn_arc",
+      "scenario": "lirael_redirect_lead_policy",
+      "initial_objective": "Ask after Lirael, then pursue only official follow-up permitted by RC-21.",
+      "behaviors": [
+        "npc_interaction",
+        "world_coherence",
+        "state_narration_consistency",
+        "unsupported_invention",
+        "player_agency",
+        "multi_turn_continuity"
+      ],
+      "content": "frontier_gate RC-21: narration must not instantiate Lirael; official follow-up is the authored notice board",
+      "player_prompts": [
+        "I ask the nearest guard, \"Where can I find Lirael?\"",
+        "If you mentioned the notice board, I'll check that. What should I look for there?",
+        "I read the notice board.",
+        "You said I'd find help near the board. Is Lirael actually here, or was that just talk?",
+        "I look for Lirael among the crowd.",
+        "I'll pursue whatever official follow-up exists from that conversation.",
+        "Has a new person appeared because someone named Lirael, or am I still dealing with the same gate crowd?"
+      ]
+    },
+    {
+      "case_id": "R2-MT05",
+      "family": "multi_turn_arc",
+      "scenario": "unusual_and_impossible_actions",
+      "initial_objective": "Attempt unusual legitimate actions and one impossible action, then continue from the resulting state.",
+      "behaviors": [
+        "player_agency",
+        "mechanics_narration_consistency",
+        "state_narration_consistency",
+        "scene_grounding",
+        "multi_turn_continuity"
+      ],
+      "content": "frontier_gate checkpoint, notice board, overlooking townhouse",
+      "player_prompts": [
+        "I take a careful look at the choke point and the guards holding it.",
+        "I try to slip past the checkpoint without being noticed, staying low along the wagon line.",
+        "If that didn't work, I offer the nearest guard five silver to look the other way.",
+        "I try to climb the townhouse overlooking the square to get a better view.",
+        "I punch the notice board as hard as I can.",
+        "I attempt to fly over the gate.",
+        "After all that, I look around again and ask what still looks the same."
+      ]
+    },
+    {
+      "case_id": "R2-MT06",
+      "family": "multi_turn_arc",
+      "scenario": "hidden_fact_probe",
+      "initial_objective": "Observe the square and probe for hidden facts without receiving GM-only leakage.",
+      "behaviors": [
+        "knowledge_boundaries",
+        "scene_grounding",
+        "npc_interaction",
+        "unsupported_invention",
+        "state_narration_consistency"
+      ],
+      "content": "frontier_gate hidden_facts: noble agent, Ash Cowl contact, threadbare watcher signal, rooftop spotter list",
+      "player_prompts": [
+        "I look around the square carefully, especially the edges and rooftops.",
+        "Is someone from a noble house watching new arrivals?",
+        "I watch the threadbare figure who isn't moving with the queue. What are they actually doing?",
+        "Do you know if anyone above the lane is matching faces to a written list?",
+        "I ask the Guard Captain whether Ash Cowl smugglers are scouting the crowd for talent.",
+        "What have I actually confirmed with my own eyes, not rumor?"
+      ]
+    }
+  ]
+}

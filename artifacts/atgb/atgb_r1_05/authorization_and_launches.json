@@ -1,0 +1,15 @@
+{
+  "initial_launch": "exec_command rejected before CreateProcess; zero admissions, no gameplay changes",
+  "auto_review_reason": "Although L1 live execution is explicitly authorized, it sends private campaign context and player data to an unspecified external provider; the destination and complete payload are not explicitly authorized for sensitive egress.",
+  "user_question": "Do you approve sending the reconstructed frozen S08 context and the R1-04 synthetic pending-ASK control (including their authored scene, public NPC facts and preceding conversation) to OpenAI's Responses API at https://api.openai.com/v1/responses using gpt-4.1-mini, solely for L1, L2 and L4 within the existing six-admission limit?",
+  "user_reply": "Approve this bounded transfer",
+  "subsequent_launches": "L1, L2, L4 explicitly approved through escalated exec; completed exit 0",
+  "workaround": false,
+  "trial_retries": 0,
+  "offline_preview_failure": [
+    "isolated_store",
+    "fixture_matches_store"
+  ],
+  "offline_preview_correction": "New runner restores active-player directory environment after isolated storage import. Readiness guard still validates imported store and exact loaded snapshots. Existing readiness/production unchanged.",
+  "preview_classification": "local structural preparation only; neither preview counts as a live trial"
+}

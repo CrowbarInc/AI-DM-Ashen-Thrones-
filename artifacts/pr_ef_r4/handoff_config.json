@@ -1,0 +1,229 @@
+{
+  "campaign_id": "pr_ef_r4_authorization_contract_20261016",
+  "campaign_name": "PR-EF-R4 \u2014 Conversational Authority Contract Consolidation",
+  "campaign_date": "2026-10-16",
+  "purpose": "Consolidate conversational authorization. Do not start PR-EG.",
+  "objective_status": "B \u2014 PR-EF ACCEPTED WITH LIMITATIONS",
+  "executive_summary": "# 01 \u2014 Executive Summary\n\nPR-EF-R4 consolidates conversational authorization onto one grounding decision, `assess_addressee_grounding`, and records that decision on the resolution contract and on clarification responses. Provider-suggested NPC ids are candidates. They do not authorize an unresolved or non-unique person reference, and they do not advance the world while clarification is required.\n\n## Implementation\n\nThe production path still interprets, then authorizes, then hands an eligible operation to the existing social, exploration, and movement resolvers. Authorization does not declare success. Final responses for an unresolved addressee use the authorization clarification. Narration is skipped only when a resolved social result has speech authority `none`, no revealed topic, no subjective allowance, and reply plan `consequential_information_request`.\n\n## Critical findings\n\n- The historical \u201cI ask one of them what happened\u201d failure does not execute and does not tick. Fresh live play with Sergeant Mara and Corporal Bren both visible asked which person was meant. Turn, clocks, and factions stayed put. The follow-up \u201cThe sergeant.\u201d executed as Sergeant Mara.\n- Explicit and uniquely grounded addresses still reach the social resolver. \u201cI ask Sergeant Mara\u2026\u201d, \u201cI ask the sergeant\u2026\u201d, \u201cI ask the taller guard\u2026\u201d when height is actually written, and an in-conversation \u201cWhat did you mean\u2026\u201d all executed the grounded NPC.\n- A GM question about an NPC is not turned into NPC dialogue. \u201cWhat does the sergeant know about the lantern?\u201d stayed with the GM. \u201cWhat did she mean by the road?\u201d in the continuous conversation did not tick and did not open a new social exchange.\n- Corrections, bare confirmation, and withdrawal do not execute a missing or already-resolved intention. The live correction after an executed ask said the action could not be undone and did not roll the turn back.\n- Mixed and conditional intentions stay unexecuted until their condition or confirmation exists. The live conditional about the gate did not move. The following explicit walk through the courtyard gate did.\n\n## Remaining defects\n\n- One isolated live holdout, \u201cWhat did you mean by the north road?\u201d with only a session flag and no prior visible turn, was blocked as malformed communication. The same sentence succeeded as turn 3 of the continuous conversation.\n- \u201cI put the question to one of them\u201d with one visible NPC clarified and did not mutate, but the spoken line was the provider\u2019s clarification question rather than the authorization template.\n- A knowledge-gap ask whose reply plan is `genuine_uncertainty` still calls strict-social narration and may retry. Live case B accepted \u201cI don\u2019t know.\u201d after one format retry (50,784 input tokens). A clarified \u201cwhat happened\u201d ask whose plan said `authoritative_answer_available` while speech authority was `none` still spent a narration plus retry (51,910 input tokens) and then showed the safe line.\n- The twenty PR-EF-R2 regression identities still fail. None were added and none were cleared.\n\n## Recommendation\n\n**B \u2014 PR-EF ACCEPTED WITH LIMITATIONS**\n\nCore authorization, ambiguity, ownership, pending-intention, and resolver handoff behavior is demonstrated on fresh `/api/chat` output and on the frozen holdouts. The remaining gaps are a cold-follow-up interpretation block, clarification wording on one non-unique phrase, and narration cost when the reply plan is not the closed consequential-information plan. Do not start PR-EG from this package.\n",
+  "changes": {
+    "production": [
+      "One addressee grounding decision gates execution and the world tick.",
+      "Provider NPC ids are candidates unless the utterance uniquely grounds them.",
+      "Narration and retry are skipped only for a closed consequential-information plan."
+    ],
+    "validation": [
+      "Frozen holdouts in tests/fixtures/pr_ef_r4_holdouts.json.",
+      "tests/test_pr_ef_r4_authorization.py."
+    ],
+    "tooling": [
+      "tools/validate_pr_ef_r4.py"
+    ],
+    "documentation": [
+      "Reports 01\u201318 under artifacts/pr_ef_r4."
+    ],
+    "generated_artifacts": [
+      "Fresh /api/chat conversation, holdouts, and performance records.",
+      "Post-implementation regression junit."
+    ]
+  },
+  "testing": {
+    "focused": "28/28 PR-EF-R4 authorization tests passed, including 25 frozen cases under scripted providers.",
+    "broader": "Family 349 passed / 20 failed. The 20 identities are exactly the PR-EF-R2 historical set.",
+    "full_suite": "Not run. The established conversational family was run.",
+    "runtime_validation": "Fresh gpt-4.1-mini-2025-04-14 through TestClient /api/chat. Ten-turn conversation plus 25 live holdouts. 49 requests, 494725 input tokens.",
+    "model_runtime_boundary": "Configured gpt-4.1-mini. Observed gpt-4.1-mini-2025-04-14.",
+    "new_regressions": "None in the final family measurement.",
+    "pre_existing_failures": "The twenty PR-EF-R2 identities remain. They were not cleaned up."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "A cold follow-up can be blocked as malformed communication before continuation.",
+      "A non-INTERPRETED record can speak the provider clarification instead of the authorization template.",
+      "genuine_uncertainty and authoritative_answer_available with speech authority none still pay narration and retry."
+    ],
+    "pre_existing": [
+      "Twenty inherited regression failures from the R2 family."
+    ]
+  },
+  "missing_concepts": [
+    "A non-persisted incidental speech lane. Left for PR-EG. Not implemented."
+  ],
+  "decisions_requiring_human_review": [
+    "Accept or reject B \u2014 accepted with limitations.",
+    "Do not begin PR-EG from this package."
+  ],
+  "does_not_prove": [
+    "That every unknown question avoids narration.",
+    "Interpretation-label agreement with the live model. Behavior is scored separately and is ahead of labels.",
+    "A global token reduction against the R2 eleven-turn workload. The workloads differ.",
+    "That the pre-edit tree would still score 321/20. That run was not repeated."
+  ],
+  "recommended_next_step": "External review. Stop. Do not start PR-EG.",
+  "primary_report": "artifacts/pr_ef_r4/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 5242880,
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_ef_r4/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/03_AUTHORIZATION_CONTRACT_DESIGN.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/04_AUTHORITY_CONSOLIDATION_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/05_AMBIGUOUS_TARGET_INTEGRITY.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/06_GM_NPC_OWNERSHIP.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/07_CORRECTIONS_AND_PENDING_INTENTIONS.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/08_RESOLVER_HANDOFF.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/09_FINAL_RESPONSE_CONSISTENCY.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/10_PROVIDER_ELIGIBILITY_AND_RETRY.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/11_FROZEN_SEMANTIC_HOLDOUTS.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/12_FRESH_LIVE_CONVERSATION.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/13_PERFORMANCE_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/14_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/15_BOUNDED_IMPROVISATION_COMPATIBILITY.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/16_REMAINING_ISSUES.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/17_FINAL_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/18_CHANGED_FILE_INVENTORY.md",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_r4/live.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r4/live_interpretation_disabled.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r4/live_qualification.json",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r4/live_qualification_interpretation_disabled.json",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_r4/regression_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF-R4 report or fresh-provider evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "Eighteen reports, frozen holdouts, live conversation, performance cases, and the regression junit. No .env and no active campaign saves."
+}

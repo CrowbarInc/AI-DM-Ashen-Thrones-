@@ -1,0 +1,51 @@
+{
+  "case_id": "s24q2",
+  "family": "s24",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "4a0d928574aaf0b3aa35d431e66cffb60a66599d7063be2c213177ef413626ec",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Abbess Irra retained authority to close the shrine"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s24"
+    ],
+    "answered_arguments": [
+      "person",
+      "authority"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f2 directly states that Abbess Irra retained authority to close the shrine."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

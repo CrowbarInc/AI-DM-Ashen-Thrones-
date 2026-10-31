@@ -1,0 +1,171 @@
+{
+  "sequence": "A",
+  "scene": {
+    "scene": {
+      "id": "clay_shed",
+      "location": "Reedbank clay shed",
+      "summary": "A low shed holds unfired pots on plank shelves. The large water jar on the center shelf is split from lip to base, and the clay inside it has dried into pale flakes. A stack of unused coil-pots sits intact on the lower shelf. The shed door stands open to the yard. Nothing here says who split the jar, when, or why.",
+      "mode": "exploration",
+      "visible_facts": [
+        {
+          "text": "The large water jar on the center shelf is split from lip to base.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "water_jar",
+            "subject_aliases": [
+              "water jar",
+              "jar",
+              "large water jar"
+            ],
+            "relation": "condition",
+            "value": "split",
+            "value_aliases": [
+              "split",
+              "split from lip to base"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "The clay inside the split water jar has dried into pale flakes.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "jar_clay",
+            "subject_aliases": [
+              "clay",
+              "dried clay",
+              "pale flakes",
+              "flakes"
+            ],
+            "relation": "condition",
+            "value": "dried flakes",
+            "value_aliases": [
+              "dried",
+              "pale flakes",
+              "dried into pale flakes"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "A stack of unused coil-pots sits intact on the lower shelf.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "coil_pots",
+            "subject_aliases": [
+              "coil-pots",
+              "coil pots",
+              "pots",
+              "unused coil-pots"
+            ],
+            "relation": "condition",
+            "value": "intact",
+            "value_aliases": [
+              "intact",
+              "unused",
+              "stack"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "The shed door stands open to the yard.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "shed_door",
+            "subject_aliases": [
+              "shed door",
+              "door"
+            ],
+            "relation": "condition",
+            "value": "open",
+            "value_aliases": [
+              "open",
+              "stands open"
+            ],
+            "polarity": "positive"
+          }
+        }
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": [
+        {
+          "id": "water_jar",
+          "label": "split water jar",
+          "aliases": [
+            "water jar",
+            "jar",
+            "large water jar",
+            "clay"
+          ],
+          "type": "investigate"
+        }
+      ]
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "reedbank",
+        "name": "Reedbank",
+        "type": "riverside_hamlet",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hamlet of small craft sheds along a slow river."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign": {
+    "title": "Ashen Thrones",
+    "premise": "Galinor is spending an ordinary day in Reedbank, a riverside hamlet of small craft sheds.",
+    "tone": "ordinary craft work in a quiet hamlet",
+    "player_character": "Galinor",
+    "character_role": "A traveler passing through Reedbank.",
+    "starting_context": "Galinor is spending an ordinary day in Reedbank, a riverside hamlet of small craft sheds.",
+    "character_secret": {
+      "title": "None",
+      "description": "No secret is in play for this validation.",
+      "implications": [],
+      "hidden_truth": ""
+    },
+    "world_pressures": [
+      "Ordinary craft work and the weather in a riverside hamlet."
+    ],
+    "environmental_threats": [],
+    "magic_style": "rare, mysterious, feared, and poorly understood. Magical knowledge is fragmented and often tied to ancient relics, ruins, or forbidden traditions.",
+    "campaign_structure": "A short ordinary day in Reedbank.",
+    "long_term_goals": [
+      "Get through an ordinary day in Reedbank."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary craft shed in Reedbank.",
+      "People present are ordinary workers unless the scene says otherwise.",
+      "Do not invent a cause, an actor, an organization, or a hidden place for an unexplained condition."
+    ]
+  },
+  "note": "Controlled seed. Unused holding scenes exist only so the default exit graph validates. Their prose, clues, and addressables were cleared. No facts were inserted between turns."
+}

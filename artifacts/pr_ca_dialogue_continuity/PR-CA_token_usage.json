@@ -1,0 +1,48 @@
+{
+  "per_turn": [
+    {
+      "turn": "T1",
+      "input_tokens": 23413,
+      "output_tokens": 54,
+      "total_tokens": 23467,
+      "provider_attempts": 1,
+      "retry_overhead": 0,
+      "input_chars": 100313
+    },
+    {
+      "turn": "T2",
+      "input_tokens": 24124,
+      "output_tokens": 76,
+      "total_tokens": 24200,
+      "provider_attempts": 1,
+      "retry_overhead": 0,
+      "input_chars": 103312
+    },
+    {
+      "turn": "T3",
+      "input_tokens": 24890,
+      "output_tokens": 78,
+      "total_tokens": 24968,
+      "provider_attempts": 1,
+      "retry_overhead": 0,
+      "input_chars": 106545
+    },
+    {
+      "turn": "T4",
+      "input_tokens": 24763,
+      "output_tokens": 57,
+      "total_tokens": 24820,
+      "provider_attempts": 1,
+      "retry_overhead": 0,
+      "input_chars": 106067
+    }
+  ],
+  "cumulative": {
+    "input_tokens": 97190,
+    "output_tokens": 265,
+    "total_tokens": 97455,
+    "provider_attempts": 4,
+    "retries": 0
+  },
+  "context_growth_observation": "Generation input grew from 100,313 chars / 23,413 tokens on T1 to a high of 106,545 chars / 24,890 tokens on T3, then 106,067 chars / 24,763 tokens on T4. Growth is visible but bounded in this four-turn sample."
+}

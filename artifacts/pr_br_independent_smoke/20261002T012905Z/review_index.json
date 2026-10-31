@@ -1,0 +1,747 @@
+[
+  {
+    "n": 1,
+    "player": "I push through the wet crowd to the tavern runner and ask him what a bowl of that stew costs, and whether I can eat it somewhere out of this rain.",
+    "op": "ask",
+    "target": "tavern_runner",
+    "interlocutor": "tavern_runner",
+    "dimension": "content",
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "unresolved_compound_intent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I nod at the crush of people. If the dry place is inside the market quarter, how do I get through this line, and will the guards let a stranger in just to eat?",
+    "op": "ask",
+    "target": "Gate Guard",
+    "interlocutor": "tavern_runner",
+    "dimension": "content",
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "wrong_interlocutor"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: wrong_interlocutor. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "I leave the runner and step up to the nearest gate guard. I ask, plainly, what a traveler has to show or pay to get through this gate.",
+    "op": "ask",
+    "target": "Gate Guard",
+    "interlocutor": "gate_guard",
+    "dimension": "content",
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_guard",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I keep my eyes on the guard. You are the one watching me right now. What papers, and what fee, are actually in force for a lone traveler at this moment?",
+    "op": "ask",
+    "target": "Gate Guard",
+    "interlocutor": "gate_guard",
+    "dimension": "content",
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_guard",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I step away from the guard and go to the notice board he indicated. I read the postings for the taxes, the curfew, and anything that says what a traveler needs in order to pass.",
+    "op": "unresolved",
+    "target": null,
+    "interlocutor": "gate_guard",
+    "dimension": null,
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_guard",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "ungrounded_authoritative_rule"
+    ],
+    "regen": true,
+    "regen_feedback": "The previous attempt was rejected for: ungrounded_authoritative_rule. It asserted an ungrounded authoritative world rule. Answer again without establishing unsupported authoritative facts. Do not invent a replacement fact. Keep the same resolution contract, canonical state, mechanical result, operation, and interlocutor.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [
+      "There is no explicit mention here of any specific papers required for entry, but fees and permits are suggested to be in constant flux, as the gate guard showed uncertainty earlier."
+    ],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "I leave the board and walk back to the same gate guard. The postings name new taxes and a curfew after dark, but no fee and no papers. Will you let me through tonight, or am I staying outside?",
+    "op": "ask",
+    "target": null,
+    "interlocutor": "gate_guard",
+    "dimension": null,
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_guard",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I step into the line and move toward the gate. I tell the guard I have no papers and nothing set aside for a fee, and that I am going through now.",
+    "op": "act",
+    "target": "Gate Guard",
+    "interlocutor": null,
+    "dimension": "content",
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "gate",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": {
+      "id": "rc_e85ec8d5b246",
+      "label": "I step into the line and move toward the gate. I tell the guard I have no papers and nothing set aside for a fee, and that I am going through now.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "I step back out of the line. This guard will not give me a yes or a no. I walk over to the threadbare figure who has been standing still, watching packs and faces, and I ask quietly what they are waiting for.",
+    "op": "ask",
+    "target": "Threadbare watcher",
+    "interlocutor": "threadbare_watcher",
+    "dimension": "content",
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "threadbare_watcher",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "malformed_output",
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": {
+      "id": "emitted_2929100b79",
+      "label": "They say in a low, hesitant voice, \\",
+      "kind": "claim",
+      "epistemic_status": "hearsay",
+      "turn_index": 9,
+      "source": "emitted_npc_claim"
+    },
+    "active_inspected": null,
+    "previous_action": {
+      "id": "rc_e85ec8d5b246",
+      "label": "I step into the line and move toward the gate. I tell the guard I have no papers and nothing set aside for a fee, and that I am going through now.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "fallback"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I follow their glance. Which crates do you mean, and did you see the patrol there yourself, or is that only what people have been saying?",
+    "op": "act",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": {
+      "id": "emitted_2929100b79",
+      "label": "They say in a low, hesitant voice, \\",
+      "kind": "claim",
+      "epistemic_status": "hearsay",
+      "turn_index": 9,
+      "source": "emitted_npc_claim"
+    },
+    "active_inspected": null,
+    "previous_action": {
+      "id": "rc_39b57a06f663",
+      "label": "I follow their glance.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "They did not answer me. I leave the threadbare figure and walk up to the gate serjeant who was looking at those crates. I ask him what he is watching for out there.",
+    "op": "ask",
+    "target": "Gate Serjeant",
+    "interlocutor": "gate_serjeant",
+    "dimension": "content",
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "malformed_output",
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 11,
+      "source": "resolution_contract"
+    },
+    "active_claim": {
+      "id": "emitted_60f8bffada",
+      "label": "they say quietly,",
+      "kind": "claim",
+      "epistemic_status": "hearsay",
+      "turn_index": 11,
+      "source": "emitted_npc_claim"
+    },
+    "active_inspected": null,
+    "previous_action": {
+      "id": "rc_39b57a06f663",
+      "label": "I follow their glance.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  }
+]

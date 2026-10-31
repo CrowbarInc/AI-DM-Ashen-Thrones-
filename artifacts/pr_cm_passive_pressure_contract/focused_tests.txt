@@ -1,0 +1,10 @@
+Revised passive-pressure tests (both passed inside the shared run):
+.venv\Scripts\python.exe -m pytest tests/test_turn_pipeline_shared.py::test_chat_single_wait_records_world_progress_and_keeps_hard_valid_narration tests/test_turn_pipeline_shared.py::test_chat_repeated_passive_waits_advance_world_and_ground_scene_stall --tb=short -q --override-ini="addopts="
+
+Shared pipeline:
+.venv\Scripts\python.exe -m pytest tests/test_turn_pipeline_shared.py --tb=no -q --override-ini="addopts=" --junitxml="artifacts/pr_cm_passive_pressure_contract/pytest_shared.xml"
+Result: 41 passed, 24 failed, 0 skipped, 0 errors
+
+Focused suite:
+.venv\Scripts\python.exe -m pytest tests/test_pr_cm_passive_pressure_contract.py tests/test_pr_ck_ordinary_resolver_selection.py tests/test_grounded_observation_non_invention.py tests/test_final_emission_passive_scene_pressure.py tests/test_bv4b_concrete_beat_upstream_satisfier.py tests/test_clocks_projects_logging_lint.py tests/test_world_state.py tests/test_world_progression_tick_integration.py tests/test_agenda_simulation.py tests/test_pr_br_continuation18_immutable_boundary.py tests/test_pr_br_continuation19_hard_authority.py tests/test_pr_br_gm_resolution_decision.py tests/test_social_question_relevance_answer_selection.py tests/test_pr_cc_social_reply_reconciliation.py tests/test_pr_ce_subjective_preference_classification.py tests/test_pr_by_narration_only_retry_contract.py tests/test_pr_bw_narration_only_envelope.py --tb=line -q --override-ini="addopts=" --junitxml="artifacts/pr_cm_passive_pressure_contract/pytest_focused.xml"
+Result: 201 passed, 3 failed, 0 skipped, 0 errors

@@ -1,0 +1,74 @@
+[
+  {
+    "pass": "atgb_r1_03",
+    "trial": "L1",
+    "exception_type": "APIConnectionError",
+    "classification": "indeterminate",
+    "category_rationale": "Connection exception reported; underlying cause and connection phase not retained, so transport root cause unestablished",
+    "cause": null,
+    "connection_phase": null,
+    "http_status": null,
+    "provider_request_id": null,
+    "model_response_available": false,
+    "usage_available": false,
+    "admissions": 1,
+    "dispatch_attempted": true,
+    "dispatch_latency_ms": 625.517,
+    "timeout_observed": false,
+    "timeout_configuration_historically_recorded": false,
+    "sdk_retries": 0,
+    "ledger_error": "provider_error",
+    "sources": [
+      "artifacts\\atgb\\atgb_r1_03\\L1\\accounting.json",
+      "artifacts\\atgb\\atgb_r1_03\\L1\\trace.json"
+    ]
+  },
+  {
+    "pass": "atgb_r1_03",
+    "trial": "L2",
+    "exception_type": "InternalServerError",
+    "classification": "provider_response_failure",
+    "category_rationale": "SDK InternalServerError supports server error response category; exact HTTP status not retained",
+    "cause": null,
+    "connection_phase": null,
+    "http_status": null,
+    "provider_request_id": null,
+    "model_response_available": false,
+    "usage_available": false,
+    "admissions": 1,
+    "dispatch_attempted": true,
+    "dispatch_latency_ms": 6519.199,
+    "timeout_observed": false,
+    "timeout_configuration_historically_recorded": false,
+    "sdk_retries": 0,
+    "ledger_error": "provider_error",
+    "sources": [
+      "artifacts\\atgb\\atgb_r1_03\\L2\\accounting.json",
+      "artifacts\\atgb\\atgb_r1_03\\L2\\trace.json"
+    ]
+  },
+  {
+    "pass": "atgb_r1_08",
+    "trial": "L1",
+    "exception_type": "APIConnectionError",
+    "classification": "indeterminate",
+    "category_rationale": "Connection exception reported; underlying cause and connection phase not retained, so transport root cause unestablished",
+    "cause": null,
+    "connection_phase": null,
+    "http_status": null,
+    "provider_request_id": null,
+    "model_response_available": false,
+    "usage_available": false,
+    "admissions": 1,
+    "dispatch_attempted": true,
+    "dispatch_latency_ms": 91.72,
+    "timeout_observed": false,
+    "timeout_configuration_historically_recorded": false,
+    "sdk_retries": 0,
+    "ledger_error": "provider_error",
+    "sources": [
+      "artifacts\\atgb\\atgb_r1_08\\L1\\accounting.json",
+      "artifacts\\atgb\\atgb_r1_08\\L1\\traces.json"
+    ]
+  }
+]

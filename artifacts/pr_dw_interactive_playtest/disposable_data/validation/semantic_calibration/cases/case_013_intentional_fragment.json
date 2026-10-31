@@ -1,0 +1,16 @@
+{
+  "case_id": "case_013_intentional_fragment",
+  "category": "positive.intentional_fragment",
+  "player_input": "What do I hear behind the door?",
+  "prior_context": "The player is listening at a closed door.",
+  "gm_response": "\"Footsteps. Then silence.\"",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "The fragment is communicatively complete in context and should not be rejected for terseness.",
+  "provenance": {"kind": "synthetic_boundary_example"},
+  "synthetic": true,
+  "action_type": "question"
+}

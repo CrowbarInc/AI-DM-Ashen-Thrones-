@@ -1,0 +1,50 @@
+{
+  "case_id": "s07q4",
+  "family": "s07",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "ff2a8083347bfa32d0db9556933fb478b916d4b039a99128f003e06f14dc7f77",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "The ash orchard probably belongs to the Bell family"
+    ],
+    "qualifiers": [
+      "probably"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s07"
+    ],
+    "answered_arguments": [
+      "owner"
+    ],
+    "missing_arguments": [
+      "location of the deed"
+    ],
+    "conflict": false,
+    "reason": "The fact provides probable ownership of the ash orchard by the Bell family but does not mention where the deed is located."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

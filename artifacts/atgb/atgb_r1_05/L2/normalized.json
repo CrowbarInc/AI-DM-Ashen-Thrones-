@@ -1,0 +1,114 @@
+{
+  "trial": "L2",
+  "player_input": "I meant the people, not the weather.",
+  "response": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+  "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"CLARIFICATION\",\"subject\":\"Clarification of referent 'the people' versus 'the weather' in previous utterance\",\"evidence_refs\":[]},\"communication_mode\":\"CLARIFICATION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Clarify that 'the people' were meant, not 'the weather'.\"},\"asserted_premises\":[{\"text\":\"Previous mention or implication involved 'the weather'.\"},{\"text\":\"Speaker now corrects to mean 'the people'.\"}],\"requested_outcomes\":[{\"text\":\"GM understands that the speaker refers to 'the people' rather than 'the weather'.\"}],\"action_components\":[], \"references\":{\"permitted_entity_ids\":[],\"unresolved_references\":[]},\"clarification_question\":\"Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?\",\"correction\":{\"subject\":\"INTENTION\",\"note\":\"Correcting referent from 'weather' to 'people'.\"}}",
+  "parsed_interpretation": {
+    "communication": {
+      "recipient": "GM",
+      "purpose": "CLARIFICATION",
+      "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+      "evidence_refs": []
+    },
+    "communication_mode": "CLARIFICATION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Clarify that 'the people' were meant, not 'the weather'."
+    },
+    "asserted_premises": [
+      {
+        "text": "Previous mention or implication involved 'the weather'."
+      },
+      {
+        "text": "Speaker now corrects to mean 'the people'."
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "GM understands that the speaker refers to 'the people' rather than 'the weather'."
+      }
+    ],
+    "action_components": [],
+    "references": {
+      "permitted_entity_ids": [],
+      "unresolved_references": []
+    },
+    "clarification_question": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+    "correction": {
+      "subject": "INTENTION",
+      "note": "Correcting referent from 'weather' to 'people'."
+    }
+  },
+  "available_public_evidence": {
+    "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+    "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+    "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+    "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+    "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+    "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+  },
+  "selected_evidence_refs": [],
+  "pending_revision_decision": null,
+  "host_decision": {
+    "category": "CLARIFY",
+    "primary_intention": "I meant the people, not the weather.",
+    "intent_family": "gm_communication",
+    "incidental_context": [],
+    "proposed_operation": null,
+    "proposed_target": null,
+    "proposed_record": null,
+    "missing_information": [],
+    "context_references": [],
+    "requires_authoritative_execution": false,
+    "reason": "communication_before_execution",
+    "confidence": null,
+    "ambiguity": null,
+    "player_facing_text": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+    "context_update": null,
+    "intent_modality": "informational",
+    "secondary_intentions": [],
+    "execution_policy": "answer_only",
+    "communication_owner": "GM",
+    "communication_purpose": "CLARIFICATION",
+    "authorization": null
+  },
+  "routing": "PASS",
+  "interpretation": "PASS",
+  "evidence_selection": "FAIL",
+  "response_adequacy": "FAIL",
+  "authority": "PASS",
+  "interpretation_qualification": "Subject change recognized, but redundant clarification posture is incorrect; passing this narrow criterion is not full interpretation adequacy.",
+  "session_keys_changed": [
+    "conversational_context",
+    "last_saved_at"
+  ],
+  "state_integrity": {
+    "unchanged": {
+      "session": false,
+      "world": true,
+      "scene": true,
+      "character": true,
+      "combat": true,
+      "log": false
+    },
+    "unchanged_session_fields": {
+      "turn_counter": true,
+      "clocks": true,
+      "active_scene_id": true,
+      "current_date": true
+    },
+    "pending_before": null,
+    "pending_after": null
+  },
+  "timing": {
+    "end_to_end_ms": 3730.975,
+    "sdk_clients": [
+      {
+        "max_retries": 0
+      }
+    ]
+  },
+  "measured_provider_model": "gpt-4.1-mini-2025-04-14",
+  "source_artifact_path": "artifacts/atgb/atgb_r1_05/L2/response.json"
+}

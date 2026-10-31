@@ -1,0 +1,66 @@
+[
+  {
+    "source_run": "20261030T183848Z-5fe421902485",
+    "pass_name": "PR08",
+    "provider_model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 26593,
+    "output_tokens": 1724,
+    "declaration_count": 9,
+    "structured_validation": true,
+    "semantic_validation": true,
+    "opening_accepted": true,
+    "reasons": [],
+    "capture_completeness": "Complete bounded parsed-response JSON; provider wire bytes and exact full request absent",
+    "replay_feasibility": "Production parser, semantics, final gate and acceptance via synthetic SDK; captured baseline documents restored",
+    "capture_sha256": "e45a5511cacdbaa57b2ba81f454220e5125fb40f1782be88a4ed63dbca762191"
+  },
+  {
+    "source_run": "20261030T191257Z-ecc1b6062bdc",
+    "pass_name": "PR09/PR10 accepted opening",
+    "provider_model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 26593,
+    "output_tokens": 1655,
+    "declaration_count": 7,
+    "structured_validation": true,
+    "semantic_validation": true,
+    "opening_accepted": true,
+    "reasons": [],
+    "capture_completeness": "Complete bounded parsed-response JSON; provider wire bytes and exact full request absent",
+    "replay_feasibility": "Production parser, semantics, final gate and acceptance via synthetic SDK; captured baseline documents restored",
+    "capture_sha256": "89cb0a4fe380bb170bf0fa39ac99578375fc8761471322386c7c2d9168624d07"
+  },
+  {
+    "source_run": "20261031T015747Z-5a6c03c902e3",
+    "pass_name": "PR11 investigation",
+    "provider_model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 26593,
+    "output_tokens": 1352,
+    "declaration_count": 7,
+    "structured_validation": true,
+    "semantic_validation": false,
+    "opening_accepted": false,
+    "reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "capture_completeness": "Complete bounded parsed-response JSON; provider wire bytes and exact full request absent",
+    "replay_feasibility": "Production parser, semantics, final gate and acceptance via synthetic SDK; captured baseline documents restored",
+    "capture_sha256": "2941f86055d75da204ce95adf5236491e7f98811b73f24255958aedc956155ad"
+  },
+  {
+    "source_run": "20261031T170523Z-92cd9d058c92",
+    "pass_name": "Latest post-PR11",
+    "provider_model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 26714,
+    "output_tokens": 1784,
+    "declaration_count": 9,
+    "structured_validation": true,
+    "semantic_validation": false,
+    "opening_accepted": false,
+    "reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "capture_completeness": "Complete bounded parsed-response JSON; provider wire bytes and exact full request absent",
+    "replay_feasibility": "Production parser, semantics, final gate and acceptance via synthetic SDK; captured baseline documents restored",
+    "capture_sha256": "6c5d14998b767b0763a4ae130907084bdc12363534044c00bc831348bb36f0ee"
+  }
+]

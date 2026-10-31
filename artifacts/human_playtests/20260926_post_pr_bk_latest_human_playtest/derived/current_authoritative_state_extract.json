@@ -1,0 +1,594 @@
+{
+  "source_files": [
+    "data/session.json",
+    "data/world.json",
+    "data/combat.json"
+  ],
+  "session_id": "735ebd1cfb4567c4f97df6dc",
+  "session_saved_at": "2026-09-26T01:54:18.130251Z",
+  "current_scene": "frontier_gate",
+  "visited_scene_ids": [
+    "frontier_gate"
+  ],
+  "current_date": "Day 1",
+  "turn_counter": 10,
+  "clocks": {
+    "suspicion": 0,
+    "unrest": 0,
+    "danger": 0,
+    "occult_instability": 0,
+    "time_pressure": 10
+  },
+  "interaction_context": {
+    "active_interaction_target_id": null,
+    "active_interaction_kind": "observe",
+    "interaction_mode": "activity",
+    "engagement_level": "focused",
+    "conversation_privacy": null,
+    "player_position_context": null
+  },
+  "scene_state": {
+    "active_scene_id": "frontier_gate",
+    "active_entities": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "guard_captain",
+      "refugee",
+      "threadbare_watcher"
+    ],
+    "entity_presence": {
+      "gate_guard": "active",
+      "gate_serjeant": "active",
+      "tavern_runner": "active",
+      "refugee": "active",
+      "threadbare_watcher": "active",
+      "guard_captain": "active"
+    },
+    "current_interlocutor": null,
+    "emergent_addressables": [],
+    "promoted_actor_npc_map": {}
+  },
+  "scene_runtime_frontier_gate": {
+    "discovered_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "discovered_clue_ids": [
+      "notice_patrol_route"
+    ],
+    "pending_leads": [],
+    "revealed_hidden_facts": [],
+    "suspicion_flags": [],
+    "searched_targets": [
+      "notice_board"
+    ],
+    "resolved_interactables": [
+      "notice_board"
+    ],
+    "last_exploration_action_key": "i_move_closer_to_one_of_the_broken_banne",
+    "repeated_action_count": 1,
+    "last_resolution_kind": "custom",
+    "last_description_hash": "a61011acf81c0c0d74376665f411fda8",
+    "last_perception_visible_facts": [],
+    "last_perception_narration": "",
+    "last_perception_turn": null,
+    "consumed_action_ids": [],
+    "momentum_exchanges_since": 0,
+    "momentum_next_due_in": 2,
+    "momentum_last_kind": "new_information",
+    "passive_action_streak": 0,
+    "recent_player_actions": [
+      {
+        "text": "Inclined to take this matter into my own hands, I proceed North-West, as the runner directed.",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 7
+      },
+      {
+        "text": "As I pass the crates, can I tell whether any of them have been opened or rummaged through?",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 8
+      },
+      {
+        "text": "I move closer to one of the broken banners, studying it carefully. How was this thing destroyed?",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 9
+      },
+      {
+        "text": "Not deterred, I continue following the path.",
+        "passive": false,
+        "markers": [],
+        "resolution_kind": null,
+        "turn": 10
+      }
+    ],
+    "last_player_action_text": "Not deterred, I continue following the path.",
+    "last_player_action_passive": false,
+    "recent_contextual_leads": [
+      {
+        "key": "scene_npc_tavern_runner",
+        "kind": "scene_npc",
+        "subject": "Tavern Runner",
+        "position": "",
+        "named": true,
+        "positioned": false,
+        "mentions": 2,
+        "last_turn": 5
+      },
+      {
+        "key": "active_event_theres_no_reward_offered_for_uncovering_what_happened_the_gate_guard_says_firmly_eyes_flicking_briefly_to_the_restive_crowd_pressing_at_the_muddy_line",
+        "kind": "active_event",
+        "subject": "\"there's no reward offered for uncovering what happened,\" the gate guard says firmly, eyes flicking briefly to the restive crowd pressing",
+        "position": "at the muddy line",
+        "named": false,
+        "positioned": true,
+        "mentions": 1,
+        "last_turn": 6
+      },
+      {
+        "key": "active_event_and_any_information_you_might_have_to_share_with_the",
+        "kind": "active_event",
+        "subject": "\"and any information you might have to share with the",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 6
+      },
+      {
+        "key": "active_event_turning_northwest_the_runners_directions_lead_you_past_weather_beaten_crates_piled_along_the_edge_of_the_gate_district",
+        "kind": "active_event",
+        "subject": "turning northwest, the runners’ directions lead you past weather-beaten crates piled along the edge of the gate district",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 7
+      },
+      {
+        "key": "notice_board_notice_board",
+        "kind": "notice_board",
+        "subject": "notice board",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 9
+      },
+      {
+        "key": "active_event_missing_patrol_rumor",
+        "kind": "active_event",
+        "subject": "missing patrol rumor",
+        "position": "",
+        "named": false,
+        "positioned": false,
+        "mentions": 1,
+        "last_turn": 10
+      }
+    ],
+    "topic_pressure": {
+      "topic:approach_around_away": {
+        "repeat_count": 1,
+        "low_progress_streak": 0,
+        "progress_score_total": 2.1,
+        "last_answer": "\"I'm not sure about the exact number,\" the tavern runner says with a shrug. \"They usually patrol in small groups, maybe half a dozen or so, but no one has said precisely how many went missing.\" They glance toward the gate serjeant, then lean in with a low voice, \"If you want to know more, you might check with the guard captain inside the gate—he keeps the rosters and might share what he's willing.\"",
+        "last_turn": 5,
+        "speaker_targets": {
+          "tavern_runner": {
+            "repeat_count": 2,
+            "low_progress_streak": 1,
+            "patience": 2,
+            "last_turn": 5
+          }
+        },
+        "previous_probe_dimension": "general",
+        "last_probe_dimension": "quantity",
+        "last_player_input": "\"A missing patrol? That's strange. How many soldiers disappeared?\"",
+        "last_answer_provenance": "generative_reply"
+      },
+      "topic:find_information_perhap": {
+        "repeat_count": 1,
+        "low_progress_streak": 0,
+        "progress_score_total": 6.300000000000001,
+        "last_answer": "The muddied trail twists northwest, bordered by scattered broken banners whose frayed edges flutter in the damp wind. Their sigils match those worn on the missing patrol’s uniforms. Amid the ruins of the last known route, you spot subtle signs of hurried passage—broken twigs, faint footprints pressed deep into the soft earth. The air carries a faint hint of smoke, distant and elusive but unmistakably recent.",
+        "last_turn": 6,
+        "speaker_targets": {
+          "gate_guard": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "patience": 3,
+            "last_turn": 6
+          }
+        },
+        "previous_probe_dimension": "",
+        "last_probe_dimension": "identity",
+        "last_player_input": "\"Well, is there a reward for who finds out? Or perhaps, can turn in useful information to the watch?\"",
+        "last_answer_provenance": "clue_knowledge",
+        "last_answer_authoritative_text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    },
+    "topic_pressure_last_topic_key": "topic:find_information_perhap",
+    "topic_pressure_current": {
+      "topic_key": "topic:find_information_perhap",
+      "speaker_key": "gate_guard",
+      "turn": 6,
+      "player_text": "\"Well, is there a reward for who finds out? Or perhaps, can turn in useful information to the watch?\"",
+      "interaction_kind": "social",
+      "interaction_mode": "social",
+      "social_intent_class": "social_exchange",
+      "npc_name": "Gate Guard"
+    }
+  },
+  "runtime_scene_overlay_frontier_gate": {
+    "scene_id": "frontier_gate",
+    "visible_facts_add": [
+      "You have reached the northwest mud track past the crates, the last known route of the missing patrol.",
+      "Broken banners along the path bear the sigil matching those on the missing patrol’s uniforms."
+    ],
+    "discovered_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "state_flags": {},
+    "runtime_entities": [],
+    "mutations": {
+      "discoverable_clues_add": [
+        "Broken patrol banners along the mud track bear a sigil matching those on the missing patrol’s uniforms."
+      ],
+      "hidden_facts_add": [
+        "The path ahead is watched by unseen eyes; subtle signs suggest someone follows quietly."
+      ],
+      "mode": "exploration"
+    }
+  },
+  "topic_pressure": null,
+  "relationships": null,
+  "lead_registry": {
+    "notice_patrol_route": {
+      "id": "notice_patrol_route",
+      "title": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "summary": "The missing patrol was last seen taking the northwest mud track past the crates.",
+      "type": "rumor",
+      "lifecycle": "discovered",
+      "status": "active",
+      "confidence": "plausible",
+      "discovery_source": "clue_explicit",
+      "first_discovered_turn": 3,
+      "last_updated_turn": 3,
+      "committed_at_turn": null,
+      "commitment_source": null,
+      "commitment_strength": null,
+      "resolved_at_turn": null,
+      "resolution_type": null,
+      "resolution_summary": null,
+      "obsolete_reason": null,
+      "escalation_level": 0,
+      "escalation_reason": null,
+      "escalated_at_turn": null,
+      "unlocked_by_lead_id": null,
+      "obsolete_by_lead_id": null,
+      "next_step": "",
+      "related_clue_ids": [],
+      "related_npc_ids": [],
+      "related_location_ids": [],
+      "owner_faction_id": null,
+      "priority": 0,
+      "last_touched_turn": 3,
+      "stale_after_turns": null,
+      "parent_lead_id": null,
+      "supersedes": [],
+      "superseded_by": null,
+      "unlocks": [],
+      "blocked_by": [],
+      "related_faction_ids": [],
+      "related_scene_ids": [
+        "frontier_gate"
+      ],
+      "tags": [],
+      "evidence_clue_ids": [
+        "notice_patrol_route"
+      ],
+      "consequence_ids": [],
+      "metadata": {}
+    }
+  },
+  "clue_knowledge": {
+    "notice_patrol_route": {
+      "state": "discovered",
+      "source_scene": "frontier_gate",
+      "presentation": "explicit",
+      "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+    }
+  },
+  "recent_contextual_leads": [
+    {
+      "key": "scene_npc_tavern_runner",
+      "kind": "scene_npc",
+      "subject": "Tavern Runner",
+      "position": "",
+      "named": true,
+      "positioned": false,
+      "mentions": 2,
+      "last_turn": 5
+    },
+    {
+      "key": "active_event_theres_no_reward_offered_for_uncovering_what_happened_the_gate_guard_says_firmly_eyes_flicking_briefly_to_the_restive_crowd_pressing_at_the_muddy_line",
+      "kind": "active_event",
+      "subject": "\"there's no reward offered for uncovering what happened,\" the gate guard says firmly, eyes flicking briefly to the restive crowd pressing",
+      "position": "at the muddy line",
+      "named": false,
+      "positioned": true,
+      "mentions": 1,
+      "last_turn": 6
+    },
+    {
+      "key": "active_event_and_any_information_you_might_have_to_share_with_the",
+      "kind": "active_event",
+      "subject": "\"and any information you might have to share with the",
+      "position": "",
+      "named": false,
+      "positioned": false,
+      "mentions": 1,
+      "last_turn": 6
+    },
+    {
+      "key": "active_event_turning_northwest_the_runners_directions_lead_you_past_weather_beaten_crates_piled_along_the_edge_of_the_gate_district",
+      "kind": "active_event",
+      "subject": "turning northwest, the runners’ directions lead you past weather-beaten crates piled along the edge of the gate district",
+      "position": "",
+      "named": false,
+      "positioned": false,
+      "mentions": 1,
+      "last_turn": 7
+    },
+    {
+      "key": "notice_board_notice_board",
+      "kind": "notice_board",
+      "subject": "notice board",
+      "position": "",
+      "named": false,
+      "positioned": false,
+      "mentions": 1,
+      "last_turn": 9
+    },
+    {
+      "key": "active_event_missing_patrol_rumor",
+      "kind": "active_event",
+      "subject": "missing patrol rumor",
+      "position": "",
+      "named": false,
+      "positioned": false,
+      "mentions": 1,
+      "last_turn": 10
+    }
+  ],
+  "discovered_information": {
+    "scene_runtime_discovered_clues": [
+      "The missing patrol was last seen taking the northwest mud track past the crates."
+    ],
+    "scene_runtime_discovered_clue_ids": [
+      "notice_patrol_route"
+    ],
+    "world_event_log": [
+      {
+        "type": "faction_pressure",
+        "text": "House Verevin's pressure mounts.",
+        "source": "house_verevin"
+      },
+      {
+        "type": "faction_pressure",
+        "text": "The Ash Cowl's pressure mounts.",
+        "source": "ash_cowl"
+      },
+      {
+        "type": "faction_pressure",
+        "text": "Ordo Pyric's pressure mounts.",
+        "source": "ordo_pyric"
+      },
+      {
+        "type": "faction_operation_complete",
+        "text": "House Verevin completes an off-screen operation.",
+        "source": "house_verevin"
+      },
+      {
+        "type": "faction_operation_complete",
+        "text": "The Ash Cowl completes an off-screen operation.",
+        "source": "ash_cowl"
+      },
+      {
+        "type": "faction_operation_complete",
+        "text": "Ordo Pyric completes an off-screen operation.",
+        "source": "ordo_pyric"
+      }
+    ]
+  },
+  "interactables": null,
+  "transitions": null,
+  "conditions": {
+    "dazed": {
+      "name": "Dazed",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true
+      }
+    },
+    "shaken": {
+      "name": "Shaken",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "sickened": {
+      "name": "Sickened",
+      "kind": "condition",
+      "default_effects": {
+        "attack_penalty": 2,
+        "damage_penalty": 2,
+        "save_penalty": 2,
+        "skill_penalty": 2
+      }
+    },
+    "blinded": {
+      "name": "Blinded",
+      "kind": "condition",
+      "default_effects": {
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "stunned": {
+      "name": "Stunned",
+      "kind": "condition",
+      "default_effects": {
+        "no_actions": true,
+        "ac_penalty": 2,
+        "lose_dex_to_ac": true
+      }
+    },
+    "risky_strike": {
+      "name": "Risky Strike",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "defensive_stance": {
+      "name": "Defensive Stance",
+      "kind": "combat_toggle",
+      "default_effects": {}
+    },
+    "shield": {
+      "name": "Shield",
+      "kind": "spell_effect",
+      "default_effects": {
+        "ac_bonus": 4
+      }
+    }
+  },
+  "combat_state": {
+    "persistence_version": 1,
+    "kind": "combat",
+    "saved_at": "2026-09-26T01:54:18.140251Z",
+    "payload": {
+      "in_combat": false,
+      "round": 0,
+      "initiative_order": [],
+      "turn_index": 0,
+      "active_actor_id": null,
+      "player_turn_used": false
+    },
+    "integrity": {
+      "payload_sha256": "5173f2e2f569585ed9a729d0ed4987dce1a35973b2186a16c01e2d484a6bdbe0",
+      "canonicalization": "json/sort_keys,separators",
+      "hash": "sha256"
+    }
+  },
+  "world_state": {
+    "flags": {
+      "faction_house_verevin_agenda_advanced": true,
+      "faction_ash_cowl_agenda_advanced": true,
+      "faction_ordo_pyric_agenda_advanced": true
+    },
+    "counters": {},
+    "clocks": {}
+  },
+  "npcs": [
+    {
+      "id": "gate_guard",
+      "name": "Gate Guard",
+      "location": "frontier_gate",
+      "aliases": [
+        "guard",
+        "watch",
+        "watch guard"
+      ],
+      "topics": [
+        {
+          "id": "watch_command",
+          "text": "Captain Thoran commands the gate watch tonight.",
+          "clue_id": "captain_thoran_watch"
+        }
+      ],
+      "role": "",
+      "affiliation": "",
+      "availability": "available",
+      "current_agenda": "",
+      "disposition": "neutral",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "frontier_gate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "gate_serjeant",
+      "name": "Gate Serjeant",
+      "location": "frontier_gate",
+      "aliases": [
+        "serjeant",
+        "watch serjeant",
+        "gate serjeant"
+      ],
+      "topics": [
+        {
+          "id": "route_change",
+          "text": "The patrol route changed after the Ash Compact census choke worsened.",
+          "clue_id": "patrol_route_change"
+        }
+      ],
+      "role": "",
+      "affiliation": "",
+      "availability": "available",
+      "current_agenda": "",
+      "disposition": "neutral",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "frontier_gate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "tavern_runner",
+      "name": "Tavern Runner",
+      "location": "frontier_gate",
+      "aliases": [
+        "runner",
+        "tavern runner"
+      ],
+      "topics": [
+        {
+          "id": "patrol_rumor",
+          "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "clue_id": "muddy_footprints_northwest"
+        }
+      ],
+      "role": "",
+      "affiliation": "",
+      "availability": "available",
+      "current_agenda": "sell_rumors",
+      "disposition": "friendly",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "frontier_gate",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ]
+}

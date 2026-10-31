@@ -1,0 +1,365 @@
+[
+  {
+    "probe": "ambiguous_plural",
+    "player": "I ask one of them what happened.",
+    "status": "accepted",
+    "reason": "eligible_for_bridge",
+    "blocked_text": "",
+    "communication": {
+      "recipient": "GM",
+      "purpose": "QUESTION",
+      "subject": "What happened according to one of the NPCs",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "ASK",
+        "target": null
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.ANSWER",
+    "decision_owner": "GM",
+    "decision_purpose": "QUESTION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": false,
+    "bridge_reason": "missing_target",
+    "bridge_target": null,
+    "input_tokens": 1647,
+    "output_tokens": 178
+  },
+  {
+    "probe": "explicit_npc",
+    "player": "I ask Sergeant Mara what happened.",
+    "status": "accepted",
+    "reason": "eligible_for_bridge",
+    "blocked_text": "",
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "What happened to Sergeant Mara?",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara"
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.EXECUTE",
+    "decision_owner": "NPC",
+    "decision_purpose": "ACTION",
+    "decision_reason": "single_authoritative_component",
+    "requires_execution": true,
+    "bridge_accepted": true,
+    "bridge_reason": null,
+    "bridge_target": "sergeant_mara",
+    "input_tokens": 1646,
+    "output_tokens": 158
+  },
+  {
+    "probe": "gm_about_npc",
+    "player": "What is the sergeant worried about?",
+    "status": "accepted",
+    "reason": "eligible_for_bridge",
+    "blocked_text": "",
+    "communication": {
+      "recipient": "GM",
+      "purpose": "QUESTION",
+      "subject": "sergeant_mara's worry",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara"
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.ANSWER",
+    "decision_owner": "GM",
+    "decision_purpose": "QUESTION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": true,
+    "bridge_reason": null,
+    "bridge_target": "sergeant_mara",
+    "input_tokens": 1647,
+    "output_tokens": 165
+  },
+  {
+    "probe": "followup_meaning",
+    "player": "What does she mean by the road?",
+    "status": "accepted",
+    "reason": "eligible_for_bridge",
+    "blocked_text": "",
+    "communication": {
+      "recipient": "GM",
+      "purpose": "EXPLANATION",
+      "subject": "Meaning of 'the road' as used by Sergeant Mara",
+      "evidence_refs": [
+        "npc_latest_reply"
+      ]
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "ASK",
+        "target": null
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.ANSWER",
+    "decision_owner": "GM",
+    "decision_purpose": "EXPLANATION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": false,
+    "bridge_reason": "missing_target",
+    "bridge_target": null,
+    "input_tokens": 1732,
+    "output_tokens": 221
+  },
+  {
+    "probe": "correction",
+    "player": "Instead, make that a question about the lamp.",
+    "status": "blocked",
+    "reason": "clarification_required",
+    "blocked_text": "I need a clearer action or target before I change anything in the scene.",
+    "communication": {
+      "recipient": "GM",
+      "purpose": "CORRECTION",
+      "subject": "Referent correction to focus question on the lamp",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [],
+    "correction": {
+      "subject": "REFERENT",
+      "note": "Change the focus of the question to the courtyard lantern."
+    },
+    "eligibility_disposition": "SAFE_ABSTENTION",
+    "decision_category": "ConversationalDecisionCategory.ANSWER",
+    "decision_owner": "GM",
+    "decision_purpose": "CORRECTION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": false,
+    "bridge_reason": "unsupported_operation",
+    "bridge_target": null,
+    "input_tokens": 1639,
+    "output_tokens": 168
+  },
+  {
+    "probe": "withdrawal",
+    "player": "Never mind, forget that.",
+    "status": "blocked",
+    "reason": "clarification_required",
+    "blocked_text": "I need a clearer action or target before I change anything in the scene.",
+    "communication": {
+      "recipient": "GM",
+      "purpose": "WITHDRAWAL",
+      "subject": "withdraw previous intent or statement",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [],
+    "correction": {
+      "subject": "INTENTION",
+      "note": "The player withdraws a previous intention or statement."
+    },
+    "eligibility_disposition": "SAFE_ABSTENTION",
+    "decision_category": "ConversationalDecisionCategory.ANSWER",
+    "decision_owner": "GM",
+    "decision_purpose": "WITHDRAWAL",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": false,
+    "bridge_reason": "unsupported_operation",
+    "bridge_target": null,
+    "input_tokens": 1635,
+    "output_tokens": 178
+  },
+  {
+    "probe": "mixed",
+    "player": "I ask the sergeant who owns the lantern, and then I open the gate.",
+    "status": "blocked",
+    "reason": "clarification_required",
+    "blocked_text": "Which single action should I resolve first?",
+    "communication": {
+      "recipient": "MIXED",
+      "purpose": "ACTION",
+      "subject": "Ask Sergeant Mara who owns the lantern and then open the courtyard gate",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara"
+      },
+      {
+        "operation": "USE_VISIBLE_OBJECT",
+        "target": "courtyard_gate"
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.CLARIFY",
+    "decision_owner": "MIXED",
+    "decision_purpose": "ACTION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": false,
+    "bridge_reason": "unsupported_operation",
+    "bridge_target": null,
+    "input_tokens": 1656,
+    "output_tokens": 238
+  },
+  {
+    "probe": "descriptive",
+    "player": "What does the courtyard look like right now?",
+    "status": "accepted",
+    "reason": "eligible_for_bridge",
+    "blocked_text": "",
+    "communication": {
+      "recipient": "GM",
+      "purpose": "DESCRIPTION",
+      "subject": "current appearance of the courtyard",
+      "evidence_refs": [
+        "scene",
+        "visible:0"
+      ]
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "PERCEIVE",
+        "target": "courtyard_lantern"
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.ANSWER",
+    "decision_owner": "GM",
+    "decision_purpose": "DESCRIPTION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": true,
+    "bridge_reason": null,
+    "bridge_target": "courtyard_lantern",
+    "input_tokens": 1638,
+    "output_tokens": 192
+  },
+  {
+    "probe": "knowledge",
+    "player": "I ask Mara who gave the order to bar the gate.",
+    "status": "accepted",
+    "reason": "eligible_for_bridge",
+    "blocked_text": "",
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "Who gave the order to bar the gate?",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara"
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.EXECUTE",
+    "decision_owner": "NPC",
+    "decision_purpose": "ACTION",
+    "decision_reason": "single_authoritative_component",
+    "requires_execution": true,
+    "bridge_accepted": true,
+    "bridge_reason": null,
+    "bridge_target": "sergeant_mara",
+    "input_tokens": 1641,
+    "output_tokens": 198
+  },
+  {
+    "probe": "consequential",
+    "player": "I draw my sword and attack the sergeant.",
+    "status": "blocked",
+    "reason": "clarification_required",
+    "blocked_text": "Which single action should I resolve first?",
+    "communication": {
+      "recipient": "MIXED",
+      "purpose": "ACTION",
+      "subject": "Character attempts to draw sword and attack Sergeant Mara",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "unresolved_references": [],
+    "components": [
+      {
+        "operation": "USE_VISIBLE_OBJECT",
+        "target": null
+      },
+      {
+        "operation": "ATTACK",
+        "target": "sergeant_mara"
+      }
+    ],
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+    "decision_category": "ConversationalDecisionCategory.CLARIFY",
+    "decision_owner": "MIXED",
+    "decision_purpose": "ACTION",
+    "decision_reason": "communication_before_execution",
+    "requires_execution": false,
+    "bridge_accepted": false,
+    "bridge_reason": "unsupported_operation",
+    "bridge_target": null,
+    "input_tokens": 1649,
+    "output_tokens": 204
+  }
+]

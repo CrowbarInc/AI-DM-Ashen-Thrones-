@@ -1,0 +1,174 @@
+...........F...FFF.FFFFF...............F....FF..............F.....F..F.. [ 22%]
+....FF.FFFF...F......................................................... [ 45%]
+.............................F..F.....F..F.............................. [ 67%]
+............F........................................................... [ 90%]
+..............................                                           [100%]
+================================== FAILURES ===================================
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+     +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x0000020209A1E200>('resolution')
+     +    where <built-in method get of dict object at 0x0000020209A1E200> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:293: assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+E   AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'
+E   AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'
+E   AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}
+     +  where 'unknown' = <built-in method get of dict object at 0x000002020C214F40>('reply_kind')
+     +    where <built-in method get of dict object at 0x000002020C214F40> = {'social_intent_class': 'social_exchange', 'npc_id': 'runner', 'npc_name': 'Tavern Runner', 'target_resolved': True, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:492: AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}
+E   assert 'retry_strategy:selected=unresolved_question' in ''
+     +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, "Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:579: assert 'retry_strategy:selected=unresolved_question' in ''
+E   assert 0 == 2
+     +  where 0 = len([])
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:608: assert 0 == 2
+E   assert 0 == 2
+     +  where 0 = len([])
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:648: assert 0 == 2
+E   assert 0 == 2
+     +  where 0 = len([])
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:678: assert 0 == 2
+E   assert 1 == 2
+     +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\n\nRule P...itative_social_target_requires_dialogue", "dialogue_turn_contains_question_expectation", "social_question_guard"]}}'}]])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:716: assert 1 == 2
+E   AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1135: AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+     +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000002020C034880>('resolution')
+     +    where <built-in method get of dict object at 0x000002020C034880> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1250: assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+E   AssertionError: expected resolution.kind in ['social_probe'], got 'question'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:377: AssertionError: expected resolution.kind in ['social_probe'], got 'question'
+E   AssertionError: assert None == 'roll_requirement_query'
+     +  where None = <built-in method get of dict object at 0x00000202099FBA40>('category')
+     +    where <built-in method get of dict object at 0x00000202099FBA40> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1516: AssertionError: assert None == 'roll_requirement_query'
+E   AssertionError: assert None == 'roll_requirement_query'
+     +  where None = <built-in method get of dict object at 0x0000020209AFE6C0>('category')
+     +    where <built-in method get of dict object at 0x0000020209AFE6C0> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:1697: AssertionError: assert None == 'roll_requirement_query'
+E   AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+E   AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[SOCIAL RESOLUTION REPAIR] terminal empty social output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:228: AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\helpers\emission_smoke_assertions.py:356: AssertionError
+E   AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2111: AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'
+E   assert False
+     +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x000002020C207ED0>)
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2152: assert False
+E   AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2193: AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'
+E   AssertionError: assert None
+     +  where None = <built-in method get of dict object at 0x000002020C250740>('speaker_contract_enforcement_reason')
+     +    where <built-in method get of dict object at 0x000002020C250740> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_turn_pipeline_shared.py:2221: AssertionError: assert None
+E   AssertionError: assert 'notice board' in 'the board names the north road past the waystation. taxes and curfew lines in waystation street get read aloud by someone who wants witnesses.'
+     +  where 'the board names the north road past the waystation. taxes and curfew lines in waystation street get read aloud by someone who wants witnesses.' = <built-in method lower of str object at 0x0000020208D71FB0>()
+     +    where <built-in method lower of str object at 0x0000020208D71FB0> = 'The board names the north road past the waystation. Taxes and curfew lines in Waystation street get read aloud by someone who wants witnesses.'.lower
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] north_road
+[ENGINE] Scene transition -> waystation_street
+[CLUE DISCOVERED] street_notice
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_du_player_pipeline.py:152: AssertionError: assert 'notice board' in 'the board names the north road past the waystation. taxes and curfew lines in waystation street get read aloud by someone who wants witnesses.'
+E   assert False
+     +  where False = any([False])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_exploration_resolution.py:449: assert False
+E   assert None == 'observe'
+     +  where None = <built-in method get of dict object at 0x000002020C156700>('kind')
+     +    where <built-in method get of dict object at 0x000002020C156700> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_exploration_resolution.py:497: assert None == 'observe'
+E   assert None == 'observe'
+     +  where None = <built-in method get of dict object at 0x0000020208BE0FC0>('kind')
+     +    where <built-in method get of dict object at 0x0000020208BE0FC0> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_exploration_resolution.py:609: assert None == 'observe'
+E   AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_exploration_resolution.py:666: AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}
+E   AssertionError: assert not [PermissionError(13, 'Permission denied')]
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_runtime_persistence_regression_suite_obj14.py:317: AssertionError: assert not [PermissionError(13, 'Permission denied')]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+FAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]
+FAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]
+FAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+FAILED tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+FAILED tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair
+FAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical
+FAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired
+FAILED tests/test_pr_du_player_pipeline.py::test_pr_du_four_action_sequence_and_ooc_through_production_chat
+FAILED tests/test_exploration_resolution.py::test_chat_quarterstaff_attack_mechanical_resolution_absent
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_resolution_kwarg_to_build_messages
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+FAILED tests/test_exploration_resolution.py::test_chat_exploration_parsed_routes_through_exploration
+FAILED tests/test_runtime_persistence_regression_suite_obj14.py::test_obj14_overlapping_persistence_operations_are_serialized_deterministically
+27 failed, 291 passed, 1 warning in 35.84s

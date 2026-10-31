@@ -1,0 +1,423 @@
+{
+  "rows": {
+    "conversation": [
+      {
+        "turn": 1,
+        "player": "Could you describe our surroundings?",
+        "expected": "gm_no_mutation",
+        "behavior_pass": false,
+        "critical_unauthorized_mutation": true,
+        "http_status": 200,
+        "response": "The inspection establishes no further reliable detail about Could you describe our surroundings.",
+        "kind": null,
+        "social": {
+          "reply_speaker_grounding_neutral_bridge": true
+        },
+        "raw_interpretation": null,
+        "interpretation_record": null,
+        "authorization": {
+          "communication_ownership": "gm_directed",
+          "intent_purpose": "request_information",
+          "target_resolution": "none_required",
+          "target_provenance": "none",
+          "target_id": null,
+          "candidate_target_ids": [],
+          "operation_eligibility": "no_consequential_operation",
+          "mutation_eligibility": false,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "none",
+          "allowed_operation": "unresolved",
+          "clarification": "",
+          "choices": [],
+          "direct_address": false,
+          "player_text": "Could you describe our surroundings?"
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 0,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 2,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 0,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 1,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 0,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 1,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 2,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 1,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 21252.7,
+        "calls": {
+          "provider_calls": 2,
+          "interpretation_calls": 0,
+          "narration_calls": 1,
+          "retry_calls": 1,
+          "input_tokens": 45243,
+          "output_tokens": 2602,
+          "total_tokens": 47845,
+          "purposes": [
+            "strict_social",
+            "retry_escalation"
+          ]
+        }
+      },
+      {
+        "turn": 2,
+        "player": "I ask Sergeant Mara whether the north road is watched.",
+        "expected": "execute_mara",
+        "behavior_pass": true,
+        "critical_unauthorized_mutation": false,
+        "http_status": 200,
+        "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+        "kind": "question",
+        "social": {
+          "social_intent_class": "social_exchange",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "target_resolved": true,
+          "topic_revealed": {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road",
+            "clue_text": null
+          },
+          "recalled_topic": false,
+          "skill_check": null,
+          "npc_reply_expected": true,
+          "reply_kind": "answer",
+          "target_source": "declared_action",
+          "target_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+          "target_candidate_id": "sergeant mara whether the north road is watched",
+          "target_candidate_valid": false,
+          "stale_interlocutor_cleared": false,
+          "addressability_checked_against": [
+            "active_entities",
+            "entity_presence_active_or_nearby",
+            "scene_addressables",
+            "world_roster_in_scene",
+            "interaction_continuity"
+          ],
+          "declared_switch_detected": true,
+          "declared_switch_target_actor_id": "sergeant_mara",
+          "continuity_overridden_by_declared_switch": false,
+          "spoken_vocative_detected": false,
+          "spoken_vocative_target_actor_id": null,
+          "continuity_overridden_by_spoken_vocative": false,
+          "actor_addressable": true,
+          "target_binding": {
+            "final_target_kind": "npc",
+            "npc_id": "sergeant_mara",
+            "target_source": "native_npc",
+            "origin_actor_id": null,
+            "promoted_this_turn": false
+          },
+          "target_profile_hints": {
+            "guardedness": "medium",
+            "answer_reliability_tier": "medium",
+            "speaks_authoritatively_for_scene": false
+          },
+          "authority_source_used": "declared_action",
+          "proposed_reply_speaker_id": "sergeant_mara",
+          "grounding_fallback_applied": false,
+          "grounding_reason_code": "authoritative_speaker_eligible_topic_salience_ignored",
+          "grounded_speaker_id": "sergeant_mara",
+          "lead_discussion_updates": [
+            {
+              "npc_id": "sergeant_mara",
+              "lead_id": "north_road",
+              "disclosure_level": "explicit",
+              "player_acknowledged": false,
+              "mention_count": 1,
+              "acknowledged_updated": false
+            }
+          ]
+        },
+        "raw_interpretation": null,
+        "interpretation_record": null,
+        "authorization": {
+          "communication_ownership": "character_action",
+          "intent_purpose": "perform_action",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "authority_provenance": "resolution_contract",
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [],
+          "direct_address": false,
+          "player_text": "I ask Sergeant Mara whether the north road is watched."
+        },
+        "decision_reason": null,
+        "decision_owner": null,
+        "resolver_invoked": null,
+        "state_before": {
+          "turn_counter": 1,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 3,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 1,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 2,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 1,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "state_after": {
+          "turn_counter": 2,
+          "clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "type": "noble_house",
+              "attitude": "wary",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Expand territory",
+              "current_plan": "Gathering influence",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "type": "criminal_syndicate",
+              "attitude": "opportunistic",
+              "influence": 3,
+              "pressure": 4,
+              "goal": "Control black market",
+              "current_plan": "Establishing smuggling routes",
+              "agenda_progress": 2,
+              "assets": []
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "type": "religious_order",
+              "attitude": "suspicious",
+              "influence": 2,
+              "pressure": 3,
+              "goal": "Suppress dangerous magic",
+              "current_plan": "Watching newcomers",
+              "agenda_progress": 2,
+              "assets": []
+            }
+          ],
+          "scene": "waystation_courtyard",
+          "character_location": null,
+          "relationships": null
+        },
+        "pending_after": null,
+        "elapsed_ms": 4608.691,
+        "calls": {
+          "provider_calls": 1,
+          "interpretation_calls": 0,
+          "narration_calls": 1,
+          "retry_calls": 0,
+          "input_tokens": 23550,
+          "output_tokens": 94,
+          "total_tokens": 23644,
+          "purposes": [
+            "strict_social"
+          ]
+        }
+      }
+    ],
+    "holdouts": [],
+    "performance": []
+  },
+  "provider": {
+    "requests": 3,
+    "input_tokens": 68793,
+    "output_tokens": 2696,
+    "total_tokens": 71489,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_068f574a2a12ca55006ad2b0b8597887d2b312a6e0282f1be6",
+        "input_tokens": 22123,
+        "output_tokens": 1436,
+        "total_tokens": 23559,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0e2689ce10e7e13f006ad2b0c3c4b087d2abb01b3f84dbb535",
+        "input_tokens": 23120,
+        "output_tokens": 1166,
+        "total_tokens": 24286,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0ad5e6b1a47f7850006ad2b0cd558c87d29743e2e8fe3eee07",
+        "input_tokens": 23550,
+        "output_tokens": 94,
+        "total_tokens": 23644,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      }
+    ]
+  }
+}

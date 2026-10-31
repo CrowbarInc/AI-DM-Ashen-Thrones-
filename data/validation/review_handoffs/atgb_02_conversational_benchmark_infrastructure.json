@@ -1,0 +1,303 @@
+{
+  "campaign_id": "atgb_02_conversational_benchmark_infrastructure",
+  "campaign_name": "ATGB-02 Conversational Benchmark Infrastructure",
+  "campaign_date": "2026-10-18",
+  "purpose": "Implement the Ashen Thrones Gameplay Benchmark infrastructure from the ATGB-01 design, with S07 moved to held-out. Validate it with providers disabled. Do not run a live benchmark and do not change production gameplay.",
+  "objective_status": "INFRASTRUCTURE READY — NO GAMEPLAY RESULT",
+  "executive_summary": "Implementation outcome: fixtures for 37 turns, an isolated chat driver, a provider-disabled simulated mode, a provider-disabled host path, a human worksheet, and a result format. Original reproduction: not applicable; this pass repairs no gameplay failure. Related generalization: not applicable. Independent generalization: not evaluated. The held-out partition is stored and labeled previously exposed because those scenarios were already in the ATGB-01 review. Regression: 49 passed across playability, review-handoff, and validation-evidence tests; the full suite was not run. ATGB: no performance result. Provider-disabled validation captured 37 simulated turns and 4 host turns of S06. Both packages set gameplay_performance_claim to false. Known limitations: simulated mode does not call chat; host mode is not conversational competence; held-out turns are not unseen; no historical adapter and no dollar default. Remaining uncertainty: the live trial count and any future price ceiling are unset, and the PR-BL session orientation is still unreconciled with later PR-EG history. No gameplay improvement is claimed.",
+  "changes": {
+    "production": [
+      "No production gameplay module changed. game/ does not import the benchmark. evaluate_playability is not called."
+    ],
+    "validation": [
+      "Added tests/test_atgb_infrastructure.py. Playability scenarios, semantic calibration, and protected replay were not edited."
+    ],
+    "tooling": [
+      "Added tools/run_atgb.py and tools/atgb/. The driver posts to the existing POST /api/chat boundary in a subprocess and refuses unsafe data directories before reset."
+    ],
+    "documentation": [
+      "Added the ATGB-02 specification, execution note, and implementation report.",
+      "Pointed docs/validation_evidence_standard.md at the implemented corpus and forbade a performance claim from infrastructure, host-only, or unscored output.",
+      "Left the ATGB-01 catalog body in place and recorded that its index still lists S07 as development-visible.",
+      "Updated docs/NEXT_SESSION.md. Did not start another Product Realization campaign."
+    ],
+    "generated_artifacts": [
+      "Provider-disabled simulated run of all 37 turns at artifacts/atgb/atgb_02_infrastructure/.",
+      "Provider-disabled host run of S06 at artifacts/atgb/atgb_02_host_probe/. Neither artifact is a gameplay benchmark result."
+    ]
+  },
+  "testing": {
+    "focused": "9 passed in tests/test_atgb_infrastructure.py. Covers fixture counts, catalog lines, isolation rejection, order, simulated labels, unavailable telemetry, worksheets, reproducibility, budget refusal, and one provider-disabled host scenario.",
+    "broader": "49 passed across tests/test_playability_eval.py, tests/test_review_handoff.py, and tests/test_validation_evidence_standard.py.",
+    "full_suite": "Not run.",
+    "runtime_validation": "No live-provider execution. Original reproduction, related generalization, and independent generalization were not evaluated because this pass repairs no gameplay failure. Host S06 is infrastructure evidence only.",
+    "model_runtime_boundary": "No model was called. Provider-disabled host mode set ASHEN_DISABLE_PROVIDER_CALLS, ASHEN_DISABLE_LIVE_INTERPRETATION, and ASHEN_DISABLE_EXPRESSION_GENERATION, and removed the API key from the worker environment.",
+    "new_regressions": "None observed in the focused or adjacent tests that were run.",
+    "pre_existing_failures": "Not reassessed. The full suite was not run. docs/product_realization_validation.md already had an uncommitted generalization paragraph; this pass does not claim that diff."
+  },
+  "decisions_requiring_human_review": [
+    "Accept or reject the ATGB-02 corpus and harness before any live baseline.",
+    "The live trial count is still the design default of one. This pass does not choose a dollar ceiling.",
+    "Held-out turns remain previously exposed. A later unexposed environment would be required before a strong generalization claim.",
+    "The NEXT_SESSION product orientation versus later PR-EG history remains a separate maintenance item. This package does not decide it."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Simulated replies are a test double. They do not exercise POST /api/chat.",
+      "The host performance counter can report a provider call for the provider-disabled narration fallback. The harness preserves the count and does not treat it as a sent request when tokens are null and the reply is stamped provider-disabled.",
+      "The benchmark copy of world.json is the repository file plus the existing playthrough reset. It does not rebuild a pristine world from git.",
+      "No historical compatibility adapter is implemented."
+    ],
+    "pre_existing": [
+      "Playability scoring, semantic calibration, protected replay, and replay failure classification keep their existing authorities.",
+      "Curfew hours, stew price, diegetic time passage, compound multi-action execution, and richer pronoun continuity remain outside current authored behavior.",
+      "docs/NEXT_SESSION.md product orientation remains the 2026-09-26 PR-BL closeout. Later PR-EG history remains unreconciled."
+    ]
+  },
+  "missing_concepts": [
+    "A live-provider baseline and a completed human score sheet for that transcript.",
+    "A provider price table. Cost stays unavailable until a run supplies prices and the host records token counts.",
+    "An unexposed held-out environment. The current held-out turns were visible in the ATGB-01 review.",
+    "A historical-build adapter. Older revisions are not comparable unless they can boot the same isolated store."
+  ],
+  "does_not_prove": [
+    "That player-AI-DM communication improved.",
+    "An Ashen Thrones Gameplay Benchmark performance result.",
+    "That the scenarios would pass on the current build under a live model.",
+    "Independent generalization from the held-out partition.",
+    "Mechanical correctness of combat, inventory, economy, character creation, equipment, or advancement.",
+    "That playability PASS and ATGB acceptability are the same judgment.",
+    "That deterministic host behavior is natural conversational competence.",
+    "That the PR-BL session orientation and later PR-EG history agree."
+  ],
+  "recommended_next_step": "Stop. Review this infrastructure before any live ATGB baseline. Do not report a gameplay-performance result from the provider-disabled runs. Do not modify production gameplay to improve benchmark results, and do not start another Product Realization campaign from this package.",
+  "primary_report": "development/reports/atgb_02_implementation.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "benchmark_specification",
+      "why": "Adopted scope, the S07 partition move, the 25/4/8 counts, and the previously exposed held-out status.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_02_execution.md",
+      "role": "execution_note",
+      "why": "How fixtures, isolation, provider-disabled mode, live budgets, results, and future environments work.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "scenario_catalog",
+      "why": "Behavioral source for the fixtures. Its index still lists S07 as development-visible.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "rubric_source",
+      "why": "Rubric atgb-rubric-01. The body is the historical proposal; ATGB-02 does not rewrite it.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_implementation_feasibility.md",
+      "role": "feasibility_note",
+      "why": "The reuse boundaries the driver kept: chat, isolated storage, and no second scorer.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/README.md",
+      "role": "fixture_index",
+      "why": "How visible and held-out fixture directories are organized.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "corpus_manifest",
+      "why": "Version, expected counts, and the written S07 discrepancy.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "scenario_fixture",
+      "why": "Development-visible fixture. Behavioral criteria, not an exact reply.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "scenario_fixture",
+      "why": "Development-visible fixture.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "scenario_fixture",
+      "why": "Development-visible fixture.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "scenario_fixture",
+      "why": "Development-visible fixture.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "scenario_fixture",
+      "why": "Development-visible fixture.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "scenario_fixture",
+      "why": "Development-visible IC/OOC fixture used by the host probe.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "scenario_fixture",
+      "why": "Related-variation fixture. Not independent generalization.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "scenario_fixture",
+      "why": "Held-out by the ATGB-02 partition move. Previously exposed in the ATGB-01 review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "scenario_fixture",
+      "why": "Held-out fixture. Previously exposed.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "scenario_fixture",
+      "why": "Held-out fixture. Previously exposed.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_infrastructure.py",
+      "role": "focused_test",
+      "why": "Provider-disabled and isolation checks. Not a gameplay score.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/run_atgb.py",
+      "role": "benchmark_command",
+      "why": "Operator entry point. Live mode is refused without an explicit confirmation and ceilings.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/__init__.py",
+      "role": "benchmark_library",
+      "why": "Version constants.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/fixtures.py",
+      "role": "benchmark_library",
+      "why": "Fixture loader and count check.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "benchmark_library",
+      "why": "Data-directory safeguard. Reset is refused until the store is isolated.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/budget.py",
+      "role": "benchmark_library",
+      "why": "Call, token, time, and optional cost ceilings. No default dollar budget.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "benchmark_library",
+      "why": "Scenario order, simulated double, and subprocess launch.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "benchmark_library",
+      "why": "Imports the game only after isolation and posts to POST /api/chat.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/results.py",
+      "role": "benchmark_library",
+      "why": "Result schema and the report order that keeps critical failures visible.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/worksheet.py",
+      "role": "benchmark_library",
+      "why": "Human worksheet. Three judgments stay separate.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "specialized_authority",
+      "why": "ATGB claim boundary after the corpus was implemented. Infrastructure validation is not a performance result.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/playability_validation.md",
+      "role": "specialized_authority",
+      "why": "Playability remains evaluate_playability. ATGB does not become a second scorer.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "session_orientation",
+      "why": "Points at ATGB-02 and leaves the PR-BL versus PR-EG discrepancy unresolved.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_02_infrastructure/report.md",
+      "role": "infrastructure_report",
+      "why": "Simulated 37-turn package. Gameplay performance claim is false.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_02_host_probe/report.md",
+      "role": "host_probe_report",
+      "why": "Provider-disabled host transcript summary for S06. Not a gameplay result.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ],
+  "self_contained_review_test": "The ZIP packages the specification, fixtures, harness, and provider-disabled reports. It contains no live-provider transcript and claims no gameplay performance result."
+}

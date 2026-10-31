@@ -1,0 +1,74 @@
+--- baseline/game/dialogue_authority.py
++++ final/game/dialogue_authority.py
+@@ -53,7 +53,7 @@
+     )),
+     ("ownership", re.compile(r"\b(?:who\s+owns|whose|belongs\s+to|owner\s+of)\b", re.IGNORECASE)),
+     ("surveillance", re.compile(
+-        r"\b(?:watched|under\s+watch|keep(?:s|ing)?\s+an\s+eye|patrol(?:led|s|ling)?|who\s+watches)\b",
++        r"\b(?:watch(?:es|ed|ing)?|guards?|sentries|under\s+watch|keep(?:s|ing)?\s+an\s+eye|patrol(?:led|s|ling)?|who\s+watches)\b",
+         re.IGNORECASE,
+     )),
+     ("personal_state", re.compile(
+@@ -110,7 +110,10 @@
+ 
+ def requested_information(player_text: str) -> str:
+     text = str(player_text or "")
+-    for name, pattern in _REQUESTS:
++    from game.conversational_continuity import is_incidental_personal
++    if is_incidental_personal(text):
++        return "opinion"
++    for name, pattern in sorted(_REQUESTS, key=lambda item: item[0] == "surveillance"):
+         if pattern.search(text):
+             return name
+     from game.conversational_continuity import is_incidental_personal
+@@ -139,6 +142,10 @@
+ def topic_supports_requested_information(player_text: str, topic_text: str) -> bool:
+     """A subject mention is not an answer to a more specific request."""
+     kind = requested_information(player_text)
++    # A positive watch assertion does not establish the time of an absence.
++    absence = re.compile(r"\b(?:unattended|unguarded|unwatched)\b", re.I)
++    if absence.search(player_text) and not absence.search(topic_text):
++        return False
+     if kind == "general":
+         return True
+     pattern = _SUPPORT.get(kind)
+@@ -251,6 +258,12 @@
+     from game.conversational_continuity import find_reusable_commitment, supplied_clarification
+ 
+     quoted = supplied_clarification(player_text, session, npc_id, name)
++    history_source = ""
++    if quoted:
++        from game.conversational_continuity import _best_exchange, delivered_exchanges
++        historical = _best_exchange(player_text, delivered_exchanges(session), npc_id)
++        if isinstance(historical, dict):
++            history_source = "delivered:" + str(historical.get("speaker_id") or "") + ":" + str(historical.get("turn") or 0) + ":" + str(historical.get("authorization_source") or historical.get("topic_id") or "statement")
+     reused = "" if quoted else find_reusable_commitment(session, npc_id, player_text)
+     line = ""
+     if quoted or reused:
+@@ -274,6 +287,16 @@
+     if not incidental:
+         prohibited.append("invented_answer")
+     return {
++        "topic_grounding": {
++            "speaker_id": npc_id, "addressee": "player", "requested_subject": subject,
++            "requested_information": kind, "reference": "delivered_speech" if quoted else "current_request",
++            "candidate_sources": ["npc:" + npc_id + ":" + str(topic.get("id") or "")] if topic_text else [],
++            "selected_source": (history_source if quoted else "npc:" + npc_id + ":" + str(topic.get("id") or "") if topic_text else ""),
++            "ambiguous": "Which earlier remark" in quoted, "ownership": "npc",
++            **dict(payload.get("topic_selection") or {}),
++            **({"selected_source": history_source,
++                "ambiguous": "Which earlier remark" in quoted} if quoted else {}),
++        },
+         "requested_information": kind,
+         "subject": subject,
+         "knowledge_posture": posture,
+@@ -404,6 +427,9 @@
+     line = str(record.get("player_line") or "").strip()
+     if record.get("reuse_prior_speech") and line:
+         return line, "dialogue_authority.reuse_prior_speech"
++    grounding = social.get("topic_selection") or {}
++    if grounding.get("ambiguous"):
++        return f'{name} says, "Which subject do you mean?"', "social.topic_selection.ambiguous"
+     topic = social.get("topic_revealed")
+     if isinstance(topic, Mapping):
+         text = str(topic.get("text") or topic.get("clue_text") or "").strip()

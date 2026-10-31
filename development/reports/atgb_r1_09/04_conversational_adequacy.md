@@ -1,0 +1,7 @@
+# 04 — Conversational Adequacy
+
+Current correction recognition, communication-mode decision, evidence selection, response adequacy and naturalness are NOT EVALUATED for L1/L2/L3. There is no new exchange to score. Phase A diagnostics are structural/environment evidence only (evidence_scope: structural_only), not semantic behavioral evidence.
+
+Historical R1-05 L1/L2 and R1-03 L3 understood people versus weather but chose clarification and no public evidence, giving redundant confirmation instead of answering. R1-06 established that relevant public people passages and preceding reply were available in the actual requests. R1-07 updated the existing interpretation guidance to distinguish correction from genuine missing information, answer the corrected question with relevant authorized evidence, and preserve mechanical action authority. Its existing answer branch adds minimal acknowledgment only for supported resolved corrections.
+
+Historical deterministic evidence shows the host can deliver an acknowledgment and public answer with a suitable substituted interpretation. It does not show live model selection. R1-08 submitted the revised guidance but obtained no model output. R1-09 cannot change those conclusions. No broad conversational improvement, independent generalization, reliability rate, naturalness gain or benchmark score is claimed. Judgments remain provisional AI-assisted analysis, not authenticated human scoring; no historical assessments were overwritten.

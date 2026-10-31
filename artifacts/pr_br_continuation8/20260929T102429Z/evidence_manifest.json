@@ -1,0 +1,67 @@
+{
+  "campaign": {
+    "campaign_id": "pr-br-continuation-8",
+    "run_count": 2,
+    "turn_count": 10,
+    "gm_boundary": "live gpt-4.1-mini via /api/chat, isolated storage, 10 completed, 0 aborted, 12 model calls, 2 retries"
+  },
+  "selected_evidence": {
+    "representative_success": {"example_id": "social_t5"},
+    "representative_failure": {"example_id": "social_t1"},
+    "evaluator_disagreement": {"example_id": "social_t2"},
+    "unexpected_unclassified": {"example_id": "explore_t3"},
+    "stress_probe": {"example_id": "explore_t1"}
+  },
+  "examples": [
+    {
+      "example_id": "social_t5",
+      "player_input_classification": ["social_question"],
+      "player_input": "Before I move on, I ask what trouble I should watch for in the next few minutes.",
+      "exact_gm_output": "The gate guard names the missing patrol, bandit talk on the northwest mud track, delays, and tighter scrutiny.",
+      "semantic_result": "PASS",
+      "human_review": {"status": "PASS", "rationale": "The trouble question is answered and the model text survived."},
+      "evaluator_disagreement": {"present": false},
+      "source_artifact_path": "artifacts/pr_br_continuation8/20260929T102429Z/transcript.md"
+    },
+    {
+      "example_id": "social_t1",
+      "player_input_classification": ["social_question"],
+      "player_input": "I look for someone on duty and ask what a traveler has to do to pass the gate tonight.",
+      "exact_gm_output": "You find no such thing among what is actually present. The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "semantic_result": "FAIL",
+      "human_review": {"status": "FAIL", "rationale": "Contract target was the object duty. A serjeant answer about papers, toll, and inspection was replaced."},
+      "evaluator_disagreement": {"present": false},
+      "source_artifact_path": "artifacts/pr_br_continuation8/20260929T102429Z/turns.json"
+    },
+    {
+      "example_id": "social_t2",
+      "player_input_classification": ["social_followup"],
+      "player_input": "I ask them to name the actual snag, and who can deal with it.",
+      "exact_gm_output": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+      "semantic_result": "PASS",
+      "human_review": {"status": "FAIL", "rationale": "The model named the missing patrol and the guard captain. The final line does not. Evaluator PASS is false."},
+      "evaluator_disagreement": {"present": true},
+      "source_artifact_path": "artifacts/pr_br_continuation8/20260929T102429Z/turns.json"
+    },
+    {
+      "example_id": "explore_t1",
+      "player_input_classification": ["explore"],
+      "player_input": "I take in the yard and walk toward the nearest ordinary thing a traveler could look at or use.",
+      "exact_gm_output": "The reference cannot be identified clearly enough to resolve without clarification.",
+      "semantic_result": "PASS",
+      "human_review": {"status": "FAIL", "rationale": "The model chose the notice board. The final line asks for a referent the player did not need to name."},
+      "evaluator_disagreement": {"present": true},
+      "source_artifact_path": "artifacts/pr_br_continuation8/20260929T102429Z/turns.json"
+    },
+    {
+      "example_id": "explore_t3",
+      "player_input_classification": ["action"],
+      "player_input": "I try the simplest ordinary use, without forcing or breaking anything.",
+      "exact_gm_output": "Inspecting the notice board again, you find no indication of practical devices or tools meant for public use here.",
+      "semantic_result": "PASS",
+      "human_review": {"status": "FAIL", "rationale": "The first model call had the player read the board. An echo retry replaced that with a refusal."},
+      "evaluator_disagreement": {"present": true},
+      "source_artifact_path": "artifacts/pr_br_continuation8/20260929T102429Z/turns.json"
+    }
+  ]
+}

@@ -1,0 +1,1005 @@
+[
+  {
+    "conversation": "primary",
+    "turn": 1,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 2,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 3,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": null,
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 4,
+    "world_paths": [
+      "/factions",
+      "/world_state/flags/faction_ash_cowl_agenda_advanced",
+      "/world_state/flags/faction_house_verevin_agenda_advanced",
+      "/world_state/flags/faction_ordo_pyric_agenda_advanced"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    }
+  },
+  {
+    "conversation": "primary",
+    "turn": 5,
+    "world_paths": [
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 6,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 7,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 8,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": {
+      "context_equal": true
+    }
+  },
+  {
+    "conversation": "primary",
+    "turn": 9,
+    "world_paths": [
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "north gate left",
+            "text": "Sergeant Mara says, \"I don't know when the north gate is left unattended.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 10,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 11,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 12,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 13,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "north gate left",
+            "text": "Sergeant Mara says, \"I don't know when the north gate is left unattended.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "general"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "revised",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "north gate left",
+            "text": "Sergeant Mara says, \"I don't know when the north gate is left unattended.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 14,
+    "world_paths": [
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "primary",
+    "turn": 15,
+    "world_paths": [
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "revised",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "north gate left",
+            "text": "Sergeant Mara says, \"I don't know when the north gate is left unattended.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "made lantern",
+            "text": "Sergeant Mara says, \"I don't know who made the lantern.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "active",
+            "requested_information": "maker"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for helping me.\"",
+            "canonical": false,
+            "turn": 4,
+            "status": "revised",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "admitted_uncertainty",
+            "subject": "north gate left",
+            "text": "Sergeant Mara says, \"I don't know when the north gate is left unattended.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "general"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Sergeant Mara says, \"I can't promise you a reward for that.\"",
+            "canonical": false,
+            "turn": 6,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "sergeant_mara",
+            "kind": "opinion",
+            "subject": "still evening",
+            "text": "Sergeant Mara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 8,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    }
+  },
+  {
+    "conversation": "secondary",
+    "turn": 1,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 2,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 3,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 4,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": null,
+        "after": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    }
+  },
+  {
+    "conversation": "secondary",
+    "turn": 5,
+    "world_paths": [
+      "/factions",
+      "/world_state/flags/faction_ash_cowl_agenda_advanced",
+      "/world_state/flags/faction_house_verevin_agenda_advanced",
+      "/world_state/flags/faction_ordo_pyric_agenda_advanced"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "enjoy evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 6,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "enjoy evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "enjoy evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Keeper Nara says, \"I cannot promise a reward for mending the net.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ]
+      }
+    ],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 7,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 8,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": {
+      "context_equal": true
+    }
+  },
+  {
+    "conversation": "secondary",
+    "turn": 9,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 10,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 11,
+    "world_paths": [],
+    "nonpassive": [],
+    "commitment_diff": [],
+    "save_load": null
+  },
+  {
+    "conversation": "secondary",
+    "turn": 12,
+    "world_paths": [
+      "/event_log",
+      "/factions"
+    ],
+    "nonpassive": [],
+    "commitment_diff": [
+      {
+        "path": "",
+        "before": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "enjoy evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Keeper Nara says, \"I cannot promise a reward for mending the net.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "promise"
+          }
+        ],
+        "after": [
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "morning evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 2,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "enjoy evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "opinion"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "refusal",
+            "subject": "reward",
+            "text": "Keeper Nara says, \"I cannot promise a reward for mending the net.\"",
+            "canonical": false,
+            "turn": 3,
+            "status": "active",
+            "requested_information": "promise"
+          },
+          {
+            "npc_id": "keeper_nara",
+            "kind": "opinion",
+            "subject": "the evening",
+            "text": "Keeper Nara says, \"I prefer the evening.\"",
+            "canonical": false,
+            "turn": 5,
+            "status": "active",
+            "requested_information": "opinion"
+          }
+        ]
+      }
+    ],
+    "save_load": {
+      "context_equal": true
+    }
+  }
+]

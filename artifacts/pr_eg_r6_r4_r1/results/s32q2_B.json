@@ -1,0 +1,51 @@
+{
+  "case_id": "s32q2",
+  "family": "s32",
+  "partition": "holdout",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "ee8616c86c0a5c148ed35d31dbdc1ceb87787ddc275aaf984c04bd270ac2e8e4",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "the pilots' compact"
+    ],
+    "qualifiers": [
+      "after three readings",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s32"
+    ],
+    "answered_arguments": [
+      "instrument"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that the harbor assembly ratified the pilots' compact after three readings, directly answering the question about the instrument ratified."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

@@ -1,0 +1,51 @@
+{
+  "case_id": "s05q0",
+  "family": "s05",
+  "partition": "holdout",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "5ea62f8e28ac50b00dda87853b3ba987441bf7af5fbc45c95239d56003838ce4",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The river council"
+    ],
+    "qualifiers": [
+      "if the water falls",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s05"
+    ],
+    "answered_arguments": [
+      "agent"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that The river council will open the sluice tomorrow at noon if the water falls, which directly answers who plans to open the sluice."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": "F05"
+  },
+  "provider_error": null
+}

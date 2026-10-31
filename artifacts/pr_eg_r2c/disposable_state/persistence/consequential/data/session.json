@@ -1,0 +1,55 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:01:49.798934Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:01:49.798934Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Do guards watch the north gate?",
+          "delivered_text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+          "subject": "guards north gate",
+          "requested_information": "general",
+          "supplied_text": "Word is, guards watch the north gate throughout the night.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "social.topic_revealed:fact",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    }
+  },
+  "integrity": {
+    "payload_sha256": "1e2ccaa050c07470fdd070a8583cf1cd4784469f2e9426d394795fbed696530e",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

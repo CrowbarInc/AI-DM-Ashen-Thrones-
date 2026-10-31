@@ -1,0 +1,16 @@
+{
+  "case_id": "case_006_valid_npc_ignorance",
+  "category": "positive.valid_npc_ignorance",
+  "player_input": "Who stole the relic from the chapel?",
+  "prior_context": "The stablehand was not present and reasonably lacks this information.",
+  "gm_response": "The stablehand shakes his head. \"Couldn't tell you. I wasn't there.\"",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "The NPC coherently communicates ignorance rather than ignoring the question.",
+  "provenance": {"kind": "manually_authored_positive_control"},
+  "synthetic": true,
+  "action_type": "question"
+}

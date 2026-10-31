@@ -1,0 +1,14 @@
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_cc_social_reply_reconciliation.py tests\test_social.py::test_question_without_topic_marks_consequential_unknown_and_non_invention_hint tests\test_dialogue_social_plan.py tests\test_dialogue_social_plan_block_x_contract_pins.py tests\test_dialogue_social_plan_block_y.py -q --tb=short --basetemp=codex_pytest_tmp_prcd_focused
+RESULT: 36 passed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_social_question_relevance_answer_selection.py -k "not http" -q --tb=short --basetemp=codex_pytest_tmp_prcd_social_no_http
+RESULT: 19 passed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_social.py -q --tb=short --basetemp=codex_pytest_tmp_prcd_social_resolver
+RESULT: 31 passed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_by_narration_only_retry_contract.py tests\test_pr_bw_narration_only_envelope.py -q --tb=short --basetemp=codex_pytest_tmp_prcd_bybw
+RESULT: 27 passed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_br_resolution_contract.py::test_consequential_information_does_not_enter_incidental_authority tests\test_pr_br_authority_reconciliation.py::test_incidental_structured_narration_can_seal_without_a_consequential_claim -q --tb=short --basetemp=codex_pytest_tmp_prcd_authority_focus
+RESULT: 2 passed

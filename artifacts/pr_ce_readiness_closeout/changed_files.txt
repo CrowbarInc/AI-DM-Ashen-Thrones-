@@ -1,0 +1,28 @@
+PR-CE edits in this pass
+
+game/social.py
+  Extended the existing _HARMLESS_SUBJECTIVE_REPLY_RE with ordinary preference and habit forms.
+  Extended _CONSEQUENTIAL_SOCIAL_INFO_RE so bare "murder" stays consequential before the subjective expression is considered.
+  The file also contains earlier uncommitted social-reply work. This pass did not rework that logic.
+
+tests/test_pr_ce_subjective_preference_classification.py
+  New. Positive controls, negative controls, and the offline PR-CA replay.
+
+artifacts/pr_ce_readiness_closeout/
+  PR-CE_closeout_report.md
+  PR-CE_testclient_environment.md
+  PR-CE_testclient_minimal_reproduction.md
+  PR-CE_testclient_repair.md
+  PR-CE_subjective_classifier_audit.md
+  PR-CE_subjective_classifier_tests.json
+  PR-CE_PRCA_replay.json
+  PR-CE_authority_integrity.md
+  focused_tests.txt
+  broad_tests.txt
+  changed_files.txt
+
+handoff/CURRENT_REVIEW.md
+handoff/REVIEW_MANIFEST.json
+handoff/CURRENT_REVIEW.zip
+
+No production event-loop change. No conftest change. No live provider call.

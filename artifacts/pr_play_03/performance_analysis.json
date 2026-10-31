@@ -1,0 +1,251 @@
+{
+  "original_ledger_completed": {
+    "event": "completed",
+    "version": "ATGB-03B-1",
+    "run_id": "bf3a33164a1c4e19a3d60795a71eee6d",
+    "attempt_id": "a493ad2dca4542dbb1c22e62bc5e0718",
+    "purpose": "primary_turn",
+    "owner": "gm.call_gpt",
+    "configured_model": "gpt-4.1-mini",
+    "admitted_at": "2026-10-27T00:21:34.634922+00:00",
+    "time": "2026-10-27T00:21:41.033279+00:00",
+    "sequence": 1,
+    "admission": "admitted",
+    "budget_remaining": 5,
+    "sdk_retries": 0,
+    "host_retries": "disabled",
+    "sent": true,
+    "request_id": "resp_005b8827b94f8a0e006adfee9064a087d28e248fb4cd7ea1f7",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 26593,
+    "output_tokens": 600,
+    "total_tokens": 27193,
+    "usage_consistent": true,
+    "refusal": null,
+    "completion_status": "completed",
+    "dispatch_attempted": true,
+    "latency_ms": 5364.341
+  },
+  "original_latency_ms": {
+    "intent_classification": 0,
+    "engine_resolution": 1,
+    "prompt_construction": 25,
+    "gpt_call": 6426,
+    "retry_loop_total": 0,
+    "final_emission_gate": 0,
+    "fallback_repair": 2,
+    "total_turn": 6538
+  },
+  "warning": "completion_status is host accounting status, NOT provider status or finish_reason",
+  "offline_reconstructed_request": {
+    "api_fields": [
+      "model",
+      "input",
+      "max_output_tokens"
+    ],
+    "max_output_tokens": 600,
+    "system_chars": 9564,
+    "payload_chars": 96588,
+    "top_level_char_contributors": [
+      {
+        "key": "response_policy",
+        "chars": 21236
+      },
+      {
+        "key": "instructions",
+        "chars": 14433
+      },
+      {
+        "key": "gm_resolution_decision",
+        "chars": 10638
+      },
+      {
+        "key": "turn_packet",
+        "chars": 8654
+      },
+      {
+        "key": "decision_facing_answer_recipe",
+        "chars": 7031
+      },
+      {
+        "key": "narrative_plan",
+        "chars": 6757
+      },
+      {
+        "key": "scene",
+        "chars": 4140
+      },
+      {
+        "key": "opening_scene_realization",
+        "chars": 3538
+      },
+      {
+        "key": "referent_tracking",
+        "chars": 3198
+      },
+      {
+        "key": "dialogue_social_plan",
+        "chars": 2245
+      },
+      {
+        "key": "mechanical_resolution",
+        "chars": 1406
+      },
+      {
+        "key": "speaker_selection",
+        "chars": 1142
+      },
+      {
+        "key": "character",
+        "chars": 1059
+      },
+      {
+        "key": "campaign",
+        "chars": 1057
+      },
+      {
+        "key": "scene_state_anchor_contract",
+        "chars": 1028
+      },
+      {
+        "key": "transition",
+        "chars": 814
+      },
+      {
+        "key": "narration_visibility",
+        "chars": 790
+      },
+      {
+        "key": "opening_selector_selected_facts",
+        "chars": 582
+      },
+      {
+        "key": "opening_curated_facts",
+        "chars": 582
+      },
+      {
+        "key": "opening_narration_obligations",
+        "chars": 451
+      },
+      {
+        "key": "narration_obligations",
+        "chars": 401
+      },
+      {
+        "key": "response_type_contract",
+        "chars": 390
+      },
+      {
+        "key": "resolution_contract",
+        "chars": 364
+      },
+      {
+        "key": "bounded_improvisation",
+        "chars": 359
+      },
+      {
+        "key": "turn_summary",
+        "chars": 358
+      },
+      {
+        "key": "world",
+        "chars": 349
+      },
+      {
+        "key": "session",
+        "chars": 340
+      },
+      {
+        "key": "lead_context",
+        "chars": 337
+      },
+      {
+        "key": "interlocutor_lead_context",
+        "chars": 270
+      },
+      {
+        "key": "interaction_continuity",
+        "chars": 230
+      },
+      {
+        "key": "player_expression_contract",
+        "chars": 210
+      },
+      {
+        "key": "world_progression_summary",
+        "chars": 200
+      },
+      {
+        "key": "social_context",
+        "chars": 175
+      },
+      {
+        "key": "first_mention_contract",
+        "chars": 159
+      },
+      {
+        "key": "scene_advancement",
+        "chars": 99
+      },
+      {
+        "key": "active_topic_anchor",
+        "chars": 75
+      },
+      {
+        "key": "clues",
+        "chars": 63
+      },
+      {
+        "key": "world_state",
+        "chars": 51
+      },
+      {
+        "key": "opening_selector_source_used",
+        "chars": 20
+      },
+      {
+        "key": "combat",
+        "chars": 20
+      },
+      {
+        "key": "active_interlocutor",
+        "chars": 4
+      },
+      {
+        "key": "follow_up_pressure",
+        "chars": 4
+      },
+      {
+        "key": "uncertainty_hint",
+        "chars": 4
+      },
+      {
+        "key": "opening_inputs_are_curated",
+        "chars": 4
+      },
+      {
+        "key": "discoverable_hinting",
+        "chars": 4
+      },
+      {
+        "key": "recent_log",
+        "chars": 2
+      },
+      {
+        "key": "selected_conversational_memory",
+        "chars": 2
+      },
+      {
+        "key": "player_input",
+        "chars": 2
+      },
+      {
+        "key": "interlocutor_lead_behavior_hints",
+        "chars": 2
+      }
+    ]
+  },
+  "original_request_retained": false,
+  "original_raw_response_retained": false,
+  "provider_finish_reason_retained": false
+}

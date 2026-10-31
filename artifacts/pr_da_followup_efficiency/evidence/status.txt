@@ -1,0 +1,63 @@
+2026-10-10T16:13:50.432625+00:00 PHASE0 RECORDED
+2026-10-10T16:13:50.467351+00:00 PHASE1 RECONSTRUCTED
+2026-10-10T16:13:50.846219+00:00 PHASE2 PREFLIGHT error=Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_da_followup_efficiency\run_probe.py", line 915, in run_chat
+    with TestClient(api.app) as client:
+         ~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\testclient.py", line 699, in __exit__
+    self.exit_stack.close()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 627, in close
+    self.__exit__(None, None, None)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 619, in __exit__
+    raise exc
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 604, in __exit__
+    if cb(*exc_details):
+       ~~^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 482, in _exit_wrapper
+    callback(*args, **kwds)
+    ~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\testclient.py", line 692, in wait_shutdown
+    portal.call(self.wait_shutdown)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\anyio\from_thread.py", line 334, in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\concurrent\futures\_base.py", line 448, in result
+    raise CancelledError()
+concurrent.futures._base.CancelledError
+
+2026-10-10T16:13:50.852346+00:00 STOP interlocutor preflight failed: resolver=social interlocutor_id=None
+2026-10-10T16:15:54.467583+00:00 PHASE0 RECORDED
+2026-10-10T16:15:54.504035+00:00 PHASE1 RECONSTRUCTED
+2026-10-10T16:15:54.839087+00:00 PHASE2 PREFLIGHT error=Traceback (most recent call last):
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_da_followup_efficiency\run_probe.py", line 935, in run_chat
+    with TestClient(api.app) as client:
+         ~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\testclient.py", line 699, in __exit__
+    self.exit_stack.close()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 627, in close
+    self.__exit__(None, None, None)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 619, in __exit__
+    raise exc
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 604, in __exit__
+    if cb(*exc_details):
+       ~~^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\contextlib.py", line 482, in _exit_wrapper
+    callback(*args, **kwds)
+    ~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\starlette\testclient.py", line 692, in wait_shutdown
+    portal.call(self.wait_shutdown)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\anyio\from_thread.py", line 334, in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\concurrent\futures\_base.py", line 448, in result
+    raise CancelledError()
+concurrent.futures._base.CancelledError
+
+2026-10-10T16:15:58.675874+00:00 PHASE5 LIVE http=200 error=None tokens=30282 halt=None
+2026-10-10T16:15:58.725927+00:00 DONE A - LIVE FOLLOW-UP VERIFIED

@@ -1,0 +1,55 @@
+PASS: 36
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_pr_cc_social_reply_reconciliation.py tests\test_social.py::test_question_without_topic_marks_consequential_unknown_and_non_invention_hint tests\test_dialogue_social_plan.py tests\test_dialogue_social_plan_block_x_contract_pins.py tests\test_dialogue_social_plan_block_y.py -q --tb=short --basetemp=codex_pytest_tmp_prcc5
+
+Output:
+....................................                                     [100%]
+
+PASS: 22
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_pr_by_narration_only_retry_contract.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_by
+
+Output:
+......................                                                   [100%]
+
+PASS: 5
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_pr_bw_narration_only_envelope.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_bw
+
+Output:
+.....                                                                    [100%]
+
+PASS: 16
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_bounded_improvisation_authority.py tests\test_pr_br_structured_realization_envelope.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_auth
+
+Output:
+................                                                         [100%]
+
+PASS: 31
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_social.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_social_py
+
+Output:
+...............................                                          [100%]
+
+PASS: 14
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_social_answer_candidate.py tests\test_social_topic_anchor.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_social_anchor
+
+Output:
+..............                                                           [100%]
+
+PASS: 9
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_unauthored_reply_structured_fact_integrity.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_unauth
+
+Output:
+.........                                                                [100%]

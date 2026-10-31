@@ -1,0 +1,63 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "edda",
+      "name": "Edda",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "hymn",
+          "text": "The evening hymn is called the reed hymn.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "candle",
+          "text": "The votive candles are lit at dusk.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "bells",
+          "text": "Edda believes the chapel bells skip the third stroke.",
+          "epistemic": "belief"
+        },
+        {
+          "id": "vow",
+          "text": "The sealed chapel vow is pale vow.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

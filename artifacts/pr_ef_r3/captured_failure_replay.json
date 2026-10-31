@@ -1,0 +1,365 @@
+[
+  {
+    "turn": 26,
+    "player": "I ask the sergeant who owns the lantern.",
+    "historical_response": "That has not been established in the information available to you.",
+    "historical_critical": false,
+    "historical_nonmutating": true,
+    "historical_provider_calls": 1,
+    "communication": {
+      "recipient": "GM",
+      "purpose": "QUESTION",
+      "subject": "ownership of the lantern",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "unresolved_references": [],
+    "action_components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara",
+        "description": "Ask Sergeant Mara who owns the lantern."
+      }
+    ],
+    "clarification_question": "",
+    "public_evidence_keys": [],
+    "eligibility": {
+      "disposition": "ELIGIBLE_FOR_VALIDATION",
+      "execution_authorized": false,
+      "executed": false,
+      "mutated_state": false,
+      "consumes_action": false,
+      "advances_time": false,
+      "creates_npc_response": false,
+      "history_rewritten": false,
+      "history_disposition": "UNCHANGED",
+      "rolls_dice": false,
+      "reveals_hidden_information": false,
+      "engine_submission": {
+        "disposition": "ELIGIBLE_FOR_VALIDATION",
+        "execution_authorized": false,
+        "operation_classes": [
+          "ASK"
+        ],
+        "target_ids": [
+          "sergeant_mara"
+        ],
+        "component_orders": [
+          1
+        ],
+        "compound_transaction": false,
+        "includes_model_text": false,
+        "includes_asserted_premises": false,
+        "includes_requested_outcomes": false
+      },
+      "rejected_identifiers": [],
+      "reasons": [
+        "allowlisted_attempt_awaits_engine_validation"
+      ],
+      "compound_transaction": false,
+      "authoritative_effects": []
+    },
+    "replayed_decision": {
+      "category": "ANSWER",
+      "primary_intention": "I ask the sergeant who owns the lantern.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "That has not been established in the information available to you.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION"
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    }
+  },
+  {
+    "turn": 27,
+    "player": "What does she mean by the road?",
+    "historical_response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\" The street beyond the gate is the north road. That establishes the observation or result; its cause has not been established.",
+    "historical_critical": false,
+    "historical_nonmutating": true,
+    "historical_provider_calls": 1,
+    "communication": {
+      "recipient": "GM",
+      "purpose": "EXPLANATION",
+      "subject": "Meaning of 'the road' as used by Sergeant Mara",
+      "evidence_refs": [
+        "npc_latest_reply",
+        "npc:sergeant_mara:street"
+      ]
+    },
+    "communication_mode": "CLARIFICATION",
+    "interpretation_status": "INTERPRETED",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "unresolved_references": [],
+    "action_components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara",
+        "description": "Ask GM what Sergeant Mara means by 'the road'."
+      }
+    ],
+    "clarification_question": "What does 'the road' refer to in Sergeant Mara's statement?",
+    "public_evidence_keys": [
+      "npc_latest_reply",
+      "npc:sergeant_mara:street"
+    ],
+    "eligibility": {
+      "disposition": "NEEDS_CLARIFICATION",
+      "execution_authorized": false,
+      "executed": false,
+      "mutated_state": false,
+      "consumes_action": false,
+      "advances_time": false,
+      "creates_npc_response": false,
+      "history_rewritten": false,
+      "history_disposition": "UNCHANGED",
+      "rolls_dice": false,
+      "reveals_hidden_information": false,
+      "engine_submission": null,
+      "rejected_identifiers": [],
+      "reasons": [
+        "clarification_or_unresolved_reference"
+      ],
+      "compound_transaction": false,
+      "authoritative_effects": []
+    },
+    "replayed_decision": {
+      "category": "ANSWER",
+      "primary_intention": "What does she mean by the road?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "npc_latest_reply",
+        "npc:sergeant_mara:street"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\" The street beyond the gate is the north road. That establishes the observation or result; its cause has not been established.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "EXPLANATION"
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "not_in_world_action",
+      "communication_mode": "CLARIFICATION"
+    }
+  },
+  {
+    "turn": 31,
+    "player": "Instead, make that a question about the lamp.",
+    "historical_response": "A soot-streaked lantern burns beside the courtyard gate.",
+    "historical_critical": false,
+    "historical_nonmutating": true,
+    "historical_provider_calls": 1,
+    "communication": {
+      "recipient": "GM",
+      "purpose": "CLARIFICATION",
+      "subject": "Question about the lamp",
+      "evidence_refs": [
+        "visible:0"
+      ]
+    },
+    "communication_mode": "CLARIFICATION",
+    "interpretation_status": "INTERPRETED",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "unresolved_references": [],
+    "action_components": [
+      {
+        "operation": "ASK",
+        "target": "courtyard_lantern",
+        "description": "Ask a question about the courtyard lantern."
+      }
+    ],
+    "clarification_question": "",
+    "public_evidence_keys": [
+      "visible:0"
+    ],
+    "eligibility": {
+      "disposition": "NEEDS_CLARIFICATION",
+      "execution_authorized": false,
+      "executed": false,
+      "mutated_state": false,
+      "consumes_action": false,
+      "advances_time": false,
+      "creates_npc_response": false,
+      "history_rewritten": false,
+      "history_disposition": "UNCHANGED",
+      "rolls_dice": false,
+      "reveals_hidden_information": false,
+      "engine_submission": null,
+      "rejected_identifiers": [],
+      "reasons": [
+        "clarification_or_unresolved_reference"
+      ],
+      "compound_transaction": false,
+      "authoritative_effects": []
+    },
+    "replayed_decision": {
+      "category": "ANSWER",
+      "primary_intention": "Instead, make that a question about the lamp.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "visible:0"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "A soot-streaked lantern burns beside the courtyard gate.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION"
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "not_in_world_action",
+      "communication_mode": "CLARIFICATION"
+    }
+  },
+  {
+    "turn": 33,
+    "player": "I ask one of them what happened.",
+    "historical_response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"",
+    "historical_critical": true,
+    "historical_nonmutating": false,
+    "historical_provider_calls": 3,
+    "communication": {
+      "recipient": "NPC",
+      "purpose": "QUESTION",
+      "subject": "what happened to the people in the courtyard",
+      "evidence_refs": []
+    },
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "unresolved_references": [],
+    "action_components": [
+      {
+        "operation": "ASK",
+        "target": "sergeant_mara",
+        "description": "Ask Sergeant Mara what happened"
+      }
+    ],
+    "clarification_question": "",
+    "public_evidence_keys": [],
+    "eligibility": {
+      "disposition": "ELIGIBLE_FOR_VALIDATION",
+      "execution_authorized": false,
+      "executed": false,
+      "mutated_state": false,
+      "consumes_action": false,
+      "advances_time": false,
+      "creates_npc_response": false,
+      "history_rewritten": false,
+      "history_disposition": "UNCHANGED",
+      "rolls_dice": false,
+      "reveals_hidden_information": false,
+      "engine_submission": {
+        "disposition": "ELIGIBLE_FOR_VALIDATION",
+        "execution_authorized": false,
+        "operation_classes": [
+          "ASK"
+        ],
+        "target_ids": [
+          "sergeant_mara"
+        ],
+        "component_orders": [
+          1
+        ],
+        "compound_transaction": false,
+        "includes_model_text": false,
+        "includes_asserted_premises": false,
+        "includes_requested_outcomes": false
+      },
+      "rejected_identifiers": [],
+      "reasons": [
+        "allowlisted_attempt_awaits_engine_validation"
+      ],
+      "compound_transaction": false,
+      "authoritative_effects": []
+    },
+    "replayed_decision": {
+      "category": "EXECUTE",
+      "primary_intention": "Ask Sergeant Mara what happened",
+      "intent_family": "world_operation",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": "sergeant_mara",
+      "proposed_record": "<present>",
+      "missing_information": [],
+      "context_references": [],
+      "requires_authoritative_execution": true,
+      "reason": "single_authoritative_component",
+      "confidence": 0.9,
+      "ambiguity": null,
+      "player_facing_text": "",
+      "context_update": null,
+      "intent_modality": "committed",
+      "secondary_intentions": [],
+      "execution_policy": "",
+      "communication_owner": "NPC",
+      "communication_purpose": "ACTION"
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    }
+  }
+]

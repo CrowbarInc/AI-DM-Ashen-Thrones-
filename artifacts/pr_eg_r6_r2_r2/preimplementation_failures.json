@@ -1,0 +1,3011 @@
+{
+  "classification": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "No, who owns it?",
+    "prior": {
+      "version": 1,
+      "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+      "active_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+      "sequence": 1,
+      "records": [
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_b60e321011b7",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "guards(subject)",
+          "request_proposition": {
+            "predicate": "guards",
+            "predicate_evidence": "guards",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "guards  the east quay  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "source_plan_id": "d04cb1f38c088911505f390b9c4c0964336dbed39716be27892a5b5ecebaef43",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+        "operation": "replace_relationship",
+        "changed_fields": [
+          "predicate",
+          "missing_argument"
+        ],
+        "follow_up_relationship": ""
+      },
+      "request_proposition": {
+        "predicate": "owns",
+        "predicate_evidence": "owns",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "it",
+        "object_evidence": "it",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "guards(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "copper",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "The miller",
+            "subject_evidence": "The miller",
+            "object": "the copper reliquary",
+            "object_evidence": "the copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        },
+        {
+          "source_id": "ivory",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "The miller",
+            "subject_evidence": "The miller",
+            "object": "the ivory compass",
+            "object_evidence": "the ivory compass",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        },
+        {
+          "source_id": "roster",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "Someone",
+            "subject_evidence": "Someone",
+            "object": "the roster",
+            "object_evidence": "the roster",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        },
+        {
+          "source_id": "quay",
+          "proposition": {
+            "predicate": "guards",
+            "predicate_evidence": "guards",
+            "subject": "Mara",
+            "subject_evidence": "Mara",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "subject",
+      "requested_relationship": "owns(subject)",
+      "question_text": "No, who owns it?",
+      "correction_of_prior_question": true,
+      "correction_target": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+      "referenced_prior_proposition": "guards(subject)",
+      "candidate_source_ids": [
+        "copper",
+        "ivory",
+        "roster",
+        "quay"
+      ],
+      "proposed_coverage": [
+        {
+          "source_id": "copper",
+          "coverage": "related_but_nonanswer"
+        },
+        {
+          "source_id": "ivory",
+          "coverage": "related_but_nonanswer"
+        },
+        {
+          "source_id": "roster",
+          "coverage": "related_but_nonanswer"
+        },
+        {
+          "source_id": "quay",
+          "coverage": "related_but_nonanswer"
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.95
+    },
+    "operation": {
+      "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+      "operation": "replace_relationship",
+      "changed_fields": [
+        "predicate",
+        "missing_argument"
+      ],
+      "follow_up_relationship": ""
+    },
+    "target": null,
+    "validation": "unlisted_correction_change",
+    "result": {
+      "request_proposition": {
+        "predicate": "owns",
+        "predicate_evidence": "owns",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "it",
+        "object_evidence": "it",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "guards(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "copper",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "The miller",
+            "subject_evidence": "The miller",
+            "object": "the copper reliquary",
+            "object_evidence": "the copper reliquary",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        },
+        {
+          "source_id": "ivory",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "The miller",
+            "subject_evidence": "The miller",
+            "object": "the ivory compass",
+            "object_evidence": "the ivory compass",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        },
+        {
+          "source_id": "roster",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "Someone",
+            "subject_evidence": "Someone",
+            "object": "the roster",
+            "object_evidence": "the roster",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        },
+        {
+          "source_id": "quay",
+          "proposition": {
+            "predicate": "guards",
+            "predicate_evidence": "guards",
+            "subject": "Mara",
+            "subject_evidence": "Mara",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "operation": "replace_relationship",
+          "changed_fields": [
+            "predicate",
+            "missing_argument"
+          ],
+          "follow_up_relationship": ""
+        },
+        "request_proposition": {
+          "predicate": "owns",
+          "predicate_evidence": "owns",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "it",
+          "object_evidence": "it",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "guards(subject)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "copper",
+            "proposition": {
+              "predicate": "keeps",
+              "predicate_evidence": "keeps",
+              "subject": "The miller",
+              "subject_evidence": "The miller",
+              "object": "the copper reliquary",
+              "object_evidence": "the copper reliquary",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          },
+          {
+            "source_id": "ivory",
+            "proposition": {
+              "predicate": "keeps",
+              "predicate_evidence": "keeps",
+              "subject": "The miller",
+              "subject_evidence": "The miller",
+              "object": "the ivory compass",
+              "object_evidence": "the ivory compass",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          },
+          {
+            "source_id": "roster",
+            "proposition": {
+              "predicate": "keeps",
+              "predicate_evidence": "keeps",
+              "subject": "Someone",
+              "subject_evidence": "Someone",
+              "object": "the roster",
+              "object_evidence": "the roster",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          },
+          {
+            "source_id": "quay",
+            "proposition": {
+              "predicate": "guards",
+              "predicate_evidence": "guards",
+              "subject": "Mara",
+              "subject_evidence": "Mara",
+              "object": "the east quay",
+              "object_evidence": "the east quay",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_reference": "tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "subject",
+        "requested_relationship": "owns(subject)",
+        "question_text": "No, who owns it?",
+        "correction_of_prior_question": true,
+        "correction_target": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+        "referenced_prior_proposition": "guards(subject)",
+        "candidate_source_ids": [
+          "copper",
+          "ivory",
+          "roster",
+          "quay"
+        ],
+        "proposed_coverage": [
+          {
+            "source_id": "copper",
+            "coverage": "related_but_nonanswer"
+          },
+          {
+            "source_id": "ivory",
+            "coverage": "related_but_nonanswer"
+          },
+          {
+            "source_id": "roster",
+            "coverage": "related_but_nonanswer"
+          },
+          {
+            "source_id": "quay",
+            "coverage": "related_but_nonanswer"
+          }
+        ],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.95
+      },
+      "referent_operation": {
+        "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+        "operation": "replace_relationship",
+        "changed_fields": [
+          "predicate",
+          "missing_argument"
+        ],
+        "follow_up_relationship": ""
+      },
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "subject",
+      "requested_relationship": "owns(subject)",
+      "question_text": "No, who owns it?",
+      "correction_of_prior_question": true,
+      "correction_target": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+      "referenced_prior_proposition": "guards(subject)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "correction_target",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Which earlier question do you mean?",
+      "reason": "unlisted_correction_change",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_08e2c07c8146c880006ad3eec7b4f487d297f31b5b4f9d0059",
+        "input_tokens": 2306,
+        "output_tokens": 625,
+        "total_tokens": 2931,
+        "latency_ms": 3879.616,
+        "usage_consistent": true
+      },
+      "latency_ms": 3881.801
+    },
+    "speech": "Which earlier question do you mean?"
+  },
+  "referent_target": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "I meant the ivory compass.",
+    "prior": {
+      "version": 1,
+      "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+      "active_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+      "sequence": 3,
+      "records": [
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:1",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_9b28a74cee70",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "subject",
+          "requested_relationship": "maintains(subject)",
+          "request_proposition": {
+            "predicate": "maintains",
+            "predicate_evidence": "maintains",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "jade compass",
+            "object_evidence": "jade compass",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "maintains  jade compass  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "corrected",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:1",
+          "source_plan_id": "ceb5c633ebeb0e15ef3a6cf389550107cd3b9a4742e91e2a78075964671254ba",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 2,
+          "delivery_id": "rc_686b146284fd",
+          "parent_referent_id": "ffaf3e2298d84c278952c3e207b93f58:1",
+          "revision": 1,
+          "corrected_fields": [
+            "object"
+          ],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "ivory compass",
+          "requested_relationship": "maintains_of(ivory_compass)",
+          "request_proposition": {
+            "predicate": "maintains",
+            "predicate_evidence": "maintains",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "ivory compass",
+            "object_evidence": "ivory compass",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "maintains(subject)",
+            "negated": false
+          },
+          "witness_text": "maintains  ivory compass  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "revision",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+          "source_plan_id": "b3ab3960e80fdfee2769e42a479d6c243a9d4ce67b96a9e49ed06351e7216997",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 3,
+          "delivery_id": "rc_43da7b7a0c13",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  copper reliquary  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+          "source_plan_id": "b0650040f950311939c69406c393857f21df0af4e8bb64974e80da7aa56b138d",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "request_proposition": {
+        "predicate": "maintains",
+        "predicate_evidence": "maintains",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "ivory compass",
+        "object_evidence": "ivory compass",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "maintains(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "",
+      "requested_relationship": "maintains(subject)",
+      "question_text": "I meant the ivory compass.",
+      "correction_of_prior_question": true,
+      "correction_target": "ffaf3e2298d84c278952c3e207b93f58:2",
+      "referenced_prior_proposition": "ffaf3e2298d84c278952c3e207b93f58:2",
+      "candidate_source_ids": [
+        "ivory"
+      ],
+      "proposed_coverage": [
+        {
+          "source_id": "ivory",
+          "coverage": "direct"
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.95
+    },
+    "operation": {
+      "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+      "operation": "replace_object",
+      "changed_fields": [
+        "object"
+      ],
+      "follow_up_relationship": ""
+    },
+    "target": null,
+    "validation": "empty_correction",
+    "result": {
+      "request_proposition": {
+        "predicate": "maintains",
+        "predicate_evidence": "maintains",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "ivory compass",
+        "object_evidence": "ivory compass",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "maintains(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        },
+        "request_proposition": {
+          "predicate": "maintains",
+          "predicate_evidence": "maintains",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "ivory compass",
+          "object_evidence": "ivory compass",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "maintains(subject)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_reference": "tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "",
+        "requested_relationship": "maintains(subject)",
+        "question_text": "I meant the ivory compass.",
+        "correction_of_prior_question": true,
+        "correction_target": "ffaf3e2298d84c278952c3e207b93f58:2",
+        "referenced_prior_proposition": "ffaf3e2298d84c278952c3e207b93f58:2",
+        "candidate_source_ids": [
+          "ivory"
+        ],
+        "proposed_coverage": [
+          {
+            "source_id": "ivory",
+            "coverage": "direct"
+          }
+        ],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.95
+      },
+      "referent_operation": {
+        "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "",
+      "requested_relationship": "maintains(subject)",
+      "question_text": "I meant the ivory compass.",
+      "correction_of_prior_question": true,
+      "correction_target": "ffaf3e2298d84c278952c3e207b93f58:2",
+      "referenced_prior_proposition": "ffaf3e2298d84c278952c3e207b93f58:2",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "correction_target",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Which earlier question do you mean?",
+      "reason": "empty_correction",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0b84588e01a2b4e4006ad3ef07705487d2b75d6c0bd4258444",
+        "input_tokens": 2865,
+        "output_tokens": 292,
+        "total_tokens": 3157,
+        "latency_ms": 2401.665,
+        "usage_consistent": true
+      },
+      "latency_ms": 2403.585
+    },
+    "speech": "Which earlier question do you mean?"
+  },
+  "object_replacement": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "I wasn't asking about the bell. I meant the north road.",
+    "prior": {
+      "version": 1,
+      "conversation_id": "f849e6d12d57406aafde80d230e36364",
+      "active_id": "f849e6d12d57406aafde80d230e36364:5",
+      "sequence": 5,
+      "records": [
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_91d9d8c5acc6",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "subject",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "amber reliquary",
+            "object_evidence": "amber reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  amber reliquary  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "corrected",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "source_plan_id": "4272905a7854ec1458a90f4795a4034a2c2b7d869660e5fea0035f14f6a6a0c0",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:2",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 2,
+          "delivery_id": "rc_0997bbf1c2cd",
+          "parent_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "revision": 1,
+          "corrected_fields": [
+            "object"
+          ],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "copper reliquary",
+          "requested_relationship": "keeps_of(copper_reliquary)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "witness_text": "keeps  copper reliquary  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "revision",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:2",
+          "source_plan_id": "8048a8850f3e47e300d1a4df54ad5d8e40228e05925799f0a0e069f525903946",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 3,
+          "delivery_id": "rc_22f07691e428",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "object",
+          "requested_relationship": "is_called(object)",
+          "request_proposition": {
+            "predicate": "is_called",
+            "predicate_evidence": "called",
+            "subject": "aqueduct",
+            "subject_evidence": "aqueduct",
+            "object": "",
+            "object_evidence": "",
+            "missing_argument": "object",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "called aqueduct   ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "source_plan_id": "317853ddcd3a8d83e435141f15518382231406ce27fabb57ad4d4b949e523157",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:4",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 4,
+          "delivery_id": "rc_4b5886edfe80",
+          "parent_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "aqueduct",
+          "requested_relationship": "who_told_of(aqueduct)",
+          "request_proposition": {
+            "predicate": "who_told",
+            "predicate_evidence": "Who told you",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "aqueduct",
+            "object_evidence": "aqueduct",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "is_called(object)",
+            "negated": false
+          },
+          "witness_text": "Who told you  aqueduct  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "source_attribution",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "source_plan_id": "221e0717e7195d0d222bfbae42f5500d35e5cc00ecce1f3d8817f9f762795501",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 5,
+          "delivery_id": "rc_fe7a74e291d6",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "bell",
+            "object_evidence": "bell",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  bell  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "source_plan_id": "97eccabab1415618f0dcdf4ff483bde7cc343ac6fed95a295cd8f7b279dea804",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "request_proposition": {
+        "predicate": "keeps",
+        "predicate_evidence": "kept",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "north road",
+        "object_evidence": "north road",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "",
+      "requested_relationship": "keeps(subject)",
+      "question_text": "I wasn't asking about the bell. I meant the north road.",
+      "correction_of_prior_question": true,
+      "correction_target": "f849e6d12d57406aafde80d230e36364:5",
+      "referenced_prior_proposition": "keeps(subject)",
+      "candidate_source_ids": [
+        "road"
+      ],
+      "proposed_coverage": [
+        {
+          "source_id": "road",
+          "coverage": "related_but_nonanswer"
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.95
+    },
+    "operation": {
+      "target_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+      "operation": "replace_object",
+      "changed_fields": [
+        "object"
+      ],
+      "follow_up_relationship": ""
+    },
+    "target": "f849e6d12d57406aafde80d230e36364:5",
+    "validation": "no_relevant_source",
+    "result": {
+      "request_proposition": {
+        "predicate": "keeps",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "north road",
+        "object_evidence": "north road",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "keeps(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "source_relevance": [
+        {
+          "source_id": "copper",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "road",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "ferry",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "quay",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "jade",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "ivory",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "roster",
+          "coverage": "unknown"
+        }
+      ],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        },
+        "request_proposition": {
+          "predicate": "keeps",
+          "predicate_evidence": "kept",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "north road",
+          "object_evidence": "north road",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_reference": "tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "",
+        "requested_relationship": "keeps(subject)",
+        "question_text": "I wasn't asking about the bell. I meant the north road.",
+        "correction_of_prior_question": true,
+        "correction_target": "f849e6d12d57406aafde80d230e36364:5",
+        "referenced_prior_proposition": "keeps(subject)",
+        "candidate_source_ids": [
+          "road"
+        ],
+        "proposed_coverage": [
+          {
+            "source_id": "road",
+            "coverage": "related_but_nonanswer"
+          }
+        ],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.95
+      },
+      "referent_operation": {
+        "target_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "bound_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+      "referent_prior_answer_status": "unknown",
+      "referent_eligible": true,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_id": "tavi",
+      "addressee_reference": "Tavi",
+      "requested_subject": "north road",
+      "requested_relationship": "keeps_of(north_road)",
+      "question_text": "I wasn't asking about the bell. I meant the north road.",
+      "correction_of_prior_question": true,
+      "correction_target": "keeps  bell  ",
+      "referenced_prior_proposition": "keeps(subject)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Tavi says, \"I couldn't tell you.\"",
+      "reason": "no_relevant_source",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0fbc1b9b34848705006ad3eea62cb487d28c3a3a711299d0b1",
+        "input_tokens": 3268,
+        "output_tokens": 275,
+        "total_tokens": 3543,
+        "latency_ms": 2227.363,
+        "usage_consistent": true
+      },
+      "latency_ms": 2229.445
+    },
+    "speech": "Tavi says, \"I couldn't tell you.\""
+  },
+  "multi_role": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "I meant what Oren told Mara.",
+    "prior": {
+      "version": 1,
+      "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+      "active_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+      "sequence": 7,
+      "records": [
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_b60e321011b7",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "guards(subject)",
+          "request_proposition": {
+            "predicate": "guards",
+            "predicate_evidence": "guards",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "guards  the east quay  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "source_plan_id": "d04cb1f38c088911505f390b9c4c0964336dbed39716be27892a5b5ecebaef43",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:2",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 2,
+          "delivery_id": "rc_3f1ece320d42",
+          "parent_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "the east quay",
+          "requested_relationship": "explain_of(the_east_quay)",
+          "request_proposition": {
+            "predicate": "explain",
+            "predicate_evidence": "Why?",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "guards(subject)",
+            "negated": false
+          },
+          "witness_text": "Why?  the east quay  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "explanation",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "source_plan_id": "b6d712df9578a2add12ef331c65010dce73f11a03ca685ae217611f6b0aea28e",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 3,
+          "delivery_id": "rc_43da7b7a0c13",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the copper reliquary",
+            "object_evidence": "the copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  the copper reliquary  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "source_plan_id": "b0650040f950311939c69406c393857f21df0af4e8bb64974e80da7aa56b138d",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:4",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 4,
+          "delivery_id": "rc_ad3ba8d46d97",
+          "parent_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "the copper reliquary",
+          "requested_relationship": "keeps_of(the_copper_reliquary)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the copper reliquary",
+            "object_evidence": "the copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "witness_text": "keeps  the copper reliquary  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "speech_clarification",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "source_plan_id": "6d32e6b7167a6fa34538b0904c23a2280934ec6c7d17e9fb984f40af95eec804",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:5",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 5,
+          "delivery_id": "rc_854fb64d531d",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "subject",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the roster",
+            "object_evidence": "the roster",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  the roster  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:5",
+          "source_plan_id": "4c102edebd3a17d7421e758f38470513aea187ede0eed6ec935b21ac77472332",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:6",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 6,
+          "delivery_id": "rc_10d44a800f94",
+          "parent_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:5",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "the roster",
+          "requested_relationship": "told_of(the_roster)",
+          "request_proposition": {
+            "predicate": "told",
+            "predicate_evidence": "told",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the roster",
+            "object_evidence": "the roster",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "witness_text": "told  the roster  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "source_attribution",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:5",
+          "source_plan_id": "967e1e71d64c1f18b010331862c950a94b0dce3570f20fe81c9db08778565fdc",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 7,
+          "delivery_id": "rc_f80231189fef",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [
+            "mara",
+            "oren"
+          ],
+          "requested_subject": "subject",
+          "requested_relationship": "tell(subject)",
+          "request_proposition": {
+            "predicate": "tell",
+            "predicate_evidence": "tell",
+            "subject": "Mara",
+            "subject_evidence": "Mara",
+            "object": "Oren",
+            "object_evidence": "Oren",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "tell Mara Oren  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+          "source_plan_id": "0f76b264ddda6ad030f0187cecd5b0e5909c03f389a59940947b12369eedc069",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+        "operation": "replace_subject",
+        "changed_fields": [
+          "subject"
+        ],
+        "follow_up_relationship": ""
+      },
+      "request_proposition": {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "subject": "Oren",
+        "subject_evidence": "Oren",
+        "object": "Mara",
+        "object_evidence": "Mara",
+        "missing_argument": "",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "tell(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "subject",
+      "requested_relationship": "tell(subject)",
+      "question_text": "I meant what Oren told Mara.",
+      "correction_of_prior_question": true,
+      "correction_target": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+      "referenced_prior_proposition": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.95
+    },
+    "operation": {
+      "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+      "operation": "replace_subject",
+      "changed_fields": [
+        "subject"
+      ],
+      "follow_up_relationship": ""
+    },
+    "target": null,
+    "validation": "unlisted_correction_change",
+    "result": {
+      "request_proposition": {
+        "predicate": "tell",
+        "predicate_evidence": "tell",
+        "subject": "Oren",
+        "subject_evidence": "Oren",
+        "object": "Mara",
+        "object_evidence": "Mara",
+        "missing_argument": "",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "tell(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+          "operation": "replace_subject",
+          "changed_fields": [
+            "subject"
+          ],
+          "follow_up_relationship": ""
+        },
+        "request_proposition": {
+          "predicate": "tell",
+          "predicate_evidence": "tell",
+          "subject": "Oren",
+          "subject_evidence": "Oren",
+          "object": "Mara",
+          "object_evidence": "Mara",
+          "missing_argument": "",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "tell(subject)",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "correction",
+        "addressee_reference": "tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "subject",
+        "requested_relationship": "tell(subject)",
+        "question_text": "I meant what Oren told Mara.",
+        "correction_of_prior_question": true,
+        "correction_target": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+        "referenced_prior_proposition": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.95
+      },
+      "referent_operation": {
+        "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+        "operation": "replace_subject",
+        "changed_fields": [
+          "subject"
+        ],
+        "follow_up_relationship": ""
+      },
+      "referent_eligible": false,
+      "mentioned_entity_ids": [
+        "mara",
+        "oren"
+      ],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "subject",
+      "requested_relationship": "tell(subject)",
+      "question_text": "I meant what Oren told Mara.",
+      "correction_of_prior_question": true,
+      "correction_target": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+      "referenced_prior_proposition": "3bafbbd30dd241a5bd10c8c17c0d61ef:7",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "correction_target",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Which earlier question do you mean?",
+      "reason": "unlisted_correction_change",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_039a9de22f20e3e3006ad3eee672dc87d2ae552207957a17ad",
+        "input_tokens": 3564,
+        "output_tokens": 288,
+        "total_tokens": 3852,
+        "latency_ms": 2671.128,
+        "usage_consistent": true
+      },
+      "latency_ms": 2673.335
+    },
+    "speech": "Which earlier question do you mean?"
+  },
+  "follow_up": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "What did you mean?",
+    "prior": {
+      "version": 1,
+      "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+      "active_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+      "sequence": 3,
+      "records": [
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_b60e321011b7",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "guards(subject)",
+          "request_proposition": {
+            "predicate": "guards",
+            "predicate_evidence": "guards",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "guards  the east quay  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "source_plan_id": "d04cb1f38c088911505f390b9c4c0964336dbed39716be27892a5b5ecebaef43",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:2",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 2,
+          "delivery_id": "rc_3f1ece320d42",
+          "parent_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "the east quay",
+          "requested_relationship": "explain_of(the_east_quay)",
+          "request_proposition": {
+            "predicate": "explain",
+            "predicate_evidence": "Why?",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the east quay",
+            "object_evidence": "the east quay",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "guards(subject)",
+            "negated": false
+          },
+          "witness_text": "Why?  the east quay  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "explanation",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:1",
+          "source_plan_id": "b6d712df9578a2add12ef331c65010dce73f11a03ca685ae217611f6b0aea28e",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "conversation_id": "3bafbbd30dd241a5bd10c8c17c0d61ef",
+          "originating_turn_id": 3,
+          "delivery_id": "rc_43da7b7a0c13",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the copper reliquary",
+            "object_evidence": "the copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  the copper reliquary  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "source_plan_id": "b0650040f950311939c69406c393857f21df0af4e8bb64974e80da7aa56b138d",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "speech_clarification"
+      },
+      "request_proposition": {
+        "predicate": "keeps",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "the copper reliquary",
+        "object_evidence": "the copper reliquary",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "follow_up",
+      "addressee_reference": "tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "",
+      "requested_relationship": "keeps(subject)",
+      "question_text": "What did you mean?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "keeps the copper reliquary",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": true,
+      "interpretation_confidence": 0.9
+    },
+    "operation": {
+      "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+      "operation": "",
+      "changed_fields": [],
+      "follow_up_relationship": "speech_clarification"
+    },
+    "target": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+    "validation": "no_relevant_source",
+    "result": {
+      "request_proposition": {
+        "predicate": "keeps",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "the copper reliquary",
+        "object_evidence": "the copper reliquary",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "keeps(subject)",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "source_relevance": [
+        {
+          "source_id": "copper",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "road",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "ferry",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "quay",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "jade",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "ivory",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "roster",
+          "coverage": "unknown"
+        }
+      ],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": "speech_clarification"
+        },
+        "request_proposition": {
+          "predicate": "keeps",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "the copper reliquary",
+          "object_evidence": "the copper reliquary",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "follow_up",
+        "addressee_reference": "tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "",
+        "requested_relationship": "keeps(subject)",
+        "question_text": "What did you mean?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "keeps the copper reliquary",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": true,
+        "interpretation_confidence": 0.9
+      },
+      "referent_operation": {
+        "target_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "speech_clarification"
+      },
+      "bound_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+      "proposition_referent_id": "3bafbbd30dd241a5bd10c8c17c0d61ef:3",
+      "referent_prior_answer_status": "direct",
+      "referent_eligible": true,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "follow_up",
+      "addressee_id": "tavi",
+      "addressee_reference": "Tavi",
+      "requested_subject": "the copper reliquary",
+      "requested_relationship": "keeps_of(the_copper_reliquary)",
+      "question_text": "What did you mean?",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  the copper reliquary  ",
+      "referenced_prior_proposition": "keeps(subject)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Tavi says, \"I couldn't tell you.\"",
+      "reason": "no_relevant_source",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0b6a66e8472eddad006ad3eed7c53c87d2911591fd3ae48ac5",
+        "input_tokens": 2863,
+        "output_tokens": 242,
+        "total_tokens": 3105,
+        "latency_ms": 2123.262,
+        "usage_consistent": true
+      },
+      "latency_ms": 2124.959
+    },
+    "speech": "Tavi says, \"I just simply couldn't tell you.\""
+  },
+  "false_clarification": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "What did you mean?",
+    "prior": {
+      "version": 1,
+      "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+      "active_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+      "sequence": 5,
+      "records": [
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:1",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_9b28a74cee70",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "subject",
+          "requested_relationship": "maintains(subject)",
+          "request_proposition": {
+            "predicate": "maintains",
+            "predicate_evidence": "maintains",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "jade compass",
+            "object_evidence": "jade compass",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "maintains  jade compass  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "corrected",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:1",
+          "source_plan_id": "ceb5c633ebeb0e15ef3a6cf389550107cd3b9a4742e91e2a78075964671254ba",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 2,
+          "delivery_id": "rc_686b146284fd",
+          "parent_referent_id": "ffaf3e2298d84c278952c3e207b93f58:1",
+          "revision": 1,
+          "corrected_fields": [
+            "object"
+          ],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "ivory compass",
+          "requested_relationship": "maintains_of(ivory_compass)",
+          "request_proposition": {
+            "predicate": "maintains",
+            "predicate_evidence": "maintains",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "ivory compass",
+            "object_evidence": "ivory compass",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "maintains(subject)",
+            "negated": false
+          },
+          "witness_text": "maintains  ivory compass  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "revision",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:2",
+          "source_plan_id": "b3ab3960e80fdfee2769e42a479d6c243a9d4ce67b96a9e49ed06351e7216997",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 3,
+          "delivery_id": "rc_43da7b7a0c13",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  copper reliquary  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+          "source_plan_id": "b0650040f950311939c69406c393857f21df0af4e8bb64974e80da7aa56b138d",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:4",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 4,
+          "delivery_id": "rc_10e33f77e397",
+          "parent_referent_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "copper reliquary",
+          "requested_relationship": "evidence_of(copper_reliquary)",
+          "request_proposition": {
+            "predicate": "evidence",
+            "predicate_evidence": "Why?",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "witness_text": "Why?  copper reliquary  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "evidence",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:3",
+          "source_plan_id": "2c12b1c984035bc8dfdafd143c84d30742d56c3099e9a995dd9b51eb7dbbcb47",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+          "conversation_id": "ffaf3e2298d84c278952c3e207b93f58",
+          "originating_turn_id": 5,
+          "delivery_id": "rc_9cb1fa8f77a5",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "called(subject)",
+          "request_proposition": {
+            "predicate": "called",
+            "predicate_evidence": "called",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "the aqueduct",
+            "object_evidence": "the aqueduct",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "called  the aqueduct  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+          "source_plan_id": "56db563d4929b739d0d666583cf83cb5a9e197f994f1feaf54dab8aaf95ac586",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "speech_clarification"
+      },
+      "request_proposition": {
+        "predicate": "called",
+        "predicate_evidence": "called",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "the aqueduct",
+        "object_evidence": "the aqueduct",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "clarification_response",
+      "addressee_reference": "Tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "subject",
+      "requested_relationship": "called(subject)",
+      "question_text": "What did you mean?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "called the aqueduct",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "proposition",
+      "clarification_needed": true,
+      "interpretation_confidence": 0.95
+    },
+    "operation": {
+      "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+      "operation": "",
+      "changed_fields": [],
+      "follow_up_relationship": "speech_clarification"
+    },
+    "target": null,
+    "validation": "no_pending_clarification",
+    "result": {
+      "request_proposition": {
+        "predicate": "called",
+        "predicate_evidence": "called",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "the aqueduct",
+        "object_evidence": "the aqueduct",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": "speech_clarification"
+        },
+        "request_proposition": {
+          "predicate": "called",
+          "predicate_evidence": "called",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "the aqueduct",
+          "object_evidence": "the aqueduct",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "clarification_response",
+        "addressee_reference": "Tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "subject",
+        "requested_relationship": "called(subject)",
+        "question_text": "What did you mean?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "called the aqueduct",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "proposition",
+        "clarification_needed": true,
+        "interpretation_confidence": 0.95
+      },
+      "referent_operation": {
+        "target_referent_id": "ffaf3e2298d84c278952c3e207b93f58:5",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "speech_clarification"
+      },
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "clarification_response",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "subject",
+      "requested_relationship": "called(subject)",
+      "question_text": "What did you mean?",
+      "correction_of_prior_question": false,
+      "correction_target": "called  the aqueduct  ",
+      "referenced_prior_proposition": "called the aqueduct",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "correction_target",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Which earlier question do you mean?",
+      "reason": "no_pending_clarification",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_09df6cb5546f6e33006ad3ef123d9c87d28ae5641b5bfaf066",
+        "input_tokens": 3289,
+        "output_tokens": 236,
+        "total_tokens": 3525,
+        "latency_ms": 2206.707,
+        "usage_consistent": true
+      },
+      "latency_ms": 2208.448
+    },
+    "speech": "Which earlier question do you mean?"
+  },
+  "partial_overstatement": {
+    "source": "preserved predecessor fresh-provider evidence, not a new reproduction",
+    "player": "Tavi, who keeps the roster?",
+    "prior": {
+      "version": 1,
+      "conversation_id": "f849e6d12d57406aafde80d230e36364",
+      "active_id": "f849e6d12d57406aafde80d230e36364:7",
+      "sequence": 7,
+      "records": [
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 1,
+          "delivery_id": "rc_91d9d8c5acc6",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "subject",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "amber reliquary",
+            "object_evidence": "amber reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  amber reliquary  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "corrected",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "source_plan_id": "4272905a7854ec1458a90f4795a4034a2c2b7d869660e5fea0035f14f6a6a0c0",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:2",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 2,
+          "delivery_id": "rc_0997bbf1c2cd",
+          "parent_referent_id": "f849e6d12d57406aafde80d230e36364:1",
+          "revision": 1,
+          "corrected_fields": [
+            "object"
+          ],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "copper reliquary",
+          "requested_relationship": "keeps_of(copper_reliquary)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "copper reliquary",
+            "object_evidence": "copper reliquary",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "witness_text": "keeps  copper reliquary  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "revision",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:2",
+          "source_plan_id": "8048a8850f3e47e300d1a4df54ad5d8e40228e05925799f0a0e069f525903946",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 3,
+          "delivery_id": "rc_22f07691e428",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "object",
+          "requested_relationship": "is_called(object)",
+          "request_proposition": {
+            "predicate": "is_called",
+            "predicate_evidence": "called",
+            "subject": "aqueduct",
+            "subject_evidence": "aqueduct",
+            "object": "",
+            "object_evidence": "",
+            "missing_argument": "object",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "called aqueduct   ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "source_plan_id": "317853ddcd3a8d83e435141f15518382231406ce27fabb57ad4d4b949e523157",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:4",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 4,
+          "delivery_id": "rc_4b5886edfe80",
+          "parent_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "aqueduct",
+          "requested_relationship": "who_told_of(aqueduct)",
+          "request_proposition": {
+            "predicate": "who_told",
+            "predicate_evidence": "Who told you",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "aqueduct",
+            "object_evidence": "aqueduct",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "is_called(object)",
+            "negated": false
+          },
+          "witness_text": "Who told you  aqueduct  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "original",
+          "focus_status": "archived",
+          "follow_up_relationship": "source_attribution",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:3",
+          "source_plan_id": "221e0717e7195d0d222bfbae42f5500d35e5cc00ecce1f3d8817f9f762795501",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 5,
+          "delivery_id": "rc_fe7a74e291d6",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "",
+          "requested_relationship": "keeps(subject)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "bell",
+            "object_evidence": "bell",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "keeps  bell  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "corrected",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "source_plan_id": "97eccabab1415618f0dcdf4ff483bde7cc343ac6fed95a295cd8f7b279dea804",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:6",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 6,
+          "delivery_id": "rc_7db7eb157209",
+          "parent_referent_id": "f849e6d12d57406aafde80d230e36364:5",
+          "revision": 1,
+          "corrected_fields": [
+            "object"
+          ],
+          "addressee_id": "tavi",
+          "mentioned_entity_ids": [],
+          "requested_subject": "north road",
+          "requested_relationship": "keeps_of(north_road)",
+          "request_proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "",
+            "subject_evidence": "",
+            "object": "north road",
+            "object_evidence": "north road",
+            "missing_argument": "subject",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "keeps(subject)",
+            "negated": false
+          },
+          "witness_text": "keeps  north road  ",
+          "answer_status": "unknown",
+          "epistemic_status": "none",
+          "correction_status": "revision",
+          "focus_status": "superseded",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:6",
+          "source_plan_id": "d9a30fdadeb4b5f5c3142f1ac04e3b5c90e52e482bfea6c2cb45ed8072be2891",
+          "provenance": "host_interpretation",
+          "canonical": false
+        },
+        {
+          "referent_id": "f849e6d12d57406aafde80d230e36364:7",
+          "conversation_id": "f849e6d12d57406aafde80d230e36364",
+          "originating_turn_id": 7,
+          "delivery_id": "rc_9140b2207692",
+          "parent_referent_id": "",
+          "revision": 0,
+          "corrected_fields": [],
+          "addressee_id": "mara",
+          "mentioned_entity_ids": [
+            "oren"
+          ],
+          "requested_subject": "Oren",
+          "requested_relationship": "say_about(object)",
+          "request_proposition": {
+            "predicate": "say_about",
+            "predicate_evidence": "say about",
+            "subject": "Oren",
+            "subject_evidence": "Oren",
+            "object": "road",
+            "object_evidence": "road",
+            "missing_argument": "object",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          },
+          "witness_text": "say about Oren road  ",
+          "answer_status": "direct",
+          "epistemic_status": "npc_knowledge",
+          "correction_status": "original",
+          "focus_status": "active",
+          "follow_up_relationship": "",
+          "proposition_referent_id": "f849e6d12d57406aafde80d230e36364:7",
+          "source_plan_id": "de05bd6fa3ef819d85a3510d6814313a8fa8fac1ca301b0c151e08cec2ac3355",
+          "provenance": "host_interpretation",
+          "canonical": false
+        }
+      ]
+    },
+    "provider_proposal": {
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": ""
+      },
+      "request_proposition": {
+        "predicate": "keeps",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "roster",
+        "object_evidence": "roster",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [
+        {
+          "role": "mentioned_npc",
+          "entity_id": "tavi",
+          "reference": "Tavi",
+          "evidence": "Tavi"
+        }
+      ],
+      "source_propositions": [
+        {
+          "source_id": "roster",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "Someone",
+            "subject_evidence": "Someone",
+            "object": "roster",
+            "object_evidence": "roster",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "information_question",
+      "addressee_reference": "Tavi",
+      "addressee_id": "tavi",
+      "requested_subject": "",
+      "requested_relationship": "keeps(subject)",
+      "question_text": "Tavi, who keeps the roster?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [
+        "roster"
+      ],
+      "proposed_coverage": [
+        {
+          "source_id": "roster",
+          "coverage": "direct"
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.95
+    },
+    "operation": {
+      "target_referent_id": "",
+      "operation": "",
+      "changed_fields": [],
+      "follow_up_relationship": ""
+    },
+    "target": null,
+    "validation": "authorized_direct",
+    "result": {
+      "request_proposition": {
+        "predicate": "keeps",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "roster",
+        "object_evidence": "roster",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [
+        {
+          "role": "mentioned_npc",
+          "entity_id": "tavi",
+          "reference": "Tavi",
+          "evidence": "Tavi"
+        }
+      ],
+      "source_propositions": [
+        {
+          "source_id": "roster",
+          "proposition": {
+            "predicate": "keeps",
+            "predicate_evidence": "keeps",
+            "subject": "Someone",
+            "subject_evidence": "Someone",
+            "object": "roster",
+            "object_evidence": "roster",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "source_relevance": [
+        {
+          "source_id": "copper",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "road",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "ferry",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "quay",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "jade",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "ivory",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "roster",
+          "coverage": "direct"
+        }
+      ],
+      "provider_proposal": {
+        "referent_operation": {
+          "target_referent_id": "",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": ""
+        },
+        "request_proposition": {
+          "predicate": "keeps",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "roster",
+          "object_evidence": "roster",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [
+          {
+            "role": "mentioned_npc",
+            "entity_id": "tavi",
+            "reference": "Tavi",
+            "evidence": "Tavi"
+          }
+        ],
+        "source_propositions": [
+          {
+            "source_id": "roster",
+            "proposition": {
+              "predicate": "keeps",
+              "predicate_evidence": "keeps",
+              "subject": "Someone",
+              "subject_evidence": "Someone",
+              "object": "roster",
+              "object_evidence": "roster",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "plan_version": "pr-eg-r6-r2-r1.1",
+        "conversational_act": "information_question",
+        "addressee_reference": "Tavi",
+        "addressee_id": "tavi",
+        "requested_subject": "",
+        "requested_relationship": "keeps(subject)",
+        "question_text": "Tavi, who keeps the roster?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [
+          "roster"
+        ],
+        "proposed_coverage": [
+          {
+            "source_id": "roster",
+            "coverage": "direct"
+          }
+        ],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.95
+      },
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": ""
+      },
+      "referent_eligible": true,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "information_question",
+      "addressee_id": "tavi",
+      "addressee_reference": "Tavi",
+      "requested_subject": "",
+      "requested_relationship": "keeps(subject)",
+      "question_text": "Tavi, who keeps the roster?",
+      "correction_of_prior_question": false,
+      "correction_target": "say about Oren road  ",
+      "referenced_prior_proposition": "say_about(object)",
+      "selected_source_ids": [
+        "roster"
+      ],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [
+        "roster"
+      ],
+      "answer_sufficiency": "direct",
+      "response_kind": "direct",
+      "ambiguity_type": "",
+      "authorized_text": "Someone keeps the roster.",
+      "epistemic_status": "npc_knowledge",
+      "canonical": false,
+      "host_line": "Tavi mutters, \"Word is, someone keeps the roster.\"",
+      "reason": "authorized_direct",
+      "provider_calls": 1,
+      "provider_usage": {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0998cc3447080838006ad3eeac51f087d2ae2f537a6ddfc96d",
+        "input_tokens": 3517,
+        "output_tokens": 310,
+        "total_tokens": 3827,
+        "latency_ms": 2534.172,
+        "usage_consistent": true
+      },
+      "latency_ms": 2536.958
+    },
+    "speech": "Tavi mutters, \"Word is, someone keeps the roster.\""
+  },
+  "malformed_operation": {
+    "source": "new pre-edit controlled reproduction",
+    "player": "I meant the night ledger.",
+    "prior": {
+      "conversational_context": {
+        "delivered_exchanges": [
+          {
+            "speaker_id": "mara",
+            "speaker_name": "Mara",
+            "addressee": "player",
+            "ownership": "npc",
+            "player_text": "Mara, who keeps the night drum?",
+            "delivered_text": "Mara mutters, \"Word is, the miller keeps the night drum.\"",
+            "subject": "",
+            "topic_id": "",
+            "requested_information": "",
+            "supplied_text": "Word is, the miller keeps the night drum.",
+            "uncertain": false,
+            "commitment": false,
+            "scene_id": "",
+            "turn": 1,
+            "active": true,
+            "authorized_proposition": "Word is, the miller keeps the night drum.",
+            "answer_sufficiency": "",
+            "unified_semantic_plan": {
+              "locked": true,
+              "request_proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "",
+                "subject_evidence": "",
+                "object": "night drum",
+                "object_evidence": "night drum",
+                "missing_argument": "subject",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              },
+              "entity_roles": [],
+              "mentioned_entity_ids": [],
+              "correction_target": "",
+              "referent_operation": {
+                "target_referent_id": "",
+                "operation": "",
+                "changed_fields": [],
+                "follow_up_relationship": ""
+              },
+              "referent_eligible": true,
+              "plan_version": "pr-eg-r6-r2-r1.1",
+              "conversational_act": "information_question",
+              "addressee_id": "mara",
+              "requested_subject": "night drum",
+              "requested_relationship": "keeper_of(night_drum)",
+              "question_text": "Mara, who keeps the night drum?",
+              "selected_source_ids": [
+                "fact"
+              ],
+              "answer_sufficiency": "direct",
+              "response_kind": "direct",
+              "ambiguity_type": "",
+              "referenced_prior_proposition": "",
+              "rejected_source_ids": [],
+              "authorized_text": "The miller keeps the night drum.",
+              "host_line": "Mara mutters, \"Word is, the miller keeps the night drum.\"",
+              "reason": "authorized_direct",
+              "epistemic_status": "npc_knowledge",
+              "canonical": false,
+              "referent_id": "76b01caf19f64928bf423098c390cd87:1"
+            },
+            "proposition_id": "statement:68c075c1c27a",
+            "response_integrity_digest": "65292e79922c9b76ada1a135de5ffbe768ef346bc4f1c2184e3dd42cda0f3289",
+            "authorization_source": "host",
+            "adoption_turn_identity": "",
+            "referent_id": "76b01caf19f64928bf423098c390cd87:1"
+          }
+        ],
+        "question_referents": {
+          "version": 1,
+          "conversation_id": "76b01caf19f64928bf423098c390cd87",
+          "active_id": "76b01caf19f64928bf423098c390cd87:1",
+          "sequence": 1,
+          "records": [
+            {
+              "referent_id": "76b01caf19f64928bf423098c390cd87:1",
+              "conversation_id": "76b01caf19f64928bf423098c390cd87",
+              "originating_turn_id": 1,
+              "delivery_id": "1:Mara, who keeps the night drum?",
+              "parent_referent_id": "",
+              "revision": 0,
+              "corrected_fields": [],
+              "addressee_id": "mara",
+              "mentioned_entity_ids": [],
+              "requested_subject": "night drum",
+              "requested_relationship": "keeper_of(night_drum)",
+              "request_proposition": {
+                "predicate": "keeper",
+                "predicate_evidence": "keeps",
+                "subject": "",
+                "subject_evidence": "",
+                "object": "night drum",
+                "object_evidence": "night drum",
+                "missing_argument": "subject",
+                "temporal": "",
+                "spatial": "",
+                "epistemic": "npc_knowledge",
+                "prior_reference": "",
+                "negated": false
+              },
+              "witness_text": "keeps  night drum  ",
+              "answer_status": "direct",
+              "epistemic_status": "npc_knowledge",
+              "correction_status": "original",
+              "focus_status": "active",
+              "follow_up_relationship": "",
+              "proposition_referent_id": "76b01caf19f64928bf423098c390cd87:1",
+              "source_plan_id": "65292e79922c9b76ada1a135de5ffbe768ef346bc4f1c2184e3dd42cda0f3289",
+              "provenance": "host_interpretation",
+              "canonical": false
+            }
+          ]
+        }
+      }
+    },
+    "provider_proposal": {
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "correction",
+      "addressee_reference": "Mara",
+      "addressee_id": "mara",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Mara, who manages the ferry schedules?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "candidate_source_ids": [],
+      "proposed_coverage": [],
+      "ambiguity_type": "",
+      "clarification_needed": false,
+      "interpretation_confidence": 0.8,
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "referent_operation": {
+        "target_referent_id": "76b01caf19f64928bf423098c390cd87:1",
+        "operation": "unsupported",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      }
+    },
+    "result": {
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r1.1",
+      "conversational_act": "information_question",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "",
+      "requested_relationship": "",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "subject",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I didn't catch what you're asking.",
+      "reason": "invalid_referent_operation",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.1
+    }
+  }
+}

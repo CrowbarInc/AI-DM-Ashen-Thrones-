@@ -1,0 +1,329 @@
+......FFFFFFFFFFFFFFFF.....FFFFFFFF                                      [100%]
+================================== FAILURES ===================================
+______ test_actual_request_contract[Ordinary conversational correction] _______
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+___ test_actual_request_contract[does not itself revise a gameplay action] ____
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+______ test_actual_request_contract[player clarifying their own meaning] ______
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+________ test_actual_request_contract[AI-DM requesting clarification] _________
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+______ test_actual_request_contract[continue the corrected conversation] ______
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+________ test_actual_request_contract[Recover the underlying question] ________
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+_ test_actual_request_contract[Select relevant authorized PUBLIC evidence_refs] _
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+_________ test_actual_request_contract[meaningful ambiguity remains] __________
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+____ test_actual_request_contract[Restricted or unestablished information] ____
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+_______ test_actual_request_contract[actual eligible pending intention] _______
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+__ test_actual_request_contract[no world facts may use empty evidence_refs] ___
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+______ test_actual_request_contract[OTHER for resolved GM conversation] _______
+tests\test_atgb_r1_07_correction_contract.py:43: in test_actual_request_contract
+    _, captured = interpret(monkeypatch, corrected())
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+_ test_supported_corrections[I meant the people, not the weather.-Two astronomers stand by the telescope.] _
+tests\test_atgb_r1_07_correction_contract.py:57: in test_supported_corrections
+    result, _ = interpret(monkeypatch, corrected(["visible:0"]), text=text, scene=scene)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+_ test_supported_corrections[No, I was asking about the violinist.-The violinist wears a blue coat.] _
+tests\test_atgb_r1_07_correction_contract.py:57: in test_supported_corrections
+    result, _ = interpret(monkeypatch, corrected(["visible:0"]), text=text, scene=scene)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+_ test_supported_corrections[I meant her coat's color, not its fabric.-Her coat is blue.] _
+tests\test_atgb_r1_07_correction_contract.py:57: in test_supported_corrections
+    result, _ = interpret(monkeypatch, corrected(["visible:0"]), text=text, scene=scene)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+__________________ test_insufficient_and_restricted_evidence __________________
+tests\test_atgb_r1_07_correction_contract.py:68: in test_insufficient_and_restricted_evidence
+    result, captured = interpret(monkeypatch, corrected(), scene=scene)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+________________ test_no_fact_acknowledgment_needs_no_evidence ________________
+tests\test_atgb_r1_07_correction_contract.py:101: in test_no_fact_acknowledgment_needs_no_evidence
+    result, _ = interpret(monkeypatch, record("WITHDRAWAL"), text="Never mind.")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_r1_07_correction_contract.py:30: in interpret
+    result = live.interpret_production_turn(player_text=text, mode="AUTO", scene=scene, world=world, log=log, session=session)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+game\live_chat_interpretation.py:315: in interpret_production_turn
+    adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+                                                                                                         ^^^^^^^^^^^
+game\live_chat_interpretation.py:149: in _contract
+    from experiments.pr_do.adapter import adapt_interpretation
+E   ModuleNotFoundError: No module named 'experiments'
+__________ test_direct_chat_delivery_and_state_integrity[supported] ___________
+tests\test_atgb_r1_07_correction_contract.py:113: in test_direct_chat_delivery_and_state_integrity
+    from tests.test_pr_ef_gm_authority import seed_scene
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_ef_gm_authority.py:15: in <module>
+    from tests.test_pr_du_player_pipeline import _seed_pr_du_world, _fake_gm_for_resolution
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_du_player_pipeline.py:8: in <module>
+    from experiments.pr_dq.world import (
+E   ModuleNotFoundError: No module named 'experiments'
+_________ test_direct_chat_delivery_and_state_integrity[insufficient] _________
+tests\test_atgb_r1_07_correction_contract.py:113: in test_direct_chat_delivery_and_state_integrity
+    from tests.test_pr_ef_gm_authority import seed_scene
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_ef_gm_authority.py:15: in <module>
+    from tests.test_pr_du_player_pipeline import _seed_pr_du_world, _fake_gm_for_resolution
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_du_player_pipeline.py:8: in <module>
+    from experiments.pr_dq.world import (
+E   ModuleNotFoundError: No module named 'experiments'
+__________ test_direct_chat_delivery_and_state_integrity[restricted] __________
+tests\test_atgb_r1_07_correction_contract.py:113: in test_direct_chat_delivery_and_state_integrity
+    from tests.test_pr_ef_gm_authority import seed_scene
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_ef_gm_authority.py:15: in <module>
+    from tests.test_pr_du_player_pipeline import _seed_pr_du_world, _fake_gm_for_resolution
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_du_player_pipeline.py:8: in <module>
+    from experiments.pr_dq.world import (
+E   ModuleNotFoundError: No module named 'experiments'
+__________ test_direct_chat_delivery_and_state_integrity[ambiguous] ___________
+tests\test_atgb_r1_07_correction_contract.py:113: in test_direct_chat_delivery_and_state_integrity
+    from tests.test_pr_ef_gm_authority import seed_scene
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_ef_gm_authority.py:15: in <module>
+    from tests.test_pr_du_player_pipeline import _seed_pr_du_world, _fake_gm_for_resolution
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_du_player_pipeline.py:8: in <module>
+    from experiments.pr_dq.world import (
+E   ModuleNotFoundError: No module named 'experiments'
+____________ test_saved_failure_replay[atgb_r1_05-L1-traces.json] _____________
+tests\test_atgb_r1_07_correction_contract.py:157: in test_saved_failure_replay
+    before = json.loads((path / "before.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r1_05\\L1\\before.json'
+____________ test_saved_failure_replay[atgb_r1_05-L2-traces.json] _____________
+tests\test_atgb_r1_07_correction_contract.py:157: in test_saved_failure_replay
+    before = json.loads((path / "before.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r1_05\\L2\\before.json'
+_____________ test_saved_failure_replay[atgb_r1_03-L3-trace.json] _____________
+tests\test_atgb_r1_07_correction_contract.py:157: in test_saved_failure_replay
+    before = json.loads((path / "before.json").read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\atgb_r1_03\\L3\\before.json'
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[Ordinary conversational correction]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[does not itself revise a gameplay action]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[player clarifying their own meaning]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[AI-DM requesting clarification]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[continue the corrected conversation]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[Recover the underlying question]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[Select relevant authorized PUBLIC evidence_refs]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[meaningful ambiguity remains]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[Restricted or unestablished information]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[actual eligible pending intention]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[no world facts may use empty evidence_refs]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_actual_request_contract[OTHER for resolved GM conversation]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_supported_corrections[I meant the people, not the weather.-Two astronomers stand by the telescope.]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_supported_corrections[No, I was asking about the violinist.-The violinist wears a blue coat.]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_supported_corrections[I meant her coat's color, not its fabric.-Her coat is blue.]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_insufficient_and_restricted_evidence
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_no_fact_acknowledgment_needs_no_evidence
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_direct_chat_delivery_and_state_integrity[supported]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_direct_chat_delivery_and_state_integrity[insufficient]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_direct_chat_delivery_and_state_integrity[restricted]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_direct_chat_delivery_and_state_integrity[ambiguous]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_saved_failure_replay[atgb_r1_05-L1-traces.json]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_saved_failure_replay[atgb_r1_05-L2-traces.json]
+FAILED tests/test_atgb_r1_07_correction_contract.py::test_saved_failure_replay[atgb_r1_03-L3-trace.json]

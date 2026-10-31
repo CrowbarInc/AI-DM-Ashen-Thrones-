@@ -1,0 +1,22 @@
+{"turn": 1, "strict": null, "pass": true, "critical": false, "response": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A soot-streaked lantern burns beside the courtyard gate. The side gate is barred from the other side. Sergeant Mara looks concerned as she watches the road.", "calls": 1}
+{"turn": 2, "strict": null, "pass": true, "critical": false, "response": "A soot-streaked lantern burns beside the courtyard gate. You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.", "calls": 1}
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+[MODEL ROUTE] purpose=retry_escalation selected=gpt-4.1-mini family=retry_escalation retry=1 escalated=true
+{"turn": 3, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"", "calls": 3}
+[CLUE DISCOVERED] north_road
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+{"turn": 4, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"", "calls": 2}
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+[MODEL ROUTE] purpose=retry_escalation selected=gpt-4.1-mini family=retry_escalation retry=1 escalated=true
+{"turn": 5, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"", "calls": 3}
+{"turn": 6, "strict": null, "pass": true, "critical": false, "response": "The street beyond the gate is the north road.", "calls": 1}
+[CLUE DUPLICATE IGNORED] north_road
+{"turn": 7, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"", "calls": 1}
+[CLUE DISCOVERED] lantern_mark
+{"turn": 8, "strict": null, "pass": true, "critical": false, "response": "A small maker's mark is stamped beneath the lantern.", "calls": 1}
+{"turn": 9, "strict": null, "pass": true, "critical": false, "response": "I've set aside the unexecuted intention. Anything already resolved still stands.", "calls": 1}
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+[MODEL ROUTE] purpose=retry_escalation selected=gpt-4.1-mini family=retry_escalation retry=1 escalated=true
+{"turn": 10, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"", "calls": 3}
+[ENGINE] Scene transition -> waystation_street
+{"turn": 11, "strict": null, "pass": true, "critical": false, "response": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.", "calls": 0}

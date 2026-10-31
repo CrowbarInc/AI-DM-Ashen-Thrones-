@@ -1,0 +1,79 @@
+{
+  "validation": "PR-BR structured claim authority reconciliation",
+  "generated_utc": "2026-10-04T23:22:54.159421+00:00",
+  "decision": "A",
+  "decision_text": "KNOWN SYSTEMIC AUTHORITY BOUNDARIES ARE CLOSED; PROCEED TO FINAL SMALL LIVE PR-BR REVALIDATION",
+  "mode": "deterministic_implementation_only",
+  "gameplay_model_api_calls": 0,
+  "regression": {
+    "passed": 382,
+    "failed": 0
+  },
+  "files": [
+    {
+      "path": "CURRENT_REVIEW.md",
+      "bytes": 13623,
+      "sha256": "fcc485c8ea4141891e9d8ee3f48bbe07c372ed28c4b1e660cc759f2bf1654208"
+    },
+    {
+      "path": "prompt_payload_duplication_todo.md",
+      "bytes": 2040,
+      "sha256": "a4a84d5e75a255371a7cf1002c9be8b506980d5060d5890ace0d2592fd22b992"
+    },
+    {
+      "path": "static_audit.md",
+      "bytes": 3100,
+      "sha256": "414f37468813b24f59ec6e438c9291d8951ac3b0ea2a41b68229b0b4c777559c"
+    },
+    {
+      "path": "regression_results.md",
+      "bytes": 2432,
+      "sha256": "7a6f4a15e881355d185e595264bcd1cce8968dafb9e279654baa4813006656b2"
+    },
+    {
+      "path": "tests/test_pr_br_authority_reconciliation.py",
+      "bytes": 25442,
+      "sha256": "f637ad7442b665b070d93103411d864424e8fcdcd5fba128d1fb410dcb2cbf86"
+    },
+    {
+      "path": "evidence/A1_raw_envelope_attempt_1.json",
+      "bytes": 2627,
+      "sha256": "a5a90471ee4b17092a19ec5d2bd2996ba37dd58df13e3ccb390b4abc6349a496"
+    },
+    {
+      "path": "evidence/A1_raw_envelope_attempt_2.json",
+      "bytes": 669,
+      "sha256": "4f0cfaf70525138b5057cef3922e01253d28834031e1e01ae876105b3c015ab2"
+    },
+    {
+      "path": "evidence/A2_raw_envelope_attempt_1.json",
+      "bytes": 2638,
+      "sha256": "19ad79597b1dfa4043872e43d2c957e1503c4cd80764fdda4cf1d7360750de17"
+    },
+    {
+      "path": "evidence/A2_raw_envelope_attempt_2.json",
+      "bytes": 1534,
+      "sha256": "2c40a8b84267313dc90c7e1d471639dd55f6db1ae0cf216025b1f720114d8aaa"
+    },
+    {
+      "path": "support/game/gm_resolution_decision.py",
+      "bytes": 175674,
+      "sha256": "1b97c7bf073a4a1a77ed84a8b08356c53366bb7da1fe37c3359765f539ebdf2b"
+    },
+    {
+      "path": "support/game/immutable_valid_response.py",
+      "bytes": 62610,
+      "sha256": "24551e77f96eb3758318c01ecf1c5e878c545a1237075db7a9a38e0c45f8032a"
+    },
+    {
+      "path": "support/game/resolution_contract.py",
+      "bytes": 186163,
+      "sha256": "c5d50916511516e48e77cbed7d5ba2e09380f9b41ce397ea453bf29b6a1f1d8e"
+    },
+    {
+      "path": "support/game/gm.py",
+      "bytes": 201294,
+      "sha256": "d2b457ab4eeba008ad82d9376b31f22981b77ab95d980398348f936a91b73716"
+    }
+  ]
+}

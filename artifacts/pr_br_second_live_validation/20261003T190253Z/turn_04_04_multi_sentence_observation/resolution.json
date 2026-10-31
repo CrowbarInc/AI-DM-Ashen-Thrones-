@@ -1,0 +1,451 @@
+{
+  "kind": "investigate",
+  "action_id": "i_look_over_the_timber_wagon",
+  "label": "I look over the timber wagon.",
+  "prompt": "I look over the timber wagon.",
+  "success": null,
+  "resolved_transition": false,
+  "target_scene_id": null,
+  "clue_id": null,
+  "discovered_clues": [],
+  "world_updates": null,
+  "state_changes": {},
+  "hint": "Player looked or investigated without a grounded discoverable target. Narrate only what is already authorized here. Do not invent a clue, lead, person, time, or other evidence merely to keep the search productive.",
+  "metadata": {
+    "referenced_surface_authority": "untargeted",
+    "referenced_surface_target": "",
+    "referenced_surface_existence": false,
+    "referenced_surface_visibility": false,
+    "referenced_surface_inspectability": false,
+    "referenced_surface_interactable_id": "",
+    "referenced_surface_visible_fact": "",
+    "referenced_surface_inspectable_text": "",
+    "skip_unrelated_clue_discovery": true,
+    "resolution_contract": {
+      "contract_id": "rc_3f7f479d7d62",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "inspect",
+      "target_ref": null,
+      "interlocutor_id": null,
+      "conversational_subject": "I look over the timber wagon.",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I look over the timber wagon.",
+      "construction": {
+        "cues": [],
+        "referent_slot": null,
+        "referent_reason": "no_anaphor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "timber_yard",
+            "type": "place",
+            "label": "Ashford timber yard"
+          },
+          {
+            "id": "timber_wagon",
+            "type": "object",
+            "label": "timber wagon"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "inspect",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": null,
+        "canonicalization_attempted": true,
+        "canonical_target_found": false,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "inspect",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "unresolved",
+          "entity_class": "ambiguous_unresolved",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": null,
+          "entity_id": null,
+          "label": null,
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I look over the timber wagon.",
+          "source": "deterministic_fast_path",
+          "primary_operation": "inspect",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "commitment_status": "executed_now",
+        "primary_operation": "inspect",
+        "resolution_subject": "perception",
+        "resolution_subject_coherence": "accepted",
+        "semantic_input_length": 29,
+        "provenance_excerpt": "I look over the timber wagon.",
+        "secondary_operations": [],
+        "requested_addressee": null,
+        "addressee_binding_status": "unresolved"
+      },
+      "retry_preserved": true
+    },
+    "interaction_obligation": {
+      "kind": "inspection",
+      "target": null,
+      "interlocutor_id": null,
+      "subject": null,
+      "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_3f7f479d7d62"
+    },
+    "gm_resolution_decision": {
+      "contract_id": "rc_3f7f479d7d62",
+      "resolution_method": "inspect",
+      "outcome_classification": "established_or_retrieved",
+      "established_fact_refs": [
+        "scene_world_authored_corpus"
+      ],
+      "proposed_facts": [
+        {
+          "text": "The timber wagon's near wheel is missing two spokes.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "timber_wagon",
+            "subject_aliases": [
+              "timber wagon",
+              "wagon",
+              "near wheel",
+              "wheel"
+            ],
+            "relation": "condition",
+            "value": "missing spokes",
+            "value_aliases": [
+              "missing two spokes",
+              "missing spokes",
+              "two spokes"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "The canvas cover on the timber wagon is torn along one seam.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.1",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "wagon_cover",
+            "subject_aliases": [
+              "canvas cover",
+              "cover",
+              "wagon cover"
+            ],
+            "relation": "condition",
+            "value": "torn",
+            "value_aliases": [
+              "torn",
+              "torn along one seam"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "A coil of spare rope sits on the wagon bed.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.2",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        }
+      ],
+      "permitted_state_mutations": [],
+      "persistence_policy": "do_not_persist",
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+      ],
+      "unresolved_consequential_questions": [],
+      "unresolved_qualifiers": [],
+      "answer_relations": [],
+      "authority_algorithm": "source_provenance_v2"
+    },
+    "ordinary_contract_established": true,
+    "semantic_owner": "resolution_contract",
+    "contract_before_resolver": true,
+    "contract_construction_source": "deterministic",
+    "selected_resolver": "exploration",
+    "turn_segmentation": {
+      "declared_action_text": "I look over the timber wagon."
+    },
+    "unknown_legacy_keys": {
+      "noncombat_resolution": {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "investigation",
+        "subkind": "investigate",
+        "authority_domain": "scene_state",
+        "deterministic_resolved": true,
+        "requires_check": false,
+        "check_request": null,
+        "outcome_type": "closed",
+        "success_state": "neutral",
+        "discovered_entities": [],
+        "surfaced_facts": [],
+        "state_changes": {},
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+        "authoritative_outputs": [
+          {
+            "output_kind": "resolution_trace",
+            "source_engine": "game.exploration",
+            "route": "exploration",
+            "engine_action_id": "i_look_over_the_timber_wagon"
+          }
+        ]
+      }
+    },
+    "response_type_contract": {
+      "required_response_type": "action_outcome",
+      "source_route": "exploration",
+      "allow_escalation": false,
+      "escalation_block_reason": "non_hostile_world_action_guard",
+      "strict_target_id": null,
+      "strict_answer_expected": false,
+      "strict_dialogue_expected": false,
+      "action_must_preserve_agency": true,
+      "debug_reasons": [
+        "resolved_world_action_requires_action_outcome",
+        "non_hostile_world_action_guard"
+      ]
+    },
+    "emission_debug": {
+      "dialogue_social_plan": {
+        "version": 1,
+        "applies": false,
+        "speaker_id": null,
+        "speaker_name": null,
+        "speaker_source": "unresolved",
+        "dialogue_intent": null,
+        "reply_kind": "unknown",
+        "pressure_state": "none",
+        "relationship_codes": [
+          "unknown"
+        ],
+        "tone_bounds": [
+          "neutral"
+        ],
+        "prohibited_content_codes": [
+          "no_narrator_override",
+          "no_ooc_instructions",
+          "no_player_agency_override",
+          "no_prompt_text"
+        ],
+        "derivation_codes": [
+          "dialogue_social_plan:v1",
+          "intent:ctir_only",
+          "referent_tracking:consumed",
+          "session_hints:bounded",
+          "speaker:unresolved"
+        ],
+        "validator": {
+          "validated": true,
+          "errors": [],
+          "reject_field_names": [
+            "dialogue",
+            "dialogue_line",
+            "gm_guidance",
+            "instructions",
+            "message",
+            "narration",
+            "player_facing_text",
+            "prompt",
+            "system_prompt",
+            "text"
+          ],
+          "allowed_reply_kinds": [
+            "answer",
+            "explanation",
+            "reaction",
+            "refusal",
+            "unknown"
+          ],
+          "allowed_pressure_states": [
+            "high",
+            "low",
+            "moderate",
+            "none"
+          ],
+          "allowed_tone_codes": [
+            "cold",
+            "deferential",
+            "direct",
+            "evasive",
+            "guarded",
+            "hostile",
+            "neutral",
+            "threatening",
+            "warm"
+          ],
+          "allowed_relationship_codes": [
+            "engagement_engaged",
+            "engagement_focused",
+            "engagement_none",
+            "fear_high",
+            "fear_low",
+            "friendly",
+            "hostile",
+            "neutral",
+            "suspicion_high",
+            "suspicion_low",
+            "trust_high",
+            "trust_low",
+            "unfriendly",
+            "unknown"
+          ],
+          "allowed_speaker_alias_resolution_sources": [
+            "continuity_snapshot",
+            "interaction_continuity_contract",
+            "manual_bundle_override",
+            "referent_tracking"
+          ]
+        },
+        "bounded_session_hints": {
+          "active_interaction_target_id": null,
+          "active_interaction_target_name": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        }
+      },
+      "scene_state_anchor": {
+        "enabled": true,
+        "scene_id": "timber_yard",
+        "counts": {
+          "location": 4,
+          "actor": 2,
+          "player_action": 7
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "interaction_kind": "investigate",
+        "pressure_focus_allowed": true,
+        "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=13 ambient=1"
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      },
+      "selected_conversational_memory": [],
+      "conversational_memory": {
+        "selected_count": 0
+      }
+    }
+  },
+  "world_tick_events": []
+}

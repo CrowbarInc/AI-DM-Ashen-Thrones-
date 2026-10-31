@@ -1,0 +1,7 @@
+PR-BY focused deterministic tests. No model calls.
+
+command: .venv\Scripts\python.exe -m pytest tests/test_pr_by_narration_only_retry_contract.py -q --tb=short
+result: PASS
+22 passed, 0 failed.
+
+Covers T1 initial narration-only contract, T2 baker narration rejection through run_preserve_if_valid, T3 unauthorized_resolution_decision_fact with the PR-BX violation codes, T4 the other hard-validation branches, T5 malformed narration-only output, T6 smuggled declared_claims, T7 P1/P3 structured retries, T8 consequential realization, T9 envelope invariance, and T10 no second semantic classification.

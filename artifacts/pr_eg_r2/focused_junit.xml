@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="27" failures="2" skipped="0" tests="71" time="5.445" timestamp="2026-10-16T21:32:25.189029-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[established_road_name]" time="0.004" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[watched_not_identity]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[watched_reworded]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[partial_patrol_fact]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[forged_lantern_unknown]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[what_troubles_her]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[ordinary_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[opinion_not_canon]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[hidden_password]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[consequential_promise]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[secret_allegiance]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[unresolved_mystery]" time="0.000" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[relationship_not_invented]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[rumor_not_invented]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[background_porter_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_frozen_holdout_dimensions[contradictory_plan_after_prior_topic]" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_identity_topic_does_not_answer_whether_the_road_is_watched" time="0.000" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_prior_topic_does_not_claim_an_authoritative_answer" time="0.000" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_commitment_survives_save_shape_and_is_not_canonical" time="0.001" /><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_chat_unknown_question_skips_narration_and_does_not_invent" time="0.012"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_chat_unknown_question_ski0\\data\\session.json.tmp.78c73172cce9a207' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_chat_unknown_question_ski0\\data\\session.json'">tests\test_pr_eg_dialogue_quality.py:213: in test_chat_unknown_question_skips_narration_and_does_not_invent
+    _seed(tmp_path, monkeypatch)
+tests\test_pr_ed_provider_efficiency.py:32: in _seed
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_chat_unknown_question_ski0\\data\\session.json.tmp.78c73172cce9a207' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_chat_unknown_question_ski0\\data\\session.json'</failure></testcase><testcase classname="tests.test_pr_eg_dialogue_quality" name="test_personal_question_keeps_a_harmless_quote_and_skips_retry" time="0.028" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[immediate_clarification]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[pronoun_followup]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[paraphrase_followup]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[earlier_topic]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[explicit_addressee_change]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[gm_about_npc_statement]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[ordinary_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[repeated_preference]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[conversational_correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[pending_action_correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[executed_undo]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[negotiation_request]" time="0.002" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[unauthorized_promise]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[npc_uncertainty]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[hidden_information]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[absent_npc_reference]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[ambiguous_history]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[save_load_exchange]" time="0.002" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[rejected_narration_not_history]" time="0.001" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_frozen_continuity_holdout[bounded_commitments]" time="0.002" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_personal_ignorance_is_replaced_without_a_retry" time="0.003" /><testcase classname="tests.test_pr_eg_r1_continuity" name="test_followup_quotes_the_delivered_line_without_narration" time="0.010"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_followup_quotes_the_deliv0\\data\\session.json.tmp.a7ca35ce015d0548' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_followup_quotes_the_deliv0\\data\\session.json'">tests\test_pr_eg_r1_continuity.py:350: in test_followup_quotes_the_delivered_line_without_narration
+    _seed(tmp_path, monkeypatch)
+tests\test_pr_ed_provider_efficiency.py:32: in _seed
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_followup_quotes_the_deliv0\\data\\session.json.tmp.a7ca35ce015d0548' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_followup_quotes_the_deliv0\\data\\session.json'</failure></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[explicit_named_ask]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold0\\data\\session.json.tmp.36045cf96aadc794' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold0\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold0\\data\\session.json.tmp.36045cf96aadc794' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold0\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[explicit_role_ask]" time="0.011"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold1\\data\\session.json.tmp.9c234965fbf32515' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold1\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold1\\data\\session.json.tmp.9c234965fbf32515' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold1\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[unique_pronoun]" time="0.011"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold2\\data\\session.json.tmp.5ba87773a124a807' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold2\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold2\\data\\session.json.tmp.5ba87773a124a807' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold2\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_one_of_them_two_npcs]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold3\\data\\session.json.tmp.7680cc9ff3b07da6' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold3\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold3\\data\\session.json.tmp.7680cc9ff3b07da6' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold3\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_one_of_them_one_npc]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold4\\data\\session.json.tmp.a639668bd67045ed' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold4\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold4\\data\\session.json.tmp.a639668bd67045ed' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold4\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[ambiguous_either_guard]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold5\\data\\session.json.tmp.abecaf49af88d56f' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold5\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold5\\data\\session.json.tmp.abecaf49af88d56f' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold5\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[unresolved_someone]" time="0.011"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold6\\data\\session.json.tmp.410250a366712f6a' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold6\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold6\\data\\session.json.tmp.410250a366712f6a' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold6\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[distinguishing_fact]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold7\\data\\session.json.tmp.fbb5ed395b753bdc' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold7\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold7\\data\\session.json.tmp.fbb5ed395b753bdc' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold7\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[no_invented_distinction]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold8\\data\\session.json.tmp.26d0babffb0eff1a' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold8\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold8\\data\\session.json.tmp.26d0babffb0eff1a' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold8\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[gm_about_npc]" time="0.005"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold9\\data\\session.json.tmp.165527e5900ac05f' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold9\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold9\\data\\session.json.tmp.165527e5900ac05f' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold9\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[direct_ask_conflicting_owner]" time="0.008"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold10\\data\\session.json.tmp.0c4bad6ee5c7038f' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold10\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold10\\data\\session.json.tmp.0c4bad6ee5c7038f' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold10\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[npc_followup]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold11\\data\\session.json.tmp.8957592d7b86815c' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold11\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold11\\data\\session.json.tmp.8957592d7b86815c' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold11\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[gm_clarification_of_npc]" time="0.007"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold12\\data\\session.json.tmp.bbe2388fd9a21113' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold12\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold12\\data\\session.json.tmp.bbe2388fd9a21113' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold12\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_pending]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold13\\data\\session.json.tmp.fea4ea9ba2af270b' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold13\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold13\\data\\session.json.tmp.fea4ea9ba2af270b' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold13\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_already_executed]" time="0.011"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold14\\data\\session.json.tmp.bef07bcce28c3444' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold14\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold14\\data\\session.json.tmp.bef07bcce28c3444' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold14\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[correction_nothing_pending]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold15\\data\\session.json.tmp.da163dbd711ecd33' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold15\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold15\\data\\session.json.tmp.da163dbd711ecd33' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold15\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_single_candidate]" time="0.012"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold16\\data\\session.json.tmp.ee13a7d9edd4bc40' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold16\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold16\\data\\session.json.tmp.ee13a7d9edd4bc40' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold16\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_without_proposal]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold17\\data\\session.json.tmp.bd3eb2545777a00c' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold17\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold17\\data\\session.json.tmp.bd3eb2545777a00c' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold17\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[confirm_among_many]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold18\\data\\session.json.tmp.fbad22f93221a174' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold18\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold18\\data\\session.json.tmp.fbad22f93221a174' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold18\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[withdrawal]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold19\\data\\session.json.tmp.2468892c45854ec9' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold19\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold19\\data\\session.json.tmp.2468892c45854ec9' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold19\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[mixed_ask_then_leave]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold20\\data\\session.json.tmp.fbdf345a66d410df' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold20\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold20\\data\\session.json.tmp.fbdf345a66d410df' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold20\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[conditional_gate]" time="0.008"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold21\\data\\session.json.tmp.4362c838860d76c7' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold21\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold21\\data\\session.json.tmp.4362c838860d76c7' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold21\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[incidental_glance]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold22\\data\\session.json.tmp.3d59f6c20b9e4fd5' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold22\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold22\\data\\session.json.tmp.3d59f6c20b9e4fd5' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold22\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[provider_no_target]" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold23\\data\\session.json.tmp.634539d311386100' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold23\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold23\\data\\session.json.tmp.634539d311386100' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold23\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_frozen_authorization_holdout[save_load_pending]" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold24\\data\\session.json.tmp.e5146063805dabb2' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold24\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold24\\data\\session.json.tmp.e5146063805dabb2' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_frozen_authorization_hold24\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_determined_nonresolution_skips_narration_and_characterization_does_not" time="0.001" /><testcase classname="tests.test_pr_ef_r4_authorization" name="test_third_person_question_is_not_an_active_npc_continuation" time="0.010"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_third_person_question_is_0\\data\\session.json.tmp.5ccb199946345fcf' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_third_person_question_is_0\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_third_person_question_is_0\\data\\session.json.tmp.5ccb199946345fcf' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_third_person_question_is_0\\data\\session.json'</error></testcase><testcase classname="tests.test_pr_ef_r4_authorization" name="test_provider_id_does_not_override_unresolved_lexical_addressee" time="0.009"><error message="failed on setup with &quot;PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_provider_id_does_not_over0\\data\\session.json.tmp.a2bd26f120605057' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_provider_id_does_not_over0\\data\\session.json'&quot;">tests\test_pr_ef_r4_authorization.py:59: in campaign
+    seed_scene(tmp_path, monkeypatch)
+tests\test_pr_ef_gm_authority.py:32: in seed_scene
+    _seed_pr_du_world(tmp_path, monkeypatch)
+tests\test_pr_du_player_pipeline.py:34: in _seed_pr_du_world
+    storage.save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_provider_id_does_not_over0\\data\\session.json.tmp.a2bd26f120605057' -&gt; 'C:\\Users\\Master Mandalcio\\AppData\\Local\\Packages\\sandbox.{8623003b-e4bb-4c1e-bb89-1e7b4e8feeda}\\AC\\Temp\\pytest-of-Master Mandalcio\\pytest-0\\test_provider_id_does_not_over0\\data\\session.json'</error></testcase></testsuite></testsuites>

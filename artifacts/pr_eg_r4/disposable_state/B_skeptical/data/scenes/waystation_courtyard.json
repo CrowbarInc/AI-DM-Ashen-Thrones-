@@ -1,0 +1,36 @@
+{
+  "scene": {
+    "id": "waystation_courtyard",
+    "location": "Harbor gate office",
+    "summary": "A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.",
+    "visible_facts": [
+      "A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door."
+    ],
+    "interactables": [
+      {
+        "id": "courtyard_lantern",
+        "label": "courtyard lantern",
+        "type": "examine",
+        "description": "A soot-streaked lantern burns beside the courtyard gate.",
+        "reveals_clue": "lantern_mark"
+      }
+    ],
+    "exits": [
+      {
+        "id": "courtyard_gate",
+        "label": "Courtyard gate",
+        "target_scene_id": "waystation_street",
+        "aliases": [
+          "gate",
+          "courtyard gate"
+        ]
+      }
+    ],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "actions": [],
+    "objects": [],
+    "discovered_clues": [],
+    "runtime_entities": []
+  }
+}

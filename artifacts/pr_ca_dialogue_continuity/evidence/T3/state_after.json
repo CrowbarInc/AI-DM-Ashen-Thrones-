@@ -1,0 +1,176 @@
+{
+  "temporal": {
+    "gm_inferences": [
+      {
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "inferred"
+        },
+        "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+        "authority": "observation",
+        "provenance": "gm_inference",
+        "epistemic_status": "inferred",
+        "relation_kind": "epistemic_status",
+        "scene_id": "bread_stall",
+        "source_turn": 4
+      }
+    ],
+    "player_hypotheses": [],
+    "accepted_incidentals": [
+      {
+        "semantic_identity": {},
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+        "authority": "bounded_incidental",
+        "provenance": "bounded_incidental",
+        "epistemic_status": "",
+        "relation_kind": "ordinary_predicate",
+        "scene_id": "bread_stall",
+        "source_turn": 2
+      },
+      {
+        "semantic_identity": {},
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+        "authority": "bounded_incidental",
+        "provenance": "bounded_incidental",
+        "epistemic_status": "",
+        "relation_kind": "ordinary_predicate",
+        "scene_id": "bread_stall",
+        "source_turn": 4
+      }
+    ],
+    "rejected_consequential": [],
+    "active_claim": {
+      "id": "claim_5d4455409b",
+      "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+      "kind": "claim",
+      "scene_id": "bread_stall",
+      "turn_index": 4,
+      "source": "gm_inference",
+      "epistemic_status": "inferred"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "bread_stall",
+      "active_interlocutor": {
+        "id": "baker",
+        "label": "Baker",
+        "kind": "interlocutor",
+        "scene_id": "bread_stall",
+        "turn_index": 4,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "claim_5d4455409b",
+        "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+        "kind": "claim",
+        "scene_id": "bread_stall",
+        "turn_index": 4,
+        "source": "gm_inference",
+        "epistemic_status": "inferred"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_d9723da53bd1"
+    },
+    "turn_counter": 4,
+    "active_scene_id": "bread_stall"
+  },
+  "scene": {
+    "id": "bread_stall",
+    "location": "Bread stall",
+    "summary": "A baker stands at a bread stall.",
+    "visible_facts": [
+      "A baker stands beside loaves at a bread stall."
+    ],
+    "hidden_facts": [],
+    "discoverable_clues": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [],
+    "addressables": [
+      {
+        "id": "baker",
+        "name": "Baker",
+        "scene_id": "bread_stall",
+        "kind": "npc",
+        "addressable": true,
+        "address_priority": 0,
+        "address_roles": [
+          "baker",
+          "vendor"
+        ],
+        "aliases": [
+          "baker"
+        ]
+      }
+    ]
+  },
+  "world": {
+    "npcs": [
+      {
+        "id": "baker",
+        "name": "Baker",
+        "location": "bread_stall",
+        "topics": [],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "bread_stall",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 5,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 3,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 5,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 3,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 4,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 3,
+        "assets": []
+      }
+    ],
+    "clues": {},
+    "world_flags": [],
+    "assets": []
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "http": 0,
+  "no_secret": 0,
+  "sealed": 0,
+  "exact": 0,
+  "history_exact": 0,
+  "canonical": 0,
+  "no_secret_clue": 0,
+  "reload": 0,
+  "primary_turns": 120,
+  "supplement_turns": 29,
+  "restart_checks": {
+    "loaded_identity": true,
+    "http": true,
+    "parent": true,
+    "revision": true,
+    "subject": true,
+    "sealed": true,
+    "history_exact": true
+  },
+  "limitations": "Canonical check compares the predecessor selected NPC/topic/faction/location/HP/combat projection, not arbitrary whole-state equality. Clue check detects fixture protected values, supplemented by unchanged disclosure/provenance regression tests. These finite observations do not prove unrestricted semantic entailment or all possible unauthorized discoveries."
+}

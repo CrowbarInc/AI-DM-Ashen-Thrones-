@@ -1,0 +1,6 @@
+{
+  "reproduction": ".venv/Scripts/python.exe artifacts/pr_play_03/reproduce.py",
+  "analysis": ".venv/Scripts/python.exe artifacts/pr_play_03/analyze.py",
+  "existing_tests": "ASHEN_DISABLE_PROVIDER_CALLS=1; ASHEN_DATA_DIR=development/tmp/pr_play_03/pytest_data; .venv/Scripts/python.exe -m pytest tests/test_pr_br_structured_realization_envelope.py tests/test_pr_bw_narration_only_envelope.py tests/test_pr_by_narration_only_retry_contract.py -q --tb=short --basetemp development/tmp/pr_play_03/pytest --junitxml artifacts/pr_play_03/existing_tests.xml",
+  "packaging": ".venv/Scripts/python.exe artifacts/pr_play_03/package.py"
+}

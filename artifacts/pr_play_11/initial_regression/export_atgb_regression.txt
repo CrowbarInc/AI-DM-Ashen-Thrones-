@@ -1,0 +1,23 @@
+.....................................F...F.............F                 [100%]
+================================== FAILURES ===================================
+_____________ test_readiness_verifies_repaired_dispatch_coverage ______________
+tests\test_atgb_accounting.py:134: in test_readiness_verifies_repaired_dispatch_coverage
+    assert audit["ok"]
+E   assert False
+___ test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes ___
+tests\test_atgb_readiness.py:26: in test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes
+    assert run["turns"] == [] and run["stop_reason"] is None
+E   AssertionError: assert ([] == []
+E     
+E     Use -v to get more diff and 'worker_failed' is None)
+______________ test_worker_submits_no_turns_on_failed_preflight _______________
+tests\test_atgb_readiness.py:131: in test_worker_submits_no_turns_on_failed_preflight
+    assert result["stop_reason"] == "preflight_failed"
+E   AssertionError: assert 'worker_failed' == 'preflight_failed'
+E     
+E     - preflight_failed
+E     + worker_failed
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_accounting.py::test_readiness_verifies_repaired_dispatch_coverage
+FAILED tests/test_atgb_readiness.py::test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes
+FAILED tests/test_atgb_readiness.py::test_worker_submits_no_turns_on_failed_preflight

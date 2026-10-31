@@ -1,0 +1,95 @@
+{
+  "harness": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_automated_playtest.py",
+      "tests/test_validation_coverage_registry.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_reg_harness",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\harness.xml"
+    ],
+    "exit": 1,
+    "seconds": 145.44
+  },
+  "gameplay": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_five_turn_gameplay.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_reg_gameplay",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\gameplay.xml"
+    ],
+    "exit": 1,
+    "seconds": 191.95
+  },
+  "rules_persistence": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_noncombat_resolution.py",
+      "tests/test_noncombat_runtime_integration.py",
+      "tests/test_state_authority.py",
+      "tests/test_activate_scene_validation_and_get_persistence.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_reg_rules_persistence",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\rules_persistence.xml"
+    ],
+    "timeout": true,
+    "seconds": 240
+  },
+  "conversation": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_social_interaction_authority.py",
+      "tests/test_atgb_r1_07_correction_contract.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_reg_conversation",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\conversation.xml"
+    ],
+    "exit": 1,
+    "seconds": 7.48
+  },
+  "provider": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_02_controls.py",
+      "tests/test_provider_accounting_integrity.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_reg_provider",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\provider.xml"
+    ],
+    "exit": 1,
+    "seconds": 16.2
+  },
+  "diagnostics": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_04_opening_integrity.py",
+      "tests/test_pr_play_05_diagnostics.py",
+      "tests/test_pr_play_06_opening_budget.py",
+      "tests/test_pr_play_07_semantic_acceptance.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\tmp_reg_diagnostics",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\diagnostics.xml"
+    ],
+    "timeout": true,
+    "seconds": 240
+  }
+}

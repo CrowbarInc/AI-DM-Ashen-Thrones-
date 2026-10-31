@@ -1,0 +1,68 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "quill",
+      "name": "Quill",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "cala_brin",
+          "text": "Cala told Brin that the cistern is cracked.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "brin_cala",
+          "text": "Brin told Cala that the cistern is sound.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "key",
+          "text": "The cistern key hangs in the mill.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "ledger",
+          "text": "The night ledger is locked in the mill office.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "route",
+          "text": "The buyer route runs under the mill.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

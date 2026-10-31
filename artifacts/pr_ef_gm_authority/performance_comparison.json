@@ -1,0 +1,57 @@
+[
+  {
+    "sample": "baseline_disabled",
+    "turns": 10,
+    "median_ms": 87.0,
+    "narration_function_entries": 7,
+    "external_provider_calls": 0,
+    "input_tokens": null,
+    "output_tokens": null,
+    "known_retry_metadata_total": 0,
+    "turns_with_unavailable_retry_metadata": 8
+  },
+  {
+    "sample": "final_disabled",
+    "turns": 10,
+    "median_ms": 82.0,
+    "narration_function_entries": 6,
+    "external_provider_calls": 0,
+    "input_tokens": null,
+    "output_tokens": null,
+    "known_retry_metadata_total": 0,
+    "turns_with_unavailable_retry_metadata": 7
+  },
+  {
+    "sample": "live_before_local_repairs",
+    "turns": 10,
+    "median_ms": 1919.461,
+    "requests": 9,
+    "input_tokens": 83930,
+    "output_tokens": 1312,
+    "total_tokens": 85242,
+    "narration_calls": 3,
+    "retry_calls": 1
+  },
+  {
+    "sample": "live_before_final_recall_fix",
+    "turns": 10,
+    "median_ms": 2367.9570000000003,
+    "requests": 9,
+    "input_tokens": 86437,
+    "output_tokens": 1302,
+    "total_tokens": 87739,
+    "narration_calls": 3,
+    "retry_calls": 1
+  },
+  {
+    "sample": "live_holdouts",
+    "turns": 12,
+    "median_ms": 2314.245,
+    "requests": 12,
+    "input_tokens": 14827,
+    "output_tokens": 2509,
+    "total_tokens": 17336,
+    "narration_calls": 0,
+    "retry_calls": 0
+  }
+]

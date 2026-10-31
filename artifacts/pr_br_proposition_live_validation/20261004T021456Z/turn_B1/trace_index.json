@@ -1,0 +1,683 @@
+{
+  "resolution_contract": {
+    "contract_id": "rc_71a97401f2ef",
+    "turn_index": 1,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": null,
+    "interlocutor_id": null,
+    "conversational_subject": "When does the archive's document lift stop running?",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "clarification",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": null,
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "When does the archive's document lift stop running?",
+    "construction": {
+      "cues": [],
+      "referent_slot": null,
+      "referent_reason": "incidental_entity_unresolved",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "tavia",
+          "type": "interlocutor",
+          "label": "tavia"
+        },
+        {
+          "id": "archive_lift_hall",
+          "type": "place",
+          "label": "Rookhaven civic archive lift hall"
+        },
+        {
+          "id": "tavia",
+          "type": "interlocutor",
+          "label": "Tavia"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": null,
+      "canonicalization_attempted": true,
+      "canonical_target_found": false,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": true,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": "running",
+        "proposed_span": "running",
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": true,
+        "authority_reasons": [
+          "proposal:personhood_unresolved"
+        ],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "When does the archive's document lift stop running?",
+        "source": "deterministic_fast_path",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "raw_target_text": null,
+        "proposed_target_id": null,
+        "target_capture": "none",
+        "has_determiner": false,
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "clarification",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      },
+      "commitment_status": "executed_now",
+      "primary_operation": "ask",
+      "resolution_subject": "social",
+      "resolution_subject_coherence": "accepted",
+      "semantic_input_length": 51,
+      "provenance_excerpt": "When does the archive's document lift stop running?",
+      "secondary_operations": [],
+      "executable_obligations": {
+        "primary": null,
+        "mutation_owner": null,
+        "sequence": [],
+        "supporting": []
+      },
+      "requested_addressee": "running",
+      "addressee_binding_status": "unresolved"
+    },
+    "retry_preserved": true
+  },
+  "interaction_obligation": {
+    "kind": "question",
+    "target": null,
+    "interlocutor_id": null,
+    "subject": "When does the archive's document lift stop running",
+    "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+    "claim_id": null,
+    "resolution_mode": "clarification_target_failure",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_71a97401f2ef",
+    "executable_obligations": {
+      "primary": null,
+      "mutation_owner": null,
+      "sequence": [],
+      "supporting": []
+    }
+  },
+  "gm_resolution_decision": {
+    "contract_id": "rc_71a97401f2ef",
+    "resolution_method": "ask",
+    "outcome_classification": "established_or_retrieved",
+    "established_fact_refs": [
+      "scene_world_authored_corpus"
+    ],
+    "proposed_facts": [
+      {
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "Blank record tags are stacked at a side desk.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.1",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "Tavia sorts the blank record tags.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.2",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "Tavia exists as archive clerk",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_world_npc"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "world.npcs.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {
+          "kind": "entity",
+          "subject": "tavia",
+          "subject_aliases": [
+            "Tavia"
+          ],
+          "relation": "exists",
+          "value": "archive clerk",
+          "authority": "world_truth"
+        }
+      }
+    ],
+    "permitted_state_mutations": [],
+    "persistence_policy": "do_not_persist",
+    "narration_constraints": [
+      "Narration may not establish consequential world facts absent this decision.",
+      "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+      "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+      "Inference must not be narrated as physical evidence.",
+      "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+      "Cause, actor, and time may be called unknown. That does not deny an established condition."
+    ],
+    "unresolved_consequential_questions": [],
+    "unresolved_qualifiers": [
+      "time"
+    ],
+    "answer_relations": [],
+    "epistemic_acts": [
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.0",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.1",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "establish",
+        "source_ref": "scene.visible_facts.2",
+        "authority": "world_truth",
+        "semantic_identity": {}
+      },
+      {
+        "act": "establish",
+        "source_ref": "world.npcs.0",
+        "authority": "world_truth",
+        "semantic_identity": {
+          "kind": "entity",
+          "subject": "tavia",
+          "subject_aliases": [
+            "Tavia"
+          ],
+          "relation": "exists",
+          "value": "archive clerk",
+          "authority": "world_truth"
+        }
+      },
+      {
+        "act": "leave_unresolved",
+        "authority": "observation",
+        "semantic_identity": {
+          "relation_kind": "epistemic_status",
+          "epistemic_status": "unresolved",
+          "unresolved_qualifiers": [
+            "time"
+          ]
+        }
+      }
+    ],
+    "executable_obligations": {
+      "primary": null,
+      "mutation_owner": null,
+      "sequence": [],
+      "supporting": []
+    },
+    "authority_algorithm": "proposition_claim_control_v1"
+  },
+  "epistemic_acts": [
+    {
+      "act": "establish",
+      "source_ref": "scene.visible_facts.0",
+      "authority": "world_truth",
+      "semantic_identity": {}
+    },
+    {
+      "act": "establish",
+      "source_ref": "scene.visible_facts.1",
+      "authority": "world_truth",
+      "semantic_identity": {}
+    },
+    {
+      "act": "establish",
+      "source_ref": "scene.visible_facts.2",
+      "authority": "world_truth",
+      "semantic_identity": {}
+    },
+    {
+      "act": "establish",
+      "source_ref": "world.npcs.0",
+      "authority": "world_truth",
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "tavia",
+        "subject_aliases": [
+          "Tavia"
+        ],
+        "relation": "exists",
+        "value": "archive clerk",
+        "authority": "world_truth"
+      }
+    },
+    {
+      "act": "leave_unresolved",
+      "authority": "observation",
+      "semantic_identity": {
+        "relation_kind": "epistemic_status",
+        "epistemic_status": "unresolved",
+        "unresolved_qualifiers": [
+          "time"
+        ]
+      }
+    }
+  ],
+  "proposed_facts": [
+    {
+      "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+      "provenance": "authored_world_fact",
+      "consequence": "consequential",
+      "authorized": true,
+      "reason_codes": [
+        "authored_state_source"
+      ],
+      "authority": "world_truth",
+      "persistence": "world_truth",
+      "source_ref": "scene.visible_facts.0",
+      "outcome_classification": "established_or_retrieved",
+      "semantic_identity": {}
+    },
+    {
+      "text": "Blank record tags are stacked at a side desk.",
+      "provenance": "authored_world_fact",
+      "consequence": "consequential",
+      "authorized": true,
+      "reason_codes": [
+        "authored_state_source"
+      ],
+      "authority": "world_truth",
+      "persistence": "world_truth",
+      "source_ref": "scene.visible_facts.1",
+      "outcome_classification": "established_or_retrieved",
+      "semantic_identity": {}
+    },
+    {
+      "text": "Tavia sorts the blank record tags.",
+      "provenance": "authored_world_fact",
+      "consequence": "consequential",
+      "authorized": true,
+      "reason_codes": [
+        "authored_state_source"
+      ],
+      "authority": "world_truth",
+      "persistence": "world_truth",
+      "source_ref": "scene.visible_facts.2",
+      "outcome_classification": "established_or_retrieved",
+      "semantic_identity": {}
+    },
+    {
+      "text": "Tavia exists as archive clerk",
+      "provenance": "authored_world_fact",
+      "consequence": "consequential",
+      "authorized": true,
+      "reason_codes": [
+        "authored_world_npc"
+      ],
+      "authority": "world_truth",
+      "persistence": "world_truth",
+      "source_ref": "world.npcs.0",
+      "outcome_classification": "established_or_retrieved",
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "tavia",
+        "subject_aliases": [
+          "Tavia"
+        ],
+        "relation": "exists",
+        "value": "archive clerk",
+        "authority": "world_truth"
+      }
+    }
+  ],
+  "semantic_identities": [
+    {},
+    {},
+    {},
+    {
+      "kind": "entity",
+      "subject": "tavia",
+      "subject_aliases": [
+        "Tavia"
+      ],
+      "relation": "exists",
+      "value": "archive clerk",
+      "authority": "world_truth"
+    }
+  ],
+  "narrated_claims_initial": null,
+  "narrated_claims_accepted": {
+    "decision_id": "rc_71a97401f2ef",
+    "hard_valid": true,
+    "violations": [],
+    "proposed_facts": [
+      {
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      }
+    ],
+    "claim_results": [
+      {
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+        "semantic_identity": {},
+        "provenance": "authored_world_fact",
+        "authority": "world_truth",
+        "epistemic_status": "established",
+        "relation_kind": "ordinary_predicate",
+        "persistence": "world_truth",
+        "authorized": true,
+        "source_ref": "scene.visible_facts.0",
+        "source_turn": null,
+        "source_scene": "",
+        "reason_codes": [
+          "authored_state_source"
+        ]
+      }
+    ]
+  },
+  "claim_level_authority_results": [
+    {
+      "text": "If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification.",
+      "kind": "npc_claim",
+      "epistemic_status": "uncertain",
+      "grounded": false,
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authorized_coverage": {
+    "contract_id": "rc_71a97401f2ef",
+    "operation": "ask",
+    "target": "",
+    "interlocutor": null,
+    "dimension": null,
+    "expected_resolution": "clarification",
+    "required_dimensions": [],
+    "covered_dimensions": [],
+    "complete": true
+  },
+  "consequential_residuals": {
+    "decision_id": "rc_71a97401f2ef",
+    "hard_valid": true,
+    "violations": [],
+    "proposed_facts": [
+      {
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      }
+    ],
+    "claim_results": [
+      {
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+        "semantic_identity": {},
+        "provenance": "authored_world_fact",
+        "authority": "world_truth",
+        "epistemic_status": "established",
+        "relation_kind": "ordinary_predicate",
+        "persistence": "world_truth",
+        "authorized": true,
+        "source_ref": "scene.visible_facts.0",
+        "source_turn": null,
+        "source_scene": "",
+        "reason_codes": [
+          "authored_state_source"
+        ]
+      }
+    ]
+  },
+  "accepted_response": {
+    "immutable": true,
+    "text": "The document lift stops running when the courtyard sundial falls fully into shade. I don't have more details beyond that about operating hours or conditions. If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "When does the archive's document lift stop running?",
+    "turn_identity": "rc_71a97401f2ef",
+    "speaker": "",
+    "addressee": "running",
+    "target": "",
+    "operation": "ask",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [
+        {
+          "text": "If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification.",
+          "kind": "npc_claim",
+          "epistemic_status": "uncertain",
+          "grounded": false,
+          "consequential": false,
+          "family": "none"
+        }
+      ],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_71a97401f2ef",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+            "provenance": "authored_world_fact",
+            "consequence": "consequential",
+            "authorized": true,
+            "reason_codes": [
+              "authored_state_source"
+            ],
+            "authority": "world_truth",
+            "persistence": "world_truth",
+            "source_ref": "scene.visible_facts.0",
+            "outcome_classification": "established_or_retrieved",
+            "semantic_identity": {}
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+            "semantic_identity": {},
+            "provenance": "authored_world_fact",
+            "authority": "world_truth",
+            "epistemic_status": "established",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "world_truth",
+            "authorized": true,
+            "source_ref": "scene.visible_facts.0",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "authored_state_source"
+            ]
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_71a97401f2ef",
+      "operation": "ask",
+      "interlocutor_id": "",
+      "expected_resolution": "clarification"
+    },
+    "resolution_kind": "question",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "validation_audit": {
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "The document lift stops running when the courtyard sundial falls fully into shade. I don't have more details beyond that about operating hours or conditions. If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification."
+    },
+    "decision_review": {
+      "governing_decision_contract_id": "rc_71a97401f2ef",
+      "outcome_classification": "established_or_retrieved",
+      "attempt_1": {
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade. I don't have more details beyond that about operating hours or conditions. If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification.",
+        "reasons": [],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_71a97401f2ef",
+          "hard_valid": true,
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+              "provenance": "authored_world_fact",
+              "consequence": "consequential",
+              "authorized": true,
+              "reason_codes": [
+                "authored_state_source"
+              ],
+              "authority": "world_truth",
+              "persistence": "world_truth",
+              "source_ref": "scene.visible_facts.0",
+              "outcome_classification": "established_or_retrieved",
+              "semantic_identity": {}
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The document lift stops running when the courtyard sundial falls fully into shade.",
+              "semantic_identity": {},
+              "provenance": "authored_world_fact",
+              "authority": "world_truth",
+              "epistemic_status": "established",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "world_truth",
+              "authorized": true,
+              "source_ref": "scene.visible_facts.0",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "authored_state_source"
+              ]
+            }
+          ]
+        }
+      },
+      "retry_context": "",
+      "attempt_2": null,
+      "acceptance": {
+        "why": "initial_hard_valid",
+        "text": "The document lift stops running when the courtyard sundial falls fully into shade. I don't have more details beyond that about operating hours or conditions. If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification."
+      }
+    }
+  },
+  "final_sealed_response": "The document lift stops running when the courtyard sundial falls fully into shade. I don't have more details beyond that about operating hours or conditions. If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification.",
+  "exact_emitted_response": "The document lift stops running when the courtyard sundial falls fully into shade. I don't have more details beyond that about operating hours or conditions. If you wish, you might check the archive's posted schedules or speak with a supervisor for further clarification.",
+  "temporal_provenance_after": null,
+  "bounded_improvisation_after": {
+    "version": 1,
+    "entries": [],
+    "rejected": []
+  }
+}

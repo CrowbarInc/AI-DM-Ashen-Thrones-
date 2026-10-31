@@ -1,0 +1,138 @@
+{
+  "method": "PR-BT deterministic provider payload measurement.\n\nReconstructs the three PR-BS probes without model/API calls by loading the\nsaved isolated probe state/resolution and calling ``game.gm.build_messages``.\n",
+  "before": {
+    "P1": {
+      "total": 110450,
+      "instructions": 25788,
+      "response_policy": 20630,
+      "system_prompt": 12975,
+      "turn_packet": 10676
+    },
+    "P2": {
+      "total": 121438,
+      "instructions": 26675,
+      "response_policy": 21237,
+      "system_prompt": 12975,
+      "turn_packet": 10640
+    },
+    "P3": {
+      "total": 110665,
+      "instructions": 25856,
+      "response_policy": 20913,
+      "system_prompt": 12975,
+      "turn_packet": 10910
+    }
+  },
+  "after": {
+    "P1": {
+      "total_provider_chars": 97147,
+      "system_prompt_chars": 9564,
+      "user_json_chars": 81860,
+      "instructions_chars": 12318,
+      "instructions_count": 78,
+      "response_policy_chars": 21346,
+      "turn_packet_chars": 10676,
+      "decision_facing_answer_recipe_chars": 2962,
+      "schema_output_contract_chars_separable": 5440,
+      "context_separation_contract_chars": 3599,
+      "fallback_behavior_chars": 1526
+    },
+    "P2": {
+      "total_provider_chars": 104845,
+      "system_prompt_chars": 4166,
+      "user_json_chars": 94225,
+      "instructions_chars": 13727,
+      "instructions_count": 84,
+      "response_policy_chars": 21465,
+      "turn_packet_chars": 10640,
+      "decision_facing_answer_recipe_chars": 2507,
+      "schema_output_contract_chars_separable": 411,
+      "context_separation_contract_chars": 3359,
+      "fallback_behavior_chars": 1403
+    },
+    "P3": {
+      "total_provider_chars": 99094,
+      "system_prompt_chars": 9564,
+      "user_json_chars": 83657,
+      "instructions_chars": 12386,
+      "instructions_count": 78,
+      "response_policy_chars": 21138,
+      "turn_packet_chars": 10910,
+      "decision_facing_answer_recipe_chars": 2304,
+      "schema_output_contract_chars_separable": 5440,
+      "context_separation_contract_chars": 3437,
+      "fallback_behavior_chars": 1482
+    }
+  },
+  "savings": {
+    "P1": {
+      "total_chars_removed": 13303,
+      "total_percent_removed": 12.04,
+      "instructions_chars_removed": 13470,
+      "system_prompt_chars_removed": 3411,
+      "response_policy_chars_delta": 716,
+      "turn_packet_chars_delta": 0
+    },
+    "P2": {
+      "total_chars_removed": 16593,
+      "total_percent_removed": 13.66,
+      "instructions_chars_removed": 12948,
+      "system_prompt_chars_removed": 8809,
+      "response_policy_chars_delta": 228,
+      "turn_packet_chars_delta": 0
+    },
+    "P3": {
+      "total_chars_removed": 11571,
+      "total_percent_removed": 10.46,
+      "instructions_chars_removed": 13470,
+      "system_prompt_chars_removed": 3411,
+      "response_policy_chars_delta": 225,
+      "turn_packet_chars_delta": 0
+    }
+  },
+  "rule_presence": {
+    "P1": {
+      "authority_generated_prose_not_authoritative": true,
+      "authority_decision_claims_constrain_realization": true,
+      "recipe_cannot_grant_authority": true,
+      "inference_uncertainty_visible": true,
+      "player_hypothesis_preserved": true,
+      "npc_incidental_bounded": true,
+      "declaration_lane_visible": true,
+      "ordinary_narration_need_not_be_declared": true,
+      "fallback_unknown_visible": true,
+      "invalid_output_no_prose_escape": true,
+      "structured_envelope_explicit": true,
+      "raw_internal_json_no_player_leak": true
+    },
+    "P2": {
+      "authority_generated_prose_not_authoritative": false,
+      "authority_decision_claims_constrain_realization": true,
+      "recipe_cannot_grant_authority": true,
+      "inference_uncertainty_visible": true,
+      "player_hypothesis_preserved": true,
+      "npc_incidental_bounded": false,
+      "declaration_lane_visible": false,
+      "ordinary_narration_need_not_be_declared": false,
+      "fallback_unknown_visible": true,
+      "invalid_output_no_prose_escape": true,
+      "structured_envelope_explicit": false,
+      "raw_internal_json_no_player_leak": false
+    },
+    "P3": {
+      "authority_generated_prose_not_authoritative": true,
+      "authority_decision_claims_constrain_realization": true,
+      "recipe_cannot_grant_authority": true,
+      "inference_uncertainty_visible": true,
+      "player_hypothesis_preserved": true,
+      "npc_incidental_bounded": true,
+      "declaration_lane_visible": true,
+      "ordinary_narration_need_not_be_declared": true,
+      "fallback_unknown_visible": true,
+      "invalid_output_no_prose_escape": true,
+      "structured_envelope_explicit": true,
+      "raw_internal_json_no_player_leak": true
+    }
+  },
+  "fixed_reduction_common_to_all_three": 11571
+}

@@ -1,0 +1,167 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "behavioral",
+  "campaign": {
+    "campaign_id": "atgb_r1_08",
+    "what_was_tested": "One attempted S08.2 live correction; mandatory stop after provider failure.",
+    "runtime_path": "Direct game.api.chat with R1-04 readiness and isolated S08 store",
+    "gm_boundary": "One failed gpt-4.1-mini interpretation dispatch; deterministic host fallback",
+    "player_input_mode": "Frozen representative correction",
+    "run_count": 1,
+    "turn_count": 1,
+    "automated_conclusion": "D — Inconclusive; model semantics unavailable."
+  },
+  "claim_types": [
+    "runtime_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "ATGB-R1-08-L1",
+      "scenario_run_id": "L1/S08",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "relevant_prior_context": {
+        "player": "What's in front of me right now?",
+        "gm": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      },
+      "exact_gm_output": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "semantic_result": "FAIL",
+      "historical_result": "New operational fallback; no model semantic judgment",
+      "mandatory_gates": {
+        "interpretation": {
+          "status": "INDETERMINATE"
+        },
+        "evidence": {
+          "status": "INDETERMINATE"
+        },
+        "authority": {
+          "status": "PASS",
+          "scope": "failed-call path only"
+        }
+      },
+      "diagnostic_result": {
+        "result": "APIConnectionError; response inadequacy is fallback-only"
+      },
+      "automated_evaluation": {
+        "status": "No gameplay scorer run; AI-assisted independent dimensions in reports"
+      },
+      "runtime_validity": {
+        "preflight": "READY",
+        "model_response": false,
+        "failure": "APIConnectionError"
+      },
+      "final_emission_metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "provider_failure",
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "provider_failure",
+          "raw_interpretation": "",
+          "provider_requests": [],
+          "provider_error": "APIConnectionError",
+          "record": null
+        },
+        "provider_calls": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 1305,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "interpretation_rejected",
+          "successful": true,
+          "provider_narration_skipped": false
+        },
+        "provider_accounting": {
+          "version": "ATGB-03B-1",
+          "scope": "process_cumulative_admissions",
+          "request_upper_bound": 1,
+          "status": "recorded"
+        }
+      },
+      "continuation_decision": {
+        "continue": false,
+        "reason": "Mandatory stop: provider failure and unknown usage"
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_r1_08/L1/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Provisional AI-assisted analysis; no authenticated human review"
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "SELECTED",
+      "example_id": "ATGB-R1-08-L1",
+      "statement": null
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "SELECTED",
+      "example_id": "ATGB-R1-08-L1",
+      "statement": null
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [],
+  "limitations_and_unproven_claims": [
+    "One failed dispatch, no successful live interpretation; three trials not run.",
+    "FAIL describes fallback response adequacy, not model correction quality.",
+    "No benchmark score, generalization, successful L4 control or authenticated human review."
+  ]
+}

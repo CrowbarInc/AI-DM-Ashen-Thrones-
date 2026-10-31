@@ -1,0 +1,71 @@
+{
+  "live": true,
+  "model": {
+    "default": "gpt-4.1-mini",
+    "high_precision": "gpt-4.1-mini",
+    "routing_enabled": true
+  },
+  "retry_ceiling": 2,
+  "manual_play_gpt_ceiling": 6,
+  "narration_timeout": "openai_sdk_default",
+  "provider_budget_defaults": {
+    "request_limit_env": "ASHEN_PROVIDER_REQUEST_LIMIT",
+    "input_default_when_limit_set": 8000,
+    "output_default_when_limit_set": 2000,
+    "total_default_when_limit_set": 10000,
+    "narration_max_output_tokens_env": "ASHEN_NARRATION_MAX_OUTPUT_TOKENS",
+    "narration_max_output_default": 600,
+    "interpretation_max_output": 320
+  },
+  "caching": "No application-level prompt cache. Provider prompt caching is not configured in call sites.",
+  "instrumentation": "External wrappers around call_gpt, save_session, and save_world. No production edit.",
+  "seed_ids": {
+    "courtyard": "waystation_courtyard",
+    "street": "waystation_street",
+    "npc": "sergeant_mara"
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "ordinary_movement",
+      "player_text": "I go through the courtyard gate.",
+      "elapsed_ms": 101,
+      "latency_ms": {},
+      "narration_provider_calls": 0,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 17,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "scene_transition",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "calls": []
+    }
+  ],
+  "provider_snapshot": {
+    "requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "stopped": false,
+    "stop_reason": "",
+    "records": []
+  },
+  "persist_totals": {
+    "save_session": 17,
+    "save_world": 2,
+    "save_session_count": 4,
+    "save_world_count": 2
+  }
+}

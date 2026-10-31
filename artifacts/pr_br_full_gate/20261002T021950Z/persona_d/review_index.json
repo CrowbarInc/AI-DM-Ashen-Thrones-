@@ -1,0 +1,803 @@
+[
+  {
+    "n": 1,
+    "player": "I shoulder through the rain and the crowd to the notice board and read the fresh postings on the new taxes, the curfew, and the missing patrol, looking for names, places, and how recently the ink was put up.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": "time",
+    "dimensions": [
+      "time"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I turn northwest from the board and look for the old crates and the muddy track the posting names, trying to see how far that route sits from the gate and whether anyone is already heading that way.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "discourse_inheritance",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "I walk the few dozen paces to the old crates and check the muddy ruts for fresh boot prints or drag marks, then listen toward the underbrush for whatever is moving out there.",
+    "op": "perceive",
+    "target": "Notice board",
+    "interlocutor": "inc_72c1096743",
+    "dimension": "wear",
+    "dimensions": [
+      "wear",
+      "sound"
+    ],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": "underbrush for whatever is moving out there",
+    "bound": "inc_72c1096743",
+    "entity_id": "inc_72c1096743",
+    "authority_reasons": [
+      "scene:populated",
+      "pr_bn:accepted"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "interaction_incomplete"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: interaction_incomplete. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "interaction_incomplete"
+    ],
+    "rejected2": [
+      "interaction_incomplete"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_72c1096743",
+      "label": "underbrush for whatever is moving out there",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I follow the muddy track a short way past the crates into the underbrush, keeping low and quiet, to get a look at whatever is moving out there.",
+    "op": "inspect",
+    "target": "underbrush for whatever is moving out there",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_72c1096743",
+      "label": "underbrush for whatever is moving out there",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I shift a few paces along the brush for a clearer angle and ease a wet branch aside, trying to make out the shape that is moving in the cover.",
+    "op": "perceive",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_72c1096743",
+      "label": "underbrush for whatever is moving out there",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "I step out of the brush onto the track where the shape can see me and call over, asking whether they came from the gate or from farther up the patrol route.",
+    "op": "ask",
+    "target": "Notice board",
+    "interlocutor": "inc_72c1096743",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": null,
+    "bound": "inc_72c1096743",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "discourse_inheritance",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_72c1096743",
+      "label": "underbrush for whatever is moving out there",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:environmental_change",
+      "social_empty_resolution_repair",
+      "retry_exhausted",
+      "interaction_obligation_terminal_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I walk toward the still patch of brush at a steady pace, hands empty and in sight, until I can tell whether a person, an animal, or only wet leaves is waiting there.",
+    "op": "ask",
+    "target": "still patch brush at steady pace",
+    "interlocutor": "inc_e4b8a3906e",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": "still patch brush at steady pace",
+    "bound": "inc_e4b8a3906e",
+    "entity_id": "inc_e4b8a3906e",
+    "authority_reasons": [
+      "scene:populated",
+      "pr_bn:accepted"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_e4b8a3906e",
+      "label": "still patch brush at steady pace",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "I grab the wet branches in front of the outline and pull them wide, so whatever is standing on the track has no cover left.",
+    "op": "act",
+    "target": "Notice board",
+    "interlocutor": "inc_e4b8a3906e",
+    "dimension": "content",
+    "dimensions": [
+      "content",
+      "source",
+      "time",
+      "use"
+    ],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": null,
+    "bound": "inc_e4b8a3906e",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_e4b8a3906e",
+      "label": "still patch brush at steady pace",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_6912a2889260",
+      "label": "I grab the wet branches in front of the outline and pull them wide, so whatever is standing on the track has no cover left.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I stay where I am and look the figure over for a face, clothes, a weapon, or any badge or gear that would tie it to Eldrin Voss's patrol.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": "inc_e4b8a3906e",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": null,
+    "bound": "inc_e4b8a3906e",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_e4b8a3906e",
+      "label": "still patch brush at steady pace",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "inc_72c1096743",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_6912a2889260",
+      "label": "I grab the wet branches in front of the outline and pull them wide, so whatever is standing on the track has no cover left.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "I leave the figure in the brush and follow the muddy track farther northwest, watching the ruts and the verges for anything a patrol might have dropped.",
+    "op": "act",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": {
+      "id": "rc_f50766134b77",
+      "label": "I leave the figure in the brush and follow the muddy track farther northwest, watching the ruts and the verges for anything a patrol might have dropped.",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 11,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null,
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "milestone_mud_prints"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  }
+]

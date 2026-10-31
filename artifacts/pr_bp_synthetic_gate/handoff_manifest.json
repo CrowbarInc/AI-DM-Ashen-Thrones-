@@ -1,0 +1,26 @@
+{
+  "artifact": "PR-BP live resolution and synthetic gate handoff",
+  "base_head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "human_playtest_recommended": false,
+  "synthetic_gate": {
+    "artifact_dir": "artifacts/pr_bp_synthetic_gate/20260927T202617Z",
+    "sessions": 3,
+    "turns": 30,
+    "semantic_failures": 16,
+    "passed": false
+  },
+  "included_paths": [
+    "docs/audits/PR-BP_live_resolution_and_synthetic_gate.md",
+    "artifacts/pr_bp_synthetic_gate/test_results.md",
+    "artifacts/pr_bp_synthetic_gate/20260927T202617Z",
+    "artifacts/pr_bp_synthetic_gate/handoff_manifest.json",
+    "tests/test_pr_bp_live_resolution_routing.py",
+    "tools/run_pr_bp_synthetic_gate.py",
+    "game/live_resolution.py"
+  ],
+  "notes": [
+    "Focused PR-BP real-path tests passed.",
+    "Adjacent regression band still has failures.",
+    "Synthetic gate failed; no PR-BP completion commit was created."
+  ]
+}

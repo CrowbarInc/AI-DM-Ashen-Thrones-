@@ -1,0 +1,1283 @@
+{
+  "live": false,
+  "model": {
+    "default": "gpt-4.1-mini",
+    "high_precision": "gpt-4.1-mini",
+    "routing_enabled": true
+  },
+  "retry_ceiling": 2,
+  "manual_play_gpt_ceiling": 6,
+  "narration_timeout": "openai_sdk_default",
+  "provider_budget_defaults": {
+    "request_limit_env": "ASHEN_PROVIDER_REQUEST_LIMIT",
+    "input_default_when_limit_set": 8000,
+    "output_default_when_limit_set": 2000,
+    "total_default_when_limit_set": 10000,
+    "narration_max_output_tokens_env": "ASHEN_NARRATION_MAX_OUTPUT_TOKENS",
+    "narration_max_output_default": 600,
+    "interpretation_max_output": 320
+  },
+  "caching": "No application-level prompt cache. Provider prompt caching is not configured in call sites.",
+  "instrumentation": "External wrappers around call_gpt, save_session, and save_world. No production edit.",
+  "seed_ids": {
+    "courtyard": "waystation_courtyard",
+    "street": "waystation_street",
+    "npc": "sergeant_mara"
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "simple_contextual_question",
+      "player_text": "Where are we?",
+      "elapsed_ms": 3,
+      "latency_ms": {},
+      "narration_provider_calls": 0,
+      "interpretation_requests": 0,
+      "narration_requests_meta": 0,
+      "retries_meta": 0,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 0,
+        "save_world": 0
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "conversational_answer",
+      "scene_after": "waystation_courtyard",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. Visible points of interest: courtyard lantern. Known exits: courtyard gate.",
+      "calls": []
+    },
+    {
+      "turn_id": 2,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "ordinary_movement",
+      "player_text": "I go through the courtyard gate.",
+      "elapsed_ms": 102,
+      "latency_ms": {},
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 22740,
+      "persistence_ms": {
+        "save_session": 16,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "scene_transition",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 81397,
+          "user_estimated_tokens": 20349,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20719,
+              "estimated_tokens": 5179
+            },
+            {
+              "key": "instructions",
+              "chars": 14750,
+              "estimated_tokens": 3687
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10802,
+              "estimated_tokens": 2700
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 6447,
+              "estimated_tokens": 1611
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 3370,
+              "estimated_tokens": 842
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2908,
+              "estimated_tokens": 727
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2894,
+              "estimated_tokens": 723
+            },
+            {
+              "key": "scene",
+              "chars": 2366,
+              "estimated_tokens": 591
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2245,
+              "estimated_tokens": 561
+            },
+            {
+              "key": "opening_scene_realization",
+              "chars": 1927,
+              "estimated_tokens": 481
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1142,
+              "estimated_tokens": 285
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 3,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "movement_alternative_wording",
+      "player_text": "I make for the waystation courtyard.",
+      "elapsed_ms": 75,
+      "latency_ms": {
+        "intent_classification": 3,
+        "engine_resolution": 0,
+        "prompt_construction": 5,
+        "gpt_call": 2,
+        "retry_loop_total": 8,
+        "final_emission_gate": 5,
+        "fallback_repair": 3,
+        "total_turn": 46
+      },
+      "narration_provider_calls": 3,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [
+        "scene_stall",
+        "scene_stall"
+      ],
+      "prompt_estimated_input_tokens": 58422,
+      "persistence_ms": {
+        "save_session": 7,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": null,
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You notice the waystation street runs north from the courtyard gate. A notice board stands by the road. Taxes and curfew lines in Waystation street get read aloud by someone who wants witnesses.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 68335,
+          "user_estimated_tokens": 17083,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20422,
+              "estimated_tokens": 5105
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10743,
+              "estimated_tokens": 2685
+            },
+            {
+              "key": "instructions",
+              "chars": 10598,
+              "estimated_tokens": 2649
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4028,
+              "estimated_tokens": 1007
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2414,
+              "estimated_tokens": 603
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "scene",
+              "chars": 2272,
+              "estimated_tokens": 568
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2245,
+              "estimated_tokens": 561
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1178,
+              "estimated_tokens": 294
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 842,
+              "estimated_tokens": 210
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        },
+        {
+          "purpose": "retry_escalation",
+          "retry_attempt": 1,
+          "retry_reason": "scene_stall",
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 68335,
+          "user_estimated_tokens": 17083,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20422,
+              "estimated_tokens": 5105
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10743,
+              "estimated_tokens": 2685
+            },
+            {
+              "key": "instructions",
+              "chars": 10598,
+              "estimated_tokens": 2649
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4028,
+              "estimated_tokens": 1007
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2414,
+              "estimated_tokens": 603
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "scene",
+              "chars": 2272,
+              "estimated_tokens": 568
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2245,
+              "estimated_tokens": 561
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1178,
+              "estimated_tokens": 294
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 842,
+              "estimated_tokens": 210
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        },
+        {
+          "purpose": "retry_escalation",
+          "retry_attempt": 2,
+          "retry_reason": "scene_stall",
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 68335,
+          "user_estimated_tokens": 17083,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20422,
+              "estimated_tokens": 5105
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10743,
+              "estimated_tokens": 2685
+            },
+            {
+              "key": "instructions",
+              "chars": 10598,
+              "estimated_tokens": 2649
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4028,
+              "estimated_tokens": 1007
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2414,
+              "estimated_tokens": 603
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "scene",
+              "chars": 2272,
+              "estimated_tokens": 568
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2245,
+              "estimated_tokens": 561
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1178,
+              "estimated_tokens": 294
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 842,
+              "estimated_tokens": 210
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 4,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "npc_dialogue_initiation",
+      "player_text": "I ask Sergeant Mara about the road beyond the gate.",
+      "elapsed_ms": 74,
+      "latency_ms": {
+        "intent_classification": 7,
+        "engine_resolution": 0,
+        "prompt_construction": 6,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 1,
+        "total_turn": 42
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 20855,
+      "persistence_ms": {
+        "save_session": 8,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "question",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "Provider calls are disabled for this run, so no live narration was generated.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 73859,
+          "user_estimated_tokens": 18464,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20898,
+              "estimated_tokens": 5224
+            },
+            {
+              "key": "instructions",
+              "chars": 12822,
+              "estimated_tokens": 3205
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10922,
+              "estimated_tokens": 2730
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4613,
+              "estimated_tokens": 1153
+            },
+            {
+              "key": "scene",
+              "chars": 2550,
+              "estimated_tokens": 637
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2437,
+              "estimated_tokens": 609
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2270,
+              "estimated_tokens": 567
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1295,
+              "estimated_tokens": 323
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1193,
+              "estimated_tokens": 298
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 5,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "npc_followup",
+      "player_text": "Which road did you mean?",
+      "elapsed_ms": 77,
+      "latency_ms": {
+        "intent_classification": 5,
+        "engine_resolution": 0,
+        "prompt_construction": 6,
+        "gpt_call": 3,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 2,
+        "total_turn": 44
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 21485,
+      "persistence_ms": {
+        "save_session": 8,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": null,
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "Provider calls are disabled for this run, so no live narration was generated.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 76376,
+          "user_estimated_tokens": 19094,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21100,
+              "estimated_tokens": 5275
+            },
+            {
+              "key": "instructions",
+              "chars": 12504,
+              "estimated_tokens": 3126
+            },
+            {
+              "key": "turn_packet",
+              "chars": 11040,
+              "estimated_tokens": 2760
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4333,
+              "estimated_tokens": 1083
+            },
+            {
+              "key": "uncertainty_hint",
+              "chars": 2796,
+              "estimated_tokens": 699
+            },
+            {
+              "key": "scene",
+              "chars": 2460,
+              "estimated_tokens": 615
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2383,
+              "estimated_tokens": 595
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2254,
+              "estimated_tokens": 563
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1603,
+              "estimated_tokens": 400
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1166,
+              "estimated_tokens": 291
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 6,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "ambiguous_inspection",
+      "player_text": "I look at it more closely.",
+      "elapsed_ms": 68,
+      "latency_ms": {
+        "intent_classification": 3,
+        "engine_resolution": 0,
+        "prompt_construction": 7,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 1,
+        "total_turn": 35
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 20798,
+      "persistence_ms": {
+        "save_session": 8,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "investigate",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "notice board",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 73629,
+          "user_estimated_tokens": 18407,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20689,
+              "estimated_tokens": 5172
+            },
+            {
+              "key": "instructions",
+              "chars": 12523,
+              "estimated_tokens": 3130
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10720,
+              "estimated_tokens": 2680
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4543,
+              "estimated_tokens": 1135
+            },
+            {
+              "key": "scene",
+              "chars": 2475,
+              "estimated_tokens": 618
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2470,
+              "estimated_tokens": 617
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2254,
+              "estimated_tokens": 563
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1884,
+              "estimated_tokens": 471
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1168,
+              "estimated_tokens": 292
+            },
+            {
+              "key": "recent_log",
+              "chars": 1053,
+              "estimated_tokens": 263
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 7,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "clarification_continuation",
+      "player_text": "The lantern.",
+      "elapsed_ms": 93,
+      "latency_ms": {
+        "intent_classification": 3,
+        "engine_resolution": 0,
+        "prompt_construction": 5,
+        "gpt_call": 2,
+        "retry_loop_total": 10,
+        "final_emission_gate": 6,
+        "fallback_repair": 4,
+        "total_turn": 53
+      },
+      "narration_provider_calls": 3,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [
+        "scene_stall",
+        "scene_stall"
+      ],
+      "prompt_estimated_input_tokens": 59934,
+      "persistence_ms": {
+        "save_session": 11,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": null,
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You only get fragments in Waystation street: the waystation street runs north from the courtyard gate. A notice board stands by the road. The rest stays blurred until you push harder on something specific. Taxes and curfew lines in Waystation street get read aloud by someone who wants witnesses.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 70350,
+          "user_estimated_tokens": 17587,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20355,
+              "estimated_tokens": 5088
+            },
+            {
+              "key": "instructions",
+              "chars": 10758,
+              "estimated_tokens": 2689
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10623,
+              "estimated_tokens": 2655
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4028,
+              "estimated_tokens": 1007
+            },
+            {
+              "key": "scene",
+              "chars": 2420,
+              "estimated_tokens": 605
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2366,
+              "estimated_tokens": 591
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1744,
+              "estimated_tokens": 436
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1154,
+              "estimated_tokens": 288
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            }
+          ],
+          "latency_ms": 2,
+          "result_chars": 77
+        },
+        {
+          "purpose": "retry_escalation",
+          "retry_attempt": 1,
+          "retry_reason": "scene_stall",
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 70350,
+          "user_estimated_tokens": 17587,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20355,
+              "estimated_tokens": 5088
+            },
+            {
+              "key": "instructions",
+              "chars": 10758,
+              "estimated_tokens": 2689
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10623,
+              "estimated_tokens": 2655
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4028,
+              "estimated_tokens": 1007
+            },
+            {
+              "key": "scene",
+              "chars": 2420,
+              "estimated_tokens": 605
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2366,
+              "estimated_tokens": 591
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1744,
+              "estimated_tokens": 436
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1154,
+              "estimated_tokens": 288
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        },
+        {
+          "purpose": "retry_escalation",
+          "retry_attempt": 2,
+          "retry_reason": "scene_stall",
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 70350,
+          "user_estimated_tokens": 17587,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20355,
+              "estimated_tokens": 5088
+            },
+            {
+              "key": "instructions",
+              "chars": 10758,
+              "estimated_tokens": 2689
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10623,
+              "estimated_tokens": 2655
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4028,
+              "estimated_tokens": 1007
+            },
+            {
+              "key": "scene",
+              "chars": 2420,
+              "estimated_tokens": 605
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2366,
+              "estimated_tokens": 591
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1744,
+              "estimated_tokens": 436
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1154,
+              "estimated_tokens": 288
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 8,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "straightforward_consequential",
+      "player_text": "I examine the courtyard lantern.",
+      "elapsed_ms": 74,
+      "latency_ms": {
+        "intent_classification": 4,
+        "engine_resolution": 0,
+        "prompt_construction": 6,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 2,
+        "total_turn": 37
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 21413,
+      "persistence_ms": {
+        "save_session": 8,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "investigate",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 76089,
+          "user_estimated_tokens": 19022,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21149,
+              "estimated_tokens": 5287
+            },
+            {
+              "key": "instructions",
+              "chars": 13316,
+              "estimated_tokens": 3329
+            },
+            {
+              "key": "turn_packet",
+              "chars": 11301,
+              "estimated_tokens": 2825
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4562,
+              "estimated_tokens": 1140
+            },
+            {
+              "key": "scene",
+              "chars": 2504,
+              "estimated_tokens": 626
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2476,
+              "estimated_tokens": 619
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1819,
+              "estimated_tokens": 454
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1174,
+              "estimated_tokens": 293
+            },
+            {
+              "key": "recent_log",
+              "chars": 989,
+              "estimated_tokens": 247
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 9,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "compound_intention",
+      "player_text": "I examine the lantern and then go through the gate.",
+      "elapsed_ms": 23,
+      "latency_ms": {
+        "intent_classification": 4,
+        "engine_resolution": 0,
+        "prompt_construction": 6,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 2,
+        "total_turn": 37
+      },
+      "narration_provider_calls": 0,
+      "interpretation_requests": 0,
+      "narration_requests_meta": 0,
+      "retries_meta": 0,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 8,
+        "save_world": 0
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "conversational_clarify",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You can go through the gate first. I have not done this yet: examine the lantern. Should I do the first one now?",
+      "calls": []
+    },
+    {
+      "turn_id": 10,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "conversation_exit_then_activity",
+      "player_text": "I leave this conversation and look around.",
+      "elapsed_ms": 80,
+      "latency_ms": {
+        "intent_classification": 4,
+        "engine_resolution": 0,
+        "prompt_construction": 6,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 1,
+        "total_turn": 39
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 21100,
+      "persistence_ms": {
+        "save_session": 9,
+        "save_world": 4
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "observe",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "Provider calls are disabled for this run, so no live narration was generated.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 74838,
+          "user_estimated_tokens": 18709,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20753,
+              "estimated_tokens": 5188
+            },
+            {
+              "key": "instructions",
+              "chars": 12746,
+              "estimated_tokens": 3186
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10826,
+              "estimated_tokens": 2706
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4563,
+              "estimated_tokens": 1140
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2500,
+              "estimated_tokens": 625
+            },
+            {
+              "key": "scene",
+              "chars": 2493,
+              "estimated_tokens": 623
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2302,
+              "estimated_tokens": 575
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 1748,
+              "estimated_tokens": 437
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1184,
+              "estimated_tokens": 296
+            },
+            {
+              "key": "character",
+              "chars": 964,
+              "estimated_tokens": 241
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    }
+  ],
+  "provider_snapshot": {
+    "requests": 0,
+    "note": "provider calls disabled"
+  },
+  "persist_totals": {
+    "save_session": 83,
+    "save_world": 18,
+    "save_session_count": 12,
+    "save_world_count": 16
+  }
+}

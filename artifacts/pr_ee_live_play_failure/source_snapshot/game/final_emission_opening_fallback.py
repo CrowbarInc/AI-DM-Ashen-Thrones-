@@ -1,0 +1,560 @@
+"""Opening fallback selection and fail-closed policy used by final emission.
+
+This module selects an existing upstream-prepared opening fallback snapshot or
+the existing sealed fail-closed marker. It does not author opening prose,
+package upstream payloads, write final output, or own gate orchestration.
+
+Success-path ``opening_fallback_authorship_source`` is written once upstream by
+:func:`game.upstream_response_repairs.build_upstream_prepared_opening_fallback_payload`
+and mirrored here from ``opening_fallback_composition_meta`` when a prepared
+payload is selected. Fail-closed paths leave authorship absent or ``None``.
+
+Telemetry-only keys (CK Block 6/9): ``opening_fallback_compatibility_local_disabled`` and the
+additive alias ``opening_fallback_local_composition_disabled`` record that retired gate-local
+opening composition did not run. Both are stamped together on ``composition_meta``; only
+``opening_fallback_compatibility_local_disabled`` is RTD-merged into FEM (see
+``OPENING_FALLBACK_OUT_OF_BAND_TELEMETRY_RTD_MERGE_FIELDS``). The alias is composition-meta /
+RTD-debug only. They are **not** authorship sources and must never be confused with
+``opening_fallback_authorship_source``.
+"""
+from __future__ import annotations
+
+from typing import Any, Callable, Dict, Mapping
+
+from game.diegetic_fallback_narration import (
+    fallback_template_metadata as diegetic_classified_fallback_meta,
+    opening_scene_fallback_template_allowed as diegetic_opening_scene_template_allowed,
+)
+from game.opening_deterministic_fallback import (
+    OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+    opening_context_from_gm_output as _opening_context_from_gm_output,
+)
+from game.final_emission_boundary_contract import assert_final_emission_mutation_allowed
+from game.final_emission_sealed_fallback import SealedFallbackSelection
+from game.final_emission_text_formatting import _normalize_text
+from game.final_emission_visibility_fallback import VisibilitySelectedFallback
+from game.final_emission_meta import (
+    FINAL_EMISSION_META_KEY,
+    OPENING_FALLBACK_RESULT_META_FIELDS,
+    append_semantic_mutation_write_site,
+    default_opening_fallback_fail_closed_result_meta,
+    ensure_final_emission_meta_dict,
+    stamp_opening_fallback_owner_bucket,
+)
+from game.upstream_response_repairs import (
+    UPSTREAM_PREPARED_OPENING_FALLBACK_KEY,
+    is_structurally_usable_upstream_prepared_opening_fallback_payload,
+)
+
+_OPENING_SCENE_SAFE_FALLBACK_POOL = "scene_opening_deterministic"
+_OPENING_SCENE_SAFE_FALLBACK_KIND = "opening_deterministic_fallback"
+_OPENING_SCENE_SAFE_FALLBACK_SOURCE = "opening_deterministic_fallback"
+_OPENING_SCENE_SAFE_FALLBACK_STRATEGY = "opening_scene_safe_fallback"
+_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE = "opening_deterministic_fallback"
+
+# CK Block 7/9: out-of-band telemetry keys are stamped alongside composition_meta but are not part
+# of the canonical ``OPENING_FALLBACK_PROJECTION_FIELDS`` contract (see final_emission_meta).
+# Only ``OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY`` is RTD-merged into FEM.
+OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY = "opening_fallback_compatibility_local_disabled"
+OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY = "opening_fallback_local_composition_disabled"
+
+# CK Block 8: fail-closed diagnostic keys reach FEM via response-type debug merge but are outside
+# ``OPENING_FALLBACK_PROJECTION_FIELDS`` (see ``OPENING_FALLBACK_FAIL_CLOSED_DIAGNOSTIC_FIELDS``).
+OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY = "opening_fallback_missing_upstream_prepared_payload"
+OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY = "opening_fallback_missing_curated_facts"
+OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY = "opening_fallback_upstream_payload_unusable"
+OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY = "opening_fallback_upstream_payload_recovered"
+
+
+def _stamp_gate_local_composition_disabled_telemetry(target: Dict[str, Any]) -> None:
+    """Stamp telemetry proving retired gate-local opening composition did not run."""
+    target[OPENING_FALLBACK_COMPATIBILITY_LOCAL_DISABLED_KEY] = True
+    target[OPENING_FALLBACK_LOCAL_COMPOSITION_DISABLED_KEY] = True
+
+
+def build_opening_fallback_result_meta(
+    *,
+    context: Mapping[str, Any] | None = None,
+    facts: list[str] | None = None,
+    opening_fallback_failed_closed: bool = False,
+    force_fail_closed_context_source: bool = False,
+) -> Dict[str, Any]:
+    """Canonical opening fallback result metadata (selection/FEM projection core).
+
+    Aligns with :data:`game.final_emission_meta.OPENING_FALLBACK_RESULT_META_FIELDS`
+    (subset of ``OPENING_FALLBACK_PROJECTION_FIELDS``). Authorship is stamped only
+    upstream on the success path; selection mirrors it from composition meta.
+    """
+    if context is None:
+        return default_opening_fallback_fail_closed_result_meta()
+    resolved_facts = (
+        facts
+        if facts is not None
+        else [
+            str(x).strip().rstrip(".")
+            for x in (context.get("visible_facts") or [])
+            if str(x).strip()
+        ]
+    )
+    meta: Dict[str, Any] = {
+        "opening_fallback_context_source": context.get("opening_fallback_context_source"),
+        "opening_fallback_basis_count": len(resolved_facts),
+        "opening_fallback_context_missing": not bool(resolved_facts),
+        "opening_fallback_failed_closed": opening_fallback_failed_closed,
+        "opening_curated_facts_present": bool(resolved_facts),
+        "opening_curated_facts_count": len(resolved_facts),
+        "opening_curated_facts_source": context.get("opening_curated_facts_source") or "selector",
+        "opening_selector_source_used": context.get("opening_selector_source_used") or "none",
+        "opening_selector_selected_facts": list(context.get("opening_selector_selected_facts") or []),
+        "opening_curated_facts": list(context.get("opening_curated_facts") or []),
+        "opening_final_fallback_basis": list(context.get("opening_final_fallback_basis") or []),
+        "opening_final_basis_matches_selector": bool(context.get("opening_final_basis_matches_selector")),
+    }
+    if opening_fallback_failed_closed and (
+        force_fail_closed_context_source or not resolved_facts
+    ):
+        meta["opening_fallback_context_source"] = "opening_curated_facts"
+    assert set(meta.keys()) == set(OPENING_FALLBACK_RESULT_META_FIELDS)
+    return meta
+
+
+def build_upstream_prepared_opening_composition_meta(
+    result_meta: Mapping[str, Any],
+    *,
+    fallback_family_used: str | None,
+    fallback_temporal_frame: str | None,
+    opening_fallback_authorship_source: str,
+) -> Dict[str, Any]:
+    """Assemble ``opening_fallback_composition_meta`` from canonical result metadata + upstream layers."""
+    composition_meta: Dict[str, Any] = {
+        "first_mention_composition_used": False,
+        "first_mention_composition_layers": {"environment": None, "motion": None, "entities": []},
+        "fallback_family_used": fallback_family_used,
+        "fallback_temporal_frame": fallback_temporal_frame,
+        "opening_fallback_authorship_source": opening_fallback_authorship_source,
+    }
+    composition_meta.update(dict(result_meta))
+    return composition_meta
+
+
+def opening_fallback_authorship_source_from_composition_meta(
+    composition_meta: Mapping[str, Any] | None,
+) -> str | None:
+    """Read authorship from upstream composition meta without inferring defaults."""
+    if not isinstance(composition_meta, Mapping):
+        return None
+    value = composition_meta.get("opening_fallback_authorship_source")
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    return None
+
+
+def _result_meta_from_upstream_prepared_payload(upstream: Mapping[str, Any]) -> Dict[str, Any]:
+    """Build adapter result meta from upstream prepared opening payload (mirror only)."""
+    result_meta = dict(upstream["opening_fallback_meta"])
+    authorship = opening_fallback_authorship_source_from_composition_meta(
+        upstream.get("opening_fallback_composition_meta")
+    )
+    if authorship is not None:
+        result_meta["opening_fallback_authorship_source"] = authorship
+    return result_meta
+
+
+def _opening_fallback_classification() -> Dict[str, str]:
+    template_id = "opening_deterministic_fallback"
+    if not diegetic_opening_scene_template_allowed(template_id):
+        raise AssertionError("opening deterministic fallback template is not opening-scene classified")
+    return diegetic_classified_fallback_meta(template_id)
+
+
+def _opening_curated_facts_have_attachable_non_empty_strings(gm_output: Mapping[str, Any] | None) -> bool:
+    """Aligned with upstream prepared-opening payload attachment preconditions."""
+    if not isinstance(gm_output, dict):
+        return False
+    facts = gm_output.get("opening_curated_facts")
+    if not isinstance(facts, list):
+        return False
+    return any(isinstance(x, str) and x.strip() for x in facts)
+
+
+def _opening_curated_facts_schema_ok(gm_output: Mapping[str, Any] | None) -> bool:
+    """True when ``opening_curated_facts`` is present and a list (empty list is valid schema)."""
+    return (
+        isinstance(gm_output, dict)
+        and "opening_curated_facts" in gm_output
+        and isinstance(gm_output.get("opening_curated_facts"), list)
+    )
+
+
+def _gm_output_normalized_for_opening_context(gm_output: Mapping[str, Any] | None) -> Mapping[str, Any]:
+    """Normalize missing/non-list curated facts to ``[]`` before context extraction."""
+    if not isinstance(gm_output, dict):
+        return {"opening_curated_facts": []}
+    if _opening_curated_facts_schema_ok(gm_output):
+        return gm_output
+    merged = dict(gm_output)
+    merged["opening_curated_facts"] = []
+    return merged
+
+
+def _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Meta for the sealed opening marker when an upstream payload cannot be selected."""
+    # Negative invariant: gate-local opening composition is retired; fail-closed paths stamp
+    # telemetry-only disabled flags and leave authorship absent (never legacy compat-local tokens).
+    block_h: Dict[str, Any] = {
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: True,
+    }
+    _stamp_gate_local_composition_disabled_telemetry(block_h)
+    if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
+        ctx = _opening_context_from_gm_output(gm_output)
+        facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
+        meta = build_opening_fallback_result_meta(
+            context=ctx,
+            facts=facts,
+            opening_fallback_failed_closed=True,
+            force_fail_closed_context_source=True,
+        )
+        meta[OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY] = False
+        meta.update(block_h)
+        return meta
+    meta = build_opening_fallback_result_meta(context=None)
+    meta[OPENING_FALLBACK_MISSING_CURATED_FACTS_KEY] = True
+    meta.update(block_h)
+    return meta
+
+
+def _upstream_prepared_opening_fallback_payload_if_usable(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any] | None:
+    """Return the prepared opening snapshot if structurally consumable by the gate."""
+    if not isinstance(gm_output, dict):
+        return None
+    raw = gm_output.get(UPSTREAM_PREPARED_OPENING_FALLBACK_KEY)
+    return raw if is_structurally_usable_upstream_prepared_opening_fallback_payload(raw) else None
+
+
+def _recover_upstream_opening_fallback_stub_payload(
+    gm_output: Dict[str, Any] | None,
+) -> tuple[Dict[str, Any] | None, Dict[str, Any]]:
+    """Return a usable opening payload or mark a gate-arriving stub fail-closed."""
+    patch: Dict[str, Any] = {}
+    if not isinstance(gm_output, dict):
+        return None, patch
+    usable = _upstream_prepared_opening_fallback_payload_if_usable(gm_output)
+    if usable:
+        return usable, patch
+    if UPSTREAM_PREPARED_OPENING_FALLBACK_KEY not in gm_output:
+        return None, patch
+    patch[OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY] = True
+    patch[OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY] = False
+    _stamp_gate_local_composition_disabled_telemetry(patch)
+    return None, patch
+
+
+def _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(
+    gm_output: Mapping[str, Any] | None,
+) -> bool:
+    """True when upstream attach recorded a prepared-opening build failure."""
+    if not isinstance(gm_output, dict):
+        return False
+    md = gm_output.get("metadata")
+    em = md.get("emission_debug") if isinstance(md, dict) else None
+    if not isinstance(em, dict):
+        return False
+    return bool(em.get("opening_upstream_prepare_attach_build_failed"))
+
+
+def _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Sealed marker meta when upstream attach was attempted but failed."""
+    out: Dict[str, Any] = {
+        "opening_fallback_failed_closed": True,
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: True,
+        "blocked_repair_kind": "opening_upstream_prepare_attach_failed",
+    }
+    _stamp_gate_local_composition_disabled_telemetry(out)
+    if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
+        ctx = _opening_context_from_gm_output(gm_output)
+        facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
+        out.update(
+            build_opening_fallback_result_meta(
+                context=ctx,
+                facts=facts,
+                opening_fallback_failed_closed=True,
+                force_fail_closed_context_source=True,
+            )
+        )
+    return out
+
+
+def _opening_fail_closed_meta_upstream_stub_rebuild_failed(
+    gm_output: Mapping[str, Any] | None,
+) -> Dict[str, Any]:
+    """Sealed marker meta when an unusable upstream stub reaches the gate."""
+    out: Dict[str, Any] = {
+        "opening_fallback_failed_closed": True,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY: True,
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY: False,
+        OPENING_FALLBACK_MISSING_UPSTREAM_PREPARED_PAYLOAD_KEY: False,
+    }
+    _stamp_gate_local_composition_disabled_telemetry(out)
+    if isinstance(gm_output, dict) and isinstance(gm_output.get("opening_curated_facts"), list):
+        ctx = _opening_context_from_gm_output(gm_output)
+        facts = [str(x).strip().rstrip(".") for x in (ctx.get("visible_facts") or []) if str(x).strip()]
+        out.update(
+            build_opening_fallback_result_meta(
+                context=ctx,
+                facts=facts,
+                opening_fallback_failed_closed=True,
+                force_fail_closed_context_source=True,
+            )
+        )
+    return out
+
+
+def scene_opening_rt_contract_accept_path_promotes_candidate(
+    response_type_debug: Mapping[str, Any],
+) -> bool:
+    """True when scene-opening response-type path accepts the writer candidate without RT repair (selector only)."""
+    return (
+        str(response_type_debug.get("response_type_required") or "").strip().lower() == "scene_opening"
+        and response_type_debug.get("response_type_candidate_ok") is True
+        and response_type_debug.get("response_type_repair_used") is False
+        and response_type_debug.get("scene_opening_candidate_contract_passed") is True
+    )
+
+
+def _scene_opening_debug_preview(text: str, *, limit: int = 120) -> str:
+    clean = _normalize_text(text)
+    return (clean[:limit] + "…") if len(clean) > limit else clean
+
+
+def patch_scene_opening_candidate_emission_debug(
+    out: Dict[str, Any],
+    *,
+    accepted_scene_opening_text: str | None,
+) -> None:
+    """Patch scene-opening accept-path candidate/emitted debug keys on gm output."""
+    if not isinstance(out, dict):
+        return
+    md = out.setdefault("metadata", {})
+    if not isinstance(md, dict):
+        md = {}
+        out["metadata"] = md
+    em = md.setdefault("emission_debug", {})
+    if not isinstance(em, dict):
+        em = {}
+        md["emission_debug"] = em
+    accepted = _normalize_text(accepted_scene_opening_text or "")
+    emitted = _normalize_text(out.get("player_facing_text") or "")
+    em["scene_opening_candidate_len"] = len(accepted)
+    em["scene_opening_emitted_len"] = len(emitted)
+    em["scene_opening_candidate_emitted_match"] = bool(accepted) and emitted == accepted
+    em["scene_opening_accepted_candidate_promoted"] = bool(accepted) and emitted == accepted
+    em["response_type_candidate_preview"] = _scene_opening_debug_preview(accepted)
+    em["response_type_emitted_preview"] = _scene_opening_debug_preview(emitted)
+
+    fem = out.get(FINAL_EMISSION_META_KEY)
+    if isinstance(fem, dict):
+        fem["response_type_candidate_preview"] = em["response_type_candidate_preview"]
+        fem["response_type_emitted_preview"] = em["response_type_emitted_preview"]
+
+
+def reassert_scene_opening_accepted_candidate(
+    out: Dict[str, Any],
+    *,
+    accepted_scene_opening_text: str | None,
+    source: str,
+) -> None:
+    """Restore accepted scene-opening candidate text and refresh accept-path debug telemetry."""
+    accepted = _normalize_text(accepted_scene_opening_text or "")
+    if not accepted:
+        return
+    before_text = str(out.get("player_facing_text") or "")
+    if _normalize_text(before_text) != accepted:
+        assert_final_emission_mutation_allowed(
+            "restore_accepted_scene_opening_candidate",
+            source=source,
+        )
+        out["player_facing_text"] = accepted
+        append_semantic_mutation_write_site(
+            ensure_final_emission_meta_dict(out),
+            before_text=before_text,
+            after_text=accepted,
+            write_site_family="final_emission",
+            write_site_file="game/final_emission_opening_fallback.py",
+            write_site_function="reassert_scene_opening_accepted_candidate",
+            owner="game.final_emission_opening_fallback",
+            source=source,
+            mutation_reason="accepted_scene_opening_reassertion",
+            compatibility_status="diagnostic_only",
+        )
+    patch_scene_opening_candidate_emission_debug(
+        out,
+        accepted_scene_opening_text=accepted,
+    )
+    assert _normalize_text(out.get("player_facing_text") or "") == accepted
+
+
+def select_opening_fallback_for_response_type_contract(
+    gm_output: Mapping[str, Any] | None,
+) -> tuple[str, Dict[str, Any], Dict[str, Any], bool, Dict[str, Any] | None]:
+    """Select opening fallback text and debug metadata for response-type enforcement.
+
+    Returns ``fallback_text``, ``result_meta`` (``opening_fallback_meta`` shape on upstream
+    success), ``stub_patch``, whether upstream-prepared was selected, and the upstream payload
+    snapshot when selected (else ``None``).
+    """
+    gm_dict = gm_output if isinstance(gm_output, dict) else None
+    upstream, stub_patch = (
+        _recover_upstream_opening_fallback_stub_payload(gm_dict)
+        if gm_dict is not None
+        else (None, {})
+    )
+    if upstream:
+        return (
+            str(upstream["prepared_opening_fallback_text"]).strip(),
+            _result_meta_from_upstream_prepared_payload(upstream),
+            stub_patch,
+            True,
+            upstream,
+        )
+    if stub_patch.get(OPENING_FALLBACK_UPSTREAM_PAYLOAD_UNUSABLE_KEY) and stub_patch.get(
+        OPENING_FALLBACK_UPSTREAM_PAYLOAD_RECOVERED_KEY
+    ) is False:
+        return (
+            OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+            _opening_fail_closed_meta_upstream_stub_rebuild_failed(gm_output),
+            stub_patch,
+            False,
+            None,
+        )
+    if _opening_maybe_attach_upstream_prepare_build_failed_on_emission_debug(gm_dict):
+        return (
+            OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+            _opening_fail_closed_meta_upstream_maybe_attach_prepare_failed(gm_output),
+            stub_patch,
+            False,
+            None,
+        )
+    fail_closed_meta = _opening_fail_closed_meta_upstream_missing_insufficient_curated_facts(gm_output)
+    return (
+        OPENING_FALLBACK_EMPTY_CURATED_FACTS_MARKER,
+        fail_closed_meta,
+        stub_patch,
+        False,
+        None,
+    )
+
+
+def opening_fail_closed_composition_meta_empty() -> Dict[str, Any]:
+    """No extra fail-closed composition layers (response-type contract path)."""
+    return {}
+
+
+OpeningContractSelection = tuple[str, Dict[str, Any], Dict[str, Any], bool, Dict[str, Any] | None]
+
+
+def _visibility_selected_from_opening_contract(
+    fallback_text: str,
+    fallback_meta: Dict[str, Any],
+    stub_patch: Dict[str, Any],
+    upstream_selected: bool,
+    upstream_payload: Dict[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> VisibilitySelectedFallback:
+    if upstream_selected and upstream_payload is not None:
+        composition_meta = dict(upstream_payload["opening_fallback_composition_meta"])
+        composition_meta.update(stub_patch)
+        stamp_opening_fallback_owner_bucket(composition_meta)
+        return VisibilitySelectedFallback(
+            text=fallback_text,
+            fallback_pool=_OPENING_SCENE_SAFE_FALLBACK_POOL,
+            fallback_kind=_OPENING_SCENE_SAFE_FALLBACK_KIND,
+            final_emitted_source=_OPENING_SCENE_SAFE_FALLBACK_SOURCE,
+            fallback_strategy=_OPENING_SCENE_SAFE_FALLBACK_STRATEGY,
+            fallback_candidate_source=_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE,
+            composition_meta=composition_meta,
+        )
+    classification = _opening_fallback_classification()
+    meta = fail_closed_composition_meta_factory()
+    meta["fallback_family_used"] = classification.get("fallback_family")
+    meta["fallback_temporal_frame"] = classification.get("temporal_frame")
+    meta.update(fallback_meta)
+    meta.update(stub_patch)
+    meta["opening_fallback_authorship_source"] = None
+    stamp_opening_fallback_owner_bucket(meta)
+    return VisibilitySelectedFallback(
+        text=fallback_text,
+        fallback_pool=_OPENING_SCENE_SAFE_FALLBACK_POOL,
+        fallback_kind=_OPENING_SCENE_SAFE_FALLBACK_KIND,
+        final_emitted_source=_OPENING_SCENE_SAFE_FALLBACK_SOURCE,
+        fallback_strategy=_OPENING_SCENE_SAFE_FALLBACK_STRATEGY,
+        fallback_candidate_source=_OPENING_SCENE_SAFE_FALLBACK_CANDIDATE_SOURCE,
+        composition_meta=meta,
+    )
+
+
+def opening_scene_safe_fallback_contract(
+    gm_output: Mapping[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> tuple[VisibilitySelectedFallback, OpeningContractSelection]:
+    """Unified opening selector: visibility dataclass plus response-type contract tuple."""
+    contract = select_opening_fallback_for_response_type_contract(gm_output)
+    fallback_text, fallback_meta, stub_patch, upstream_selected, upstream_payload = contract
+    selected = _visibility_selected_from_opening_contract(
+        fallback_text,
+        fallback_meta,
+        stub_patch,
+        upstream_selected,
+        upstream_payload,
+        fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+    )
+    return selected, contract
+
+
+def opening_scene_safe_fallback_selection(
+    gm_output: Mapping[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> VisibilitySelectedFallback:
+    """Canonical opening hard-replace selection: upstream snapshot or sealed marker."""
+    selected, _contract = opening_scene_safe_fallback_contract(
+        gm_output,
+        fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+    )
+    return selected
+
+
+def opening_sealed_fallback_selection(
+    gm_output: Mapping[str, Any] | None,
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> SealedFallbackSelection:
+    """Project opening hard-replace selection into sealed selection for terminal replace paths."""
+    return SealedFallbackSelection.from_visibility_selection(
+        opening_scene_safe_fallback_selection(
+            gm_output,
+            fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+        )
+    )
+
+
+def make_opening_sealed_fallback_provider(
+    *,
+    fail_closed_composition_meta_factory: Callable[[], Dict[str, Any]],
+) -> Callable[[Dict[str, Any]], SealedFallbackSelection]:
+    """Bind fail-closed composition meta for sealed non-strict opening provider injection."""
+
+    def provider(gm_output: Dict[str, Any]) -> SealedFallbackSelection:
+        return opening_sealed_fallback_selection(
+            gm_output,
+            fail_closed_composition_meta_factory=fail_closed_composition_meta_factory,
+        )
+
+    return provider

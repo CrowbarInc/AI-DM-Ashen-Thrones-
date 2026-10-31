@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="53" time="2.813" timestamp="2026-10-30T22:22:42.978377-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_noncombat_resolution" name="test_noncombat_kind_taxonomy_is_stable" time="0.004" /><testcase classname="tests.test_noncombat_resolution" name="test_classify_observe_maps_to_perception" time="0.001" /><testcase classname="tests.test_noncombat_resolution" name="test_classify_social_kind_routes_social" time="0.000" /><testcase classname="tests.test_noncombat_resolution" name="test_classify_attack_is_out_of_scope" time="0.000" /><testcase classname="tests.test_noncombat_resolution" name="test_classify_unknown_type_fail_closed" time="0.000" /><testcase classname="tests.test_noncombat_resolution" name="test_classify_explicit_route_mismatch" time="0.001" /><testcase classname="tests.test_noncombat_resolution" name="test_normalize_omits_prose_fields" time="0.000" /><testcase classname="tests.test_noncombat_resolution" name="test_resolve_noncombat_observe_minimal_scene" time="0.001" /><testcase classname="tests.test_noncombat_resolution" name="test_resolve_noncombat_attack_returns_unsupported" time="0.000" /><testcase classname="tests.test_noncombat_resolution" name="test_resolve_noncombat_downtime_not_wired" time="0.000" /><testcase classname="tests.test_noncombat_resolution" name="test_attach_noncombat_contract_embeds_payload" time="0.000" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_routes_perception" time="0.001" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_routes_investigation" time="0.001" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_routes_social_probe_preserving_domain" time="0.002" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_pending_check_matches_raw_contract" time="0.001" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_exploration_kind_unchanged_owner" time="0.003" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_attack_noncombat_resolver_stays_isolated_from_domain" time="0.000" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_unknown_type_fail_closed_no_framework_route" time="0.000" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_unknown_action_type_fail_closed_contract" time="0.001" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_downtime_unsupported_contract" time="0.000" /><testcase classname="tests.test_noncombat_runtime_integration" name="test_runtime_seam_downtime_stays_unsupported_not_synthetic_success" time="0.000" /><testcase classname="tests.test_state_authority" name="test_registry_exactly_five_domains_no_extras_deterministic_order" time="0.001" /><testcase classname="tests.test_state_authority" name="test_unknown_domain_raises_state_authority_error" time="0.001" /><testcase classname="tests.test_state_authority" name="test_player_visible_state_journal_publication_alignment" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_mutation_owners_rejected[gpt]" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_mutation_owners_rejected[gpt_output]" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_mutation_owners_rejected[llm]" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_mutation_owners_rejected[model]" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_mutation_owners_rejected[model_output]" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_mutation_owners_rejected[openai]" time="0.001" /><testcase classname="tests.test_state_authority" name="test_pseudo_owners_fail_can_owner_mutate_domain" time="0.000" /><testcase classname="tests.test_state_authority" name="test_declared_module_owners_can_mutate_expected_domains" time="0.000" /><testcase classname="tests.test_state_authority" name="test_wrong_module_cannot_mutate_domain" time="0.001" /><testcase classname="tests.test_state_authority" name="test_read_matrix_concrete_pairs" time="0.001" /><testcase classname="tests.test_state_authority" name="test_cross_domain_implicit_denial" time="0.001" /><testcase classname="tests.test_state_authority" name="test_cross_domain_same_domain_is_noop" time="0.000" /><testcase classname="tests.test_state_authority" name="test_cross_domain_operation_mismatch_fails" time="0.000" /><testcase classname="tests.test_state_authority" name="test_cross_domain_block_b_operations_allow_listed" time="0.000" /><testcase classname="tests.test_state_authority" name="test_cross_domain_allowlist_nonempty_and_json_friendly_ops" time="0.000" /><testcase classname="tests.test_state_authority" name="test_cross_domain_empty_operation_rejected" time="0.000" /><testcase classname="tests.test_state_authority" name="test_publication_view_specs_player_visible_and_hidden" time="0.000" /><testcase classname="tests.test_state_authority" name="test_build_state_mutation_trace_compact_shape" time="0.000" /><testcase classname="tests.test_state_authority" name="test_prompt_context_is_not_player_visible_state_mutator" time="0.000" /><testcase classname="tests.test_state_authority" name="test_prompt_context_is_not_runtime_truth_mutator_for_authoritative_domains" time="0.001" /><testcase classname="tests.test_state_authority" name="test_storage_is_not_interaction_state_mutator" time="0.000" /><testcase classname="tests.test_state_authority" name="test_scene_state_lazy_init_remains_outside_direct_owner_suite" time="0.000" /><testcase classname="tests.test_state_authority" name="test_storage_get_interaction_context_first_touch_not_guarded" time="0.000" /><testcase classname="tests.test_activate_scene_validation_and_get_persistence" name="test_invalid_activate_scene_id_ignored_safely" time="0.121" /><testcase classname="tests.test_activate_scene_validation_and_get_persistence" name="test_valid_activate_scene_id_is_advisory_only_in_chat" time="0.081" /><testcase classname="tests.test_activate_scene_validation_and_get_persistence" name="test_post_scene_activate_rejects_unknown_id" time="0.011" /><testcase classname="tests.test_activate_scene_validation_and_get_persistence" name="test_post_scene_activate_clears_interaction_context" time="0.017"><failure message="PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_rules_persistence_1793413362440454900\\test_post_scene_activate_clear0\\data\\session.json.tmp.b80a8fc0713d9106' -&gt; 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_rules_persistence_1793413362440454900\\test_post_scene_activate_clear0\\data\\session.json'">tests\test_activate_scene_validation_and_get_persistence.py:189: in test_post_scene_activate_clears_interaction_context
+    r = client.post("/api/scene/activate", json={"scene_id": "scene_b"})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:555: in post
+    return super().post(
+.venv\Lib\site-packages\httpx\_client.py:1144: in post
+    return self.request(
+.venv\Lib\site-packages\starlette\testclient.py:454: in request
+    return super().request(
+.venv\Lib\site-packages\httpx\_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:914: in send
+    response = self._send_handling_auth(
+.venv\Lib\site-packages\httpx\_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+.venv\Lib\site-packages\httpx\_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\httpx\_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:356: in handle_request
+    raise exc
+.venv\Lib\site-packages\starlette\testclient.py:353: in handle_request
+    portal.call(self.app, scope, receive, send)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\applications.py:1163: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:186: in __call__
+    raise exc
+.venv\Lib\site-packages\starlette\middleware\errors.py:164: in __call__
+    await self.app(scope, receive, _send)
+.venv\Lib\site-packages\starlette\middleware\cors.py:88: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:63: in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:2692: in app
+    await route.handle(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:1274: in handle
+    await super().handle(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:276: in handle
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\routing.py:156: in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+.venv\Lib\site-packages\starlette\_exception_handler.py:53: in wrapped_app
+    raise exc
+.venv\Lib\site-packages\starlette\_exception_handler.py:42: in wrapped_app
+    await app(scope, receive, sender)
+.venv\Lib\site-packages\fastapi\routing.py:142: in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:698: in app
+    raw_response = await run_endpoint_function(
+.venv\Lib\site-packages\fastapi\routing.py:352: in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\concurrency.py:34: in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\to_thread.py:65: in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:2641: in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+.venv\Lib\site-packages\anyio\_backends\_asyncio.py:1033: in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+game\api.py:5171: in api_activate_scene
+    save_session(session)
+game\storage.py:258: in save_session
+    _atomic_save_json(SESSION_PATH, env)
+game\storage.py:165: in _atomic_save_json
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+game\storage.py:161: in _atomic_write_text
+    _atomic_write_bytes(path, text.encode(encoding))
+game\storage.py:139: in _atomic_write_bytes
+    os.replace(tmp, path)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_rules_persistence_1793413362440454900\\test_post_scene_activate_clear0\\data\\session.json.tmp.b80a8fc0713d9106' -&gt; 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_rules_persistence_1793413362440454900\\test_post_scene_activate_clear0\\data\\session.json'</failure></testcase><testcase classname="tests.test_activate_scene_validation_and_get_persistence" name="test_get_time_session_initialization_persists_when_mutation_occurs" time="0.025" /><testcase classname="tests.test_activate_scene_validation_and_get_persistence" name="test_no_unnecessary_persistence_when_session_already_has_clocks" time="0.018" /></testsuite></testsuites>

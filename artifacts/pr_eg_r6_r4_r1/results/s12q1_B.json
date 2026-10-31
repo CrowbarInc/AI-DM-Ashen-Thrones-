@@ -1,0 +1,51 @@
+{
+  "case_id": "s12q1",
+  "family": "s12",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "f3bf31e510f1eed6f88ed00e8c84e1ee7c5afcd0d13420ac0172123541336458",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The reed guild"
+    ],
+    "qualifiers": [
+      "each spring",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s12"
+    ],
+    "answered_arguments": [
+      "permission"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 states that The reed guild licenses the marsh ferrymen each spring, indicating their permission is required for operation."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

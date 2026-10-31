@@ -1,0 +1,804 @@
+{
+  "conversation": [
+    {
+      "turn": 1,
+      "player": "Could you describe the courtyard?",
+      "http_status": 200,
+      "response": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Sergeant Mara watches the road. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A soot-streaked lantern burns beside the courtyard gate. The side gate is barred from the other side. Sergeant Mara looks concerned as she watches the road.",
+      "kind": "conversational_answer",
+      "authorization": null,
+      "dialogue_authority": null,
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": null,
+        "improvisation": null,
+        "efficiency": true,
+        "class": "answer"
+      },
+      "state_changed_keys": [],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1704,
+        "output_tokens": 211,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 3981.128
+    },
+    {
+      "turn": 2,
+      "player": "I ask Sergeant Mara what the street beyond the gate is called.",
+      "http_status": 200,
+      "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": true,
+        "player_text": "I ask Sergeant Mara what the street beyond the gate is called."
+      },
+      "dialogue_authority": {
+        "requested_information": "general",
+        "subject": "street beyond gate",
+        "knowledge_posture": "established",
+        "answer_relation": "sufficient",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": "authoritative_answer_available"
+      },
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": "street",
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "established",
+        "improvisation": false,
+        "efficiency": true,
+        "class": "answer"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 2,
+        "interpretation_calls": 1,
+        "narration_calls": 1,
+        "retry_calls": 0,
+        "input_tokens": 26258,
+        "output_tokens": 271,
+        "purposes": [
+          "interpretation",
+          "strict_social"
+        ]
+      },
+      "elapsed_ms": 5243.411
+    },
+    {
+      "turn": 3,
+      "player": "What did you mean by that?",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"Word is, the street beyond the gate is the north road.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "continues",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": false,
+        "player_text": "What did you mean by that?"
+      },
+      "dialogue_authority": {
+        "requested_information": "general",
+        "subject": "mean",
+        "knowledge_posture": "established",
+        "answer_relation": "sufficient",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": "authoritative_answer_available"
+      },
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": "street",
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "established",
+        "improvisation": false,
+        "efficiency": true,
+        "class": "answer"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1981,
+        "output_tokens": 221,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 3068.421
+    },
+    {
+      "turn": 4,
+      "player": "Has anyone been keeping an eye on it after dark?",
+      "http_status": 200,
+      "response": "That has not been established in the information available to you.",
+      "kind": "conversational_answer",
+      "authorization": null,
+      "dialogue_authority": null,
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": null,
+        "improvisation": null,
+        "efficiency": true,
+        "class": "internal"
+      },
+      "state_changed_keys": [],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1953,
+        "output_tokens": 188,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 2541.043
+    },
+    {
+      "turn": 5,
+      "player": "I ask Mara who forged the lantern.",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"I couldn't tell you.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "contextual",
+        "target_provenance": "unique_contextual",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": true,
+        "player_text": "I ask Mara who forged the lantern."
+      },
+      "dialogue_authority": {
+        "requested_information": "maker",
+        "subject": "the lantern",
+        "knowledge_posture": "unknown",
+        "answer_relation": "none",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": true,
+        "player_line": "Sergeant Mara says, \"I couldn't tell you.\"",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": ""
+      },
+      "reply_plan_kind": "genuine_uncertainty",
+      "npc_speech_authority": "none",
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "unknown",
+        "improvisation": false,
+        "efficiency": true,
+        "class": "uncertainty"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1981,
+        "output_tokens": 178,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 2707.379
+    },
+    {
+      "turn": 6,
+      "player": "What troubles you, standing out here?",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"I couldn't tell you.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "continues",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": false,
+        "player_text": "What troubles you, standing out here?"
+      },
+      "dialogue_authority": {
+        "requested_information": "personal_state",
+        "subject": "standing out here",
+        "knowledge_posture": "belief",
+        "answer_relation": "none",
+        "improvisation_permitted": true,
+        "improvisation_scope": "incidental_speech",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": ""
+      },
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "npc_speech_authority": "claim_only",
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "belief",
+        "improvisation": true,
+        "efficiency": false,
+        "class": "uncertainty"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 3,
+        "interpretation_calls": 1,
+        "narration_calls": 1,
+        "retry_calls": 1,
+        "input_tokens": 54871,
+        "output_tokens": 358,
+        "purposes": [
+          "interpretation",
+          "strict_social",
+          "retry_escalation"
+        ]
+      },
+      "elapsed_ms": 6282.92
+    },
+    {
+      "turn": 7,
+      "player": "Do you prefer the morning or the evening?",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"I couldn't tell you.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "continues",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": false,
+        "player_text": "Do you prefer the morning or the evening?"
+      },
+      "dialogue_authority": {
+        "requested_information": "opinion",
+        "subject": "morning evening",
+        "knowledge_posture": "belief",
+        "answer_relation": "none",
+        "improvisation_permitted": true,
+        "improvisation_scope": "incidental_speech",
+        "narration_determined": false,
+        "player_line": "",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": ""
+      },
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "npc_speech_authority": "claim_only",
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "belief",
+        "improvisation": true,
+        "efficiency": false,
+        "class": "uncertainty"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 3,
+        "interpretation_calls": 1,
+        "narration_calls": 1,
+        "retry_calls": 1,
+        "input_tokens": 53879,
+        "output_tokens": 278,
+        "purposes": [
+          "interpretation",
+          "strict_social",
+          "retry_escalation"
+        ]
+      },
+      "elapsed_ms": 7156.518
+    },
+    {
+      "turn": 8,
+      "player": "I meant the road, not how you feel.",
+      "http_status": 200,
+      "response": "That action already resolved, so I cannot undo it. You can take a new action if you want.",
+      "kind": "conversational_answer",
+      "authorization": null,
+      "dialogue_authority": null,
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": null,
+        "improvisation": null,
+        "efficiency": true,
+        "class": "uncertainty"
+      },
+      "state_changed_keys": [],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1852,
+        "output_tokens": 201,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 2975.089
+    },
+    {
+      "turn": 9,
+      "player": "What is the password for the side gate?",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"I couldn't answer that.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "continues",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": false,
+        "player_text": "What is the password for the side gate?"
+      },
+      "dialogue_authority": {
+        "requested_information": "hidden",
+        "subject": "the side gate",
+        "knowledge_posture": "withheld",
+        "answer_relation": "none",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": true,
+        "player_line": "Sergeant Mara says, \"I couldn't answer that.\"",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": ""
+      },
+      "reply_plan_kind": "genuine_refusal",
+      "npc_speech_authority": "none",
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "withheld",
+        "improvisation": false,
+        "efficiency": true,
+        "class": "refusal"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1883,
+        "output_tokens": 189,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 2657.954
+    },
+    {
+      "turn": 10,
+      "player": "Promise me a reward if I carry a message for you.",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"I couldn't tell you.\"",
+      "kind": "question",
+      "authorization": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "continues",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          }
+        ],
+        "direct_address": false,
+        "player_text": "Promise me a reward if I carry a message for you."
+      },
+      "dialogue_authority": {
+        "requested_information": "promise",
+        "subject": "carry message",
+        "knowledge_posture": "unestablished",
+        "answer_relation": "none",
+        "improvisation_permitted": false,
+        "improvisation_scope": "none",
+        "narration_determined": true,
+        "player_line": "Sergeant Mara says, \"I couldn't tell you.\"",
+        "canonical": false,
+        "npc_id": "sergeant_mara",
+        "npc_name": "Sergeant Mara",
+        "npc_role": "guard",
+        "npc_disposition": "neutral",
+        "prohibited_claims": [
+          "consequential_world_fact",
+          "hidden_disclosure",
+          "mechanical_change",
+          "new_obligation",
+          "invented_answer"
+        ],
+        "prior_commitments": [],
+        "reconciled_plan": ""
+      },
+      "reply_plan_kind": "genuine_uncertainty",
+      "npc_speech_authority": "none",
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": "unestablished",
+        "improvisation": false,
+        "efficiency": true,
+        "class": "uncertainty"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1886,
+        "output_tokens": 191,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 3047.49
+    },
+    {
+      "turn": 11,
+      "player": "I walk through the courtyard gate.",
+      "http_status": 200,
+      "response": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "kind": "scene_transition",
+      "authorization": {
+        "communication_ownership": "character_action",
+        "intent_purpose": "perform_action",
+        "target_resolution": "none_required",
+        "target_provenance": "none",
+        "target_id": null,
+        "candidate_target_ids": [],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "authority_provenance": "resolution_contract",
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "act",
+        "clarification": "",
+        "choices": [],
+        "direct_address": false,
+        "player_text": "I walk through the courtyard gate."
+      },
+      "dialogue_authority": null,
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": null,
+        "improvisation": null,
+        "efficiency": true,
+        "class": "answer"
+      },
+      "state_changed_keys": [
+        "turn_counter",
+        "scene",
+        "clocks"
+      ],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 0,
+        "interpretation_calls": 0,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "purposes": []
+      },
+      "elapsed_ms": 290.21
+    },
+    {
+      "turn": 12,
+      "player": "Earlier you could not tell me who watches the north road. Is that still where you stand?",
+      "http_status": 200,
+      "response": "Sergeant Mara says, \"I couldn't tell you.\"",
+      "kind": "conversational_answer",
+      "authorization": null,
+      "dialogue_authority": null,
+      "reply_plan_kind": null,
+      "npc_speech_authority": null,
+      "topic_revealed": null,
+      "dimensions": {
+        "relevance": true,
+        "groundedness": true,
+        "naturalness": true,
+        "uncertainty_quality": null,
+        "improvisation": null,
+        "efficiency": true,
+        "class": "uncertainty"
+      },
+      "state_changed_keys": [],
+      "topics_unchanged": true,
+      "calls": {
+        "provider_calls": 1,
+        "interpretation_calls": 1,
+        "narration_calls": 0,
+        "retry_calls": 0,
+        "input_tokens": 1795,
+        "output_tokens": 187,
+        "purposes": [
+          "interpretation"
+        ]
+      },
+      "elapsed_ms": 2208.846
+    }
+  ]
+}

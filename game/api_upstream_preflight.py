@@ -208,8 +208,9 @@ def format_upstream_api_preflight_startup_lines(status: UpstreamApiPreflightStat
 
 def _default_openai_client_factory(api_key: str) -> Any:
     from openai import OpenAI
+    from game.provider_budget import sdk_retry_options
 
-    return OpenAI(api_key=api_key)
+    return OpenAI(api_key=api_key, **sdk_retry_options())
 
 
 def run_upstream_api_preflight(
@@ -235,9 +236,16 @@ def run_upstream_api_preflight(
         {"role": "user", "content": "ping"},
     ]
 
+    from game.provider_budget import admit_request
+
+    attempt = admit_request(purpose="preflight", owner="api_upstream_preflight.run_upstream_api_preflight",
+                            model=mdl, estimated_input=max(1, len(str(probe_input)) // 4),
+                            max_output=_clamp_preflight_max_output_tokens(_PREFLIGHT_MAX_OUTPUT_TOKENS))
     try:
+        if attempt.refusal:
+            raise RuntimeError(attempt.refusal)
         client = factory(key)
-        client.responses.create(
+        attempt.dispatch(client.responses.create,
             model=mdl,
             input=probe_input,
             max_output_tokens=_clamp_preflight_max_output_tokens(_PREFLIGHT_MAX_OUTPUT_TOKENS),

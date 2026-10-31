@@ -1,0 +1,56 @@
+[
+  {
+    "at": "2026-10-03T22:34:57.569908+00:00",
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "player_facing_text": "The rows of split withies hanging from the sturdy drying rack show careful craftsmanship; each slender strip is evenly spaced to dry in the open air. Beneath the rack, the ground is pale and dry, scattered with small bits of bark and dried leaves that have fallen from the withies above. No signs of disturbance or recent footprints mar the earth, suggesting the rack has remained undisturbed for some time.",
+    "result_keys": [
+      "activate_scene_id",
+      "debug_notes",
+      "metadata",
+      "new_scene_draft",
+      "player_facing_text",
+      "scene_update",
+      "suggested_action",
+      "tags",
+      "world_updates"
+    ],
+    "prompt_flags": {
+      "user_chars": 97941,
+      "system_chars": 10702,
+      "contains_resolution_contract": true,
+      "contains_gm_resolution_decision": true,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false
+    }
+  },
+  {
+    "at": "2026-10-03T22:35:00.795522+00:00",
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "",
+    "player_facing_text": "Split withies hang in neat rows from the drying rack, their slender forms casting faint shadows on the pale, dry ground beneath. The earth under the osier rack shows no obvious signs of disturbance.",
+    "result_keys": [
+      "activate_scene_id",
+      "debug_notes",
+      "metadata",
+      "new_scene_draft",
+      "player_facing_text",
+      "scene_update",
+      "suggested_action",
+      "tags",
+      "world_updates"
+    ],
+    "prompt_flags": {
+      "user_chars": 2795,
+      "system_chars": 10702,
+      "contains_resolution_contract": true,
+      "contains_gm_resolution_decision": true,
+      "contains_authoritative_retry_context": true,
+      "contains_validation_failure": true
+    }
+  }
+]

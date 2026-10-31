@@ -1,0 +1,52 @@
+{
+  "claim_limit": "One micro-live sample. Do not generalize cost savings.",
+  "targeted_pathology": "Ordinary incidental dialogue paired with an unauthorized realize/authored_world_fact declaration, then a full structured retry that discovers declared_claims: [].",
+  "targeted_pathology_appeared": false,
+  "p2_completed_in_one_generation": false,
+  "p2_before": {
+    "source": "PR-BV turn-operation projection micro-live",
+    "envelope": "structured_realization",
+    "provider_attempts": 2,
+    "retry": true,
+    "retry_cause": "unauthorized_declared_claim: realize / authored_world_fact / established, no source_claim_id",
+    "attempt_1": {"input_tokens": 24671, "output_tokens": 421, "total_tokens": 25092},
+    "attempt_2": {"input_tokens": 26142, "output_tokens": 295, "total_tokens": 26437},
+    "turn_input_tokens": 50813,
+    "turn_output_tokens": 716,
+    "turn_total_tokens": 51529,
+    "final_narration_usable": true
+  },
+  "p2_after": {
+    "source": "PR-BX narration-only micro-live",
+    "envelope": "narration_only",
+    "provider_attempts": 2,
+    "retry": true,
+    "retry_cause": "Attempt 1 narration validation rejected ordinary dialogue after empty declarations were accepted. Retry feedback reintroduced declared_claims. Attempt 2 rejected as unexpected_declared_claims.",
+    "attempt_1": {"input_tokens": 23413, "output_tokens": 55, "total_tokens": 23468},
+    "attempt_2": {"input_tokens": 24881, "output_tokens": 154, "total_tokens": 25035},
+    "turn_input_tokens": 48294,
+    "turn_output_tokens": 209,
+    "turn_total_tokens": 48503,
+    "final_narration_usable": false,
+    "declaration_channel_in_system_prompt": false,
+    "normalized_declared_claims_attempt_1": [],
+    "declaration_authorship_attempt_1": false
+  },
+  "controls": {
+    "P1": {
+      "envelope": "structured_realization",
+      "pr_bv_attempt_1_input_tokens": 22084,
+      "pr_bx_attempt_1_input_tokens": 22084,
+      "pr_bx_provider_attempts": 2,
+      "assessment": "P1-A"
+    },
+    "P3": {
+      "envelope": "structured_realization",
+      "pr_bv_attempt_1_input_tokens": 22108,
+      "pr_bv_provider_attempts": 1,
+      "pr_bx_attempt_1_input_tokens": 22108,
+      "pr_bx_provider_attempts": 2,
+      "assessment": "not a PR-BW regression"
+    }
+  }
+}

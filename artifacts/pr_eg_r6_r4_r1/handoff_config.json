@@ -1,0 +1,621 @@
+{
+  "campaign_name": "PR-EG-R6-R4-R1 — Source-Grounded Semantic Alignment",
+  "campaign_id": "pr_eg_r6_r4_r1_source_alignment_20261018",
+  "campaign_date": "2026-10-18",
+  "purpose": "Focused architectural discovery and isolated prototype; no migration.",
+  "executive_summary": "**C — INCONCLUSIVE / BELOW ACCEPTANCE. Do not integrate.** Reuse works as caching, but source anchoring does not establish semantic support. Human adjudication and defensible semantic extraction precision/recall are missing. No production migration or PR-EH work was performed.\n\n| Arm | Strict case agreement | Class agreement | Exact content agreement | Rubric acceptance flags | Off-rubric positive predictions |\n|---|---:|---:|---:|---:|---:|\n| A | 48/170 (28.2%) | 58/170 (34.1%) | 75/170 (44.1%) | 18/30 (60.0%) | 4/30 (13.3%) |\n| B | 58/170 (34.1%) | 128/170 (75.3%) | 83/170 (48.8%) | 96/134 (71.6%) | 85/134 (63.4%) |\n| C | 64/170 (37.6%) | 123/170 (72.4%) | 87/170 (51.2%) | 76/120 (63.3%) | 71/120 (59.2%) |\n\nStrict agreement requires frozen class, exact normalized answer values and required literal qualifiers. These are offline candidate predictions, never delivered facts. The frozen scorer flags full-sentence answers as extra values even when their source supports them: its false_acceptance/unsupported_inference fields are rubric flags, NOT measured semantic falsehood rates. No corrected scores replace frozen results. Zero canonical promotion and zero gameplay disclosures occur by construction, not evidence that predictions are safe to deploy. See 31 for metric limitations and 33 for dependence/label uncertainty.",
+  "objective_status": "C — INCONCLUSIVE / BELOW ACCEPTANCE",
+  "primary_report": "artifacts/pr_eg_r6_r4_r1/01_EXECUTIVE_SUMMARY.md",
+  "self_contained_review_test": "39 numbered artifacts, frozen inputs, raw provider evidence and manifest hashes verified.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Adversarial boundary tests"
+    ],
+    "tooling": [
+      "Isolated frozen experiment and audit/report tools"
+    ],
+    "documentation": [
+      "39 numbered artifacts and independent human review packet"
+    ]
+  },
+  "testing": {
+    "focused": "20 boundary tests passed before freeze; 228 focused/current-correspondence/handoff tests passed at closeout.",
+    "broader": "Broader run including unified-planner and expression tests stalled after 77% progress and was interrupted; no complete verdict. Raw log preserved in verification_tests.txt.",
+    "full_suite": "Not run.",
+    "runtime_validation": "570/570 parsed real provider calls, 510 paired arm-cases.",
+    "model_runtime_boundary": "gpt-4.1-mini; temperature 0; output cap 1800; no SDK retries.",
+    "new_regressions": "Production code/state hashes unchanged.",
+    "pre_existing_failures": "Not globally reassessed."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Human adjudication pending.",
+      "Sparse source claim labels prevent semantic extraction precision/recall.",
+      "Exact-match rubric and different A answer capacity limit interpretation.",
+      "Network gold diagnostic rejected; local control only.",
+      "Do not use frozen runner diagnostic network mode; use the offline diagnostic tool."
+    ],
+    "pre_existing": [
+      "Prior working tree contains extensive unrelated changes."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Adjudicate the stratified packet and judge whether further discovery is justified."
+  ],
+  "does_not_prove": [
+    "Production readiness, semantic entailment verification, affordable authoring, universal security, or broad generalization."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R6-R4-R1 and await external review. Do not begin PR-EH.",
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000,
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/02_REPOSITORY_BASELINE.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/03_HISTORICAL_FAILURE_REVIEW.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/04_CURRENT_SEMANTIC_PIPELINE.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/05_EXPERIMENTAL_HYPOTHESIS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/06_ARCHITECTURE_SPECIFICATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/07_SOURCE_EXTRACTION_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/08_MULTI-FACT_SOURCES.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/09_QUALIFIER_PRESERVATION.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/10_PROVENANCE_AND_AUTHORITY.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/11_HOST_VALIDATION.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/12_VALIDATION_TRUST_LEVELS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/13_QUESTION_ALIGNMENT.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/14_MULTI-ROLE_ALIGNMENT.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/15_PARTIAL_ANSWERS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/16_RELATED_NONANSWERS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/17_CONFLICTING_EVIDENCE.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/18_OPEN-WORLD_GENERALIZATION.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/19_CORPUS_DESIGN.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/20_REUSE_EXPERIMENT.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/21_FROZEN_PARTITIONS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/22_GROUND_TRUTH.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/23_HUMAN_ADJUDICATION_PACKET.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/24_EXPERIMENTAL_FAIRNESS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/25_PROVIDER_EVIDENCE.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/26_FAILURE_TAXONOMY.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/27_SECURITY_EXPERIMENTS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/28_HOST_VALIDATION_RESULTS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/29_ANNOTATION_COST.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/30_PERFORMANCE.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/31_QUALITY_METRICS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/32_COMPARATIVE_RESULTS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/33_STATISTICAL_LIMITATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/34_ARCHITECTURE_DECISION.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/35_PRODUCTION_INTEGRATION_READINESS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/36_REMAINING_UNKNOWNS.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/37_RECOMMENDED_NEXT_CYCLE.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/38_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/39_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/adjudication_packet.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/authorization_record.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/baseline.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/baseline_status.txt",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/blocked_attempt_inventory.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/development.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/development_console.txt",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/extraction_records.jsonl",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/focused_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/freeze.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/gold_diagnostic.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/grading_audit.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/historical_examples.jsonl",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/historical_inventory.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/holdout.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/human_review_packet.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/payload_audit.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/per_case_results.jsonl",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/primary_console.txt",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/production_integrity.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/provider_calls.jsonl",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/reuse_results.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/security_results.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/source_inventory.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/summary.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/validation.json",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/verification_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r4_r1/__init__.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r4_r1/CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r4_r1/corpus.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r4_r1/engine.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r4_r1/run.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/semantic_correspondence.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/semantic_operations.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r4_r1_alignment.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/audit_pr_eg_r6_r4_r1.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/diagnostic_pr_eg_r6_r4_r1.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/report_pr_eg_r6_r4_r1.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/verify_pr_eg_r6_r4_r1.py",
+      "role": "cycle_evidence",
+      "why": "Reviewable frozen experiment, raw evidence or focused source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

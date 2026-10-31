@@ -1,0 +1,3326 @@
+--- entry/game/gm.py
++++ exit/game/gm.py
+@@ -5266,6 +5266,19 @@
+     selected_model = pinned_model or route.selected_model
+     requested_response_type = _requested_response_type_from_messages(messages)
+     is_opening = requested_response_type == "scene_opening"
++    if is_opening:
++        # Free-text authored claims are checked by lexical coverage, not a
++        # synonym/entailment model. Supply that existing constraint at generation.
++        messages = [*messages[:1], {"role": "system", "content": (
++            "Opening authored-fact realization: when a supplied authorized claim has an empty "
++            "semantic_identity, use its exact text as a separate narration sentence. Keep sensory "
++            "texture in separate sentences; do not paraphrase or embellish posted information, "
++            "history, causes, or gameplay consequences inside that fact sentence. When declaring "
++            "a supplied claim, reference its claim_id in source_claim_id and preserve its provenance, "
++            "epistemic status, modality, and premise references. A source reference does not authorize "
++            "additional prose. Do not invent claim identifiers or semantic identities. Harmless "
++            "sensory expression may remain plain narration within the existing authority rules."
++        )}, *messages[1:]]
+     narration_cap = (_opening_max_output_tokens() if is_opening else
+                      int(os.environ.get("ASHEN_NARRATION_MAX_OUTPUT_TOKENS", "600") or "600"))
+     estimated_input = 1
+--- /dev/null
++++ exit/tests/test_pr_play_11_claim_authority.py
+@@ -0,0 +1,212 @@
++"""Offline historical opening replay through production parsing and authority owners."""
++import copy
++import hashlib
++import json
++from pathlib import Path
++
++import pytest
++
++from tests.test_pr_play_04_opening_integrity import opening_world, _start, _snap
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT / 'artifacts/pr_play_11'
++RUNS = ROOT / 'artifacts/atgb/automated_playtests'
++REJECTED = '20261031T015747Z-5a6c03c902e3'
++ACCEPTED = '20261030T191257Z-ecc1b6062bdc'
++
++
++def install_history(opening_world, monkeypatch, run=REJECTED):
++    import game.api as api
++    import game.storage as st
++    import game.immutable_valid_response as ivr
++    import openai
++    path = RUNS / run
++    before = json.loads((path / 'baseline/documents.json').read_text())
++    st._save_json(st.scene_path('frontier_gate'), before['scenes/frontier_gate.json'])
++    api.compose_state()
++    capture = next((path / 'opening_response_evidence').glob('*.json'))
++    parsed = json.loads(capture.read_text())['parsed_response']
++    opening_world['state']['text'] = json.dumps(parsed)
++    traces, requests = [], []
++    original = ivr.validate_generated_response
++    def observe(text, **kwargs):
++        result = original(text, **kwargs)
++        traces.append(copy.deepcopy(dict(text=text, inputs=kwargs, result=result)))
++        return result
++    monkeypatch.setattr(ivr, 'validate_generated_response', observe)
++    ctor = openai.OpenAI
++    def observe_ctor(**kwargs):
++        client = ctor(**kwargs)
++        create = client.responses.create
++        def observe_create(**request):
++            requests.append(copy.deepcopy(request))
++            return create(**request)
++        client.responses.create = observe_create
++        return client
++    monkeypatch.setattr(openai, 'OpenAI', observe_ctor)
++    return parsed, traces, requests
++
++
++@pytest.mark.parametrize('run,expected', [(REJECTED, 422), (ACCEPTED, 200),
++    ('20261030T183848Z-5fe421902485', 200)])
++def test_historical_production_replay(opening_world, monkeypatch, run, expected):
++    parsed, traces, requests = install_history(opening_world, monkeypatch, run)
++    before = _snap()
++    body, status = _start()
++    after = _snap()
++    assert status == expected, body
++    assert len(opening_world['calls']) == 1
++    assert traces[0]['inputs']['declared_claims'] == parsed['declared_claims']
++    if expected == 422:
++        assert 'unauthorized_resolution_decision_fact' in traces[0]['result']['reasons']
++        audit = traces[0]['result']['gm_resolution_decision_audit']
++        assert audit['declaration_validation']['rejected_claims'] == []
++        assert len(audit['declaration_validation']['accepted_claims']) == 7
++        assert len(audit['violations']) == 1
++        assert audit['violations'][0]['reason_codes'] == ['notice_roster_history']
++        assert audit['violations'][0]['text'].startswith('The board itself lists grim new taxes')
++        assert before == after
++        assert after['can_start']
++    else:
++        assert after['turn_counter'] == before['turn_counter'] + 1
++        assert _start()[1] == 409
++        assert len(opening_world['calls']) == 1
++    OUT.mkdir(parents=True, exist_ok=True)
++    (OUT / (run + '_replay.json')).write_text(json.dumps(dict(
++        status=status, before=before, after=after, traces=traces,
++        requests=requests, response=body, synthetic_dispatches=len(opening_world['calls']),
++        live_dispatches=0, parsed_response_equal=True), indent=2), encoding='utf-8')
++
++
++def test_notice_claim_causal_metadata_controls(opening_world, monkeypatch):
++    from game.gm_resolution_decision import validate_declared_claims_against_decision
++    parsed, traces, _ = install_history(opening_world, monkeypatch)
++    assert _start()[1] == 422
++    decision = traces[0]['inputs']['decision']
++    original = parsed['declared_claims'][0]
++    outcomes = {}
++    for key in ('original', 'id_only', 'role_only', 'provenance_only'):
++        row = copy.deepcopy(original)
++        source = next(c for c in decision['realization_claims'] if c['claim_id'] == original['declaration_id'])
++        if key == 'id_only': row['source_claim_id'] = source['claim_id']
++        if key == 'role_only': row['realization_role'] = 'MAY_STATE'
++        if key == 'provenance_only': row['provenance_requested'] = 'bounded_incidental'
++        result = validate_declared_claims_against_decision([row], decision=decision)
++        outcomes[key] = result
++        assert result['hard_valid']  # none of these fields caused the historical rejection
++    from game.immutable_valid_response import validate_generated_response
++    context = copy.deepcopy(traces[0]['inputs'])
++    for row in context['declared_claims']:
++        row['source_claim_id'] = row['declaration_id']
++    sourced = validate_generated_response(parsed['narration'], **context)
++    assert not sourced['hard_valid']
++    assert sourced['gm_resolution_decision_audit']['declaration_validation']['hard_valid']
++    outcomes['all_source_ids_with_original_prose'] = sourced
++    (OUT/'causal_controls.json').write_text(json.dumps(outcomes, indent=2))
++
++
++def test_conservative_generation_contract(opening_world, monkeypatch):
++    parsed, traces, requests = install_history(opening_world, monkeypatch)
++    old = 'The board itself lists grim new taxes, curfew regulations, and a posted warning about a patrol that has gone missing.'
++    new = parsed['declared_claims'][0]['text']
++    for field in ('narration', 'player_facing_text'):
++        assert old in parsed[field]
++        parsed[field] = parsed[field].replace(old, new)
++    opening_world['state']['text'] = json.dumps(parsed)
++    body, status = _start()
++    assert status == 200, body
++    assert len(opening_world['calls']) == 1
++    assert traces[0]['result']['gm_resolution_decision_audit']['hard_valid']
++    (OUT/'conservative_generation.json').write_text(json.dumps(dict(
++        status=status, changed_fields=['narration', 'player_facing_text'],
++        replacement=dict(before=old, after=new), traces=traces,
++        response=body, requests=requests), indent=2))
++    prompt = json.dumps(requests)
++    assert 'use its exact text as a separate narration sentence' in prompt
++    assert 'rc_a83c5bcfc65e' in prompt
++
++
++@pytest.mark.parametrize('case,expected', [
++    ('C4', True), ('C5', False), ('C6', False), ('C7', False),
++    ('C8', True), ('C9', True), ('C10', False), ('C11', False),
++    ('C12', False), ('C13', False), ('C14', False), ('C15', True),
++    ('C16', False), ('C17', False),
++])
++def test_authority_matrix(case, expected):
++    from game.immutable_valid_response import validate_generated_response
++    context = json.loads((ROOT/'tests/fixtures/pr_play_11/opening_context.json').read_text())
++    source = context['decision']['realization_claims'][0]
++    row = copy.deepcopy(context['declared_claims'][0])
++    row['source_claim_id'] = source['claim_id']
++    text = row['text']
++    claims = [row]
++    if case in {'C5', 'C6'}:
++        row.update(text='The notice board names Varek as the murderer.', source_claim_id=None if case == 'C5' else 'rc_invalid')
++        text = row['text']
++    if case == 'C7':
++        text = 'The notice board does not list taxes, curfew rules, or a warning about a missing patrol.'
++        row.update(text=text, source_claim_id=None)
++    if case == 'C8':
++        text = source['text']
++        claims = []  # Existing authored evidence remains authoritative without a declaration.
++    if case == 'C9':
++        text = 'Rain patters on a worn cloak.'
++        claims = []
++    if case in {'C10', 'C11', 'C12'}:
++        text = {'C10':'You persuade the guards and enter the fortress.',
++                'C11':'You gain 100 gold and recover 5 HP.',
++                'C12':'The Ash Compact has closed the gate permanently.'}[case]
++        row.update(text=text, source_claim_id=None)
++    if case == 'C13':
++        text = 'GM-only: the hidden_facts reveal the murderer.'
++        claims = []
++    if case == 'C14':
++        row.update(declaration_mode='propose', provenance_requested='authored_world_fact', modality='established')
++    if case == 'C15':
++        # Empty premises and absent source ID are valid for an exact authored fact.
++        row.update(source_claim_id=None)
++    if case in {'C16', 'C17'}:
++        claims = [row, dict(row, declaration_id='invalid_1', source_claim_id=None,
++                           text='The notice board names Varek as the murderer.')]
++        if case == 'C17':
++            claims.append(dict(row, declaration_id='invalid_2', source_claim_id=None,
++                               text='The guards award you 100 gold.'))
++    context['declared_claims'] = claims
++    result = validate_generated_response(text, **context)
++    (OUT/(case+'.json')).write_text(json.dumps(dict(case=case, expected=expected, text=text, claims=claims, result=result), indent=2))
++    assert result['hard_valid'] == expected, result
++    if case == 'C17':
++        assert len(result['gm_resolution_decision_audit']['declaration_validation']['rejected_claims']) == 2
++
++
++def test_mixed_opening_atomicity_and_retryability(opening_world, monkeypatch):
++    parsed, traces, _ = install_history(opening_world, monkeypatch, ACCEPTED)
++    parsed['declared_claims'].append(dict(parsed['declared_claims'][0],
++        declaration_id='invalid_1', source_claim_id=None, semantic_identity={},
++        text='The notice board names Varek as the murderer.'))
++    opening_world['state']['text'] = json.dumps(parsed)
++    before = _snap()
++    body, status = _start()
++    assert status == 422 and _snap() == before and before['can_start']
++    parsed['declared_claims'].pop()
++    opening_world['state']['text'] = json.dumps(parsed)
++    assert _start()[1] == 200
++    assert _snap()['turn_counter'] == before['turn_counter'] + 1
++    assert len(opening_world['calls']) == 2
++
++
++def test_capture_fidelity():
++    capture = OUT/'historical/rejected_capture.json'
++    fidelity = json.loads((OUT/'capture_fidelity.json').read_text())
++    assert hashlib.sha256(capture.read_bytes()).hexdigest() == fidelity['capture_sha256']
++    assert json.loads(capture.read_text())['parsed_response'] == json.loads((ROOT/'tests/fixtures/pr_play_11/rejected_opening.json').read_text())
++
++
++def test_source_id_is_not_exclusive_evidence():
++    from game.gm_resolution_decision import validate_declared_claims_against_decision
++    context = json.loads((ROOT/'tests/fixtures/pr_play_11/opening_context.json').read_text())
++    row = copy.deepcopy(context['declared_claims'][0])
++    row['source_claim_id'] = 'rc_invalid'
++    result = validate_declared_claims_against_decision([row], decision=context['decision'])
++    assert result['hard_valid']  # The existing contract falls back to exact authored text.
++    (OUT/'source_id_fallback.json').write_text(json.dumps(dict(row=row, result=result), indent=2))
+--- /dev/null
++++ exit/tests/helpers/pr_play_11_entry_source.py
+@@ -0,0 +1,8 @@
++"""Reproduce expanded-lane failures against hash-preserved dirty entry GM source."""
++from pathlib import Path
++
++
++def pytest_configure(config):
++    import game.gm as gm
++    path = Path('artifacts/pr_play_11/entry_sources/game/gm.py')
++    exec(compile(path.read_text(encoding='utf-8'), str(path), 'exec'), gm.__dict__)
+--- /dev/null
++++ exit/tests/fixtures/pr_play_11/opening_context.json
+@@ -0,0 +1,2444 @@
++{
++  "contract": {
++    "contract_id": "rc_dd89a2b89c62",
++    "turn_index": 1,
++    "request_kind": "action",
++    "operation": "unresolved",
++    "target_ref": null,
++    "interlocutor_id": null,
++    "conversational_subject": null,
++    "dimension": null,
++    "dimensions": [],
++    "expected_resolution": "answer",
++    "epistemic_mode": "unknown_allowed",
++    "discourse_ref": null,
++    "referent_provenance": "explicit_player",
++    "ambiguous": false,
++    "raw_input": "",
++    "construction": {
++      "cues": [],
++      "referent_slot": null,
++      "referent_reason": "no_anaphor",
++      "ambiguity_detected": false,
++      "actionable_inherited": false,
++      "active_claim_inherited": false,
++      "fast_path_proposal": true,
++      "fast_path_used": true,
++      "fast_path_abstained": false,
++      "fast_path_abstention_reason": null,
++      "model_interpreter_invoked": false,
++      "model_proposal_rejected": false,
++      "clarification_after_model": false,
++      "interpretation_api_calls": 0,
++      "interpretation_error": null,
++      "canonical_candidates": [
++        {
++          "id": "frontier_gate",
++          "type": "place",
++          "label": "Cinderwatch Gate District"
++        },
++        {
++          "id": "notice_board",
++          "type": "object",
++          "label": "Notice board"
++        },
++        {
++          "id": "market_quarter",
++          "type": "place",
++          "label": "Enter Cinderwatch"
++        },
++        {
++          "id": "old_milestone",
++          "type": "place",
++          "label": "Follow the missing patrol rumor"
++        },
++        {
++          "id": "guard_captain",
++          "type": "interlocutor",
++          "label": "Guard Captain"
++        },
++        {
++          "id": "tavern_runner",
++          "type": "interlocutor",
++          "label": "Tavern Runner"
++        },
++        {
++          "id": "refugee",
++          "type": "interlocutor",
++          "label": "Ragged stranger"
++        },
++        {
++          "id": "threadbare_watcher",
++          "type": "interlocutor",
++          "label": "Threadbare watcher"
++        }
++      ],
++      "proposal_source": "deterministic_fast_path",
++      "proposed_operation": "unresolved",
++      "proposed_supporting_operations": [],
++      "proposed_raw_target": null,
++      "canonicalization_attempted": true,
++      "canonical_target_found": false,
++      "operation_conflict": false,
++      "validation_status": "validated",
++      "validation_result": {
++        "status": "validated",
++        "reason": null,
++        "failed_fields": [],
++        "clarification_required": false,
++        "model_interpretation_appropriate": false,
++        "canonical_target_id": null,
++        "canonical_target_label": null,
++        "canonical_target_type": null,
++        "canonical_basis": null,
++        "authoritative_operation": null,
++        "discourse_commit_allowed": true,
++        "compatibility_bridge": null
++      },
++      "abstention_reason": null,
++      "failed_fields": [],
++      "clarification_required": false,
++      "model_interpretation_appropriate": false,
++      "discourse_commit_allowed": true,
++      "interlocutor_rejected": false,
++      "entity_binding": {
++        "status": "unresolved",
++        "entity_class": "ambiguous_unresolved",
++        "proposed_interlocutor": null,
++        "proposed_span": null,
++        "bound_interlocutor_id": null,
++        "entity_id": null,
++        "label": null,
++        "explicit_new_interlocutor": false,
++        "authority_reasons": [],
++        "claim_binding": "none"
++      },
++      "authoritative": true,
++      "semantic_completeness": "sufficient",
++      "compatibility_bridge": null,
++      "interpretation_proposal": {
++        "raw_input": "",
++        "source": "deterministic_fast_path",
++        "primary_operation": "unresolved",
++        "supporting_operations": [],
++        "raw_target_text": null,
++        "proposed_target_id": null,
++        "target_capture": "none",
++        "has_determiner": false,
++        "interlocutor_id": null,
++        "conversational_subject": null,
++        "dimension": null,
++        "dimensions": [],
++        "expected_resolution": "answer",
++        "referenced_claim_id": null,
++        "referenced_action_id": null,
++        "referenced_inspected_id": null,
++        "confidence": null,
++        "clarification_required": false,
++        "ambiguous": false,
++        "operation_conflict": false,
++        "notes": {}
++      },
++      "commitment_status": "contemplated",
++      "primary_operation": "unresolved",
++      "resolution_subject": "action",
++      "resolution_subject_coherence": "accepted",
++      "semantic_input_length": 0,
++      "provenance_excerpt": "",
++      "secondary_operations": [],
++      "executable_obligations": {
++        "primary": null,
++        "mutation_owner": null,
++        "sequence": [],
++        "supporting": []
++      },
++      "requested_addressee": null,
++      "addressee_binding_status": "unresolved"
++    }
++  },
++  "decision": {
++    "contract_id": "rc_dd89a2b89c62",
++    "resolution_method": "scene_opening",
++    "outcome_classification": "state_mutation",
++    "established_fact_refs": [
++      "scene_world_authored_corpus"
++    ],
++    "proposed_facts": [
++      {
++        "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.0",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.1",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A tavern runner trades hot stew and rumors near the rain barrel.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.2",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "Threadbare watchers and refugees cluster along the muddy gate line.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.3",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "Ash Compact census delays have tightened the eastern caravan choke point.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.4",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.0",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.1",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.2",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A tavern runner shouts offers of hot stew and paid rumor.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.3",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.4",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.5",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.0",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.1",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.2",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A tavern runner is hawking hot stew and rumor for coin.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.3",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "A ragged stranger hangs back, watching the crowd more than the queue.",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_state_source"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.4",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {}
++      },
++      {
++        "text": "Guard Captain exists as guard",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_world_npc"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "world.npcs.0",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {
++          "kind": "entity",
++          "subject": "guard_captain",
++          "subject_aliases": [
++            "Guard Captain"
++          ],
++          "relation": "exists",
++          "value": "guard",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "text": "Tavern Runner exists as informant",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authored_world_npc"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "world.npcs.1",
++        "outcome_classification": "established_or_retrieved",
++        "semantic_identity": {
++          "kind": "entity",
++          "subject": "tavern_runner",
++          "subject_aliases": [
++            "Tavern Runner"
++          ],
++          "relation": "exists",
++          "value": "informant",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "text": "State opening_scene_turn changes to True",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authorized_state_mutation"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "resolution.state_changes.opening_scene_turn",
++        "outcome_classification": "authorized_state_outcome",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "opening_scene_turn",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "text": "State arrived_at_scene changes to True",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authorized_state_mutation"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "resolution.state_changes.arrived_at_scene",
++        "outcome_classification": "authorized_state_outcome",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "arrived_at_scene",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "text": "State new_scene_context_available changes to True",
++        "provenance": "authored_world_fact",
++        "consequence": "consequential",
++        "authorized": true,
++        "reason_codes": [
++          "authorized_state_mutation"
++        ],
++        "authority": "world_truth",
++        "persistence": "world_truth",
++        "source_ref": "resolution.state_changes.new_scene_context_available",
++        "outcome_classification": "authorized_state_outcome",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "new_scene_context_available",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        }
++      }
++    ],
++    "permitted_state_mutations": [
++      {
++        "type": "state_change",
++        "key": "opening_scene_turn",
++        "value": true
++      },
++      {
++        "type": "state_change",
++        "key": "arrived_at_scene",
++        "value": true
++      },
++      {
++        "type": "state_change",
++        "key": "new_scene_context_available",
++        "value": true
++      }
++    ],
++    "persistence_policy": "world_truth",
++    "narration_constraints": [
++      "Narration may not establish consequential world facts absent this decision.",
++      "Generated proposals are not world truth unless already grounded or explicitly permitted.",
++      "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
++      "Inference must not be narrated as physical evidence.",
++      "Do not narrate authoritative travel/location change unless a location mutation is permitted."
++    ],
++    "unresolved_consequential_questions": [],
++    "unresolved_qualifiers": [],
++    "answer_relations": [],
++    "epistemic_acts": [
++      {
++        "act": "establish",
++        "source_ref": "scene.visible_facts.0",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.visible_facts.1",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.visible_facts.2",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.visible_facts.3",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.visible_facts.4",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.opening_seed_facts.0",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.opening_seed_facts.1",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.opening_seed_facts.2",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.opening_seed_facts.3",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.opening_seed_facts.4",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.opening_seed_facts.5",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.journal_seed_facts.0",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.journal_seed_facts.1",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.journal_seed_facts.2",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.journal_seed_facts.3",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "scene.journal_seed_facts.4",
++        "authority": "world_truth",
++        "semantic_identity": {}
++      },
++      {
++        "act": "establish",
++        "source_ref": "world.npcs.0",
++        "authority": "world_truth",
++        "semantic_identity": {
++          "kind": "entity",
++          "subject": "guard_captain",
++          "subject_aliases": [
++            "Guard Captain"
++          ],
++          "relation": "exists",
++          "value": "guard",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "act": "establish",
++        "source_ref": "world.npcs.1",
++        "authority": "world_truth",
++        "semantic_identity": {
++          "kind": "entity",
++          "subject": "tavern_runner",
++          "subject_aliases": [
++            "Tavern Runner"
++          ],
++          "relation": "exists",
++          "value": "informant",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "act": "establish",
++        "source_ref": "resolution.state_changes.opening_scene_turn",
++        "authority": "world_truth",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "opening_scene_turn",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "act": "establish",
++        "source_ref": "resolution.state_changes.arrived_at_scene",
++        "authority": "world_truth",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "arrived_at_scene",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        }
++      },
++      {
++        "act": "establish",
++        "source_ref": "resolution.state_changes.new_scene_context_available",
++        "authority": "world_truth",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "new_scene_context_available",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        }
++      }
++    ],
++    "realization_claims": [
++      {
++        "claim_id": "rc_a83c5bcfc65e",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.0",
++        "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_d40a1efdddb3",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.1",
++        "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_3b26b521977b",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.2",
++        "text": "A tavern runner trades hot stew and rumors near the rain barrel.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_b59727e13c62",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.3",
++        "text": "Threadbare watchers and refugees cluster along the muddy gate line.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_be348e85a5e6",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.visible_facts.4",
++        "text": "Ash Compact census delays have tightened the eastern caravan choke point.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_31feab1dcf72",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.0",
++        "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_a0201a45af25",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.1",
++        "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_280f5390057f",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.2",
++        "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_4a217a3c17bc",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.3",
++        "text": "A tavern runner shouts offers of hot stew and paid rumor.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_819bf0e987bb",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.4",
++        "text": "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_6c31b34a1529",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.opening_seed_facts.5",
++        "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_b0360b7546fa",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.0",
++        "text": "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_c76f50a053b2",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.1",
++        "text": "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_315c2f595d6b",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.2",
++        "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_a7b51dead883",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.3",
++        "text": "A tavern runner is hawking hot stew and rumor for coin.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_815adf89f4e9",
++        "semantic_identity": {},
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "scene.journal_seed_facts.4",
++        "text": "A ragged stranger hangs back, watching the crowd more than the queue.",
++        "relation_kind": "ordinary_predicate",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_3704c0c64b57",
++        "semantic_identity": {
++          "kind": "entity",
++          "subject": "guard_captain",
++          "subject_aliases": [
++            "Guard Captain"
++          ],
++          "relation": "exists",
++          "value": "guard",
++          "authority": "world_truth"
++        },
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "world.npcs.0",
++        "text": "Guard Captain exists as guard",
++        "relation_kind": "observation",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_c297085d8f0f",
++        "semantic_identity": {
++          "kind": "entity",
++          "subject": "tavern_runner",
++          "subject_aliases": [
++            "Tavern Runner"
++          ],
++          "relation": "exists",
++          "value": "informant",
++          "authority": "world_truth"
++        },
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "world.npcs.1",
++        "text": "Tavern Runner exists as informant",
++        "relation_kind": "observation",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_0f45c085ba0a",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "opening_scene_turn",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        },
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "resolution.state_changes.opening_scene_turn",
++        "text": "State opening_scene_turn changes to True",
++        "relation_kind": "observation",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_e332994ba83e",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "arrived_at_scene",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        },
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "resolution.state_changes.arrived_at_scene",
++        "text": "State arrived_at_scene changes to True",
++        "relation_kind": "observation",
++        "premise_claim_ids": []
++      },
++      {
++        "claim_id": "rc_7c7d07927c37",
++        "semantic_identity": {
++          "kind": "state_change",
++          "subject": "new_scene_context_available",
++          "relation": "state_change",
++          "value": "True",
++          "authority": "world_truth"
++        },
++        "provenance": "authored_world_fact",
++        "authority": "world_truth",
++        "epistemic_status": "established",
++        "modality": "",
++        "realization_role": "MUST_STATE",
++        "persistence": "world_truth",
++        "source_ref": "resolution.state_changes.new_scene_context_available",
++        "text": "State new_scene_context_available changes to True",
++        "relation_kind": "observation",
++        "premise_claim_ids": []
++      }
++    ],
++    "executable_obligations": {
++      "primary": null,
++      "mutation_owner": null,
++      "sequence": [],
++      "supporting": []
++    },
++    "authority_algorithm": "proposition_claim_control_v1"
++  },
++  "declared_claims": [
++    {
++      "declaration_id": "rc_a83c5bcfc65e",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
++    },
++    {
++      "declaration_id": "rc_d40a1efdddb3",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "A gate serjeant manages the crowd and keeps one eye on the roster board."
++    },
++    {
++      "declaration_id": "rc_3b26b521977b",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "A tavern runner trades hot stew and rumors near the rain barrel."
++    },
++    {
++      "declaration_id": "rc_b59727e13c62",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Threadbare watchers and refugees cluster along the muddy gate line."
++    },
++    {
++      "declaration_id": "rc_be348e85a5e6",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Ash Compact census delays have tightened the eastern caravan choke point."
++    },
++    {
++      "declaration_id": "rc_31feab1dcf72",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate."
++    },
++    {
++      "declaration_id": "rc_a0201a45af25",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in."
++    }
++  ],
++  "player_text": "",
++  "resolution": {
++    "kind": "scene_opening",
++    "action_id": "campaign_start_opening_scene",
++    "label": "start_campaign",
++    "prompt": "",
++    "success": true,
++    "resolved_transition": false,
++    "target_scene_id": "frontier_gate",
++    "clue_id": null,
++    "discovered_clues": [],
++    "world_updates": null,
++    "state_changes": {
++      "opening_scene_turn": true,
++      "arrived_at_scene": true,
++      "new_scene_context_available": true
++    },
++    "hint": "Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.",
++    "metadata": {
++      "resolution_contract": {
++        "contract_id": "rc_dd89a2b89c62",
++        "turn_index": 1,
++        "request_kind": "action",
++        "operation": "unresolved",
++        "target_ref": null,
++        "interlocutor_id": null,
++        "conversational_subject": null,
++        "dimension": null,
++        "dimensions": [],
++        "expected_resolution": "answer",
++        "epistemic_mode": "unknown_allowed",
++        "discourse_ref": null,
++        "referent_provenance": "explicit_player",
++        "ambiguous": false,
++        "raw_input": "",
++        "construction": {
++          "cues": [],
++          "referent_slot": null,
++          "referent_reason": "no_anaphor",
++          "ambiguity_detected": false,
++          "actionable_inherited": false,
++          "active_claim_inherited": false,
++          "fast_path_proposal": true,
++          "fast_path_used": true,
++          "fast_path_abstained": false,
++          "fast_path_abstention_reason": null,
++          "model_interpreter_invoked": false,
++          "model_proposal_rejected": false,
++          "clarification_after_model": false,
++          "interpretation_api_calls": 0,
++          "interpretation_error": null,
++          "canonical_candidates": [
++            {
++              "id": "frontier_gate",
++              "type": "place",
++              "label": "Cinderwatch Gate District"
++            },
++            {
++              "id": "notice_board",
++              "type": "object",
++              "label": "Notice board"
++            },
++            {
++              "id": "market_quarter",
++              "type": "place",
++              "label": "Enter Cinderwatch"
++            },
++            {
++              "id": "old_milestone",
++              "type": "place",
++              "label": "Follow the missing patrol rumor"
++            },
++            {
++              "id": "guard_captain",
++              "type": "interlocutor",
++              "label": "Guard Captain"
++            },
++            {
++              "id": "tavern_runner",
++              "type": "interlocutor",
++              "label": "Tavern Runner"
++            },
++            {
++              "id": "refugee",
++              "type": "interlocutor",
++              "label": "Ragged stranger"
++            },
++            {
++              "id": "threadbare_watcher",
++              "type": "interlocutor",
++              "label": "Threadbare watcher"
++            }
++          ],
++          "proposal_source": "deterministic_fast_path",
++          "proposed_operation": "unresolved",
++          "proposed_supporting_operations": [],
++          "proposed_raw_target": null,
++          "canonicalization_attempted": true,
++          "canonical_target_found": false,
++          "operation_conflict": false,
++          "validation_status": "validated",
++          "validation_result": {
++            "status": "validated",
++            "reason": null,
++            "failed_fields": [],
++            "clarification_required": false,
++            "model_interpretation_appropriate": false,
++            "canonical_target_id": null,
++            "canonical_target_label": null,
++            "canonical_target_type": null,
++            "canonical_basis": null,
++            "authoritative_operation": null,
++            "discourse_commit_allowed": true,
++            "compatibility_bridge": null
++          },
++          "abstention_reason": null,
++          "failed_fields": [],
++          "clarification_required": false,
++          "model_interpretation_appropriate": false,
++          "discourse_commit_allowed": true,
++          "interlocutor_rejected": false,
++          "entity_binding": {
++            "status": "unresolved",
++            "entity_class": "ambiguous_unresolved",
++            "proposed_interlocutor": null,
++            "proposed_span": null,
++            "bound_interlocutor_id": null,
++            "entity_id": null,
++            "label": null,
++            "explicit_new_interlocutor": false,
++            "authority_reasons": [],
++            "claim_binding": "none"
++          },
++          "authoritative": true,
++          "semantic_completeness": "sufficient",
++          "compatibility_bridge": null,
++          "interpretation_proposal": {
++            "raw_input": "",
++            "source": "deterministic_fast_path",
++            "primary_operation": "unresolved",
++            "supporting_operations": [],
++            "raw_target_text": null,
++            "proposed_target_id": null,
++            "target_capture": "none",
++            "has_determiner": false,
++            "interlocutor_id": null,
++            "conversational_subject": null,
++            "dimension": null,
++            "dimensions": [],
++            "expected_resolution": "answer",
++            "referenced_claim_id": null,
++            "referenced_action_id": null,
++            "referenced_inspected_id": null,
++            "confidence": null,
++            "clarification_required": false,
++            "ambiguous": false,
++            "operation_conflict": false,
++            "notes": {}
++          },
++          "commitment_status": "contemplated",
++          "primary_operation": "unresolved",
++          "resolution_subject": "action",
++          "resolution_subject_coherence": "accepted",
++          "semantic_input_length": 0,
++          "provenance_excerpt": "",
++          "secondary_operations": [],
++          "executable_obligations": {
++            "primary": null,
++            "mutation_owner": null,
++            "sequence": [],
++            "supporting": []
++          },
++          "requested_addressee": null,
++          "addressee_binding_status": "unresolved"
++        }
++      },
++      "interaction_obligation": {
++        "kind": "question",
++        "target": "frontier_gate",
++        "interlocutor_id": null,
++        "subject": "frontier_gate",
++        "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
++        "claim_id": null,
++        "resolution_mode": "grounded_information_request",
++        "turn_index": 1,
++        "resolution_contract_id": "rc_dd89a2b89c62",
++        "executable_obligations": {
++          "primary": null,
++          "mutation_owner": null,
++          "sequence": [],
++          "supporting": []
++        }
++      },
++      "gm_resolution_decision": {
++        "contract_id": "rc_dd89a2b89c62",
++        "resolution_method": "scene_opening",
++        "outcome_classification": "state_mutation",
++        "established_fact_refs": [
++          "scene_world_authored_corpus"
++        ],
++        "proposed_facts": [
++          {
++            "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.0",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.1",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A tavern runner trades hot stew and rumors near the rain barrel.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.2",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "Threadbare watchers and refugees cluster along the muddy gate line.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.3",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "Ash Compact census delays have tightened the eastern caravan choke point.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.4",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.0",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.1",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.2",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A tavern runner shouts offers of hot stew and paid rumor.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.3",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.4",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.5",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.0",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.1",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.2",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A tavern runner is hawking hot stew and rumor for coin.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.3",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "A ragged stranger hangs back, watching the crowd more than the queue.",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_state_source"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.4",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {}
++          },
++          {
++            "text": "Guard Captain exists as guard",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_world_npc"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "world.npcs.0",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {
++              "kind": "entity",
++              "subject": "guard_captain",
++              "subject_aliases": [
++                "Guard Captain"
++              ],
++              "relation": "exists",
++              "value": "guard",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "text": "Tavern Runner exists as informant",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authored_world_npc"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "world.npcs.1",
++            "outcome_classification": "established_or_retrieved",
++            "semantic_identity": {
++              "kind": "entity",
++              "subject": "tavern_runner",
++              "subject_aliases": [
++                "Tavern Runner"
++              ],
++              "relation": "exists",
++              "value": "informant",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "text": "State opening_scene_turn changes to True",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authorized_state_mutation"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "resolution.state_changes.opening_scene_turn",
++            "outcome_classification": "authorized_state_outcome",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "opening_scene_turn",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "text": "State arrived_at_scene changes to True",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authorized_state_mutation"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "resolution.state_changes.arrived_at_scene",
++            "outcome_classification": "authorized_state_outcome",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "arrived_at_scene",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "text": "State new_scene_context_available changes to True",
++            "provenance": "authored_world_fact",
++            "consequence": "consequential",
++            "authorized": true,
++            "reason_codes": [
++              "authorized_state_mutation"
++            ],
++            "authority": "world_truth",
++            "persistence": "world_truth",
++            "source_ref": "resolution.state_changes.new_scene_context_available",
++            "outcome_classification": "authorized_state_outcome",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "new_scene_context_available",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            }
++          }
++        ],
++        "permitted_state_mutations": [
++          {
++            "type": "state_change",
++            "key": "opening_scene_turn",
++            "value": true
++          },
++          {
++            "type": "state_change",
++            "key": "arrived_at_scene",
++            "value": true
++          },
++          {
++            "type": "state_change",
++            "key": "new_scene_context_available",
++            "value": true
++          }
++        ],
++        "persistence_policy": "world_truth",
++        "narration_constraints": [
++          "Narration may not establish consequential world facts absent this decision.",
++          "Generated proposals are not world truth unless already grounded or explicitly permitted.",
++          "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
++          "Inference must not be narrated as physical evidence.",
++          "Do not narrate authoritative travel/location change unless a location mutation is permitted."
++        ],
++        "unresolved_consequential_questions": [],
++        "unresolved_qualifiers": [],
++        "answer_relations": [],
++        "epistemic_acts": [
++          {
++            "act": "establish",
++            "source_ref": "scene.visible_facts.0",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.visible_facts.1",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.visible_facts.2",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.visible_facts.3",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.visible_facts.4",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.opening_seed_facts.0",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.opening_seed_facts.1",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.opening_seed_facts.2",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.opening_seed_facts.3",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.opening_seed_facts.4",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.opening_seed_facts.5",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.journal_seed_facts.0",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.journal_seed_facts.1",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.journal_seed_facts.2",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.journal_seed_facts.3",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "scene.journal_seed_facts.4",
++            "authority": "world_truth",
++            "semantic_identity": {}
++          },
++          {
++            "act": "establish",
++            "source_ref": "world.npcs.0",
++            "authority": "world_truth",
++            "semantic_identity": {
++              "kind": "entity",
++              "subject": "guard_captain",
++              "subject_aliases": [
++                "Guard Captain"
++              ],
++              "relation": "exists",
++              "value": "guard",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "act": "establish",
++            "source_ref": "world.npcs.1",
++            "authority": "world_truth",
++            "semantic_identity": {
++              "kind": "entity",
++              "subject": "tavern_runner",
++              "subject_aliases": [
++                "Tavern Runner"
++              ],
++              "relation": "exists",
++              "value": "informant",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "act": "establish",
++            "source_ref": "resolution.state_changes.opening_scene_turn",
++            "authority": "world_truth",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "opening_scene_turn",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "act": "establish",
++            "source_ref": "resolution.state_changes.arrived_at_scene",
++            "authority": "world_truth",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "arrived_at_scene",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            }
++          },
++          {
++            "act": "establish",
++            "source_ref": "resolution.state_changes.new_scene_context_available",
++            "authority": "world_truth",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "new_scene_context_available",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            }
++          }
++        ],
++        "realization_claims": [
++          {
++            "claim_id": "rc_a83c5bcfc65e",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.0",
++            "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_d40a1efdddb3",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.1",
++            "text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_3b26b521977b",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.2",
++            "text": "A tavern runner trades hot stew and rumors near the rain barrel.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_b59727e13c62",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.3",
++            "text": "Threadbare watchers and refugees cluster along the muddy gate line.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_be348e85a5e6",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.visible_facts.4",
++            "text": "Ash Compact census delays have tightened the eastern caravan choke point.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_31feab1dcf72",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.0",
++            "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_a0201a45af25",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.1",
++            "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_280f5390057f",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.2",
++            "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_4a217a3c17bc",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.3",
++            "text": "A tavern runner shouts offers of hot stew and paid rumor.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_819bf0e987bb",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.4",
++            "text": "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_6c31b34a1529",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.opening_seed_facts.5",
++            "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_b0360b7546fa",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.0",
++            "text": "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_c76f50a053b2",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.1",
++            "text": "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_315c2f595d6b",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.2",
++            "text": "A notice board announces new taxes and curfews, and names a missing patrol.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_a7b51dead883",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.3",
++            "text": "A tavern runner is hawking hot stew and rumor for coin.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_815adf89f4e9",
++            "semantic_identity": {},
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "scene.journal_seed_facts.4",
++            "text": "A ragged stranger hangs back, watching the crowd more than the queue.",
++            "relation_kind": "ordinary_predicate",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_3704c0c64b57",
++            "semantic_identity": {
++              "kind": "entity",
++              "subject": "guard_captain",
++              "subject_aliases": [
++                "Guard Captain"
++              ],
++              "relation": "exists",
++              "value": "guard",
++              "authority": "world_truth"
++            },
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "world.npcs.0",
++            "text": "Guard Captain exists as guard",
++            "relation_kind": "observation",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_c297085d8f0f",
++            "semantic_identity": {
++              "kind": "entity",
++              "subject": "tavern_runner",
++              "subject_aliases": [
++                "Tavern Runner"
++              ],
++              "relation": "exists",
++              "value": "informant",
++              "authority": "world_truth"
++            },
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "world.npcs.1",
++            "text": "Tavern Runner exists as informant",
++            "relation_kind": "observation",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_0f45c085ba0a",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "opening_scene_turn",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            },
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "resolution.state_changes.opening_scene_turn",
++            "text": "State opening_scene_turn changes to True",
++            "relation_kind": "observation",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_e332994ba83e",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "arrived_at_scene",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            },
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "resolution.state_changes.arrived_at_scene",
++            "text": "State arrived_at_scene changes to True",
++            "relation_kind": "observation",
++            "premise_claim_ids": []
++          },
++          {
++            "claim_id": "rc_7c7d07927c37",
++            "semantic_identity": {
++              "kind": "state_change",
++              "subject": "new_scene_context_available",
++              "relation": "state_change",
++              "value": "True",
++              "authority": "world_truth"
++            },
++            "provenance": "authored_world_fact",
++            "authority": "world_truth",
++            "epistemic_status": "established",
++            "modality": "",
++            "realization_role": "MUST_STATE",
++            "persistence": "world_truth",
++            "source_ref": "resolution.state_changes.new_scene_context_available",
++            "text": "State new_scene_context_available changes to True",
++            "relation_kind": "observation",
++            "premise_claim_ids": []
++          }
++        ],
++        "executable_obligations": {
++          "primary": null,
++          "mutation_owner": null,
++          "sequence": [],
++          "supporting": []
++        },
++        "authority_algorithm": "proposition_claim_control_v1"
++      },
++      "response_type_contract": {
++        "required_response_type": "scene_opening",
++        "source_route": "exploration",
++        "allow_escalation": false,
++        "escalation_block_reason": "non_hostile_world_action_guard",
++        "strict_target_id": null,
++        "strict_answer_expected": false,
++        "strict_dialogue_expected": false,
++        "action_must_preserve_agency": false,
++        "debug_reasons": [
++          "scene_opening_requires_opening_response",
++          "non_hostile_world_action_guard"
++        ]
++      },
++      "emission_debug": {
++        "dialogue_social_plan": {
++          "version": 1,
++          "applies": false,
++          "speaker_id": null,
++          "speaker_name": null,
++          "speaker_source": "unresolved",
++          "dialogue_intent": null,
++          "reply_kind": "unknown",
++          "reply_plan_kind": null,
++          "incidental_subjective_allowed": false,
++          "absence_of_authored_topic_forces_refusal": false,
++          "npc_speech_authority": null,
++          "objective_world_fact_authority": null,
++          "declared_claims_expected": false,
++          "durable_state_mutation_allowed": false,
++          "pressure_state": "none",
++          "relationship_codes": [
++            "unknown"
++          ],
++          "tone_bounds": [
++            "neutral"
++          ],
++          "prohibited_content_codes": [
++            "no_narrator_override",
++            "no_ooc_instructions",
++            "no_player_agency_override",
++            "no_prompt_text"
++          ],
++          "derivation_codes": [
++            "dialogue_social_plan:v1",
++            "intent:ctir_only",
++            "referent_tracking:consumed",
++            "session_hints:bounded",
++            "speaker:unresolved"
++          ],
++          "validator": {
++            "validated": true,
++            "errors": [],
++            "reject_field_names": [
++              "dialogue",
++              "dialogue_line",
++              "gm_guidance",
++              "instructions",
++              "message",
++              "narration",
++              "player_facing_text",
++              "prompt",
++              "system_prompt",
++              "text"
++            ],
++            "allowed_reply_kinds": [
++              "answer",
++              "explanation",
++              "reaction",
++              "refusal",
++              "unknown"
++            ],
++            "allowed_reply_plan_kinds": [
++              "authoritative_answer_available",
++              "consequential_information_request",
++              "genuine_refusal",
++              "genuine_uncertainty",
++              "harmless_subjective_response_permitted"
++            ],
++            "allowed_npc_speech_authority_codes": [
++              "claim_only",
++              "none"
++            ],
++            "allowed_objective_world_fact_authority_codes": [
++              "authored_context_required",
++              "none"
++            ],
++            "allowed_pressure_states": [
++              "high",
++              "low",
++              "moderate",
++              "none"
++            ],
++            "allowed_tone_codes": [
++              "cold",
++              "deferential",
++              "direct",
++              "evasive",
++              "guarded",
++              "hostile",
++              "neutral",
++              "threatening",
++              "warm"
++            ],
++            "allowed_relationship_codes": [
++              "engagement_engaged",
++              "engagement_focused",
++              "engagement_none",
++              "fear_high",
++              "fear_low",
++              "friendly",
++              "hostile",
++              "neutral",
++              "suspicion_high",
++              "suspicion_low",
++              "trust_high",
++              "trust_low",
++              "unfriendly",
++              "unknown"
++            ],
++            "allowed_speaker_alias_resolution_sources": [
++              "continuity_snapshot",
++              "interaction_continuity_contract",
++              "manual_bundle_override",
++              "referent_tracking"
++            ]
++          },
++          "bounded_session_hints": {
++            "active_interaction_target_id": null,
++            "active_interaction_target_name": null,
++            "active_interaction_kind": null,
++            "interaction_mode": "none",
++            "engagement_level": "none",
++            "conversation_privacy": null,
++            "player_position_context": null
++          }
++        },
++        "scene_state_anchor": {
++          "enabled": true,
++          "scene_id": "frontier_gate",
++          "counts": {
++            "location": 14,
++            "actor": 4,
++            "player_action": 3
++          }
++        },
++        "context_separation": {
++          "enabled": true,
++          "interaction_kind": "scene_opening",
++          "pressure_focus_allowed": false,
++          "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=21 ambient=3"
++        },
++        "conversational_memory_window": {
++          "enabled": true,
++          "window_version": "v1",
++          "prioritize_recent_turns": true,
++          "prioritize_active_scene_entities": true,
++          "deprioritize_stale_inactive_elements": true,
++          "allow_explicit_reintroduction": true,
++          "recent_turn_window": 6,
++          "soft_memory_limit": 12,
++          "stale_after_turns": 18,
++          "active_scene_entity_ids": [
++            "guard_captain",
++            "refugee",
++            "tavern_runner",
++            "threadbare_watcher"
++          ],
++          "anchored_interlocutor_id": "",
++          "active_interaction_target_id": "",
++          "explicit_reintroduced_entity_ids": [],
++          "explicit_reintroduced_topics": [],
++          "selection_debug": {
++            "matched_entity_ids": [],
++            "matched_topics": [],
++            "matched_grounded_ids": [],
++            "callback_marker_hit": null,
++            "reason": "empty_player_text",
++            "source_of_activity_anchor": "none",
++            "source_of_recentness": "session.turn_counter",
++            "source_of_reintroductions": "player_text+visibility_aliases"
++          }
++        },
++        "selected_conversational_memory": [],
++        "conversational_memory": {
++          "selected_count": 0
++        },
++        "speaker_contract_enforcement": {
++          "contract_present": false,
++          "validation": {
++            "ok": true,
++            "reason_code": "speaker_contract_match",
++            "canonical_speaker_id": null,
++            "canonical_speaker_name": null,
++            "repair_mode": "none",
++            "details": {
++              "signature": {
++                "speaker_name": null,
++                "speaker_label": null,
++                "is_explicitly_attributed": false,
++                "is_generic_fallback_label": false,
++                "has_interruption_framing": false,
++                "confidence": "low"
++              },
++              "skipped": "no_contract"
++            }
++          },
++          "final_reason_code": "speaker_contract_match"
++        }
++      }
++    }
++  },
++  "referents": [
++    {
++      "id": "frontier_gate",
++      "type": "place",
++      "label": "Cinderwatch Gate District"
++    },
++    {
++      "id": "notice_board",
++      "type": "object",
++      "label": "Notice board"
++    },
++    {
++      "id": "market_quarter",
++      "type": "place",
++      "label": "Enter Cinderwatch"
++    },
++    {
++      "id": "old_milestone",
++      "type": "place",
++      "label": "Follow the missing patrol rumor"
++    },
++    {
++      "id": "guard_captain",
++      "type": "interlocutor",
++      "label": "Guard Captain"
++    },
++    {
++      "id": "tavern_runner",
++      "type": "interlocutor",
++      "label": "Tavern Runner"
++    },
++    {
++      "id": "refugee",
++      "type": "interlocutor",
++      "label": "Ragged stranger"
++    },
++    {
++      "id": "threadbare_watcher",
++      "type": "interlocutor",
++      "label": "Threadbare watcher"
++    }
++  ],
++  "authored_corpus": "\nThe notice board lists taxes, curfew rules, and a warning about a missing patrol.\nA gate serjeant manages the crowd and keeps one eye on the roster board.\nA tavern runner trades hot stew and rumors near the rain barrel.\nThreadbare watchers and refugees cluster along the muddy gate line.\nAsh Compact census delays have tightened the eastern caravan choke point.\nRain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\nRefugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\nA notice board lists new taxes, curfews, and a posted warning about a missing patrol.\nA tavern runner shouts offers of hot stew and paid rumor.\nA well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.\nOne figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\nRain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
++  "present_addressee": "",
++  "dead_actor_labels": null
++}
+--- /dev/null
++++ exit/tests/fixtures/pr_play_11/rejected_opening.json
+@@ -0,0 +1,105 @@
++{
++  "declared_claims": [
++    {
++      "declaration_id": "rc_a83c5bcfc65e",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
++    },
++    {
++      "declaration_id": "rc_d40a1efdddb3",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "A gate serjeant manages the crowd and keeps one eye on the roster board."
++    },
++    {
++      "declaration_id": "rc_3b26b521977b",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "A tavern runner trades hot stew and rumors near the rain barrel."
++    },
++    {
++      "declaration_id": "rc_b59727e13c62",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Threadbare watchers and refugees cluster along the muddy gate line."
++    },
++    {
++      "declaration_id": "rc_be348e85a5e6",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Ash Compact census delays have tightened the eastern caravan choke point."
++    },
++    {
++      "declaration_id": "rc_31feab1dcf72",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate."
++    },
++    {
++      "declaration_id": "rc_a0201a45af25",
++      "declaration_mode": "realize",
++      "source_claim_id": null,
++      "premise_claim_ids": [],
++      "semantic_identity": {},
++      "provenance_requested": "authored_world_fact",
++      "epistemic_status": "established",
++      "modality": "established",
++      "realization_role": "MUST_STATE",
++      "relation_kind": "ordinary_predicate",
++      "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in."
++    }
++  ],
++  "narration": "Rain spatters against the soot-dark stones as frayed banners flap weakly above Cinderwatch's eastern gate. The muddy approach is choked with refugees, wagons, and foot traffic, pressing against the guards who hold firm in tight formation. Near the gate, a gate serjeant keeps a watchful eye on the crowds while frequently glancing toward a nearby notice board. The board itself lists grim new taxes, curfew regulations, and a posted warning about a patrol that has gone missing. Threadbare watchers and ragged strangers cluster uneasily along the gate line, their gazes flickering between the gate, the crowd, and the bustling tavern runner shouting offers of hot stew and snippets of rumor beside a rain barrel. Ash Compact census delays have tightened the caravan's eastern choke point, adding strain to the already sluggish movement through the gate district.",
++  "player_facing_text": "Rain spatters against the soot-dark stones as frayed banners flap weakly above Cinderwatch's eastern gate. The muddy approach is choked with refugees, wagons, and foot traffic, pressing against the guards who hold firm in tight formation. Near the gate, a gate serjeant keeps a watchful eye on the crowds while frequently glancing toward a nearby notice board. The board itself lists grim new taxes, curfew regulations, and a posted warning about a patrol that has gone missing. Threadbare watchers and ragged strangers cluster uneasily along the gate line, their gazes flickering between the gate, the crowd, and the bustling tavern runner shouting offers of hot stew and snippets of rumor beside a rain barrel. Ash Compact census delays have tightened the caravan's eastern choke point, adding strain to the already sluggish movement through the gate district.",
++  "tags": [],
++  "improvisation_proposals": null,
++  "scene_update": null,
++  "activate_scene_id": null,
++  "new_scene_draft": null,
++  "world_updates": null,
++  "suggested_action": null,
++  "debug_notes": "Opening scene established with sensory detail, named entities, and narrative pressure grounded in visible facts."
++}
+--- /dev/null
++++ exit/tools/validate_pr_play_11.py
+@@ -0,0 +1,76 @@
++"""Offline regression lanes; preserve prior evidence and ordinary game stores."""
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import time
++
++from tools.validate_pr_play_10 import LANES as PRIOR
++from tools.validate_pr_play_09 import protected_hashes
++from tools.playtest.runner import stop_owned
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'artifacts/pr_play_11'
++LANES = dict(PRIOR)
++LANES['claim_authority'] = ['test_pr_play_11_claim_authority',
++    'test_pr_bu_narration_claim_composition', 'test_pr_br_claim_control_slice1',
++    'test_pr_br_claim_control_slice2', 'test_realization_provenance',
++    'test_investigation_result_provenance_non_invention']
++LANES['entry_claim_authority'] = LANES['claim_authority'][1:]
++
++
++def main():
++    backup = {p: p.read_bytes() for n in range(4, 11)
++              for p in (ROOT/f'artifacts/pr_play_{n:02}').rglob('*') if p.is_file()}
++    protected = protected_hashes()
++    env = dict(os.environ, PR_PLAY_DIAGNOSTIC_OUT=str(OUT/'regression_diagnostics'))
++    env['PYTHONPATH'] = os.pathsep.join([str(ROOT), *[p for p in sys.path if 'site-packages' in p]])
++    runs = json.loads((OUT/'regression_runs.json').read_text()) if (OUT/'regression_runs.json').exists() else {}
++    try:
++        for lane in sys.argv[1:] or LANES:
++            command = [getattr(sys, '_base_executable', sys.executable), '-u', '-m', 'pytest',
++                *['tests/'+n+'.py' for n in LANES[lane]], '-q', '--tb=short',
++                '--basetemp='+str(ROOT/'development/tmp'/('pr_play_11_'+lane+'_'+str(time.time_ns()))),
++                '--junitxml='+str(OUT/(lane+'_regression.xml'))]
++            if lane == 'entry_claim_authority':
++                command += ['-p', 'tests.helpers.pr_play_11_entry_source']
++            start = time.monotonic()
++            with (OUT/(lane+'_regression.txt')).open('w', encoding='utf-8') as log:
++                proc = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log,
++                    stderr=subprocess.STDOUT, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
++                timeout = False
++                try:
++                    code = proc.wait(timeout=180)
++                except subprocess.TimeoutExpired:
++                    timeout = True
++                    stop_owned(proc, 5)
++                    code = None
++            runs[lane] = dict(command=command, exit=code, timeout=timeout, seconds=round(time.monotonic()-start, 3))
++            if lane == 'gameplay':
++                # Preserve this run's real HTTP continuation evidence before
++                # restoring the older fixed PR09 evidence pointer.
++                import shutil
++                pointer = ROOT/'artifacts/pr_play_09/example_run.json'
++                if pointer.exists():
++                    selected = Path(json.loads(pointer.read_text())['run'])
++                    dest = OUT/'gameplay_readiness'
++                    dest.mkdir(exist_ok=True)
++                    for rel in ('reports/result.json', 'reports/GAMEPLAY_REPORT.md', 'evidence/evidence.zip'):
++                        target = dest/rel
++                        target.parent.mkdir(parents=True, exist_ok=True)
++                        shutil.copy2(selected/rel, target)
++                    (dest/'source_run.json').write_text(json.dumps(dict(run=str(selected), command=command), indent=2))
++            (OUT/'regression_runs.json').write_text(json.dumps(runs, indent=2))
++            print(lane, code, 'timeout='+str(timeout), flush=True)
++    finally:
++        for p, data in backup.items():
++            if not p.exists() or p.read_bytes() != data:
++                p.write_bytes(data)
++        (OUT/'validation_integrity.json').write_text(json.dumps(dict(
++            protected_unchanged=protected == protected_hashes(), files=len(protected),
++            prior_evidence_restored=all(p.read_bytes() == data for p, data in backup.items())), indent=2))
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ exit/tools/analyze_pr_play_11.py
+@@ -0,0 +1,96 @@
++"""Bounded offline authority evidence derived from saved production-path replays."""
++import hashlib
++import json
++from pathlib import Path
++import shutil
++
++from game.gm_resolution_decision import _empty_identity_covers, _token_set
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'artifacts/pr_play_11'
++RUNS = ROOT/'artifacts/atgb/automated_playtests'
++REJECTED = '20261031T015747Z-5a6c03c902e3'
++
++
++def write(name, value):
++    (OUT/name).write_text(json.dumps(value, indent=2, ensure_ascii=True)+'\n', encoding='utf-8')
++
++
++def main():
++    replay = json.loads((OUT/(REJECTED+'_replay.json')).read_text())
++    trace = replay['traces'][0]
++    audit = trace['result']['gm_resolution_decision_audit']
++    declared = trace['inputs']['declared_claims']
++    decision = trace['inputs']['decision']
++    records = []
++    for index, row in enumerate(declared):
++        matches = [c for c in decision['realization_claims'] if c['text'] == row['text']]
++        records.append(dict(declaration_index=index, original=row,
++            subject_field_present='subject' in row['semantic_identity'],
++            predicate_field_present='predicate' in row['semantic_identity'],
++            object_field_present='object' in row['semantic_identity'],
++            supplied_authority=dict(provenance_requested=row['provenance_requested'], source_claim_id=row['source_claim_id']),
++            required_authority='Match an authorized realization claim without modality/premise strengthening',
++            matched_authored_claims=matches, declaration_rejected=False,
++            validator='validate_declared_claims_against_decision -> _declared_identity_matches_realization',
++            declaration_decision='accepted by exact text; source_claim_id is not mandatory in this contract'))
++    violations = []
++    for v in audit['violations'][:32]:
++        violations.append(dict(original_violation=v, related_declaration_id=declared[0]['declaration_id'],
++            relation='same notice-board subject; declaration itself accepted',
++            required_authority='Authored text lexical coverage or authorized semantic identity',
++            supplied_authority='Paraphrased prose; no lexical coverage and no matching authored semantic identity',
++            failed_function='_authorized_rows_for_sentence -> _empty_identity_covers',
++            rejection_function='_classify_narrated_fact_legacy -> _unlicensed_consequential_reasons',
++            specific_rule='notice_roster_history',
++            correct_under_executable_contract=True,
++            semantic_assessment='Ordinary paraphrase of supplied information; deterministic guard has no synonym/entailment authority'))
++    write('declaration_analysis.json', dict(declarations=records, rejected_declarations=[],
++        narration_violations=violations, diagnostic_limit=32, omitted_violations=max(0,len(audit['violations'])-32)))
++    text = audit['violations'][0]['text']
++    lexical = []
++    for c in decision['realization_claims']:
++        if 'notice board' in c['text'].lower():
++            lexical.append(dict(claim_id=c['claim_id'], text=c['text'],
++                extra_content_tokens=sorted(_token_set(text)-_token_set(c['text'])),
++                covered=_empty_identity_covers(text,c['text'])))
++    write('lexical_failure.json', dict(narration=text, candidates=lexical,
++        condition='More than one added content token rejects before later overlap checks; no synonym/entailment inference.'))
++    corpus = []
++    for run, pass_name in [('20261030T183848Z-5fe421902485','PR-PLAY-08'),
++                           ('20261030T191257Z-ecc1b6062bdc','PR-PLAY-09'), (REJECTED,'PR-PLAY-09/10 rejection')]:
++        folder = RUNS/run
++        result = json.loads((folder/'reports/result.json').read_text())
++        p = next((folder/'opening_response_evidence').glob('*.json'))
++        capture = json.loads(p.read_text())
++        dest = OUT/'corpus'/run
++        dest.mkdir(parents=True, exist_ok=True)
++        for rel in ['baseline/documents.json','reports/result.json']:
++            d=dest/rel; d.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(folder/rel,d)
++        shutil.copy2(p, dest/'capture.json')
++        (dest/'parsed_response.json').write_text(json.dumps(capture['parsed_response'],indent=2)+'\n')
++        usage=result['provider_usage']
++        corpus.append(dict(source_run=run, pass_name=pass_name, source=str(p.relative_to(ROOT)),
++            capture_available=True, capture_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
++            provider_model=usage['records'][0].get('model'),
++            structured_validity=result['structural_validation'], semantic_outcome=result['semantic_validation'],
++            opening_acceptance=result['opening_acceptance'], declaration_count=len(capture['parsed_response']['declared_claims']),
++            original_failure_reason=result.get('failure_classification'),
++            declaration_metadata=capture['parsed_response']['declared_claims'],
++            replay_status=json.loads((OUT/(run+'_replay.json')).read_text())['status'],
++            exact_parsed_replay=True, exact_provider_wire_replay=False))
++    write('historical_corpus.json', corpus)
++    lines = ['# Declaration-level rejection analysis', '',
++        'All seven declarations are accepted. No declaration fails provenance, modality, or source matching.', '',
++        '| Declaration identifier | Exact text | Decision |', '|---|---|---|']
++    lines += [f"| {r['declaration_id']} | {r['text']} | Accepted by exact authored-text match |" for r in declared]
++    lines += ['', 'The sole rejected item is narration associated with the notice-board declaration:', '',
++        '| Related declaration | Rejected narration | Failed condition | Required / supplied authority |', '|---|---|---|---|',
++        f"| {declared[0]['declaration_id']} (accepted) | {text} | No authorized row coverage; `notice_roster_history` | Authored lexical/identity evidence / embellished prose outside lexical coverage |", '',
++        'The existing operational contract rejects this wording. Missing source IDs and MUST_STATE do not cause this rejection.']
++    (OUT/'declaration_rejection_table.md').write_text('\n'.join(lines)+'\n',encoding='utf-8')
++    print('Derived declaration, lexical, and three-response corpus evidence.')
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ exit/tools/report_pr_play_11.py
+@@ -0,0 +1,297 @@
++"""Explicit PR-PLAY-11 reports and secret-scanned standard review export."""
++from datetime import datetime, timezone, timedelta
++import difflib
++import hashlib
++import io
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++import xml.etree.ElementTree as ET
++import zipfile
++
++from tools.build_review_handoff import build_handoff
++from tools.validate_pr_play_09 import protected_hashes
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'artifacts/pr_play_11'
++REPORTS = ROOT/'development/campaigns/product_realization/pr_play_11'
++COMMAND = '.\\scripts\\run_live_playtest.ps1 -Scenario FiveTurnGameplay -Mode Live -AuthorizeLiveProvider -CaptureResponse'
++SOURCES = ['game/gm.py','tests/test_pr_play_11_claim_authority.py',
++    'tests/helpers/pr_play_11_entry_source.py',
++    'tests/fixtures/pr_play_11/opening_context.json','tests/fixtures/pr_play_11/rejected_opening.json',
++    'tools/validate_pr_play_11.py','tools/analyze_pr_play_11.py','tools/report_pr_play_11.py','docs/NEXT_SESSION.md']
++CONFIRM = '''No live provider calls. No provider connectivity tests. No model changes.
++No output-budget increases. No automatic retries. No broad semantic-validation relaxation.
++No unsupported claim authorization. No unrelated gameplay changes. No unauthorized state mutations.
++No new persistent gameplay structures. No experimental PR-EG integration.
++Frozen ATGB baseline unchanged. No secrets included. No commit or push performed.'''
++
++
++def read(name):
++    return json.loads((OUT/name).read_text(encoding='utf-8'))
++
++
++def write(name, value):
++    (OUT/name).write_text(json.dumps(value, indent=2)+'\n', encoding='utf-8')
++
++
++def report(name, title, body):
++    (REPORTS/(name+'.md')).write_text('# '+title+'\n\nPR-PLAY-11 · 2026-10-30 America/New_York · evidence_scope: structural_only.\n\n'+body.strip()+'\n', encoding='utf-8')
++
++
++def main():
++    REPORTS.mkdir(parents=True, exist_ok=True)
++    results = {}
++    runs = read('regression_runs.json')
++    for lane in runs:
++        p = OUT/(lane+'_regression.xml')
++        if not p.exists():
++            results[lane] = dict(classification='environment-blocked', timeout=runs[lane]['timeout'])
++            continue
++        suite = next(ET.parse(p).getroot().iter('testsuite'))
++        counts = {k:int(suite.get(k,0)) for k in ('tests','failures','errors','skipped')}
++        counts['passed'] = counts['tests']-counts['failures']-counts['errors']-counts['skipped']
++        counts['failure_cases'] = [c.get('classname')+'::'+c.get('name') for c in suite if c.find('failure') is not None or c.find('error') is not None]
++        results[lane] = counts
++    write('test_summary.json', results)
++    prior=json.loads((ROOT/'artifacts/pr_play_10/test_summary.json').read_text())
++    prior_ids={n for v in prior.values() for n in v['failure_cases']}
++    entry_ids=set(results['entry_claim_authority']['failure_cases'])
++    prior_ids.update(entry_ids)
++    failures=[dict(lane=k,test=n,classification='preexisting_failure' if n in prior_ids else 'unresolved')
++        for k,v in results.items() for n in v.get('failure_cases',[])]
++    write('failure_classification.json',dict(failures=failures,
++        new_regressions=[f for f in failures if f['classification']!='preexisting_failure'],
++        environment_blocked=['Two sandbox attempts interrupted before obtaining regression results; localhost-capable run is authoritative.'],
++        comparison='Exact failure IDs against PR-PLAY-10; no frozen source attestation rewritten.'))
++    assert all(f['classification']=='preexisting_failure' for f in failures), failures
++    assert not any(r['timeout'] for r in runs.values()), runs
++    assert set(results['claim_authority']['failure_cases']) == entry_ids
++    for lane in ('overlay','diagnostics','harness','gameplay','hidden_faction'):
++        assert results[lane]['failures']==results[lane]['errors']==0, (lane,results[lane])
++    passed=sum(v.get('passed',0) for k,v in results.items() if k!='entry_claim_authority')
++    failed=sum(v.get('failures',0) for k,v in results.items() if k!='entry_claim_authority')
++    analysis=read('declaration_analysis.json')
++    corpus=read('historical_corpus.json')
++    authority=[
++        dict(category='Authored-world facts',owner='gm_resolution_decision / authored scene, world, resolution',rule='Match existing realization claim by ID, semantic identity, exact text or bounded lexical coverage; preserve ceilings'),
++        dict(category='Environmental realization',owner='authored evidence and narration audit',rule='Descriptive text is not automatically a resolution outcome. Authored content still needs coverage when consequential patterns match.'),
++        dict(category='Bounded improvisation',owner='bounded_improvisation',rule='Existing low-consequence proposal policy; rumors remain claims, not world truth. No new authority.'),
++        dict(category='Player-action outcomes',owner='resolution_contract and engine resolution',rule='Narration cannot resolve success, movement or player agency without engine evidence.'),
++        dict(category='Mechanical decisions',owner='noncombat_resolution / combat / world',rule='Checks, damage, resources and movement require engine outcomes.'),
++        dict(category='Consequential world changes',owner='world / state_authority',rule='NPC/faction/access/quest changes require existing authorized mutations; structured declarations cannot self-authorize.')]
++    write('claim_authority_matrix.json',authority)
++    bindings={
++      'C1':('PASS','before_repair_replay.json; baseline.xml: historical production replay returned 422'),
++      'C2':('PASS','Historical unchanged JSON remains 422 after guidance; conservative_generation.json returns 200 with source sentence'),
++      'C3':('PASS','Both PR-PLAY-08 and 09 unchanged parsed captures replay with 200'),
++      'C4':('PASS','C4.json: valid claim with source reference'),
++      'C5':('PASS_WITH_CONTRACT_CLARIFICATION','C5.json: unsupported fact without evidence rejected; source ID is not mandatory if authored text matches'),
++      'C6':('PASS_WITH_CONTRACT_CLARIFICATION','C6.json: nonexistent ID plus unsupported text rejected; source_id_fallback.json proves invalid ID alone is not fatal with exact authored evidence'),
++      'C7':('PASS','C7.json: contradictory authored claim rejected'),
++      'C8':('PASS','C8.json: existing authored environmental realization accepted'),
++      'C9':('PASS','C9.json: sensory incidental accepted; hidden_faction regression includes bounded proposal acceptance/promotion controls'),
++      'C10':('PASS','C10.json: unauthorized action outcome rejected'),
++      'C11':('PASS','C11.json: unauthorized mechanical/resource decision rejected'),
++      'C12':('PASS','C12.json: unauthorized consequential gate/faction change rejected'),
++      'C13':('PASS','C13.json and narrative-authority/hidden regressions'),
++      'C14':('PASS','C14.json: established authored provenance requested in proposal rejected'),
++      'C15':('PASS','C15.json: exact authored text with empty premises and no source ID accepted'),
++      'C16':('PASS','C16.json and mixed-opening endpoint rollback/retry test'),
++      'C17':('PASS','C17.json: both invalid declaration IDs captured'),
++      'C18':('PASS','Historical endpoint replay before==after gameplay snapshot; PR04 rollback controls'),
++      'C19':('PASS','Accepted endpoint replay advances one turn/log; PR04 exactly-once controls'),
++      'C20':('PASS','Mixed-opening test fails without progression then succeeds on explicit new Start'),
++      'C21':('PASS','Accepted historical replay repeat returns 409 and no extra transport dispatch'),
++      'C22':('PASS','PR04 and PR10 concurrent endpoint tests pass in diagnostics/overlay lanes'),
++      'C23':('PARTIAL_EVIDENCE_LIMIT','Original capture bytes hashed and copied unchanged; parsed JSON equal. Original provider wire bytes and original request payload were not captured; cannot claim byte-exact transport replay.'),
++      'C24':('PASS','Pytest live-model guard, SDK synthetic transport, H15/G23 external socket refusal controls'),
++      'C25':('PASS','Existing nested decision audit plus declaration_analysis.json and lexical_failure.json identify accepted declarations and sole narration rule'),
++      'C26':('PASS','Explicit export selection, no environment dumps, configured-secret scan and ZIP scan'),
++      'C27':('PASS','Overlay lane including O1-O15, production replay, rollback and concurrency'),
++      'C28':('PASS_WITH_EXISTING_LIMIT','Gameplay HTTP synthetic pipeline proceeds past opening through T1-T4 and safely skips T5 at unchanged six-request ceiling; no all-five completion claim')}
++    write('C1_C28_results.json',{k:dict(status=v[0],evidence=v[1]) for k,v in bindings.items()})
++    table='\n'.join(f"| {k} | {v[0]} | {v[1]} |" for k,v in bindings.items())
++    report('01_BASELINE_AND_HISTORICAL_EVIDENCE','01 — Baseline and Historical Evidence',f'''
++Revision: `{(OUT/'revision.txt').read_text(encoding='utf-8-sig').strip()}`. Extensive tracked and untracked entry changes are preserved in entry_status.txt; this is not a clean-tree investigation. Incremental diff uses saved entry sources, not git HEAD. No unrelated work reverted.
++
++Primary archive evidence(3).zip was not located in the workspace. Corresponding complete local run **20261031T015747Z-5a6c03c902e3** matches the requested 26593 input / 1352 output tokens, one completed GPT-4.1-mini dispatch, structured validity, HTTP 422, zero player turns and unchanged gameplay. Original evidence remains untouched. historical/rejected_capture.json is an unchanged byte copy of the bounded parsed-response capture; original provider wire bytes are unavailable.
++
++Authorities reviewed: DEVELOPMENT_CONSTITUTION, NEXT_SESSION, Product Realization portfolio bootstrap/validation, state_authority_model, validation_layer_separation, validation_evidence_standard (ATGB), realization_provenance_audit, PR-BN bounded authority, source structured-envelope/claim contracts and PR-PLAY-04–10 handoffs and relevant tests. No benchmark score is claimed.
++
++Relevant owners: game/gm.py (transport/extraction/schema), structured_player_output, gm_resolution_decision (declaration and prose authority), immutable_valid_response (hard validation/sealing), api (acceptance/rollback), provider_budget (observations), tools/playtest (isolated harness). Existing tests include PR04 opening integrity, PR07 semantic acceptance, PR10 overlay replay, structured realization, claim-control, provenance, bounded improvisation and narrative authority suites.
++
++Existing replay capability preserved parsed JSON via SDK transport through production API owners. PR11 adds two accepted historical captures and the rejected capture to that capability. Source claims and prompt requests are observed by delegating wrappers, without replacing validators or commit logic. Opening scene comes from the historical baseline and remaining campaign state from the existing isolated seed; relevant authored facts/claim IDs are confirmed in actual outgoing context. Original live request payload was not saved, so exact original full-context equivalence cannot be proved.
++''')
++    report('02_DECLARATION_LEVEL_FAILURE_ANALYSIS','02 — Declaration-Level Failure Analysis',f'''
++**No structured declaration is rejected.** All seven exact authored-text matches pass validate_declared_claims_against_decision, despite source_claim_id=null and semantic_identity={{}}. The requested declaration-level rejection table is artifacts/pr_play_11/declaration_rejection_table.md; original fields and accepted source claims are preserved in declaration_analysis.json.
++
++The sole offending narration is: “The board itself lists grim new taxes, curfew regulations, and a posted warning about a patrol that has gone missing.” Related accepted declaration: rc_a83c5bcfc65e, “The notice board lists taxes, curfew rules, and a warning about a missing patrol.” Subject/predicate/object fields are **absent**, not inferred replacements for the empty semantic_identity. Every actual field and null/empty value remains in the capture.
++
++Path: call_gpt completed output_text → _safe_json / structured envelope → run_preserve_if_valid._check → validate_generated_response → audit_realization_envelope_against_decision → declarations pass → audit_narration_against_decision → audit_narrated_claims / classify_narrated_fact → _classify_narrated_fact_legacy → no _authorized_rows_for_sentence coverage → consequential pattern notice_roster_history → unauthorized narration → unauthorized_resolution_decision_fact → host safe_nonresolution → api._opening_response_rejection → 422 and rollback.
++
++_empty_identity_covers rejects more than one added content token. Relative to the first authored source, the narration adds gone/grim/itself/posted/regulations; the alternative opening-seed wording also fails. No synonym/entailment authority exists. This is correct under the executable conservative coverage contract, even though the sentence reads as an ordinary paraphrase. The notice/patrol pattern conservatively treats posting assertions as potentially consequential; it does not establish that the model made a mechanical decision.
++
++Existing nested audits already report all seven accepted claims and the rejected narration with specific reason codes. No production diagnostics relaxation or raw-response ledger extension is necessary. PR11 exports that existing audit and bounded (32-item) declaration/narration analysis; omitted counts are explicit. Aggregate ledger error alone must not be used to accuse a declaration.
++''')
++    report('03_CLAIM_AND_RESOLUTION_AUTHORITY','03 — Claim and Resolution Authority','''
++The decision is a pre-narration authority boundary, not merely a dice-result classifier. It covers authored facts, epistemic limits, incidental texture, action outcomes, mechanics and persistent consequences. claim_authority_matrix.json identifies existing owners and limits. GPT expressions never become state truth by assertion.
++
++authored_world_fact does not self-authorize. A realize declaration must match a supplied authorized realization_claim and preserve modality/premise ceilings. source_claim_id is **not mandatory**: _declared_identity_matches_realization also accepts semantic identity, exact text and bounded lexical compatibility. Exact authored environmental facts can use authored provenance; premises may be empty when no uncertain dependency exists. No special opening exemption exists. Scene context is usable only through the host's actual decision/evidence, not a model-invented authority claim.
++
++Missing provenance defaults to generated_proposal during coercion, but realized output provenance is taken from the matched host claim. Requested provenance is not independently equality-checked in the realize branch; contradictions in *requested labels* alone do not necessarily reject. Proposal world-truth requests are explicitly prohibited. Invalid source IDs may fall back to exact text matching: C6 rejects unsupported content with an invalid ID, while source_id_fallback.json documents that a bogus ID with independently matched authored text remains accepted. This preexisting contract is not silently strengthened or relaxed here. Source ID matching itself is permissive; broad assurance about all malformed metadata is not claimed.
++
++MUST_STATE is host presentation priority derived from authorized world claims. It is not an authority grant or resolution flag. Declared roles and ordinary_predicate do not by themselves reject this opening. established modality is valid for these established facts. The historical combination is valid for all seven declarations. Correct source IDs, changed role, or changed requested provenance leave the original narrated sentence rejected. Same semantic subject can pass declaration validation and fail prose validation because each surface is checked separately.
++
++Consequential player-action, mechanical and persistent-world outcomes remain engine-owned. Ordinary prose can trigger a consequential lexical restriction when it asserts posted information, evidence, historical causes or other guarded content. Sounding mundane does not bypass that check. Bounded incidental details and NPC rumors retain their existing separate policy and persistence limits.
++''')
++    report('04_GENERATION_CONTRACT_ANALYSIS','04 — Generation Contract Analysis','''
++Actual model input is saved in before_repair_replay.json.requests (reconstructed pre-change production request), with actual post-change SDK requests in each replay. Full system JSON example permits source_claim_id=null, semantic_identity={}, established status and MUST_STATE. These are permitted options, not a requirement to use that combination. The system requires consequential declarations, forbids self-authorization, and permits plain sensory texture. decision_facing_answer_recipe requests source references and provenance. Opening guidance requests sensory/spatial details and natural language; vivid mode emphasizes mood.
++
++The confirmed mismatch is narrower than missing evidence: the model receives authored claim texts and stable rc_ identifiers, can reference them in the schema, and all historical declarations match supplied texts. No identifier fabrication or missing-context repair is justified. Existing guidance does not explain that free-text claims without semantic identities have a conservative lexical prose check that cannot authorize expanded synonym paraphrases. A valid declaration does not make its elaborated narration valid.
++
++Compliant generation is feasible: keep an authorized source fact sentence intact and place texture separately. An unchanged-metadata response with only the notice sentence replaced passes the complete production opening path and commits once. The general system example is a field catalog rather than a concrete positive/negative opening pair; the recipe supplies real valid rows but no explicit lexical counterexample. Empty identity means there is no typed subject/relation/value supplied for that fact. The model must not invent one to broaden prose acceptance.
++
++Repair: one opening-only system instruction in call_gpt explains this existing lexical constraint before input estimation/admission/dispatch. Use exact supplied text as a separate sentence for empty-identity authored claims; preserve references/status/premises; keep texture separate; do not fabricate identities or IDs. The outgoing-request assertion verifies delivery and source claim availability. Ordinary-turn prompts and all authority validators are unchanged. Additional prompt input is small but unmeasured in live tokens; no claim of prompt-size reduction or output-budget increase.
++''')
++    corpus_table='\n'.join(f"| {c['pass_name']} | {c['source_run']} | {c['declaration_count']} | {c['opening_acceptance']} | {c['replay_status']} |" for c in corpus)
++    report('05_ACCEPTED_REJECTED_OPENING_COMPARISON','05 — Accepted/Rejected Opening Comparison',f'''
++| Source | Run | Declarations | Historical accepted | Replay HTTP |
++|---|---|---|---|---|
++{corpus_table}
++
++All three use GPT-4.1-mini; original capture bytes and parsed JSON are retained under corpus/. historical_corpus.json contains actual declaration metadata, availability, structural/semantic outcomes, original failure reason, model and hashes. No unavailable capture was manufactured. Exact parsed replay is available; exact provider wire-byte replay is not.
++
++The seven rejected-run declaration texts occur as authored evidence; the accepted PR09 response uses nonempty semantic_identity fields and one source ID, whereas rejected declarations have empty identities and null sources. This correlation is **not the cause**: original declarations all pass, and adding all correct source IDs still leaves the same prose rejection. Accepted historical metadata may use model-supplied identities, but acceptance is not evidence that every possible identity/provenance combination is sound.
++
++Smallest confirmed causal change: replace the one notice-board narration sentence (both narration and legacy player_facing_text) with its already supplied authored text. Declarations, field combinations, state, validator and provider transport remain fixed. conservative_generation.json records 200; before_repair_replay.json records 422. Superficial wording matters to this conservative token-coverage gate. No metadata-only authorization repair is indicated, and no predicate-specific production allowlist is added.
++''')
++    report('06_ROOT_CAUSE_AND_IMPLEMENTATION','06 — Root Cause and Implementation','''
++**Classification C — Generation/Validation Contract Mismatch (under-specified realization constraint).** Development-constitution failure class: contract. The first demonstrated mismatch is the prose realization of an authorized untyped fact beyond the existing lexical coverage rule. Structured declarations are valid; parser/provider completion are successful; no missing-claim provenance conclusion is supported. The executable validator conservatively rejects the paraphrase as designed. This is not proof that the model attempted an unauthorized mechanical resolution.
++
++Bounded implementation: game/gm.py appends opening-only guidance before accounting input estimation and dispatch. No validator change, synonym table, retry, additional request, fabricated authority, scene rewrite, output allowance or model change. New tests and offline evidence tools replay both accepted captures and the rejection through production owners and capture existing nested authority diagnostics. Source diff is incremental against dirty entry bytes. No new gameplay subsystem or persistent structure is added.
++
++Rejected alternatives: require source_claim_id everywhere (not existing contract and not causal); trust authored_world_fact labels; exempt ordinary_predicate/MUST_STATE; expand token-overlap allowance; whitelist this historical sentence; attach invented semantic identities; strip declarations; change world content; bypass hard validity; force historical acceptance; spend a live request. All would be unjustified or exceed scope.
++
++The raw historical response correctly remains rejected under the preserved contract. A compliant equivalent is accepted. This fixes the demonstrated missing generation constraint for the class of empty-identity opening facts, conditional on the model following it. It does not prove a stochastic failure-rate reduction or solve every conservative prose false rejection. Broader semantic adequacy is deferred.
++''')
++    summary_table='\n'.join(f"| {k} | {v.get('passed',0)} | {v.get('failures',0)} | {v.get('errors',0)} |" for k,v in results.items())
++    report('07_DETERMINISTIC_VALIDATION','07 — Deterministic Validation',f'''
++Actual commands, executable paths, basetemps, exits and durations: regression_runs.json. Entry point: `.venv/Scripts/python.exe -m tools.validate_pr_play_11`; successful outer invocation uses the base Python312 interpreter with repository/.venv site-packages in PYTHONPATH to avoid Windows launcher issues. Every lane executes pytest with explicit selected files, -q --tb=short and JUnit output. Test live-model guard prohibits real SDK construction except explicit synthetic stubs. No live test or connectivity probe ran.
++
++| Lane | Passed | Failures | Errors |
++|---|---|---|---|
++{summary_table}
++
++Actual current-source total: **{passed} passing executions / {failed} failures**. The same PR10 lanes retain **752 passing / six failures**. The added claim/provenance selection contributes **126 passing / eight additional failures**; all eight reproduce against saved entry GM source (separate entry comparison: 104 passing / eight failures, excluded from the current-source total). Exact failure IDs and comparison are in failure_classification.json. One additional failure is an existing test incompatibility with the deterministic live-model guard; remaining added failures concern old claim/investigation behavior. They are not repaired here. No relevant new regression remains. Initial sandbox child/localhost attempts did not yield usable results and were interrupted; completed localhost-capable run supplies authoritative results. A transient Windows atomic-replace PermissionError passes on rerun. Initial prompt placement after the user message broke seven transport-fixture assumptions; moving the instruction before the user payload restores all diagnostics. Initial results are preserved under initial_regression/.
++
++The first exploratory baseline test also had a mistaken expected structured subject and raised StopIteration; correcting the evidence lookup exposed that actual scene claims have empty identities. That test-authoring error was not a product regression; original baseline XML is retained. Counts are overlapping executions, not unique tests. No acceptance tests were weakened.
++
++| Case | Result | Evidence / limits |
++|---|---|---|
++{table}
++
++No full-suite, rendered UI, live reliability, semantic gameplay-quality, ATGB score or independent held-out generalization claim. Matrix probes are synthetic positive/negative controls. Historical captures are runtime-discovered evidence; replay is deterministic. C23 is explicitly partial, not fabricated wire fidelity. C5/C6 reflect the actual matching contract rather than imposing a nonexistent mandatory-ID rule. Normal data and frozen baseline hashes are checked at exit; prior fixed evidence sinks restored after regression.
++''')
++    readiness=f'''
++**B — Conditionally ready for external review of the controlled diagnostic.** Historical failure reproduced; exact offending prose and rule identified; conservative generation constraint reconciled; positive/negative, atomicity, overlay and continuation controls pass. No relevant new regression remains. C23's missing wire bytes/original full request cannot be recovered; parsed captures and relevant reconstructed public context remain inspectable. C5/C6's source-ID fallback is a preexisting contract limitation, not repaired or hidden here.
++
++Original reproduction: raw response remains rejected as required by the existing lexical guard; a one-sentence compliant equivalent passes. Failure-class guidance: now explicitly communicates the empty-identity lexical constraint. Reliability: **not established**; no independent live openings run. Do not promise the prompt prevents every future rejection.
++
++Future command, for external review and a separately authorized later run only:
++
++```powershell
++{COMMAND}
++```
++
++Existing FiveTurnGameplay v1.0.0, same five actions, same configured model and output allowances (normally opening 3000 / ordinary narration 600), maximum six requests, no SDK/host retries, isolated fresh campaign, state-integrity checks, bounded response capture and automatic evidence export retained. Aggregate ceilings remain 200000 input / 20000 output / 220000 total or stricter inherited limits. No connectivity test. Failed-call usage can be unknown. No cost estimate fabricated.
++
++Synthetic normal HTTP pipeline passes opening and T1–T4, then safely skips T5 at the unchanged six-request ceiling. Full five-turn completion in six requests is unproven. Stop on any semantic or state-integrity failure and retain evidence without retry. Live execution is not authorized in PR-PLAY-11 and was not executed. One next action: external review of this archive.
++'''
++    report('08_LIVE_TEST_READINESS','08 — Live-Test Readiness',readiness)
++    (OUT/'future_live_command.md').write_text(readiness,encoding='utf-8')
++    verdict=f'''
++**B — Conditionally ready.** Root cause C: generation/prose validation constraint mismatch, not rejected declaration provenance. All seven declarations pass; notice-board narration triggers notice_roster_history after lexical coverage fails. Exact original parsed replay returns 422 and preserves gameplay. Two historical accepted openings remain 200. One constrained sentence replacement returns 200 with the original declarations. Opening-only guidance communicates the existing guard without relaxing authority.
++
++Validation: {passed} passing regression executions, {failed} inherited failures, no demonstrated relevant new regression. See report 07 for C1–C28 qualifications. Missing original wire bytes/full live payload, preexisting source-ID fallback/permissive identity matching, conservative prose wording sensitivity, six-request feasibility and unmeasured live compliance remain limitations. No broad reliability, gameplay quality or ATGB improvement is claimed.
++
++Live recommendation: only after external review accepts this bounded package and a separate invocation authorizes the controlled diagnostic. Do not execute it now. One recommended next action: external review of CURRENT_REVIEW and the timestamped ZIP.
++
++{CONFIRM}
++
++Stop after generating the review archive. Await external review before another live gameplay test.
++'''
++    report('09_FINAL_VERDICT_AND_HANDOFF','09 — Final Verdict and Handoff',verdict)
++    entry=read('protected_before.json'); after=protected_hashes()
++    changed=[k for k in entry if entry[k]!=after.get(k)]
++    integrity=dict(files=len(entry),changed=changed,added=sorted(set(after)-set(entry)),
++        normal_data_unchanged=all(entry[k]==after.get(k) for k in entry if k.startswith('data/')),
++        only_authorized_production_change=changed==['game/gm.py'])
++    assert integrity['normal_data_unchanged'] and integrity['only_authorized_production_change'], integrity
++    assert not integrity['added'], integrity
++    from tools.atgb.baseline import load_baseline
++    load_baseline(ROOT)
++    integrity['frozen_baseline_verified']=True
++    write('entry_to_exit_integrity.json',integrity)
++    (OUT/'exit_status.txt').write_text(subprocess.check_output(['git','status','--short'],cwd=ROOT,text=True),encoding='utf-8')
++    diff=[]
++    for name in SOURCES:
++        path=ROOT/name; dest=OUT/'source_snapshots'/name
++        dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(path,dest)
++        base=OUT/'entry_sources'/name
++        diff.extend(difflib.unified_diff(base.read_text(encoding='utf-8').splitlines(True) if base.exists() else [],
++            path.read_text(encoding='utf-8').splitlines(True),fromfile='entry/'+name if base.exists() else '/dev/null',tofile='exit/'+name))
++    (OUT/'source_diff.patch').write_text(''.join(diff),encoding='utf-8')
++    selected=[ROOT/s for s in SOURCES]+list(REPORTS.glob('*.md'))+[
++        p for p in OUT.rglob('*') if p.is_file() and p.name not in {'review_config.json'} and 'entry_sources' not in p.parts]
++    from dotenv import dotenv_values
++    secrets=[v.encode() for k,v in {**dotenv_values(ROOT/'.env'),**os.environ}.items()
++        if any(t in k.upper() for t in ('API_KEY','SECRET','PASSWORD','ACCESS_TOKEN'))
++        and isinstance(v,str) and len(v)>=8 and v!='offline-placeholder']
++    def check_payload(data, label):
++        assert not any(secret in data for secret in secrets), 'Configured secret detected in '+label
++        if zipfile.is_zipfile(io.BytesIO(data)):
++            with zipfile.ZipFile(io.BytesIO(data)) as nested:
++                for name in nested.namelist():
++                    if not name.endswith('/'):
++                        check_payload(nested.read(name), label+'!'+name)
++    for path in selected:
++        check_payload(path.read_bytes(), path.name)
++    write('diagnostic_safety.json',dict(configured_secret_scan_passed=True,environment_dump_included=False,
++        raw_provider_wire_bytes_included=False,existing_nested_audit_exported=True,bounded_violation_count=32))
++    selected.append(OUT/'diagnostic_safety.json')
++    config=dict(campaign_id='pr_play_11',campaign_name='PR-PLAY-11 — Opening Claim-Authority Reconciliation',
++        campaign_date='2026-10-30',purpose='Offline claim-authority investigation and bounded generation repair',
++        objective_status='B — Conditionally ready; external review only',
++        executive_summary=f'All seven declarations pass; notice-board prose fails conservative lexical authority. Opening guidance reconciled; {passed} passing checks, {failed} inherited failures. No live calls.',
++        primary_report='development/campaigns/product_realization/pr_play_11/09_FINAL_VERDICT_AND_HANDOFF.md',
++        supporting_files=[dict(path=p.relative_to(ROOT).as_posix(),role='evidence',why='Explicit PR11 report, source or offline evidence') for p in sorted(set(selected))],
++        changes=dict(production=['Opening-only exact source-sentence guidance for untyped authored claims'],tooling=['Offline analysis and replay evidence export'],
++            validation=['Three historical replays, authority distinctions and inherited regression lanes'],documentation=['Nine reports and canonical session handoff']),
++        testing=dict(focused='Historical and authority controls pass',broader=f'{passed} passed; {failed} inherited failures',full_suite='Not run',
++            runtime_validation='Production API / normal HTTP with synthetic SDK',model_runtime_boundary='Zero live providers or connectivity tests',
++            new_regressions='None demonstrated',pre_existing_failures='Six PR10 baseline IDs plus eight added-lane entry-reproduced failures'),
++        decisions_requiring_human_review=['Review conservative generation repair and qualified readiness before separate live authorization'],
++        known_problems=dict(campaign_specific=['No original wire bytes/full historical request; live compliance unproven'],
++            pre_existing=['Conservative prose matching; source-ID fallback; six-request limit may skip T5; six PR10 failures plus eight additional entry-reproduced failures']),
++        does_not_prove=['Live reliability, broader semantic authority, full five-turn feasibility, ATGB quality or held-out generalization'],
++        recommended_next_step='External review only; do not execute live test',deferred_work=['Broad validator/identity/provenance policy repair outside confirmed cause'],
++        validation_evidence=dict(evidence_scope='structural_only'))
++    write('review_config.json',config)
++    build_handoff(config,root=ROOT)
++    stamp=datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=-4))).strftime('%Y%m%d-%H%M%S')
++    dest=ROOT/'handoff'/f'CURRENT_REVIEW({stamp}).zip'
++    shutil.copy2(ROOT/'handoff/CURRENT_REVIEW.zip',dest)
++    with zipfile.ZipFile(dest) as archive:
++        assert archive.testzip() is None
++        assert all(any(n.endswith(p.relative_to(ROOT).as_posix()) for n in archive.namelist()) for p in REPORTS.glob('*.md'))
++        for name in archive.namelist():
++            if not name.endswith('/'):
++                check_payload(archive.read(name), name)
++    print(dest)
++
++
++if __name__=='__main__':
++    main()
+--- entry/docs/NEXT_SESSION.md
++++ exit/docs/NEXT_SESSION.md
+@@ -1,8 +1,41 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-30 / PR-PLAY-10.
++Ashen Thrones — Product Realization. Updated 2026-10-30 / PR-PLAY-11.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest opening authority reconciliation — PR-PLAY-11
++
++2026-10-30: **B — Conditionally ready; external review only.** Historical rejected
++run 20261031T015747Z-5a6c03c902e3 (26593/1352 tokens) reproduces through the
++production parser, semantic validator and opening rollback. All seven declarations
++pass; only the notice-board narration fails `notice_roster_history` after strict
++free-text lexical coverage fails. Missing source IDs and MUST_STATE are not causal.
++Classification C: generation guidance omitted that existing empty-identity prose
++constraint. Opening-only guidance now preserves exact authored fact sentences and
++separates sensory texture; validators and all authority/budget/retry rules unchanged.
++
++Both PR08/09 accepted parsed captures still replay successfully. Original rejected
++JSON remains rejected; replacing only its notice narration with supplied source text
++commits once. Twenty-two focused controls pass. Same PR10 lanes retain 752 passing /
++six baseline failures; expanded claim/provenance lane adds 126 passing / eight failures,
++all eight reproduced on saved entry source (one deterministic-guard incompatibility).
++Current-source total 878 passing / 14 preexisting failures; no new relevant regression.
++HTTP synthetic pipeline passes opening/T1–T4 then skips T5 at six requests. Live
++reliability, full-five feasibility, and broad legacy authority remain unproven.
++
++Nine reports: development/campaigns/product_realization/pr_play_11/.
++Evidence: artifacts/pr_play_11/ (before_repair_replay.json, declaration_analysis.json,
++lexical_failure.json, historical_corpus.json, C1_C28_results.json, regression evidence).
++Review: handoff/CURRENT_REVIEW.md and timestamped ZIP. Minimum read: reports 02/03/06/07/08/09.
++C23 is partial: original capture bytes and parsed JSON retained, original provider wire
++bytes/full historical request unavailable. C5/C6 follow existing exact-text fallback;
++source_claim_id is not mandatory. Permissive legacy identity/provenance matching remains
++out of scope. Dirty entry work preserved; only authorized production change is opening
++prompt guidance. Normal data, frozen ATGB and experiments unchanged. No live/connectivity
++calls, model/output increases, retries, broad validation relaxation, new persistence,
++PR-EG integration, secrets, commit or push. Next action: external review only. Stop after
++review ZIP; no further live test is authorized by this handoff.
+ 
+ ## Latest state-integrity reconciliation — PR-PLAY-10
+ 

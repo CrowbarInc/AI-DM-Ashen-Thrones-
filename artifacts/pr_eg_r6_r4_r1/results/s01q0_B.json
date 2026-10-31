@@ -1,0 +1,52 @@
+{
+  "case_id": "s01q0",
+  "family": "s01",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "6e3878accbd25c9fb374e49a9978666a9e6f4bc49389ac7c4315c7ea5664342d",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Cala told Brin"
+    ],
+    "qualifiers": [
+      "npc_knowledge",
+      "world_source"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s01"
+    ],
+    "answered_arguments": [
+      "who informed Brin about the cistern"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 directly states that Cala told Brin, answering who informed Brin about the cistern."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

@@ -1,0 +1,45 @@
+# 09 — Recommended Architecture and Implementation Plan
+
+PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
+
+**Recommend a bounded C-led hybrid: engine-owned factual opening rendering with explicit operation capabilities and finite presentation choices.** Do not implement flexible unrestricted prose acceptance or replace the production validator. This is conditionally ready for a scoped implementation proposal, not deployment authority.
+
+Authority ownership stays with existing domain resolvers, CTIR/decision meaning, narration_visibility publication, API transaction spine and storage. The new responsibility is positive rendering at the existing narration/final-delivery boundary, using an ephemeral plan. It must not introduce a second router, state store or model judge. The model may improvise presentation only within a granted finite vocabulary; consequential facts remain engine-controlled because the renderer has no free-text factual channel.
+
+Structured contract: an opening-specific plan containing only bounded ordered atoms of public claim_id and renderer variant ID, plus finite context-authorized presentation selectors. The engine supplies the catalog, required anchor subset, operation and capability set; model labels cannot elevate them. Bind IDs to source value, current scene, operation and turn; do not inherit today's permissive ID-to-declared.text matching. Duplicate handling and maximum output length must be explicit. Reject unknown keys, IDs, variants, optional legacy mutations and raw text. Do not persist the plan or new schema roots.
+
+Narration contract: factual sentences come from engine text or reviewed semantic variants with preserved referent, polarity, modality and attribution. No arbitrary connective prose, dialogue, sensory string or caption may bypass that construction boundary. The first increment may provide ordering and rain/cadence choices, not an open-ended natural-language paraphraser. Low narrative flexibility is an acknowledged tradeoff; broad authored variant coverage is future work, not silently delegated authority.
+
+Validation stages: current structural extraction → strict closed plan check against the engine's public catalog and operation capabilities → deterministic rendering → existing hard semantic, visibility and final-delivery legality → ordinary opening acceptance → unchanged adoption/commit/rollback. Gate ordering and accepted-response sealing need explicit review: construct the candidate before sealing rather than mutating an already accepted immutable string. Do not suppress an existing hard rejection merely because a plan is valid. If current validators reject a renderer-owned variant, fail the experiment and diagnose it; do not add a blanket exemption.
+
+Hidden information: construct the catalog from positive published/revealed facts, not all gm_resolution_decision.realization_claims, all prompt text or hidden_facts with prohibited words removed. A guessed hidden ID must fail even if it exists in the broader engine. Preserve independent visibility checking after rendering. Resolver outcomes and NPC knowledge require their own operation receipts/capabilities; a visible NPC existence claim does not authorize its private knowledge or actions.
+
+Mechanical enforcement: no player success, death, injury, inventory change, movement, quest completion, faction or time mutation can originate in a presentation selector. For later ordinary-turn adoption, use engine-owned outcome components bound to exact resolver receipts. An opening can publish initial scene state and normal initialization bookkeeping; it cannot grant player-action success merely because arrival context exists.
+
+Persistence: reuse existing session/world/combat/log writes and opening scope lock/restore. Rendered text may enter existing transcript/provenance fields; it must not create independent world truth. Preserve receipt-based scene overlay projection. First opening-plan implementation emits no model scene/world update payloads, so unsupported updates fail before adoption; legitimate existing seed overlay needs must be represented by existing engine-owned sources and receipts, not reintroduced as an unchecked text escape.
+
+Failure: reject invalid plan or rendered output before commit, return the current bounded opening failure response, retain useful claim/span/operation diagnostics and state rollback. No new retry, fallback authorization, provider request, budget increase or judge call. A renderer fallback is not automatically an accepted opening; the existing scene-opening/required-anchor checks must accept it independently.
+
+**Opening policy decision: shared authority policy with engine-selected operation-specific capabilities.** Opening has initial authored public anchors and initialization/overlay work but no player action to adjudicate. It still contains hidden facts and consequential hooks. Ordinary turns additionally need resolver results, NPC claims and uncertainty permissions. A narrower capability profile is appropriate; a global bypass for opening prose is not. The policy is shared, the grants differ by engine operation, and the model cannot select a more permissive operation.
+
+## Phase 1 — Contract definition
+
+Document the exact public catalog projection and required anchor subset. Resolve existing blanket MUST_STATE ambiguity; distinguish optional authored observations from necessary opening orientation. Define semantics of missing source, expired/wrong-scene/reveal IDs, uncertainty, repeated atoms, ordering and operation binding. Inventory entry into final sealing and native adoption so the new plan cannot authorize legacy writes. Review canonical text for accidental hidden content. Gate: a source-reviewed contract and adversarial fixtures; no production behavior change yet.
+
+## Phase 2 — Minimal implementation
+
+Add a default-off opening renderer-plan envelope at the existing gm schema boundary and an ephemeral catalog/renderer helper beside existing narration owners. Keep ordinary turns on their current envelope and keep all state schemas. Reuse the existing one-call provider route and output allowance; do not add model calls. Add no new runtime persistent structures. Implement a small finite variant/selector set only. The engine selects the envelope based on operation, not user/model text. Gate: exact plan inputs, deterministic output, no free-text escape or optional mutation channel, no production default change.
+
+## Phase 3 — Deterministic validation
+
+Replay all four parsed historical captures through unchanged legacy mode, preserving both 200 and 422 outcomes. In plan mode, use explicitly derived engine plans with their own lineage; never claim those are unmodified historical provider responses. Run E1–E20 against legacy mode and equivalent hostile/supported plan representations against renderer mode. Require every unsafe outcome to be rejected or impossible to represent, unknown/hidden IDs rejected, reviewed variants accepted by all downstream gates, original state unchanged on rejection, commit once on acceptance. Preserve false-positive/negative reporting across stages.
+
+## Phase 4 — Safety regression
+
+Re-run mechanical/hidden/epistemic/scene/overlay/state/provenance suites, provider budgets and retries, opening concurrency/repeat/rollback and persistence. Add attack controls for valid-ID wrong text, raw text in every field, polarity/strengthening, stale-turn/wrong-operation/wrong-scene IDs, hidden catalog membership, forged outcome/reveal receipts, model-supplied capability sets and required omissions. Keep ATGB corpus, saved judgments and attestations frozen; record new evidence separately. Gate: no new relevant failure, no relaxed guard, complete input/output lineage, no unchecked adoption seam and no secret disclosure in delivered text.
+
+## Phase 5 — Controlled live test (future authority required)
+
+Only after external approval and separate authorization, return to the existing FiveTurnGameplay scenario with the unchanged six-request ceiling, model, output caps and retry suppression. If five turns do not fit, stop and report incomplete feasibility. Do not raise limits or retry automatically. Inspect opening and all delivered turns, state, publication and mutation receipts; keep ATGB/human judgments separate from structural success. Require review of narrative adequacy, not merely an accepted opening.
+
+Migration is additive, flag-controlled and reversible. Legacy mode retains historical outcomes; no frozen attestation is rewritten to bless source changes. The exact next implementation objective is **an opt-in opening-only, public-catalog-bound rendering-plan contract and renderer that passes downstream existing validators without any arbitrary text or model-state-update field**. It does not include ordinary-turn migration or broader semantic-validator changes. One next action: external review of this contract and the evidence package. Do not execute that implementation during PR-PLAY-12.

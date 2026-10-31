@@ -1,0 +1,134 @@
+{
+  "mode": "offline planning and projection only",
+  "live_provider_calls": 0,
+  "source_evidence": "artifacts/pr_ca_dialogue_continuity",
+  "world_npc_unchanged": true,
+  "baker_runtime_after": {
+    "attitude": 0,
+    "trust": 0,
+    "fear": 0,
+    "suspicion": 0,
+    "known_topics": [],
+    "revealed_topics": [],
+    "last_interaction_turn": 4,
+    "durable_preference_created": false
+  },
+  "history_preserved": [
+    {
+      "player_input": "Baker, which loaf do you usually keep for yourself?",
+      "gm_snippet": "The baker says he prefers to keep that to himself."
+    },
+    {
+      "player_input": "Surely you have a favorite. What makes you reluctant to say?",
+      "gm_snippet": "The baker says some things are better kept private."
+    },
+    {
+      "player_input": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+      "gm_snippet": "The baker declines to point to a loaf."
+    }
+  ],
+  "turns": [
+    {
+      "turn": "T1",
+      "player_input": "Baker, which loaf do you usually keep for yourself?",
+      "prior_evasive_history_present": false,
+      "state_changes": {},
+      "current_resolution_social": {
+        "reply_plan_kind": "harmless_subjective_response_permitted",
+        "reply_kind": "answer",
+        "incidental_subjective_allowed": true,
+        "absence_of_authored_topic_forces_refusal": false,
+        "npc_speech_authority": "claim_only",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false,
+        "npc_id": "baker",
+        "npc_name": "Baker",
+        "target_resolved": true
+      },
+      "current_dialogue_social_plan": {
+        "reply_plan_kind": "harmless_subjective_response_permitted",
+        "reply_kind": "answer",
+        "incidental_subjective_allowed": true,
+        "absence_of_authored_topic_forces_refusal": false,
+        "npc_speech_authority": "claim_only",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      }
+    },
+    {
+      "turn": "T2",
+      "player_input": "Surely you have a favorite. What makes you reluctant to say?",
+      "prior_evasive_history_present": true,
+      "state_changes": {},
+      "current_resolution_social": {
+        "reply_plan_kind": "harmless_subjective_response_permitted",
+        "reply_kind": "answer",
+        "incidental_subjective_allowed": true,
+        "npc_speech_authority": "claim_only",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      },
+      "current_dialogue_social_plan": {
+        "reply_plan_kind": "harmless_subjective_response_permitted",
+        "reply_kind": "answer",
+        "incidental_subjective_allowed": true,
+        "npc_speech_authority": "claim_only",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      }
+    },
+    {
+      "turn": "T3",
+      "player_input": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+      "prior_evasive_history_present": true,
+      "state_changes": {},
+      "current_resolution_social": {
+        "reply_plan_kind": "harmless_subjective_response_permitted",
+        "reply_kind": "answer",
+        "incidental_subjective_allowed": true,
+        "npc_speech_authority": "claim_only",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      },
+      "current_dialogue_social_plan": {
+        "reply_plan_kind": "harmless_subjective_response_permitted",
+        "reply_kind": "answer",
+        "incidental_subjective_allowed": true,
+        "npc_speech_authority": "claim_only",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      }
+    },
+    {
+      "turn": "T4",
+      "player_input": "Thanks. I'll remember your recommendation.",
+      "prior_evasive_history_present": true,
+      "state_changes": {},
+      "assessment": "The player's recommendation premise is not promoted. reply_plan_kind stays genuine_uncertainty, objective authority stays none, and no durable preference is stored.",
+      "current_resolution_social": {
+        "reply_plan_kind": "genuine_uncertainty",
+        "reply_kind": "unknown",
+        "incidental_subjective_allowed": false,
+        "npc_speech_authority": "none",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      },
+      "current_dialogue_social_plan": {
+        "reply_plan_kind": "genuine_uncertainty",
+        "reply_kind": "unknown",
+        "incidental_subjective_allowed": false,
+        "npc_speech_authority": "none",
+        "objective_world_fact_authority": "none",
+        "declared_claims_expected": false,
+        "durable_state_mutation_allowed": false
+      }
+    }
+  ]
+}

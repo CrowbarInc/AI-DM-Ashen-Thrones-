@@ -1,0 +1,40 @@
+[
+  {
+    "at": "2026-10-03T22:33:26.421963+00:00",
+    "event": "attempt",
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "system_chars": 679,
+      "user_chars": 952,
+      "contains_resolution_contract": false,
+      "contains_gm_resolution_decision": false,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false,
+      "system_text": "You interpret what the player is immediately trying to ask, do, or reference. You do not decide what exists, what is true, what becomes canonical, or what happens next. Use only candidate ids from the supplied list. Put the player's main goal in primary_operation and any setup action in supporting_operations. If more than one candidate remains plausible, set ambiguous and clarification_required to true and leave proposed ids null. Do not invent ids, operations, claims, or previous actions. Set dimension to content when the player asks what was said, reported, written, or heard. source is who said it, confidence is how sure, time is when, and use is what something is for.",
+      "user_text": "{\"utterance\": \"I look again at the dried flakes and the intact coil-pots. Is the jar having been left unfired something we know, or only a possibility?\", \"abstention_reason\": \"target_not_canonical\", \"candidates\": [{\"id\": \"water_jar\", \"type\": \"object\", \"label\": \"split water jar\", \"aliases\": []}, {\"id\": \"clay_shed\", \"type\": \"place\", \"label\": \"Reedbank clay shed\", \"aliases\": []}, {\"id\": \"water_jar\", \"type\": \"object\", \"label\": \"split water jar\", \"aliases\": [\"water jar\", \"jar\", \"large water jar\", \"clay\"]}], \"discourse\": {\"scene_id\": \"clay_shed\", \"active_interlocutor\": null, \"active_claim\": null, \"active_actionable_lead\": null, \"active_inspected\": {\"id\": \"water_jar\", \"label\": \"split water jar\"}, \"last_attempted_action\": null}, \"recent_visible\": [{\"player\": \"What does the split and the dried clay suggest happened?\", \"gm\": \"\"}, {\"player\": \"If it was left unfired and just dried out, who would have had the chance to leave it that way?\", \"gm\": \"\"}]}"
+    },
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"inspect\"],\"raw_target_text\":\"Is the jar having been left unfired something we know, or only a possibility?\",\"proposed_target_id\":\"water_jar\",\"interlocutor_id\":null,\"conversational_subject\":\"water_jar\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"clarify whether the jar was definitively left unfired or if that is just a hypothesis\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":\"water_jar\",\"clarification_required\":true,\"ambiguous\":true,\"confidence\":null}"
+  },
+  {
+    "at": "2026-10-03T22:34:53.044674+00:00",
+    "event": "attempt",
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "system_chars": 679,
+      "user_chars": 1559,
+      "contains_resolution_contract": false,
+      "contains_gm_resolution_decision": false,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false,
+      "system_text": "You interpret what the player is immediately trying to ask, do, or reference. You do not decide what exists, what is true, what becomes canonical, or what happens next. Use only candidate ids from the supplied list. Put the player's main goal in primary_operation and any setup action in supporting_operations. If more than one candidate remains plausible, set ambiguous and clarification_required to true and leave proposed ids null. Do not invent ids, operations, claims, or previous actions. Set dimension to content when the player asks what was said, reported, written, or heard. source is who said it, confidence is how sure, time is when, and use is what something is for.",
+      "user_text": "{\"utterance\": \"I look closely at the split withies and the ground under the rack.\", \"abstention_reason\": \"target_not_canonical\", \"candidates\": [{\"id\": \"linden\", \"type\": \"interlocutor\", \"label\": \"Linden\", \"aliases\": []}, {\"id\": \"emitted_52048ea49a\", \"type\": \"claim\", \"label\": \"I heard a carter mention that the brine cask at the curing house was found unbunged,\", \"aliases\": []}, {\"id\": \"rc_a7b1780ddf95\", \"type\": \"action\", \"label\": \"I thank Linden for telling me the weather held and that the carter's story is only something he heard, then I head out to the osier rack.\", \"aliases\": []}, {\"id\": \"osier_rack\", \"type\": \"place\", \"label\": \"Reedbank osier rack\", \"aliases\": []}, {\"id\": \"seat_shop\", \"type\": \"place\", \"label\": \"Return to the seat shop\", \"aliases\": []}], \"discourse\": {\"scene_id\": \"osier_rack\", \"active_interlocutor\": {\"id\": \"linden\", \"label\": \"Linden\"}, \"active_claim\": {\"id\": \"emitted_52048ea49a\", \"label\": \"I heard a carter mention that the brine cask at the curing house was found unbunged,\"}, \"active_actionable_lead\": null, \"active_inspected\": null, \"last_attempted_action\": {\"id\": \"rc_a7b1780ddf95\", \"label\": \"I thank Linden for telling me the weather held and that the carter's story is only something he heard, then I head out to the osier rack.\"}}, \"recent_visible\": [{\"player\": \"I ask Linden whether the brine cask at the curing house was really found unbunged.\", \"gm\": \"\"}, {\"player\": \"I thank Linden for telling me the weather held and that the carter's story is only something he heard, then I head out to the osier rack.\", \"gm\": \"\"}]}"
+    },
+    "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[],\"raw_target_text\":\"the split withies and the ground under the rack\",\"proposed_target_id\":\"osier_rack\",\"interlocutor_id\":null,\"conversational_subject\":null,\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":null,\"referenced_claim_id\":null,\"referenced_action_id\":\"rc_a7b1780ddf95\",\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  }
+]

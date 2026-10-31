@@ -1,0 +1,1424 @@
+[
+  {
+    "turn": "T1",
+    "input_tokens_actual": 23413,
+    "system_chars": 4166,
+    "user_chars": 90113,
+    "fields": [
+      {
+        "field": "response_policy",
+        "chars": 21242,
+        "share_percent": 22.53,
+        "token_estimate_char_proportional": 5275
+      },
+      {
+        "field": "instructions",
+        "chars": 14332,
+        "share_percent": 15.2,
+        "token_estimate_char_proportional": 3559
+      },
+      {
+        "field": "turn_packet",
+        "chars": 10645,
+        "share_percent": 11.29,
+        "token_estimate_char_proportional": 2644
+      },
+      {
+        "field": "mechanical_resolution",
+        "chars": 6253,
+        "share_percent": 6.63,
+        "token_estimate_char_proportional": 1553
+      },
+      {
+        "field": "narrative_plan",
+        "chars": 4965,
+        "share_percent": 5.27,
+        "token_estimate_char_proportional": 1233
+      },
+      {
+        "field": "context_separation_contract",
+        "chars": 3359,
+        "share_percent": 3.56,
+        "token_estimate_char_proportional": 834
+      },
+      {
+        "field": "referent_tracking",
+        "chars": 3005,
+        "share_percent": 3.19,
+        "token_estimate_char_proportional": 746
+      },
+      {
+        "field": "decision_facing_answer_recipe",
+        "chars": 2507,
+        "share_percent": 2.66,
+        "token_estimate_char_proportional": 623
+      },
+      {
+        "field": "interaction_continuity_contract",
+        "chars": 2157,
+        "share_percent": 2.29,
+        "token_estimate_char_proportional": 536
+      },
+      {
+        "field": "scene",
+        "chars": 1630,
+        "share_percent": 1.73,
+        "token_estimate_char_proportional": 405
+      },
+      {
+        "field": "speaker_selection",
+        "chars": 1455,
+        "share_percent": 1.54,
+        "token_estimate_char_proportional": 361
+      },
+      {
+        "field": "anti_railroading_contract",
+        "chars": 1451,
+        "share_percent": 1.54,
+        "token_estimate_char_proportional": 360
+      },
+      {
+        "field": "fallback_behavior",
+        "chars": 1403,
+        "share_percent": 1.49,
+        "token_estimate_char_proportional": 348
+      },
+      {
+        "field": "gm_resolution_decision",
+        "chars": 1184,
+        "share_percent": 1.26,
+        "token_estimate_char_proportional": 294
+      },
+      {
+        "field": "character",
+        "chars": 1059,
+        "share_percent": 1.12,
+        "token_estimate_char_proportional": 263
+      },
+      {
+        "field": "campaign",
+        "chars": 1057,
+        "share_percent": 1.12,
+        "token_estimate_char_proportional": 262
+      },
+      {
+        "field": "scene_state_anchor_contract",
+        "chars": 930,
+        "share_percent": 0.99,
+        "token_estimate_char_proportional": 231
+      },
+      {
+        "field": "conversational_memory_window",
+        "chars": 886,
+        "share_percent": 0.94,
+        "token_estimate_char_proportional": 220
+      },
+      {
+        "field": "social_context",
+        "chars": 784,
+        "share_percent": 0.83,
+        "token_estimate_char_proportional": 195
+      },
+      {
+        "field": "resolution_contract",
+        "chars": 723,
+        "share_percent": 0.77,
+        "token_estimate_char_proportional": 180
+      },
+      {
+        "field": "social_response_structure_contract",
+        "chars": 623,
+        "share_percent": 0.66,
+        "token_estimate_char_proportional": 155
+      },
+      {
+        "field": "dialogue_social_plan",
+        "chars": 557,
+        "share_percent": 0.59,
+        "token_estimate_char_proportional": 138
+      },
+      {
+        "field": "transition",
+        "chars": 529,
+        "share_percent": 0.56,
+        "token_estimate_char_proportional": 131
+      },
+      {
+        "field": "referent_clause_prompt_hints",
+        "chars": 502,
+        "share_percent": 0.53,
+        "token_estimate_char_proportional": 125
+      },
+      {
+        "field": "response_type_contract",
+        "chars": 416,
+        "share_percent": 0.44,
+        "token_estimate_char_proportional": 103
+      },
+      {
+        "field": "narration_obligations",
+        "chars": 404,
+        "share_percent": 0.43,
+        "token_estimate_char_proportional": 100
+      },
+      {
+        "field": "turn_summary",
+        "chars": 385,
+        "share_percent": 0.41,
+        "token_estimate_char_proportional": 96
+      },
+      {
+        "field": "player_facing_narration_purity_contract",
+        "chars": 373,
+        "share_percent": 0.4,
+        "token_estimate_char_proportional": 93
+      },
+      {
+        "field": "bounded_improvisation",
+        "chars": 359,
+        "share_percent": 0.38,
+        "token_estimate_char_proportional": 89
+      },
+      {
+        "field": "session",
+        "chars": 353,
+        "share_percent": 0.37,
+        "token_estimate_char_proportional": 88
+      },
+      {
+        "field": "world",
+        "chars": 349,
+        "share_percent": 0.37,
+        "token_estimate_char_proportional": 87
+      },
+      {
+        "field": "lead_context",
+        "chars": 337,
+        "share_percent": 0.36,
+        "token_estimate_char_proportional": 84
+      },
+      {
+        "field": "active_interlocutor",
+        "chars": 277,
+        "share_percent": 0.29,
+        "token_estimate_char_proportional": 69
+      },
+      {
+        "field": "interlocutor_lead_context",
+        "chars": 273,
+        "share_percent": 0.29,
+        "token_estimate_char_proportional": 68
+      },
+      {
+        "field": "interaction_continuity",
+        "chars": 245,
+        "share_percent": 0.26,
+        "token_estimate_char_proportional": 61
+      },
+      {
+        "field": "narration_visibility",
+        "chars": 229,
+        "share_percent": 0.24,
+        "token_estimate_char_proportional": 57
+      },
+      {
+        "field": "player_expression_contract",
+        "chars": 210,
+        "share_percent": 0.22,
+        "token_estimate_char_proportional": 52
+      },
+      {
+        "field": "world_progression_summary",
+        "chars": 200,
+        "share_percent": 0.21,
+        "token_estimate_char_proportional": 50
+      },
+      {
+        "field": "follow_up_pressure",
+        "chars": 180,
+        "share_percent": 0.19,
+        "token_estimate_char_proportional": 45
+      },
+      {
+        "field": "opening_scene_realization",
+        "chars": 177,
+        "share_percent": 0.19,
+        "token_estimate_char_proportional": 44
+      },
+      {
+        "field": "first_mention_contract",
+        "chars": 159,
+        "share_percent": 0.17,
+        "token_estimate_char_proportional": 39
+      },
+      {
+        "field": "opening_narration_obligations",
+        "chars": 101,
+        "share_percent": 0.11,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "scene_advancement",
+        "chars": 101,
+        "share_percent": 0.11,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "active_topic_anchor",
+        "chars": 75,
+        "share_percent": 0.08,
+        "token_estimate_char_proportional": 19
+      },
+      {
+        "field": "clues",
+        "chars": 63,
+        "share_percent": 0.07,
+        "token_estimate_char_proportional": 16
+      },
+      {
+        "field": "player_input",
+        "chars": 53,
+        "share_percent": 0.06,
+        "token_estimate_char_proportional": 13
+      },
+      {
+        "field": "world_state",
+        "chars": 51,
+        "share_percent": 0.05,
+        "token_estimate_char_proportional": 13
+      },
+      {
+        "field": "combat",
+        "chars": 20,
+        "share_percent": 0.02,
+        "token_estimate_char_proportional": 5
+      },
+      {
+        "field": "opening_selector_source_used",
+        "chars": 6,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "opening_inputs_are_curated",
+        "chars": 5,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "uncertainty_hint",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "discoverable_hinting",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "recent_log",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "selected_conversational_memory",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "interlocutor_lead_behavior_hints",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_selector_selected_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_curated_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      }
+    ],
+    "method": "Character shares; tokens apportioned from actual usage. Not exact tokenizer counts; keys, framing and punctuation create residual."
+  },
+  {
+    "turn": "T2",
+    "input_tokens_actual": 24124,
+    "system_chars": 4166,
+    "user_chars": 92996,
+    "fields": [
+      {
+        "field": "response_policy",
+        "chars": 21304,
+        "share_percent": 21.93,
+        "token_estimate_char_proportional": 5289
+      },
+      {
+        "field": "instructions",
+        "chars": 14828,
+        "share_percent": 15.26,
+        "token_estimate_char_proportional": 3682
+      },
+      {
+        "field": "turn_packet",
+        "chars": 10730,
+        "share_percent": 11.04,
+        "token_estimate_char_proportional": 2664
+      },
+      {
+        "field": "mechanical_resolution",
+        "chars": 6347,
+        "share_percent": 6.53,
+        "token_estimate_char_proportional": 1576
+      },
+      {
+        "field": "narrative_plan",
+        "chars": 4965,
+        "share_percent": 5.11,
+        "token_estimate_char_proportional": 1233
+      },
+      {
+        "field": "context_separation_contract",
+        "chars": 3388,
+        "share_percent": 3.49,
+        "token_estimate_char_proportional": 841
+      },
+      {
+        "field": "referent_tracking",
+        "chars": 3005,
+        "share_percent": 3.09,
+        "token_estimate_char_proportional": 746
+      },
+      {
+        "field": "decision_facing_answer_recipe",
+        "chars": 2516,
+        "share_percent": 2.59,
+        "token_estimate_char_proportional": 625
+      },
+      {
+        "field": "interaction_continuity_contract",
+        "chars": 2157,
+        "share_percent": 2.22,
+        "token_estimate_char_proportional": 536
+      },
+      {
+        "field": "gm_resolution_decision",
+        "chars": 1654,
+        "share_percent": 1.7,
+        "token_estimate_char_proportional": 411
+      },
+      {
+        "field": "scene",
+        "chars": 1639,
+        "share_percent": 1.69,
+        "token_estimate_char_proportional": 407
+      },
+      {
+        "field": "speaker_selection",
+        "chars": 1464,
+        "share_percent": 1.51,
+        "token_estimate_char_proportional": 363
+      },
+      {
+        "field": "anti_railroading_contract",
+        "chars": 1451,
+        "share_percent": 1.49,
+        "token_estimate_char_proportional": 360
+      },
+      {
+        "field": "fallback_behavior",
+        "chars": 1403,
+        "share_percent": 1.44,
+        "token_estimate_char_proportional": 348
+      },
+      {
+        "field": "character",
+        "chars": 1059,
+        "share_percent": 1.09,
+        "token_estimate_char_proportional": 263
+      },
+      {
+        "field": "campaign",
+        "chars": 1057,
+        "share_percent": 1.09,
+        "token_estimate_char_proportional": 262
+      },
+      {
+        "field": "scene_state_anchor_contract",
+        "chars": 933,
+        "share_percent": 0.96,
+        "token_estimate_char_proportional": 232
+      },
+      {
+        "field": "social_context",
+        "chars": 784,
+        "share_percent": 0.81,
+        "token_estimate_char_proportional": 195
+      },
+      {
+        "field": "resolution_contract",
+        "chars": 772,
+        "share_percent": 0.79,
+        "token_estimate_char_proportional": 192
+      },
+      {
+        "field": "conversational_memory_window",
+        "chars": 766,
+        "share_percent": 0.79,
+        "token_estimate_char_proportional": 190
+      },
+      {
+        "field": "narration_temporal_provenance",
+        "chars": 671,
+        "share_percent": 0.69,
+        "token_estimate_char_proportional": 167
+      },
+      {
+        "field": "social_response_structure_contract",
+        "chars": 623,
+        "share_percent": 0.64,
+        "token_estimate_char_proportional": 155
+      },
+      {
+        "field": "dialogue_social_plan",
+        "chars": 557,
+        "share_percent": 0.57,
+        "token_estimate_char_proportional": 138
+      },
+      {
+        "field": "transition",
+        "chars": 529,
+        "share_percent": 0.54,
+        "token_estimate_char_proportional": 131
+      },
+      {
+        "field": "referent_clause_prompt_hints",
+        "chars": 502,
+        "share_percent": 0.52,
+        "token_estimate_char_proportional": 125
+      },
+      {
+        "field": "selected_conversational_memory",
+        "chars": 438,
+        "share_percent": 0.45,
+        "token_estimate_char_proportional": 109
+      },
+      {
+        "field": "response_type_contract",
+        "chars": 416,
+        "share_percent": 0.43,
+        "token_estimate_char_proportional": 103
+      },
+      {
+        "field": "narration_obligations",
+        "chars": 404,
+        "share_percent": 0.42,
+        "token_estimate_char_proportional": 100
+      },
+      {
+        "field": "world_progression_summary",
+        "chars": 399,
+        "share_percent": 0.41,
+        "token_estimate_char_proportional": 99
+      },
+      {
+        "field": "turn_summary",
+        "chars": 394,
+        "share_percent": 0.41,
+        "token_estimate_char_proportional": 98
+      },
+      {
+        "field": "world",
+        "chars": 382,
+        "share_percent": 0.39,
+        "token_estimate_char_proportional": 95
+      },
+      {
+        "field": "player_facing_narration_purity_contract",
+        "chars": 373,
+        "share_percent": 0.38,
+        "token_estimate_char_proportional": 93
+      },
+      {
+        "field": "bounded_improvisation",
+        "chars": 359,
+        "share_percent": 0.37,
+        "token_estimate_char_proportional": 89
+      },
+      {
+        "field": "session",
+        "chars": 353,
+        "share_percent": 0.36,
+        "token_estimate_char_proportional": 88
+      },
+      {
+        "field": "lead_context",
+        "chars": 337,
+        "share_percent": 0.35,
+        "token_estimate_char_proportional": 84
+      },
+      {
+        "field": "recent_log",
+        "chars": 298,
+        "share_percent": 0.31,
+        "token_estimate_char_proportional": 74
+      },
+      {
+        "field": "active_interlocutor",
+        "chars": 277,
+        "share_percent": 0.29,
+        "token_estimate_char_proportional": 69
+      },
+      {
+        "field": "interlocutor_lead_context",
+        "chars": 273,
+        "share_percent": 0.28,
+        "token_estimate_char_proportional": 68
+      },
+      {
+        "field": "interaction_continuity",
+        "chars": 245,
+        "share_percent": 0.25,
+        "token_estimate_char_proportional": 61
+      },
+      {
+        "field": "narration_visibility",
+        "chars": 229,
+        "share_percent": 0.24,
+        "token_estimate_char_proportional": 57
+      },
+      {
+        "field": "player_expression_contract",
+        "chars": 210,
+        "share_percent": 0.22,
+        "token_estimate_char_proportional": 52
+      },
+      {
+        "field": "follow_up_pressure",
+        "chars": 180,
+        "share_percent": 0.19,
+        "token_estimate_char_proportional": 45
+      },
+      {
+        "field": "opening_scene_realization",
+        "chars": 177,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 44
+      },
+      {
+        "field": "first_mention_contract",
+        "chars": 159,
+        "share_percent": 0.16,
+        "token_estimate_char_proportional": 39
+      },
+      {
+        "field": "opening_narration_obligations",
+        "chars": 101,
+        "share_percent": 0.1,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "scene_advancement",
+        "chars": 101,
+        "share_percent": 0.1,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "active_topic_anchor",
+        "chars": 75,
+        "share_percent": 0.08,
+        "token_estimate_char_proportional": 19
+      },
+      {
+        "field": "clues",
+        "chars": 63,
+        "share_percent": 0.06,
+        "token_estimate_char_proportional": 16
+      },
+      {
+        "field": "player_input",
+        "chars": 62,
+        "share_percent": 0.06,
+        "token_estimate_char_proportional": 15
+      },
+      {
+        "field": "world_state",
+        "chars": 51,
+        "share_percent": 0.05,
+        "token_estimate_char_proportional": 13
+      },
+      {
+        "field": "combat",
+        "chars": 20,
+        "share_percent": 0.02,
+        "token_estimate_char_proportional": 5
+      },
+      {
+        "field": "opening_selector_source_used",
+        "chars": 6,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "opening_inputs_are_curated",
+        "chars": 5,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "uncertainty_hint",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "discoverable_hinting",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "interlocutor_lead_behavior_hints",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_selector_selected_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_curated_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      }
+    ],
+    "method": "Character shares; tokens apportioned from actual usage. Not exact tokenizer counts; keys, framing and punctuation create residual."
+  },
+  {
+    "turn": "T3",
+    "input_tokens_actual": 24890,
+    "system_chars": 4166,
+    "user_chars": 96030,
+    "fields": [
+      {
+        "field": "response_policy",
+        "chars": 21423,
+        "share_percent": 21.38,
+        "token_estimate_char_proportional": 5322
+      },
+      {
+        "field": "instructions",
+        "chars": 15083,
+        "share_percent": 15.05,
+        "token_estimate_char_proportional": 3747
+      },
+      {
+        "field": "turn_packet",
+        "chars": 10880,
+        "share_percent": 10.86,
+        "token_estimate_char_proportional": 2703
+      },
+      {
+        "field": "mechanical_resolution",
+        "chars": 6477,
+        "share_percent": 6.46,
+        "token_estimate_char_proportional": 1609
+      },
+      {
+        "field": "narrative_plan",
+        "chars": 4965,
+        "share_percent": 4.96,
+        "token_estimate_char_proportional": 1233
+      },
+      {
+        "field": "context_separation_contract",
+        "chars": 3441,
+        "share_percent": 3.43,
+        "token_estimate_char_proportional": 855
+      },
+      {
+        "field": "referent_tracking",
+        "chars": 3005,
+        "share_percent": 3.0,
+        "token_estimate_char_proportional": 746
+      },
+      {
+        "field": "decision_facing_answer_recipe",
+        "chars": 2844,
+        "share_percent": 2.84,
+        "token_estimate_char_proportional": 706
+      },
+      {
+        "field": "gm_resolution_decision",
+        "chars": 2201,
+        "share_percent": 2.2,
+        "token_estimate_char_proportional": 547
+      },
+      {
+        "field": "interaction_continuity_contract",
+        "chars": 2157,
+        "share_percent": 2.15,
+        "token_estimate_char_proportional": 536
+      },
+      {
+        "field": "scene",
+        "chars": 1666,
+        "share_percent": 1.66,
+        "token_estimate_char_proportional": 414
+      },
+      {
+        "field": "speaker_selection",
+        "chars": 1491,
+        "share_percent": 1.49,
+        "token_estimate_char_proportional": 370
+      },
+      {
+        "field": "fallback_behavior",
+        "chars": 1457,
+        "share_percent": 1.45,
+        "token_estimate_char_proportional": 362
+      },
+      {
+        "field": "anti_railroading_contract",
+        "chars": 1451,
+        "share_percent": 1.45,
+        "token_estimate_char_proportional": 360
+      },
+      {
+        "field": "character",
+        "chars": 1059,
+        "share_percent": 1.06,
+        "token_estimate_char_proportional": 263
+      },
+      {
+        "field": "campaign",
+        "chars": 1057,
+        "share_percent": 1.05,
+        "token_estimate_char_proportional": 263
+      },
+      {
+        "field": "scene_state_anchor_contract",
+        "chars": 961,
+        "share_percent": 0.96,
+        "token_estimate_char_proportional": 239
+      },
+      {
+        "field": "selected_conversational_memory",
+        "chars": 884,
+        "share_percent": 0.88,
+        "token_estimate_char_proportional": 220
+      },
+      {
+        "field": "resolution_contract",
+        "chars": 826,
+        "share_percent": 0.82,
+        "token_estimate_char_proportional": 205
+      },
+      {
+        "field": "social_context",
+        "chars": 784,
+        "share_percent": 0.78,
+        "token_estimate_char_proportional": 195
+      },
+      {
+        "field": "conversational_memory_window",
+        "chars": 766,
+        "share_percent": 0.76,
+        "token_estimate_char_proportional": 190
+      },
+      {
+        "field": "narration_temporal_provenance",
+        "chars": 671,
+        "share_percent": 0.67,
+        "token_estimate_char_proportional": 167
+      },
+      {
+        "field": "world_progression_summary",
+        "chars": 657,
+        "share_percent": 0.66,
+        "token_estimate_char_proportional": 163
+      },
+      {
+        "field": "social_response_structure_contract",
+        "chars": 623,
+        "share_percent": 0.62,
+        "token_estimate_char_proportional": 155
+      },
+      {
+        "field": "dialogue_social_plan",
+        "chars": 557,
+        "share_percent": 0.56,
+        "token_estimate_char_proportional": 138
+      },
+      {
+        "field": "recent_log",
+        "chars": 540,
+        "share_percent": 0.54,
+        "token_estimate_char_proportional": 134
+      },
+      {
+        "field": "transition",
+        "chars": 529,
+        "share_percent": 0.53,
+        "token_estimate_char_proportional": 131
+      },
+      {
+        "field": "world",
+        "chars": 513,
+        "share_percent": 0.51,
+        "token_estimate_char_proportional": 127
+      },
+      {
+        "field": "referent_clause_prompt_hints",
+        "chars": 502,
+        "share_percent": 0.5,
+        "token_estimate_char_proportional": 125
+      },
+      {
+        "field": "turn_summary",
+        "chars": 421,
+        "share_percent": 0.42,
+        "token_estimate_char_proportional": 105
+      },
+      {
+        "field": "response_type_contract",
+        "chars": 416,
+        "share_percent": 0.42,
+        "token_estimate_char_proportional": 103
+      },
+      {
+        "field": "narration_obligations",
+        "chars": 404,
+        "share_percent": 0.4,
+        "token_estimate_char_proportional": 100
+      },
+      {
+        "field": "player_facing_narration_purity_contract",
+        "chars": 373,
+        "share_percent": 0.37,
+        "token_estimate_char_proportional": 93
+      },
+      {
+        "field": "bounded_improvisation",
+        "chars": 359,
+        "share_percent": 0.36,
+        "token_estimate_char_proportional": 89
+      },
+      {
+        "field": "session",
+        "chars": 353,
+        "share_percent": 0.35,
+        "token_estimate_char_proportional": 88
+      },
+      {
+        "field": "lead_context",
+        "chars": 337,
+        "share_percent": 0.34,
+        "token_estimate_char_proportional": 84
+      },
+      {
+        "field": "active_interlocutor",
+        "chars": 277,
+        "share_percent": 0.28,
+        "token_estimate_char_proportional": 69
+      },
+      {
+        "field": "interlocutor_lead_context",
+        "chars": 273,
+        "share_percent": 0.27,
+        "token_estimate_char_proportional": 68
+      },
+      {
+        "field": "interaction_continuity",
+        "chars": 245,
+        "share_percent": 0.24,
+        "token_estimate_char_proportional": 61
+      },
+      {
+        "field": "narration_visibility",
+        "chars": 229,
+        "share_percent": 0.23,
+        "token_estimate_char_proportional": 57
+      },
+      {
+        "field": "player_expression_contract",
+        "chars": 210,
+        "share_percent": 0.21,
+        "token_estimate_char_proportional": 52
+      },
+      {
+        "field": "world_state",
+        "chars": 182,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 45
+      },
+      {
+        "field": "follow_up_pressure",
+        "chars": 180,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 45
+      },
+      {
+        "field": "opening_scene_realization",
+        "chars": 177,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 44
+      },
+      {
+        "field": "first_mention_contract",
+        "chars": 159,
+        "share_percent": 0.16,
+        "token_estimate_char_proportional": 39
+      },
+      {
+        "field": "opening_narration_obligations",
+        "chars": 101,
+        "share_percent": 0.1,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "scene_advancement",
+        "chars": 101,
+        "share_percent": 0.1,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "player_input",
+        "chars": 89,
+        "share_percent": 0.09,
+        "token_estimate_char_proportional": 22
+      },
+      {
+        "field": "active_topic_anchor",
+        "chars": 75,
+        "share_percent": 0.07,
+        "token_estimate_char_proportional": 19
+      },
+      {
+        "field": "clues",
+        "chars": 63,
+        "share_percent": 0.06,
+        "token_estimate_char_proportional": 16
+      },
+      {
+        "field": "combat",
+        "chars": 20,
+        "share_percent": 0.02,
+        "token_estimate_char_proportional": 5
+      },
+      {
+        "field": "opening_selector_source_used",
+        "chars": 6,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "opening_inputs_are_curated",
+        "chars": 5,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "uncertainty_hint",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "discoverable_hinting",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "interlocutor_lead_behavior_hints",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_selector_selected_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_curated_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      }
+    ],
+    "method": "Character shares; tokens apportioned from actual usage. Not exact tokenizer counts; keys, framing and punctuation create residual."
+  },
+  {
+    "turn": "T4",
+    "input_tokens_actual": 24763,
+    "system_chars": 4166,
+    "user_chars": 95563,
+    "fields": [
+      {
+        "field": "response_policy",
+        "chars": 21174,
+        "share_percent": 21.23,
+        "token_estimate_char_proportional": 5258
+      },
+      {
+        "field": "instructions",
+        "chars": 14717,
+        "share_percent": 14.76,
+        "token_estimate_char_proportional": 3654
+      },
+      {
+        "field": "turn_packet",
+        "chars": 10653,
+        "share_percent": 10.68,
+        "token_estimate_char_proportional": 2645
+      },
+      {
+        "field": "mechanical_resolution",
+        "chars": 5202,
+        "share_percent": 5.22,
+        "token_estimate_char_proportional": 1292
+      },
+      {
+        "field": "narrative_plan",
+        "chars": 4776,
+        "share_percent": 4.79,
+        "token_estimate_char_proportional": 1186
+      },
+      {
+        "field": "context_separation_contract",
+        "chars": 3436,
+        "share_percent": 3.45,
+        "token_estimate_char_proportional": 853
+      },
+      {
+        "field": "decision_facing_answer_recipe",
+        "chars": 3164,
+        "share_percent": 3.17,
+        "token_estimate_char_proportional": 786
+      },
+      {
+        "field": "referent_tracking",
+        "chars": 3005,
+        "share_percent": 3.01,
+        "token_estimate_char_proportional": 746
+      },
+      {
+        "field": "gm_resolution_decision",
+        "chars": 2707,
+        "share_percent": 2.71,
+        "token_estimate_char_proportional": 672
+      },
+      {
+        "field": "interaction_continuity_contract",
+        "chars": 2166,
+        "share_percent": 2.17,
+        "token_estimate_char_proportional": 538
+      },
+      {
+        "field": "scene",
+        "chars": 1637,
+        "share_percent": 1.64,
+        "token_estimate_char_proportional": 406
+      },
+      {
+        "field": "anti_railroading_contract",
+        "chars": 1451,
+        "share_percent": 1.45,
+        "token_estimate_char_proportional": 360
+      },
+      {
+        "field": "speaker_selection",
+        "chars": 1446,
+        "share_percent": 1.45,
+        "token_estimate_char_proportional": 359
+      },
+      {
+        "field": "narration_temporal_provenance",
+        "chars": 1365,
+        "share_percent": 1.37,
+        "token_estimate_char_proportional": 339
+      },
+      {
+        "field": "selected_conversational_memory",
+        "chars": 1353,
+        "share_percent": 1.36,
+        "token_estimate_char_proportional": 336
+      },
+      {
+        "field": "fallback_behavior",
+        "chars": 1315,
+        "share_percent": 1.32,
+        "token_estimate_char_proportional": 327
+      },
+      {
+        "field": "character",
+        "chars": 1059,
+        "share_percent": 1.06,
+        "token_estimate_char_proportional": 263
+      },
+      {
+        "field": "campaign",
+        "chars": 1057,
+        "share_percent": 1.06,
+        "token_estimate_char_proportional": 262
+      },
+      {
+        "field": "scene_state_anchor_contract",
+        "chars": 942,
+        "share_percent": 0.94,
+        "token_estimate_char_proportional": 234
+      },
+      {
+        "field": "recent_log",
+        "chars": 870,
+        "share_percent": 0.87,
+        "token_estimate_char_proportional": 216
+      },
+      {
+        "field": "social_context",
+        "chars": 784,
+        "share_percent": 0.79,
+        "token_estimate_char_proportional": 195
+      },
+      {
+        "field": "conversational_memory_window",
+        "chars": 766,
+        "share_percent": 0.77,
+        "token_estimate_char_proportional": 190
+      },
+      {
+        "field": "resolution_contract",
+        "chars": 736,
+        "share_percent": 0.74,
+        "token_estimate_char_proportional": 183
+      },
+      {
+        "field": "social_response_structure_contract",
+        "chars": 632,
+        "share_percent": 0.63,
+        "token_estimate_char_proportional": 157
+      },
+      {
+        "field": "world_progression_summary",
+        "chars": 562,
+        "share_percent": 0.56,
+        "token_estimate_char_proportional": 140
+      },
+      {
+        "field": "dialogue_social_plan",
+        "chars": 561,
+        "share_percent": 0.56,
+        "token_estimate_char_proportional": 139
+      },
+      {
+        "field": "transition",
+        "chars": 529,
+        "share_percent": 0.53,
+        "token_estimate_char_proportional": 131
+      },
+      {
+        "field": "world",
+        "chars": 513,
+        "share_percent": 0.51,
+        "token_estimate_char_proportional": 127
+      },
+      {
+        "field": "referent_clause_prompt_hints",
+        "chars": 502,
+        "share_percent": 0.5,
+        "token_estimate_char_proportional": 125
+      },
+      {
+        "field": "response_type_contract",
+        "chars": 416,
+        "share_percent": 0.42,
+        "token_estimate_char_proportional": 103
+      },
+      {
+        "field": "narration_obligations",
+        "chars": 405,
+        "share_percent": 0.41,
+        "token_estimate_char_proportional": 101
+      },
+      {
+        "field": "turn_summary",
+        "chars": 388,
+        "share_percent": 0.39,
+        "token_estimate_char_proportional": 96
+      },
+      {
+        "field": "player_facing_narration_purity_contract",
+        "chars": 373,
+        "share_percent": 0.37,
+        "token_estimate_char_proportional": 93
+      },
+      {
+        "field": "bounded_improvisation",
+        "chars": 359,
+        "share_percent": 0.36,
+        "token_estimate_char_proportional": 89
+      },
+      {
+        "field": "session",
+        "chars": 353,
+        "share_percent": 0.35,
+        "token_estimate_char_proportional": 88
+      },
+      {
+        "field": "lead_context",
+        "chars": 337,
+        "share_percent": 0.34,
+        "token_estimate_char_proportional": 84
+      },
+      {
+        "field": "active_interlocutor",
+        "chars": 277,
+        "share_percent": 0.28,
+        "token_estimate_char_proportional": 69
+      },
+      {
+        "field": "interlocutor_lead_context",
+        "chars": 273,
+        "share_percent": 0.27,
+        "token_estimate_char_proportional": 68
+      },
+      {
+        "field": "interaction_continuity",
+        "chars": 245,
+        "share_percent": 0.25,
+        "token_estimate_char_proportional": 61
+      },
+      {
+        "field": "narration_visibility",
+        "chars": 229,
+        "share_percent": 0.23,
+        "token_estimate_char_proportional": 57
+      },
+      {
+        "field": "player_expression_contract",
+        "chars": 210,
+        "share_percent": 0.21,
+        "token_estimate_char_proportional": 52
+      },
+      {
+        "field": "world_state",
+        "chars": 182,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 45
+      },
+      {
+        "field": "follow_up_pressure",
+        "chars": 180,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 45
+      },
+      {
+        "field": "opening_scene_realization",
+        "chars": 177,
+        "share_percent": 0.18,
+        "token_estimate_char_proportional": 44
+      },
+      {
+        "field": "first_mention_contract",
+        "chars": 159,
+        "share_percent": 0.16,
+        "token_estimate_char_proportional": 39
+      },
+      {
+        "field": "opening_narration_obligations",
+        "chars": 101,
+        "share_percent": 0.1,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "scene_advancement",
+        "chars": 101,
+        "share_percent": 0.1,
+        "token_estimate_char_proportional": 25
+      },
+      {
+        "field": "active_topic_anchor",
+        "chars": 75,
+        "share_percent": 0.08,
+        "token_estimate_char_proportional": 19
+      },
+      {
+        "field": "clues",
+        "chars": 63,
+        "share_percent": 0.06,
+        "token_estimate_char_proportional": 16
+      },
+      {
+        "field": "player_input",
+        "chars": 44,
+        "share_percent": 0.04,
+        "token_estimate_char_proportional": 11
+      },
+      {
+        "field": "combat",
+        "chars": 20,
+        "share_percent": 0.02,
+        "token_estimate_char_proportional": 5
+      },
+      {
+        "field": "opening_selector_source_used",
+        "chars": 6,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "opening_inputs_are_curated",
+        "chars": 5,
+        "share_percent": 0.01,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "uncertainty_hint",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "discoverable_hinting",
+        "chars": 4,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 1
+      },
+      {
+        "field": "interlocutor_lead_behavior_hints",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_selector_selected_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      },
+      {
+        "field": "opening_curated_facts",
+        "chars": 2,
+        "share_percent": 0.0,
+        "token_estimate_char_proportional": 0
+      }
+    ],
+    "method": "Character shares; tokens apportioned from actual usage. Not exact tokenizer counts; keys, framing and punctuation create residual."
+  }
+]

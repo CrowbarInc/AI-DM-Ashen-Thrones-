@@ -1,0 +1,135 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_sela_price",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "sela",
+      "topic_id": "price"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_joss_buyer",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "joss",
+      "topic_id": "buyer"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_joss_cart",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "joss",
+      "topic_id": "cart"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "sela",
+      "name": "Sela",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "price",
+          "text": "The spare lamps cost three silver.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "crate",
+          "text": "The spice crate weighs a stone.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "shortage",
+          "text": "Hawkers say lamp oil runs short before winter.",
+          "epistemic": "rumor"
+        },
+        {
+          "id": "client",
+          "text": "The hidden buyer is house merrow.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "joss",
+      "name": "Joss",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "buyer",
+          "text": "Joss buys the spare lamps for the hostel.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "cart",
+          "text": "The morning cart leaves from the elm.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "client",
+          "text": "The hidden buyer is house merrow.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

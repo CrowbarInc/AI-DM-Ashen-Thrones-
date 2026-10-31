@@ -1,0 +1,108 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "rhee",
+      "name": "Rhee",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "relief",
+          "text": "Tamsin relieves Rhee at the second bell.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "west",
+          "text": "Rhee says the west post was quiet.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "signal",
+          "text": "The private signal is west whistle.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "tamsin",
+      "name": "Tamsin",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "west",
+          "text": "Tamsin says the west post was noisy.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "book",
+          "text": "The watch book closes at the third bell.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "signal",
+          "text": "The private signal is west whistle.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "scene": {
+    "id": "waystation_courtyard",
+    "location": "Waystation courtyard",
+    "summary": "A quiet public office. Vesper, Cala, Brin can answer questions.",
+    "visible_facts": [],
+    "interactables": [
+      {
+        "id": "courtyard_lantern",
+        "label": "courtyard lantern",
+        "type": "examine",
+        "description": "A soot-streaked lantern burns beside the courtyard gate.",
+        "reveals_clue": "lantern_mark"
+      }
+    ],
+    "exits": [
+      {
+        "id": "courtyard_gate",
+        "label": "Courtyard gate",
+        "target_scene_id": "waystation_street",
+        "aliases": [
+          "gate",
+          "courtyard gate"
+        ]
+      }
+    ],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "actions": [],
+    "objects": [],
+    "discovered_clues": [],
+    "runtime_entities": [],
+    "addressables": [
+      {
+        "id": "vesper",
+        "name": "Vesper",
+        "kind": "npc",
+        "aliases": []
+      },
+      {
+        "id": "cala",
+        "name": "Cala",
+        "kind": "npc",
+        "aliases": []
+      },
+      {
+        "id": "brin",
+        "name": "Brin",
+        "kind": "npc",
+        "aliases": []
+      }
+    ]
+  }
+}

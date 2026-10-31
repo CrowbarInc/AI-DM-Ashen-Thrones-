@@ -1,0 +1,29 @@
+--- cycle_baseline/game/conversational_continuity.py
++++ final/game/conversational_continuity.py
+@@ -522,9 +522,25 @@
+         return None
+     present = _present(scene, world)
+     active = _active_id(session, present)
++    rows = delivered_exchanges(session)
++    ctx = (session or {}).get("conversational_context") or {}
++    last_gm = ctx.get("last_gm_exchange") or {}
++    latest = rows[-1] if rows else {}
++    scene_id = str(((scene or {}).get("scene") or scene or {}).get("id") or "")
++    # A bare request to repeat/clarify refers to the latest delivered question,
++    # not an older NPC disclosure. Explicit speaker/subject recall still uses
++    # the existing historical selector below. Keep the pending intent intact.
++    if (( _REPEAT.search(text) or _MEANING.search(text))
++            and latest.get("ownership") == "gm"
++            and last_gm.get("category") == "CLARIFY"
++            and last_gm.get("scene_id") == scene_id
++            and latest.get("delivered_text") == last_gm.get("response")
++            and not _unique_named(text, present)
++            and not reference_subject_tokens(text, " ".join(str(n.get("name") or "") for n in present.values()))):
++        return {"action": "clarify", "owner": "gm", "npc_id": "", "npc_name": "",
++                "line": str(last_gm["response"]), "reason": "repeat_pending_clarification"}
+     if _names_other(text, present, active):
+         return None
+-    rows = delivered_exchanges(session)
+     found = _best_exchange(text, rows, "" if _GM.search(text) else active)
+     if found == "ambiguous" and (_GM.search(text) or _MEANING.search(text) or _REPEAT.search(text) or _DEICTIC.search(text)):
+         return {

@@ -1,0 +1,310 @@
+{
+  "campaign_id": "pr_eg_r6_unified_semantic_planning_20261017",
+  "campaign_name": "PR-EG-R6 \u2014 Unified Semantic Planning",
+  "campaign_date": "2026-10-17",
+  "purpose": "Qualify the first semantic-planning slice and stop for external review.",
+  "objective_status": "D \u2014 ARCHITECTURAL OR INTEGRITY BLOCKER",
+  "executive_summary": "D \u2014 ARCHITECTURAL OR INTEGRITY BLOCKER. Fresh turns: 119. See artifacts/pr_eg_r6/01_EXECUTIVE_SUMMARY.md.",
+  "changes": {
+    "production": [
+      "Gated semantic planner for explicit NPC information questions, corrections, and follow-ups.",
+      "Host validation, relevance, disclosure, and the existing speech seal remain authoritative."
+    ],
+    "validation": [
+      "Controlled T01\u2013T28 tests and fresh /api/chat qualification."
+    ],
+    "tooling": [
+      "tools/qualify_pr_eg_r6.py",
+      "tools/write_pr_eg_r6_review.py"
+    ],
+    "documentation": [
+      "31 PR-EG-R6 review artifacts."
+    ],
+    "generated_artifacts": [
+      "Live transcripts, baseline transcripts, usage, regression JUnit."
+    ]
+  },
+  "testing": {
+    "focused": "tests/test_pr_eg_r6_unified_semantic_planning.py passed in the focused run.",
+    "broader": "Relevant regression JUnit passed 753 failed 27.",
+    "full_suite": "Not run. The relevant conversational selection was run.",
+    "runtime_validation": "/api/chat turns 119; status STOP.",
+    "model_runtime_boundary": "Live model gpt-4.1-mini for semantic plans and expression.",
+    "new_regressions": "[{\"name\": \"tests.test_pr_ef_r1_semantic_handoff::test_semantic_ownership_precedes_active_npc[SESSION-RULES-components1]\", \"kind\": \"failure\", \"message\": \"PermissionError: [WinError 5] Access is denied: 'C:\\\\\\\\Users\\\\\\\\Master Mandalcio\\\\\\\\Documents\\\\\\\\Tabletop Gaming\\\\\\\\AI Dungeon Master\\\\\\\\ashen_thrones_ai_gm\\\\\\\\development\\\\\\\\tmp\\\\\\\\pytest\\\\\\\\test_sem\"}, {\"name\": \"tests.test_pr_ef_r1_semantic_handoff::test_semantic_confirmation_rejects_stale_scene\", \"kind\": \"failure\", \"message\": \"PermissionError: [WinError 5] Access is denied: 'C:\\\\\\\\Users\\\\\\\\Master Mandalcio\\\\\\\\Documents\\\\\\\\Tabletop Gaming\\\\\\\\AI Dungeon Master\\\\\\\\ashen_thrones_ai_gm\\\\\\\\development\\\\\\\\tmp\\\\\\\\pytest\\\\\\\\test_sem\"}]",
+    "pre_existing_failures": "25 name-matched R4-R1 failures, including the preseal provenance test."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Second NPC names force addressee clarification.",
+      "No-shared-stem paraphrases fail closed.",
+      "D \u2014 ARCHITECTURAL OR INTEGRITY BLOCKER"
+    ],
+    "pre_existing": [
+      "25 inherited relevant-family failures. Two extra large-run file-lock flakes passed in isolation."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review the verdict and whether the slice is accepted before any further conversational family is migrated."
+  ],
+  "missing_concepts": [
+    "Grammatical addressee versus a merely mentioned second name.",
+    "Paraphrase matching beyond shared stems, without lexical exceptions."
+  ],
+  "does_not_prove": [
+    "Playability of bargaining, combat, movement, or unguided social chat.",
+    "That a stub-proposer test pass equals provider qualification."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R6 and await external review. Do not begin PR-EH.",
+  "self_contained_review_test": "Handoff bundle generated from the explicit file list.",
+  "primary_report": "artifacts/pr_eg_r6/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000,
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6/02_BASELINE_AND_REPOSITORY_STATE.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/03_IMPLEMENTED_ARCHITECTURE.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/04_SEMANTIC_PLAN_CONTRACT.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/05_PROVIDER_INTERPRETATION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/06_HOST_PLAN_VALIDATION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/07_REQUESTED_RELATIONSHIP_HANDLING.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/08_RELEVANCE_VS_AUTHORIZATION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/09_ANSWER_SUFFICIENCY.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/10_CORRECTION_HANDLING.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/11_FOLLOW_UP_CONTINUITY.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/12_AMBIGUITY_HANDLING.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/13_HOST_KNOWLEDGE_SELECTION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/14_RESPONSE_PLANNING.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/15_EXPRESSION_AND_FINAL_ADOPTION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/16_FEATURE_GATE_BEHAVIOR.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/17_LEGACY_PATH_ISOLATION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/18_MATCHED_BASELINE_COMPARISON.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/19_FROZEN_HOLDOUTS.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/20_ADVERSARIAL_INTEGRITY_TESTS.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/21_CONTROLLED_TEST_RESULTS.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/22_FRESH_PROVIDER_CONVERSATIONS.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/23_TURN_LEVEL_QUALIFICATION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/24_DIALOGUE_QUALITY_AND_PLAYABILITY.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/25_PROVIDER_PERFORMANCE.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/26_REGRESSION_COMPARISON.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/27_ACCEPTANCE_GATE_RESULTS.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/28_REMAINING_LIMITATIONS.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/29_RECOMMENDED_NEXT_ACTION.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/30_FINAL_VERDICT.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6/31_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/frozen_holdouts.json",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/freeze.json",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/live_turns.jsonl",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/live_status.json",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/baseline_turns.jsonl",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/baseline_status.json",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/regression_junit.xml",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/live_usage.jsonl",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/live_turns_stopped.jsonl",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/live_turns_echo_stop.jsonl",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/live_turns_password_stop.jsonl",
+      "role": "r6_evidence",
+      "why": "PR-EG-R6 report or recorded qualification evidence.",
+      "human_review_required": false
+    }
+  ]
+}

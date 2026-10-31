@@ -1,0 +1,30 @@
+{
+  "model_calls": 0,
+  "source": "artifacts/pr_bu_pr_bt_final_repaired_chain_micro_live/evidence/P1/validation.json attempt_2",
+  "narration": "The bell's wooden yoke is split, its surface showing clear evidence of damage. The leather hanger appears torn, frayed at the edges. These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.",
+  "before": {
+    "hard_valid": false,
+    "reasons": ["unauthorized_resolution_decision_fact"],
+    "violations": [
+      {
+        "text": "The bell's wooden yoke is split, its surface showing clear evidence of damage.",
+        "reason_codes": ["patrol_route_or_geography"],
+        "match": "split, its surface showing clear evidence",
+        "span": [26, 67]
+      },
+      {
+        "text": "These details point to significant deterioration, though without further context it remains uncertain what exactly caused this wear or when it occurred.",
+        "reason_codes": ["unauthorized_cause_attribution"],
+        "also_recorded": ["authorized_qualified_inference", "unknown_cause_actor_or_time"],
+        "match": "caused this",
+        "span": [115, 126]
+      }
+    ]
+  },
+  "after": {
+    "hard_valid": true,
+    "reason_codes": ["authorized_qualified_inference", "unknown_cause_actor_or_time"],
+    "patrol_route_or_geography": false,
+    "unauthorized_cause_attribution": false
+  }
+}

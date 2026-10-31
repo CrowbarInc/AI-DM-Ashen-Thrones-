@@ -1,0 +1,30 @@
+[
+  {
+    "Start": "Set-Location -LiteralPath 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm'",
+    "Errors": []
+  },
+  {
+    "Start": "$env:ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT = '1'",
+    "Errors": []
+  },
+  {
+    "Start": "Set-Location -LiteralPath 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm'",
+    "Errors": []
+  },
+  {
+    "Start": "Invoke-RestMethod -Uri 'http://127.0.0.1:8765/api/state' -TimeoutSec 15 | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath (Join-Path $playRoot 'before_state.json') -Encoding utf8",
+    "Errors": []
+  },
+  {
+    "Start": "Write-Host 'Capturing AFTER state (15 second timeout). Then stop server with Ctrl+C.'",
+    "Errors": []
+  },
+  {
+    "Start": "Invoke-RestMethod -Uri 'http://127.0.0.1:8765/api/state' -TimeoutSec 15 | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath (Join-Path $playRoot 'after_state.json') -Encoding utf8",
+    "Errors": []
+  },
+  {
+    "Start": "Write-Host 'Server stopped. Copying AFTER data and exporting evidence.'",
+    "Errors": []
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "case_id": "s11q3",
+  "family": "s11",
+  "partition": "holdout",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "25887337f878282ea0c594bb387a0c794e746b8ca7bfe230805b4fccf7b000f5",
+  "answer": {
+    "response_class": "UNKNOWN",
+    "values": [],
+    "qualifiers": [],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s11"
+    ],
+    "answered_arguments": [],
+    "missing_arguments": [
+      "informant"
+    ],
+    "conflict": false,
+    "reason": "The available fact states the road's name but does not specify who told the NPC the road's name. No evidence identifies the informant."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": "F11"
+  },
+  "provider_error": null
+}

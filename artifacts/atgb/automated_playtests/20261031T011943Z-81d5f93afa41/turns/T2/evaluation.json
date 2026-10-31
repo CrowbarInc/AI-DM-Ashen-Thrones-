@@ -1,0 +1,729 @@
+{
+  "step_id": "T2",
+  "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+  "dm_response": "I cannot tell who that is addressed to. Nothing has been attempted.",
+  "response_truncated": false,
+  "http_status": 200,
+  "outcome_classification": {
+    "kind": "unknown",
+    "evidence": "native accepted response and resolution; no invented success condition"
+  },
+  "state_diff": [
+    {
+      "path": "/session.json/conversational_context/delivered_exchanges",
+      "before": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "",
+          "delivered_text": "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 1,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "fcbb0e6c1fe3fc832c2ab64ec0aecc6d19f664d99b9b09b4b74c8ec7c8660649",
+          "authorization_source": "initial_generation",
+          "adoption_turn_identity": "rc_dd89a2b89c62"
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I take a moment to look around the gate district. What do I notice?",
+          "delivered_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 1,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "1fb5b9da538c7e273c33ce1cfbcd66ea1e07e43e5831d57f282b71b6500dd25d",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "after": {
+        "preview": "[{\"speaker_id\": \"\", \"speaker_name\": \"\", \"addressee\": \"player\", \"ownership\": \"gm\", \"player_text\": \"\", \"delivered_text\": \"You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.\", \"subject\": \"\", \"topic_id\": \"\", \"requested_information\": \"\", \"supplied_text\": \"\", \"uncertain\": false, \"commitment\": false, \"scene_id\": \"frontier_gate\", \"turn\": 1, \"active\": false, \"authorized_proposition\": \"\", \"answer_sufficiency\": \"\", \"proposition_id\": \"\", \"response_integrity_digest\": \"fcbb0e6c1fe3fc832c2ab64ec0aecc6d19f664d99b9b09b4b74c8ec7c8660649\", \"authorization_source\": \"initial_generation\", \"adoption_turn_identity\": \"rc_dd89a2b89c62\"}, {\"speaker_id\": \"\", \"speaker_name\": \"\", \"addressee\": \"player\", \"ownership\": \"gm\", \"player_text\": \"I take a moment to look around the gate district. What do I notice?\", \"delivered_text\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"subject\": \"\", \"topic_id\": \"\", \"requested_information\": \"\", \"supplied_text\": \"\", \"uncertain\": false, \"commitment\": false, \"scene_id\": \"frontier_gate\", \"turn\": 1, \"active\": false, \"authorized_proposition\": \"\", \"answer_sufficiency\": \"\", \"proposition_id\": \"\", \"response_integrity_digest\": \"1fb5b9da538c7e273c33ce1cfbcd66ea1e07e43e5831d57f282b71b6500dd25d\", \"authorization_source\": \"conversational_decision:communication_before_execution\", \"adoption_turn_identity\": \"\"}, {\"speaker_id\": \"\", \"speaker_name\": \"\", \"addressee\": \"player\", \"ownership\": \"gm\", \"player_text\": \"I approach the gate serjeant and ask what happened to the missing patrol.\", \"delivered_text\": \"I cannot tell who t",
+        "truncated": true,
+        "characters": 2559,
+        "sha256": "10906783cd9d498e9345ae2ad02a81ef28820d819a3c62b0da7d607191aa1580"
+      }
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/category",
+      "before": "ANSWER",
+      "after": "CLARIFY"
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/purpose",
+      "before": "DESCRIPTION",
+      "after": "CLARIFICATION"
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/response",
+      "before": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "after": "I cannot tell who that is addressed to. Nothing has been attempted."
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/subject",
+      "before": "I take a moment to look around the gate district. What do I notice?",
+      "after": "I approach the gate serjeant and ask what happened to the missing patrol."
+    },
+    {
+      "path": "/session.json/conversational_context/pending_clarification",
+      "before": null,
+      "after": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "frontier_gate",
+        "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "choices": [
+          {
+            "entity_id": "gate_guard",
+            "label": "Gate Guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "clarification": "",
+        "target_resolution": "none_required"
+      }
+    },
+    {
+      "path": "/session.json/conversational_context/pending_intention",
+      "before": null,
+      "after": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "frontier_gate",
+        "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "choices": [
+          {
+            "entity_id": "gate_guard",
+            "label": "Gate Guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "clarification": "",
+        "target_resolution": "none_required"
+      }
+    },
+    {
+      "path": "/session_log.jsonl",
+      "before": {
+        "preview": "[{\"timestamp\": \"2026-10-31T01:19:46.350106Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 95284,
+        "sha256": "a3d88bf532f511e178da5b4739f964382b8ee29258e600ef05ecc001c600709e"
+      },
+      "after": {
+        "preview": "[{\"timestamp\": \"2026-10-31T01:19:46.350106Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 107121,
+        "sha256": "e63fa8c941d26013a7b7ba3ee3be01cc003f9e3927e0badb55e4285c86db390c"
+      }
+    }
+  ],
+  "overlay_comparison": {
+    "integrity": true,
+    "changes": [],
+    "omitted_entries": 0,
+    "total_changes": 0
+  },
+  "state_before": "turns/T2/before/documents.json",
+  "state_after": "turns/T2/after/documents.json",
+  "diagnostics": [
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "c89d2bc6d9d2440eb9dc8a99a415ad03",
+      "attempt_id": "4eec29704bb145c681463644d42c8c29",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-31T01:19:47.218208+00:00",
+      "time": "2026-10-31T01:19:47.218208+00:00",
+      "sequence": 3,
+      "admission": "admitted",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "c89d2bc6d9d2440eb9dc8a99a415ad03",
+      "attempt_id": "4eec29704bb145c681463644d42c8c29",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-31T01:19:47.218208+00:00",
+      "time": "2026-10-31T01:19:47.220206+00:00",
+      "sequence": 3,
+      "admission": "admitted",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "c89d2bc6d9d2440eb9dc8a99a415ad03",
+      "attempt_id": "4eec29704bb145c681463644d42c8c29",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-31T01:19:47.218208+00:00",
+      "time": "2026-10-31T01:19:47.222207+00:00",
+      "sequence": 3,
+      "admission": "admitted",
+      "budget_remaining": 3,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": true,
+      "request_id": "synthetic-response",
+      "model": "gpt-4.1-mini",
+      "input_tokens": 20,
+      "output_tokens": 10,
+      "total_tokens": 30,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 0.096
+    }
+  ],
+  "provider_usage": {
+    "request_count": 1,
+    "input_tokens": 20,
+    "output_tokens": 10,
+    "total_tokens": 30,
+    "retry_count": 0,
+    "operations": [
+      {
+        "attempt_id": "4eec29704bb145c681463644d42c8c29",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "purpose": "interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini",
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "total_tokens": 30,
+        "latency_ms": 0.096,
+        "completion_status": "completed"
+      }
+    ],
+    "provider_latency_ms": 0.096,
+    "provider_latency_status": "native latency_ms only; unavailable remains null"
+  },
+  "mechanical": {
+    "status": "PASS",
+    "completed_interaction": true,
+    "turn_delta": 0,
+    "log_delta": 1,
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "rules": {
+      "status": "recorded_requires_review",
+      "evidence": {
+        "kind": "conversational_clarify",
+        "action_id": "conversational_clarify",
+        "label": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "prompt": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {},
+        "metadata": {
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "authoritative_mutation": false,
+          "resolver_invoked": false,
+          "gameplay_parser_invoked": false,
+          "narration_invoked": false,
+          "processing_outcome": "conversational_clarify",
+          "conversational_decision": {
+            "category": "CLARIFY",
+            "primary_intention": "I approach the gate serjeant and ask what happened to the missing patrol.",
+            "intent_family": "world_operation",
+            "incidental_context": [],
+            "proposed_operation": "ASK",
+            "proposed_target": "gate_serjeant",
+            "proposed_record": {
+              "communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "Ask gate serjeant about missing patrol"
+              },
+              "asserted_premises": [],
+              "requested_outcomes": [],
+              "action_components": [
+                {
+                  "order": 1,
+                  "description": "Attempt the requested interaction",
+                  "target_ref": "gate_serjeant",
+                  "operation_class": "ASK"
+                }
+              ],
+              "references": {
+                "permitted_entity_ids": [
+                  "gate_serjeant"
+                ],
+                "unresolved_references": []
+              },
+              "clarification_question": "",
+              "correction": {
+                "subject": "NONE",
+                "note": ""
+              },
+              "communication": {
+                "recipient": "NPC",
+                "purpose": "QUESTION",
+                "subject": "missing patrol",
+                "evidence_refs": []
+              },
+              "incidental_context": [],
+              "reference_reconciliation": {
+                "annotations": [],
+                "addressee": null,
+                "operation": "ASK"
+              },
+              "public_evidence": {}
+            },
+            "missing_information": [
+              "interlocutor"
+            ],
+            "context_references": [],
+            "requires_authoritative_execution": false,
+            "reason": "ungrounded_provider_target",
+            "confidence": 0.7,
+            "ambiguity": null,
+            "player_facing_text": "I cannot tell who that is addressed to. Nothing has been attempted.",
+            "context_update": {
+              "conversational_context": {
+                "pending_clarification": {
+                  "kind": "ambiguous_addressee",
+                  "operation": "ASK",
+                  "status": "pending",
+                  "scene_id": "frontier_gate",
+                  "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+                  "choices": [
+                    {
+                      "entity_id": "gate_guard",
+                      "label": "Gate Guard"
+                    },
+                    {
+                      "entity_id": "gate_serjeant",
+                      "label": "Gate Serjeant"
+                    },
+                    {
+                      "entity_id": "tavern_runner",
+                      "label": "Tavern Runner"
+                    }
+                  ],
+                  "clarification": "",
+                  "target_resolution": "none_required"
+                },
+                "pending_intention": {
+                  "kind": "ambiguous_addressee",
+                  "operation": "ASK",
+                  "status": "pending",
+                  "scene_id": "frontier_gate",
+                  "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+                  "choices": [
+                    {
+                      "entity_id": "gate_guard",
+                      "label": "Gate Guard"
+                    },
+                    {
+                      "entity_id": "gate_serjeant",
+                      "label": "Gate Serjeant"
+                    },
+                    {
+                      "entity_id": "tavern_runner",
+                      "label": "Tavern Runner"
+                    }
+                  ],
+                  "clarification": "",
+                  "target_resolution": "none_required"
+                }
+              }
+            },
+            "intent_modality": "committed",
+            "secondary_intentions": [],
+            "execution_policy": "",
+            "communication_owner": "GM",
+            "communication_purpose": "CLARIFICATION",
+            "authorization": null
+          },
+          "live_chat_interpretation": {
+            "status": "accepted",
+            "reason": "eligible_for_bridge",
+            "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+            "model_communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "raw_interpretation": "{\"communication_mode\": \"IN_WORLD_ACTION\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Ask gate serjeant about missing patrol\"}, \"asserted_premises\": [], \"requested_outcomes\": [], \"action_components\": [{\"order\": 1, \"operation_class\": \"ASK\", \"target_ref\": \"gate_serjeant\", \"description\": \"Attempt the requested interaction\"}], \"references\": {\"permitted_entity_ids\": [\"gate_serjeant\"], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"NONE\", \"note\": \"\"}, \"communication\": {\"recipient\": \"NPC\", \"purpose\": \"QUESTION\", \"subject\": \"missing patrol\", \"evidence_refs\": []}}",
+            "provider_requests": [
+              {
+                "event": "completed",
+                "version": "ATGB-03B-1",
+                "run_id": "c89d2bc6d9d2440eb9dc8a99a415ad03",
+                "attempt_id": "4eec29704bb145c681463644d42c8c29",
+                "purpose": "interpretation",
+                "owner": "live_chat_interpretation.request_interpretation",
+                "configured_model": "gpt-4.1-mini",
+                "admitted_at": "2026-10-31T01:19:47.218208+00:00",
+                "time": "2026-10-31T01:19:47.222207+00:00",
+                "sequence": 3,
+                "admission": "admitted",
+                "budget_remaining": 3,
+                "sdk_retries": 0,
+                "host_retries": "disabled",
+                "sent": true,
+                "request_id": "synthetic-response",
+                "model": "gpt-4.1-mini",
+                "input_tokens": 20,
+                "output_tokens": 10,
+                "total_tokens": 30,
+                "usage_consistent": true,
+                "refusal": null,
+                "completion_status": "completed",
+                "dispatch_attempted": true,
+                "latency_ms": 0.096
+              }
+            ],
+            "record": {
+              "communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "Ask gate serjeant about missing patrol"
+              },
+              "asserted_premises": [],
+              "requested_outcomes": [],
+              "action_components": [
+                {
+                  "order": 1,
+                  "description": "Attempt the requested interaction",
+                  "target_ref": "gate_serjeant",
+                  "operation_class": "ASK"
+                }
+              ],
+              "references": {
+                "permitted_entity_ids": [
+                  "gate_serjeant"
+                ],
+                "unresolved_references": []
+              },
+              "clarification_question": "",
+              "correction": {
+                "subject": "NONE",
+                "note": ""
+              },
+              "communication": {
+                "recipient": "NPC",
+                "purpose": "QUESTION",
+                "subject": "missing patrol",
+                "evidence_refs": []
+              },
+              "incidental_context": [],
+              "reference_reconciliation": {
+                "annotations": [],
+                "addressee": null,
+                "operation": "ASK"
+              },
+              "public_evidence": {}
+            }
+          },
+          "stored_interpretation_bridge": {
+            "source": "stored_interpretation",
+            "accepted": false,
+            "reason": "ungrounded_provider_target",
+            "operation": "ASK",
+            "target_ref": "gate_serjeant",
+            "candidate_target_ids": [
+              "gate_serjeant"
+            ],
+            "clarification": "I cannot tell who that is addressed to. Nothing has been attempted.",
+            "authorization": {
+              "communication_ownership": "gm_directed",
+              "intent_purpose": "request_information",
+              "target_resolution": "none_required",
+              "target_provenance": "none",
+              "target_id": null,
+              "candidate_target_ids": [
+                "gate_serjeant"
+              ],
+              "operation_eligibility": "not_assessed",
+              "mutation_eligibility": true,
+              "conflict_status": "none",
+              "conflict_details": {},
+              "pending_intention_relationship": "none",
+              "allowed_operation": null,
+              "clarification": "",
+              "choices": [
+                {
+                  "entity_id": "gate_guard",
+                  "label": "Gate Guard"
+                },
+                {
+                  "entity_id": "gate_serjeant",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "entity_id": "tavern_runner",
+                  "label": "Tavern Runner"
+                }
+              ],
+              "direct_address": false
+            },
+            "pending_intention": {
+              "kind": "ambiguous_addressee",
+              "operation": "ASK",
+              "status": "pending",
+              "scene_id": "frontier_gate",
+              "original_text": "I approach the gate serjeant and ask what happened to the missing patrol.",
+              "choices": [
+                {
+                  "entity_id": "gate_guard",
+                  "label": "Gate Guard"
+                },
+                {
+                  "entity_id": "gate_serjeant",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "entity_id": "tavern_runner",
+                  "label": "Tavern Runner"
+                }
+              ],
+              "clarification": "",
+              "target_resolution": "none_required"
+            }
+          },
+          "provider_calls": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0
+          },
+          "performance": {
+            "elapsed_ms": 17,
+            "interpretation_ms": null,
+            "resolution_ms": null,
+            "narration_ms": null,
+            "validation_ms": null,
+            "retry_ms": null,
+            "provider_call_count": 1,
+            "input_tokens": 20,
+            "output_tokens": 10,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "conversational_clarify",
+            "successful": false,
+            "provider_narration_skipped": false
+          }
+        }
+      },
+      "source": "production resolution; no independent adjudication"
+    },
+    "mutation_authority": "REQUIRES_HUMAN_REVIEW for changes not covered by explicit invariants"
+  },
+  "semantic": {
+    "status": "RECORDED",
+    "final_hard_validation": true,
+    "native_validation": {
+      "accepted_response": {
+        "addressee": "player",
+        "adoption_status": "candidate_accepted",
+        "attempt": 0,
+        "authority_result": "accepted",
+        "authorization_provenance": {
+          "addressee": "player",
+          "authority_category": "host_operation",
+          "authorized_proposition": "",
+          "epistemic_status": "none",
+          "operation": "ask",
+          "policy_version": "pr-eg-r6-r1-r1",
+          "provenance_id": "2608602d877553f8",
+          "source_id": "",
+          "speaker_id": "",
+          "validation": "host_operation"
+        },
+        "authorization_source": "conversational_decision:ungrounded_provider_target",
+        "candidate_disposition": "host_selected",
+        "canonical": false,
+        "contract": {
+          "contract_id": "",
+          "expected_resolution": "",
+          "interlocutor_id": "",
+          "operation": ""
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 0,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            "conversational_decision:ungrounded_provider_target"
+          ],
+          "gm_resolution_decision_audit": null,
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "ask",
+        "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "provenance": "authorized_host_speech",
+        "resolution_kind": "conversational_clarify",
+        "speaker": "GM",
+        "speaker_id": "",
+        "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+        "subject": "",
+        "target": "",
+        "text": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "turn_identity": "",
+        "integrity_digest": "3773881738384e9050cb27e0b39f2fd3f519aa0357be753338b025dde763838f"
+      }
+    },
+    "nonresolution": "authorized_host_speech",
+    "gameplay_acceptance": true,
+    "provider_stages": [],
+    "extraction": [],
+    "json_parsing": [],
+    "structured_validation": []
+  },
+  "quality": {
+    "rubric_version": "pr-play-09-quality-v1",
+    "scale": {
+      "0": "Complete failure",
+      "1": "Major deficiency",
+      "2": "Partially adequate",
+      "3": "Good",
+      "4": "Strong"
+    },
+    "dimensions": {
+      "Q1": {
+        "dimension": "Responsiveness",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q2": {
+        "dimension": "Grounding",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q3": {
+        "dimension": "Continuity",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q4": {
+        "dimension": "Actionability",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q5": {
+        "dimension": "Narrative quality",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q6": {
+        "dimension": "Agency and consequences",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "I cannot tell who that is addressed to. Nothing has been attempted.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      }
+    },
+    "probes": {
+      "response_exists": true,
+      "requested_subject_mentioned": false,
+      "repeated_exact_response": false,
+      "generic_marker": false
+    },
+    "concerns": [
+      "possibly_irrelevant_response"
+    ],
+    "method": "deterministic presence and exact markers; heuristic relevance and repetition",
+    "status": "REQUIRES_HUMAN_REVIEW"
+  },
+  "findings": [
+    {
+      "category": "possibly_irrelevant_response",
+      "kind": "heuristic_quality_concern",
+      "evidence": {
+        "response_exists": true,
+        "requested_subject_mentioned": false,
+        "repeated_exact_response": false,
+        "generic_marker": false
+      },
+      "source": "pr-play-09-quality-v1",
+      "step_id": "T2",
+      "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+      "dm_response": "I cannot tell who that is addressed to. Nothing has been attempted.",
+      "diagnostics": "turns/T2/evaluation.json#diagnostics",
+      "state_comparison": "turns/T2/evaluation.json#state_diff"
+    }
+  ],
+  "stop": false,
+  "application_latency_seconds": 0.219,
+  "ok": true,
+  "action": "player_turn"
+}

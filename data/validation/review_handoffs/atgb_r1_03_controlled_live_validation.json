@@ -1,0 +1,486 @@
+{
+  "campaign_id": "atgb_r1_03_controlled_live_validation",
+  "campaign_name": "ATGB-R1-03 Controlled Live Conversational Validation",
+  "campaign_date": "2026-10-19",
+  "purpose": "Bounded validation only; no implementation authority.",
+  "objective_status": "D — INCONCLUSIVE; EXTERNAL REVIEW REQUIRED",
+  "executive_summary": "Original-wording L1/L2 failed upstream before interpretation. L3 correctly identified people but selected no evidence and asked redundant confirmation. L4 control invalid due to test-import environment leakage; generic fallback mutated isolated state. Repaired gate not demonstrated live. Three admissions of eight maximum; one valid completed live trial. Production and all protected baseline/experimental files unchanged. No secrets packaged; no commit/push. Stop for external review.",
+  "changes": {
+    "production": [
+      "None. Reviewed R1-02 source unchanged."
+    ],
+    "validation": [
+      "Controlled designated attempts and AI-assisted six-dimension judgments; no scorer/expectation edits."
+    ],
+    "tooling": [
+      "Campaign-local observer, bounded SDK transport constructor and reporting/export scripts only."
+    ],
+    "documentation": [
+      "Eight reports, index and canonical session handoff."
+    ],
+    "generated_artifacts": [
+      "Raw and normalized traces, transcripts, accounting, state snapshots, hashes and standard review export."
+    ]
+  },
+  "testing": {
+    "focused": "102 non-HTTP boundary tests passed, 3 API tests deselected, exit 0.",
+    "broader": "Initial 133-test HTTP slice interrupted at Windows TestClient boundary; no completed result.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Four designated attempts: two upstream failures, one inadequate live paraphrase, one invalid live control.",
+    "model_runtime_boundary": "OpenAI gpt-4.1-mini; only L3 returned actual gpt-4.1-mini-2025-04-14; SDK retries zero.",
+    "new_regressions": "No production change; L4 invalid harness cannot establish a new production regression.",
+    "pre_existing_failures": "Global accounting source manifest stale solely for the reviewed routing repair; dispatch fingerprints unchanged."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Missing successful original-wording trials.",
+      "L3 redundant clarification and ignored available people evidence.",
+      "L4 fixture import disabled interpretation and isolated fallback mutated state.",
+      "Failed-call token usage/billing unavailable."
+    ],
+    "pre_existing": [
+      "Human ATGB review remains unattested.",
+      "Extensive dirty worktree preserved.",
+      "PR-EG integration ban remains."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review D inconclusive verdict and invalid-control authority evidence.",
+    "Decide whether to authorize bounded ATGB-R1-04 validation-readiness recovery; no implementation follows automatically."
+  ],
+  "missing_concepts": [
+    "No new semantic subsystem or authority proposed."
+  ],
+  "does_not_prove": [
+    "Original repair reproduced live, valid mechanical control, broad conversation quality, independent generalization, full-suite green, unconditional authority preservation or exact total cost."
+  ],
+  "recommended_next_step": "External review, then separately authorized bounded validation-readiness recovery and missing original/control trials in ATGB-R1-04. Do not implement semantic repairs.",
+  "primary_report": "development/reports/atgb_r1_03_controlled_live_validation.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/atgb_r1_03"
+  ],
+  "self_contained_review_test": "ZIP contains all eight reports, exact exchanges, raw/normalized traces, full pre/post state, accounting and status; source hashes and CRC verified.",
+  "configuration_source": "data/validation/review_handoffs/atgb_r1_03_controlled_live_validation.json",
+  "supporting_files": [
+    {
+      "path": "development/reports/atgb_r1_03/01_execution_readiness.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/02_live_trial_results.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/03_execution_traces.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/04_s08_2_historical_comparison.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/05_failure_localization.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/06_authority_and_state_integrity.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/07_provider_accounting.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/08_final_verdict.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/accounting_readiness.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/entry_hashes.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/integrity.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/normalized_results.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/provider_accounting.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/validation_commands.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/deterministic.txt",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/deterministic_non_http.txt",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/repository_status_after.txt",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/repository_status_before.txt",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/transcripts.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/execute_trial.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/prepare_review.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_dq/__init__.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_02_revision_boundary.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_ef_r4_authorization.py",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/fixtures/pr_ef_r4_holdouts.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/transcript.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/accounting.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/after.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/before.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/response.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/setup.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/trace.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/accounting.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/after.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/before.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/response.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/setup.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/trace.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/accounting.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/after.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/before.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/response.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/setup.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/trace.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/accounting.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/after.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/before.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/response.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/setup.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/trace.json",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L4/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Required controlled trial, authority, accounting or baseline evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_du_player_pipeline.py",
+      "role": "fixture_import_provenance",
+      "why": "Shows the import of experiments.pr_dq.world which executes the package initializer.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/export_review.py",
+      "role": "review_verification",
+      "why": "Export integrity or invalid fixture environment provenance.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

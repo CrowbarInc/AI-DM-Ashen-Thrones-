@@ -1,0 +1,219 @@
+[
+  {
+    "module": "game/api.py",
+    "function": "_post_gm_adoption_gateway",
+    "line": 1864,
+    "end": 1899,
+    "args": "*, operation: str, source: str, session: dict, scene_id: str | None, affected_domains: list[str], proposed_payload_summary: dict[str, Any] | None=None, branch_label: str | None=None, classification: dict[str, Any] | None=None"
+  },
+  {
+    "module": "game/api.py",
+    "function": "_build_gpt_narration_from_authoritative_state",
+    "line": 3163,
+    "end": 4415,
+    "args": "*, campaign: dict, world: dict, session: dict, character: dict, scene: dict, combat: dict, recent_log: list, user_text: str, resolution: dict | None, scene_runtime: dict, segmented_turn: dict | None=None, route_choice: str | None=None, directed_social_entry: dict | None=None, response_type_contract: dict | None=None, latency_sink: dict | None=None, normalized_action: dict | None=None"
+  },
+  {
+    "module": "game/api.py",
+    "function": "_run_resolved_turn_pipeline",
+    "line": 4418,
+    "end": 4520,
+    "args": "*, campaign: dict, character: dict, session: dict, world: dict, combat: dict, scene: dict, recent_log: list, resolution: dict, normalized_action: dict | None, fallback_user_text: str, segmented_turn: dict | None=None, route_choice: str | None=None, directed_social_entry: dict | None=None, latency_sink: dict | None=None"
+  },
+  {
+    "module": "game/api.py",
+    "function": "_opening_response_rejection",
+    "line": 4789,
+    "end": 4842,
+    "args": "gm: dict | None, resolution: dict | None, response_type_contract: dict | None"
+  },
+  {
+    "module": "game/api.py",
+    "function": "_restore_opening_baseline",
+    "line": 4878,
+    "end": 4889,
+    "args": "baseline: dict"
+  },
+  {
+    "module": "game/api.py",
+    "function": "_complete_opening_turn_persistence_like_chat",
+    "line": 5893,
+    "end": 6338,
+    "args": "*, turn_started: float, campaign: dict, character: dict, session: dict, world: dict, combat: dict, scene: dict, scene_before_id: str, trace: dict, latency_ms: dict[str, int], clue_presentation_before: dict, clocks_before: dict, time_pressure_after: int, tick: dict, recent_log: list, routed_via_exploration: bool, routed_via_adjudication: bool, normalized_chat: dict | None, resolution: dict | None, gm: dict, response_type_contract: dict | None, route_choice: str | None, parsed: dict | None, segmented_turn: dict | None, compact_segmented: dict | None, canonical_entry: dict, implied_context: dict, authoritative_clue_updates: list[str], player_text_for_eval: str, debug_action_kind: str, trace_source: str, trace_action_type: str, request_log_payload: dict, mark_campaign_started: bool"
+  },
+  {
+    "module": "game/api.py",
+    "function": "start_campaign",
+    "line": 6342,
+    "end": 6379,
+    "args": "request: Request"
+  },
+  {
+    "module": "game/api.py",
+    "function": "_start_campaign_after_admission",
+    "line": 6382,
+    "end": 6596,
+    "args": "ui_mode, gate, gate_operator, opening_scope: _OpeningScope"
+  },
+  {
+    "module": "game/gm.py",
+    "function": "_safe_json",
+    "line": 3824,
+    "end": 3986,
+    "args": "text: str, *, require_structured_claims: bool=False, provider_response_contract: str='structured_realization'"
+  },
+  {
+    "module": "game/gm.py",
+    "function": "_opening_max_output_tokens",
+    "line": 4192,
+    "end": 4197,
+    "args": ""
+  },
+  {
+    "module": "game/gm.py",
+    "function": "call_gpt",
+    "line": 5170,
+    "end": 5486,
+    "args": "messages: List[Dict[str, str]], *, purpose: str='primary_turn', response_policy: Optional[Dict[str, Any]]=None, segmented_turn: Optional[Dict[str, Any]]=None, retry_attempt: int=0, retry_reason: Optional[str]=None, strict_social: bool=False, force_high_precision: bool=False"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "_empty_identity_covers",
+    "line": 1012,
+    "end": 1036,
+    "args": "sentence: str, fact: str"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "_proposition_restates_statement",
+    "line": 1645,
+    "end": 1659,
+    "args": "sentence: str, statement: str"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "build_gm_resolution_decision",
+    "line": 2595,
+    "end": 2613,
+    "args": "*, resolution: Mapping[str, Any] | None, session: Mapping[str, Any] | None=None, scene: Mapping[str, Any] | None=None, world: Mapping[str, Any] | None=None, normalized_action: Mapping[str, Any] | None=None"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "audit_narration_against_decision",
+    "line": 3337,
+    "end": 3381,
+    "args": "text: str | None, *, decision: Mapping[str, Any] | None, authored_corpus: str=''"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "_declared_identity_matches_realization",
+    "line": 3667,
+    "end": 3687,
+    "args": "declared: DeclaredRealizationClaim, claim: Mapping[str, Any]"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "validate_declared_claims_against_decision",
+    "line": 3797,
+    "end": 3926,
+    "args": "declared_claims: Sequence[Mapping[str, Any] | DeclaredRealizationClaim] | None, *, decision: Mapping[str, Any] | None"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "_undeclared_consequential_violations",
+    "line": 3971,
+    "end": 4050,
+    "args": "narration_audit: Mapping[str, Any], accepted_claims: Sequence[Mapping[str, Any]] | None, narration: str | None=None, decision: Mapping[str, Any] | None=None"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "audit_realization_envelope_against_decision",
+    "line": 4053,
+    "end": 4101,
+    "args": "*, narration: str | None, declared_claims: Sequence[Mapping[str, Any] | DeclaredRealizationClaim] | None, decision: Mapping[str, Any] | None, authored_corpus: str=''"
+  },
+  {
+    "module": "game/gm_resolution_decision.py",
+    "function": "remember_temporal_claims",
+    "line": 4154,
+    "end": 4216,
+    "args": "session: dict[str, Any] | None, *, claims: Sequence[Mapping[str, Any]] | None, scene_id: str | None=None, source_turn: int | None=None, cap: int=24"
+  },
+  {
+    "module": "game/immutable_valid_response.py",
+    "function": "validate_generated_response",
+    "line": 623,
+    "end": 815,
+    "args": "text: str | None, *, contract: Mapping[str, Any] | None=None, decision: Mapping[str, Any] | None=None, declared_claims: list[Mapping[str, Any]] | None=None, player_text: str | None=None, resolution: Mapping[str, Any] | None=None, referents: list[Mapping[str, Any]] | None=None, authored_corpus: str='', present_addressee: str='', dead_actor_labels: list[str] | None=None"
+  },
+  {
+    "module": "game/immutable_valid_response.py",
+    "function": "run_preserve_if_valid",
+    "line": 1609,
+    "end": 2188,
+    "args": "gm: dict[str, Any], *, regenerate: Callable[[str], dict[str, Any] | None] | None, resolution: Mapping[str, Any] | None, player_text: str, scene: Mapping[str, Any] | None=None, world: Mapping[str, Any] | None=None, session: Mapping[str, Any] | None=None, referents: list[Mapping[str, Any]] | None=None, authored_corpus: str='', present_addressee: str='', dead_actor_labels: list[str] | None=None, visible_facts: list[str] | None=None"
+  },
+  {
+    "module": "game/narration_visibility.py",
+    "function": "_normalized_fact_match_kind",
+    "line": 373,
+    "end": 380,
+    "args": "normalized_text: str, fact: str"
+  },
+  {
+    "module": "game/narration_visibility.py",
+    "function": "validate_player_facing_visibility",
+    "line": 1227,
+    "end": 1320,
+    "args": "text: str, *, session: Dict[str, Any] | None, scene: Dict[str, Any] | None, world: Dict[str, Any] | None"
+  },
+  {
+    "module": "game/narration_visibility.py",
+    "function": "build_narration_visibility_contract",
+    "line": 1338,
+    "end": 1388,
+    "args": "*, session: Dict[str, Any] | None, scene: Dict[str, Any] | None, world: Dict[str, Any] | None"
+  },
+  {
+    "module": "game/narrative_authority.py",
+    "function": "build_narrative_authority_contract",
+    "line": 197,
+    "end": 342,
+    "args": "*, resolution: Mapping[str, Any] | None, narration_visibility: Mapping[str, Any] | None, scene_state_anchor_contract: Mapping[str, Any] | None, speaker_selection_contract: Mapping[str, Any] | None, session_view: Mapping[str, Any] | None=None"
+  },
+  {
+    "module": "game/narrative_authority.py",
+    "function": "validate_narrative_authority",
+    "line": 548,
+    "end": 689,
+    "args": "text: str, contract: Mapping[str, Any], *, resolution: Mapping[str, Any] | None=None, player_text: str | None=None"
+  },
+  {
+    "module": "game/bounded_improvisation.py",
+    "function": "validate_bounded_improvisation_proposal",
+    "line": 230,
+    "end": 316,
+    "args": "proposal: Mapping[str, Any], *, session: Mapping[str, Any] | None, scene: Mapping[str, Any] | None, world: Mapping[str, Any] | None, resolution: Mapping[str, Any] | None=None"
+  },
+  {
+    "module": "game/bounded_improvisation.py",
+    "function": "promote_accepted_bounded_improvisation",
+    "line": 402,
+    "end": 450,
+    "args": "gm: Mapping[str, Any] | None, *, session: dict[str, Any], scene: Mapping[str, Any] | None, world: Mapping[str, Any] | None, resolution: Mapping[str, Any] | None=None"
+  },
+  {
+    "module": "game/ctir_runtime.py",
+    "function": "build_runtime_ctir_for_narration",
+    "line": 303,
+    "end": 336,
+    "args": "*, turn_id: Any, scene_id: str | None, player_input: str, builder_source: str, resolution: dict | None, normalized_action: dict | None, combat: dict | None, session: dict | None, world: dict | None=None"
+  },
+  {
+    "module": "game/prompt_context.py",
+    "function": "build_narration_context",
+    "line": 1527,
+    "end": 3000,
+    "args": "campaign: Dict[str, Any], world: Dict[str, Any], session: Dict[str, Any], character: Dict[str, Any], scene: Dict[str, Any], combat: Dict[str, Any], recent_log: List[Dict[str, Any]], user_text: str, resolution: Dict[str, Any] | None, scene_runtime: Dict[str, Any] | None, *, public_scene: Dict[str, Any], discoverable_clues: List[str], gm_only_hidden_facts: List[str], gm_only_discoverable_locked: List[str], discovered_clue_records: List[Dict[str, Any]], undiscovered_clue_records: List[Dict[str, Any]], pending_leads: List[Any], intent: Dict[str, Any], world_state_view: Dict[str, Any], mode_instruction: str, recent_log_for_prompt: List[Dict[str, Any]], uncertainty_hint: Dict[str, Any] | None=None, prompt_profile: str='full', include_non_public_prompt_keys: bool=False"
+  }
+]

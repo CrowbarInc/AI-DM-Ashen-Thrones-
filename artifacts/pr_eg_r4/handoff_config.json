@@ -1,0 +1,1794 @@
+{
+  "campaign_id": "pr_eg_r4_conversational_playability_20261017",
+  "campaign_name": "PR-EG-R4 — Conversational Playability Qualification",
+  "campaign_date": "2026-10-17",
+  "purpose": "Evaluate integrated adaptive NPC conversation without changing production behavior; stop after R4.",
+  "executive_summary": "**D — CRITICAL ARCHITECTURAL OR INTEGRITY BLOCKER.**\n\nObserved 69 qualification turns in 5 conversations; 4 reached 15 turns. Dialogue quality ≥2: 2/69 (2.9%). Playability ≥2: 1/69 (1.4%).\n\nThe stopped sample does not support ordinary conversational playability. Most exchanges expose command or authorization handling, lose a clear addressee/subject, or repeat an irrelevant authored fact. A critical post-rejection delivery bypass requires a D verdict before the planned personal scene or remaining profiles can run. This is a specific integrity finding, not evidence of a leaked secret or corrupted world fact.\n\nDo not close PR-EG. Recommend a narrowly scoped PR-EG-R4-R1 repair of post-gate authoritative-fact preservation: honor final rejection, keep speaker/target authority aligned, and validate the actual emitted text before history commit. Require a production-path regression for the preserved B_skeptical turn 9 and then rerun the full 180-turn adaptive qualification. Do not implement this in R4; await external review.",
+  "objective_status": "D — CRITICAL ARCHITECTURAL OR INTEGRITY BLOCKER",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Unchanged relevant regression baseline; adaptive fresh-provider evaluation."
+    ],
+    "tooling": [
+      "Evaluation runner and evidence report builder."
+    ],
+    "documentation": [
+      "27 required reports and CURRENT_REVIEW."
+    ],
+    "generated_artifacts": [
+      "Frozen protocol, transcripts, per-turn state, scores, metrics, audits and source provenance."
+    ]
+  },
+  "testing": {
+    "focused": "No regression expectations changed.",
+    "broader": "{'passed': 692, 'failed': 25}",
+    "full_suite": "Not run; relevant historical family only.",
+    "runtime_validation": "69 fresh adaptive production HTTP turns.",
+    "model_runtime_boundary": "Fresh OpenAI Responses API; separate gpt-4.1 evaluator; exact returned model IDs in logs.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "25 inherited identities."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "The stopped sample does not support ordinary conversational playability. Most exchanges expose command or authorization handling, lose a clear addressee/subject, or repeat an irrelevant authored fact. A critical post-rejection delivery bypass requires a D verdict before the planned personal scene or remaining profiles can run. This is a specific integrity finding, not evidence of a leaked secret or corrupted world fact."
+    ],
+    "pre_existing": [
+      "25 predecessor relevant-suite failures."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review R4 evidence and recommended next cycle before proceeding."
+  ],
+  "missing_concepts": [
+    "Any broader architecture review requires separate authorization after external review."
+  ],
+  "does_not_prove": [
+    "Population-wide reliability or statistical certainty.",
+    "Full repository regression success.",
+    "Unrestricted improvisation or full process-restart continuity."
+  ],
+  "recommended_next_step": "Do not close PR-EG. Recommend a narrowly scoped PR-EG-R4-R1 repair of post-gate authoritative-fact preservation: honor final rejection, keep speaker/target authority aligned, and validate the actual emitted text before history commit. Require a production-path regression for the preserved B_skeptical turn 9 and then rerun the full 180-turn adaptive qualification. Do not implement this in R4; await external review. Stop after PR-EG-R4 and await external review.",
+  "primary_report": "artifacts/pr_eg_r4/01_EXECUTIVE_SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r4/01_EXECUTIVE_SUMMARY.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/03_EVALUATION_METHODOLOGY.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/04_SCENE_DEFINITIONS.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/05_SIMULATED_PLAYER_PROFILES.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/06_PLAYER_GENERATION_METHOD.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/07_CONVERSATION_INVENTORY.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/08_COMPLETE_CONVERSATION_TRANSCRIPTS.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/09_TURN_LEVEL_SCORING.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/10_PLAYABILITY_SCORING.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/11_CONVERSATIONAL_RECOVERY_ANALYSIS.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/12_INFORMATION_INTEGRITY_AUDIT.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/13_CONTINUITY_AUDIT.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/14_CHARACTERIZATION_ASSESSMENT.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/15_PLAYER_FREEDOM_ASSESSMENT.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/16_PROVIDER_PERFORMANCE.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/17_REGRESSION_BASELINE.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/18_INDEPENDENT_EVALUATION_METHOD.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/19_FAILURE_TAXONOMY_RESULTS.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/20_FAILURE_CLUSTERING.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/21_SEVERITY_AND_PRIORITY_RANKING.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/22_CONVERSATION_LEVEL_ASSESSMENTS.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/23_ACCEPTANCE_GATE_RESULTS.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/24_ROOT_CAUSE_HYPOTHESES.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/25_RECOMMENDED_NEXT_ACTION.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/26_FINAL_VERDICT.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/27_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/acceptance_gates.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/agent_audit.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/auxiliary_calls.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/auxiliary_usage_totals.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/campaign_usage.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/critical_stop_evidence.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/dependency_versions.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/engine_budget_final.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/engine_usage.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/environment.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/evaluation_events.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/failure_counts.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/freeze.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/history_gap_monitor_pause.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/initial_git_status.txt",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/metrics.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/playability_metrics.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_payload_audit.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/preservation_check.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/progress.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/protocol.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/regression_comparison.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/regression_output.txt",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/regression_restored_outputs.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/regression_run.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/regression_selection.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/relevant_junit.xml",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/reload_checks.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/request.txt",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/review_audit.py",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/root_turn_annotations.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/sandbox_regression_stall.txt",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/scorer_comparison.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/scores.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/stop.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/stressor_coverage.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/turns.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/auxiliary_calls.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/auxiliary_usage_totals.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/engine_budget_final.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/engine_usage.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/preservation_check.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/progress.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/root_scores.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/scores.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/stop.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/turns.jsonl",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_casual_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_cooperative_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_curious_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/A_playful_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/player_inputs/B_skeptical_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_casual_initial.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_cooperative_initial.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_curious_initial.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_10.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_11.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_12.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_13.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_14.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_15.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/A_playful_initial.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_04.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_05.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_06.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_07.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_08.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_09.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/states/B_skeptical_initial.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/transcripts/A_casual.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/transcripts/A_cooperative.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/transcripts/A_curious.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/transcripts/A_playful.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/transcripts/B_skeptical.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/player_inputs/A_cooperative_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/player_inputs/A_cooperative_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/player_inputs/A_cooperative_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/states/A_cooperative_01.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/states/A_cooperative_02.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/states/A_cooperative_03.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/states/A_cooperative_initial.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r4/interrupted_monitor_run/transcripts/A_cooperative.json",
+      "role": "qualification_evidence",
+      "why": "PR-EG-R4 evaluation, provenance or transcript evidence",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/api_turn_support.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/noncombat_resolution.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/social.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/ordinary_semantic_ownership.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/interaction_completion.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/storage.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r4.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/report_pr_eg_r4.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_ef_gm_authority.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_du_player_pipeline.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/helpers/turn_pipeline_http_fixtures.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_dq/world.py",
+      "role": "source",
+      "why": "Evaluated production path or evaluation setup source",
+      "human_review_required": true
+    }
+  ],
+  "max_file_bytes": 83886080,
+  "warn_bundle_bytes": 20971520,
+  "self_contained_review_test": "Manifest hashes and all 27 reports verified in bundle_verification.json; inherited backup and credentials excluded."
+}

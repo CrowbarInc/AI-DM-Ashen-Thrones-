@@ -1,0 +1,747 @@
+[
+  {
+    "n": 1,
+    "player": "I approach the tavern runner, buy a bowl of stew, and ask, “Who went missing with that patrol?”",
+    "op": "ask",
+    "target": "Tavern Runner",
+    "interlocutor": "tavern_runner",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I carry the stew to the gate serjeant, offer the bowl with a smile, and ask, \"Who was on the missing patrol, and what favor would loosen the roster?\"",
+    "op": "ask",
+    "target": "Gate Serjeant",
+    "interlocutor": "gate_serjeant",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Tavern Runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "I drift over to the threadbare watcher and murmur, \"You watch packs more than gates—did you notice anyone following the patrol before it vanished?\"",
+    "op": "ask",
+    "target": "Tavern Runner",
+    "interlocutor": "gate_serjeant",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "discourse_inheritance",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Tavern Runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I follow the watcher gaze to the clustered packs and ask softly, \"Then forget the patrol—which movement in this crowd worries you right now?\"",
+    "op": "ask",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "softly",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:personhood_unresolved"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I leave the silent watcher be and examine the notice board closely, lifting the corners of the fresh tax and curfew sheets to see what older notices they cover.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "I inspect the waiting wagon wheels for the distinctive mud of that northwest track, then ask the likeliest driver, \"Come through there today—anything odd along the way?\"",
+    "op": "unresolved",
+    "target": null,
+    "interlocutor": "inc_dbd4f71091",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": null,
+    "bound": "inc_dbd4f71091",
+    "entity_id": "inc_dbd4f71091",
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "unresolved_compound_intent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I crouch beside his wagon and ask permission to sift a little mud from the axle for leaves, fibers, or metal scraps caught near the old milestone.",
+    "op": "ask",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "permission",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:personhood_unresolved"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "I stand, point to the axle, and ask the driver who just answered me, \"Is this one yours? I will clean the axle while I look, if that makes the poking worthwhile.\"",
+    "op": "ask",
+    "target": "likeliest driver",
+    "interlocutor": "inc_dbd4f71091",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": null,
+    "bound": "inc_dbd4f71091",
+    "entity_id": "inc_dbd4f71091",
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_dbd4f71091",
+      "label": "likeliest driver",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know why their old route changed?\"",
+    "op": "act",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": "appearance",
+    "dimensions": [
+      "appearance"
+    ],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "discourse_inheritance",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "unsolicited_npc_speech"
+    ],
+    "regen": true,
+    "regen_feedback": "The previous attempt was rejected for: unsolicited_npc_speech. The response assigns the answer to the wrong speaker. Preserve the bound interlocutor. Do not answer as a different person, and do not turn an observation into unrelated NPC speech. Keep the same resolution contract, operation, target, and dimension. Answer again. Do not rewrite a name into the previous sentence.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "inc_dbd4f71091",
+      "label": "likeliest driver",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_4e726954de90",
+      "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "live_bounded_improvisation_proposal",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "I step back from the silent door and study the rain-softened footprints and carriage tracks leaving the townhouse, following whichever fresh trail leads toward the gate.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "gate",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "consequential_invention"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "consequential_invention"
+    ],
+    "rejected2": [
+      "consequential_invention"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 11,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_4e726954de90",
+      "label": "I abandon the mysterious ownerless wheel, cross to the townhouse, and knock beneath its noble colors, asking, \"Does this house sponsor the gate patrols—or know",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "threadbare_watcher"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 2,
+    "ledger_rejected_count": 0
+  }
+]

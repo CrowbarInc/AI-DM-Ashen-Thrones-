@@ -1,0 +1,113 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "doss",
+      "name": "Doss",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "nia_doss",
+          "text": "Nia told Doss the fever started at dusk.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "doss_nia",
+          "text": "Doss told Nia the fever broke at dawn.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "willow",
+          "text": "The willow poultice cools a mild fever.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "cupboard",
+          "text": "The locked antidote is in the blue cupboard.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "nia",
+      "name": "Nia",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "band",
+          "text": "The linen bands are boiled at morning.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "plague",
+          "text": "Villagers fear a plague in the lower ward.",
+          "epistemic": "rumor"
+        },
+        {
+          "id": "cupboard",
+          "text": "The locked antidote is in the blue cupboard.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard",
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "wary",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "live_calls": 0,
+  "focused_social_phrases": {
+    "passed": true,
+    "phrases": [
+      "I ask the baker which loaf he recommends.",
+      "I turn to the guard and ask who passed through.",
+      "I ask the merchant whether the shop is open.",
+      "What happened to the patrol?",
+      "What have you heard?",
+      "Where are you?",
+      "I talk to the tavern runner.",
+      "Tell me plainly.",
+      "I persuade the gate guard to let me pass.",
+      "Who attacked them? with interlocutor gate_guard"
+    ],
+    "result": "resolver social, operation ask, subject social; the follow-up keeps interlocutor gate_guard"
+  },
+  "scene_focus_does_not_socialize_a_wait": true,
+  "suites": {
+    "tests/test_social_question_relevance_answer_selection.py": "25 passed, 0 failed",
+    "tests/test_pr_cc_social_reply_reconciliation.py": "11 passed, 0 failed",
+    "tests/test_pr_ce_subjective_preference_classification.py": "13 passed, 0 failed",
+    "tests/test_directed_social_routing.py": "34 passed, 0 failed",
+    "tests/test_listen_question_not_social_capture.py": "8 passed, 0 failed",
+    "tests/test_pr_br_continuation25_semantic_ownership.py": "9 passed, 0 failed",
+    "tests/test_pr_br_continuation27_structural_subject.py": "13 passed, 0 failed"
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "label": "P1_retry",
+    "hard_valid": true,
+    "reason_codes": [
+      "authorized_qualified_inference",
+      "unknown_cause_actor_or_time"
+    ],
+    "narration_validation_set": true
+  },
+  {
+    "label": "P1_initial",
+    "hard_valid": false,
+    "reason_codes": [
+      "unauthorized_causal_relation",
+      "unsupported_narrator_lead",
+      "accepted_bounded_declared_inference",
+      "authorized_qualified_inference"
+    ],
+    "narration_validation_set": true
+  },
+  {
+    "label": "P2_initial",
+    "hard_valid": false,
+    "reason_codes": [
+      "unauthorized_declared_claim"
+    ],
+    "narration_validation_set": false
+  },
+  {
+    "label": "P3_initial",
+    "hard_valid": true,
+    "reason_codes": [
+      "accepted_declared_realization"
+    ],
+    "narration_validation_set": true
+  }
+]

@@ -1,0 +1,73 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T09:57:02.054206Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T09:57:02.054206Z",
+    "conversational_context": {
+      "pending_clarification": {
+        "kind": "missing_destination",
+        "operation": "MOVE",
+        "original_text": "I leave.",
+        "choices": [
+          {
+            "entity_id": "courtyard_gate",
+            "label": "Courtyard gate"
+          }
+        ],
+        "scene_id": "waystation_courtyard"
+      },
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I leave.",
+          "delivered_text": "Where are you trying to go?",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Move or leave the current situation.",
+        "response": "Where are you trying to go?",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "a9547189f1ad7c871387c6265514421280a2ca5b48f71dbbd17f5a34180f3157",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

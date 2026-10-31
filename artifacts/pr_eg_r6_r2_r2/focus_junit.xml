@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="10" skipped="0" tests="140" time="2.930" timestamp="2026-10-17T18:42:19.936483-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[None]" time="1.031" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad2]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad3]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad4]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad5]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad6]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad7]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad8]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_schema_rejects_malformed[bad9]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[speaker]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[recipient]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[topic]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[instrument]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[beneficiary]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[message_content]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_open_bounded_role_vocabulary[unfamiliar_role]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_grounding_rejects_forgery[value]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_grounding_rejects_forgery[entity_id]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_grounding_rejects_forgery[evidence]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_missing_role_is_partial[speaker]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_missing_role_is_partial[recipient]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_missing_role_is_partial[topic]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_missing_role_is_partial[message_content]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_conflicts_are_nonanswers[predicate-own]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_conflicts_are_nonanswers[negated-True]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_conflicts_are_nonanswers[temporal-tomorrow]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_coverage_conflicts_are_nonanswers[spatial-quay]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_full_role_coverage" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_reversal_preserves_topic_and_requested_content" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_delta_requires_exact_supported_changes[names0]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_delta_requires_exact_supported_changes[names1]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_delta_requires_exact_supported_changes[names2]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_role_delta_requires_exact_supported_changes[names3]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_existing_statuses_roundtrip_and_rejection_keeps_focus[direct]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_existing_statuses_roundtrip_and_rejection_keeps_focus[partial]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_existing_statuses_roundtrip_and_rejection_keeps_focus[unknown]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_partial_named_extension_rejected[roles]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_partial_named_extension_rejected[requested_role]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_requested_role_syntax[bad role]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_requested_role_syntax[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_requested_role_syntax[Speaker]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_requested_role_syntax[]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_operation_taxonomy_schema[information_question]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_operation_taxonomy_schema[correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_operation_taxonomy_schema[follow_up]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_operation_taxonomy_schema[clarification_response]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_operation_taxonomy_schema[reference_to_prior_speech]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_operation_taxonomy_schema[other]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_malformed_operation_is_uncertainty_not_player_ambiguity" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_unwitnessed_qualifier_rejected[temporal]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_unwitnessed_qualifier_rejected[spatial]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_unwitnessed_qualifier_rejected[epistemic]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_legacy_binary_read_does_not_invent_roles" time="0.000" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_named_proposition_schema_and_serialization" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r2_operations" name="test_named_role_reversal_is_not_direct_answer" time="0.000" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_stable_identity_and_sealed_history" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_identity_unique_across_conversations" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_answer_status_preserves_focus[unknown]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_answer_status_preserves_focus[partial]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_answer_status_preserves_focus[direct]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_object_correction_is_bounded_and_lineage_is_immutable" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_corrections_preserve_unmodified_slots[predicate-owns-replace_relationship-No, who owns it?]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_corrections_preserve_unmodified_slots[temporal-tomorrow-replace_qualifier-I meant tomorrow.]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_corrections_preserve_unmodified_slots[spatial-north-replace_qualifier-I meant in the north.]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_subject_replacement_and_role_reversal" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_follow_up_after_uncertainty_retains_original_focus[source_attribution-Who told you?]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_follow_up_after_uncertainty_retains_original_focus[explanation-Why told?]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_follow_up_after_uncertainty_retains_original_focus[evidence-How do you know who told?]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_follow_up_after_uncertainty_retains_original_focus[speech_clarification-What did you mean by told?]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_follow_up_after_partial_preserves_partial_status" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_temporal_follow_up_inherits_proposition" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_ambiguous_or_ungrounded_alternative_clarifies[-]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_ambiguous_or_ungrounded_alternative_clarifies[night ledger-invented]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_multiple_questions_and_explicit_older_target" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[forged]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'forged'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'cross_conversation'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[stale]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'stale'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[speaker]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'speaker'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[field]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'field'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[operation]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'operation'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'unwitnessed'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_untrusted_operations_fail_closed_without_losing_focus[substitution]" time="0.002"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">attack = 'substitution'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+&gt;       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_prior_entity_cannot_be_replaced_by_unrelated_follow_up" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_addressee_replacement_requires_explicit_grounding" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_mentioned_npc_never_becomes_addressee" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_save_load_preserves_identity_and_next_revision" time="0.030" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_legacy_save_compatibility_is_noncanonical" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_retry_idempotence" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_no_commit_before_verified_delivery_or_on_rejection" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_retention_pins_active_question_and_compacts_history" time="0.062" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_referents_never_grant_disclosure_or_create_facts[secret]" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_referents_never_grant_disclosure_or_create_facts[restricted]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_referents_never_grant_disclosure_or_create_facts[private]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_gate_off_creates_no_referents" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_all_frozen_holdouts_unchanged" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_structured_schema_requires_all_declared_properties" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_unqualified_historical_id_cannot_override_focus" time="0.002"><failure message="KeyError: 'bound_referent_id'">def test_unqualified_historical_id_cannot_override_focus():
+        session, first = seeded()
+        deliver(session,resolve(session,question(prop(object='night ledger',object_evidence='night ledger')),
+            text='Mara, who keeps the night ledger?'),2)
+        locked=resolve(session,follow(first),text='Who told you?')
+&gt;       assert locked['bound_referent_id']==refs.active(session)['referent_id']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'bound_referent_id'
+
+tests\test_pr_eg_r6_r2_r1_referents.py:323: KeyError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_valid_alternative_is_grounded_and_preserves_predicate" time="0.002" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_rejected_delivery_never_commits_referent" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_http_delivery_save_load_and_correction_use_same_referent[unknown]" time="0.290" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_http_delivery_save_load_and_correction_use_same_referent[partial]" time="0.211" /><testcase classname="tests.test_pr_eg_r6_r2_r1_referents" name="test_http_delivery_save_load_and_correction_use_same_referent[direct]" time="0.216" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_direct_semantic_answer" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_vocative_separates_mentions[Mara, what did Oren say about the road?-mara-oren]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_vocative_separates_mentions[Oren, what did Mara say about the road?-oren-mara]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_no_address_invented_from_mentions[What did Mara tell Oren?]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_no_address_invented_from_mentions[Sable, what did Oren say?]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_shared_alias_remains_ambiguous" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_argument_substitution_rejected[object-night ledger-night ledger]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_argument_substitution_rejected[subject-Oren-Oren]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_night_drum_not_ledger_in_compatibility_adapter" time="0.000" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_road_name_is_not_informant" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_paraphrased_relationship_without_shared_stems" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_qualifier_mismatch_is_not_direct[temporal-tomorrow]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_qualifier_mismatch_is_not_direct[spatial-north]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_qualifier_mismatch_is_not_direct[negated-True]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_partial_requires_same_relationship" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_epistemic_qualification_not_promoted[rumor]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_epistemic_qualification_not_promoted[belief]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_relevance_never_grants_disclosure[secret]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_relevance_never_grants_disclosure[restricted]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_relevance_never_grants_disclosure[private]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_forged_source_id_cannot_select_text" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_forged_authority_or_entity_rejected[change0]" time="0.001"><failure message="AssertionError: assert 'unknown' == 'clarification'&#10;  &#10;  - clarification&#10;  + unknown">change = {'canonical_fact': 'invented'}
+
+    @pytest.mark.parametrize('change',[
+     {'canonical_fact':'invented'},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'phantom','reference':'Sable','evidence':'Sable'}]},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'oren','reference':'Oren','evidence':'Oren'}]},
+    ])
+    def test_forged_authority_or_entity_rejected(change):
+        plan=proposal();plan.update(change)
+        p=ask(plan)
+&gt;       assert p['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:154: AssertionError</failure></testcase><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_forged_authority_or_entity_rejected[change1]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_forged_authority_or_entity_rejected[change2]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_unwitnessed_source_interpretation_rejected[predicate_evidence]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_unwitnessed_source_interpretation_rejected[subject_evidence]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_unwitnessed_source_interpretation_rejected[object_evidence]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_provider_confidence_cannot_upgrade_unknown" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_entity_only_correction_preserves_relation" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_structured_continuity_is_not_lexically_rewritten[correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_structured_continuity_is_not_lexically_rewritten[follow_up]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_bad_prior_target_cannot_launder_history[correction]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_bad_prior_target_cannot_launder_history[follow_up]" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_history_is_not_candidate_source" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_candidate_prompt_excludes_restricted_text" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_save_load_keeps_proposition_and_roles" time="0.001" /><testcase classname="tests.test_pr_eg_r6_r2_grounding" name="test_frozen_inputs_unchanged" time="0.001" /></testsuite></testsuites>

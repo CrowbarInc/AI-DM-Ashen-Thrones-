@@ -1,0 +1,154 @@
+[
+  {
+    "case": "valid",
+    "input": "{\"declared_claims\": [], \"narration\": \"Rain falls by the gate.\"}",
+    "output": {
+      "player_facing_text": "Rain falls by the gate.",
+      "tags": [],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Parsed model output.",
+      "metadata": {
+        "output_form": "structured",
+        "provider_response_contract": "structured_realization",
+        "realization_envelope": {
+          "schema_version": 1,
+          "provider_response_contract": "structured_realization",
+          "declared_claims": [],
+          "narration": "Rain falls by the gate.",
+          "structured_contract_present": true,
+          "legacy_fallback": false
+        }
+      }
+    }
+  },
+  {
+    "case": "fenced",
+    "input": "```json\n{\"declared_claims\": [], \"narration\": \"Rain falls by the gate.\"}\n```",
+    "output": {
+      "player_facing_text": "Rain falls by the gate.",
+      "tags": [],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Parsed model output.",
+      "metadata": {
+        "output_form": "structured",
+        "provider_response_contract": "structured_realization",
+        "realization_envelope": {
+          "schema_version": 1,
+          "provider_response_contract": "structured_realization",
+          "declared_claims": [],
+          "narration": "Rain falls by the gate.",
+          "structured_contract_present": true,
+          "legacy_fallback": false
+        }
+      }
+    }
+  },
+  {
+    "case": "plain",
+    "input": "You stand beside the gate in the rain.",
+    "output": {
+      "player_facing_text": "",
+      "tags": [
+        "structured_output_rejected",
+        "structured_contract_failure"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Structured realization envelope required.",
+      "metadata": {
+        "output_form": "plain",
+        "structured_output_rejected": true,
+        "structured_contract_failure": true,
+        "structured_contract_reason": "missing_structured_envelope",
+        "provider_response_contract": "structured_realization",
+        "legacy_fallback": false
+      }
+    }
+  },
+  {
+    "case": "truncated_declarations",
+    "input": "{\"declared_claims\": [",
+    "output": {
+      "player_facing_text": "",
+      "tags": [
+        "structured_output_rejected",
+        "structured_contract_failure"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Structured realization envelope required.",
+      "metadata": {
+        "output_form": "plain",
+        "structured_output_rejected": true,
+        "structured_contract_failure": true,
+        "structured_contract_reason": "missing_structured_envelope",
+        "provider_response_contract": "structured_realization",
+        "legacy_fallback": false
+      }
+    }
+  },
+  {
+    "case": "narration_only",
+    "input": "{\"narration\":\"Rain falls by the gate.\"}",
+    "output": {
+      "player_facing_text": "",
+      "tags": [
+        "structured_output_rejected",
+        "structured_contract_failure"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Structured realization envelope required.",
+      "metadata": {
+        "output_form": "malformed",
+        "structured_output_rejected": true,
+        "structured_contract_failure": true,
+        "structured_contract_reason": "malformed_envelope",
+        "provider_response_contract": "structured_realization",
+        "legacy_fallback": false
+      }
+    }
+  },
+  {
+    "case": "valid_embedded_in_prose",
+    "input": "Here is the response: {\"declared_claims\":[],\"narration\":\"Rain falls by the gate.\"}",
+    "output": {
+      "player_facing_text": "",
+      "tags": [
+        "structured_output_rejected",
+        "structured_contract_failure"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "Structured realization envelope required.",
+      "metadata": {
+        "output_form": "malformed",
+        "structured_output_rejected": true,
+        "structured_contract_failure": true,
+        "structured_contract_reason": "malformed_envelope",
+        "provider_response_contract": "structured_realization",
+        "legacy_fallback": false
+      }
+    }
+  }
+]

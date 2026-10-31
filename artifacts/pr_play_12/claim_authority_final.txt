@@ -1,0 +1,131 @@
+........................................................................ [ 53%]
+......................F........F.......FF.FF.......F........F.           [100%]
+================================== FAILURES ===================================
+________________ test_false_positive_controls_remain_speakable ________________
+tests\test_pr_br_claim_control_slice2.py:146: in test_false_positive_controls_remain_speakable
+    assert _audit(text, decision)["hard_valid"] is True, text
+E   AssertionError: The damage alone doesn't identify who worked on the lock.
+E   assert False is True
+_________ test_call_gpt_provider_failure_metadata_has_provider_family _________
+tests\test_realization_provenance.py:105: in test_call_gpt_provider_failure_metadata_has_provider_family
+    out = gm.call_gpt([{"role": "user", "content": "hello"}])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\helpers\live_model_guard.py:73: in _blocked_call
+    raise LiveModelCallForbidden("game.gm.call_gpt")
+E   tests.helpers.live_model_guard.LiveModelCallForbidden: Unexpected live model/API client use during a deterministic test.
+E   site: game.gm.call_gpt
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 372, in _main
+E       config.hook.pytest_runtestloop(session=session)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\main.py", line 396, in pytest_runtestloop
+E       item.config.hook.pytest_runtest_protocol(item=item, nextitem=nextitem)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 118, in pytest_runtest_protocol
+E       runtestprotocol(item, nextitem=nextitem)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 137, in runtestprotocol
+E       reports.append(call_and_report(item, "call", log))
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 244, in call_and_report
+E       call = CallInfo.from_call(
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 353, in from_call
+E       result: TResult | None = func()
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 245, in <lambda>
+E       lambda: runtest_hook(item=item, **kwds),
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\runner.py", line 179, in pytest_runtest_call
+E       item.runtest()
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\python.py", line 1720, in runtest
+E       self.ihook.pytest_pyfunc_call(pyfuncitem=self)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_hooks.py", line 512, in __call__
+E       return self._hookexec(self.name, self._hookimpls.copy(), kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_manager.py", line 120, in _hookexec
+E       return self._inner_hookexec(hook_name, methods, kwargs, firstresult)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\pluggy\_callers.py", line 121, in _multicall
+E       res = hook_impl.function(*args)
+E     File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\python.py", line 166, in pytest_pyfunc_call
+E       result = testfunction(**testargs)
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_play_12\sandbox\tests\test_realization_provenance.py", line 105, in test_call_gpt_provider_failure_metadata_has_provider_family
+E       out = gm.call_gpt([{"role": "user", "content": "hello"}])
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_play_12\sandbox\tests\helpers\live_model_guard.py", line 73, in _blocked_call
+E       raise LiveModelCallForbidden("game.gm.call_gpt")
+E     File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\artifacts\pr_play_12\sandbox\tests\helpers\live_model_guard.py", line 30, in __init__
+E       stack = "".join(traceback.format_stack(limit=25))
+________ test_general_written_surface_question_discovers_authored_clue ________
+tests\test_investigation_result_provenance_non_invention.py:259: in test_general_written_surface_question_discovers_authored_clue
+    assert (data.get("resolution") or {}).get("kind") == "discover_clue"
+E   assert None == 'discover_clue'
+E    +  where None = <built-in method get of dict object at 0x000001A0E751A600>('kind')
+E    +    where <built-in method get of dict object at 0x000001A0E751A600> = ({'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]}).get
+E    +      where {'metadata': {'adjudication_resolver_family': None, 'communication_mode': 'AUTO', 'contract_before_resolver': True, 'c...': 'faction_pressure'}, {'source': 'ash_cowl', 'text': "The Ash Cowl's pressure mounts.", 'type': 'faction_pressure'}]} = <built-in method get of dict object at 0x000001A0E73F5C40>('resolution')
+E    +        where <built-in method get of dict object at 0x000001A0E73F5C40> = {'campaign': {'campaign_structure': 'A sandbox political world where the player gradually establishes a locus of power..., 'combat': {'active_actor_id': None, 'in_combat': False, 'initiative_order': [], 'player_turn_used': False, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+________________ test_general_visible_evidence_may_be_reported ________________
+tests\test_investigation_result_provenance_non_invention.py:269: in test_general_visible_evidence_may_be_reported
+    assert "cooper" in text or "bench" in text
+E   AssertionError: assert ('cooper' in 'a silver locket names the night buyer.' or 'bench' in 'a silver locket names the night buyer.')
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_general_valid_target_no_evidence_is_grounded_absence __________
+tests\test_investigation_result_provenance_non_invention.py:304: in test_general_valid_target_no_evidence_is_grounded_absence
+    assert SUSPICIOUS_TITLE.lower() not in _facing(data).lower()
+E   AssertionError: assert 'details on ... assignment.' not in 'details on ... assignment.'
+E     
+E     'details on the exa... patrol assignment.' is contained here:
+E       details on the exact timing and personnel of the missing patrol assignment.
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_general_requested_identity_absent_does_not_mint_person _________
+tests\test_investigation_result_provenance_non_invention.py:316: in test_general_requested_identity_absent_does_not_mint_person
+    assert "cooper hale" not in blob
+E   AssertionError: assert 'cooper hale' not in 'the last us... at dusk. []'
+E     
+E     'cooper hale' is contained here:
+E       the last user was cooper hale, who left at dusk. []
+E     ?                   +++++++++++
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________ test_general_observe_empty_target_does_not_invent ______________
+tests\test_investigation_result_provenance_non_invention.py:443: in test_general_observe_empty_target_does_not_invent
+    assert "duke" not in _facing(data).lower()
+E   assert 'duke' not in "a sealed do...ke's killer."
+E     
+E     'duke' is contained here:
+E       a sealed dossier names the duke's killer.
+E     ?                            ++++
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing ______
+tests\test_investigation_result_provenance_non_invention.py:578: in test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing
+    assert "exact timing" not in facing
+E   AssertionError: assert 'exact timing' not in 'details on ... assignment.'
+E     
+E     'exact timing' is contained here:
+E       details on the exact timing and personnel of the missing patrol assignment.
+E     ?                ++++++++++++
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] notice_patrol_route
+[PROMPT] fresh campaign prompt constructed
+=========================== short test summary info ===========================
+FAILED tests/test_pr_br_claim_control_slice2.py::test_false_positive_controls_remain_speakable
+FAILED tests/test_realization_provenance.py::test_call_gpt_provider_failure_metadata_has_provider_family
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_written_surface_question_discovers_authored_clue
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_visible_evidence_may_be_reported
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_valid_target_no_evidence_is_grounded_absence
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_requested_identity_absent_does_not_mint_person
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_general_observe_empty_target_does_not_invent
+FAILED tests/test_investigation_result_provenance_non_invention.py::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing

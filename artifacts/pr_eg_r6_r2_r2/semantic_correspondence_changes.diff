@@ -1,0 +1,75 @@
+--- pre_edit/game/semantic_correspondence.py
++++ final/game/semantic_correspondence.py
+@@ -16,17 +16,24 @@
+     return {'type': 'object', 'additionalProperties': False, 'properties': properties, 'required': list(properties)}
+ 
+ 
+-def proposition_schema():
++def proposition_schema(named=False):
+     strings = ('predicate', 'predicate_evidence', 'subject', 'subject_evidence', 'object', 'object_evidence', 'missing_argument', 'temporal', 'spatial', 'epistemic', 'prior_reference')
+-    return object_schema({**{k: {'type': 'string'} for k in strings}, 'negated': {'type': 'boolean'}})
++    properties = {**{k: {'type': 'string'} for k in strings}, 'negated': {'type': 'boolean'}}
++    if named:
++        from game.semantic_operations import role_schema
++        for key in ('subject', 'subject_evidence', 'object', 'object_evidence', 'missing_argument'):
++            properties.pop(key)
++        properties.update(roles={'type': 'array', 'items': role_schema(), 'maxItems': 8},
++                          requested_role={'type': 'string', 'maxLength': 48})
++    return object_schema(properties)
+ 
+ 
+ def role_schema():
+     return object_schema({'role': {'type': 'string', 'enum': list(ROLES)}, 'entity_id': {'type': 'string'}, 'reference': {'type': 'string'}, 'evidence': {'type': 'string'}})
+ 
+ 
+-def source_schema():
+-    return object_schema({'source_id': {'type': 'string'}, 'proposition': proposition_schema()})
++def source_schema(named=False):
++    return object_schema({'source_id': {'type': 'string'}, 'proposition': proposition_schema(named)})
+ 
+ 
+ def normalize(value):
+@@ -36,10 +43,27 @@
+ def clean_proposition(raw: Any):
+     if not isinstance(raw, Mapping):
+         return None
+-    keys = set(proposition_schema()['properties'])
++    # An explicitly empty requested slot and an omitted requested slot are the
++    # same proposal. Normalize only this schema-equivalent representation.
++    if isinstance(raw.get('roles'), list) and isinstance(raw.get('requested_role'), str):
++        raw = dict(raw)
++        raw['roles'] = [r for r in raw['roles'] if not (
++            isinstance(r, dict) and set(r) == {'name', 'value', 'entity_id', 'evidence'}
++            and r['name'] == raw['requested_role'] and all(r[k] == '' for k in ('value', 'entity_id')))]
++    from game.semantic_operations import EXTENSIONS, NAME, clean_roles
++    named = bool(set(raw) & EXTENSIONS)
++    binary = {'subject', 'subject_evidence', 'object', 'object_evidence', 'missing_argument'}
++    if named and not set(raw) & binary:
++        raw = {**raw, **dict.fromkeys(binary, '')}
++    keys = set(proposition_schema()['properties']) | (EXTENSIONS if named else set())
+     if set(raw) != keys or not isinstance(raw.get('negated'), bool):
+         return None
+-    if any(not isinstance(raw[k], str) or len(raw[k]) > 160 for k in keys - {'negated'}):
++    if any(not isinstance(raw[k], str) or len(raw[k]) > 160 for k in keys - {'negated', 'roles'}):
++        return None
++    if named and (clean_roles(raw['roles']) is None or
++                  raw['requested_role'] and not NAME.fullmatch(raw['requested_role'])):
++        return None
++    if named and raw['requested_role'] in {r['name'] for r in raw['roles']}:
+         return None
+     if raw['missing_argument'] not in {'', 'subject', 'object', 'temporal', 'spatial', 'predicate'}:
+         return None
+@@ -84,6 +108,13 @@
+     """
+     if not witnessed(request, question, prior_text=prior_text) or not witnessed(source, source_text):
+         return 'unknown'
++    if 'roles' in request or 'roles' in source:
++        from game.semantic_operations import roles_witnessed, named_coverage
++        if 'roles' not in request or 'roles' not in source:
++            return 'unknown'
++        if not roles_witnessed(request, question, participants, prior_text) or not roles_witnessed(source, source_text, participants):
++            return 'unknown'
++        return named_coverage(request, source)
+     for prop in (request, source):
+         for slot in ('subject', 'object'):
+             if slot != prop['missing_argument'] and prop[slot] and not argument_identity(prop[slot], prop[slot + '_evidence'], participants):

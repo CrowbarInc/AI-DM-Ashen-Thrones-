@@ -1,0 +1,866 @@
+# ============================================================
+# PR-EG-R4-R1 — Final Speech Authority & Delivery Integrity
+# ============================================================
+#
+# ERA: Product Realization
+# CHAPTER: II
+# CYCLE: PR-EG-R4-R1
+# LANES: Architecture / AI / Validation / Gameplay
+# PRIORITY: CRITICAL
+# TYPE: Focused Integrity Repair & Qualification
+# PREDECESSOR: PR-EG-R4
+#
+# ============================================================
+# 0. MISSION
+# ============================================================
+#
+# Repair the critical final-response integrity defect
+# discovered during PR-EG-R4 conversational playability
+# qualification.
+#
+# Establish and enforce the following invariant:
+#
+# THE RESPONSE DELIVERED TO THE PLAYER MUST BE THE
+# RESPONSE AUTHORIZED BY THE FINAL DELIVERY GATE.
+#
+# No downstream operation may replace, rewrite,
+# embellish, or substitute the authorized response
+# without passing through a new complete authorization
+# and validation decision.
+#
+# The same invariant must apply to:
+#
+# - Player-facing API output.
+# - Delivered conversational history.
+# - NPC speech commitments.
+# - Persisted dialogue records.
+# - Save/load continuation.
+# - Any downstream response consumers.
+#
+# This is an integrity repair, not a conversational
+# quality improvement campaign.
+#
+# Do not attempt to make PR-EG conversationally
+# playable within this cycle.
+#
+# ============================================================
+# 1. BASELINE AND CRITICAL EVIDENCE
+# ============================================================
+#
+# PR-EG-R4 reported:
+#
+# - 69 completed player turns.
+# - 5 conversations started.
+# - 4 conversations reaching 15 turns.
+# - Dialogue quality >=2: 2/69.
+# - Playability >=2: 1/69.
+# - Recovery success: 1/11.
+# - Continuity success: 8/57.
+# - Relevant regression: 692 passed / 25 inherited
+#   failures.
+# - 1 critical speech-adoption bypass.
+# - No observed unauthorized canonical mutations.
+#
+# The evaluation stopped after discovering the
+# critical integrity defect.
+#
+# CRITICAL REPRODUCTION:
+#
+# Conversation: B_skeptical
+# Turn: 9
+#
+# PLAYER:
+#
+# "I mean both of your repeated statements about
+# the harbor bell. Could you please stop repeating
+# that and clearly answer: do either of you manage
+# ferry schedules and harbor coordination, or is
+# that someone else's job?"
+#
+# REJECTED CANDIDATE:
+#
+# Clerk Oren mutters,
+# "Word is, the bell beside the ferry is called
+# the harbor bell."
+#
+# REJECTION REASONS:
+#
+# - conflicting_target_authorities
+# - wrong_interlocutor
+#
+# ACCEPTED FALLBACK:
+#
+# "I cannot provide a validated response to that
+# request."
+#
+# ACTUALLY DELIVERED:
+#
+# "Clerk Oren answers: The bell beside the ferry
+# is called the harbor bell."
+#
+# OBSERVED:
+#
+# - Accepted provenance: rejected.
+# - Accepted immutable: false.
+# - Post-gate replacement applied: true.
+# - Final text differed from accepted text.
+# - Replacement entered delivered history.
+#
+# This violates the intended host-owned speech
+# adoption boundary.
+#
+# ============================================================
+# 2. NON-NEGOTIABLE REQUIREMENTS
+# ============================================================
+#
+# A. A rejected candidate must never become the
+#    final delivered response through downstream
+#    substitution.
+#
+# B. A rejected response must never be silently
+#    replaced by another unvalidated response.
+#
+# C. The final delivery gate must own the exact
+#    response authorized for delivery.
+#
+# D. Delivered history must record the exact
+#    authorized response.
+#
+# E. Speaker and addressee authority must remain
+#    consistent.
+#
+# F. No new world-state authority may be granted
+#    to narration or expression providers.
+#
+# G. Existing legitimate authorized dialogue must
+#    remain functional.
+#
+# H. Information-integrity protections from
+#    PR-EG-R2C and PR-EG-R3 must remain intact.
+#
+# ============================================================
+# 3. SCOPE
+# ============================================================
+#
+# IN SCOPE:
+#
+# - Final response selection.
+# - Response authorization.
+# - Response sealing / immutability.
+# - Post-validation transformations.
+# - Social-fact preservation.
+# - NPC speech ownership.
+# - Delivered-history recording.
+# - Response persistence.
+# - Save/load continuation.
+# - API response serialization.
+# - Adversarial integrity testing.
+#
+# OUT OF SCOPE:
+#
+# - General conversational quality.
+# - Natural-language interpretation improvements.
+# - New NPC knowledge systems.
+# - New personality systems.
+# - New dialogue-generation categories.
+# - New world facts.
+# - New quest mechanics.
+# - Campaign lifecycle.
+# - Broad performance optimization.
+# - Repairing all PR-EG-R4 playability failures.
+#
+# Do not broaden the implementation merely to
+# improve dialogue-quality scores.
+#
+# ============================================================
+# 4. BASELINE CAPTURE
+# ============================================================
+#
+# Before modifying production code:
+#
+# Record:
+#
+# - Repository revision.
+# - Working-tree status.
+# - Provider configuration.
+# - Relevant feature flags.
+# - Current regression baseline.
+# - Existing final-response implementation.
+# - Current history-recording implementation.
+#
+# Preserve the original PR-EG-R4 failure evidence.
+#
+# Do not overwrite the failed transcript.
+#
+# ============================================================
+# 5. REPRODUCE THE ORIGINAL DEFECT
+# ============================================================
+#
+# Construct a deterministic reproduction of
+# B_skeptical turn 9 using the actual production
+# response-selection and delivery path.
+#
+# The reproduction must establish:
+#
+# 1. Candidate response is rejected.
+#
+# 2. Rejection reasons include conflicting
+#    authority and/or incorrect interlocutor.
+#
+# 3. A safe fallback is selected.
+#
+# 4. A downstream stage replaces the fallback.
+#
+# 5. The replacement reaches the player.
+#
+# 6. The replacement is recorded in delivered
+#    conversational history.
+#
+# Record the precise call sequence.
+#
+# Identify the last point at which the accepted
+# response is known to be valid.
+#
+# Identify the first point at which the emitted
+# response diverges.
+#
+# If the exact defect cannot be reproduced,
+# do not claim it has been repaired.
+#
+# ============================================================
+# 6. FULL RESPONSE-PATH AUDIT
+# ============================================================
+#
+# Inspect the complete production response path,
+# including:
+#
+# - game/api.py
+# - game/api_turn_support.py
+# - game/immutable_valid_response.py
+# - game/dialogue_authority.py
+# - game/conversational_continuity.py
+# - game/expressive_dialogue.py
+# - game/social.py
+#
+# Include any additional modules that:
+#
+# - Select response text.
+# - Rewrite response text.
+# - Preserve social facts.
+# - Apply fallbacks.
+# - Correct speaker labels.
+# - Modify narration.
+# - Record delivered speech.
+# - Serialize API responses.
+#
+# Search for all operations capable of changing
+# player-facing response content after validation.
+#
+# Do not limit the audit to the known offending
+# helper.
+#
+# Produce a response-path diagram showing:
+#
+# CANDIDATE
+#    |
+#    v
+# AUTHORITY RESOLUTION
+#    |
+#    v
+# VALIDATION
+#    |
+#    v
+# FINAL ADOPTION
+#    |
+#    v
+# HISTORY RECORDING
+#    |
+#    v
+# API DELIVERY
+#
+# Document any real ordering differences.
+#
+# ============================================================
+# 7. POST-GATE MUTATION INVENTORY
+# ============================================================
+#
+# Enumerate every post-validation operation that
+# can modify:
+#
+# - Response text.
+# - Speaker identity.
+# - Addressee identity.
+# - Subject identity.
+# - Provenance.
+# - Authorization metadata.
+# - Speech commitments.
+# - Delivered-history content.
+#
+# For each operation, classify it as:
+#
+# A. Harmless presentation transformation.
+#
+# B. Semantically meaningful transformation
+#    requiring renewed authorization.
+#
+# C. Unauthorized mutation.
+#
+# D. Dead or unreachable code.
+#
+# Do not assume that a transformation is harmless
+# merely because it preserves an authored fact.
+#
+# Speaker changes and subject substitutions are
+# semantically meaningful.
+#
+# ============================================================
+# 8. FINAL DELIVERY CONTRACT
+# ============================================================
+#
+# Define one authoritative final-response contract.
+#
+# It should contain, or reference:
+#
+# - Exact authorized response text.
+# - Speaker identity.
+# - Addressee identity.
+# - Subject identity.
+# - Authorization source.
+# - Validation outcome.
+# - Response provenance.
+# - Adoption status.
+# - Source revision or digest where relevant.
+# - Final response identity or integrity digest.
+#
+# Reuse existing structures wherever possible.
+#
+# Do not introduce a parallel authorization system.
+#
+# Do not duplicate canonical state.
+#
+# The contract must make it possible to establish
+# whether the emitted response is exactly the
+# response approved for delivery.
+#
+# ============================================================
+# 9. FINALITY AND IMMUTABILITY
+# ============================================================
+#
+# Once the final response is authorized:
+#
+# - Its semantic content must be immutable.
+# - Its speaker attribution must be immutable.
+# - Its authorization provenance must be immutable.
+#
+# If a downstream operation needs to change
+# semantic content:
+#
+# It must produce a new candidate and pass through
+# the complete authorization and validation path.
+#
+# Prefer eliminating unnecessary post-gate
+# transformations rather than repeatedly
+# revalidating downstream rewrites.
+#
+# Do not allow silent mutation of a sealed response.
+#
+# ============================================================
+# 10. SOCIAL-FACT PRESERVATION
+# ============================================================
+#
+# Investigate the mechanism responsible for
+# preserving resolver-authorized social facts.
+#
+# Determine:
+#
+# - Why it runs after validation.
+# - What conditions trigger it.
+# - Whether it can change speaker identity.
+# - Whether it can change subject identity.
+# - Whether it can override a rejected response.
+# - Whether it can introduce unvalidated text.
+#
+# Preserve its legitimate purpose.
+#
+# However:
+#
+# Authorized factual content does not justify
+# bypassing final response authorization.
+#
+# If a social fact must be included:
+#
+# Incorporate it before final validation,
+# or construct a new fully validated candidate.
+#
+# Do not overwrite a rejected fallback with
+# unvalidated social speech.
+#
+# ============================================================
+# 11. REJECTION SEMANTICS
+# ============================================================
+#
+# Distinguish:
+#
+# - Candidate rejected.
+# - Safe fallback selected.
+# - Candidate accepted.
+# - Candidate accepted with authorized correction.
+#
+# A rejected candidate remains rejected.
+#
+# Its text must not be recycled as authoritative
+# speech merely because part of it is factually
+# correct.
+#
+# The safe fallback must not be replaced without
+# a new complete authorization decision.
+#
+# Preserve rejection reasons for diagnostics.
+#
+# ============================================================
+# 12. SPEAKER AND ADDRESSEE INTEGRITY
+# ============================================================
+#
+# Test cases involving:
+#
+# - One NPC.
+# - Multiple NPCs.
+# - Ambiguous addressee.
+# - Explicit named addressee.
+# - GM-directed questions.
+# - NPC-to-NPC references.
+# - Incorrect provider speaker attribution.
+# - Conflicting target authorities.
+#
+# Verify:
+#
+# The final response belongs to the correct
+# conversational authority.
+#
+# A response rejected for wrong interlocutor
+# cannot reappear under a different speaker label
+# without renewed authorization.
+#
+# ============================================================
+# 13. HISTORY AND PERSISTENCE
+# ============================================================
+#
+# Delivered history must record only authorized,
+# actually delivered speech.
+#
+# Verify:
+#
+# - Accepted candidate recorded correctly.
+# - Rejected candidate excluded.
+# - Authorized fallback recorded correctly.
+# - Speaker attribution preserved.
+# - Proposition identity preserved.
+# - Save/load round-trip preserves exact speech.
+# - No rejected text enters continuity commitments.
+#
+# The API response and recorded delivered speech
+# must agree.
+#
+# Do not create a second independent history store.
+#
+# ============================================================
+# 14. API SERIALIZATION
+# ============================================================
+#
+# Audit the final API response construction.
+#
+# Verify that:
+#
+# - Serialization does not rewrite semantic content.
+# - Presentation formatting does not change speaker.
+# - Error handling does not substitute NPC speech.
+# - Fallback formatting does not bypass authorization.
+# - The serialized response matches the sealed
+#   authorized response.
+#
+# If a response-integrity assertion fails:
+#
+# Fail closed.
+#
+# Do not deliver the divergent text.
+#
+# Preserve diagnostics without exposing internal
+# implementation details to the player.
+#
+# ============================================================
+# 15. CONTROLLED ADVERSARIAL TESTS
+# ============================================================
+#
+# Construct controlled provider outputs covering:
+#
+# A. Rejected wrong-interlocutor speech.
+#
+# B. Rejected conflicting-authority speech.
+#
+# C. Rejected unsupported security claim.
+#
+# D. Rejected unauthorized promise.
+#
+# E. Rejected unauthorized reward.
+#
+# F. Rejected entity-name substitution.
+#
+# G. Rejected hidden-information disclosure.
+#
+# H. Accepted authorized factual speech.
+#
+# I. Accepted bounded characterization.
+#
+# J. Accepted factual paraphrase.
+#
+# K. Accepted uncertainty.
+#
+# L. Accepted nonbinding refusal.
+#
+# M. Valid fallback after rejection.
+#
+# N. Multiple NPCs sharing related facts.
+#
+# O. Post-gate replacement attempt.
+#
+# For every case inspect:
+#
+# - Raw candidate.
+# - Validation result.
+# - Final authorized response.
+# - Emitted response.
+# - Delivered history.
+# - Canonical state.
+#
+# Rejected candidates must not leak.
+#
+# ============================================================
+# 16. ORIGINAL FAILURE REGRESSION
+# ============================================================
+#
+# Preserve B_skeptical turn 9 as a frozen
+# regression.
+#
+# Required result:
+#
+# - Original candidate rejected.
+# - Rejection reasons preserved.
+# - No unvalidated post-gate replacement.
+# - Final emitted response matches the authorized
+#   response.
+# - Delivered history matches final emitted speech.
+# - No unauthorized canonical mutation.
+#
+# Do not modify the historical failure evidence.
+#
+# Create a separate passing repair test.
+#
+# ============================================================
+# 17. AUTHORIZED DISCLOSURE PRESERVATION
+# ============================================================
+#
+# The repair must not prevent legitimate
+# consequential information from being delivered.
+#
+# Include a case where an NPC is authorized to
+# disclose an established fact.
+#
+# Verify:
+#
+# - Resolver selects the correct fact.
+# - Correct speaker owns the response.
+# - Validation accepts the response.
+# - Final adoption succeeds.
+# - Exact authorized speech reaches the player.
+# - Delivered history records it.
+# - Canonical state remains consistent.
+#
+# Do not solve the integrity defect by replacing
+# all NPC responses with generic refusals.
+#
+# ============================================================
+# 18. TARGETED TEST MATRIX
+# ============================================================
+#
+# T01 — Original B_skeptical reproduction.
+# T02 — Rejected candidate remains rejected.
+# T03 — Safe fallback remains authoritative.
+# T04 — No post-gate semantic replacement.
+# T05 — Final response immutability.
+# T06 — Response identity verification.
+# T07 — Wrong interlocutor rejection.
+# T08 — Conflicting authority rejection.
+# T09 — Multiple NPC speaker integrity.
+# T10 — GM speaker integrity.
+# T11 — Authorized consequential disclosure.
+# T12 — Bounded characterization adoption.
+# T13 — Factual paraphrase adoption.
+# T14 — Unauthorized security claim blocked.
+# T15 — Unauthorized promise blocked.
+# T16 — Unauthorized reward blocked.
+# T17 — Entity-name substitution blocked.
+# T18 — Hidden information blocked.
+# T19 — Rejected candidate excluded from history.
+# T20 — Authorized fallback recorded correctly.
+# T21 — Save/load exact speech preservation.
+# T22 — API response equals authorized speech.
+# T23 — No unauthorized canonical mutation.
+# T24 — Existing frozen holdouts preserved.
+# T25 — No new critical regression failures.
+#
+# ============================================================
+# 19. REGRESSION
+# ============================================================
+#
+# Run the relevant regression family.
+#
+# Preserve:
+#
+# - PR-EF conversational authority.
+# - PR-EG-R2C host-owned adoption.
+# - PR-EG-R2C-R1 continuity.
+# - PR-EG-R2C-R2 reference eligibility.
+# - PR-EG-R3 bounded expression.
+# - PR-EG-R3-R1 semantic contracts.
+# - PR-EG-R4 original failure evidence.
+#
+# Record exact pass/fail identities.
+#
+# Do not report only aggregate counts.
+#
+# Distinguish inherited failures from new failures.
+#
+# ============================================================
+# 20. PRODUCTION-PATH QUALIFICATION
+# ============================================================
+#
+# Run fresh-provider /api/chat qualification after
+# the repair.
+#
+# Minimum:
+#
+# - Two independent conversations.
+# - At least 10 turns each.
+# - Multiple NPCs.
+# - Explicit addressee changes.
+# - Ambiguous addressee.
+# - Authorized factual disclosure.
+# - Rejected provider candidate.
+# - Safe fallback.
+# - Historical recall.
+# - Save/load continuation.
+#
+# Capture:
+#
+# - Complete transcripts.
+# - Provider calls.
+# - Validation decisions.
+# - Final response contracts.
+# - Emitted responses.
+# - Delivered history.
+# - Canonical state changes.
+# - Tokens.
+# - Latency.
+#
+# Also run the deterministic controlled-provider
+# reproduction of the original critical defect.
+#
+# Do not represent controlled-provider evidence
+# as fresh-provider evidence.
+#
+# Do not require a full 180-turn playability
+# evaluation in this cycle.
+#
+# ============================================================
+# 21. PERFORMANCE
+# ============================================================
+#
+# Measure:
+#
+# - Provider calls.
+# - Retries.
+# - Input tokens.
+# - Output tokens.
+# - Mean latency.
+# - Maximum latency.
+# - Validation overhead.
+#
+# The repair should not require an additional
+# provider call for every response.
+#
+# Prefer deterministic final-response integrity
+# verification.
+#
+# Do not reintroduce expensive strict-social
+# narration or retry loops.
+#
+# ============================================================
+# 22. ACCEPTANCE GATES
+# ============================================================
+#
+# GATE 1 — ORIGINAL DEFECT REPAIRED
+#
+# B_skeptical turn 9 no longer permits
+# unvalidated response replacement.
+#
+# GATE 2 — FINAL RESPONSE AUTHORITY
+#
+# The exact delivered response is authorized.
+#
+# GATE 3 — NO POST-GATE BYPASS
+#
+# No reachable downstream path can silently
+# substitute semantically different speech.
+#
+# GATE 4 — HISTORY INTEGRITY
+#
+# Delivered history matches authorized speech.
+#
+# GATE 5 — SPEAKER INTEGRITY
+#
+# Wrong-interlocutor and conflicting-authority
+# responses cannot be resurrected.
+#
+# GATE 6 — AUTHORIZED DISCLOSURE
+#
+# Legitimate authorized NPC speech still works.
+#
+# GATE 7 — INFORMATION INTEGRITY
+#
+# Adversarial unsupported consequential claims
+# remain blocked.
+#
+# GATE 8 — PERSISTENCE
+#
+# Save/load preserves authorized delivered speech.
+#
+# GATE 9 — REGRESSION
+#
+# No unexplained new critical failures.
+#
+# GATE 10 — PRODUCTION EVIDENCE
+#
+# Fresh-provider conversations exercise the
+# repaired delivery path.
+#
+# GATE 11 — PERFORMANCE
+#
+# No systemic retry or prompt-cost regression.
+#
+# Do not declare success if a critical gate fails.
+#
+# ============================================================
+# 23. REQUIRED REVIEW ARTIFACTS
+# ============================================================
+#
+# Generate:
+#
+# 01 — Executive Summary
+# 02 — Baseline and Environment
+# 03 — Original Failure Reproduction
+# 04 — Response-Path Audit
+# 05 — Post-Gate Mutation Inventory
+# 06 — Root-Cause Analysis
+# 07 — Final Delivery Contract
+# 08 — Immutability Enforcement
+# 09 — Social-Fact Preservation Repair
+# 10 — Rejection Semantics
+# 11 — Speaker and Addressee Integrity
+# 12 — History and Persistence
+# 13 — API Serialization Audit
+# 14 — Adversarial Qualification
+# 15 — Original Failure Regression
+# 16 — Authorized Disclosure Preservation
+# 17 — Targeted Test Matrix
+# 18 — Regression Comparison
+# 19 — Primary Fresh-Provider Conversation
+# 20 — Secondary Fresh-Provider Conversation
+# 21 — Provider Cost and Latency
+# 22 — Source Change Inventory
+# 23 — Remaining Limitations
+# 24 — Acceptance Gate Results
+# 25 — Recommended Next Action
+# 26 — Final Verdict
+# 27 — Source and Evidence Inventory
+#
+# Package all artifacts through the established
+# CURRENT_REVIEW workflow.
+#
+# ============================================================
+# 24. VERDICT
+# ============================================================
+#
+# Choose:
+#
+# A — INTEGRITY REPAIR QUALIFIED
+#
+# B — INTEGRITY REPAIR QUALIFIED WITH LIMITATIONS
+#
+# C — REPAIR INCOMPLETE
+#
+# D — CRITICAL INTEGRITY DEFECT REMAINS
+#
+# UNVERIFIED — INSUFFICIENT EVIDENCE
+#
+# Do not use conversational playability scores
+# to determine this cycle's integrity verdict.
+#
+# ============================================================
+# 25. STOP CONDITIONS
+# ============================================================
+#
+# Stop and report if:
+#
+# - The original defect remains reproducible.
+#
+# - Any downstream path can still override a
+#   rejected response without authorization.
+#
+# - Rejected text enters delivered history.
+#
+# - Response immutability cannot be enforced.
+#
+# - Authorized speech is broadly disabled.
+#
+# - The repair requires granting new authority
+#   to the provider.
+#
+# - Critical regressions remain unexplained.
+#
+# Do not hide an incomplete repair behind
+# passing aggregate tests.
+#
+# ============================================================
+# 26. FINAL INSTRUCTION
+# ============================================================
+#
+# Reproduce the PR-EG-R4 critical speech-adoption
+# bypass.
+#
+# Audit the complete final-response path.
+#
+# Eliminate unauthorized post-validation mutation.
+#
+# Establish one authoritative final-delivery
+# contract.
+#
+# Guarantee that API output and delivered history
+# reflect the authorized response.
+#
+# Preserve legitimate social-fact disclosure,
+# bounded expression, and conversational history.
+#
+# Run targeted adversarial tests, relevant
+# regressions, and fresh-provider production-path
+# qualification.
+#
+# Do not attempt to solve broad conversational
+# playability in this cycle.
+#
+# Do not begin the architectural reassessment.
+#
+# Generate CURRENT_REVIEW.
+#
+# STOP after PR-EG-R4-R1.
+#
+# Await external review before proceeding.

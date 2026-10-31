@@ -1,0 +1,1707 @@
+{
+  "campaign_id": "pr_eg_r2_generative_dialogue_boundary_20261016",
+  "campaign_name": "PR-EG-R2 — Generative Dialogue Boundary Investigation",
+  "campaign_date": "2026-10-16",
+  "purpose": "Investigate compact dialogue provider capability, authority enforcement, cost and integration feasibility. No production implementation.",
+  "objective_status": "D — FURTHER INVESTIGATION REQUIRED",
+  "executive_summary": "# 01 — Executive Summary\n\n\n**D — FURTHER INVESTIGATION REQUIRED. Do not implement PR-EG-R3 or begin PR-EH.**\n\nFRESH: 130 matrix generations (72 single-turn core, 24 matched context ablations, 34 turns in eight continuous transcripts), plus one separate access probe, using configured `gpt-4.1-mini` / returned `gpt-4.1-mini-2025-04-14`. The matrix consumed 62,542 input and 3,738 output tokens. All 130 JSON envelopes parsed; one narration left its quotation unclosed. A failed sandbox connection is also retained.\n\nThe provider can paraphrase, state a preference reason and vary a refusal at roughly 350–630 input tokens in these fixtures. It also invents security conditions, speculative mystery suspects and unprovided naming causes. Two near-identical suspect prompts both produced consequential speculation. Fluency does not establish safety. The unchanged prompt was tested diagnostically; no prompt repair or production implementation followed those failures.\n\nLOCAL: Existing hard validation on 18 deliberately labeled controls produced 3 correct acceptances, 4 correct rejections, 9 false acceptances and 2 false rejections at the direct validation seam with fixture-derived decisions. Additional preseal processing blocks some unsafe controls but retains others, including a speculative guard weakness, an unauthorized reward phrased as twenty crowns, an invented historical cause and a hidden route. These are helper-scope results, not claims that the complete production gate delivers every missed control.\n\nLOCAL: Two captured production prompts contain 24,104 and 23,611 content tokens before message framing. Policy/validation plus resolver scaffolding dominate; simulation data alone does not explain the cost. Existing projections and exact deduplication still leave repeated semantic contracts.\n\nLOCAL: An exact seeded preference follow-up found its active NPC and preference commitment, set `reuse_prior_speech`, skipped generation, then ultimately emitted “I don't know” through grounded-social absence realization. That shows a production composition problem beyond prompt size. It advanced the existing question turn (0→1); it did not authorize a generated reward or new world fact.\n\nThe existing session commitment store can round-trip generated speech noncanonically, but it revises differing text without semantic contradiction checks and truncates lines at 180 characters. A compact provider lane is architecturally plausible; its enforcement and context-selection requirements are not yet qualified. A dedicated NPC agent would not solve these boundaries.\n\nNo production code or active campaign data changed: 316 protected source/data files match their before hashes. Existing focused tests: **71 passed**. Historical family: **393 passing / 19 failing**, not rerun. A–G artifacts and all failed outputs are retained. Fresh full-size baseline calls were blocked by automatic review; local content-token measurements and recorded PR-EG-R1 usage are distinguished throughout.\n\n\nEvidence labels: **FRESH** = actual isolated provider response; **LOCAL** = executed production helper with disposable fixtures; **STATIC** = source inspection; **HISTORICAL** = retained PR-EG-R1/earlier evidence; **INFERENCE** = assessment beyond the measured sample. No isolated result is full production qualification.\n",
+  "changes": {
+    "production": [
+      "None. All 316 protected game/source and active-data files unchanged."
+    ],
+    "validation": [
+      "Existing validator/preseal functions exercised on all 130 provider outputs and 18 labeled controls; no production validation changes."
+    ],
+    "tooling": [
+      "Isolated synthetic provider, prompt-capture, local tokenizer, persistence and report scripts under artifacts/pr_eg_r2."
+    ],
+    "documentation": [
+      "Twenty-one required reports, source snapshots, retained predecessor evidence and exact prompts/outputs."
+    ],
+    "generated_artifacts": [
+      "130 A–G matrix responses, one access response, one failed transport attempt, source hashes, 71-pass focused junit, local prompt attribution."
+    ]
+  },
+  "testing": {
+    "focused": "71 existing tests passed in 3.71s (focused_local_junit.xml). Initial sandbox temp/socket failures retained and classified.",
+    "broader": "Historical R1 family 393 passed / 19 failed; not rerun.",
+    "full_suite": "Not run; no production edits.",
+    "runtime_validation": "130 isolated provider matrix responses, eight continuous transcripts (34 turns), plus one access probe. No production compact-generation qualification.",
+    "model_runtime_boundary": "gpt-4.1-mini, returned gpt-4.1-mini-2025-04-14. Explicit OpenAI Responses endpoint, default sampling parameters, 500 output cap, SDK retries disabled.",
+    "new_regressions": "No new failure in 71 focused tests. Full family not measured.",
+    "pre_existing_failures": "Nineteen historical R1 family failures, not independently re-established."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Repeated consequential provider claims under speculation and personal elaboration.",
+      "Validator false acceptance and false rejection; preseal sometimes destroys harmless wording and sometimes retains unsafe speech.",
+      "No safe minimum context or full-chain compact qualification established.",
+      "Fresh full-prompt baseline requests blocked by automatic approval review; local tokenizer and historical measurements used."
+    ],
+    "pre_existing": [
+      "Large first social prompt, rigid reuse and inherited regression debt."
+    ]
+  },
+  "missing_concepts": [
+    "Semantic per-claim authorization for quoted/hedged consequential statements.",
+    "Explicit per-turn topic and transaction roles without a second authority system.",
+    "Stable incidental commitment identity/contradiction handling."
+  ],
+  "decisions_requiring_human_review": [
+    "Review D — further investigation required.",
+    "Do not implement R3 or begin PR-EH from this package.",
+    "Optional approval question covers the exact two synthetic full-prompt baseline payloads; it is not required for the local R2 findings."
+  ],
+  "does_not_prove": [
+    "That compact generation is safe in production.",
+    "That direct validator/preseal results are complete final-emission outcomes.",
+    "That hidden-information tests with secret bodies excluded prove arbitrary disclosure resistance.",
+    "That measured small synthetic prompts yield the same savings or latency in a qualified production path.",
+    "That all inherited full-family regression failures are unchanged."
+  ],
+  "recommended_next_step": "External review of R2. Further bounded enforcement/context investigation only if separately authorized. Stop; no automatic PR-EG-R3 or PR-EH.",
+  "primary_report": "artifacts/pr_eg_r2/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 5242880,
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r2/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/03_PRODUCTION_DIALOGUE_PIPELINE.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/04_STRICT_SOCIAL_PROMPT_ATTRIBUTION.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/05_COMPACT_DIALOGUE_CONTEXT_DESIGN.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/06_PARAPHRASING_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/07_EXPLANATION_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/08_PERSONAL_ELABORATION_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/09_REPEATED_REQUEST_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/10_KNOWLEDGE_LIMITATION_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/11_ADVERSARIAL_SAFETY_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/12_MULTITURN_CONTINUITY_EXPERIMENTS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/13_VALIDATOR_COMPATIBILITY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/14_COMMITMENT_PERSISTENCE_FEASIBILITY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/15_PERFORMANCE_COMPARISON.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/16_PRODUCTION_INTEGRATION_FEASIBILITY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/17_ARCHITECTURAL_OPTIONS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/18_IMPLEMENTATION_READINESS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/19_REMAINING_QUESTIONS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/20_FINAL_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/21_SOURCE_AND_EXPERIMENT_INVENTORY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/analyze.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/artifact_inventory.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/build_reports.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/disposable_final_session_offline.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/environment.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/exact_preference_trace.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/experiment_completion_ablation.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/experiment_completion_core.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/experiment_completion_multiturn.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/experiments.jsonl",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/failure_inventory.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/focused_junit.xml",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/focused_local_junit.xml",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/frozen_cases.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/investigate.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/investigator_review.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/live_single.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/local_prompt_attribution.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/measure.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/package_review.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/persistence_probe.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r3/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r3/03_SEMANTIC_AUTHORITY_INVENTORY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r3/08_PROVIDER_CALL_GRAPH.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r3/09_PROMPT_COST_ATTRIBUTION.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r3/10_RESTRICTIVE_DIALOGUE_ANALYSIS.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r4/03_AUTHORIZATION_CONTRACT_DESIGN.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r4/09_FINAL_RESPONSE_CONSISTENCY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_ef_r4/10_PROVIDER_ELIGIBILITY_AND_RETRY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/10_COMMITMENT_RETENTION.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/11_PROVIDER_EFFICIENCY.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/15_STATE_INTEGRITY_AUDIT.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/16_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/17_REMAINING_ISSUES.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/live.usage.jsonl",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/live_qualification.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/predecessors/pr_eg_r1/regression_junit.xml",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/production_baseline_offline.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/production_captures_offline.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A1_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A1_minimal_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A1_minimal_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A1_rich_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A1_rich_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A2_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A3_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A3_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A4_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A4_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A5_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/A5_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B1_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B1_minimal_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B1_minimal_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B1_rich_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B1_rich_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B2_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B3_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/B3_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C1_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C1_minimal_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C1_minimal_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C1_rich_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C1_rich_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C2_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C3_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C3_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C4_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C4_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C5_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/C5_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D1_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D1_minimal_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D1_minimal_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D1_rich_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D1_rich_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D2_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D3_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D3_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D4_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/D4_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E1_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E2_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E3_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E3_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E4_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E4_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E5_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E5_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E5_minimal_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E5_minimal_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E5_rich_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E5_rich_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E6_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E6_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E7_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/E7_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F10_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F10_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F11_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F11_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F12_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F12_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F1_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F2_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F2_minimal_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F2_minimal_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F2_rich_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F2_rich_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F3_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F3_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F4_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F4_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F5_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F5_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F6_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F6_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F7_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F7_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F8_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F8_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F9_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/F9_compact_2.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T1R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T1R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T2R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T2R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T3R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T3R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T4R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T4R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T5R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G1T5R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T1R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T1R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T2R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T2R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T3R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T3R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T4R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T4R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T5R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G2T5R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T1R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T1R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T2R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T2R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T3R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T3R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T4R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G3T4R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G4T1R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G4T1R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G4T2R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G4T2R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G4T3R1_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/prompts/G4T3R2_compact_1.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/protected_after_baseline.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/protected_before.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/provider_validator_results.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/REQUEST.md",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2/single_provider_access.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/source_integrity.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/api.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/api_turn_support.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/bounded_improvisation.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/config.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/conversational_continuity.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/conversational_orchestration.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/dialogue_authority.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/dialogue_social_plan.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/final_emission_gate.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/final_emission_strict_social_stack.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/gm.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/gm_resolution_decision.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/gm_retry.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/immutable_valid_response.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/interaction_context.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/live_chat_interpretation.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/model_routing.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/narration_state_consistency.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/ordinary_semantic_ownership.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/prompt_context.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/proposition_authority.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/provider_budget.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/response_policy_enforcement.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/social.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/social_exchange_emission.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/social_exchange_fallback_catalog.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/social_exchange_policy.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/storage.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/sources/game/world.py",
+      "role": "production_source_snapshot",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/summary_measurements.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/system_prompt.txt",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/trace_preference.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/validator_control_matrix.json",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/verify_bundle.py",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2/working_tree_before.txt",
+      "role": "evidence",
+      "why": "R2 exact source, report, experiment or explicitly labeled historical evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "21 numbered reports, all prompts/outputs, controls and measurements, source snapshots/hashes, predecessor context. Credentials, active saves, dependencies and disposable temp trees excluded."
+}

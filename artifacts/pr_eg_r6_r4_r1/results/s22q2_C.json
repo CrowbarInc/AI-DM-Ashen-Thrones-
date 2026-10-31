@@ -1,0 +1,51 @@
+{
+  "case_id": "s22q2",
+  "family": "s22",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "b4a3a1f199859408cd5bab6b8529e3f7658f2e34497c64ebf013de9bb4972d91",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "service in the archive for one year"
+    ],
+    "qualifiers": [
+      "to service in the archive for one year",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s22"
+    ],
+    "answered_arguments": [
+      "replacement for Dar's exile"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The regent commuted Dar's exile to service in the archive for one year, directly answering what replaced Dar's exile."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

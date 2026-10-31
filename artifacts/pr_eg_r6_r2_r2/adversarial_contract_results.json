@@ -1,0 +1,1039 @@
+[
+  {
+    "attack": "forged",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "invalid_referent_target",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "night ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "invented",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "invented",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "invalid_referent_target",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "invalid_referent_target",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.256
+    }
+  },
+  {
+    "attack": "cross_conversation",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "invalid_referent_target",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "night ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "57bee3fb3372456ebab5cbfa16d18e48:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "57bee3fb3372456ebab5cbfa16d18e48:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "invalid_referent_target",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "invalid_referent_target",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.137
+    }
+  },
+  {
+    "attack": "stale",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "stale_correction_target",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "night ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "f256e6e1f72d4647bbeb4064ba9c3b34:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "f256e6e1f72d4647bbeb4064ba9c3b34:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "stale_correction_target",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "stale_correction_target",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.121
+    }
+  },
+  {
+    "attack": "speaker",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "referent_speaker_mismatch",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "oren",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "night ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "88ad4fe6437843309e7a796f25e69dee:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "88ad4fe6437843309e7a796f25e69dee:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "referent_speaker_mismatch",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [
+        "oren"
+      ],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "Oren, I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "referent_speaker_mismatch",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.135
+    }
+  },
+  {
+    "attack": "field",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "invalid_correction_operation",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "night ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "9d4924b2763c4302ad8e48a7e973a6e3:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "predicate"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "9d4924b2763c4302ad8e48a7e973a6e3:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "predicate"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "invalid_correction_operation",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "invalid_correction_operation",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.196
+    }
+  },
+  {
+    "attack": "operation",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "invalid_referent_operation",
+    "plan": {
+      "answer_status": "unknown",
+      "validation_failure": "invalid_referent_operation",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "information_question",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "",
+      "requested_relationship": "",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that just now.",
+      "reason": "invalid_referent_operation",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.086
+    }
+  },
+  {
+    "attack": "unwitnessed",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "unwitnessed_correction",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keeper",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "unseen ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "keeper",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "unseen ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "25727b2e4f404c878a0a2469fc170292:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "25727b2e4f404c878a0a2469fc170292:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "unwitnessed_correction",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "unwitnessed_correction",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.212
+    }
+  },
+  {
+    "attack": "substitution",
+    "checks": {
+      "noncommitting": true,
+      "no_selected_source": true,
+      "not_eligible": true
+    },
+    "response_kind": "unknown",
+    "reason": "unlisted_correction_change",
+    "plan": {
+      "request_proposition": {
+        "predicate": "invent",
+        "predicate_evidence": "keeps",
+        "subject": "",
+        "subject_evidence": "",
+        "object": "night ledger",
+        "object_evidence": "night ledger",
+        "missing_argument": "subject",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "fact",
+          "proposition": {
+            "predicate": "keeper",
+            "predicate_evidence": "keeps",
+            "subject": "miller",
+            "subject_evidence": "miller",
+            "object": "night drum",
+            "object_evidence": "night drum",
+            "missing_argument": "",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false
+          }
+        }
+      ],
+      "provider_proposal": {
+        "plan_version": "pr-eg-r6-r2-r2.1",
+        "conversational_act": "correction",
+        "addressee_reference": "Mara",
+        "addressee_id": "mara",
+        "requested_subject": "night drum",
+        "requested_relationship": "keeper_of(night_drum)",
+        "question_text": "Mara, who manages the ferry schedules?",
+        "correction_of_prior_question": false,
+        "correction_target": "",
+        "referenced_prior_proposition": "",
+        "candidate_source_ids": [],
+        "proposed_coverage": [],
+        "ambiguity_type": "",
+        "clarification_needed": false,
+        "interpretation_confidence": 0.8,
+        "request_proposition": {
+          "predicate": "invent",
+          "predicate_evidence": "keeps",
+          "subject": "",
+          "subject_evidence": "",
+          "object": "night ledger",
+          "object_evidence": "night ledger",
+          "missing_argument": "subject",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false
+        },
+        "entity_roles": [],
+        "source_propositions": [
+          {
+            "source_id": "fact",
+            "proposition": {
+              "predicate": "keeper",
+              "predicate_evidence": "keeps",
+              "subject": "miller",
+              "subject_evidence": "miller",
+              "object": "night drum",
+              "object_evidence": "night drum",
+              "missing_argument": "",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false
+            }
+          }
+        ],
+        "referent_operation": {
+          "target_referent_id": "2566876253e14eeb856c84b73de651eb:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "object"
+          ],
+          "follow_up_relationship": ""
+        }
+      },
+      "referent_operation": {
+        "target_referent_id": "2566876253e14eeb856c84b73de651eb:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "object"
+        ],
+        "follow_up_relationship": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "unlisted_correction_change",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "night drum",
+      "requested_relationship": "keeper_of(night_drum)",
+      "question_text": "I meant the night ledger.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps  night drum  ",
+      "referenced_prior_proposition": "keeper_of(night_drum)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "unlisted_correction_change",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.206
+    }
+  }
+]

@@ -1,0 +1,545 @@
+--- entry/docs/NEXT_SESSION.md
++++ final/docs/NEXT_SESSION.md
+@@ -1,8 +1,32 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-19 / PR-PLAY-01.
++Ashen Thrones — Product Realization. Updated 2026-10-19 / PR-PLAY-02.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest controlled-play preparation — PR-PLAY-02
++
++2026-10-19: **B — Conditionally ready.** Added opt-in
++ASHEN_PLAYTEST_DISABLE_SDK_RETRIES=1 to all seven existing provider constructors;
++reuse existing host retry suppression, process-local atomic admission limit six,
++durable ledger and isolated ASHEN_DATA_DIR. Added playtest-only rejection telemetry
++and nonmutating exhausted-submission gates. Normal retry defaults/payloads unchanged.
++30 new checks pass; completed regression totals 354 passed / 2 preexisting failures
++(stale ATGB source attestation and exact provider metadata assertion), reproduced
++on saved entry source. Explicit HTTP lifespan test blocked at 15s; no repair.
++445 protected normal-data/experiment/prior-handoff hashes and inventory unchanged.
++
++Eight reports/manual artifact: development/reports/pr_play_02/; test, constructor,
++admission/concurrency, entry-diff and integrity evidence: artifacts/pr_play_02/.
++Review: handoff/CURRENT_REVIEW.md and timestamped ZIP. The old ATGB manifest remains
++unattested for current sources; do not infer ATGB-worker readiness. Manual launch
++uses the normal app, one worker/no reload, fresh disposable data and one continuous
++process. No restarting to continue the six-attempt session. New Campaign then
++Start Campaign are separate. No live/provider-connectivity work performed.
++R1/R2 scopes, frozen baseline, PR-PLAY-01 environment-blocked status and PR-EG ban
++remain unchanged. No prompt/schema/gameplay/state/model/endpoint changes; no secrets,
++commit or push. Stop for external review, then separately approve operator-run
++PR_PLAY_02_LIVE_PLAYTEST.txt. UI/live behavior, latency and cost remain unverified.
+ 
+ ## Latest integrated checkpoint — PR-PLAY-01
+ 
+--- entry/game/api.py
++++ final/game/api.py
+@@ -6139,6 +6139,9 @@
+ @app.post('/api/start_campaign')
+ def start_campaign(request: Request):
+     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
++    from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
++    if playtest_stop_reason():
++        return JSONResponse(status_code=409, content={"ok": False, "status": "blocked", "error": PLAYTEST_STOP_MESSAGE})
+     try:
+         ui_mode = resolve_requested_ui_mode(request)
+         assert_mode_allows_runtime_action(ui_mode)
+@@ -6387,6 +6390,12 @@
+     _mark_turn_started()
+     reset_live_interpretation_consumed()
+     mode_decision = _resolve_communication_mode(req)
++    from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
++    if playtest_stop_reason():
++        return _live_interpretation_block_response(req, mode_decision, {
++            "reason": "playtest_stopped", "player_facing_text": PLAYTEST_STOP_MESSAGE,
++            "tags": ["provider_budget_refused", "non_mutating"], "provider_requests": [],
++        })
+     original_player_text = mode_decision.original_text
+     if mode_decision.conflict:
+         return _communication_mode_conflict_response(req, mode_decision)
+--- entry/game/api_upstream_preflight.py
++++ final/game/api_upstream_preflight.py
+@@ -208,8 +208,9 @@
+ 
+ def _default_openai_client_factory(api_key: str) -> Any:
+     from openai import OpenAI
+-
+-    return OpenAI(api_key=api_key)
++    from game.provider_budget import sdk_retry_options
++
++    return OpenAI(api_key=api_key, **sdk_retry_options())
+ 
+ 
+ def run_upstream_api_preflight(
+--- entry/game/expressive_dialogue.py
++++ final/game/expressive_dialogue.py
+@@ -809,12 +809,13 @@
+         )
+         return {"ok": False, "sent": False, "text": "", "reason": refusal, "usage": usage, "latency_ms": 0}
+     from openai import OpenAI
++    from game.provider_budget import sdk_retry_options
+ 
+     from game.gm import provider_timeout_seconds
+ 
+     started = time.perf_counter()
+     try:
+-        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
++        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+         response = attempt.dispatch(client.responses.create,
+             model=DEFAULT_MODEL_NAME,
+             input=messages,
+--- entry/game/gm.py
++++ final/game/gm.py
+@@ -5157,6 +5157,7 @@
+     attempt = admit_request(owner="gm.call_gpt", model=selected_model, purpose=purpose or "narration", estimated_input=estimated_input, max_output=narration_cap)
+     refusal = attempt.refusal
+     if refusal:
++        from game.provider_budget import sdk_retry_options, PLAYTEST_STOP_MESSAGE
+         attempt.finish(
+             {
+                 "purpose": purpose or "narration",
+@@ -5171,7 +5172,7 @@
+         return _attach_model_route_metadata(
+             {
+                 "player_facing_text": (
+-                    "The action was resolved, but live narration was not requested because it would exceed the provider budget."
++                    PLAYTEST_STOP_MESSAGE if sdk_retry_options() else "The action was resolved, but live narration was not requested because it would exceed the provider budget."
+                 ),
+                 "tags": ["provider_budget_refused", "deterministic_fallback"],
+                 "scene_update": None,
+@@ -5194,7 +5195,8 @@
+     request_sent = False
+     try:
+         from openai import OpenAI
+-        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
++        from game.provider_budget import sdk_retry_options
++        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+         _log_model_route(
+             selected_model=selected_model,
+             route_family=route.route_family,
+--- entry/game/host_constrained_candidates.py
++++ final/game/host_constrained_candidates.py
+@@ -690,6 +690,7 @@
+ 
+ def invoke_candidate_provider(payload: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:
+     from openai import OpenAI
++    from game.provider_budget import sdk_retry_options
+ 
+     from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
+     from game.gm import provider_timeout_seconds
+@@ -723,7 +724,7 @@
+         })
+         raise RuntimeError(refusal or "provider_budget")
+     started = time.perf_counter()
+-    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
++    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+     response = attempt.dispatch(client.responses.create,
+         model=DEFAULT_MODEL_NAME,
+         input=messages,
+--- entry/game/live_chat_interpretation.py
++++ final/game/live_chat_interpretation.py
+@@ -233,6 +233,7 @@
+         )
+         return {"ok": False, "sent": False, "reason": refusal, "error": refusal, "usage": usage}
+     from openai import OpenAI
++    from game.provider_budget import sdk_retry_options
+ 
+     from game.config import get_openai_api_key
+ 
+@@ -240,7 +241,7 @@
+     try:
+         from game.gm import provider_timeout_seconds
+ 
+-        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
++        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+         response = attempt.dispatch(client.responses.create,
+             model=model_id,
+             input=messages,
+@@ -432,9 +433,10 @@
+     provider_requests = [call.get("usage")] if isinstance(call.get("usage"), dict) else []
+     if not call.get("ok"):
+         reason = str(call.get("reason") or "provider_failure")
++        from game.provider_budget import sdk_retry_options, PLAYTEST_STOP_MESSAGE
+         return _blocked(
+             reason,
+-            "I couldn't interpret that just now, so no gameplay action was taken.",
++            PLAYTEST_STOP_MESSAGE if sdk_retry_options() and reason == "request ceiling" else "I couldn't interpret that just now, so no gameplay action was taken.",
+             tags=["interpretation_rejected", "non_mutating"],
+             extra={"provider_requests": provider_requests, "provider_error": call.get("error")},
+         )
+--- entry/game/provider_budget.py
++++ final/game/provider_budget.py
+@@ -49,6 +49,25 @@
+ 
+ def provider_retries_disabled() -> bool:
+     return _truthy("ASHEN_DISABLE_PROVIDER_RETRIES")
++
++
++def sdk_retry_options() -> dict[str, int]:
++    """Opt-in constructor options; leave the SDK's ordinary default untouched."""
++    return {"max_retries": 0} if _truthy("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES") else {}
++
++
++def playtest_stop_reason() -> str:
++    """Non-reserving submission gate, supplemental to atomic request admission."""
++    if not sdk_retry_options() or not accounting_active():
++        return ""
++    with _LOCK:
++        ceiling = limits()
++        if _STOPPED:
++            return _STOP_REASON
++        return "request ceiling" if ceiling and _REQUESTS >= ceiling[0] else ""
++
++
++PLAYTEST_STOP_MESSAGE = "The controlled playtest request limit has been reached. Stop and export diagnostics; do not restart to continue this session."
+ 
+ 
+ def accounting_active() -> bool:
+@@ -142,6 +161,7 @@
+         self.dispatched = False
+         self.dispatch_started = 0.0
+         self.completed: dict[str, Any] | None = None
++        self.sequence: int | None = None
+ 
+     def dispatch(self, invoke, **kwargs):
+         """Exactly one dispatch; durable admission/dispatch markers precede it."""
+@@ -181,9 +201,15 @@
+         return response
+ 
+     def _event(self, event: str) -> dict[str, Any]:
+-        return {"event": event, "version": ACCOUNTING_VERSION, "run_id": _RUN_ID,
++        record = {"event": event, "version": ACCOUNTING_VERSION, "run_id": _RUN_ID,
+                 "attempt_id": self.attempt_id, "purpose": self.purpose, "owner": self.owner,
+                 "configured_model": self.model, "admitted_at": self.admitted_at, "time": _now()}
++        if sdk_retry_options():
++            ceiling = limits()
++            record.update(sequence=self.sequence, admission="rejected" if self.refusal else "admitted",
++                          budget_remaining=max(0, ceiling[0] - _REQUESTS - (event == "admitted")) if ceiling else None,
++                          sdk_retries=0, host_retries="disabled" if provider_retries_disabled() else "unavailable")
++        return record
+ 
+     def finish(self, record: dict[str, Any]) -> dict[str, Any]:
+         global _INPUT, _OUTPUT, _RESERVED_INPUT, _RESERVED_OUTPUT, _USAGE_KNOWN
+@@ -263,6 +289,7 @@
+                         attempt.refusal = "total-token ceiling"
+                 if not attempt.refusal:
+                     attempt.admitted_at = _now()
++                    attempt.sequence = _REQUESTS + 1
+                     _append(attempt._event("admitted"))
+                     _REQUESTS += 1
+                     _RESERVED_INPUT += attempt.estimated_input
+@@ -271,6 +298,12 @@
+             except (OSError, ValueError, ProviderAccountingError):
+                 _stop("provider admission accounting unavailable")
+                 attempt.refusal = _STOP_REASON
++        if attempt.refusal and attempt.active and sdk_retry_options() and _INITIALIZED:
++            try:
++                _append({**attempt._event("rejected"), "refusal": attempt.refusal, "sent": False,
++                         "input_tokens": None, "output_tokens": None, "total_tokens": None})
++            except OSError:
++                _stop("provider rejection ledger write failed")
+     return attempt
+ 
+ 
+--- entry/game/semantic_interpreter.py
++++ final/game/semantic_interpreter.py
+@@ -216,6 +216,7 @@
+ def _invoke_interpretation_model(messages: list[dict[str, str]]) -> str:
+     """One structured completion. Callers do not retry this."""
+     from openai import OpenAI
++    from game.provider_budget import sdk_retry_options
+ 
+     from game.provider_budget import admit_request
+ 
+@@ -223,7 +224,7 @@
+                             model=DEFAULT_MODEL_NAME, estimated_input=max(1, len(json.dumps(messages)) // 4), max_output=400)
+     if attempt.refusal:
+         raise RuntimeError(attempt.refusal)
+-    client = OpenAI(api_key=get_openai_api_key())
++    client = OpenAI(api_key=get_openai_api_key(), **sdk_retry_options())
+     response = attempt.dispatch(client.responses.create,
+         model=DEFAULT_MODEL_NAME,
+         input=messages,
+--- entry/game/unified_semantic_planning.py
++++ final/game/unified_semantic_planning.py
+@@ -459,6 +459,7 @@
+ 
+ def _invoke_provider(payload: Mapping[str, Any]) -> tuple[str, dict[str, Any]]:
+     from openai import OpenAI
++    from game.provider_budget import sdk_retry_options
+ 
+     from game.config import DEFAULT_MODEL_NAME, get_openai_api_key
+     from game.gm import provider_timeout_seconds
+@@ -484,7 +485,7 @@
+         })
+         raise RuntimeError(refusal or "provider_budget")
+     started = time.perf_counter()
+-    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())
++    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+     response = attempt.dispatch(client.responses.create,
+         model=DEFAULT_MODEL_NAME,
+         input=messages,
+--- entry/tools/atgb/accounting.py
++++ final/tools/atgb/accounting.py
+@@ -74,6 +74,8 @@
+                 raise ValueError("ledger_run_identity_disagreement")
+             aid = event.get("attempt_id")
+             kind = event.get("event")
++            if kind == "rejected" and aid and event.get("sent") is False and event.get("refusal"):
++                continue  # A refusal is evidence, never an admitted outbound request.
+             if not aid or not event.get("purpose") or not event.get("owner") or not event.get("admitted_at"):
+                 raise ValueError("incomplete_attempt_identity")
+             if kind == "admitted" and aid not in states:
+--- /dev/null
++++ final/tests/test_pr_play_02_controls.py
+@@ -0,0 +1,248 @@
++"""Offline checks at production constructors/dispatches; never permit network I/O."""
++import json
++import threading
++from concurrent.futures import ThreadPoolExecutor
++from types import SimpleNamespace as NS
++
++import openai
++import pytest
++
++from game import provider_budget as budget
++from game.api_upstream_preflight import _default_openai_client_factory as preflight_factory
++from game.semantic_interpreter import _invoke_interpretation_model as contract_request
++from game.expressive_dialogue import request_expression as expression_request
++from tests.test_provider_accounting_integrity import ledger, response
++from tools.atgb.accounting import inspect_ledger
++
++REAL_OPENAI = openai.OpenAI
++
++
++@pytest.fixture
++def playtest(ledger, monkeypatch):
++    monkeypatch.setenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", "1")
++    monkeypatch.setenv("ASHEN_DISABLE_PROVIDER_RETRIES", "1")
++    monkeypatch.setenv("ASHEN_PROVIDER_REQUEST_LIMIT", "6")
++    return ledger
++
++
++def invoke_owner(owner, monkeypatch):
++    from game import config
++    monkeypatch.setattr(config, "get_openai_api_key", lambda: "stub-only")
++    if owner == "interpretation":
++        from game import live_chat_interpretation as mod
++        monkeypatch.setattr(mod, "_contract", lambda: (None, None, None, None, "gpt-4.1-mini", None))
++        monkeypatch.setattr(mod, "production_interpretation_schema", lambda: {})
++        return lambda: mod.request_interpretation([], estimated_input=10)
++    if owner == "narration":
++        from tests.helpers.live_model_guard import production_call_gpt
++        return lambda: production_call_gpt()([], purpose="narration")
++    if owner == "expression":
++        return lambda: expression_request({"prompt": {"system": "system", "user": "user"}})
++    if owner == "contract":
++        from game import semantic_interpreter as mod
++        monkeypatch.setattr(mod, "get_openai_api_key", lambda: "stub-only")
++        return lambda: contract_request([])
++    if owner == "candidate":
++        from game.host_constrained_candidates import invoke_candidate_provider
++        return lambda: invoke_candidate_provider({})
++    if owner == "plan":
++        from game.unified_semantic_planning import _invoke_provider
++        return lambda: _invoke_provider({})
++    from game.api_upstream_preflight import run_upstream_api_preflight
++    return lambda: run_upstream_api_preflight(api_key="stub-only", client_factory=preflight_factory)
++
++
++OWNERS = ["interpretation", "narration", "expression", "contract", "candidate", "plan", "preflight"]
++
++
++@pytest.mark.parametrize("owner", OWNERS)
++@pytest.mark.parametrize("enabled", [False, True])
++def test_effective_constructor_and_dispatch(ledger, monkeypatch, owner, enabled):
++    if enabled:
++        monkeypatch.setenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", "1")
++    else:
++        monkeypatch.delenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", raising=False)
++    constructors, calls = [], []
++    def constructor(**kwargs):
++        constructors.append(kwargs)
++        return NS(responses=NS(create=lambda **kw: calls.append(kw) or response()))
++    monkeypatch.setattr(openai, "OpenAI", constructor)
++    invoke_owner(owner, monkeypatch)()
++    assert len(constructors) == len(calls) == 1
++    if enabled:
++        assert constructors[0]["max_retries"] == 0
++    else:
++        assert "max_retries" not in constructors[0]
++    assert budget.snapshot()["dispatched_requests"] == 1
++
++
++@pytest.mark.parametrize("owner", OWNERS)
++def test_each_production_path_rejects_seventh_before_sdk(playtest, monkeypatch, owner):
++    calls = []
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=lambda **kw: calls.append(kw) or response())))
++    request = invoke_owner(owner, monkeypatch)
++    for _ in range(6):
++        request()
++    try:
++        request()
++    except RuntimeError as exc:
++        assert str(exc) == "request ceiling"
++    snap = budget.snapshot()
++    assert len(calls) == snap["requests"] == snap["dispatched_requests"] == 6
++    assert len([e for e in snap["events"] if e["event"] == "rejected"]) == 1
++    assert inspect_ledger(playtest, snap)["request_upper_bound"] == 6
++
++
++def test_shared_budget_multiple_operations_and_submissions(playtest, monkeypatch):
++    calls = []
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=lambda **kw: calls.append(kw) or response())))
++    interpretation = invoke_owner("interpretation", monkeypatch)
++    narration = invoke_owner("narration", monkeypatch)
++    # Three simulated submissions, with two real production operations per submission.
++    for _ in range(3):
++        interpretation()
++        narration()
++    refused = interpretation()
++    assert refused["sent"] is False and refused["reason"] == "request ceiling"
++    snap = budget.snapshot()
++    assert len(calls) == snap["dispatched_requests"] == 6
++    assert [r["sequence"] for r in snap["records"]] == list(range(1, 7))
++    assert snap["total_tokens"] == 72
++    assert all(e["sdk_retries"] == 0 and e["host_retries"] == "disabled" for e in snap["events"][1:])
++    rejected = snap["events"][-1]
++    assert rejected["event"] == "rejected" and rejected["budget_remaining"] == 0
++    assert rejected["total_tokens"] is None and rejected["sent"] is False
++
++
++def test_failed_production_dispatch_consumes_admission_and_usage_unknown(playtest, monkeypatch):
++    calls = []
++    def fail(**kw):
++        calls.append(kw)
++        raise TimeoutError("sensitive exception text")
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=fail)))
++    request = invoke_owner("interpretation", monkeypatch)
++    assert request()["ok"] is False
++    assert request()["sent"] is False  # Existing fail-closed policy stops on unknown usage.
++    snap = budget.snapshot()
++    assert len(calls) == snap["requests"] == 1
++    assert snap["total_tokens"] is None
++    assert snap["records"][0]["completion_status"] == "failed"
++    assert "sensitive exception text" not in playtest.read_text()
++
++
++def test_concurrent_production_operations_share_six_admissions(playtest, monkeypatch):
++    calls = []
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=lambda **kw: calls.append(kw) or response())))
++    interpretation = invoke_owner("interpretation", monkeypatch)
++    narration = invoke_owner("narration", monkeypatch)
++    barrier = threading.Barrier(16)
++    def run(i):
++        barrier.wait()
++        (interpretation if i % 2 else narration)()
++    with ThreadPoolExecutor(max_workers=16) as pool:
++        list(pool.map(run, range(16)))
++    snap = budget.snapshot()
++    assert len(calls) == snap["requests"] == snap["dispatched_requests"] == 6
++    assert len([e for e in snap["events"] if e["event"] == "rejected"]) == 10
++    assert inspect_ledger(playtest, snap)["request_upper_bound"] == 6
++
++
++def test_exhausted_chat_and_opening_do_not_reach_state_or_resolver(playtest, monkeypatch):
++    from game import api
++    from game.models import ChatRequest
++    from starlette.requests import Request
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=lambda **kw: response())))
++    for _ in range(6):
++        invoke_owner("interpretation", monkeypatch)()
++    logs = []
++    monkeypatch.setattr(api, "append_log", logs.append)
++    for name in ["load_session", "load_world", "load_character", "load_combat", "save_session", "save_world", "save_character", "save_combat", "interpret_production_turn"]:
++        monkeypatch.setattr(api, name, lambda *a, **kw: pytest.fail("exhausted operation reached state/interpretation"))
++    for text in ["I examine the signal mirror.", "Yes, proceed.", "/ooc What happened?"]:
++        result = api.chat(ChatRequest(text=text))
++        assert "controlled playtest request limit" in result["gm_output"]["player_facing_text"]
++        assert result["resolution"]["metadata"]["authoritative_mutation"] is False
++    result = api.start_campaign(Request({"type": "http", "headers": []}))
++    assert result.status_code == 409
++    assert len(logs) == 3 and budget.snapshot()["requests"] == 6
++
++
++def test_real_sdk_transport_has_no_retry(playtest, monkeypatch):
++    # Installed SDK + its supported mock transport: no socket can be reached.
++    from openai._base_client import httpx
++    calls, clients = [], []
++    def transport(request):
++        calls.append(request)
++        return httpx.Response(429, json={"error": {"message": "stub rate limit", "type": "rate_limit"}})
++    def constructor(**kwargs):
++        client = REAL_OPENAI(**kwargs, http_client=openai.DefaultHttpxClient(transport=httpx.MockTransport(transport)))
++        clients.append(client)
++        assert client.max_retries == 0
++        return client
++    monkeypatch.setattr(openai, "OpenAI", constructor)
++    try:
++        assert invoke_owner("interpretation", monkeypatch)()["ok"] is False
++        assert len(calls) == 1
++        assert budget.snapshot()["dispatched_requests"] == 1
++    finally:
++        for client in clients:
++            client.close()
++
++
++def test_host_retry_refused_before_constructor(playtest, monkeypatch):
++    from tests.helpers.live_model_guard import production_call_gpt
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: pytest.fail("host retry constructed SDK"))
++    result = production_call_gpt()([], retry_attempt=1)
++    assert "provider_retry_disabled" in result["tags"]
++    assert budget.snapshot()["requests"] == 0
++
++
++def test_real_chat_submissions_do_not_reset_budget(playtest, monkeypatch, tmp_path):
++    from game import api
++    from game.models import ChatRequest
++    from tests.test_pr_ef_gm_authority import seed_scene
++    seed_scene(tmp_path, monkeypatch)
++    calls = []
++    monkeypatch.setattr(openai, "OpenAI", lambda **kw: NS(responses=NS(create=lambda **kw: calls.append(kw) or response())))
++    request = invoke_owner("interpretation", monkeypatch)
++    def controlled_interpretation(**kwargs):
++        result = request()
++        # End each fixture turn through the production nonmutating error path.
++        return {"status": "blocked", "reason": "fixture_stop", "record": None,
++                "player_facing_text": "Fixture interpretation complete.", "provider_requests": [result["usage"]]}
++    monkeypatch.setattr(api, "interpret_production_turn", controlled_interpretation)
++    monkeypatch.setattr(api, "_stored_interpretation_for_player_text", lambda *_: None)
++    for _ in range(6):
++        assert api.chat(ChatRequest(text="What is visible near the signal mirror?"))["ok"]
++    result = api.chat(ChatRequest(text="I examine the mirror."))
++    assert "controlled playtest request limit" in result["gm_output"]["player_facing_text"]
++    assert len(calls) == budget.snapshot()["requests"] == 6
++
++
++def test_supported_data_directory_in_fresh_process(tmp_path):
++    import os
++    from pathlib import Path
++    import subprocess
++    import sys
++    env = dict(os.environ, ASHEN_DATA_DIR=str(tmp_path / "disposable"), ASHEN_DISABLE_PROVIDER_CALLS="1")
++    result = subprocess.run([sys.executable, "-c", """
++from pathlib import Path
++import os
++from game import storage
++from game.campaign_reset import apply_new_campaign_hard_reset
++assert storage.DATA_DIR == Path(os.environ['ASHEN_DATA_DIR']).resolve()
++result = apply_new_campaign_hard_reset()
++assert result['silent_reset_no_implicit_transcript'] is True
++assert storage.load_session()['campaign_started'] is False
++assert storage.load_log() == []
++assert storage.SESSION_PATH.is_file()
++print('isolated reset passed; separate Start Campaign still required')
++"""], env=env, capture_output=True, text=True, timeout=15)
++    assert result.returncode == 0, result.stderr
++
++
++def test_default_has_no_playtest_gate_or_constructor_override(monkeypatch):
++    monkeypatch.delenv("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES", raising=False)
++    monkeypatch.setattr(budget, "_STOPPED", True)
++    assert budget.sdk_retry_options() == {}
++    assert budget.playtest_stop_reason() == ""

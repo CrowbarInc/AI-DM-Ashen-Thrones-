@@ -1,0 +1,7 @@
+# 04 — Response Continuation
+
+Source inspection established that the existing _communication_decision answer branch joins unique selected public passages verbatim and API delivery preserves its text. Schema has no acknowledgment prose field. Contract edits alone therefore could select evidence, but could not produce a brief receipt on this branch without putting prose into a fact/subject field. A minimal production change was necessary and implemented there.
+
+After earlier mechanical control/ambiguity branches, an answer gets 'Understood. ' only for GM/CORRECTION, INTERPRETED, zero operations, no unresolved references, correction.subject REFERENT, nonempty selected refs all present in answer evidence, and a nonempty answer. This is a receipt for the supplied resolved interpretation, not a new classifier or necessity veto. It does not assert the corrected subject as a world fact. Evidence is joined once by the existing deduplication path. Other CORRECTION records, insufficient evidence, ambiguous/status-unresolved records and mechanical revision do not get the receipt.
+
+Three unrelated-vocabulary synthetic corrections test subject/referent/description continuation. Direct chat checks verify final delivery, unknown limitation, private-reference rejection and targeted ambiguity question. No new call or narration subsystem; no mechanical response change. The host still relies on the supplied interpretation's semantic accuracy; live adequacy is unproven.

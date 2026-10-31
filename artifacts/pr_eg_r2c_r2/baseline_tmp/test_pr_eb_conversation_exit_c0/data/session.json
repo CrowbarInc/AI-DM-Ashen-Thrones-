@@ -1,0 +1,87 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T12:47:50.558626Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard",
+      "active_entities": [],
+      "entity_presence": {},
+      "emergent_addressables": [],
+      "current_interlocutor": null,
+      "promoted_actor_npc_map": {}
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T12:47:50.558626Z",
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "debug_traces": [
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.interaction_context",
+        "operation": "set_social_target",
+        "changed_area": "interaction_context+scene_state.current_interlocutor"
+      }
+    ],
+    "conversational_context": {
+      "pending_clarification": null,
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "That's enough for now.",
+          "delivered_text": "You end the conversation with Sergeant Mara.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:conversation_exit_expression",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "GM",
+        "purpose": "EXPLANATION",
+        "subject": "End the active conversation.",
+        "response": "You end the conversation with Sergeant Mara.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "c9166b6ba22b9575eb442f5192cbb44aaebfc5b3c2ee23654532b232261fc2c4",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "verdict": "C",
+  "execution_class": "C",
+  "primary_failure": "F2",
+  "severity": "blocking",
+  "observed_readiness_attempts": 1,
+  "observed_readiness_failures": 1,
+  "observed_gameplay_turns": 0,
+  "root_cause": "Unresolved beyond failed DNS lookup",
+  "second_and_third_problems": "Not demonstrated",
+  "next_implementation": "Withheld pending representative post-repair evidence",
+  "next_action": "External review then separately approved disposable manual playtest",
+  "inspected_limitations": [
+    "Normal UI host retry flag does not explicitly set zero SDK transport retries",
+    "Existing HTTP TestClient environment coverage gap"
+  ]
+}

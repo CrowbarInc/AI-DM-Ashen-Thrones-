@@ -1,0 +1,53 @@
+{
+  "schema": "decision_facing_answer_recipe_v1",
+  "projection_only": true,
+  "authority_owner": "gm_resolution_decision",
+  "turn_operation": {
+    "projection_only": true,
+    "authority_owner": "gm_resolution_decision",
+    "response_operation": "player_hypothesis_discussion",
+    "declaration_expectation": "hypothesis_discussion_not_required",
+    "semantic_ceiling": "conditional_hypothesis_not_established",
+    "instruction": "Discuss whether the player's hypothesis fits the listed observations, conditionally. Do not establish the hypothesis, an actor, a motive, a tool, or timing. No declaration is needed merely to discuss it. Realize only claims already listed."
+  },
+  "requested_answer": "Answer the perceive about chapel bell. Player asked: Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+  "required_content": [
+    {
+      "claim_id": "rc_db5ec0aa65c3",
+      "role": "MUST_STATE",
+      "text": "The bell's wooden yoke is split.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    },
+    {
+      "claim_id": "rc_b31ecb1fd1c7",
+      "role": "MUST_STATE",
+      "text": "The bell's leather hanger is torn.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    }
+  ],
+  "permitted_content": [],
+  "permitted_inference": {
+    "allowed": false,
+    "qualified_observations": [],
+    "may_infer_claims": []
+  },
+  "inference_modality": "none",
+  "unresolved_content": [],
+  "forbidden_upgrades": [
+    "unauthorized_consequential_fact",
+    "generated_content_as_authored_world_fact"
+  ],
+  "declaration_guidance": {
+    "consequential_authorized_claim": "realize with source_claim_id and the claim provenance",
+    "bounded_inference": "not permitted on this turn",
+    "epistemic_premise": "A player hypothesis on this turn may be discussed conditionally. It is not an authorized claim and it is not world truth.",
+    "epistemic_claims": [],
+    "ordinary_incidental_expression": "Harmless sensory detail and mannerism may stay plain narration. They are not consequential claims."
+  },
+  "incidental_improvisation_guidance": "Harmless sensory detail and mannerism may stay plain narration. They are not consequential claims.",
+  "answer_strategy": "Realize the listed claims. Discuss the player's hypothesis conditionally. Do not establish it."
+}

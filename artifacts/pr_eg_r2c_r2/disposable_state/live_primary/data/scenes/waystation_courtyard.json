@@ -1,0 +1,43 @@
+{
+  "scene": {
+    "id": "waystation_courtyard",
+    "location": "Waystation courtyard",
+    "summary": "A walled courtyard. A lit lantern hangs beside the gate. A side gate is barred from the other side. Warden Rell watches the road.",
+    "visible_facts": [
+      "A soot-streaked lantern burns beside the courtyard gate.",
+      "The side gate is barred from the other side.",
+      "Warden Rell looks concerned as she watches the road."
+    ],
+    "interactables": [
+      {
+        "id": "courtyard_lantern",
+        "label": "courtyard lantern",
+        "type": "examine",
+        "description": "A soot-streaked lantern burns beside the courtyard gate.",
+        "reveals_clue": "lantern_mark"
+      }
+    ],
+    "exits": [
+      {
+        "id": "courtyard_gate",
+        "label": "Courtyard gate",
+        "target_scene_id": "waystation_street",
+        "aliases": [
+          "gate",
+          "courtyard gate"
+        ]
+      }
+    ],
+    "discoverable_clues": [
+      {
+        "id": "lantern_mark",
+        "text": "A small maker's mark is stamped beneath the lantern."
+      }
+    ],
+    "hidden_facts": [],
+    "actions": [],
+    "objects": [],
+    "discovered_clues": [],
+    "runtime_entities": []
+  }
+}

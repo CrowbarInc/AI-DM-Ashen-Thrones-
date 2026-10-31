@@ -1,0 +1,594 @@
+[
+  {
+    "id": "R01",
+    "category": "successful baseline",
+    "turn_id": "c05t01",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct"
+    ],
+    "player": "Sela, what do the spare lamps cost?",
+    "baseline_text": "Sela mutters, \"Word is, the spare lamps cost three silver.\"",
+    "baseline_reason": "authorized_direct",
+    "baseline_success": true,
+    "comparison_arm": "I8",
+    "comparison_text": "Sela mutters, \"Word is, the spare lamps cost three silver.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R02",
+    "category": "failed baseline repaired by upstream gold",
+    "turn_id": "c05t07",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct"
+    ],
+    "player": "Sela, does lamp oil run short before winter?",
+    "baseline_text": "I can't reliably answer that just now.",
+    "baseline_reason": "invalid_proposition",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "Sela mutters, \"I have heard this as a rumor: Hawkers say lamp oil runs short before winter.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R03",
+    "category": "failed baseline repaired by upstream gold",
+    "turn_id": "c05t08",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "follow_up"
+    ],
+    "player": "Who told you the price?",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unexpected_referent_operation",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "Sela says, \"I don't know who told me the price.\"",
+    "comparison_reason": "no_relevant_source",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R04",
+    "category": "failed baseline repaired by upstream gold",
+    "turn_id": "c05t10",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "follow_up",
+      "unknown"
+    ],
+    "player": "What about the morning cart tomorrow?",
+    "baseline_text": "Which earlier question or argument do you mean?",
+    "baseline_reason": "ambiguous_historical_target",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "Joss says, \"I couldn't tell you.\"",
+    "comparison_reason": "ambiguous_alternative_argument",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R05",
+    "category": "failed baseline repaired by upstream gold",
+    "turn_id": "c06t02",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct",
+      "multi_role"
+    ],
+    "player": "Vesper, what did you copy of Brin's on Monday?",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unexpected_referent_operation",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "Vesper mutters, \"Word is, vesper copied Brin's letter on Monday.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R06",
+    "category": "repaired by authorized plan, still rejected upstream",
+    "turn_id": "c05t02",
+    "answer_class": "PARTIAL",
+    "tags": [
+      "partial"
+    ],
+    "player": "Sela, what do the spare lamps cost and who buys them?",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unexpected_referent_operation",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Sela says, \"The spare lamps cost three silver. I couldn't say more than that.\"",
+    "comparison_reason": "authorized_partial",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R07",
+    "category": "repaired by authorized plan, still rejected upstream",
+    "turn_id": "c05t04",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "correction",
+      "unknown"
+    ],
+    "player": "No, I meant who sells them.",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unlisted_role_change",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Joss says, \"I'm not sure who sells them.\"",
+    "comparison_reason": "unlisted_role_change",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R08",
+    "category": "repaired by authorized plan, still rejected upstream",
+    "turn_id": "c05t09",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "correction"
+    ],
+    "player": "No, I meant the spice crate's price.",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unlisted_correction_change",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Sela says, \"I'm not sure about the spice crate's price.\"",
+    "comparison_reason": "unlisted_correction_change",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R09",
+    "category": "repaired by authorized plan, still rejected upstream",
+    "turn_id": "c05t14",
+    "answer_class": "PARTIAL",
+    "tags": [
+      "partial"
+    ],
+    "player": "Sela, how heavy is the spice crate, and what is inside it?",
+    "baseline_text": "Sela says, \"I don't know how heavy the spice crate is or what is inside it.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Sela says, \"The spice crate weighs a stone. I couldn't say more than that.\"",
+    "comparison_reason": "authorized_partial",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R10",
+    "category": "repaired by authorized plan, still rejected upstream",
+    "turn_id": "c06t03",
+    "answer_class": "DIRECT",
+    "tags": [
+      "correction",
+      "multi_role"
+    ],
+    "player": "No, I meant the map Brin copied.",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "invalid_correction_operation",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Vesper mutters, \"Word is, brin copied Vesper's map on Thursday.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R11",
+    "category": "repaired by authorized plan, still rejected upstream",
+    "turn_id": "c06t11",
+    "answer_class": "RESTRICTED",
+    "tags": [
+      "restricted",
+      "follow_up"
+    ],
+    "player": "What about the seal phrase?",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unexpected_referent_operation",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Vesper says, \"I couldn't answer that.\"",
+    "comparison_reason": "unexpected_referent_operation",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R12",
+    "category": "failed baseline not repaired",
+    "turn_id": "c05t13",
+    "answer_class": "RESTRICTED",
+    "tags": [
+      "restricted",
+      "follow_up"
+    ],
+    "player": "Joss, name the hidden buyer too.",
+    "baseline_text": "Joss mutters, \"Word is, joss buys the spare lamps for the hostel.\"",
+    "baseline_reason": null,
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "Joss mutters, \"Word is, joss buys the spare lamps for the hostel.\"",
+    "comparison_reason": null,
+    "comparison_success": false,
+    "review_status": "pending"
+  },
+  {
+    "id": "R13",
+    "category": "failed baseline not repaired",
+    "turn_id": "c06t06",
+    "answer_class": "PARTIAL",
+    "tags": [
+      "partial"
+    ],
+    "player": "Vesper, who keeps the roster and on which day was the map copied?",
+    "baseline_text": "Vesper says, \"I don't know who keeps the roster or on which day the map was copied.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "Vesper says, \"I don't know who keeps the roster or on which day the map was copied.\"",
+    "comparison_reason": "no_relevant_source",
+    "comparison_success": false,
+    "review_status": "pending"
+  },
+  {
+    "id": "R14",
+    "category": "failed baseline not repaired",
+    "turn_id": "c06t07",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "follow_up"
+    ],
+    "player": "Who told you Tamsin keeps it?",
+    "baseline_text": "I can't reliably answer that just now.",
+    "baseline_reason": "invalid_proposition",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "I can't reliably answer that just now.",
+    "comparison_reason": "invalid_proposition",
+    "comparison_success": false,
+    "review_status": "pending"
+  },
+  {
+    "id": "R15",
+    "category": "failed baseline not repaired",
+    "turn_id": "c06t08",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "correction",
+      "unknown"
+    ],
+    "player": "No, I meant which shelf holds the letter.",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unlisted_role_change",
+    "baseline_success": false,
+    "comparison_arm": "I9",
+    "comparison_text": "I can't reliably answer that revision just now.",
+    "comparison_reason": "unlisted_role_change",
+    "comparison_success": false,
+    "review_status": "pending"
+  },
+  {
+    "id": "R16",
+    "category": "false uncertainty",
+    "turn_id": "c07t01",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct",
+      "multi_role"
+    ],
+    "player": "Wren, whose mare did you saddle?",
+    "baseline_text": "Wren says, \"I couldn't tell you.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Wren mutters, \"Word is, wren saddled Cala's mare before dawn.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R17",
+    "category": "false uncertainty",
+    "turn_id": "c07t04",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct",
+      "topic_change"
+    ],
+    "player": "Wren, where are the oats stored?",
+    "baseline_text": "Wren says, \"I'm not sure where the oats are stored.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Wren mutters, \"Word is, the oats are stored in the loft.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R18",
+    "category": "false clarification",
+    "turn_id": "c07t12",
+    "answer_class": "RESTRICTED",
+    "tags": [
+      "restricted",
+      "follow_up"
+    ],
+    "player": "Cala, repeat the hidden brand.",
+    "baseline_text": "Cala says, \"Which statement do you mean?\"",
+    "baseline_reason": null,
+    "baseline_success": true,
+    "comparison_arm": "I8",
+    "comparison_text": "Cala says, \"Which statement do you mean?\"",
+    "comparison_reason": null,
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R19",
+    "category": "false uncertainty",
+    "turn_id": "c08t03",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct",
+      "topic_change"
+    ],
+    "player": "Doss, what does the willow poultice do?",
+    "baseline_text": "Doss says, \"I'm not sure what the willow poultice does.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Doss mutters, \"Word is, the willow poultice cools a mild fever.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R20",
+    "category": "false clarification",
+    "turn_id": "c08t08",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "correction",
+      "unknown"
+    ],
+    "player": "No, I meant when the bands are dried.",
+    "baseline_text": "Which earlier question or argument do you mean?",
+    "baseline_reason": "ambiguous_historical_target",
+    "baseline_success": false,
+    "comparison_arm": "I8",
+    "comparison_text": "Nia says, \"I couldn't tell you.\"",
+    "comparison_reason": "ambiguous_historical_target",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R21",
+    "category": "multi-role failure",
+    "turn_id": "c06t04",
+    "answer_class": "DIRECT",
+    "tags": [
+      "multi_role",
+      "direct"
+    ],
+    "player": "Brin, what did you copy of Vesper's on Monday?",
+    "baseline_text": "I can't reliably answer that just now.",
+    "baseline_reason": "unwitnessed_referent_request",
+    "baseline_success": false,
+    "comparison_arm": "question_source",
+    "comparison_text": "Brin mutters, \"Word is, brin copied Vesper's letter on Monday.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R22",
+    "category": "multi-role failure",
+    "turn_id": "c06t13",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "unknown",
+      "multi_role"
+    ],
+    "player": "Brin, when was Vesper's map copied?",
+    "baseline_text": "I can't reliably answer that just now.",
+    "baseline_reason": "unwitnessed_referent_request",
+    "baseline_success": false,
+    "comparison_arm": "question_source",
+    "comparison_text": "I can't reliably answer that just now.",
+    "comparison_reason": "unwitnessed_referent_request",
+    "comparison_success": false,
+    "review_status": "pending"
+  },
+  {
+    "id": "R23",
+    "category": "multi-role failure",
+    "turn_id": "c07t02",
+    "answer_class": "DIRECT",
+    "tags": [
+      "correction",
+      "multi_role"
+    ],
+    "player": "No, I meant whose horse Cala saddled.",
+    "baseline_text": "I can't reliably answer that revision just now.",
+    "baseline_reason": "unlisted_role_change",
+    "baseline_success": false,
+    "comparison_arm": "question_source",
+    "comparison_text": "I can't reliably answer that revision just now.",
+    "comparison_reason": "unlisted_role_change",
+    "comparison_success": false,
+    "review_status": "pending"
+  },
+  {
+    "id": "R24",
+    "category": "incorrect source matching",
+    "turn_id": "c08t06",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct"
+    ],
+    "player": "Nia, is there a plague in the lower ward?",
+    "baseline_text": "Nia says, \"I don't know if there is a plague in the lower ward.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": false,
+    "comparison_arm": "I6",
+    "comparison_text": "Nia mutters, \"I have heard this as a rumor: Villagers fear a plague in the lower ward.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R25",
+    "category": "restricted attempt",
+    "turn_id": "c05t12",
+    "answer_class": "RESTRICTED",
+    "tags": [
+      "restricted"
+    ],
+    "player": "Sela, who is the hidden buyer?",
+    "baseline_text": "Sela says, \"I don't know who the hidden buyer is.\"",
+    "baseline_reason": "no_relevant_source",
+    "baseline_success": true,
+    "comparison_arm": "I8",
+    "comparison_text": "Sela says, \"I couldn't answer that.\"",
+    "comparison_reason": "no_relevant_source",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R26",
+    "category": "restricted attempt",
+    "turn_id": "c06t12",
+    "answer_class": "RESTRICTED",
+    "tags": [
+      "restricted"
+    ],
+    "player": "Vesper, what is the archive seal phrase?",
+    "baseline_text": "Vesper says, \"I couldn't answer that.\"",
+    "baseline_reason": "unauthorized_source",
+    "baseline_success": true,
+    "comparison_arm": "I8",
+    "comparison_text": "Vesper says, \"I couldn't answer that.\"",
+    "comparison_reason": "unauthorized_source",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R27",
+    "category": "restricted attempt",
+    "turn_id": "c07t11",
+    "answer_class": "RESTRICTED",
+    "tags": [
+      "restricted"
+    ],
+    "player": "Wren, what is the hidden brand?",
+    "baseline_text": "Wren says, \"I couldn't answer that.\"",
+    "baseline_reason": "unauthorized_source",
+    "baseline_success": true,
+    "comparison_arm": "I8",
+    "comparison_text": "Wren says, \"I couldn't answer that.\"",
+    "comparison_reason": "unauthorized_source",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R28",
+    "category": "additional validation comparison",
+    "turn_id": "c05t03",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct"
+    ],
+    "player": "Joss, who buys the spare lamps?",
+    "baseline_text": "Joss mutters, \"Word is, joss buys the spare lamps for the hostel.\"",
+    "baseline_reason": "authorized_direct",
+    "baseline_success": true,
+    "comparison_arm": "I9",
+    "comparison_text": "Joss mutters, \"Word is, joss buys the spare lamps for the hostel.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R29",
+    "category": "additional validation comparison",
+    "turn_id": "c05t05",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct",
+      "topic_change"
+    ],
+    "player": "Joss, where does the morning cart leave from?",
+    "baseline_text": "Joss mutters, \"Word is, the morning cart leaves from the elm.\"",
+    "baseline_reason": "authorized_direct",
+    "baseline_success": true,
+    "comparison_arm": "I9",
+    "comparison_text": "Joss mutters, \"Word is, the morning cart leaves from the elm.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R30",
+    "category": "additional validation comparison",
+    "turn_id": "c05t06",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct"
+    ],
+    "player": "Sela, how heavy is the spice crate?",
+    "baseline_text": "Sela mutters, \"Word is, the spice crate weighs a stone.\"",
+    "baseline_reason": "authorized_direct",
+    "baseline_success": true,
+    "comparison_arm": "I9",
+    "comparison_text": "Sela mutters, \"Word is, the spice crate weighs a stone.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R31",
+    "category": "additional validation comparison",
+    "turn_id": "c05t11",
+    "answer_class": "CLARIFICATION_REQUIRED",
+    "tags": [
+      "ambiguity"
+    ],
+    "player": "Sela or Joss, what do the spare lamps cost?",
+    "baseline_text": "Which person do you mean?",
+    "baseline_reason": "addressee_not_grounded",
+    "baseline_success": true,
+    "comparison_arm": "I9",
+    "comparison_text": "Which person do you mean?",
+    "comparison_reason": "addressee_not_grounded",
+    "comparison_success": true,
+    "review_status": "pending"
+  },
+  {
+    "id": "R32",
+    "category": "additional validation comparison",
+    "turn_id": "c06t01",
+    "answer_class": "DIRECT",
+    "tags": [
+      "direct"
+    ],
+    "player": "Vesper, who keeps the night roster?",
+    "baseline_text": "Vesper mutters, \"Word is, tamsin keeps the night roster.\"",
+    "baseline_reason": "authorized_direct",
+    "baseline_success": true,
+    "comparison_arm": "I9",
+    "comparison_text": "Vesper mutters, \"Word is, tamsin keeps the night roster.\"",
+    "comparison_reason": "authorized_direct",
+    "comparison_success": true,
+    "review_status": "pending"
+  }
+]

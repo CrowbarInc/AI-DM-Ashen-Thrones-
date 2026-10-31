@@ -1,0 +1,55 @@
+{
+  "unchanged": {
+    "session": false,
+    "world": true,
+    "scene": true,
+    "character": true,
+    "combat": true,
+    "log": false
+  },
+  "unchanged_session_fields": {
+    "turn_counter": true,
+    "clocks": true,
+    "active_scene_id": true,
+    "current_date": true
+  },
+  "pending_before": {
+    "kind": "ambiguous_addressee",
+    "operation": "ASK",
+    "status": "pending",
+    "scene_id": "waystation_courtyard",
+    "original_text": "I ask one of them what happened.",
+    "choices": [
+      {
+        "entity_id": "sergeant_mara",
+        "label": "Sergeant Mara"
+      },
+      {
+        "entity_id": "corporal_bren",
+        "label": "Corporal Bren"
+      }
+    ],
+    "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+    "target_resolution": "ambiguous"
+  },
+  "pending_after": {
+    "kind": "ambiguous_addressee",
+    "operation": "ASK",
+    "status": "pending",
+    "scene_id": "waystation_courtyard",
+    "original_text": "I ask one of them what happened.",
+    "choices": [
+      {
+        "entity_id": "sergeant_mara",
+        "label": "Sergeant Mara"
+      },
+      {
+        "entity_id": "corporal_bren",
+        "label": "Corporal Bren"
+      }
+    ],
+    "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+    "target_resolution": "ambiguous",
+    "revised_text": "Instead, make that a question about the lamp."
+  }
+}

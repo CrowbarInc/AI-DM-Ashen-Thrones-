@@ -1,0 +1,55 @@
+{
+  "case_id": "s30q4",
+  "family": "s30",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "348e88c10ae6546d307d674e0c38f1087364d565c02d23f41a2bdf7d066f2a8e",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Senn does not guard the granary",
+      "The watch rota assigns Senn to the ferry landing"
+    ],
+    "qualifiers": [
+      "npc_knowledge",
+      "world_source"
+    ],
+    "selected_fact_ids": [
+      "f1",
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s30"
+    ],
+    "answered_arguments": [
+      "who is not guarding the granary",
+      "who replaces that person"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 states that Senn does not guard the granary, and fact f2 states that the watch rota assigns Senn to the ferry landing, indicating that Senn is replaced at the granary by being assigned elsewhere."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

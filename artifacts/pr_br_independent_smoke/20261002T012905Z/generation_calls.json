@@ -1,0 +1,93 @@
+[
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "Rain spatters against the soot-dark stone of Cinderwatch's eastern gate, where frayed banners shudder in the chilly wind. The muddy approach to the gate is congested with foot traffic, refugees, and wagons, all pressing forward under the watchful eyes of guards who hold the choke point firm. Nearby, a tavern runner calls out energetically, hawking hot stew and tidbits of rumor to the waiting crowd. A notice board catches your eye; it prominently displays new taxes and curfew rules alongside a troubling warning about a missing patrol. Among the crowd, a lone figure dressed in threadbare clothes remains unnervingly still, their gaze darting more toward the passing faces and packs than the gate itself. From here, you can sense an undercurrent of tension—news travels fast, and the absence of that patrol is turning heads and tightening scrutiny."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "\"A bowl of stew?\" The tavern runner glances around anxiously before shaking their head. \"Can't say what it costs right now, and there’s no dry spot to eat out here. Best head inside the market quarter if you want shelter from the rain.\""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "\"I can't say for sure how you might slip through that line,\" the tavern runner says, eyes flicking nervously toward the crowded gate. \"The guards near the frontier gate are strict these days, especially with all the tension around the market quarter. They don't usually make exceptions for strangers, even if it's just to eat. If you want in dry, the best bet might be to find someone from the inner districts who can vouch for you.\""
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "",
+    "model_player_facing_text": "The tavern runner shakes their head again, their eyes darting briefly toward the guards managing the crowded line. \"I can't say how you’d manage to get through the crowd, and I don’t know if they’d allow a stranger inside just to eat. You might have better luck asking one of the gate guards over there, but right now, things are tense and they're quite strict about who passes.\""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "\"I'm afraid I can't give you a simple answer,\" the gate guard says, eyes flicking toward the crowded line and the notice board listing curfews and taxes. \"The rules for passage vary, and travelers might be required to show permits, pay certain fees, or prove they're not a threat. These days, with the Ash Compact census and tightened checks, things can change on short notice. Your best bet is to prepare for paperwork and coin, but exactly what depends on who’s watching and what happens to be in force when you reach the front.\""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "\"What papers and fees apply for a lone traveler right now?\" the gate guard says, their tone measured. \"I can't give you a straight answer—the requirements shift often. Your best bet is to check the notice board there; it lists the current taxes, curfew rules, and what’s expected for anyone seeking passage.\" The guard's gaze flicks to the crowded board plastered with notices."
+  },
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "You step closer to the notice board pressed against the rain-darkened stone of the gate district. The board holds several notices: new tax rates affecting travelers linger at the top, imposed recently by the city magistrate. Below that, curfew hours are clearly posted, forbidding movement past the gates after dusk without explicit guard permission. A separate pinned warning mentions a patrol gone missing on the northwest route beyond the crates, cautioning travelers to report any unusual sights. There is no explicit mention here of any specific papers required for entry, but fees and permits are suggested to be in constant flux, as the gate guard showed uncertainty earlier. It appears the most reliable information remains with the gate officials who enforce these rules day by day."
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "",
+    "model_player_facing_text": "The notice board before you is densely packed with papers under a thin layer of grime from the rain. You make out several postings: a list of new taxes imposed recently, a curfew ordinance restricting movement after dark, and a cautionary note about a patrol reported missing to the northwest. While there is no direct statement detailing traveler-specific papers or fees here, the implication of frequent changes and the posted warnings suggest that travelers might face variable requirements. Nearby guards keep a watchful eye on the board and the crowd, but do not intervene as you read."
+  },
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "The gate guard eyes you with a guarded expression. \"The new postings list taxes and a curfew after dark, but there is no set fee or mandatory papers required for passage at this moment,\" they say. \"Whether I'll let you through tonight depends on other factors—the crowd, the mood of the guards, and orders from above. No guarantees, but you won't be stopped just for lack of papers or fees right now.\" They glance back toward the notice board and the line pressing forward."
+  },
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "You step into the line toward the gate, stating plainly to the guard that you have no papers or fees set aside and that you intend to pass through now. The guard assesses you with a hard, unreadable gaze but offers no immediate promise of passage. His expression remains guarded, and without explicit orders or concessions, the crowded line ahead does not shift. It seems your movement forward depends heavily on factors beyond your control—the mood among the guards, the orders they are enforcing, and the pressure of the gathering crowd."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "{\n  \"player_facing_text\": \"The threadbare watcher’s gaze shifts slowly from the crowd to your approach. They say in a low, hesitant voice, \\\"Waiting for a sign, something or someone to break the silence out here. Folks say the missing patrol might bring one—or trouble. So we watch and wait, caught between hope and dread.\\\" Their eyes flick toward the boarded-up crates beyond the gate where the patrol was last seen.',\n  \"tags\": [\"scene_momentum:new_information\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The threadbare watcher speaks with a quiet urgency, their voice barely above the rain’s patter.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"none\",\n      \"source\": \"npc:threadbare_watcher\",\n      \"speaker_id\": \"threadbare_watcher\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Direct response by the threadbare watcher to the question about what they are waiting for. Adds new concrete detail and maintains the guarded, wary tone appropriate to the scene.\"\n}"
+  },
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "You turn your gaze to follow where the watchful figures—gate guards and refugees alike—are looking. Their eyes trace a path toward a clutter of weather-beaten crates piled near the northwestern edge of the muddy approach to the gate. This aligns with the recent warnings posted about a missing patrol that was last seen moving past this muddy track northwest of here. The gate serjeant’s gaze lingers briefly on that area before flicking back to the restless crowd, his posture taut with vigilance amid the persistent rain and tension."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "model_player_facing_text": "\"The gate serjeant follows your gaze toward the weather-beaten crates near the northern edge of the gate district. \"Those crates,\" they say quietly, \"have been a focal point for the patrol’s last known movements. We’re watching for any sign of that missing unit or unusual activity along that muddy northwest track. Quiet as it is, our eyes and ears need to stay sharp out there.\" Their expression tightens slightly. \"The patrol was tasked with checking the route beyond those crates, but they've vanished without a trace. We’re on edge, waiting for any hint—something to break this silence.\""
+  }
+]

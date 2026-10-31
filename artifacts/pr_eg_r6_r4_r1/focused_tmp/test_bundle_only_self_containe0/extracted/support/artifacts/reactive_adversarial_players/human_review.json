@@ -1,0 +1,68 @@
+{
+  "artifact_version": 1,
+  "reviewed_campaigns": [
+    "20260918T021838Z",
+    "20260918T022209Z"
+  ],
+  "classifications": [
+    {
+      "classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE",
+      "campaign_id": "20260918T021838Z",
+      "run_id": "watch_command_reactive_seed1701",
+      "turn_indices": [0, 1, 2, 3],
+      "summary": "Repeated direct and rephrased command questions receive atmospheric non-answers; player_intent_addressed correctly fails.",
+      "novel_vs_calibration": false
+    },
+    {
+      "classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE",
+      "campaign_id": "20260918T021838Z",
+      "run_id": "watch_command_adversarial_seed1701",
+      "turn_indices": [0, 1, 2, 3],
+      "summary": "Bounded adversarial pressure reproduces unanswered-question behavior; player_intent_addressed correctly fails.",
+      "novel_vs_calibration": false
+    },
+    {
+      "classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE",
+      "campaign_id": "20260918T021838Z",
+      "run_id": "patrol_knowledge_reactive_seed1701",
+      "turn_indices": [0],
+      "summary": "The broken refusal 'cannot answer that from what' is detected as an intent failure.",
+      "novel_vs_calibration": false
+    },
+    {
+      "classification": "A_KNOWN_EVALUATOR_DETECTED_FAILURE",
+      "campaign_id": "20260918T021838Z",
+      "run_id": "patrol_knowledge_adversarial_seed1701",
+      "turn_indices": [0, 2],
+      "summary": "Pressure reproduces both the broken-refusal fragment and a truncated speech construction; mandatory gates detect them.",
+      "novel_vs_calibration": false
+    },
+    {
+      "classification": "B_PROBABLE_GAMEPLAY_FAILURE_EVALUATOR_MISS",
+      "campaign_id": "20260918T021838Z",
+      "run_id": "notice_observation_adversarial_seed1701",
+      "turn_indices": [1],
+      "summary": "The guard claims ignorance about which visible parts of a nearby notice are readable. The response is lexically coherent and receives PASS, but it does not provide the requested observation and introduces an unnecessary speaker boundary.",
+      "novel_vs_calibration": false,
+      "proposed_calibration_candidate": "Observation follow-through where a visible property is replaced by irrelevant NPC ignorance. Preserve for later human calibration; no rule added here."
+    },
+    {
+      "classification": "C_PROBABLE_FALSE_POSITIVE",
+      "campaign_id": "20260918T022209Z",
+      "run_id": "patrol_knowledge_adversarial_seed1701",
+      "turn_indices": [0],
+      "summary": "Tavern Runner grimaces and says 'Not something I can say here.' This is a coherent diegetic refusal, but player_intent_addressed reports FAIL.",
+      "novel_vs_calibration": true,
+      "proposed_calibration_candidate": "Concise diegetic refusal phrased as inability or unwillingness to speak here. Preserve for later human calibration; no rule added here."
+    },
+    {
+      "classification": "E_AMBIGUOUS_HUMAN_REVIEW_REQUIRED",
+      "campaign_id": "20260918T021838Z",
+      "run_id": "notice_observation_reactive_seed1701",
+      "turn_indices": [0],
+      "summary": "The requested categories are present, but the sentence is grammatically degraded ('a warning ... sharpens') and mixes unrelated pressure. It remains insufficiently clear for an evaluator-policy change."
+    }
+  ],
+  "invalid_runs": [],
+  "review_conclusion": "No gameplay repairs or semantic-policy changes were made. The false-positive and evaluator-miss candidates require a later human-reviewed calibration campaign."
+}

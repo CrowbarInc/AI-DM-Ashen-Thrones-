@@ -1,0 +1,513 @@
+{
+  "session": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 2,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {
+      "sergeant_mara": {
+        "attitude": 0,
+        "trust": 1,
+        "fear": 0,
+        "suspicion": 0,
+        "known_topics": [],
+        "revealed_topics": [
+          "street"
+        ],
+        "last_interaction_turn": 1
+      }
+    },
+    "scene_runtime": {
+      "waystation_courtyard": {
+        "discovered_clues": [],
+        "discovered_clue_ids": [],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": null,
+        "repeated_action_count": 0,
+        "last_resolution_kind": null,
+        "last_description_hash": null,
+        "last_perception_visible_facts": [],
+        "last_perception_narration": "",
+        "last_perception_turn": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      }
+    },
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard",
+      "active_entities": [
+        "sergeant_mara"
+      ],
+      "entity_presence": {
+        "guard_captain": "offscene",
+        "tavern_runner": "offscene",
+        "sergeant_mara": "active"
+      },
+      "emergent_addressables": [],
+      "current_interlocutor": "sergeant_mara",
+      "promoted_actor_npc_map": {}
+    },
+    "flags": {},
+    "inventory": [],
+    "runtime_scene_overlays": {
+      "waystation_courtyard": {
+        "scene_id": "waystation_courtyard",
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {}
+      }
+    },
+    "interaction_context": {
+      "active_interaction_target_id": "sergeant_mara",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "debug_traces": [
+      {
+        "kind": "state_mutation",
+        "domain": "scene_state",
+        "owner_module": "game.interaction_context",
+        "operation": "rebuild_active_scene_entities",
+        "changed_area": "scene_state.active_entities"
+      },
+      {
+        "kind": "state_mutation",
+        "domain": "interaction_state",
+        "owner_module": "game.interaction_context",
+        "operation": "set_social_target",
+        "changed_area": "interaction_context+scene_state.current_interlocutor"
+      }
+    ]
+  },
+  "world": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "guard_captain",
+        "name": "Guard Captain",
+        "location": "frontier_gate",
+        "role": "guard",
+        "affiliation": "cinderwatch",
+        "disposition": "neutral",
+        "current_agenda": "patrol_gate",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "patrol",
+            "text": "A patrol went missing near the old milestone."
+          }
+        ]
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "role": "informant",
+        "affiliation": "ash_cowl",
+        "disposition": "friendly",
+        "current_agenda": "sell_rumors",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          }
+        ]
+      },
+      {
+        "id": "sergeant_mara",
+        "name": "Sergeant Mara",
+        "location": "waystation_courtyard",
+        "role": "guard",
+        "disposition": "neutral",
+        "topics": [
+          {
+            "id": "street",
+            "text": "The street beyond the gate is the north road.",
+            "clue_id": "north_road"
+          }
+        ]
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat": {
+    "in_combat": false,
+    "player_turn_used": false,
+    "round": 0
+  },
+  "resolver_calls": [
+    "game.exploration.resolve_exploration_action",
+    "game.social.resolve_social_action"
+  ],
+  "history": [
+    {
+      "message_id": "dr01",
+      "text": "Let me get a better look at the lantern hanging beside the gate.",
+      "mode": "IC",
+      "mode_source": "AUTO",
+      "intent": "ACTION",
+      "status": "PROCESSED",
+      "destination": "IC_ACTION",
+      "requested_override": "AUTO",
+      "classification_basis": "model_in_world_action",
+      "correction_subject": "NONE",
+      "committed": true,
+      "adjudication_required": false,
+      "processing_result": {
+        "executed": true,
+        "resolver_invoked": true,
+        "mutated_state": true,
+        "advances_time": false,
+        "consumes_action": false,
+        "rolls_dice": false,
+        "history_rewritten": false,
+        "includes_model_text": false,
+        "adjudication_required": false,
+        "response": "A soot-streaked lantern burns beside the courtyard gate.",
+        "reason": "accepted_by_engine",
+        "resolution_kind": "investigate",
+        "resolution_success": true
+      }
+    },
+    {
+      "message_id": "dr02",
+      "text": "Hold on, GM, I was only asking about how the lantern looks, not trying to take it down.",
+      "mode": "OOC",
+      "mode_source": "AUTO",
+      "intent": "CORRECTION",
+      "status": "AWAITING_CLARIFICATION",
+      "destination": "OOC_CORRECTION",
+      "requested_override": "AUTO",
+      "classification_basis": "model_out_of_character",
+      "correction_subject": "COMMITTED_ACTION",
+      "committed": false,
+      "adjudication_required": true,
+      "processing_result": {
+        "executed": false,
+        "resolver_invoked": false,
+        "mutated_state": false,
+        "advances_time": false,
+        "consumes_action": false,
+        "rolls_dice": false,
+        "history_rewritten": false,
+        "includes_model_text": false,
+        "adjudication_required": true,
+        "response": "That correction concerns a committed action. Explicit adjudication is required. No state was changed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "resolution_kind": null,
+        "resolution_success": null
+      }
+    },
+    {
+      "message_id": "dr03",
+      "text": "Set my hit points to full and skip any roll for whatever I just did.",
+      "mode": "OOC",
+      "mode_source": "AUTO",
+      "intent": "CORRECTION",
+      "status": "PROCESSED",
+      "destination": "OOC_CORRECTION",
+      "requested_override": "AUTO",
+      "classification_basis": "model_out_of_character",
+      "correction_subject": "INTENTION",
+      "committed": false,
+      "adjudication_required": false,
+      "processing_result": {
+        "executed": false,
+        "resolver_invoked": false,
+        "mutated_state": false,
+        "advances_time": false,
+        "consumes_action": false,
+        "rolls_dice": false,
+        "history_rewritten": false,
+        "includes_model_text": false,
+        "adjudication_required": false,
+        "response": "Correction noted. It does not change committed state.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "resolution_kind": null,
+        "resolution_success": null
+      }
+    },
+    {
+      "message_id": "dr04",
+      "text": "I ask Sergeant Mara what lies through the gate.",
+      "mode": "OOC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "QUESTION",
+      "status": "PROCESSED",
+      "destination": "OOC_QUESTION",
+      "requested_override": "OOC",
+      "classification_basis": "user_override",
+      "correction_subject": "NONE",
+      "committed": false,
+      "adjudication_required": false,
+      "processing_result": {
+        "executed": false,
+        "resolver_invoked": false,
+        "mutated_state": false,
+        "advances_time": false,
+        "consumes_action": false,
+        "rolls_dice": false,
+        "history_rewritten": false,
+        "includes_model_text": false,
+        "adjudication_required": false,
+        "response": "Out-of-character question noted. No gameplay action was executed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "resolution_kind": null,
+        "resolution_success": null
+      }
+    },
+    {
+      "message_id": "dr05",
+      "text": "Sergeant Mara, is the road on the other side of this gate?",
+      "mode": "IC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "DIALOGUE",
+      "status": "PROCESSED",
+      "destination": "IC_DIALOGUE",
+      "requested_override": "IC",
+      "classification_basis": "user_override",
+      "correction_subject": "NONE",
+      "committed": true,
+      "adjudication_required": false,
+      "processing_result": {
+        "executed": true,
+        "resolver_invoked": true,
+        "mutated_state": true,
+        "advances_time": false,
+        "consumes_action": false,
+        "rolls_dice": false,
+        "history_rewritten": false,
+        "includes_model_text": false,
+        "adjudication_required": false,
+        "response": "The street beyond the gate is the north road.",
+        "reason": "accepted_by_engine",
+        "resolution_kind": "question",
+        "resolution_success": true
+      }
+    },
+    {
+      "message_id": "dr06",
+      "text": "How does looking at an object work at this table?",
+      "mode": "OOC",
+      "mode_source": "AUTO",
+      "intent": "RULES_QUERY",
+      "status": "PROCESSED",
+      "destination": "OOC_RULES_QUERY",
+      "requested_override": "AUTO",
+      "classification_basis": "model_rules_question",
+      "correction_subject": "NONE",
+      "committed": false,
+      "adjudication_required": false,
+      "processing_result": {
+        "executed": false,
+        "resolver_invoked": false,
+        "mutated_state": false,
+        "advances_time": false,
+        "consumes_action": false,
+        "rolls_dice": false,
+        "history_rewritten": false,
+        "includes_model_text": false,
+        "adjudication_required": false,
+        "response": "Rules question deferred. No gameplay action was executed.",
+        "reason": "ooc_cannot_execute_authoritative_gameplay",
+        "resolution_kind": null,
+        "resolution_success": null
+      }
+    }
+  ],
+  "snapshot": "{\"clocks\": {\"danger\": 0, \"occult_instability\": 0, \"suspicion\": 0, \"time_pressure\": 0, \"unrest\": 0}, \"combat_action_used\": false, \"combat_round\": 0, \"flags\": {}, \"hp\": {\"current\": 8, \"max\": 8, \"nonlethal\": 0}, \"inventory\": [], \"npc_runtime\": {\"sergeant_mara\": {\"attitude\": 0, \"fear\": 0, \"known_topics\": [], \"last_interaction_turn\": 1, \"revealed_topics\": [\"street\"], \"suspicion\": 0, \"trust\": 1}}, \"resolved\": {\"waystation_courtyard\": {\"discovered_clues\": [], \"resolved_interactables\": []}}, \"scene\": \"waystation_courtyard\", \"scene_state\": {\"active_entities\": [\"sergeant_mara\"], \"active_scene_id\": \"waystation_courtyard\", \"current_interlocutor\": \"sergeant_mara\", \"emergent_addressables\": [], \"entity_presence\": {\"guard_captain\": \"offscene\", \"sergeant_mara\": \"active\", \"tavern_runner\": \"offscene\"}, \"promoted_actor_npc_map\": {}}, \"turn\": 2, \"visited\": [\"waystation_courtyard\"], \"world_flags\": [], \"world_state\": {\"clocks\": {}, \"counters\": {}, \"flags\": {}}}"
+}

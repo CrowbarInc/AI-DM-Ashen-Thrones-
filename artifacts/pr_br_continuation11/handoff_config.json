@@ -1,0 +1,167 @@
+{
+  "campaign_id": "pr-br-continuation-11",
+  "campaign_name": "PR-BR Continuation 11 — Structured Model Interpretation Integration",
+  "campaign_date": "2026-09-29",
+  "purpose": "Wire the live scene catalog into interpretation validation and call a structured interpreter only after deterministic abstention. Same validator. Six focused live turns. No smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Ordinary /api/chat now supplies a scene/referent catalog, so the unscoped nominal bridge is not used on that path. A structured interpreter runs only after the fast path abstains, once, and its Interpretation Proposal is accepted or rejected by the Continuation 10 validator. Deterministic band: 234 passed, 0 failed. Live turns: 6. Fast path: 4. Model-interpreted: 2. Both interpreted contracts were correct. Neither interpreted reply answered the player. Manual player-visible PASS 1/6. Evaluator PASS 5/6 with 4 false PASS. Interpretation calls 2. Generation calls 6. Evaluator model calls 0. Retries 0. READY FOR INDEPENDENT 10-TURN SMOKE: NO. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/scene_referent_catalog.py indexes existing scene, exit, object, and NPC records.",
+      "game/semantic_interpreter.py makes one structured Interpretation Proposal after abstention.",
+      "game/resolution_contract.py validates that proposal with the Continuation 10 validator.",
+      "game/live_resolution.py and game/api.py pass the catalog on ordinary /api/chat."
+    ],
+    "validation": [
+      "tests/test_pr_br_model_interpretation.py covers stubbed interpretation and raw /api/chat.",
+      "Broader band: 234 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation11_live.py runs at most six focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 11 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation11 live transcript, manual review, junit, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Stubbed interpretation tests and Continuation 10 proposal tests passed inside the 234-test band.",
+    "broader": "234 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation11/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 4 fast-path. 2 model-interpreted. No smoke. No 4x10 gate.",
+    "model_runtime_boundary": "2 interpretation calls. 6 generation calls. 0 evaluator model calls. 0 retries.",
+    "new_regressions": "First band pass failed five live-path tests whose fixture scene lacked the named objects. Those objects were added to the shared HTTP fixture. Final band is green.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Do not authorize independent smoke yet. The two model-assisted contracts were right and the replies were not.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "A validated ask contract can still fail to answer the player.",
+      "Fast-path success on ellipsis and referential action blocks interpretation.",
+      "Turn 1 stored the interlocutor as active_claim."
+    ],
+    "pre_existing": [
+      "The omitted-index unscoped nominal bridge remains for callers that do not pass a catalog.",
+      "Already-poisoned discourse slots are not scrubbed."
+    ]
+  },
+  "missing_concepts": [
+    "Emission that honors a validated ask contract.",
+    "A discourse-commit rule that does not store an interlocutor as a claim.",
+    "Fast-path abstention for elliptical and referential lines the current lexer still accepts."
+  ],
+  "does_not_prove": [
+    "Does not prove model-assisted turns produce useful player-visible answers.",
+    "Does not prove 10-turn smoke health.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest."
+  ],
+  "recommended_next_step": "Make a validated ask contract reach the player, and stop interlocutor identity from occupying active_claim, before an independent 10-turn smoke. Do not start PR-BS.",
+  "supporting_files": [
+    {
+      "path": "game/scene_referent_catalog.py",
+      "role": "scene_catalog",
+      "why": "Live canonical referent index from existing scene and NPC records.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "role": "interpreter",
+      "why": "One structured Interpretation Proposal after abstention.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "validator",
+      "why": "Same deterministic validator. Model ids must already exist.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "contract_integration",
+      "why": "Fast path or one validated model proposal becomes the contract.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_resolution.py",
+      "role": "live_wiring",
+      "why": "Ordinary obligation attachment receives the catalog and the interpreter.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_model_interpretation.py",
+      "role": "stub_tests",
+      "why": "Stubbed interpreter, invalid proposals, and raw /api/chat integration.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/fixtures/pr_br_interpretation/continuation8_shapes.json",
+      "role": "fixtures",
+      "why": "Continuation 8 shapes replayed without paid inference.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/junit.xml",
+      "role": "regression",
+      "why": "234 deterministic tests, 0 failures.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/20260930T010945Z/transcript.md",
+      "role": "live_transcript",
+      "why": "Six focused live turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/20260930T010945Z/turns.json",
+      "role": "interpretation_traces",
+      "why": "Per-turn fast path, proposal, validator, contract, and evaluator result.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/20260930T010945Z/summary.json",
+      "role": "cost_accounting",
+      "why": "Turn counts and model-call counts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/manual_review.md",
+      "role": "manual_review",
+      "why": "Human-DM contract and response judgments, including evaluator false PASS.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/call_coalescing.md",
+      "role": "coalescing",
+      "why": "Why interpretation is not combined with generation in this continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation11/provenance.json",
+      "role": "provenance",
+      "why": "HEAD, band result, live-call counts, PR-BR still open.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

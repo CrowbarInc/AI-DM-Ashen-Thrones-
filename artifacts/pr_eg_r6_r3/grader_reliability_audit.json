@@ -1,0 +1,577 @@
+{
+  "source": "artifacts/pr_eg_r6_r2_r2 local_assessment.json final_turns joined to independent_grades.jsonl via grading_blind_map.json",
+  "local_turns": 150,
+  "final_grade_rows": 150,
+  "joined_turns": 150,
+  "intended_corrections": 23,
+  "intended_followups": 51,
+  "grader_missing_correction_label": 7,
+  "grader_missing_followup_label": 13,
+  "structural_or_relevance_credit_on_failed_corrections": [
+    {
+      "conversation": "continuity_0",
+      "turn": 7,
+      "player": "I wasn't asking about the bell. I meant the north road.",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 2,
+      "player": "No, who owns it?",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 10,
+      "player": "I meant what Oren told Mara.",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 7,
+      "player": "No, who owns it?",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 11,
+      "player": "I meant the bridge.",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "local_act": "correction",
+      "local_success": false
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "local_act": "correction",
+      "local_success": false
+    }
+  ],
+  "bias_counts": {
+    "referent_false_positive": 38,
+    "wrong_operation_still_relevant_and_sufficient": 17
+  },
+  "metrics": {
+    "operation_correct": {
+      "comparable_turns": 150,
+      "grader_null_while_local_labeled": 0,
+      "both_true": 130,
+      "grader_only_false_positive": 19,
+      "local_only": 0,
+      "both_false": 1,
+      "grader_positive": 149,
+      "local_positive": 130,
+      "examples": [
+        {
+          "conversation": "continuity_1",
+          "turn": 6,
+          "player": "What did you mean?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 8,
+          "player": "What did you mean?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_4",
+          "turn": 2,
+          "player": "No, what did Oren tell Mara?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_4",
+          "turn": 11,
+          "player": "Which person exactly?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_4",
+          "turn": 13,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_5",
+          "turn": 2,
+          "player": "No, what did Oren tell Mara?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_5",
+          "turn": 11,
+          "player": "Which person exactly?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_6",
+          "turn": 2,
+          "player": "No, what did Oren tell Mara?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_6",
+          "turn": 5,
+          "player": "I meant the ivory compass.",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_6",
+          "turn": 11,
+          "player": "Which person exactly?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_7",
+          "turn": 2,
+          "player": "No, what did Oren tell Mara?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_7",
+          "turn": 11,
+          "player": "Which person exactly?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        }
+      ]
+    },
+    "referent_correct": {
+      "comparable_turns": 61,
+      "grader_null_while_local_labeled": 26,
+      "both_true": 23,
+      "grader_only_false_positive": 38,
+      "local_only": 0,
+      "both_false": 0,
+      "grader_positive": 61,
+      "local_positive": 23,
+      "examples": [
+        {
+          "conversation": "continuity_0",
+          "turn": 5,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_0",
+          "turn": 12,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 2,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 5,
+          "player": "What about tomorrow?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 6,
+          "player": "What did you mean?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 10,
+          "player": "I meant what Oren told Mara.",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 14,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 5,
+          "player": "I meant the ivory compass.",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 6,
+          "player": "Why?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 8,
+          "player": "What did you mean?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 10,
+          "player": "What about tomorrow?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 13,
+          "player": "And the other one?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        }
+      ]
+    },
+    "correction_success": {
+      "comparable_turns": 16,
+      "grader_null_while_local_labeled": 134,
+      "both_true": 5,
+      "grader_only_false_positive": 10,
+      "local_only": 0,
+      "both_false": 1,
+      "grader_positive": 15,
+      "local_positive": 5,
+      "examples": [
+        {
+          "conversation": "continuity_0",
+          "turn": 7,
+          "player": "I wasn't asking about the bell. I meant the north road.",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 2,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 10,
+          "player": "I meant what Oren told Mara.",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 5,
+          "player": "I meant the ivory compass.",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_3",
+          "turn": 7,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_3",
+          "turn": 11,
+          "player": "I meant the bridge.",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_4",
+          "turn": 8,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_5",
+          "turn": 8,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_6",
+          "turn": 8,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_7",
+          "turn": 8,
+          "player": "No, who owns it?",
+          "local": false,
+          "grader": true,
+          "actual_act": "correction",
+          "issue": "grader_false_positive"
+        }
+      ]
+    },
+    "follow_up_success": {
+      "comparable_turns": 38,
+      "grader_null_while_local_labeled": 112,
+      "both_true": 18,
+      "grader_only_false_positive": 20,
+      "local_only": 0,
+      "both_false": 0,
+      "grader_positive": 38,
+      "local_positive": 18,
+      "examples": [
+        {
+          "conversation": "continuity_0",
+          "turn": 5,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_0",
+          "turn": 12,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 5,
+          "player": "What about tomorrow?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 6,
+          "player": "What did you mean?",
+          "local": false,
+          "grader": true,
+          "actual_act": "clarification_response",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_1",
+          "turn": 14,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 6,
+          "player": "Why?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 8,
+          "player": "What did you mean?",
+          "local": false,
+          "grader": true,
+          "actual_act": "information_question",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 10,
+          "player": "What about tomorrow?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_2",
+          "turn": 13,
+          "player": "And the other one?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "continuity_3",
+          "turn": 13,
+          "player": "Who told you?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_4",
+          "turn": 6,
+          "player": "What about tomorrow?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        },
+        {
+          "conversation": "operation_4",
+          "turn": 9,
+          "player": "How do you know?",
+          "local": false,
+          "grader": true,
+          "actual_act": "follow_up",
+          "issue": "grader_false_positive"
+        }
+      ]
+    },
+    "false_clarification": {
+      "comparable_turns": 136,
+      "grader_null_while_local_labeled": 14,
+      "both_true": 4,
+      "grader_only_false_positive": 0,
+      "local_only": 11,
+      "both_false": 121,
+      "grader_positive": 4,
+      "local_positive": 15,
+      "examples": [
+        {
+          "conversation": "continuity_1",
+          "turn": 10,
+          "player": "I meant what Oren told Mara.",
+          "local": true,
+          "grader": null,
+          "issue": "grader_null_on_labeled_turn"
+        }
+      ]
+    }
+  },
+  "findings": [
+    "Local denominators use explicit intended-turn labels. The grader was instructed to use null unless it independently judged the turn to be a correction or follow-up.",
+    "When the grader fails to recognize an intended correction or follow-up, that turn leaves the grader denominator and cannot count as a failure.",
+    "Local correction and follow-up success also required the automated relevant/sufficient/roles flags, so those local rates are optimistic upper bounds, not a second human gold set.",
+    "A grade can mark operation_correct and relevant while the explicit label says the conversational act was wrong.",
+    "Referent credit can be assigned to a bound id that is not the labeled active referent."
+  ]
+}

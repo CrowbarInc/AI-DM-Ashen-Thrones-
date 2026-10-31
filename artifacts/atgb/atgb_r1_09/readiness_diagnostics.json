@@ -1,0 +1,36 @@
+{
+  "non_billable": true,
+  "inference_requests": 0,
+  "host": "api.openai.com",
+  "timeout_seconds": 5,
+  "proxy_route": "No proxy environment configured",
+  "dns": {
+    "status": "FAIL",
+    "exception_type": "gaierror",
+    "errno": 11001,
+    "winerror": null,
+    "reason": null,
+    "elapsed_ms": 5.925
+  },
+  "tcp": {
+    "status": "FAIL",
+    "exception_type": "gaierror",
+    "errno": 11001,
+    "winerror": null,
+    "reason": null,
+    "elapsed_ms": 0.884
+  },
+  "tls": {
+    "status": "FAIL",
+    "exception_type": "gaierror",
+    "errno": 11001,
+    "winerror": null,
+    "reason": null,
+    "elapsed_ms": 16.071
+  },
+  "readiness": "BLOCKED",
+  "blockers": [
+    "network_diagnostic_failure"
+  ],
+  "limitations": "DNS/TCP/TLS cannot prove authentication, model access or successful inference. No authentication endpoint called."
+}

@@ -1,0 +1,103 @@
+[
+  {
+    "proposal": {
+      "kind": "npc_claim",
+      "category": "opinion",
+      "content": "I usually keep a rye loaf for myself.",
+      "scope": "scene",
+      "speaker_id": "baker",
+      "epistemic_status": "grounded",
+      "consequence_level": "low"
+    },
+    "accepted": true,
+    "reasons": [],
+    "entry": {
+      "id": "bi_3fae536ec2c3",
+      "kind": "npc_claim",
+      "category": "opinion",
+      "content": "I usually keep a rye loaf for myself.",
+      "scope": "scene",
+      "scene_id": "",
+      "consequence_level": "low",
+      "source": "dm_improvisation",
+      "speaker_id": "baker",
+      "epistemic_status": "grounded",
+      "status": "accepted",
+      "authority": "bounded_improvisation",
+      "truth_status": "not_world_truth"
+    }
+  },
+  {
+    "proposal": {
+      "kind": "incidental_fact",
+      "category": "food_composition",
+      "content": "The darker loaf is popular with travelers.",
+      "scope": "scene",
+      "speaker_id": "baker",
+      "epistemic_status": "grounded",
+      "consequence_level": "low"
+    },
+    "accepted": true,
+    "reasons": [],
+    "entry": {
+      "id": "bi_2c53e1659690",
+      "kind": "incidental_fact",
+      "category": "food_composition",
+      "content": "The darker loaf is popular with travelers.",
+      "scope": "scene",
+      "scene_id": "",
+      "consequence_level": "low",
+      "source": "dm_improvisation",
+      "speaker_id": "baker",
+      "epistemic_status": null,
+      "status": "accepted",
+      "authority": "bounded_improvisation",
+      "truth_status": "runtime_incidental"
+    }
+  },
+  {
+    "proposal": {
+      "kind": "incidental_fact",
+      "category": "ordinary_personal_detail",
+      "content": "The baker prefers rye bread.",
+      "scope": "scene",
+      "speaker_id": "baker",
+      "epistemic_status": "grounded",
+      "consequence_level": "low"
+    },
+    "accepted": true,
+    "reasons": [],
+    "entry": {
+      "id": "bi_74bc7970a6a1",
+      "kind": "incidental_fact",
+      "category": "ordinary_personal_detail",
+      "content": "The baker prefers rye bread.",
+      "scope": "scene",
+      "scene_id": "",
+      "consequence_level": "low",
+      "source": "dm_improvisation",
+      "speaker_id": "baker",
+      "epistemic_status": null,
+      "status": "accepted",
+      "authority": "bounded_improvisation",
+      "truth_status": "runtime_incidental"
+    }
+  },
+  {
+    "proposal": {
+      "kind": "consequential_proposal",
+      "category": "quest",
+      "content": "The baker knows the hidden vault.",
+      "scope": "scene",
+      "speaker_id": "baker",
+      "epistemic_status": "grounded",
+      "consequence_level": "low"
+    },
+    "accepted": false,
+    "reasons": [
+      "kind:consequential",
+      "kind:not_supported"
+    ],
+    "entry": null
+  }
+]

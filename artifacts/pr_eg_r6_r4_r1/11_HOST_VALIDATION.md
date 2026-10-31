@@ -1,0 +1,3 @@
+# 11 — Host Validation
+
+Mechanically checked: known source identity, NPC/context membership, existing host disclosure policy, schema/duplicate fact IDs, evidence-span substring, role-value-within-role-evidence-within-span, literal qualifier/scope anchors, inherited authority metadata, selected fact/source coherence, answer-value anchors. Not mechanically established: relation entailment, role direction, omission of an essential qualifier, implicit causal support, metaphor literalness or reported-content truth. A named-role swap can pass all anchors. These are separate measurements; no host_verified semantic label is assigned.

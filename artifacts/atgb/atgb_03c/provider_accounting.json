@@ -1,0 +1,2727 @@
+{
+  "version": "ATGB-03B-1",
+  "scenarios": [
+    {
+      "scenario_id": "S04",
+      "trial": 2,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 3,
+      "dispatched": 3,
+      "completed": 3,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 3154,
+      "output_tokens": 345,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 1,
+        "contract_interpretation": 1,
+        "expression": 1
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S04.1",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 4565
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1796
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 199
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": "unavailable",
+            "narration_requests": "unavailable",
+            "retries": "unavailable"
+          }
+        },
+        {
+          "turn_id": "S04.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 15
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "input_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "output_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S04.3",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 2699
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "input_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "output_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": "unavailable",
+            "narration_requests": "unavailable",
+            "retries": "unavailable"
+          }
+        },
+        {
+          "turn_id": "S04.4",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 17
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "input_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "output_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        }
+      ],
+      "host_count_subtotal": 1,
+      "host_count_unavailable_turns": 0,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 3,
+        "observed_sent_requests": 3,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S04/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+        "requests": 3,
+        "request_upper_bound": 3,
+        "dispatched_requests": 3,
+        "pending_requests": 0,
+        "input_tokens": 3154,
+        "output_tokens": 345,
+        "total_tokens": 3499,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1c1514530e834f71ad15c13e017bc84d",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:50.497122+00:00",
+            "time": "2026-10-18T22:30:54.799659+00:00",
+            "sent": true,
+            "request_id": "resp_0baef6cd15816cd6006ad5489cd52487d294f489255fdf97fb",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1796,
+            "output_tokens": 199,
+            "total_tokens": 1995,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 3151.812
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1320daa5517a433daf44e9085405ca53",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:55.385612+00:00",
+            "time": "2026-10-18T22:30:57.111744+00:00",
+            "sent": true,
+            "request_id": "resp_026910ddcf88adca006ad5489fc59c87d28ef1409022366283",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1162,
+            "output_tokens": 130,
+            "total_tokens": 1292,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1653.038
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "a0de1edafa804b6b916fa284e4241665",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:57.161318+00:00",
+            "time": "2026-10-18T22:30:57.988161+00:00",
+            "sent": true,
+            "request_id": "resp_0fea00a3e8c55bcf006ad548a18b2087d2b63e329a80a8f440",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 196,
+            "output_tokens": 16,
+            "total_tokens": 212,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 805.977
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "time": "2026-10-18T22:30:48.532916+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1c1514530e834f71ad15c13e017bc84d",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:50.497122+00:00",
+            "time": "2026-10-18T22:30:50.497122+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1c1514530e834f71ad15c13e017bc84d",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:50.497122+00:00",
+            "time": "2026-10-18T22:30:51.589675+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1c1514530e834f71ad15c13e017bc84d",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:50.497122+00:00",
+            "time": "2026-10-18T22:30:54.799659+00:00",
+            "sent": true,
+            "request_id": "resp_0baef6cd15816cd6006ad5489cd52487d294f489255fdf97fb",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1796,
+            "output_tokens": 199,
+            "total_tokens": 1995,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 3151.812
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1320daa5517a433daf44e9085405ca53",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:55.385612+00:00",
+            "time": "2026-10-18T22:30:55.385612+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1320daa5517a433daf44e9085405ca53",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:55.385612+00:00",
+            "time": "2026-10-18T22:30:55.457197+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "1320daa5517a433daf44e9085405ca53",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:55.385612+00:00",
+            "time": "2026-10-18T22:30:57.111744+00:00",
+            "sent": true,
+            "request_id": "resp_026910ddcf88adca006ad5489fc59c87d28ef1409022366283",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1162,
+            "output_tokens": 130,
+            "total_tokens": 1292,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1653.038
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "a0de1edafa804b6b916fa284e4241665",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:57.161318+00:00",
+            "time": "2026-10-18T22:30:57.161318+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "a0de1edafa804b6b916fa284e4241665",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:57.161318+00:00",
+            "time": "2026-10-18T22:30:57.180875+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "f95223cbb3b84ecfad8b2a4a2500fac3",
+            "attempt_id": "a0de1edafa804b6b916fa284e4241665",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:30:57.161318+00:00",
+            "time": "2026-10-18T22:30:57.988161+00:00",
+            "sent": true,
+            "request_id": "resp_0fea00a3e8c55bcf006ad548a18b2087d2b63e329a80a8f440",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 196,
+            "output_tokens": 16,
+            "total_tokens": 212,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 805.977
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "S05",
+      "trial": 1,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 5,
+      "dispatched": 5,
+      "completed": 5,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 7079,
+      "output_tokens": 754,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 3,
+        "contract_interpretation": 1,
+        "expression": 1
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S05.1",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 3368
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1795
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 181
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": "unavailable",
+            "narration_requests": "unavailable",
+            "retries": "unavailable"
+          }
+        },
+        {
+          "turn_id": "S05.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 1554
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "input_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "output_tokens": {
+            "status": "host_reported_null",
+            "value": null
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": "unavailable",
+            "narration_requests": "unavailable",
+            "retries": "unavailable"
+          }
+        },
+        {
+          "turn_id": "S05.3",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 2166
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1948
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 198
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S05.4",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 4517
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 2050
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 232
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": "unavailable",
+            "narration_requests": "unavailable",
+            "retries": "unavailable"
+          }
+        }
+      ],
+      "host_count_subtotal": 3,
+      "host_count_unavailable_turns": 0,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 5,
+        "observed_sent_requests": 5,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S05/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "ca592ea13888412682ab009816c5c70a",
+        "requests": 5,
+        "request_upper_bound": 5,
+        "dispatched_requests": 5,
+        "pending_requests": 0,
+        "input_tokens": 7079,
+        "output_tokens": 754,
+        "total_tokens": 7833,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "19c0bec14c934218a08ca3739c698fae",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:13.234508+00:00",
+            "time": "2026-10-18T22:31:16.392702+00:00",
+            "sent": true,
+            "request_id": "resp_027cd33c17be67d6006ad548b28ad487d29a8c61efef5f6484",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1795,
+            "output_tokens": 181,
+            "total_tokens": 1976,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2297.88
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "c7e95a222e294910a22d18b3b3329719",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:16.759801+00:00",
+            "time": "2026-10-18T22:31:18.136184+00:00",
+            "sent": true,
+            "request_id": "resp_0c1d061caebdb4f5006ad548b50de887d28d7e883390b43eee",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1126,
+            "output_tokens": 125,
+            "total_tokens": 1251,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1354.391
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "10b539d392174aaf90276b63a479d77a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:18.379728+00:00",
+            "time": "2026-10-18T22:31:20.520975+00:00",
+            "sent": true,
+            "request_id": "resp_049e44d3a71275d3006ad548b6ae6c87d28ff1bfbacf364d95",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1948,
+            "output_tokens": 198,
+            "total_tokens": 2146,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2118.87
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "4829658829c044dea10ecfe3b51b1183",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:20.599177+00:00",
+            "time": "2026-10-18T22:31:23.417415+00:00",
+            "sent": true,
+            "request_id": "resp_06801de86b837b30006ad548b8fbe487d28be77ddf2baf55e8",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2050,
+            "output_tokens": 232,
+            "total_tokens": 2282,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2796.367
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "a4aa5e8f87cd40aaa4543a9177623c09",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:23.509576+00:00",
+            "time": "2026-10-18T22:31:25.082994+00:00",
+            "sent": true,
+            "request_id": "resp_04844448fe9b50ee006ad548bc3d7087d2ae43f95c7a1a4d24",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 160,
+            "output_tokens": 18,
+            "total_tokens": 178,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1550.925
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "time": "2026-10-18T22:31:11.268570+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "19c0bec14c934218a08ca3739c698fae",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:13.234508+00:00",
+            "time": "2026-10-18T22:31:13.234508+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "19c0bec14c934218a08ca3739c698fae",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:13.234508+00:00",
+            "time": "2026-10-18T22:31:14.092146+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "19c0bec14c934218a08ca3739c698fae",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:13.234508+00:00",
+            "time": "2026-10-18T22:31:16.392702+00:00",
+            "sent": true,
+            "request_id": "resp_027cd33c17be67d6006ad548b28ad487d29a8c61efef5f6484",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1795,
+            "output_tokens": 181,
+            "total_tokens": 1976,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2297.88
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "c7e95a222e294910a22d18b3b3329719",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:16.759801+00:00",
+            "time": "2026-10-18T22:31:16.759801+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "c7e95a222e294910a22d18b3b3329719",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:16.759801+00:00",
+            "time": "2026-10-18T22:31:16.779823+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "c7e95a222e294910a22d18b3b3329719",
+            "purpose": "contract_interpretation",
+            "owner": "semantic_interpreter._invoke_interpretation_model",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:16.759801+00:00",
+            "time": "2026-10-18T22:31:18.136184+00:00",
+            "sent": true,
+            "request_id": "resp_0c1d061caebdb4f5006ad548b50de887d28d7e883390b43eee",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1126,
+            "output_tokens": 125,
+            "total_tokens": 1251,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1354.391
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "10b539d392174aaf90276b63a479d77a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:18.379728+00:00",
+            "time": "2026-10-18T22:31:18.379728+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "10b539d392174aaf90276b63a479d77a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:18.379728+00:00",
+            "time": "2026-10-18T22:31:18.400755+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "10b539d392174aaf90276b63a479d77a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:18.379728+00:00",
+            "time": "2026-10-18T22:31:20.520975+00:00",
+            "sent": true,
+            "request_id": "resp_049e44d3a71275d3006ad548b6ae6c87d28ff1bfbacf364d95",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1948,
+            "output_tokens": 198,
+            "total_tokens": 2146,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2118.87
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "4829658829c044dea10ecfe3b51b1183",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:20.599177+00:00",
+            "time": "2026-10-18T22:31:20.599177+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "4829658829c044dea10ecfe3b51b1183",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:20.599177+00:00",
+            "time": "2026-10-18T22:31:20.619207+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "4829658829c044dea10ecfe3b51b1183",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:20.599177+00:00",
+            "time": "2026-10-18T22:31:23.417415+00:00",
+            "sent": true,
+            "request_id": "resp_06801de86b837b30006ad548b8fbe487d28be77ddf2baf55e8",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2050,
+            "output_tokens": 232,
+            "total_tokens": 2282,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2796.367
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "a4aa5e8f87cd40aaa4543a9177623c09",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:23.509576+00:00",
+            "time": "2026-10-18T22:31:23.509576+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "a4aa5e8f87cd40aaa4543a9177623c09",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:23.509576+00:00",
+            "time": "2026-10-18T22:31:23.530127+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "ca592ea13888412682ab009816c5c70a",
+            "attempt_id": "a4aa5e8f87cd40aaa4543a9177623c09",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:23.509576+00:00",
+            "time": "2026-10-18T22:31:25.082994+00:00",
+            "sent": true,
+            "request_id": "resp_04844448fe9b50ee006ad548bc3d7087d2ae43f95c7a1a4d24",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 160,
+            "output_tokens": 18,
+            "total_tokens": 178,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1550.925
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "S06",
+      "trial": 1,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 3,
+      "dispatched": 3,
+      "completed": 3,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 4057,
+      "output_tokens": 407,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 2,
+        "expression": 1
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S06.1",
+          "elapsed_ms": {
+            "status": "unavailable",
+            "value": null
+          },
+          "provider_call_count": {
+            "status": "unavailable",
+            "value": null
+          },
+          "input_tokens": {
+            "status": "unavailable",
+            "value": null
+          },
+          "output_tokens": {
+            "status": "unavailable",
+            "value": null
+          },
+          "retry_count": {
+            "status": "unavailable",
+            "value": null
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S06.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 4147
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1892
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 180
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": "unavailable",
+            "narration_requests": "unavailable",
+            "retries": "unavailable"
+          }
+        },
+        {
+          "turn_id": "S06.3",
+          "elapsed_ms": {
+            "status": "unavailable",
+            "value": null
+          },
+          "provider_call_count": {
+            "status": "unavailable",
+            "value": null
+          },
+          "input_tokens": {
+            "status": "unavailable",
+            "value": null
+          },
+          "output_tokens": {
+            "status": "unavailable",
+            "value": null
+          },
+          "retry_count": {
+            "status": "unavailable",
+            "value": null
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S06.4",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 1916
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 2004
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 214
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        }
+      ],
+      "host_count_subtotal": 2,
+      "host_count_unavailable_turns": 2,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 3,
+        "observed_sent_requests": 3,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S06/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+        "requests": 3,
+        "request_upper_bound": 3,
+        "dispatched_requests": 3,
+        "pending_requests": 0,
+        "input_tokens": 4057,
+        "output_tokens": 407,
+        "total_tokens": 4464,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "3e186044106840feaf31d611ee97fed5",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:40.107234+00:00",
+            "time": "2026-10-18T22:31:43.009632+00:00",
+            "sent": true,
+            "request_id": "resp_01528ec80e0961f1006ad548cd792c87d2a7e6cf6ead0e9afb",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1892,
+            "output_tokens": 180,
+            "total_tokens": 2072,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1988.956
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "b084ec5ea4e647b79ddaa51c60bf0f12",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:43.191920+00:00",
+            "time": "2026-10-18T22:31:44.208355+00:00",
+            "sent": true,
+            "request_id": "resp_0356b2d11d61e214006ad548cf7a0c87d28f6dc8adad828c78",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 161,
+            "output_tokens": 13,
+            "total_tokens": 174,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 994.627
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "1c973457231a4895ab208f1220393aac",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:44.382596+00:00",
+            "time": "2026-10-18T22:31:46.279409+00:00",
+            "sent": true,
+            "request_id": "resp_0a497e7427055afb006ad548d0b2e487d2b9f7f22add79f374",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2004,
+            "output_tokens": 214,
+            "total_tokens": 2218,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1869.774
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "time": "2026-10-18T22:31:38.087690+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "3e186044106840feaf31d611ee97fed5",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:40.107234+00:00",
+            "time": "2026-10-18T22:31:40.107234+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "3e186044106840feaf31d611ee97fed5",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:40.107234+00:00",
+            "time": "2026-10-18T22:31:41.018662+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "3e186044106840feaf31d611ee97fed5",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:40.107234+00:00",
+            "time": "2026-10-18T22:31:43.009632+00:00",
+            "sent": true,
+            "request_id": "resp_01528ec80e0961f1006ad548cd792c87d2a7e6cf6ead0e9afb",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1892,
+            "output_tokens": 180,
+            "total_tokens": 2072,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1988.956
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "b084ec5ea4e647b79ddaa51c60bf0f12",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:43.191920+00:00",
+            "time": "2026-10-18T22:31:43.191920+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "b084ec5ea4e647b79ddaa51c60bf0f12",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:43.191920+00:00",
+            "time": "2026-10-18T22:31:43.212952+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "b084ec5ea4e647b79ddaa51c60bf0f12",
+            "purpose": "expression",
+            "owner": "expressive_dialogue.request_expression",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:43.191920+00:00",
+            "time": "2026-10-18T22:31:44.208355+00:00",
+            "sent": true,
+            "request_id": "resp_0356b2d11d61e214006ad548cf7a0c87d28f6dc8adad828c78",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 161,
+            "output_tokens": 13,
+            "total_tokens": 174,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 994.627
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "1c973457231a4895ab208f1220393aac",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:44.382596+00:00",
+            "time": "2026-10-18T22:31:44.382596+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "1c973457231a4895ab208f1220393aac",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:44.382596+00:00",
+            "time": "2026-10-18T22:31:44.407748+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4ed5276e6c5499f912648af6f69ecb1",
+            "attempt_id": "1c973457231a4895ab208f1220393aac",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:31:44.382596+00:00",
+            "time": "2026-10-18T22:31:46.279409+00:00",
+            "sent": true,
+            "request_id": "resp_0a497e7427055afb006ad548d0b2e487d2b9f7f22add79f374",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2004,
+            "output_tokens": 214,
+            "total_tokens": 2218,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1869.774
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "S07",
+      "trial": 1,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 4,
+      "dispatched": 4,
+      "completed": 4,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 7682,
+      "output_tokens": 870,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 4
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S07.1",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 3283
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1794
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 215
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S07.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 1957
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1931
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 202
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S07.3",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 2149
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1986
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 196
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S07.4",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 2080
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1971
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 257
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        }
+      ],
+      "host_count_subtotal": 4,
+      "host_count_unavailable_turns": 0,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 4,
+        "observed_sent_requests": 4,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S07/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+        "requests": 4,
+        "request_upper_bound": 4,
+        "dispatched_requests": 4,
+        "pending_requests": 0,
+        "input_tokens": 7682,
+        "output_tokens": 870,
+        "total_tokens": 8552,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "45d7a8c4a2704df99d8b77ff6ac8c0f8",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:00.764411+00:00",
+            "time": "2026-10-18T22:32:03.979531+00:00",
+            "sent": true,
+            "request_id": "resp_0765f38fc1aad30c006ad548e2100887d28ca4fb306d98ee8d",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1794,
+            "output_tokens": 215,
+            "total_tokens": 2009,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2352.344
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "9f3acea6b2ef499ab38a9726a8e452ad",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:04.017592+00:00",
+            "time": "2026-10-18T22:32:05.966276+00:00",
+            "sent": true,
+            "request_id": "resp_0f7ba4027f384389006ad548e4548487d2a96b9e83a99cf386",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1931,
+            "output_tokens": 202,
+            "total_tokens": 2133,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1925.638
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "90687815f4ed47e49fb14a9d7f7974bd",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:05.989282+00:00",
+            "time": "2026-10-18T22:32:08.128825+00:00",
+            "sent": true,
+            "request_id": "resp_0f225eeb5ae68437006ad548e648dc87d280cb770eb586cc89",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1986,
+            "output_tokens": 196,
+            "total_tokens": 2182,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2117.747
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "0cdf7b3fe0a0446aa7ec4312ab761c89",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:08.150351+00:00",
+            "time": "2026-10-18T22:32:10.222039+00:00",
+            "sent": true,
+            "request_id": "resp_00e785896105a485006ad548e876ec87d287e9e2ef00f61f58",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1971,
+            "output_tokens": 257,
+            "total_tokens": 2228,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2049.356
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "time": "2026-10-18T22:31:58.832834+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "45d7a8c4a2704df99d8b77ff6ac8c0f8",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:00.764411+00:00",
+            "time": "2026-10-18T22:32:00.764411+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "45d7a8c4a2704df99d8b77ff6ac8c0f8",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:00.764411+00:00",
+            "time": "2026-10-18T22:32:01.624418+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "45d7a8c4a2704df99d8b77ff6ac8c0f8",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:00.764411+00:00",
+            "time": "2026-10-18T22:32:03.979531+00:00",
+            "sent": true,
+            "request_id": "resp_0765f38fc1aad30c006ad548e2100887d28ca4fb306d98ee8d",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1794,
+            "output_tokens": 215,
+            "total_tokens": 2009,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2352.344
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "9f3acea6b2ef499ab38a9726a8e452ad",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:04.017592+00:00",
+            "time": "2026-10-18T22:32:04.017592+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "9f3acea6b2ef499ab38a9726a8e452ad",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:04.017592+00:00",
+            "time": "2026-10-18T22:32:04.039112+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "9f3acea6b2ef499ab38a9726a8e452ad",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:04.017592+00:00",
+            "time": "2026-10-18T22:32:05.966276+00:00",
+            "sent": true,
+            "request_id": "resp_0f7ba4027f384389006ad548e4548487d2a96b9e83a99cf386",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1931,
+            "output_tokens": 202,
+            "total_tokens": 2133,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1925.638
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "90687815f4ed47e49fb14a9d7f7974bd",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:05.989282+00:00",
+            "time": "2026-10-18T22:32:05.989282+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "90687815f4ed47e49fb14a9d7f7974bd",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:05.989282+00:00",
+            "time": "2026-10-18T22:32:06.009282+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "90687815f4ed47e49fb14a9d7f7974bd",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:05.989282+00:00",
+            "time": "2026-10-18T22:32:08.128825+00:00",
+            "sent": true,
+            "request_id": "resp_0f225eeb5ae68437006ad548e648dc87d280cb770eb586cc89",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1986,
+            "output_tokens": 196,
+            "total_tokens": 2182,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2117.747
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "0cdf7b3fe0a0446aa7ec4312ab761c89",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:08.150351+00:00",
+            "time": "2026-10-18T22:32:08.150351+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "0cdf7b3fe0a0446aa7ec4312ab761c89",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:08.150351+00:00",
+            "time": "2026-10-18T22:32:08.171347+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "24e8eb0094fb409a99dba1c01a83ea48",
+            "attempt_id": "0cdf7b3fe0a0446aa7ec4312ab761c89",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:08.150351+00:00",
+            "time": "2026-10-18T22:32:10.222039+00:00",
+            "sent": true,
+            "request_id": "resp_00e785896105a485006ad548e876ec87d287e9e2ef00f61f58",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1971,
+            "output_tokens": 257,
+            "total_tokens": 2228,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2049.356
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "S08",
+      "trial": 1,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 4,
+      "dispatched": 4,
+      "completed": 4,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 7926,
+      "output_tokens": 834,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 4
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S08.1",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 3254
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1793
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 234
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S08.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 1850
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 2004
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 210
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S08.3",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 2243
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 2067
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 195
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S08.4",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 1844
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 2062
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 195
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        }
+      ],
+      "host_count_subtotal": 4,
+      "host_count_unavailable_turns": 0,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 4,
+        "observed_sent_requests": 4,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S08/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "d169c2b5ce82427588985d937db29973",
+        "requests": 4,
+        "request_upper_bound": 4,
+        "dispatched_requests": 4,
+        "pending_requests": 0,
+        "input_tokens": 7926,
+        "output_tokens": 834,
+        "total_tokens": 8760,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+            "time": "2026-10-18T22:32:28.371928+00:00",
+            "sent": true,
+            "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1793,
+            "output_tokens": 234,
+            "total_tokens": 2027,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2315.867
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+            "time": "2026-10-18T22:32:30.253914+00:00",
+            "sent": true,
+            "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2004,
+            "output_tokens": 210,
+            "total_tokens": 2214,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1819.477
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+            "time": "2026-10-18T22:32:32.509084+00:00",
+            "sent": true,
+            "request_id": "resp_0297846710d513c6006ad548fe9b2887d285cc8cba948d9422",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2067,
+            "output_tokens": 195,
+            "total_tokens": 2262,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2211.222
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "50a44c8b957d48d592364178f677053a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+            "time": "2026-10-18T22:32:34.363678+00:00",
+            "sent": true,
+            "request_id": "resp_08ce718b80469432006ad54900dab087d28df05d69a2e69fd1",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2062,
+            "output_tokens": 195,
+            "total_tokens": 2257,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1814.306
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "time": "2026-10-18T22:32:23.210608+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+            "time": "2026-10-18T22:32:25.174794+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+            "time": "2026-10-18T22:32:26.053763+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+            "time": "2026-10-18T22:32:28.371928+00:00",
+            "sent": true,
+            "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1793,
+            "output_tokens": 234,
+            "total_tokens": 2027,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2315.867
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+            "time": "2026-10-18T22:32:28.411521+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+            "time": "2026-10-18T22:32:28.432533+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+            "time": "2026-10-18T22:32:30.253914+00:00",
+            "sent": true,
+            "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2004,
+            "output_tokens": 210,
+            "total_tokens": 2214,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1819.477
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+            "time": "2026-10-18T22:32:30.274926+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+            "time": "2026-10-18T22:32:30.296462+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+            "time": "2026-10-18T22:32:32.509084+00:00",
+            "sent": true,
+            "request_id": "resp_0297846710d513c6006ad548fe9b2887d285cc8cba948d9422",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2067,
+            "output_tokens": 195,
+            "total_tokens": 2262,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2211.222
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "50a44c8b957d48d592364178f677053a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+            "time": "2026-10-18T22:32:32.528088+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "50a44c8b957d48d592364178f677053a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+            "time": "2026-10-18T22:32:32.548108+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "d169c2b5ce82427588985d937db29973",
+            "attempt_id": "50a44c8b957d48d592364178f677053a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+            "time": "2026-10-18T22:32:34.363678+00:00",
+            "sent": true,
+            "request_id": "resp_08ce718b80469432006ad54900dab087d28df05d69a2e69fd1",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 2062,
+            "output_tokens": 195,
+            "total_tokens": 2257,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1814.306
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "S09",
+      "trial": 1,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 2,
+      "dispatched": 2,
+      "completed": 2,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 3660,
+      "output_tokens": 464,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 2
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S09.1",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 3828
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1801
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 255
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S09.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 1994
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1859
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 209
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        }
+      ],
+      "host_count_subtotal": 2,
+      "host_count_unavailable_turns": 0,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 2,
+        "observed_sent_requests": 2,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S09/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+        "requests": 2,
+        "request_upper_bound": 2,
+        "dispatched_requests": 2,
+        "pending_requests": 0,
+        "input_tokens": 3660,
+        "output_tokens": 464,
+        "total_tokens": 4124,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+            "time": "2026-10-18T22:32:51.956524+00:00",
+            "sent": true,
+            "request_id": "resp_03005edbd9a651e4006ad54911908087d2945faf6b31902ebc",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1801,
+            "output_tokens": 255,
+            "total_tokens": 2056,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2940.167
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+            "time": "2026-10-18T22:32:53.957163+00:00",
+            "sent": true,
+            "request_id": "resp_03e681be9310f8f7006ad5491455e487d28af13981f724185c",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1859,
+            "output_tokens": 209,
+            "total_tokens": 2068,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1945.55
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "time": "2026-10-18T22:32:46.459751+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+            "time": "2026-10-18T22:32:48.161179+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+            "time": "2026-10-18T22:32:49.013854+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+            "time": "2026-10-18T22:32:51.956524+00:00",
+            "sent": true,
+            "request_id": "resp_03005edbd9a651e4006ad54911908087d2945faf6b31902ebc",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1801,
+            "output_tokens": 255,
+            "total_tokens": 2056,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2940.167
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+            "time": "2026-10-18T22:32:51.989599+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+            "time": "2026-10-18T22:32:52.010626+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+            "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+            "time": "2026-10-18T22:32:53.957163+00:00",
+            "sent": true,
+            "request_id": "resp_03e681be9310f8f7006ad5491455e487d28af13981f724185c",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1859,
+            "output_tokens": 209,
+            "total_tokens": 2068,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 1945.55
+          }
+        ]
+      }
+    },
+    {
+      "scenario_id": "S10",
+      "trial": 1,
+      "accounting_version": "ATGB-03B-1",
+      "admitted": 2,
+      "dispatched": 2,
+      "completed": 2,
+      "failed_or_interrupted": 0,
+      "pending": 0,
+      "input_tokens": 3664,
+      "output_tokens": 463,
+      "token_totals_complete": true,
+      "unknown_usage": 0,
+      "purposes": {
+        "interpretation": 2
+      },
+      "returned_models": [
+        "gpt-4.1-mini-2025-04-14"
+      ],
+      "host_performance": [
+        {
+          "turn_id": "S10.1",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 3419
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1792
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 198
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        },
+        {
+          "turn_id": "S10.2",
+          "elapsed_ms": {
+            "status": "recorded",
+            "value": 2617
+          },
+          "provider_call_count": {
+            "status": "recorded",
+            "value": 1
+          },
+          "input_tokens": {
+            "status": "recorded",
+            "value": 1872
+          },
+          "output_tokens": {
+            "status": "recorded",
+            "value": 265
+          },
+          "retry_count": {
+            "status": "recorded",
+            "value": 0
+          },
+          "estimated_cost": {
+            "status": "unavailable",
+            "value": null,
+            "reason": "no_price_table"
+          },
+          "provider_call_detail": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "retries": 0
+          }
+        }
+      ],
+      "host_count_subtotal": 2,
+      "host_count_unavailable_turns": 0,
+      "host_scope_discrepancy": "Host counters have different scope; retain independently, including expression requests.",
+      "ledger_reconciliation": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 2,
+        "observed_sent_requests": 2,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded"
+      },
+      "ledger": "artifacts/atgb/atgb_03c/S10/provider_usage.jsonl",
+      "process_snapshot": {
+        "version": "ATGB-03B-1",
+        "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+        "requests": 2,
+        "request_upper_bound": 2,
+        "dispatched_requests": 2,
+        "pending_requests": 0,
+        "input_tokens": 3664,
+        "output_tokens": 463,
+        "total_tokens": 4127,
+        "stopped": false,
+        "stop_reason": "",
+        "records": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "acca27162e2b4f9f8ab4d8558e04cabb",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:08.230675+00:00",
+            "time": "2026-10-18T22:33:11.593856+00:00",
+            "sent": true,
+            "request_id": "resp_09081591ec13856b006ad54925961c87d29e1f5fb46574cbf0",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1792,
+            "output_tokens": 198,
+            "total_tokens": 1990,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2523.897
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "524fb3963c23410ba9f0e2e69f65f0ec",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:11.632931+00:00",
+            "time": "2026-10-18T22:33:14.241558+00:00",
+            "sent": true,
+            "request_id": "resp_0975c84ea007ec56006ad54927f55c87d29379f3abc349d610",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1872,
+            "output_tokens": 265,
+            "total_tokens": 2137,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2585.038
+          }
+        ],
+        "events": [
+          {
+            "event": "initialized",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "time": "2026-10-18T22:33:06.396865+00:00"
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "acca27162e2b4f9f8ab4d8558e04cabb",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:08.230675+00:00",
+            "time": "2026-10-18T22:33:08.230675+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "acca27162e2b4f9f8ab4d8558e04cabb",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:08.230675+00:00",
+            "time": "2026-10-18T22:33:09.066918+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "acca27162e2b4f9f8ab4d8558e04cabb",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:08.230675+00:00",
+            "time": "2026-10-18T22:33:11.593856+00:00",
+            "sent": true,
+            "request_id": "resp_09081591ec13856b006ad54925961c87d29e1f5fb46574cbf0",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1792,
+            "output_tokens": 198,
+            "total_tokens": 1990,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2523.897
+          },
+          {
+            "event": "admitted",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "524fb3963c23410ba9f0e2e69f65f0ec",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:11.632931+00:00",
+            "time": "2026-10-18T22:33:11.632931+00:00"
+          },
+          {
+            "event": "dispatch_attempted",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "524fb3963c23410ba9f0e2e69f65f0ec",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:11.632931+00:00",
+            "time": "2026-10-18T22:33:11.654484+00:00"
+          },
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "4099cfea5029454fb9d4c52a8baa9157",
+            "attempt_id": "524fb3963c23410ba9f0e2e69f65f0ec",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-18T22:33:11.632931+00:00",
+            "time": "2026-10-18T22:33:14.241558+00:00",
+            "sent": true,
+            "request_id": "resp_0975c84ea007ec56006ad54927f55c87d29379f3abc349d610",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "input_tokens": 1872,
+            "output_tokens": 265,
+            "total_tokens": 2137,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 2585.038
+          }
+        ]
+      }
+    }
+  ],
+  "historical_records_included": false
+}

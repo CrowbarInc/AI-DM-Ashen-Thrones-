@@ -1,0 +1,27 @@
+{
+  "raw_full_utterance": "I nod thoughtfully, glancing toward the northwest where the crates stand drenched in rain. \"Thank you for the warning. Have you heard anything about who or what might be causing trouble there? Any chance I could find shelter or supplies nearby before investigating further?",
+  "segmentation": {
+    "spoken_text": null,
+    "declared_action_text": "I nod thoughtfully, glancing toward the northwest where the crates stand drenched in rain. \"Thank you for the warning. Have you heard anything about who or what might be causing trouble there?",
+    "adjudication_question_text": "Any chance I could find shelter or supplies nearby before investigating further?",
+    "observation_intent_text": null,
+    "contingency_text": null
+  },
+  "adjudication_clause": "Any chance I could find shelter or supplies nearby before investigating further?",
+  "classifier_on_clause": "perception_query",
+  "first_turn_interlocutor": "tavern_runner",
+  "first_turn_operation": "ask",
+  "social_context_reason": "no_addressable_target",
+  "route": "procedural_perception_query",
+  "kind": "adjudication_query",
+  "contract_present": false,
+  "contract_id": null,
+  "visible": "The guard says, \"I do not know enough to answer that.\"",
+  "tags": [
+    "adjudication_query",
+    "final_emission_gate_replaced",
+    "final_emission_gate:anti_reset_continuation_fallback"
+  ],
+  "accepted": false,
+  "first_contractless_decision": "game.api.chat unparsed arm: parsed is None and resolve_adjudication_query(embedded adjudication clause) returns a perception_query. Emission continues without attach_interaction_obligation. contract == None is accepted there."
+}

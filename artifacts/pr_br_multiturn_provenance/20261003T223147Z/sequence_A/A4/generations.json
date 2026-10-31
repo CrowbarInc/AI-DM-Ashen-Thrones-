@@ -1,0 +1,56 @@
+[
+  {
+    "at": "2026-10-03T22:33:31.366743+00:00",
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model": "",
+    "player_facing_text": "The large water jar sitting on the center shelf is cleanly split from lip to base, with its clay dried into fragile pale flakes. Nearby, a neat stack of unused coil-pots remains intact on the lower shelf, their surfaces unbroken and showing no signs of firing. The jar’s condition makes it clear it was never fired in a kiln but left to dry naturally. However, nothing here reveals whether that was intentional or accidental, nor who might have left it that way.",
+    "result_keys": [
+      "activate_scene_id",
+      "debug_notes",
+      "metadata",
+      "new_scene_draft",
+      "player_facing_text",
+      "scene_update",
+      "suggested_action",
+      "tags",
+      "world_updates"
+    ],
+    "prompt_flags": {
+      "user_chars": 94646,
+      "system_chars": 10702,
+      "contains_resolution_contract": true,
+      "contains_gm_resolution_decision": true,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false
+    }
+  },
+  {
+    "at": "2026-10-03T22:33:33.223592+00:00",
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model": "",
+    "player_facing_text": "The large water jar on the center shelf is split from lip to base. The clay inside the split water jar has dried into pale flakes. A stack of unused coil-pots sits intact on the lower shelf. The shed door stands open to the yard.\n\nThe shed offers no clear sign of why the jar was left unfired or who might have done so.",
+    "result_keys": [
+      "activate_scene_id",
+      "debug_notes",
+      "metadata",
+      "new_scene_draft",
+      "player_facing_text",
+      "scene_update",
+      "suggested_action",
+      "tags",
+      "world_updates"
+    ],
+    "prompt_flags": {
+      "user_chars": 4161,
+      "system_chars": 10702,
+      "contains_resolution_contract": true,
+      "contains_gm_resolution_decision": true,
+      "contains_authoritative_retry_context": true,
+      "contains_validation_failure": true
+    }
+  }
+]

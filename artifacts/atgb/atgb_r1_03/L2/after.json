@@ -1,0 +1,851 @@
+{
+  "session": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "cdfc59f8b640733ecb7e6b05",
+    "session_id": "cdfc59f8b640733ecb7e6b05",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-19T09:06:00.132046Z",
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "What's in front of me right now?",
+          "delivered_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "GM",
+        "purpose": "QUESTION",
+        "subject": "What's in front of me right now?",
+        "response": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "refusal_reason": null,
+        "scene_id": "frontier_gate"
+      }
+    }
+  },
+  "world": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [
+      {
+        "id": "house_verevin",
+        "name": "House Verevin",
+        "type": "noble_house",
+        "attitude": "wary",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Expand territory",
+        "current_plan": "Gathering influence",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ash_cowl",
+        "name": "The Ash Cowl",
+        "type": "criminal_syndicate",
+        "attitude": "opportunistic",
+        "influence": 3,
+        "pressure": 2,
+        "goal": "Control black market",
+        "current_plan": "Establishing smuggling routes",
+        "agenda_progress": 0,
+        "assets": []
+      },
+      {
+        "id": "ordo_pyric",
+        "name": "Ordo Pyric",
+        "type": "religious_order",
+        "attitude": "suspicious",
+        "influence": 2,
+        "pressure": 1,
+        "goal": "Suppress dangerous magic",
+        "current_plan": "Watching newcomers",
+        "agenda_progress": 0,
+        "assets": []
+      }
+    ],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate",
+        "aliases": [
+          "guard",
+          "watch",
+          "watch guard"
+        ],
+        "topics": [
+          {
+            "id": "watch_command",
+            "text": "Captain Thoran commands the gate watch tonight.",
+            "clue_id": "captain_thoran_watch"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate",
+        "aliases": [
+          "serjeant",
+          "watch serjeant",
+          "gate serjeant"
+        ],
+        "topics": [
+          {
+            "id": "route_change",
+            "text": "The patrol route changed after the Ash Compact census choke worsened.",
+            "clue_id": "patrol_route_change"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "",
+        "disposition": "neutral",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate",
+        "aliases": [
+          "runner",
+          "tavern runner"
+        ],
+        "topics": [
+          {
+            "id": "patrol_rumor",
+            "text": "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "clue_id": "muddy_footprints_northwest"
+          }
+        ],
+        "role": "",
+        "affiliation": "",
+        "availability": "available",
+        "current_agenda": "sell_rumors",
+        "disposition": "friendly",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "frontier_gate",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat": {
+    "in_combat": false,
+    "round": 0,
+    "initiative_order": [],
+    "turn_index": 0,
+    "active_actor_id": null,
+    "player_turn_used": false
+  },
+  "scene": {
+    "scene": {
+      "id": "frontier_gate",
+      "location": "Cinderwatch Gate District",
+      "summary": "Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.",
+      "mode": "social",
+      "visible_facts": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "opening_seed_facts": [
+        "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+        "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+        "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+        "A tavern runner shouts offers of hot stew and paid rumor.",
+        "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+        "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+      ],
+      "journal_seed_facts": [
+        "Cold rain needles Cinderwatch's eastern gate under frayed banners.",
+        "The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.",
+        "A notice board announces new taxes and curfews, and names a missing patrol.",
+        "A tavern runner is hawking hot stew and rumor for coin.",
+        "A ragged stranger hangs back, watching the crowd more than the queue."
+      ],
+      "discoverable_clues": [
+        {
+          "id": "notice_patrol_route",
+          "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+        }
+      ],
+      "hidden_facts": [
+        "An agent of a noble house is watching new arrivals from the square's edge.",
+        "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+        "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+        "A spotter above the lane is matching faces to a written list paid for in silver."
+      ],
+      "exits": [
+        {
+          "label": "Enter Cinderwatch",
+          "target_scene_id": "market_quarter"
+        },
+        {
+          "label": "Follow the missing patrol rumor",
+          "target_scene_id": "old_milestone"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "guard",
+            "watchman",
+            "sentry",
+            "guardsman",
+            "captain"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "scene_id": "frontier_gate",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 1,
+          "address_roles": [
+            "runner",
+            "informant"
+          ],
+          "aliases": []
+        },
+        {
+          "id": "refugee",
+          "name": "Ragged stranger",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 2,
+          "address_roles": [
+            "stranger",
+            "refugee"
+          ],
+          "aliases": [
+            "ragged stranger"
+          ]
+        },
+        {
+          "id": "threadbare_watcher",
+          "name": "Threadbare watcher",
+          "scene_id": "frontier_gate",
+          "kind": "scene_actor",
+          "addressable": true,
+          "address_priority": 3,
+          "address_roles": [
+            "watcher"
+          ],
+          "aliases": []
+        }
+      ],
+      "interactables": [
+        {
+          "id": "notice_board",
+          "label": "Notice board",
+          "aliases": [
+            "notice",
+            "board",
+            "curfew notice",
+            "missing patrol warning"
+          ],
+          "type": "investigate",
+          "reveals_clue": "notice_patrol_route"
+        }
+      ],
+      "objects": [],
+      "discovered_clues": [],
+      "runtime_entities": []
+    }
+  },
+  "log": [
+    {
+      "timestamp": "2026-10-18T22:32:28.398987Z",
+      "player_input": "What's in front of me right now?",
+      "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "request": {
+        "chat": "What's in front of me right now?"
+      },
+      "resolution": {
+        "kind": "conversational_answer",
+        "action_id": "conversational_answer",
+        "label": "What's in front of me right now?",
+        "prompt": "What's in front of me right now?",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {},
+        "metadata": {
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "authoritative_mutation": false,
+          "resolver_invoked": false,
+          "gameplay_parser_invoked": false,
+          "narration_invoked": false,
+          "processing_outcome": "conversational_answer",
+          "conversational_decision": {
+            "category": "ANSWER",
+            "primary_intention": "What's in front of me right now?",
+            "intent_family": "gm_communication",
+            "incidental_context": [],
+            "proposed_operation": null,
+            "proposed_target": null,
+            "proposed_record": null,
+            "missing_information": [],
+            "context_references": [
+              "scene",
+              "visible:0",
+              "visible:1",
+              "visible:2",
+              "visible:3",
+              "visible:4"
+            ],
+            "requires_authoritative_execution": false,
+            "reason": "communication_before_execution",
+            "confidence": null,
+            "ambiguity": null,
+            "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+            "context_update": null,
+            "intent_modality": "informational",
+            "secondary_intentions": [],
+            "execution_policy": "answer_only",
+            "communication_owner": "GM",
+            "communication_purpose": "QUESTION",
+            "authorization": null
+          },
+          "live_chat_interpretation": {
+            "status": "accepted",
+            "reason": "eligible_for_bridge",
+            "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+            "model_communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Description of what is in front of the character right now\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\",\"visible:3\",\"visible:4\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Request a description of the immediate surroundings in front of the character.\"},\"asserted_premises\":[{\"text\":\"The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"A detailed description of what is directly in front of the character.\"}],\"action_components\":[{\"order\":1,\"description\":\"Perceive the scene in front of the character to identify visible elements.\",\"target_ref\":null,\"operation_class\":\"PERCEIVE\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+            "provider_requests": [
+              {
+                "event": "completed",
+                "version": "ATGB-03B-1",
+                "run_id": "d169c2b5ce82427588985d937db29973",
+                "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+                "purpose": "interpretation",
+                "owner": "live_chat_interpretation.request_interpretation",
+                "configured_model": "gpt-4.1-mini",
+                "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+                "time": "2026-10-18T22:32:28.371928+00:00",
+                "sent": true,
+                "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+                "model": "gpt-4.1-mini-2025-04-14",
+                "input_tokens": 1793,
+                "output_tokens": 234,
+                "total_tokens": 2027,
+                "usage_consistent": true,
+                "refusal": null,
+                "completion_status": "completed",
+                "dispatch_attempted": true,
+                "latency_ms": 2315.867
+              }
+            ],
+            "record": {
+              "communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "Request a description of the immediate surroundings in front of the character."
+              },
+              "asserted_premises": [
+                {
+                  "text": "The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.",
+                  "canon_status": "PLAYER_CLAIM"
+                }
+              ],
+              "requested_outcomes": [
+                {
+                  "text": "A detailed description of what is directly in front of the character.",
+                  "adjudication_status": "UNADJUDICATED"
+                }
+              ],
+              "action_components": [
+                {
+                  "order": 1,
+                  "description": "Perceive the scene in front of the character to identify visible elements.",
+                  "target_ref": null,
+                  "operation_class": "PERCEIVE"
+                }
+              ],
+              "references": {
+                "permitted_entity_ids": [
+                  "gate_guard",
+                  "gate_serjeant",
+                  "notice_board",
+                  "tavern_runner"
+                ],
+                "unresolved_references": []
+              },
+              "clarification_question": "",
+              "correction": {
+                "subject": "NONE",
+                "note": ""
+              },
+              "communication": {
+                "recipient": "GM",
+                "purpose": "QUESTION",
+                "subject": "Description of what is in front of the character right now",
+                "evidence_refs": [
+                  "scene",
+                  "visible:0",
+                  "visible:1",
+                  "visible:2",
+                  "visible:3",
+                  "visible:4"
+                ]
+              },
+              "incidental_context": [],
+              "reference_reconciliation": {
+                "annotations": [],
+                "addressee": null,
+                "operation": "PERCEIVE"
+              },
+              "public_evidence": {
+                "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+                "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+                "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+                "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+              }
+            }
+          },
+          "stored_interpretation_bridge": null,
+          "provider_calls": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0
+          },
+          "performance": {
+            "elapsed_ms": 3254,
+            "interpretation_ms": null,
+            "resolution_ms": null,
+            "narration_ms": null,
+            "validation_ms": null,
+            "retry_ms": null,
+            "provider_call_count": 1,
+            "input_tokens": 1793,
+            "output_tokens": 234,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "conversational_answer",
+            "successful": true,
+            "provider_narration_skipped": false
+          }
+        }
+      },
+      "gm_output": {
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "tags": [
+          "conversational_orchestration",
+          "answer",
+          "non_mutating"
+        ],
+        "scene_update": null,
+        "activate_scene_id": null,
+        "new_scene_draft": null,
+        "world_updates": null,
+        "suggested_action": null,
+        "debug_notes": "conversational_orchestration:communication_before_execution",
+        "metadata": {
+          "accepted_response": {
+            "immutable": true,
+            "text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+            "provenance": "authorized_host_speech",
+            "attempt": 0,
+            "player_input": "What's in front of me right now?",
+            "turn_identity": "",
+            "speaker": "GM",
+            "addressee": "player",
+            "target": "",
+            "operation": "ask",
+            "authority_result": "accepted",
+            "grounding_result": "not_a_replacement_trigger",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [
+                "conversational_decision:communication_before_execution"
+              ],
+              "gm_resolution_decision_audit": null
+            },
+            "interaction_completion": true,
+            "contract_satisfying": true,
+            "contract": {
+              "contract_id": "",
+              "operation": "",
+              "interlocutor_id": "",
+              "expected_resolution": ""
+            },
+            "resolution_kind": "conversational_answer",
+            "generation_attempts": 0,
+            "skipped_mutators": [],
+            "subject": "",
+            "authorization_source": "conversational_decision:communication_before_execution",
+            "adoption_status": "candidate_accepted",
+            "integrity_digest": "10097d3d980b2b8b6ae85129f20125cd2636adca07cb862a81fec50c6a0fa5fb",
+            "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+            "speaker_id": "",
+            "canonical": false,
+            "candidate_disposition": "host_selected",
+            "authorization_provenance": {
+              "authority_category": "host_operation",
+              "speaker_id": "",
+              "addressee": "player",
+              "operation": "ask",
+              "authorized_proposition": "",
+              "source_id": "",
+              "epistemic_status": "none",
+              "validation": "host_operation",
+              "provenance_id": "2608602d877553f8",
+              "policy_version": "pr-eg-r6-r1-r1"
+            }
+          },
+          "emission_debug": {
+            "accepted_response_provenance": "authorized_host_speech",
+            "generation_attempts": 0,
+            "legacy_emission_authority": false,
+            "semantic_degradation": false,
+            "semantic_degradation_reasons": [],
+            "resolution_contract_semantic": {
+              "status": "satisfied",
+              "reasons": [],
+              "preserved": true
+            }
+          }
+        },
+        "_final_delivery_seal": "{\"addressee\":\"player\",\"adoption_status\":\"candidate_accepted\",\"attempt\":0,\"authority_result\":\"accepted\",\"authorization_provenance\":{\"addressee\":\"player\",\"authority_category\":\"host_operation\",\"authorized_proposition\":\"\",\"epistemic_status\":\"none\",\"operation\":\"ask\",\"policy_version\":\"pr-eg-r6-r1-r1\",\"provenance_id\":\"2608602d877553f8\",\"source_id\":\"\",\"speaker_id\":\"\",\"validation\":\"host_operation\"},\"authorization_source\":\"conversational_decision:communication_before_execution\",\"candidate_disposition\":\"host_selected\",\"canonical\":false,\"contract\":{\"contract_id\":\"\",\"expected_resolution\":\"\",\"interlocutor_id\":\"\",\"operation\":\"\"},\"contract_satisfying\":true,\"generation_attempts\":0,\"grounding_result\":\"not_a_replacement_trigger\",\"hard_validation\":{\"authority\":[\"conversational_decision:communication_before_execution\"],\"gm_resolution_decision_audit\":null,\"hard_valid\":true,\"reasons\":[],\"soft_flags\":[]},\"immutable\":true,\"interaction_completion\":true,\"operation\":\"ask\",\"player_input\":\"What's in front of me right now?\",\"provenance\":\"authorized_host_speech\",\"resolution_kind\":\"conversational_answer\",\"speaker\":\"GM\",\"speaker_id\":\"\",\"speech_adoption\":\"AUTHORIZED_HOST_SPEECH\",\"subject\":\"\",\"target\":\"\",\"text\":\"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\",\"turn_identity\":\"\"}"
+      },
+      "log_meta": {
+        "player_input": "What's in front of me right now?",
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "processing_outcome": "conversational_answer",
+        "authoritative_mutation": false,
+        "resolver_invoked": false
+      }
+    },
+    {
+      "timestamp": "2026-10-19T09:06:07.606745Z",
+      "player_input": "I meant the people, not the weather.",
+      "player_facing_text": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "request": {
+        "chat": "I meant the people, not the weather."
+      },
+      "resolution": {
+        "kind": "interpretation_rejected",
+        "action_id": "interpretation_rejected",
+        "label": "I meant the people, not the weather.",
+        "prompt": "I meant the people, not the weather.",
+        "success": false,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {},
+        "metadata": {
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "authoritative_mutation": false,
+          "resolver_invoked": false,
+          "gameplay_parser_invoked": false,
+          "narration_invoked": false,
+          "processing_outcome": "provider_failure",
+          "live_chat_interpretation": {
+            "status": "blocked",
+            "reason": "provider_failure",
+            "raw_interpretation": "",
+            "provider_requests": [],
+            "provider_error": "InternalServerError",
+            "record": null
+          },
+          "provider_calls": {
+            "interpretation_requests": 0,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0
+          },
+          "performance": {
+            "elapsed_ms": 7469,
+            "interpretation_ms": null,
+            "resolution_ms": null,
+            "narration_ms": null,
+            "validation_ms": null,
+            "retry_ms": null,
+            "provider_call_count": 0,
+            "input_tokens": null,
+            "output_tokens": null,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "interpretation_rejected",
+            "successful": true,
+            "provider_narration_skipped": false
+          },
+          "provider_accounting": {
+            "version": "ATGB-03B-1",
+            "scope": "process_cumulative_admissions",
+            "request_upper_bound": 1,
+            "status": "recorded"
+          }
+        }
+      },
+      "gm_output": {
+        "player_facing_text": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "tags": [
+          "interpretation_rejected",
+          "non_mutating"
+        ],
+        "scene_update": null,
+        "activate_scene_id": null,
+        "new_scene_draft": null,
+        "world_updates": null,
+        "suggested_action": null,
+        "debug_notes": "live_interpretation_blocked:provider_failure"
+      },
+      "log_meta": {
+        "player_input": "I meant the people, not the weather.",
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "processing_outcome": "provider_failure",
+        "authoritative_mutation": false,
+        "resolver_invoked": false
+      }
+    }
+  ]
+}

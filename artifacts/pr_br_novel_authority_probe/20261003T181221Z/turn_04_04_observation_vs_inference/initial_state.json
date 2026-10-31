@@ -1,0 +1,104 @@
+{
+  "scene": {
+    "scene": {
+      "id": "dye_shed",
+      "location": "Brineward dye shed",
+      "summary": "A copper dye vat sits in a dim shed. A pale crust rings its lip, and the wool in it has gone stiff. Nothing in the shed says why.",
+      "mode": "exploration",
+      "visible_facts": [
+        {
+          "text": "A pale crust rings the lip of the copper dye vat, and the wool in it has gone stiff.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "dye_vat",
+            "subject_aliases": [
+              "copper dye vat",
+              "dye vat",
+              "vat",
+              "wool"
+            ],
+            "relation": "observation",
+            "value": "stiff",
+            "value_aliases": [
+              "stiff",
+              "pale crust",
+              "crust",
+              "gone stiff"
+            ],
+            "polarity": "positive"
+          }
+        }
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": [
+        {
+          "id": "dye_vat",
+          "label": "copper dye vat",
+          "aliases": [
+            "dye vat",
+            "vat",
+            "wool"
+          ],
+          "type": "investigate"
+        }
+      ]
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "brineward",
+        "name": "Brineward",
+        "type": "riverside_ward",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A riverside ward of workshops, stalls, and work yards."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "starting_context": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a riverside craft ward."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace or stall in Brineward.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "dye_shed",
+    "visited_scene_ids": [
+      "dye_shed"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

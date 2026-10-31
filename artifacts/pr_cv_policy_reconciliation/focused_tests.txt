@@ -1,0 +1,11 @@
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_bt_policy_instruction_deduplication.py tests\test_pr_bt_selective_epistemic_guidance.py -q --tb=short --basetemp=codex_pytest_tmp_pr_cv_repro
+Result: 3 passed / 3 failed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_pr_bt_policy_instruction_deduplication.py tests\test_pr_bt_selective_epistemic_guidance.py -q --tb=short --basetemp=codex_pytest_tmp_pr_cv_focused3
+Result: 8 passed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_authored_knowledge_realization.py -q --tb=short --basetemp=codex_pytest_tmp_pr_cv_authored
+Result: 14 passed / 2 failed
+
+.\.venv\Scripts\python.exe -m pytest tests\test_turn_pipeline_shared.py -q --tb=short --basetemp=codex_pytest_tmp_pr_cv_shared
+Result: 41 passed / 24 failed

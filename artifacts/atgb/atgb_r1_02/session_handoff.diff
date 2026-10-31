@@ -1,0 +1,57 @@
+--- before/docs/NEXT_SESSION.md
++++ after/docs/NEXT_SESSION.md
+@@ -1,6 +1,6 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-18 / ATGB-R1-01.
++Ashen Thrones — Product Realization. Updated 2026-10-18 / ATGB-R1-02.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
+ 
+@@ -42,16 +42,28 @@
+ 
+ ## Last work and recommended next action
+ 
+-ATGB-R1-01 investigated S08.2 only. Report:
+-`development/reports/atgb_r1_01_s08_2_causal_trace.md`. Standard review:
+-`handoff/CURRENT_REVIEW.md` and `handoff/CURRENT_REVIEW.zip`.
++ATGB-R1-02 implemented the bounded mechanical revision-entry repair authorized
++by the user after ATGB-R1-01. Report:
++`development/reports/atgb_r1_02_mechanical_revision_boundary.md`; eight detailed
++reports under `development/reports/atgb_r1_02/`; evidence under
++`artifacts/atgb/atgb_r1_02/`. Standard review: `handoff/CURRENT_REVIEW.md` and ZIP.
+ 
+-S08.2’s sentence is the host `no_pending_intention` template in
+-`_pending_revision_decision`. The utterance matched `i meant` and no gameplay
+-intention was pending. Failure class: contract. Relationship to PR-EG-R6-R5:
+-**C — different mechanism**. R1’s `bind()` repair does not reach this turn.
+-The justified follow-on is a narrower entry condition that keeps the PR-EF-R4
+-revision holdouts. Do not implement until this review is accepted.
++Verdict **B — Conditional**. Routing PASS under GM/DESCRIPTION and GM/CORRECTION
++stubs; 105 new tests plus 28 frozen authorization tests pass. Broader slice:
++443 passed, 9 failed; saved pre-repair source reproduces the same 9 PR-EG
++referent failures (338 passed / 347 existing tests). No new failures in the
++matched slice. Full suite not run. No live provider calls.
++
++Empty-evidence S08.2 response-plan adequacy FAIL: ordinary communication says
++“That has not been established in the information available to you.” Production
++adequacy NOT EVALUABLE: original interpretation/evidence refs were not retained.
++No downstream sufficiency repair. Frozen baseline/fixtures/experiments: 3,564
++hashed files unchanged. No bind/witness, addressee or experimental integration.
++
++Await external review. Only after review and separate live authorization,
++consider a controlled new S08.2 trial to inspect downstream evidence selection.
++Do not begin ATGB-R1-03 automatically. The R1-01 mechanism and different-mechanism
++PR-EG comparison remain established in its causal-trace report.
+ 
+ ATGB-05A remains the assessment-import closeout. Its review and hashes stay at
+ `development/reports/atgb_05_baseline_preservation.md` and
+@@ -109,5 +121,6 @@
+ play-session data, governance and generated evidence. Preserve it. Do not revert
+ human play data or alter the protected latest human-playtest folder. No commit
+ or push requested. ATGB-05/05A change documentation/evidence/export only.
+-Stop for review: ATGB-R1-01 implemented no repair. No gameplay change, live
+-provider call, baseline edit, or authority change in this pass.
++Stop for external review: ATGB-R1-02 changed only mechanical revision routing.
++No live provider call, frozen-baseline edit, added model authority, commit or push.
++Do not begin ATGB-R1-03 until external review.

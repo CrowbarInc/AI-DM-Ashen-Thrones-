@@ -1,0 +1,142 @@
+{
+  "kind": "deterministic synthetic boundary experiments; not provider qualification",
+  "passed": 14,
+  "total": 14,
+  "experiments": [
+    {
+      "name": "restricted_password",
+      "passed": true,
+      "input_excluded": true,
+      "provider_calls": 0
+    },
+    {
+      "name": "private_knowledge",
+      "passed": true,
+      "input_excluded": true,
+      "provider_calls": 0
+    },
+    {
+      "name": "foreign_npc",
+      "passed": true,
+      "input_excluded": true,
+      "provider_calls": 0
+    },
+    {
+      "name": "foreign_conversation",
+      "passed": true,
+      "input_excluded": true,
+      "provider_calls": 0
+    },
+    {
+      "name": "historical_speech_laundering",
+      "passed": true,
+      "input_excluded": true,
+      "provider_calls": 0
+    },
+    {
+      "name": "forged_source_id",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "unavailable_source_id"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "fabricated_span",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "evidence_span_mismatch",
+          "argument_anchor_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "forged_authority",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "authority_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "fabricated_argument",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "argument_anchor_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "anchored_role_swap_remains_unverified",
+      "passed": true,
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "authority_inheritance_world_source",
+      "passed": true,
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "authority_inheritance_host_operation",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "authority_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "authority_inheritance_bounded_expression",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "authority_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    },
+    {
+      "name": "authority_inheritance_verified_history",
+      "passed": true,
+      "validation": {
+        "level": "REJECTED",
+        "reasons": [
+          "authority_mismatch"
+        ],
+        "semantic_support": "unestablished"
+      },
+      "provider_calls": 0
+    }
+  ]
+}

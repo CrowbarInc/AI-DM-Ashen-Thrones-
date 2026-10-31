@@ -105,7 +105,7 @@ _IMPOSSIBLE_RE = re.compile(
     re.IGNORECASE,
 )
 _REVISION_RE = re.compile(
-    r"\b(?:instead|make that|change that|i meant|revise)\b",
+    r"\b(?:instead|make that|revise|change (?:my|the) pending)\b",
     re.IGNORECASE,
 )
 _CAUSE_QUESTION_RE = re.compile(
@@ -388,14 +388,27 @@ def _reclassify_direct_npc_address(
     return prepared
 
 
-def _pending_revision_decision(text: str, *, session, scene, purpose: str) -> ConversationalDecision | None:
+def _pending_revision_decision(text: str, *, session, scene, purpose: str, components=()) -> ConversationalDecision | None:
     """Revise an unexecuted intention. Do not execute it and do not undo a resolved one."""
-    if purpose == "WITHDRAWAL" or not (purpose == "CORRECTION" or _REVISION_RE.search(text)):
+    if purpose == "WITHDRAWAL":
         return None
     ctx = _conversation_context(session)
     pending = ctx.get("pending_intention") if isinstance(ctx.get("pending_intention"), Mapping) else None
     if pending is None and isinstance(ctx.get("pending_clarification"), Mapping):
         pending = ctx.get("pending_clarification")
+    # A correction label or conversational repair phrase is not action control.
+    # Implicit revisions need both an intention referent and an action proposal;
+    # explicit revision requests still reach the no-pending / executed guards.
+    if not _REVISION_RE.search(text) and not (
+        (purpose == "CORRECTION" or re.search(r"\b(?:i meant|change that)\b", text, re.I))
+        and (isinstance(pending, Mapping) or isinstance(ctx.get("last_executed_intention"), Mapping))
+        and any(
+            isinstance(component, Mapping)
+            and component.get("operation_class") in _CONNECTED_OPERATIONS | {"ATTACK", "USE_VISIBLE_OBJECT", "FOLLOW"}
+            for component in components
+        )
+    ):
+        return None
     scene_id = _scene_id(scene)
     if isinstance(pending, Mapping) and str(pending.get("status") or "pending") != "executed":
         if pending.get("scene_id") and scene_id and pending.get("scene_id") != scene_id:
@@ -541,15 +554,13 @@ def _communication_decision(record: Mapping[str, Any], text: str, *, session=Non
     if owner == "GM" and purpose == "OBSERVATION" and components:
         if all(isinstance(c, Mapping) and c.get("operation_class") in {"PERCEIVE", "INSPECT"} for c in components):
             return None
-    revision = _pending_revision_decision(text, session=session, scene=scene, purpose=purpose)
+    revision = _pending_revision_decision(text, session=session, scene=scene, purpose=purpose, components=components)
     if revision is not None:
         return revision
     category = ConversationalDecisionCategory.ANSWER
     update = None
-    if purpose in {"CORRECTION", "WITHDRAWAL"}:
+    if purpose == "WITHDRAWAL":
         answer = "I've set aside the unexecuted intention. Anything already resolved still stands."
-        if purpose == "CORRECTION":
-            answer += " What do you want to change?"
         update = _context_update(pending=None, pending_set=True, intention=None, intention_set=True, clear_interlocutor=False)
     elif owner == "MIXED":
         category = ConversationalDecisionCategory.CLARIFY
@@ -573,6 +584,14 @@ def _communication_decision(record: Mapping[str, Any], text: str, *, session=Non
         if evidence_refs:
             evidence = {key: evidence[key] for key in evidence_refs if key in evidence}
         answer = " ".join(dict.fromkeys(str(value) for value in evidence.values()))
+        # Receipt only for a resolved conversational correction with a grounded
+        # answer. Mechanical revisions returned above; no semantic reclassification.
+        if (answer and owner == "GM" and purpose == "CORRECTION"
+                and status == "INTERPRETED" and not components
+                and not (record.get("references") or {}).get("unresolved_references")
+                and (record.get("correction") or {}).get("subject") == "REFERENT"
+                and evidence_refs and all(ref in evidence for ref in evidence_refs)):
+            answer = "Understood. " + answer
         if purpose == "EXPLANATION" and answer and _CAUSE_QUESTION_RE.search(text) and not any(str(ref).startswith("cause:") for ref in evidence):
             answer += " That establishes the observation or result; its cause has not been established."
         if not answer:

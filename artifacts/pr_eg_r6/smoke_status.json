@@ -1,0 +1,121 @@
+{
+  "status": "completed",
+  "mode": "smoke",
+  "model": "gpt-4.1-mini",
+  "summary": {
+    "turns": 2,
+    "conversations": [
+      "smoke_harbor_gap"
+    ],
+    "integrity_failures": [],
+    "intent": {
+      "n": 2,
+      "ok": 2,
+      "rate": 1.0
+    },
+    "addressee": {
+      "n": 2,
+      "ok": 2,
+      "rate": 1.0
+    },
+    "subject": {
+      "n": 2,
+      "ok": 2,
+      "rate": 1.0
+    },
+    "relevance": {
+      "n": 2,
+      "ok": 2,
+      "rate": 1.0
+    },
+    "sufficiency": {
+      "n": 2,
+      "ok": 2,
+      "rate": 1.0
+    },
+    "corrections": {
+      "n": 0,
+      "ok": 0,
+      "rate": null
+    },
+    "followups": {
+      "n": 0,
+      "ok": 0,
+      "rate": null
+    },
+    "recovery": {
+      "n": 0,
+      "ok": 0,
+      "rate": null
+    },
+    "quality_mean": 3.0,
+    "playability_mean": 3.0,
+    "quality_ge_2": 2,
+    "playability_ge_2": 2,
+    "quality_n": 2,
+    "provider_calls": 3,
+    "calls_per_turn_mean": 1.5,
+    "input_tokens_mean": 410.3333333333333,
+    "input_tokens_p95": 564,
+    "output_tokens_mean": 86.66666666666667,
+    "turn_input_tokens_mean": 615.5,
+    "turn_input_tokens_p95": 667,
+    "latency_mean_ms": 2733.453,
+    "latency_median_ms": 2733.453,
+    "latency_p95_ms": 3324.391,
+    "latency_max_ms": 3324.391,
+    "provider_latency_p95_ms": 2014.608,
+    "retry_calls": 0,
+    "models": [
+      "gpt-4.1-mini-2025-04-14"
+    ]
+  },
+  "budget": {
+    "requests": 3,
+    "input_tokens": 1231,
+    "output_tokens": 260,
+    "total_tokens": 1491,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_02bdc65fc0ece2e7006ad3b4732be087d2865dbe41987a940e",
+        "input_tokens": 505,
+        "output_tokens": 118,
+        "total_tokens": 623,
+        "latency_ms": 1982.139,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "expression",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_06786d2615d7b0b1006ad3b475120087d2a7a1c1b714bea1c0",
+        "input_tokens": 162,
+        "output_tokens": 11,
+        "total_tokens": 173,
+        "latency_ms": 1155.887,
+        "max_output_tokens": 80,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "semantic_plan",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_00527839240535d4006ad3b477f34c87d28f60dde3adce7709",
+        "input_tokens": 564,
+        "output_tokens": 131,
+        "total_tokens": 695,
+        "latency_ms": 2014.608,
+        "usage_consistent": true
+      }
+    ]
+  }
+}

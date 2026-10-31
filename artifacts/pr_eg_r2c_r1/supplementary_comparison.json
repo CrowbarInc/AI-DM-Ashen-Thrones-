@@ -1,0 +1,33 @@
+{
+  "counts": {
+    "baseline": {
+      "failed": 6,
+      "passed": 129
+    },
+    "final": {
+      "failed": 7,
+      "passed": 128
+    }
+  },
+  "new_failures": [
+    "tests.test_social_question_relevance_answer_selection::test_generic_ask_without_subject_can_still_reveal_first_topic"
+  ],
+  "resolved": [],
+  "baseline_failures": [
+    "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_strict_social_hidden_mutation_detected",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_wrong_speaker_fixture_has_attributable_trace",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_report_schema_and_gap_closure",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_writer_raw_checkpoint_present_on_strict_social_turn",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_generate_repo_artifacts"
+  ],
+  "final_failures": [
+    "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance",
+    "tests.test_social_question_relevance_answer_selection::test_generic_ask_without_subject_can_still_reveal_first_topic",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_strict_social_hidden_mutation_detected",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_wrong_speaker_fixture_has_attributable_trace",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_report_schema_and_gap_closure",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_writer_raw_checkpoint_present_on_strict_social_turn",
+    "tests.test_by3_strict_social_semantic_mutation::test_by3_generate_repo_artifacts"
+  ]
+}

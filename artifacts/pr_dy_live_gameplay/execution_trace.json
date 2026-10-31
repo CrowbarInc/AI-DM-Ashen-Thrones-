@@ -1,0 +1,136 @@
+{
+  "cycle": "PR-DY",
+  "mode": "LIVE GAMEPLAY READINESS",
+  "decision": "A",
+  "decision_label": "LIVE GAMEPLAY READY",
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "production_saves_unchanged": true,
+  "human_playtest": "NOT YET PERFORMED",
+  "browser": "http://127.0.0.1:8765/",
+  "disposable_data": "artifacts/pr_dy_live_gameplay/disposable_data",
+  "phases": [
+    {
+      "phase": 0,
+      "name": "safety",
+      "result": "passed",
+      "notes": "Dirty worktree preserved. Production save hashes matched before and after. Disposable data only."
+    },
+    {
+      "phase": 1,
+      "name": "trace",
+      "result": "gap_was_step_4",
+      "notes": "Browser and HTTP already reached chat(). Production chat did not call the PR-DO/PR-DR interpreter until this connector."
+    },
+    {
+      "phase": 2,
+      "name": "integration",
+      "result": "connected",
+      "notes": "game/live_chat_interpretation.py reuses the existing prompt, schema, adapter, and PR-DU bridge. Accepted actions are locked. Rejected results do not fall through."
+    },
+    {
+      "phase": 3,
+      "name": "communication_modes",
+      "result": "passed",
+      "notes": "Explicit IC, explicit OOC, and AUTO exercised. Explicit OOC made no provider call. AUTO rules question was OUT_OF_CHARACTER and non-mutating."
+    },
+    {
+      "phase": 4,
+      "name": "provider_controls",
+      "result": "bounded",
+      "notes": "Pin gpt-4.1-mini. Retries disabled. Limit 6 requests, 8000 input, 2000 output, 10000 total."
+    },
+    {
+      "phase": 5,
+      "name": "preflight",
+      "result": "passed",
+      "notes": "Providers disabled. Frontend, start, explicit OOC non-mutating, explicit IC discover_clue. See preflight_http.json. Runtime then replaced before live calls."
+    },
+    {
+      "phase": 6,
+      "name": "first_live_turn",
+      "result": "passed",
+      "player_text": "I take a closer look at the notice board.",
+      "mode": "AUTO",
+      "operation": "INSPECT",
+      "target": "notice_board",
+      "resolver": "discover_clue",
+      "narration_sent": false
+    },
+    {
+      "phase": 7,
+      "name": "second_live_turn",
+      "result": "passed",
+      "player_text": "I ask the captain what he thinks happened to them.",
+      "mode": "AUTO",
+      "operation": "ASK",
+      "target": "guard_captain",
+      "resolver": "question",
+      "narration_sent": false
+    },
+    {
+      "phase": 8,
+      "name": "ooc",
+      "result": "passed",
+      "automatic_ooc": "How does searching work at the table? I'm not doing anything in the scene.",
+      "explicit_ooc": "OOC: please leave the scene exactly as it is.",
+      "turn_after_both": 3,
+      "time_pressure_after_both": 3
+    },
+    {
+      "phase": 9,
+      "name": "response_quality",
+      "result": "authoritative_text_shown_model_narration_not_sent"
+    },
+    {
+      "phase": 10,
+      "name": "failure_recovery",
+      "result": "unit_and_budget_refusal",
+      "duplicate_live_commit": false,
+      "identical_resubmit_commits_again": true
+    },
+    {
+      "phase": 11,
+      "name": "playtest_guide",
+      "result": "written"
+    },
+    {
+      "phase": 12,
+      "name": "human_playtest_evidence",
+      "result": "NOT YET PERFORMED"
+    },
+    {
+      "phase": 13,
+      "name": "regression",
+      "focused_passed": 99,
+      "focused_failed": 0,
+      "prdx_file_set_passed": 199,
+      "prdx_file_set_failed": 29,
+      "prdx_recorded_passed": 203,
+      "prdx_recorded_failed": 29
+    },
+    {
+      "phase": 14,
+      "name": "decision",
+      "result": "A"
+    }
+  ],
+  "provider": {
+    "configured_model": "gpt-4.1-mini",
+    "returned_model": "gpt-4.1-mini-2025-04-14",
+    "ledger_rows": 6,
+    "sent_requests": 3,
+    "refused_before_send": 3,
+    "retries": 0,
+    "sent_input_tokens": 2173,
+    "sent_output_tokens": 583,
+    "sent_total_tokens": 2756,
+    "refused_token_usage": "unavailable"
+  },
+  "final_disposable_state": {
+    "turn_counter": 3,
+    "time_pressure": 3,
+    "scene": "frontier_gate",
+    "clue": "notice_patrol_route",
+    "clue_state": "discovered"
+  }
+}

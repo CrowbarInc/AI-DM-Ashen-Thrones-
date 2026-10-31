@@ -1,0 +1,91 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "maud",
+      "name": "Maud",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "relic",
+          "text": "The chapel relic is called the pale lantern.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "carry",
+          "text": "Lior carried the pale lantern to Maud.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "belief",
+          "text": "Maud believes the blessing fades at midnight.",
+          "epistemic": "belief"
+        },
+        {
+          "id": "vow",
+          "text": "The inner vow is quiet ash.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    },
+    {
+      "id": "lior",
+      "name": "Lior",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "water",
+          "text": "The shrine well is drawn at noon.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "carry",
+          "text": "Maud carried the pale lantern to Lior.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "vow",
+          "text": "The inner vow is quiet ash.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

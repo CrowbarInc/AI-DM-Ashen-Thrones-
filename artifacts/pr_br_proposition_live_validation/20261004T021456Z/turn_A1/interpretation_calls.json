@@ -1,0 +1,19 @@
+[
+  {
+    "event": "attempt",
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "user_chars": 512,
+      "contains_resolution_contract": false,
+      "contains_gm_resolution_decision": false,
+      "contains_temporal_provenance": false,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false,
+      "user_content": "{\"utterance\": \"I examine the snapped counterweight chain and the roof-hatch mechanism. What does the damage suggest?\", \"abstention_reason\": \"malformed_target_span\", \"candidates\": [{\"id\": \"observatory_service_room\", \"type\": \"place\", \"label\": \"Rookhaven observatory service room\", \"aliases\": []}], \"discourse\": {\"scene_id\": \"observatory_service_room\", \"active_interlocutor\": null, \"active_claim\": null, \"active_actionable_lead\": null, \"active_inspected\": null, \"last_attempted_action\": null}, \"recent_visible\": []}"
+    },
+    "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[\"ask\"],\"raw_target_text\":\"snapped counterweight chain and the roof-hatch mechanism\",\"proposed_target_id\":null,\"interlocutor_id\":null,\"conversational_subject\":\"damage to the snapped counterweight chain and roof-hatch mechanism\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"an explanation of what the damage suggests\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  }
+]

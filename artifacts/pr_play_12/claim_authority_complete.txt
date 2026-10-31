@@ -1,0 +1,19 @@
+
+=================================== ERRORS ====================================
+______ ERROR collecting tests/test_pr_bu_narration_claim_composition.py _______
+tests\test_pr_bu_narration_claim_composition.py:142: in <module>
+    @pytest.mark.parametrize("case_id", _matrix_ids())
+                                        ^^^^^^^^^^^^^
+tests\test_pr_bu_narration_claim_composition.py:138: in _matrix_ids
+    payload = json.loads(MATRIX.read_text(encoding="utf-8"))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\PR-BU_validator_semantic_matrix.json'
+=========================== short test summary info ===========================
+ERROR tests/test_pr_bu_narration_claim_composition.py - FileNotFoundError: [E...
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!

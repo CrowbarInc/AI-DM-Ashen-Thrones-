@@ -1,0 +1,3 @@
+# 09 — Qualifier Preservation
+
+Families cover may (s08), might (s09), probably (s07), reportedly (s02), used to (s04), will/if (s05), unless (s06), not (s30), spatial boundaries (s14/s31), and ledger attribution (s25). Frozen labels demand literal required phrases in positive answers. Qualifier_phrase_coverage in summary.json measures annotated source phrases appearing in extracted fields, not correct semantic scope. A paraphrase such as a synonymous modal can fail this strict rubric; labels were not corrected after exposure. Lost epistemic force and wrong temporal attachment need human review.

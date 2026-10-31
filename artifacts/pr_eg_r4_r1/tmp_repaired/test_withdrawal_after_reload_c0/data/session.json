@@ -1,0 +1,94 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T16:16:47.922553Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T16:16:47.922553Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "pending_clarification": null,
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I leave.",
+          "delivered_text": "Where are you trying to go?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "452cd57cb8477c83acfe0d95d13fd8762aa0b977f1058569fa90d00f95886e04",
+          "authorization_source": "conversational_decision:movement_destination_missing",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "No.",
+          "delivered_text": "I've set aside the unexecuted intention. Anything already resolved still stands.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "b1f2ae577c12d316d01dc931e11c5d2987d1f862ba59289ad747c6bf1a5b84de",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "GM",
+        "purpose": "WITHDRAWAL",
+        "subject": "No.",
+        "response": "I've set aside the unexecuted intention. Anything already resolved still stands.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      },
+      "pending_intention": null
+    }
+  },
+  "integrity": {
+    "payload_sha256": "c95898402190eea0d5db76d0161ae4a99e0fd7e209e260028d187c367707529d",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "campaign_id": "pr-br-continuation-18",
+  "campaign_name": "PR-BR Continuation 18 — Immutable Valid Response Boundary and Bounded Regeneration",
+  "campaign_date": "2026-10-01",
+  "purpose": "Preserve a hard-valid generated response, regenerate once when it is hard-invalid, and emit a minimal safe nonresolution only after both attempts fail. Replay the 16 C17 turns. Six focused live turns. No independent smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Hard-valid text is now sealed and emitted unchanged. The 16-turn replay preserves 12/12 eligible lines and blocks 4/4 hard-invalid initials. The seven downstream-created failures stay eliminated. Six live turns all matched the accepted text exactly. Two hard-invalid initials were regenerated once and the retry was sealed. Final manual PASS was 5/6. One unauthored closing time inside guard dialogue reached the player. READY FOR ANOTHER INDEPENDENT 10-TURN SMOKE: YES. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/immutable_valid_response.py seals an accepted response, hard-validates, retries once, and emits a narrow safe line.",
+      "game/api.py runs that lifecycle on contract-bearing narration and skips the quality tournament once sealed.",
+      "Post-acceptance mutators return the sealed text. best_safe and satisfaction no longer choose the emitted line."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation18_immutable_boundary.py replays 16 turns, the seven downstream failures, the four hard-invalid initials, and the stubbed /api/chat path.",
+      "Focused band including Continuations 14-16 and 18 passed 183 tests with 0 failures."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation18_live.py runs at most six focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md Continuation 18 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation18/20261001T225126Z live transcript, turns, and cost summary."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 18 immutability, replay, retry, state-commit, and raw chat stub tests passed.",
+    "broader": "183 passed, 0 failed in the last combined Continuation 14-18 band. An earlier 189-test Continuation 12-16 band also passed. Full suite not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 2 interpretation calls. 8 gameplay-generation calls, of which 2 were regenerations. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "2 interpretation calls. 8 gameplay-generation calls. 0 evaluator model calls. 2 regenerations. 0 aborted.",
+    "new_regressions": "None in the deterministic band. Live turn 3 preserved an unauthored third-bell closing inside guard dialogue.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "An independent 10-turn smoke is the next measurement. Do not run it in this cycle.",
+    "Turn 3 shows a clock inside NPC dialogue that hard validation does not yet reject.",
+    "Turn 2's contract target became a slice of the previous answer.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Unauthored schedule language inside NPC dialogue can be sealed.",
+      "A follow-up contract target can be the previous sentence rather than the interlocutor.",
+      "The local evaluator false-failed three hedged but usable live answers."
+    ],
+    "pre_existing": [
+      "Scene openings and turns without a contract operation still use the legacy emission path."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health. The smoke was not run.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest.",
+    "Does not prove every unauthored NPC claim is blocked. Turn 3 emitted a third-bell closing."
+  ],
+  "recommended_next_step": "External review. Do not close PR-BR. Do not start PR-BS. The next cycle may run one independent 10-turn smoke. Do not run the six live turns again in this cycle.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "role": "audit",
+      "why": "Continuation 17 discovery and Continuation 18 implementation record.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "lifecycle",
+      "why": "Accepted response, hard validation, one retry, and safe nonresolution.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "role": "tests",
+      "why": "16-turn replay, seven downstream fixtures, four hard-invalid fixtures, and stub paths.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation18_live.py",
+      "role": "runner",
+      "why": "Six-turn focused live session.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/turns.json",
+      "role": "turns",
+      "why": "Accepted versus emitted text, provenance, and retry feedback.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/summary.json",
+      "role": "cost",
+      "why": "Generation, interpretation, and regeneration counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation18/20261001T225126Z/generation_calls.json",
+      "role": "calls",
+      "why": "Per-call generation excerpts and retry reasons.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    }
+  ]
+}

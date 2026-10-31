@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="25" time="13.718" timestamp="2026-10-31T13:45:23.257250-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_pr_play_12_assessment" name="test_history[20261030T183848Z-5fe421902485]" time="0.755" /><testcase classname="tests.test_pr_play_12_assessment" name="test_history[20261030T191257Z-ecc1b6062bdc]" time="0.510" /><testcase classname="tests.test_pr_play_12_assessment" name="test_history[20261031T015747Z-5a6c03c902e3]" time="0.291"><failure message="assert {'campaign.js...n  }\n}', ...} == {'campaign.js...n  }\n}', ...}&#10;  &#10;  Omitting 8 identical items, use -vv to show&#10;  Differing items:&#10;  {'session.json': '{\n  &quot;persistence_version&quot;: 1,\n  &quot;kind&quot;: &quot;session&quot;,\n  &quot;saved_at&quot;: &quot;2026-10-31T01:57:49.769791Z&quot;,\n...ba374dc84698551451b2a00cccc5afb&quot;,\n    &quot;canonicalization&quot;: &quot;json/sort_keys,separators&quot;,\n    &quot;hash&quot;: &quot;sha256&quot;\n  }\n}'} != {'session.json': '{\n  &quot;persistence_version&quot;: 1,\n  &quot;kind&quot;: &quot;session&quot;,\n  &quot;saved_at&quot;: &quot;2026-10-31T17:45:27.350200Z&quot;,\n...0aba9e63ca53bef8acb6fae66e20e03&quot;,\n    &quot;canonicalization&quot;: &quot;json/sort_keys,separators&quot;,\n    &quot;hash&quot;: &quot;sha256&quot;\n  }\n}'}&#10;  {'combat.json': '{\n  &quot;persistenc...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tests\test_pr_play_12_assessment.py:62: in test_history
+    assert before==after
+E   assert {'campaign.js...n  }\n}', ...} == {'campaign.js...n  }\n}', ...}
+E     
+E     Omitting 8 identical items, use -vv to show
+E     Differing items:
+E     {'session.json': '{\n  "persistence_version": 1,\n  "kind": "session",\n  "saved_at": "2026-10-31T01:57:49.769791Z",\n...ba374dc84698551451b2a00cccc5afb",\n    "canonicalization": "json/sort_keys,separators",\n    "hash": "sha256"\n  }\n}'} != {'session.json': '{\n  "persistence_version": 1,\n  "kind": "session",\n  "saved_at": "2026-10-31T17:45:27.350200Z",\n...0aba9e63ca53bef8acb6fae66e20e03",\n    "canonicalization": "json/sort_keys,separators",\n    "hash": "sha256"\n  }\n}'}
+E     {'combat.json': '{\n  "persistenc...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_history[20261031T170523Z-92cd9d058c92]" time="0.317"><failure message="assert {'campaign.js...n  }\n}', ...} == {'campaign.js...n  }\n}', ...}&#10;  &#10;  Omitting 8 identical items, use -vv to show&#10;  Differing items:&#10;  {'session.json': '{\n  &quot;persistence_version&quot;: 1,\n  &quot;kind&quot;: &quot;session&quot;,\n  &quot;saved_at&quot;: &quot;2026-10-31T17:05:27.305048Z&quot;,\n...2905f6fb1d176f455b4e2465b9531e5&quot;,\n    &quot;canonicalization&quot;: &quot;json/sort_keys,separators&quot;,\n    &quot;hash&quot;: &quot;sha256&quot;\n  }\n}'} != {'session.json': '{\n  &quot;persistence_version&quot;: 1,\n  &quot;kind&quot;: &quot;session&quot;,\n  &quot;saved_at&quot;: &quot;2026-10-31T17:45:29.562104Z&quot;,\n...10d94a0d4b0f3a08224b0006799ab3b&quot;,\n    &quot;canonicalization&quot;: &quot;json/sort_keys,separators&quot;,\n    &quot;hash&quot;: &quot;sha256&quot;\n  }\n}'}&#10;  {'combat.json': '{\n  &quot;persistenc...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tests\test_pr_play_12_assessment.py:62: in test_history
+    assert before==after
+E   assert {'campaign.js...n  }\n}', ...} == {'campaign.js...n  }\n}', ...}
+E     
+E     Omitting 8 identical items, use -vv to show
+E     Differing items:
+E     {'session.json': '{\n  "persistence_version": 1,\n  "kind": "session",\n  "saved_at": "2026-10-31T17:05:27.305048Z",\n...2905f6fb1d176f455b4e2465b9531e5",\n    "canonicalization": "json/sort_keys,separators",\n    "hash": "sha256"\n  }\n}'} != {'session.json': '{\n  "persistence_version": 1,\n  "kind": "session",\n  "saved_at": "2026-10-31T17:45:29.562104Z",\n...10d94a0d4b0f3a08224b0006799ab3b",\n    "canonicalization": "json/sort_keys,separators",\n    "hash": "sha256"\n  }\n}'}
+E     {'combat.json': '{\n  "persistenc...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E1]" time="0.303" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E2]" time="0.288" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E3]" time="0.200"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E4]" time="0.236"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E5]" time="0.326" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E6]" time="0.262"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E7]" time="0.341" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E8]" time="0.321" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E9]" time="0.422" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E10]" time="0.378" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E11]" time="0.297"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E12]" time="0.325" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E13]" time="0.233"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E14]" time="0.250"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E15]" time="0.285" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E16]" time="0.406" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E17]" time="0.405" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E18]" time="0.483" /><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E19]" time="0.302"><failure message="assert False">tests\test_pr_play_12_assessment.py:108: in test_corpus
+    if status==422: assert result['rollback_equal']
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert False</failure></testcase><testcase classname="tests.test_pr_play_12_assessment" name="test_corpus[E20]" time="0.436" /><testcase classname="tests.test_pr_play_12_assessment" name="test_span_causal_controls" time="0.689" /></testsuite></testsuites>

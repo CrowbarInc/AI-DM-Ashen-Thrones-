@@ -1,0 +1,76 @@
+{
+  "evidence": "DETERMINISTIC_FROZEN_BASELINE_AND_FINAL",
+  "timing": "Long-history reproduction executed after repair against preserved pre-edit source; short pre-edit D/F probes passed.",
+  "results": {
+    "baseline": [
+      {
+        "id": "D",
+        "directive": {
+          "action": "answer",
+          "owner": "gm",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "line": "Sergeant Mara said they could not answer that. They have not spoken again.",
+          "reason": "gm_recall_of_npc_statement"
+        },
+        "passed": false
+      },
+      {
+        "id": "F",
+        "directive": {
+          "action": "answer",
+          "owner": "gm",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "line": "Sergeant Mara said they could not answer that. They have not spoken again.",
+          "reason": "gm_recall_of_npc_statement"
+        },
+        "passed": false
+      }
+    ],
+    "final": [
+      {
+        "id": "D",
+        "directive": {
+          "action": "answer",
+          "owner": "gm",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "line": "Sergeant Mara said: \"The street beyond the gate is the north road.\"",
+          "reason": "gm_recall_of_npc_statement",
+          "topic_grounding": {
+            "speaker_id": "sergeant_mara",
+            "ownership": "gm",
+            "reference": "delivered_speech",
+            "topic_id": "",
+            "selected_source": null,
+            "delivered_turn": 1,
+            "canonical": false
+          }
+        },
+        "passed": true
+      },
+      {
+        "id": "F",
+        "directive": {
+          "action": "answer",
+          "owner": "gm",
+          "npc_id": "sergeant_mara",
+          "npc_name": "Sergeant Mara",
+          "line": "Sergeant Mara said: \"The street beyond the gate is the north road.\"",
+          "reason": "gm_recall_of_npc_statement",
+          "topic_grounding": {
+            "speaker_id": "sergeant_mara",
+            "ownership": "gm",
+            "reference": "delivered_speech",
+            "topic_id": "",
+            "selected_source": null,
+            "delivered_turn": 1,
+            "canonical": false
+          }
+        },
+        "passed": true
+      }
+    ]
+  }
+}

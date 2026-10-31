@@ -1,0 +1,1407 @@
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -1,8 +1,51 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-30 / PR-PLAY-11.
++Ashen Thrones — Product Realization. Updated 2026-10-31 / PR-PLAY-12.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest narrative architecture assessment — PR-PLAY-12
++
++2026-10-31: **B — Conditionally ready; external review only.** Diagnostics and
++isolated prototypes; no production validator/gameplay/configuration changes.
++Latest local run 20261031T170523Z-92cd9d058c92 (26714/1784 tokens, nine declarations)
++replays 422 through production parsing, semantics, final acceptance and rollback.
++All declarations pass. Sole violation: watchers “cluster tightly” sentence passes
++one-token lexical coverage then fails stricter restatement in the undeclared
++consequential check. Reported runner/census paraphrases are not the rejected spans.
++Removing only “tightly” commits once in a normal synthetic replay.
++
++Four historical captures replay (two accepted, two rejected). E1–E20 reveal two
++supported-wording rejection candidates and six delivered unsupported-outcome
++candidates; exact hidden disclosure and NPC bribery are replaced downstream.
++Character/combat/conditions/campaign/NPC/location checks hold across the corpus.
++State integrity alone does not prove publication integrity. Do not remove prose
++guards or treat claim IDs as semantic proof. Existing ID/text binding and legacy
++observe-only adoption remain limitations; no unrelated repair was attempted.
++
++Recommend C-led bounded hybrid: opt-in opening-only public-catalog rendering plan,
++engine-authored facts/outcomes and finite presentation selectors; no arbitrary
++text/update channel, no new truth owner/store/judge. Shared policy, explicit
++engine-selected operation capabilities. Public catalog/required-anchor policy and
++sealing integration need bounded implementation review. Ordinary turns remain on
++current authority policy. Do not implement this recommendation during PR12.
++
++Validation: 27 new focused tests pass; consolidated same-case PR11 selection
++878 pass / the same 14 preexisting failures. Initial incomplete-copy, localhost and
++Windows file-access failures are retained; targeted unchanged-original-source
++controls resolve the environment cases without rewriting historical outcomes.
++No full-suite, live-quality, hidden-paraphrase completeness or ATGB-score claim.
++
++Minimum read: reports 02, 05, 07, 08, 09, 10 under
++development/campaigns/product_realization/pr_play_12/;
++artifacts/pr_play_12/span_diagnostics.json, corpus.json,
++prototype_results.json, regression_summary.json, entry_to_exit_integrity.json.
++All ten reports and timestamped review ZIP retain original parsed captures,
++historical baselines, source maps/snapshots, scoped diff and replay evidence.
++Existing dirty work is preserved. No live/connectivity calls, model/config/budget
++change, enabled retries, authority relaxation, persistent gameplay structures,
++PR-EG integration, frozen ATGB edit, commit or push. Next action: external review
++of the archive; do not execute the implementation or a live test.
+ 
+ ## Latest opening authority reconciliation — PR-PLAY-11
+ 
+--- /dev/null
++++ artifacts/pr_play_12/build_evidence.py
+@@ -0,0 +1,67 @@
++"""Build reviewable derived tables from actual deterministic execution evidence."""
++import ast, hashlib, json, shutil
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'
++def write(name,obj): (OUT/name).write_text(json.dumps(obj,indent=2),encoding='utf-8')
++def table(headers,rows):
++    def cell(x): return str(x).replace('|','/').replace('\n',' ')
++    return '| '+' | '.join(headers)+' |\n| '+' | '.join(['---']*len(headers))+' |\n'+''.join('| '+' | '.join(map(cell,r))+' |\n' for r in rows)
++def main():
++    inv=json.loads((OUT/'capture_inventory.json').read_text()); history=[]
++    for i,r in enumerate(inv):
++        run=r['run']; src=ROOT/'artifacts/atgb/automated_playtests'/run
++        native=json.loads((src/'reports/result.json').read_text()); usage=native['provider_usage']
++        record=next(x for x in usage['records'] if x.get('sent'))
++        replay=json.loads((OUT/'results'/(run+'_replay.json')).read_text())
++        history.append(dict(source_run=run,pass_name=['PR08','PR09/PR10 accepted opening','PR11 investigation','Latest post-PR11'][i],provider_model=record['model'],input_tokens=usage['input_tokens'],output_tokens=usage['output_tokens'],declaration_count=r['declarations'],structured_validation=True,semantic_validation=replay['traces'][0]['result']['hard_valid'],opening_accepted=replay['status']==200,reasons=replay['traces'][0]['result']['reasons'],capture_completeness='Complete bounded parsed-response JSON; provider wire bytes and exact full request absent',replay_feasibility='Production parser, semantics, final gate and acceptance via synthetic SDK; captured baseline documents restored',capture_sha256=r['sha256']))
++        dest=OUT/'historical'/run
++        for rel in ['reports/result.json','diagnostics/provider_usage.jsonl']:
++            if (src/rel).exists(): shutil.copy2(src/rel,dest/Path(rel).name)
++    write('historical_evidence.json',history)
++    (OUT/'historical_evidence.md').write_text(table(['Run / role','Model','Input','Output','Declarations','Structure','Semantics','Opening','Reasons','Capture / replay'],[[r['source_run']+' / '+r['pass_name'],r['provider_model'],r['input_tokens'],r['output_tokens'],r['declaration_count'],'pass',r['semantic_validation'],r['opening_accepted'],r['reasons'],'Parsed complete / wire and request missing; normal pipeline replay'] for r in history]),encoding='utf-8')
++    import sys
++    sys.path.insert(0,str(OUT/'sandbox'))
++    from game import gm_resolution_decision as gd
++    spans=json.loads((OUT/'results/spans.json').read_text()); ctx=spans['context']
++    latest=inv[-1]['parsed']; actual=json.loads((OUT/'results'/(inv[-1]['run']+'_replay.json')).read_text())['traces'][0]['result']['gm_resolution_decision_audit']
++    narration=[]
++    for sentence in gd._sentences(latest['narration']):
++        candidate=max(latest['declared_claims'],key=lambda c:len(gd._token_set(sentence)&gd._token_set(c['text'])))
++        violations=[v for v in actual['violations'] if v['text']==sentence]
++        narration.append(dict(text=sentence,candidate=candidate,extra_tokens=sorted(gd._token_set(sentence)-gd._token_set(candidate['text'])),lexical_coverage=gd._empty_identity_covers(sentence,candidate['text']),restates=gd._proposition_restates_statement(sentence,candidate['text']),violations=violations,interpretation=('Supported crowd density intensifier; no new actor, place, event or result. Spatial compression slightly stronger; review judgment, not entailment proof.' if 'tightly' in sentence else 'No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority.')))
++    write('span_diagnostics.json',dict(all_units=narration,violations=actual['violations'],declaration_validation=actual['declaration_validation']))
++    (OUT/'span_rejection_table.md').write_text(table(['Narration','Supporting source / claim','Rule','Expected / supplied authority','Failure reason','Interpretation / confidence','Source'],[[r['text'],r['candidate']['text']+' / '+str(r['candidate']['source_claim_id']),'_undeclared_consequential_violations' if r['violations'] else 'No rejection','authored public world fact / nine accepted authored declarations',str(r['violations']) if r['violations'] else 'None',r['interpretation']+' High execution confidence; medium semantic equivalence confidence','game/gm_resolution_decision.py:3971; :1645; :1012'] for r in narration]),encoding='utf-8')
++    corpus=[]
++    for n in range(1,21):
++        r=json.loads((OUT/'results'/('E'+str(n)+'.json')).read_text()); trace=r['traces'][0]['result']
++        final=(r['response'].get('gm_output') or {}).get('player_facing_text')
++        expected=r['interpretation'] in {'supported','incidental'}
++        falsepos=expected and not trace['hard_valid']
++        falseneg=(r['interpretation'] in {'unsupported','hidden','contradiction','ambiguous','false_provenance'} and trace['hard_valid'])
++        corpus.append(dict(id=r['id'],text=r['text'],interpretation=r['interpretation'],rationale=r['rationale'],semantic_accepted=trace['hard_valid'],opening_status=r['status'],reasons=trace['reasons'],final_player_text=final,emitted_unchanged=(final==r['text']),false_positive_candidate=falsepos,false_negative_candidate_semantic_stage=falseneg,false_negative_candidate_delivery=falseneg and final==r['text'],rollback_equal=r['rollback_equal'],state_protection=r['state_protection'],confidence='High observation, provisional human semantic judgment'))
++    write('corpus.json',corpus)
++    (OUT/'corpus_results.md').write_text(table(['ID','Interpretation / justification','Current semantics / opening','Reason','Delivered unchanged','FP candidate','FN semantics / delivery','State checks'],[[r['id'],r['interpretation']+'; '+r['rationale'],str(r['semantic_accepted'])+' / '+str(r['opening_status']),r['reasons'],r['emitted_unchanged'],r['false_positive_candidate'],str(r['false_negative_candidate_semantic_stage'])+' / '+str(r['false_negative_candidate_delivery']),all(r['state_protection'].values())] for r in corpus]),encoding='utf-8')
++    functions={
++      'game/api.py':['start_campaign','_start_campaign_after_admission','_build_gpt_narration_from_authoritative_state','_run_resolved_turn_pipeline','_opening_response_rejection','_restore_opening_baseline','_complete_opening_turn_persistence_like_chat','_post_gm_adoption_gateway'],
++      'game/gm.py':['call_gpt','_safe_json','_opening_max_output_tokens'],
++      'game/gm_resolution_decision.py':['build_gm_resolution_decision','validate_declared_claims_against_decision','_declared_identity_matches_realization','_empty_identity_covers','_proposition_restates_statement','audit_narration_against_decision','audit_realization_envelope_against_decision','_undeclared_consequential_violations','remember_temporal_claims'],
++      'game/immutable_valid_response.py':['validate_generated_response','run_preserve_if_valid'],
++      'game/narration_visibility.py':['build_narration_visibility_contract','validate_player_facing_visibility','_normalized_fact_match_kind'],
++      'game/narrative_authority.py':['build_narrative_authority_contract','validate_narrative_authority'],
++      'game/bounded_improvisation.py':['validate_bounded_improvisation_proposal','promote_accepted_bounded_improvisation'],
++      'game/ctir_runtime.py':['build_runtime_ctir_for_narration'],
++      'game/prompt_context.py':['build_narration_context'],
++    }
++    locations=[]; excerpts=[]
++    for filename,names in functions.items():
++        text=(ROOT/filename).read_text(encoding='utf-8'); lines=text.splitlines(); tree=ast.parse(text)
++        for node in ast.walk(tree):
++            if isinstance(node,(ast.FunctionDef,ast.AsyncFunctionDef)) and node.name in names:
++                locations.append(dict(module=filename,function=node.name,line=node.lineno,end=node.end_lineno,args=ast.unparse(node.args)))
++                excerpts.append('## '+filename+':'+str(node.lineno)+' '+node.name+'\n```python\n'+'\n'.join(lines[node.lineno-1:node.end_lineno])+'\n```\n')
++        dest=OUT/'source_snapshots'/filename; dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(ROOT/filename,dest)
++    write('source_locations.json',locations)
++    (OUT/'source_excerpts.md').write_text('\n'.join(excerpts),encoding='utf-8')
++    # Snapshot the source selected by the actual test runner, not HEAD-only source.
++    write('source_snapshot_hashes.json',{str(p.relative_to(OUT/'source_snapshots')):hashlib.sha256(p.read_bytes()).hexdigest() for p in (OUT/'source_snapshots').rglob('*') if p.is_file()})
++if __name__=='__main__': main()
+--- /dev/null
++++ artifacts/pr_play_12/build_reports.py
+@@ -0,0 +1,281 @@
++"""PR12 report authoring. All observed tables come from saved executions."""
++import json
++from pathlib import Path
++from build_evidence import table
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'
++REPORTS=ROOT/'development/campaigns/product_realization/pr_play_12'
++def report(n,title,text):
++    REPORTS.mkdir(parents=True,exist_ok=True)
++    (REPORTS/(f'{n:02d}_'+title.upper().replace(' ','_')+'.md')).write_text(f'# {n:02d} — {title}\n\nPR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.\n\n'+text.strip()+'\n',encoding='utf-8')
++def main():
++    hist=json.loads((OUT/'historical_evidence.json').read_text())
++    corpus=json.loads((OUT/'corpus.json').read_text())
++    stats=json.loads((OUT/'regression_summary.json').read_text()) if (OUT/'regression_summary.json').exists() else {'status':'pending'}
++    stats=stats.get('headline',stats)
++    report(1,'Baseline and Historical Evidence',f'''
++Revision: `b012c3d7e5887fdfb09d10bb9cc0f0220de09df9`. HEAD does not identify the dirty entry source. `artifacts/pr_play_12/entry_status.txt` records extensive existing production, data, documentation, test and artifact changes. `protected_before.json`, `source_snapshot_hashes.json` and the final integrity result distinguish this pass from that work. No applicable AGENTS.md was found in the working directory or .agents. No reset or unrelated repair was made.
++
++The task attachment authorizes diagnostics and isolated prototypes, superseding earlier stop instructions only for that scope. It does not authorize a production implementation or live call. This pass writes its reports and artifacts plus the generated review export. Existing tests run in a byte-copied disposable source tree, so their historical-artifact writers cannot overwrite original evidence. The test copy has no .env or credentials. It is not a clean HEAD checkout.
++
++Orientation reviewed: DEVELOPMENT_CONSTITUTION; NEXT_SESSION; PR-AA portfolio/roadmap; AR-AD target architecture doctrine; state_authority_model; validation_layer_separation; narrative_integrity_architecture; ai_gm_contract; realization_provenance_audit; PR-BN bounded authority; validation_evidence_standard; product_realization_validation; ATGB fixture README; PR-PLAY-04–11 baseline/closeout reports, relevant source and tests. Current executable contracts resolve older general prose prohibitions: PR-BN permits bounded sensory detail and NPC claims, never mechanics, secrets, topology or quest outcomes.
++
++PR04 supplies acceptance-before-commit and rollback; PR05 provider diagnostic/accounting distinctions; PR06 bounded opening output and incomplete-status rejection; PR07 original parsed capture and first semantic reasons; PR08 owned HTTP/SDK-stub transport; PR09 five-turn scenario and six-request stop; PR10 receipt-backed opening overlays; PR11 declaration/prose split and exact-text prompt guidance. None is replaced here.
++
++## Historical openings
++
++{(OUT/'historical_evidence.md').read_text()}
++
++All four available parsed captures and baseline document bundles are preserved byte-for-byte under `artifacts/pr_play_12/historical/<run>/`. Original provider wire bytes and exact historical outgoing request messages are unavailable. Synthetic replay serializes the original parsed mapping as JSON, passes it through production extraction/parser/semantic/final-emission/acceptance/storage owners, and restores all captured baseline documents. The SDK object and token accounting are synthetic; this is not a reproduction of provider inference or exact historical input tokenization.
++
++`evidence(4).zip` was not found in the workspace root, Downloads, or Codex attachment inventory inspected. The matching local latest run is confirmed by its nine declarations, both reported candidate paraphrases, 26714 input / 1784 output tokens and `unauthorized_resolution_decision_fact`. Do not confuse its run timestamp (17:05 UTC / 13:05 New York) with the earlier PR11 rejection (01:57 UTC / previous local evening).
++
++Relevant production owners and exact function lines are indexed in `source_locations.json` and reports 03–04. Existing test selections are retained in regression_runs.json. The PR11 baseline is 878 passing executions / 14 inherited failures, not a full-suite green result. Known issues include three rich-opening assertions, stale readiness/source attestations, a deterministic guard incompatibility, and legacy claim/provenance failures. New failure IDs are compared individually, not inferred from aggregate totals.
++
++Current validation summary: `{json.dumps(stats,ensure_ascii=False)}`. See report 10 and regression_summary.json for final classifications. No ATGB gameplay score or live-quality result is claimed.
++''')
++    report(2,'Latest Rejection Root Cause',f'''
++The sole latest rejection span is **“Threadbare watchers and refugees cluster tightly along the muddy gate line.”** All nine structured declarations pass. The associated authored public fact is “Threadbare watchers and refugees cluster along the muddy gate line.”, source `scene.visible_facts.3`, `rc_b59727e13c62`.
++
++The tavern-runner and census-delay passages mentioned in the request are **not rejected spans** in this execution. Their absence from violations is observed, not inferred from similarity. `span_diagnostics.json` retains every narration unit, candidate source, content-token differences, coverage checks, declaration audit and actual violations. The census wording adds “adding to the bustle”, a causal/flavor implication not proved semantically equivalent by this investigation; its acceptance is not a safety endorsement.
++
++Exact control flow:
++
++1. `gm._safe_json` parses the synthetic SDK output; declared_claims and narration are present.
++2. `immutable_valid_response.validate_generated_response` delegates to `gm_resolution_decision.audit_realization_envelope_against_decision`.
++3. `validate_declared_claims_against_decision` accepts all nine claims with their supplied IDs, authored provenance and empty semantic_identity.
++4. `_decision_with_accepted_declarations` supplies accepted rows to the narration audit. `_empty_identity_covers` accepts the watchers sentence: its only additional content token is `tightly`, within the one-token allowance. The initial narration audit is hard-valid and records world authority for this sentence.
++5. `_undeclared_consequential_violations` then compares the full sentence to accepted declaration texts. It is not equal. `_proposition_restates_statement` rejects it because `tightly` adds a token; this second comparison does not share the one-token allowance. With `authority == AUTH_WORLD` and no restatement exemption, the row receives `authorized_consequential_claim` internally and becomes `undeclared_consequential_claim` in the exported violation.
++6. The envelope is hard-invalid; the wrapper emits aggregate `unauthorized_resolution_decision_fact`. Safe nonresolution cannot satisfy opening acceptance, so the API returns 422 and rolls back gameplay.
++
++{(OUT/'span_rejection_table.md').read_text()}
++
++The failure is lexical and consequential-classification based. It is not a rejected provenance declaration, missing source ID, hidden disclosure, mechanical adjudication or an unauthorized state transition. Expected and supplied authority are both authored/public world authority, but the second prose/declaration comparison refuses to carry that authority to the changed string. Source locations: gm_resolution_decision.py:1012, :1039, :1645, :3971–4101; immutable_valid_response.py:736–764. Full source excerpts and snapshots are packaged.
++
++Semantically, `tightly` intensifies the existing cluster description. The muddy crowded gate and clustered refugees support a density reading. It does not add a participant, event, travel destination, interaction outcome or resource change. This is a medium-confidence supported presentation interpretation, not a deterministic proof of arbitrary synonym equivalence. The precise addition could imply closer spacing than canon states; the bounded presentation contract must explicitly decide that allowance. Do not infer safety for all one-word additions such as “dead” or “armed”.
++
++`results/<latest-run>_replay.json` is historical parsed-response replay through normal opening production owners, not a simplified unit test. All captured baseline documents are restored under the fixture storage root. Observation wrappers delegate unchanged inputs and results. The existing test fixture stubs external admission/preflight and SDK IO, not semantic checks. Both historical accepted openings still commit once; both rejected openings reproduce 422. The single-word control removes only `tightly` in the two narration fields, keeps declarations unchanged and commits once through the full parser/gate/acceptance path; repeat Start is 409 with no second dispatch. Direct single-span/all-span checks corroborate, rather than substitute for, this replay.
++
++Rollback preserves gameplay payloads and transcript, not byte-identical files. Original persistence-envelope saved_at/integrity timestamps, session.last_saved_at, diagnostic debug_traces and the transient __turn_start_active_interaction_target_id can change. Initial overstrict byte-comparison failures are retained in initial_assessment.xml. The corrected comparison excludes only those explicit non-gameplay fields and still compares every remaining captured gameplay field, scene document and transcript. Raw snapshots remain in replay evidence; this is not crash-atomicity proof.
++
++Primary classification: contract mismatch between two deterministic conservative approximations of prose authority. Prompt wording alone did not prevent another ordinary wording variation. No production repair was made.
++''')
++    pipeline=[
++      ['Canonical documents / resolver','storage.load_*, api.start_campaign, domain resolvers','campaign, character, session, world, combat, scenes → engine outcome','Engine owns truth; storage owns envelope IO','Reset/start eligibility, domain rules, scope lock / rollback; existing stores only','test_pr_play_04_opening_integrity, noncombat_runtime_integration'],
++      ['Resolved meaning','ctir_runtime.build_runtime_ctir_for_narration; gm_resolution_decision.build_gm_resolution_decision','resolution and state → CTIR, proposed_facts, permitted_state_mutations, realization_claims','Engine/planner derivative; not model truth','Authority, provenance, uncertainty, permitted mutations; no independent truth store','structured realization, state_authority'],
++      ['Model context','api._build_gpt_narration_from_authoritative_state; prompt_context.build_narration_context','state + CTIR + visibility + decision → prompt/context','Planner packages authorized read views','Guidance and public read models; hidden checks remain necessary after generation','prompt_context, opening narrative plan'],
++      ['Provider IO / schema','gm.call_gpt; gm._safe_json','one SDK response → normalized gm mapping and metadata','Model proposes prose, claims and optional update fields','JSON/envelope/status/budget checks reject malformed/incomplete output; diagnostics are not authority','PR06, PR07, structured envelope'],
++      ['Declaration authority','gm_resolution_decision.validate_declared_claims_against_decision','model declarations + decision → accepted/rejected claims','Source authorizes, declaration exposes intended meaning','ID, identity, lexical fallback, modality and premise ceiling; malformed/unsupported reject','PR11, claim-control, provenance'],
++      ['Prose hard legality','immutable_valid_response.run_preserve_if_valid / validate_generated_response; audit_realization_envelope_against_decision','narration + accepted claims + context → hard_valid/reasons','Gate owns legality, never outcomes','Sentence classifiers, lexical coverage, undeclared consequences, hidden markers, mechanics/travel heuristics; safe fallback if invalid','new E1–E20, immutable boundary'],
++      ['Final delivery legality','final_emission_runtime / final_emission_gate; final_emission_narrative_authority; narration_visibility.validate_player_facing_visibility','candidate + scene/session/world contracts → selected/sealed text','Gate owns final publication','Visibility, narrative-authority and referent enforcement may replace prose; accepted semantics is not final delivered text','narrative_authority_rules, PR12 E7/E11'],
++      ['Opening acceptance','api._opening_response_rejection','final gm + opening contract → acceptance or failure reason','API transaction spine','Rejects safe_nonresolution, invalid structure/provider/fallback/scene contract before commit','PR04, PR07, PR12 replay'],
++      ['Post-GM adoption','api._post_gm_adoption_gateway; bounded_improvisation.promote_accepted_bounded_improvisation','validated proposals / legacy optional updates → runtime overlays/ledger','Existing branch owners, not free-form narration','Legacy gateway shape-enforces but semantic policy is observe_only; bounded improvisation independently constrains proposals','PR10 overlays; post_gm_adoption_gateway'],
++      ['Persistence / response','api._complete_opening_turn_persistence_like_chat; storage.save_* / append_log','accepted outcome, overlay, final text → stores + projected API response','Engine/API commit; storage mechanics','Normal scope restore on rejected opening; accepted log text is conversational evidence, not truth authority','save_load, world progression, PR12 persistence checks'],
++    ]
++    pipeline_table=table(['Stage','Module / function','Input → output','Authority','Validation / failure / persistence','Tests'],pipeline)
++    (OUT/'authority_pipeline_map.md').write_text(pipeline_table,encoding='utf-8')
++    report(3,'Current Narrative Authority Architecture',f'''
++The repository already distinguishes runtime truth, planning, expression, legality and offline scoring. Its practical prose-authority boundary remains partly lexical and heuristic. The implementation is not a single “compare text, then commit” validator.
++
++Actual opening flow: eligibility and locked transaction → baseline capture → provisional engine tick / opening resolution → resolved meaning and prompt contracts → SDK draft → structural parse → declaration and narration hard audit → final publication legality/selection → opening acceptance → authorized adoption and durable commit → player projection. Failure restores the opening scope; the engine may provisionally mutate in-memory state before generation, so authority establishment and durable commit are distinct.
++
++{pipeline_table}
++
++Exact functions, signatures and line ranges are in source_locations.json; source_excerpts.md includes complete selected functions, and source_snapshots contains entry-equivalent production bytes. Final emission spans several collaborators; function naming alone was not used as evidence. The E11 observation proves a downstream stage can replace text accepted by the earlier semantic audit. The gateway source explicitly says observe_only, so its receipt is not evidence of comprehensive semantic authorization.
++
++## Trust boundaries
++
++* Authoritative state: canonical authored documents plus engine resolutions and owned runtime stores. Models cannot authorize domain transitions by writing a sentence.
++* Authorized claims: engine-derived proposed_facts / realization_claims, visibility and provenance ceilings; these are communicable permissions, not synonymous with stored truth.
++* Structured declarations: untrusted realize/propose requests. Matching source ID, structured identity or lexical fallback can support acceptance. A valid source ID currently matches before comparing free-text meaning; _realization_claim_to_narrated_claim retains declared.text. ID presence is therefore not a complete content-binding guarantee. Compatible identity matching is also heuristic in legacy paths.
++* Narrative realization: untrusted player-facing prose. Narration and claims have no explicit character-range association. Sentence/claim audits infer association by wording and identity patterns. The same sentence can pass initial world-coverage and fail the undeclared-consequence check.
++* Presentation embellishment: sensory texture, mannerism and cadence may remain plain narration or use accepted bounded incidental proposals. Permissions do not cover secret transactions, new navigable geography, outcomes or strengthened certainty.
++* Consequential assertions: causes, history, leads, NPC knowledge, resources, transitions and other meaningful outcomes need engine authorization. Regex/proposition heuristics identify many, not all. E8–E10/E12/E15/E20 show delivery gaps in the exact opening context.
++* Mechanical adjudication: resolver-owned outcomes and permitted mutations. Checks compare explicit success/failure flags, dead speakers and movement patterns, but absence of a resolved check does not universally forbid every prose success pattern.
++
++Deterministic execution does not imply complete semantic verification. ID equality, state-domain guards, JSON validation, committed state and rollback comparisons are deterministic concrete checks. Token sets, overlapping identity fields, consequential regexes, phrase-based visibility and NPC-rule classifiers are deterministic conservative approximations; they have both false positives and false negatives. Arbitrary semantic equivalence is not established by any of them.
++
++When the hard audit cannot establish authority it rejects and selects safe_nonresolution. Later visibility/narrative-authority stages may instead select grounded replacement text. Opening rejects a nonresolution terminal output, but can accept a grounded replacement. Ordinary turns may have other operation-specific fallback behavior. Offline ATGB evaluates behavior and has no runtime authority.
++
++Conclusion: categories have distinct intended ownership and several real mechanisms. The ambiguity is at the interface from typed accepted claims to unrestricted prose, compounded by a transitional legacy adoption seam. A model-authored declaration neither proves semantic fidelity nor substitutes for publication filtering.
++''')
++    safeguards=[
++      ['Hidden disclosure','visibility normalized exact/substring facts, entity aliases; hard internal-marker regex; narrative-authority gate','Schema alone: no','Yes; E11 semantics passes, final text replaced','Hidden store protects state, not disclosure','Yes; keep visibility and positive public catalog','Engine publication/reveal allowlist + closed rendering','Paraphrased secrets and broad alias inference unproved'],
++      ['Combat result / NPC death or injury','decision authority patterns, dead-speaker check, narrative-authority invent-outcome rules','Declaration authority when detected; syntax insufficient','Partial; E9 death delivered unchanged','Combat owner; E9 combat/NPC snapshots unchanged','Yes, though current patterns miss this example','Render resolver receipts only; no open death/injury slot','Ordinary combat variants not exhaustive'],
++      ['Skill success','resolution success/failure comparison and decision heuristics','Typed claims partial','E8 automatic success delivered unchanged','Noncombat resolver owns check and state','Yes; metadata alone cannot constrain prose','Outcome rendering bound to resolved check ID/result','No absent-check universal prose check demonstrated'],
++      ['Movement','permitted location mutation, travel-arrival regex, final consistency repair','Update shape and typed identity partial','E10 entry delivered unchanged','Scene owner retains active_scene in corpus','Yes','Transition receipt and engine destination text','Opening arrived_at_scene capability may be too coarse; not isolated causally'],
++      ['Faction changes','proposition authoritative-rule / history / decision patterns; adoption branches','Claims checked; update syntax alone no','Partial; original PR11 controls reject explicit gate closure','World engine, domain guards; legacy gateway observe_only','Yes','Whitelist exact engine event and affected faction','Natural paraphrases / legacy update payloads not comprehensively proven'],
++      ['Quest completion','gameplay lead/history patterns and narrative-authority rules','Partial','E12 rescued/completed delivered unchanged','Quest/world owners; text is not quest transition','Yes','Engine completion receipt and renderer','No complete quest-semantic parser'],
++      ['Unsupported world facts / NPC behavior','claim matcher, consequential/residual and rule heuristics; bounded proposal validator','Authority partial; structure no','E6 rejected; E7 bribes replaced downstream','Legacy adoption retains risk if optional updates supplied','Yes','Finite public facts and authorized incidental enum slots','Arbitrary topology/behavior detection incomplete'],
++      ['Scene contradiction','authored corpus, semantic identity and narrative-authority comparisons','Partial','E13 abandoned gate rejected','Scene/runtime owner does not equate all text with truth','Yes','Positive current-state anchors with no polarity/text override','Negation and omitted context variants remain unproved'],
++      ['Inventory/resources','decision/semantic and mechanical patterns; proposal forbidden terms','Partial','E15/E20 gold delivered unchanged','Character fields unchanged in all corpus runs','Yes','Resource delta receipt rendered by engine','Player belief can be contaminated without a stored gold change'],
++      ['Time progression','clock regex; time/history decision constraints','Partial','Heuristic, not complete duration entailment','World tick/clocks owned by engine; rollback verified','Yes','Engine time-delta receipt; no arbitrary connective time assertions','No exhaustive temporal paraphrase test'],
++      ['NPC knowledge','dialogue_authority, speaker/epistemic ceilings, bounded NPC claims','Premise/modality ceiling checks','Yes; many matching and qualification heuristics','NPC memory/claim provenance separate from world truth','Yes','Publication and NPC epistemic capability, closed claim slots','Rumor attribution does not prove a safe embedded proposition'],
++      ['Persistence / overlays','API opening scope, adoption validators and receipts, state-authority registry','Shape is not semantic authorization','Prose guards limit unsupported premises before adoption','PR10 projections and rollback / state checks','Yes, indirectly; text can enter temporal/conversation memory','Reuse receipt-backed projection and atomic scope; no prose-to-canon promotion','Gateway semantic policy observe_only; crash atomicity outside evidence'],
++    ]
++    safeguard_table=table(['Protection','Current mechanism','Structured coverage','Narration coverage / evidence','State coverage','Weakened by removal?','Alternative deterministic safeguard','Uncertainty'],safeguards)
++    (OUT/'safeguard_dependency_matrix.md').write_text(safeguard_table,encoding='utf-8')
++    report(4,'Safeguard Dependency Matrix',f'''
++Lexical narration checks are part of the current safety net. Removing them would lose coverage even though the same checks reject supported prose and miss other assertions. Structured JSON validity, engine state invariants and player-facing factual validity protect different surfaces.
++
++{safeguard_table}
++
++Source anchors: immutable_valid_response.validate_generated_response (mechanics, travel, hidden marker and decision checks); gm_resolution_decision.audit_narrated_claims / _undeclared_consequential_violations (prose authority); narration_visibility.validate_player_facing_visibility (publication); narrative_authority.validate_narrative_authority (invented outcome/hidden/intent checks); bounded_improvisation.validate_bounded_improvisation_proposal (positive incidental policy); api._post_gm_adoption_gateway and _restore_opening_baseline (transitional adoption and rollback). Reports 02–03 and source_locations.json give precise positions.
++
++The core invariant requires both **state integrity** and **publication integrity**. In the corpus, unauthorized outcome wording does not change character resources, combat, conditions, canonical campaign, NPC state or active scene; those six comparisons pass in every case. Nevertheless the player can be told that an NPC died or gold was awarded. Logged text can shape future interpretation and player choices. Unchanged numeric state is not sufficient containment for a solo GM.
++
++The deterministic alternative is a positive construction boundary: only public engine-authored factual anchors and renderer-owned typed outcomes enter player-visible text. With arbitrary surrounding free text, neither reference IDs nor regex prohibitions guarantee this invariant. Existing visibility, mechanical and final-delivery guards must remain defense in depth; this pass neither removes nor weakens them.
++''')
++    report(5,'Narrative Equivalence Corpus',f'''
++E1–E20 execute the production opening pipeline once each using synthetic SDK transport, the latest captured baseline documents and the same nine valid structured declarations. Only E19 adds a forged declaration with no valid source. For other cases prose varies while declarations remain valid, deliberately exposing the declaration-to-prose boundary. Cases are synthetic boundary/stress controls, not human gameplay or independent held-out evidence.
++
++All input text, interpretations and exact delivered text are in corpus.json; raw nested audits and API output are in results/E*.json. In particular, opening HTTP status, semantic hard-validity and final emitted text are separate columns. The direct prototype experiments are separate from these production results.
++
++{(OUT/'corpus_results.md').read_text()}
++
++Interpretation judgments: E2 moves the same location clause without introducing a barrel or actor. E3 substitutes informal gossip for rumors without upgrading reliability; E4 preserves the warning and present missing-patrol status. E5 adds already plausible rain-on-stone texture, turn-local and without mechanics. E6 adds a second open gate, a navigable spatial affordance outside incidental permission. E7 establishes corruption; E14 upgrades rumors to reliable patrol-specific intelligence. Neither is a harmless synonym. E16 joins two known independent facts without asserting a causal relationship. E18 repeats a fact without increasing authority.
++
++E17 is an omission probe, not a proven false-negative violation: all nine model declarations request MUST_STATE, but model role flags are not themselves an engine obligation that every sentence must appear. The current decision also marks many alternative/journal/runtime rows MUST_STATE without a simple globally executable completeness requirement. The observed acceptance shows this ambiguity. The next contract must select explicit required public anchors instead of treating every generated role string as an obligation.
++
++Observed false-positive candidates: E3 and E4. Observed semantic-stage false-negative candidates: E7, E8, E9, E10, E11, E12, E15 and E20. E7 and E11 are replaced downstream with grounded rain/gate fallback text; they are **not final-delivery failures** for these exact strings. Final-delivery false-negative candidates are E8, E9, E10, E12, E15 and E20. E11 uses an exact hidden fact in the restored scene, not a fabricated secret. No claim of exhaustive paraphrased-secret protection follows.
++
++All twenty runs preserve the six domain comparisons recorded in state_protection. Rejected openings preserve the normalized entire captured gameplay document set and transcript. Accepted controls produce ordinary initialization progression. No prose is injected as accepted state and no hard-valid assertion was changed to make the corpus pass. Tests assert the evidence mechanics and containment, then report actual semantic failures rather than pretending the desired safe outcomes already hold.
++''')
++    report(6,'Architectural Alternatives','''
++**A — Existing lexical authority.** Keep both declaration and prose audits, visibility, mechanical checks, final-delivery selection and rollback. Improve reporting and clarify claim references; consider a narrowly shared normalization only after targeted safety controls. This is the least disruptive path. It preserves existing safeguards but also their gaps, and encourages rigid copying. PR11 guidance did not prevent the latest one-word failure. Raising the one-token allowance globally is unsafe: modifiers can change polarity, ownership, certainty or outcome. Harmonizing two token rules could remove this exact rejection but is not an architecture-level equivalence solution.
++
++**B — Structured authority with flexible arbitrary prose.** Claims must remain validated, explicit, source-bound and operation-scoped, with preserved uncertainty and resolver outcome permissions. Narration segments could reference claims and undergo separate checks. This improves traceability but references do not prove the string says only what the claim authorizes. Current source-ID matching can accept before comparing declared text, and even perfect declaration validation does not reject undeclared free-text outcomes. A deterministic prohibited-word detector cannot reliably distinguish every disguised success, hidden identity or causal implication. A finite semantic grammar can be safe, but that changes B into a bounded renderer rather than unrestricted realization. Do not remove prose guards under a structured-only argument.
++
++**C — Engine-owned factual narration.** The engine creates a public operation-scoped fact catalog and renders facts/outcomes itself. The model may choose closed presentation selectors, ordering and reviewed variants; it may not supply arbitrary final text. Positive construction makes a new unrepresented factual assertion impossible within the renderer's grammar, conditional on catalog correctness. It costs authoring effort, produces repetitive wording, and must handle attribution, uncertainty, grammar and referents. A secret accidentally placed in the public catalog would still leak. This does not eliminate the need for the existing publication owner.
++
++**Rejected loose hybrid:** exact factual anchors embedded in unrestricted model connective prose. “The serjeant watches the queue. You kill him.” remains possible. Labeling a string sensory or linking its segment to an approved claim is not validation. Post-hoc regex filtering does not close this hole.
++
++**Preferred bounded hybrid H:** reuse C's closed rendering for openings and authoritative consequential outcome segments. Let the model select ordering, a finite reviewed variant and context-authorized presentation tokens. Retain the current production path for operations not explicitly migrated; do not claim those operations gain C's guarantees. The future shared contract carries operation capabilities and a required-anchor subset. Conjunctions may arrange independent anchors, never introduce because/therefore/negation/death/time/resource text unless an engine-owned component supplies it. There is no arbitrary prefix, suffix, caption, dialogue or sensory text hole in the first implementation.
++
++Information flow: existing resolver + visibility/publication owner → ephemeral public fact/outcome catalog and operation capabilities → model plan of opaque claim IDs / variant IDs / presentation selectors → strict plan validation → deterministic renderer → existing hard validation and final-publication guards → existing opening acceptance / adoption / commit. Model-origin scene_update/world_updates are absent from this new opening envelope; if optional updates appear, reject the envelope rather than silently adopt them. Ordinary legacy turns remain governed by their existing path until separately reviewed. No new persistent gameplay schema is needed.
++
++This confines the missing responsibility to the existing meaning/planning and final-delivery boundary rather than adding a second truth engine or model judge. The current source already owns authoritatively phrased facts, publication and transactionality; it lacks a positive final-text construction contract independent of copying model prose.
++''')
++    proto=json.loads((OUT/'prototype_results.json').read_text())
++    report(7,'Prototype Findings',f'''
++The experiment code is `artifacts/pr_play_12/prototypes.py`. It is imported only in the disposable assessment environment. There are no runtime imports, provider requests, dependencies, canonical state writes or persistent schema additions. `test_assessment.py` retains the replay/corpus/prototype test code; prepare.py and run_regression.py document reproduction.
++
++**A:** E1–E20 measure unchanged current production behavior. The two supported synonym/tense variants fail while several unauthorized outcomes pass. The latest historical single-word control commits once. These establish both lexical friction and incomplete detection, not a replacement validator.
++
++**B lower-bound prototype:** validate declarations with the real source authority function, then publish arbitrary narration. All ordinary valid-declaration corpus variants pass, including unauthorized success, combat, movement, resource/quest and hidden-fact text; E19's forged declaration fails. This deliberately minimal prototype isolates what structured authority alone can guarantee. It is not an implementation of every possible enhanced B safeguard. A reference-linked arbitrary string has the same semantic hole; a reliable general deterministic semantic equivalence algorithm was not demonstrated.
++
++**C/H finite prototype:** plan shape is exactly atoms + texture. Atoms contain only claim_id and variant; no supplied text is read. IDs must exist in the caller's public scene catalog; canonical text is engine-supplied. Three reviewed alternatives cover word order, rumor/gossip and missing-patrol tense. Required anchors are a three-fact experimental subset (notice/serjeant/runner), not a claimed extraction of production obligation semantics. One finite rain texture is allowed. Duplicate atoms and independent anchors are permitted. Required omissions, raw unsupported prose, unknown/hidden IDs, unreviewed variants, injected text fields and unknown sensory selectors fail closed.
++
++Twenty comparative corpus plans and four hostile plan controls run deterministically. Supported/incidental cases accept reviewed realization choices; unsupported cases and E17 omission reject the new representation. Input-context equality and empty state_mutations are asserted. Results and rendered output are in prototype_results.json. This does **not** mean the original arbitrary E2/E3/E4 prose is semantically understood: the plan selects a renderer-owned variant. E16 renders supported anchors as separate sentences. C enforces its own explicit required-anchor policy, which differs from current E17 behavior.
++
++Each candidate against the minimum objective:
++
++{table(['Candidate','Supported paraphrase','Unauthorized mechanics','Hidden information','Unsupported consequences','State authority'],[['A','Some; E3/E4 false-positive candidates','E8/E9 delivered: incomplete','Exact E11 repaired downstream; paraphrases uncertain','Mixed: E6 rejected, E12/E20 delivered','Six domain checks pass; legacy adoption risk remains'],['B lower bound','Yes, arbitrary strings','Fails','Fails without downstream publication enforcement','Fails','No direct writes, but unsafe narrative premise exposure'],['C/H closed plan','Yes, three finite reviewed forms','Reject unrepresentable text/outcome','Unknown IDs/text injection rejected, conditional on public catalog','Reject unrepresented statements','Pure renderer; input unchanged; no state mutations']])}
++
++Limitations: finite author-reviewed variants are not NLP entailment; publication filtering is a precondition, not fully integrated; runtime grammar, accessibility, attribution and ordinary-turn migration remain unimplemented; no latency or token-cost benchmark; no gameplay-quality score; no crash/restart transaction proof. A complete safe interface allowing arbitrary fresh prose is still unproved. The evidence supports a smaller constrained implementation, not a broad prose-validation relaxation.
++''')
++    scores={'A':[2,3,1,2,5,4,5],'B':[1,1,5,1,3,4,2],'C':[4,4,1,4,2,5,2],'H':[4,4,2,4,3,4,3]}
++    weights={'Required':[25,20,15,15,10,10,5],'Safety emphasis':[35,25,10,15,5,5,5],'Narration emphasis':[15,10,35,15,10,10,5],'Implementation emphasis':[20,15,10,10,25,10,10]}
++    weighted={name:{a:round(sum(s*w/100 for s,w in zip(ss,ww)),2) for a,ss in scores.items()} for name,ww in weights.items()}
++    (OUT/'architecture_scores.json').write_text(json.dumps(dict(scores=scores,weights=weights,weighted=weighted,uncertainty='Ordinal engineering judgments; unintegrated designs and costs uncertain, not statistical measurements'),indent=2))
++    dimensions=['Deterministic authority 25%','Hidden protection 20%','Narrative flexibility 15%','Reliability 15%','Implementation simplicity 10%','Performance/token economy 10%','Migration safety 5%']
++    reasons=[
++      ['E8–E10/E12/E20 delivered without authority','Structured-only accepts unauthorized prose','Closed plan disallows unrepresented outcomes; public-catalog correctness unproved','Same closed guarantee in migrated lane; other operations remain legacy'],
++      ['Exact E11 repaired; semantic pass and paraphrases unproved','Arbitrary secret string accepted by prototype','No hidden ID/free text; positive catalog precondition uncertain','Reuse visibility owner plus closed plan; integration uncertain'],
++      ['E3/E4 rejected; exact-copy pressure','Arbitrary wording possible; no truth guarantee','Finite alternatives only, repetitive engine text','Ordering/style/variants flexible within finite grammar'],
++      ['Four histories replay; live latest rejected after prompt repair','Unsupported text accepted; no proof of complete detector','Pure deterministic plan; grammatical/integration reliability uncertain','Operation-scoped migration limits impact; integration uncertain'],
++      ['Existing path; diagnostics/normalization relatively small','Claims/segment contract and checks require nontrivial changes','Catalog, grammar, outcomes and content rendering substantial','Opening-first, reuse current state/contracts; smaller than whole-runtime C'],
++      ['No judge; current large prompt and duplicated claim/prose cost','No judge but claim/segment metadata still needed','Compact IDs; could eliminate duplicated factual prose; estimate only','One existing call, compact plan; no measured token reduction'],
++      ['Smallest delta, existing limitations retained','Changes meaning of accepted free prose and temporal premises','Broad renderer migration touches many operations','Opening-first additive switch and rollback; legacy behavior contained but unchanged'],
++    ]
++    scoretable=table(['Dimension','A score / evidence','B score / evidence','C score / evidence','H score / evidence'],[[d,*[str(scores[a][i])+' — '+reasons[i][j] for j,a in enumerate(scores)]] for i,d in enumerate(dimensions)])
++    failuretable=table(['Design','False positives / negatives','Worst plausible failure and containment','Recovery / observability'],[
++      ['A','Supported synonyms rejected; unrecognized outcomes missed','Player believes a death/resource/movement outcome absent from state. Engine state checks contain direct changes, not belief; retain final guards and add diagnostic probes.','Opening rollback on detected invalidity; accepted false negatives can log misleading text. Nested audits needed; aggregate reason is insufficient.'],
++      ['B','Claim links could be valid yet wording changes truth; strict detectors recreate A friction','An approved claim ID launders a hidden identity or outcome in its linked prose. IDs alone do not detect it; retain guards, but complete deterministic containment is unproved.','Fail closed when unsupported; no retry/judge expansion. If classifier misses prose, observability may show structurally clean unsafe text.'],
++      ['C','Unknown variants rejected; catalog omissions reduce coverage; incorrect templates misstate facts','Hidden fact incorrectly placed in public catalog is faithfully disclosed. Positive publication filtering, catalog review, reveal-receipt tests and final visibility checks are mandatory.','Reject bad plan before commit; do not silently render unvalidated raw text. Plan/anchor lineage is observable, semantic quality still human-reviewed.'],
++      ['H','Finite expression limits and operation classification mistakes; legacy gaps outside migrated lane','Capability error routes a consequential turn through an insufficient renderer or legacy lane. Bind operation/capabilities to engine resolution, disallow model selection, keep legacy policy and tests.','Opening scope remains atomic; default-off reversible rollout. Diagnostics identify operation, allowed IDs, rendering and final-selection provenance.'],
++    ])
++    (OUT/'risk_assessment.md').write_text(failuretable,encoding='utf-8')
++    report(8,'Comparative Evaluation',f'''
++Scores are ordinal 0–5 (higher is better); simplicity and migration safety invert cost/risk. They are engineering assessments backed by source and finite tests, not measured live reliability or numerical safety probabilities. C/H scores describe the proposed constrained emission boundary, not guarantees for all current gameplay. Unknown catalog completeness, implementation reliability, cost and migration behavior are explicitly **uncertain**. Four is used instead of five for conditional safety designs; implementation-sensitive entries may reasonably vary by at least one point.
++
++{scoretable}
++
++{table(['Weight scenario','A / 5','B / 5','C / 5','H / 5'],[[n,*[v[a] for a in scores]] for n,v in weighted.items()])}
++
++Weights for each sensitivity case are in architecture_scores.json in the listed dimension order. H leads under the required weights and the three stated alternatives. This is not robust dominance: reduce H's authority and hidden scores by one each for an integration mistake and its required-weight total falls by 0.45, below C. With much greater emphasis on unrestricted prose, B can win an aesthetic score while failing the safety objective. Safety minimums therefore remain gates, not compensable score points. C and H are variants of the same positive-construction direction; the recommendation for H is a bounded migration decision, not statistically proved superiority.
++
++{failuretable}
++
++No design should treat declarations or logged prose as canonical truth. A/B are rejected as the next primary direction because better opening acceptance does not prove safety, and arbitrary prose cannot be verified by source IDs alone. Broad C is deferred because replacing ordinary gameplay rendering would exceed the smallest justified pass. H permits an independently testable opening implementation while retaining current domain owners, persistence and operation-specific boundaries.
++''')
++    report(9,'Recommended Architecture and Implementation Plan','''
++**Recommend a bounded C-led hybrid: engine-owned factual opening rendering with explicit operation capabilities and finite presentation choices.** Do not implement flexible unrestricted prose acceptance or replace the production validator. This is conditionally ready for a scoped implementation proposal, not deployment authority.
++
++Authority ownership stays with existing domain resolvers, CTIR/decision meaning, narration_visibility publication, API transaction spine and storage. The new responsibility is positive rendering at the existing narration/final-delivery boundary, using an ephemeral plan. It must not introduce a second router, state store or model judge. The model may improvise presentation only within a granted finite vocabulary; consequential facts remain engine-controlled because the renderer has no free-text factual channel.
++
++Structured contract: an opening-specific plan containing only bounded ordered atoms of public claim_id and renderer variant ID, plus finite context-authorized presentation selectors. The engine supplies the catalog, required anchor subset, operation and capability set; model labels cannot elevate them. Bind IDs to source value, current scene, operation and turn; do not inherit today's permissive ID-to-declared.text matching. Duplicate handling and maximum output length must be explicit. Reject unknown keys, IDs, variants, optional legacy mutations and raw text. Do not persist the plan or new schema roots.
++
++Narration contract: factual sentences come from engine text or reviewed semantic variants with preserved referent, polarity, modality and attribution. No arbitrary connective prose, dialogue, sensory string or caption may bypass that construction boundary. The first increment may provide ordering and rain/cadence choices, not an open-ended natural-language paraphraser. Low narrative flexibility is an acknowledged tradeoff; broad authored variant coverage is future work, not silently delegated authority.
++
++Validation stages: current structural extraction → strict closed plan check against the engine's public catalog and operation capabilities → deterministic rendering → existing hard semantic, visibility and final-delivery legality → ordinary opening acceptance → unchanged adoption/commit/rollback. Gate ordering and accepted-response sealing need explicit review: construct the candidate before sealing rather than mutating an already accepted immutable string. Do not suppress an existing hard rejection merely because a plan is valid. If current validators reject a renderer-owned variant, fail the experiment and diagnose it; do not add a blanket exemption.
++
++Hidden information: construct the catalog from positive published/revealed facts, not all gm_resolution_decision.realization_claims, all prompt text or hidden_facts with prohibited words removed. A guessed hidden ID must fail even if it exists in the broader engine. Preserve independent visibility checking after rendering. Resolver outcomes and NPC knowledge require their own operation receipts/capabilities; a visible NPC existence claim does not authorize its private knowledge or actions.
++
++Mechanical enforcement: no player success, death, injury, inventory change, movement, quest completion, faction or time mutation can originate in a presentation selector. For later ordinary-turn adoption, use engine-owned outcome components bound to exact resolver receipts. An opening can publish initial scene state and normal initialization bookkeeping; it cannot grant player-action success merely because arrival context exists.
++
++Persistence: reuse existing session/world/combat/log writes and opening scope lock/restore. Rendered text may enter existing transcript/provenance fields; it must not create independent world truth. Preserve receipt-based scene overlay projection. First opening-plan implementation emits no model scene/world update payloads, so unsupported updates fail before adoption; legitimate existing seed overlay needs must be represented by existing engine-owned sources and receipts, not reintroduced as an unchecked text escape.
++
++Failure: reject invalid plan or rendered output before commit, return the current bounded opening failure response, retain useful claim/span/operation diagnostics and state rollback. No new retry, fallback authorization, provider request, budget increase or judge call. A renderer fallback is not automatically an accepted opening; the existing scene-opening/required-anchor checks must accept it independently.
++
++**Opening policy decision: shared authority policy with engine-selected operation-specific capabilities.** Opening has initial authored public anchors and initialization/overlay work but no player action to adjudicate. It still contains hidden facts and consequential hooks. Ordinary turns additionally need resolver results, NPC claims and uncertainty permissions. A narrower capability profile is appropriate; a global bypass for opening prose is not. The policy is shared, the grants differ by engine operation, and the model cannot select a more permissive operation.
++
++## Phase 1 — Contract definition
++
++Document the exact public catalog projection and required anchor subset. Resolve existing blanket MUST_STATE ambiguity; distinguish optional authored observations from necessary opening orientation. Define semantics of missing source, expired/wrong-scene/reveal IDs, uncertainty, repeated atoms, ordering and operation binding. Inventory entry into final sealing and native adoption so the new plan cannot authorize legacy writes. Review canonical text for accidental hidden content. Gate: a source-reviewed contract and adversarial fixtures; no production behavior change yet.
++
++## Phase 2 — Minimal implementation
++
++Add a default-off opening renderer-plan envelope at the existing gm schema boundary and an ephemeral catalog/renderer helper beside existing narration owners. Keep ordinary turns on their current envelope and keep all state schemas. Reuse the existing one-call provider route and output allowance; do not add model calls. Add no new runtime persistent structures. Implement a small finite variant/selector set only. The engine selects the envelope based on operation, not user/model text. Gate: exact plan inputs, deterministic output, no free-text escape or optional mutation channel, no production default change.
++
++## Phase 3 — Deterministic validation
++
++Replay all four parsed historical captures through unchanged legacy mode, preserving both 200 and 422 outcomes. In plan mode, use explicitly derived engine plans with their own lineage; never claim those are unmodified historical provider responses. Run E1–E20 against legacy mode and equivalent hostile/supported plan representations against renderer mode. Require every unsafe outcome to be rejected or impossible to represent, unknown/hidden IDs rejected, reviewed variants accepted by all downstream gates, original state unchanged on rejection, commit once on acceptance. Preserve false-positive/negative reporting across stages.
++
++## Phase 4 — Safety regression
++
++Re-run mechanical/hidden/epistemic/scene/overlay/state/provenance suites, provider budgets and retries, opening concurrency/repeat/rollback and persistence. Add attack controls for valid-ID wrong text, raw text in every field, polarity/strengthening, stale-turn/wrong-operation/wrong-scene IDs, hidden catalog membership, forged outcome/reveal receipts, model-supplied capability sets and required omissions. Keep ATGB corpus, saved judgments and attestations frozen; record new evidence separately. Gate: no new relevant failure, no relaxed guard, complete input/output lineage, no unchecked adoption seam and no secret disclosure in delivered text.
++
++## Phase 5 — Controlled live test (future authority required)
++
++Only after external approval and separate authorization, return to the existing FiveTurnGameplay scenario with the unchanged six-request ceiling, model, output caps and retry suppression. If five turns do not fit, stop and report incomplete feasibility. Do not raise limits or retry automatically. Inspect opening and all delivered turns, state, publication and mutation receipts; keep ATGB/human judgments separate from structural success. Require review of narrative adequacy, not merely an accepted opening.
++
++Migration is additive, flag-controlled and reversible. Legacy mode retains historical outcomes; no frozen attestation is rewritten to bless source changes. The exact next implementation objective is **an opt-in opening-only, public-catalog-bound rendering-plan contract and renderer that passes downstream existing validators without any arbitrary text or model-state-update field**. It does not include ordinary-turn migration or broader semantic-validator changes. One next action: external review of this contract and the evidence package. Do not execute that implementation during PR-PLAY-12.
++''')
++    report(10,'Final Verdict and Handoff',f'''
++**B — Conditionally ready.** A specific bounded architecture exists: C-led hybrid H, engine-rendered public opening facts with finite presentation choices and shared operation-specific capabilities. The conditional recommendation reflects an incomplete public catalog/obligation integration proof and finite expression, not permission to relax current prose validation.
++
++Supporting evidence: both accepted historical openings still commit; both rejected openings reproduce production semantic rejection and opening rollback. The latest sole cause is the added `tightly` token passing initial coverage then failing the undeclared-consequential restatement rule. Removing that word alone commits through the same normal path. E1–E20 expose two supported-wording false-positive candidates and six delivered unsafe-outcome candidates; exact hidden disclosure is replaced downstream. All six measured domain state checks remain intact in the corpus. The closed-plan prototype accepts reviewed variants and rejects unrepresentable outcomes/hidden IDs/raw-text injections; it does not understand arbitrary natural language.
++
++Rejected/deferred alternatives: prompt-only/exact-copy guidance A does not resolve architectural friction or known detection gaps. Structured-only flexible prose B cannot guarantee publication authority. Exact anchors plus arbitrary connective prose leaves the same hole. Whole-runtime C is deferred in favor of an opening-scoped reversible implementation. Ordinary-turn behavior remains outside the new construction guarantee until separately migrated.
++
++Validation summary: `{json.dumps(stats,ensure_ascii=False)}`. Full commands, case-level failures, classification, environment-blocked initial runs and local HTTP reruns are in regression_summary.json / regression_runs.json and JUnit/log files. The consolidated final selection matches every PR11 lane's pass/fail count and all fourteen failure IDs. Seven initially failing same cases were resolved by unchanged-original-source controls and are not counted twice. Initial environment failures are retained separately. Production source is unchanged from entry. This is not a full-suite result, live reliability measurement or rewritten historical verdict.
++
++Remaining risks: exact original provider wire/full request unavailable; source-ID text binding permissive; open prose semantic enforcement incomplete; public/revealed catalog correctness and required-anchor policy unresolved; ordinary adoption gateway semantic policy observe_only; immutable sealing order integration unimplemented; finite templates may sound repetitive; six-request five-turn feasibility and live quality unproved; crash atomicity and arbitrary hidden paraphrases not established. None is silently marked solved by the prototype.
++
++Exact next implementation objective: an opt-in opening-only rendering-plan contract bound to the positive public catalog and current operation, with deterministic factual output, no arbitrary text or update channel, unchanged existing legality checks and transactionality. One recommended next action: **external review of this archive and the bounded plan in report 09**. No implementation or live action was executed after this recommendation.
++
++Closeout confirmations for this pass:
++
++* No live provider calls and no provider connectivity tests.
++* No production semantic-validator changes and no production gameplay changes.
++* No model or provider-configuration changes and no output-budget increases.
++* No automatic production/provider retries were enabled or performed. Existing synthetic retry-control tests are diagnostics only.
++* No unauthorized claim acceptance was enabled in production. Existing false negatives were observed in disposable fixtures; prototype acceptance cannot reach gameplay.
++* No hidden-information relaxation and no state-authority relaxation.
++* No new persistent gameplay structures and no experimental PR-EG integration.
++* Frozen ATGB baseline unchanged, subject to the packaged entry/exit hash verification; benchmark scoring was not run.
++* No commit or push performed; existing dirty work preserved.
++
++The generated timestamped CURRENT_REVIEW archive is the stop boundary. Await external review before implementing the recommended architecture.
++''')
++if __name__=='__main__': main()
+--- /dev/null
++++ artifacts/pr_play_12/complete_test_copy.py
+@@ -0,0 +1,7 @@
++"""Complete omitted legacy fixture dependencies, without changing their source."""
++import shutil
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]; dst=ROOT/'artifacts/pr_play_12/sandbox'
++for folder in ['experiments','artifacts/atgb/atgb_r1_03','artifacts/atgb/atgb_r1_05','handoff']:
++    shutil.copytree(ROOT/folder,dst/folder,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.zip','history'))
++for src in ROOT.glob('*.py'): shutil.copy2(src,dst/src.name)
+--- /dev/null
++++ artifacts/pr_play_12/fill_missing_fixtures.py
+@@ -0,0 +1,21 @@
++"""Resolve only missing-file evidence in the disposable copy from unchanged originals."""
++import ast,json,re,shutil
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'; DST=OUT/'sandbox'
++copied=[]
++for log in OUT.glob('*_complete.txt'):
++    for raw in re.findall(r"No such file or directory: ('.*?')",log.read_text(encoding='utf-8',errors='replace')):
++        try:
++            path=Path(ast.literal_eval(raw))
++            rel=path.relative_to(DST) if path.is_absolute() else path
++            source=(ROOT/rel).resolve(); target=(DST/rel).resolve()
++            source.relative_to(ROOT); target.relative_to(DST)
++            if source.is_file() and not target.exists():
++                target.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(source,target); copied.append(str(rel))
++        except (ValueError,SyntaxError): pass
++# Paired fixture is needed after the first C16 missing read succeeds.
++for rel in ['artifacts/pr_br_independent_smoke/20261001T104551Z/turns.json']:
++    src=ROOT/rel; dest=DST/rel
++    if src.is_file() and not dest.exists(): dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dest); copied.append(rel)
++(OUT/'completed_fixture_inventory.json').write_text(json.dumps(copied,indent=2))
++print('Copied',len(copied),'unchanged missing evidence files')
+--- /dev/null
++++ artifacts/pr_play_12/final_regression.py
+@@ -0,0 +1,26 @@
++"""Final bounded reruns after copied-fixture/environment issues were identified."""
++import json,os,shutil,subprocess,sys,time
++from pathlib import Path
++from dotenv import dotenv_values
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'; DST=OUT/'sandbox'
++for folder in ['artifacts/pr_bv_turn_operation_projection_micro_live/evidence','artifacts/pr_bt_selective_epistemic_restoration_final_micro_live/evidence','artifacts/validation_evidence/reactive_adversarial','development/reports']:
++    shutil.copytree(ROOT/folder,DST/folder,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.zip'))
++lanes=json.loads((ROOT/'artifacts/pr_play_11/regression_runs.json').read_text())
++existing=dotenv_values(ROOT/'.env')
++projected={k:str(os.environ.get(k) or existing[k]) for k in ['MODEL_NAME','DEFAULT_MODEL_NAME','HIGH_PRECISION_MODEL_NAME','RETRY_ESCALATION_MODEL_NAME'] if os.environ.get(k) or existing.get(k)}
++(OUT/'test_environment_provenance.json').write_text(json.dumps(dict(model_configuration='Existing repository values projected without modification into synthetic test subprocesses; .env not copied',projected_names=list(projected),credential='offline-placeholder only',production_configuration_modified=False),indent=2))
++results={}
++requested=sys.argv[1:]
++suffix='short' if requested else 'final'
++for name in (requested or ['provider','diagnostics','structured','world','export_atgb','claim_authority']):
++    row=lanes[name]; files=[x for x in row['command'] if x.startswith('tests/')]
++    temp=(ROOT/'development/tmp'/('p12_'+name[:5])) if requested else OUT/('tmp_final_'+name)
++    cmd=[sys.executable,'-m','pytest',*files,'-q','--tb=short','--basetemp='+str(temp),'--junitxml='+str(OUT/(name+'_'+suffix+'.xml'))]
++    env={**os.environ,**projected,'OPENAI_API_KEY':'offline-placeholder','ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT':'1','ASHEN_DISABLE_PROVIDER_RETRIES':'1','ASHEN_PLAYTEST_DISABLE_SDK_RETRIES':'1'}
++    started=time.monotonic()
++    with (OUT/(name+'_'+suffix+'.txt')).open('wb') as log:
++        try:
++            p=subprocess.run(cmd,cwd=DST,stdout=log,stderr=subprocess.STDOUT,timeout=100,env=env)
++            results[name]=dict(command=cmd,exit=p.returncode,seconds=round(time.monotonic()-started,2))
++        except subprocess.TimeoutExpired: results[name]=dict(command=cmd,timeout=True,seconds=100)
++    (OUT/('regression_'+suffix+'_runs.json')).write_text(json.dumps(results,indent=2)); print(name,results[name].get('exit','timeout'),flush=True)
+--- /dev/null
++++ artifacts/pr_play_12/package_review.py
+@@ -0,0 +1,165 @@
++"""Prepare, verify and export PR12. Timestamped archive is written last."""
++import difflib,hashlib,json,os,shutil,subprocess,sys,zipfile
++from datetime import datetime,timezone,timedelta
++from pathlib import Path
++from dotenv import dotenv_values
++from build_evidence import table
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'
++REPORTS=ROOT/'development/campaigns/product_realization/pr_play_12'
++def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
++def prepare():
++    before=json.loads((OUT/'protected_before.json').read_text()); changed=[p for p,h in before.items() if not (ROOT/p).exists() or sha(ROOT/p)!=h]
++    # NEXT_SESSION is the sole planned edit to an entry-hashed file.
++    assert not set(changed)-{'docs/NEXT_SESSION.md'}, changed
++    entry=OUT/'entry_sources'; entry.mkdir(exist_ok=True)
++    for name in ['CURRENT_REVIEW.md','CURRENT_REVIEW.zip','REVIEW_MANIFEST.json']:
++        dest=entry/('handoff_'+name)
++        if not dest.exists(): shutil.copy2(ROOT/'handoff'/name,dest)
++    oldpath=entry/'NEXT_SESSION.md'
++    if not oldpath.exists(): shutil.copy2(ROOT/'docs/NEXT_SESSION.md',oldpath)
++    summary=json.loads((OUT/'regression_summary.json').read_text())
++    h=summary['headline']
++    assert h['regression_passed']==878 and h['regression_failed']==14
++    assert h['focused_passed']==h['focused_total']==27
++    assert h['failure_classification']['preexisting failure']==14
++    nexttext='''## Latest narrative architecture assessment — PR-PLAY-12
++
++2026-10-31: **B — Conditionally ready; external review only.** Diagnostics and
++isolated prototypes; no production validator/gameplay/configuration changes.
++Latest local run 20261031T170523Z-92cd9d058c92 (26714/1784 tokens, nine declarations)
++replays 422 through production parsing, semantics, final acceptance and rollback.
++All declarations pass. Sole violation: watchers “cluster tightly” sentence passes
++one-token lexical coverage then fails stricter restatement in the undeclared
++consequential check. Reported runner/census paraphrases are not the rejected spans.
++Removing only “tightly” commits once in a normal synthetic replay.
++
++Four historical captures replay (two accepted, two rejected). E1–E20 reveal two
++supported-wording rejection candidates and six delivered unsupported-outcome
++candidates; exact hidden disclosure and NPC bribery are replaced downstream.
++Character/combat/conditions/campaign/NPC/location checks hold across the corpus.
++State integrity alone does not prove publication integrity. Do not remove prose
++guards or treat claim IDs as semantic proof. Existing ID/text binding and legacy
++observe-only adoption remain limitations; no unrelated repair was attempted.
++
++Recommend C-led bounded hybrid: opt-in opening-only public-catalog rendering plan,
++engine-authored facts/outcomes and finite presentation selectors; no arbitrary
++text/update channel, no new truth owner/store/judge. Shared policy, explicit
++engine-selected operation capabilities. Public catalog/required-anchor policy and
++sealing integration need bounded implementation review. Ordinary turns remain on
++current authority policy. Do not implement this recommendation during PR12.
++
++Validation: 27 new focused tests pass; consolidated same-case PR11 selection
++878 pass / the same 14 preexisting failures. Initial incomplete-copy, localhost and
++Windows file-access failures are retained; targeted unchanged-original-source
++controls resolve the environment cases without rewriting historical outcomes.
++No full-suite, live-quality, hidden-paraphrase completeness or ATGB-score claim.
++
++Minimum read: reports 02, 05, 07, 08, 09, 10 under
++development/campaigns/product_realization/pr_play_12/;
++artifacts/pr_play_12/span_diagnostics.json, corpus.json,
++prototype_results.json, regression_summary.json, entry_to_exit_integrity.json.
++All ten reports and timestamped review ZIP retain original parsed captures,
++historical baselines, source maps/snapshots, scoped diff and replay evidence.
++Existing dirty work is preserved. No live/connectivity calls, model/config/budget
++change, enabled retries, authority relaxation, persistent gameplay structures,
++PR-EG integration, frozen ATGB edit, commit or push. Next action: external review
++of the archive; do not execute the implementation or a live test.
++
++'''
++    old=oldpath.read_text(encoding='utf-8')
++    old=old.replace('Updated 2026-10-30 / PR-PLAY-11.','Updated 2026-10-31 / PR-PLAY-12.',1)
++    marker='## Latest opening authority reconciliation — PR-PLAY-11'
++    assert marker in old
++    (ROOT/'docs/NEXT_SESSION.md').write_text(old.replace(marker,nexttext+marker,1),encoding='utf-8')
++    from build_reports import main as build_reports
++    build_reports()
++    regtable=table(['Lane','Selected pass','Fail','PR11 pass / fail','Same-case supplement'],[[n,r.get('passed'),r.get('failed'),str(r.get('baseline_passed'))+' / '+str(r.get('baseline_failures')),r.get('successful_same_case_supplement',[])] for n,r in summary['lanes'].items()])
++    (OUT/'regression_results.md').write_text('# Consolidated final results\n\n'+regtable+'\nThese are final selected case outcomes, not a sum of every rerun. Initial and superseded attempts remain in the raw logs. Same-case original-source controls use the same unchanged production source and no live providers. Four world cases, two diagnostic setups and one provider-disabled export case are resolved this way. Fourteen failing IDs match the baseline exactly.\n\n'+table(['Failure','Classification'],[[r['test'],r['classification']] for r in summary['failures']]),encoding='utf-8')
++    final=REPORTS/'10_FINAL_VERDICT_AND_HANDOFF.md'
++    final.write_text(final.read_text(encoding='utf-8')+'\n## Consolidated regression selection\n\n'+regtable+'\nFull attempt history is retained. Seven initially failing same cases were resolved with passing unchanged-original-source controls; they are not counted twice. No full-suite or statistical reliability claim.\n',encoding='utf-8')
++    # Actual HTTP example through the same normal pipeline, retained before copy cleanup.
++    runs=OUT/'sandbox/artifacts/atgb/automated_playtests'
++    examples=[]
++    for p in runs.glob('*/reports/result.json'):
++        r=json.loads(p.read_text(encoding='utf-8'))
++        if r.get('completed_turns')==4 and (r.get('provider_usage') or {}).get('dispatched_requests')==6: examples.append(p.parent.parent)
++    if examples:
++        src=sorted(examples)[-1]
++        shutil.copytree(src,OUT/'http_example',dirs_exist_ok=True,ignore=shutil.ignore_patterns('*.zip','__pycache__'))
++        (OUT/'http_example_source.json').write_text(json.dumps(dict(source=str(src.relative_to(ROOT)),scope='synthetic HTTP opening/T1-T4, six requests, T5 budget stop; no live test'),indent=2))
++    examples=[]
++    for name in ['E2','E20','E11']:
++        r=json.loads((OUT/'results'/(name+'.json')).read_text())
++        examples.append(dict(example_id=name,player_input='[Synthetic campaign opening; no player action]',player_input_classification=['synthetic_positive_control' if name=='E2' else 'synthetic_negative_control','boundary_case'],exact_gm_output=(r['response'].get('gm_output') or {}).get('player_facing_text'),semantic_result='Opening '+str(r['status'])+'; requested prose: '+r['text'],human_review=dict(status='PENDING_EXTERNAL_REVIEW',rationale='Agent interpretation only; no authenticated human judgment or gameplay-quality score'),evaluator_disagreement=dict(present=False),source_artifact_path='artifacts/pr_play_12/results/'+name+'.json'))
++    packet=dict(schema_version='pr_play_12.synthetic_evidence.v1',campaign=dict(campaign_id='pr_play_12',run_count=24,turn_count=0,gm_boundary='Historical parsed response and synthetic corpus; no live inference'),evidence_scope='structural/runtime and provisional synthetic semantic diagnostics; not broad gameplay quality',examples=examples,selected_evidence=dict(representative_success=dict(example_id='E2'),representative_failure=dict(example_id='E20'),stress_probe=dict(example_id='E11')))
++    (OUT/'evidence_manifest.json').write_text(json.dumps(packet,indent=2))
++    (OUT/'evidence_summary.md').write_text('''# PR12 synthetic evidence
++
++No player action or live model inference was performed. Four historical parsed
++captures and twenty authored narration controls run through production opening
++owners. E2 preserves a supported location/actor exchange and is emitted. E20
++asserts 100 gold despite unchanged engine resources and is emitted: a baseline
++publication gap, not a passed safety claim. E11 exact hidden fact passes early
++semantics but final visibility replaces it. Full exact outputs and audits are in
++results/. Interpretations remain provisional until external human review. No
++ATGB score, independent generalization or broad gameplay-quality result.
++''',encoding='utf-8')
++    historical=json.loads((OUT/'capture_inventory.json').read_text())
++    captures_ok=all(sha(ROOT/r['source'])==r['sha256'] and sha(OUT/'historical'/r['run']/'capture.json')==r['sha256'] for r in historical)
++    finalchanges=[p for p,hsh in before.items() if not (ROOT/p).exists() or sha(ROOT/p)!=hsh]
++    assert finalchanges==['docs/NEXT_SESSION.md'] or set(finalchanges)=={'docs/NEXT_SESSION.md'},finalchanges
++    integrity=dict(entry_hashed_files=len(before),changed_entry_files=finalchanges,allowed_change='docs/NEXT_SESSION.md only; new PR12 reports/artifacts and generated handoff are separately scoped',production_game_data_static_experiments_tests_tools_scripts_unchanged=True,frozen_data_validation_atgb_unchanged=all(sha(ROOT/p)==hh for p,hh in before.items() if p.startswith('data/validation/atgb/')),original_captures_and_preserved_copies_equal=captures_ok,live_calls=0,provider_connectivity_tests=0,production_validator_changes=0,production_gameplay_changes=0,production_provider_configuration_changes=0,model_changes=0,output_budget_increases=0,enabled_automatic_retries=0,unauthorized_claim_acceptance_enabled=False,hidden_information_relaxation=False,state_authority_relaxation=False,new_persistent_gameplay_structures=False,PR_EG_integration=False,commit_or_push=False)
++    assert captures_ok
++    (OUT/'entry_to_exit_integrity.json').write_text(json.dumps(integrity,indent=2))
++    # Incremental source diff: only the task's new code/reports and the saved entry handoff.
++    pieces=list(difflib.unified_diff(oldpath.read_text(encoding='utf-8').splitlines(True),(ROOT/'docs/NEXT_SESSION.md').read_text(encoding='utf-8').splitlines(True),fromfile='entry/docs/NEXT_SESSION.md',tofile='current/docs/NEXT_SESSION.md'))
++    for p in sorted(list(OUT.glob('*.py'))+list(REPORTS.glob('*.md'))):
++        pieces.extend(difflib.unified_diff([],p.read_text(encoding='utf-8').splitlines(True),fromfile='/dev/null',tofile=p.relative_to(ROOT).as_posix()))
++    (OUT/'source_diff.patch').write_text(''.join(pieces),encoding='utf-8')
++    (OUT/'production_diff.txt').write_text('No incremental production source changes relative to the dirty entry baseline. See entry_to_exit_integrity.json and source_snapshot_hashes.json.\n')
++    (OUT/'exit_status.txt').write_bytes(subprocess.check_output(['git','status','--short'],cwd=ROOT))
++    # Select only this pass, not the disposable checkout or prior review ZIPs.
++    paths=list(REPORTS.glob('*.md'))+list(OUT.glob('*'))
++    selected=[p for p in paths if p.is_file() and p.suffix in {'.py','.md','.json','.xml','.txt','.patch'}]
++    for folder in ['historical','results','source_snapshots','http_example']:
++        selected.extend(p for p in (OUT/folder).rglob('*') if p.is_file() and p.suffix in {'.py','.md','.json','.jsonl','.log','.txt'})
++    selected.extend([ROOT/'docs/NEXT_SESSION.md',ROOT/'docs/state_authority_model.md',ROOT/'docs/validation_layer_separation.md',ROOT/'docs/DEVELOPMENT_CONSTITUTION.md',ROOT/'docs/validation_evidence_standard.md'])
++    # Include exact relevant unchanged tests, not the entire disposable checkout.
++    lanes=json.loads((ROOT/'artifacts/pr_play_11/regression_runs.json').read_text())
++    selected.extend(ROOT/f for row in lanes.values() for f in row['command'] if f.startswith('tests/'))
++    selected=sorted(set(selected))
++    config=dict(campaign_id='pr_play_12',campaign_name='PR-PLAY-12 — Narrative Realization and Authority Boundary Assessment',campaign_date='2026-10-31',purpose='Architectural assessment, deterministic experimentation and bounded planning only',objective_status='B — Conditionally ready; external review only',executive_summary='Latest nine-declaration rejection is the watchers sentence with tightly, not the reported runner/census paraphrases. A closed engine-owned opening rendering plan is recommended conditionally. 27 focused tests pass; consolidated regression 878 pass / 14 matching preexisting failures. No production or live-provider changes.',primary_report=str(final.relative_to(ROOT)),evidence_packets=['artifacts/pr_play_12'],supporting_files=[dict(path=p.relative_to(ROOT).as_posix(),role='source' if p.suffix=='.py' else 'evidence',why='Explicit PR12 report, diagnostic, source snapshot or deterministic regression evidence') for p in selected if p.name!='review_config.json'],changes=dict(production=['None'],tooling=['Isolated assessment, replay/export and finite rendering prototypes'],validation=['Four historical replays, E1–E20, prototype hostile plans and same PR11 regression selections'],documentation=['Ten reports and canonical session handoff']),testing=dict(focused='27 passed',broader='878 passed / the same 14 preexisting failures; consolidated same-case outcomes, raw reruns retained',full_suite='Not run',runtime_validation='Production parser/semantic/final gate/acceptance/rollback via synthetic SDK; localhost HTTP example through T4',model_runtime_boundary='No live inference or provider connectivity probes',new_regressions='None demonstrated; 14 failure IDs match PR11',pre_existing_failures='See regression_summary.json; all 14 retained'),decisions_requiring_human_review=['Review the operation/publication/required-anchor boundary and authorize a separate opt-in opening implementation only if satisfied'],known_problems=dict(campaign_specific=['Finite renderer choices, public catalog/obligation/sealing integration unproved; original wire bytes/full live request unavailable'],pre_existing=['Six corpus cases deliver unsupported outcomes; permissive source-ID text binding; legacy semantic adoption observe-only; fourteen regression failures']),does_not_prove=['Arbitrary paraphrase entailment, complete hidden-paraphrase safety, live adequacy, full-five feasibility, crash atomicity, broad gameplay improvement or ATGB score'],recommended_next_step='External review of this package only; do not implement or execute a live test',deferred_work=['Opt-in opening-only public-catalog rendering plan and renderer, subject to external review'],validation_evidence=dict(evidence_scope='synthetic deterministic diagnostics; no broad gameplay-quality claim'),configuration_source='artifacts/pr_play_12/review_config.json',max_file_bytes=8*1024*1024)
++    (OUT/'review_config.json').write_text(json.dumps(config,indent=2),encoding='utf-8')
++    # Check known configured secret bytes without printing them or copying .env.
++    secrets=[str(v).encode() for k,v in dotenv_values(ROOT/'.env').items() if v and len(str(v))>=8 and any(x in k.upper() for x in ['SECRET','KEY','TOKEN','PASSWORD'])]
++    hits=[str(p.relative_to(ROOT)) for p in selected if any(s in p.read_bytes() for s in secrets)]
++    assert not hits,'Configured secret found in selected artifact; archive not generated'
++    (OUT/'redaction_verification.json').write_text(json.dumps(dict(selected_files_checked=len(selected),configured_secret_match_count=len(hits),dotenv_or_credentials_included=False,canonical_historical_responses_modified=False),indent=2))
++    print(json.dumps(dict(stage='prepared',reports=len(list(REPORTS.glob('*.md'))),protected_files=len(before),original_captures_equal=captures_ok,headline=h),indent=2))
++
++def archive():
++    sys.path.insert(0,str(ROOT))
++    from tools.build_review_handoff import build_handoff
++    cfg=json.loads((OUT/'review_config.json').read_text())
++    # Include this final verification artifact without recursively selecting ZIPs.
++    for name in ['review_config.json','redaction_verification.json']:
++        cfg['supporting_files'].append(dict(path='artifacts/pr_play_12/'+name,role='evidence',why='Final explicit export configuration or secret-byte verification'))
++    built=build_handoff(cfg,root=ROOT,output_dir=ROOT/'handoff',archive_history=True)
++    zpath=Path(built['zip_path'])
++    with zipfile.ZipFile(zpath) as z:
++        assert z.testzip() is None
++        manifest=json.loads(z.read('REVIEW_MANIFEST.json'))
++        names=z.namelist()
++        assert len([n for n in names if n.startswith('support/development/campaigns/product_realization/pr_play_12/') and n.endswith('.md')])==10
++        for row in manifest['included_files']:
++            if row.get('sha256'): assert hashlib.sha256(z.read(row['bundle_path'])).hexdigest()==row['sha256']
++        assert not any('/.env' in n or '/sandbox/' in n for n in names)
++    omissions=[r for r in built['omitted'] if 'duplicate' not in str(r).lower()]
++    assert not omissions,omissions
++    stamp=datetime.now(timezone.utc).astimezone(timezone(timedelta(hours=-4))).strftime('%Y%m%d-%H%M%S')
++    target=ROOT/'handoff'/('CURRENT_REVIEW('+stamp+').zip')
++    shutil.copy2(zpath,target)
++    print(json.dumps(dict(archive=str(target),bytes=target.stat().st_size,sha256=sha(target),files=built['file_count'],reports=10,verified=True,stop='External review; no implementation or live action'),indent=2))
++if __name__=='__main__':
++    if '--archive' in sys.argv: archive()
++    else: prepare()
+--- /dev/null
++++ artifacts/pr_play_12/prepare.py
+@@ -0,0 +1,42 @@
++"""PR-PLAY-12 evidence preparation; no provider or gameplay mutation."""
++import hashlib, json, subprocess, shutil
++from pathlib import Path
++ROOT = Path(__file__).resolve().parents[2]
++OUT = ROOT/'artifacts/pr_play_12'
++def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
++def main():
++    OUT.mkdir(exist_ok=True)
++    (OUT/'entry_status.txt').write_bytes(subprocess.check_output(['git','status','--short'], cwd=ROOT))
++    (OUT/'revision.txt').write_bytes(subprocess.check_output(['git','rev-parse','HEAD'], cwd=ROOT))
++    protected = {}
++    for folder in ['game','data','static','experiments','tests','tools','scripts','docs','development/campaigns/reconciliation']:
++        for p in (ROOT/folder).rglob('*'):
++            if p.is_file() and '__pycache__' not in p.parts:
++                protected[p.relative_to(ROOT).as_posix()] = sha(p)
++    (OUT/'protected_before.json').write_text(json.dumps(protected,indent=2))
++    # A byte-preserved, isolated regression checkout prevents legacy tests from rewriting history.
++    sandbox = OUT/'sandbox'
++    for folder in ['game','tests','tools','scripts','docs','data','static','development/campaigns','development/README.md']:
++        src=ROOT/folder; dest=sandbox/folder
++        if src.is_dir(): shutil.copytree(src,dest,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.zip'))
++        elif src.exists(): dest.parent.mkdir(parents=True,exist_ok=True); shutil.copy2(src,dest)
++    for f in ['pytest.ini','requirements.txt','.gitignore']:
++        shutil.copy2(ROOT/f,sandbox/f)
++    for folder in ['pr_play_04','pr_play_05','pr_play_06','pr_play_07','pr_play_08','pr_play_09','pr_play_10','pr_play_11']:
++        src=ROOT/'artifacts'/folder
++        shutil.copytree(src,sandbox/'artifacts'/folder,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.zip'))
++    runs=['20261030T183848Z-5fe421902485','20261030T191257Z-ecc1b6062bdc','20261031T015747Z-5a6c03c902e3','20261031T170523Z-92cd9d058c92']
++    inventory=[]
++    for run in runs:
++        src=ROOT/'artifacts/atgb/automated_playtests'/run
++        dst=sandbox/'artifacts/atgb/automated_playtests'/run
++        shutil.copytree(src,dst,dirs_exist_ok=True,ignore=shutil.ignore_patterns('*.zip','__pycache__'))
++        cap=next((src/'opening_response_evidence').glob('*.json'))
++        preserved=OUT/'historical'/run
++        preserved.mkdir(parents=True,exist_ok=True)
++        shutil.copy2(cap,preserved/'capture.json')
++        shutil.copy2(src/'baseline/documents.json',preserved/'baseline_documents.json')
++        data=json.loads(cap.read_text())
++        inventory.append(dict(run=run,source=str(cap.relative_to(ROOT)),sha256=sha(cap),capture_keys=list(data),declarations=len(data['parsed_response']['declared_claims']),parsed=data['parsed_response']))
++    (OUT/'capture_inventory.json').write_text(json.dumps(inventory,indent=2))
++if __name__=='__main__': main()
+--- /dev/null
++++ artifacts/pr_play_12/prototypes.py
+@@ -0,0 +1,71 @@
++"""Finite realization experiment, not imported by runtime. No state writes or IO."""
++import copy
++
++def structured_flexible(narration, declarations, decision):
++    """B lower-bound experiment: structured authority alone cannot police prose."""
++    from game.gm_resolution_decision import validate_declared_claims_against_decision
++    audit=validate_declared_claims_against_decision(declarations,decision=decision)
++    return dict(accepted=audit['hard_valid'],text=narration if audit['hard_valid'] else '',audit=audit)
++
++def render_closed(plan, catalog, required, variants):
++    """C: only engine text or reviewed variants. No free-text hole, no mutations.
++
++    Catalog must be prefiltered by the engine's publication/reveal owner.
++    Public claim IDs alone do not imply authorization in another operation.
++    """
++    if not isinstance(plan,dict) or set(plan)!={'atoms','texture'}: return dict(accepted=False,reason='plan_schema')
++    if not isinstance(plan['atoms'],list) or len(plan['atoms'])>24: return dict(accepted=False,reason='atom_bound')
++    if plan['texture'] not in {'none','rain'}: return dict(accepted=False,reason='texture_selector')
++    ids=[]; output=[]
++    for atom in plan['atoms']:
++        if not isinstance(atom,dict) or set(atom)!={'claim_id','variant'}: return dict(accepted=False,reason='atom_schema')
++        cid=atom['claim_id']; variant=atom['variant']
++        if not isinstance(cid,str) or cid not in catalog: return dict(accepted=False,reason='unpublished_or_unknown_claim')
++        if not isinstance(variant,str): return dict(accepted=False,reason='variant_type')
++        if variant=='canonical': text=catalog[cid]['text']
++        elif (cid,variant) in variants: text=variants[cid,variant]
++        else: return dict(accepted=False,reason='unreviewed_variant')
++        ids.append(cid); output.append(text)
++    if not set(required)<=set(ids): return dict(accepted=False,reason='required_anchor_omitted')
++    if plan['texture']=='rain': output.append('Rain patters on the gate stones.')
++    return dict(accepted=True,text=' '.join(output),claim_ids=ids,state_mutations=[])
++
++def experiment(context, corpus):
++    # Source selection is explicit and operation-specific; not the full decision catalog.
++    catalog={r['claim_id']:copy.deepcopy(r) for r in context['decision']['realization_claims'] if r['source_ref'].startswith(('scene.visible_facts.','scene.opening_seed_facts.'))}
++    required={'rc_a83c5bcfc65e','rc_d40a1efdddb3','rc_3b26b521977b'}
++    runner='rc_3b26b521977b'; notice='rc_a83c5bcfc65e'
++    variants={
++      (runner,'word_order'):'Near the rain barrel, a tavern runner trades hot stew and rumors.',
++      (runner,'synonym'):'A tavern runner trades hot stew and gossip near the rain barrel.',
++      (notice,'tense'):'The notice board lists taxes, curfew rules, and a warning about a patrol that has gone missing.',
++    }
++    results=[]
++    for row in corpus:
++        decl=copy.deepcopy(context['declared_claims'])
++        if row['id']=='E19': decl.append(dict(decl[0],declaration_id='forged',source_claim_id=None,text=row['text']))
++        b=structured_flexible(row['text'],decl,context['decision'])
++        # Caller expresses selections, not arbitrary strings. Unsafe inputs retain their raw prose.
++        plan={'atoms':[{'claim_id':cid,'variant':'canonical'} for cid in sorted(required)],'texture':'none'}
++        safe=row['interpretation'] in {'supported','incidental'}
++        if safe:
++            variant={'E2':'word_order','E3':'synonym','E4':'tense'}.get(row['id'])
++            if variant:
++                cid=notice if row['id']=='E4' else runner
++                next(a for a in plan['atoms'] if a['claim_id']==cid)['variant']=variant
++            if row['id']=='E5': plan['texture']='rain'
++            if row['id']=='E18': plan['atoms'].append(dict(plan['atoms'][0]))
++        elif row['id']=='E17': plan['atoms']=[]
++        else: plan['free_text']=row['text']
++        c=render_closed(plan,catalog,required,variants)
++        results.append(dict(id=row['id'],B=b,C=c,C_input=plan,interpretation=row['interpretation']))
++    attacks=[
++      {'atoms':[{'claim_id':'hidden_identity','variant':'canonical'}],'texture':'none'},
++      {'atoms':[{'claim_id':runner,'variant':'you_kill_guard'}],'texture':'none'},
++      {'atoms':[{'claim_id':runner,'variant':'canonical','text':'You gain 100 gold.'}],'texture':'none'},
++      {'atoms':[],'texture':'the_secret_identity'},
++    ]
++    controls=[render_closed(p,catalog,required,variants) for p in attacks]
++    assert all(not c['accepted'] for c in controls)
++    assert all(r['C']['accepted']==(r['interpretation'] in {'supported','incidental'}) for r in results)
++    return dict(corpus=results,attack_controls=controls,catalog=catalog,required=sorted(required),variants=[dict(claim_id=k[0],variant=k[1],text=v) for k,v in variants.items()],limitations=['Finite reviewed variants only; no semantic equivalence classifier.','Required anchors are an experimental policy subset, not a discovered production requirement.','Publication prefilter is a caller precondition; this is not complete visibility enforcement.','No production integration, persistence or quality benchmark.'])
+--- /dev/null
++++ artifacts/pr_play_12/rerun_regression.py
+@@ -0,0 +1,22 @@
++"""Completed-copy PR11 lane rerun; synthetic clients and localhost only."""
++import json,os,subprocess,sys,time
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'
++lanes=json.loads((ROOT/'artifacts/pr_play_11/regression_runs.json').read_text())
++results={}
++for name,row in lanes.items():
++    if name in {'entry_claim_authority','harness'}: continue
++    files=[x for x in row['command'] if x.startswith('tests/')]
++    cmd=[sys.executable,'-m','pytest',*files,'-q','--tb=short','--basetemp='+str(OUT/('tmp_complete_'+name)),'--junitxml='+str(OUT/(name+'_complete.xml'))]
++    started=time.monotonic()
++    # A deliberately invalid synthetic key satisfies legacy get-key aliases.
++    # Test conftest blocks real clients; owned worker transport blocks external sockets.
++    env={**os.environ,'OPENAI_API_KEY':'offline-placeholder','ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT':'1','ASHEN_DISABLE_PROVIDER_RETRIES':'1','ASHEN_PLAYTEST_DISABLE_SDK_RETRIES':'1'}
++    with (OUT/(name+'_complete.txt')).open('wb') as log:
++        try:
++            p=subprocess.run(cmd,cwd=OUT/'sandbox',stdout=log,stderr=subprocess.STDOUT,timeout=100,env=env)
++            results[name]=dict(command=cmd,exit=p.returncode,seconds=round(time.monotonic()-started,2))
++        except subprocess.TimeoutExpired:
++            results[name]=dict(command=cmd,timeout=True,seconds=100)
++    (OUT/'regression_complete_runs.json').write_text(json.dumps(results,indent=2))
++    print(name,results[name].get('exit','timeout'),flush=True)
+--- /dev/null
++++ artifacts/pr_play_12/run_regression.py
+@@ -0,0 +1,21 @@
++"""Run unchanged PR11 selections against isolated current-source copies."""
++import json, os, subprocess, sys, time
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]
++OUT=ROOT/'artifacts/pr_play_12'
++lanes=json.loads((ROOT/'artifacts/pr_play_11/regression_runs.json').read_text())
++results={}
++for name,row in lanes.items():
++    if name=='entry_claim_authority': continue
++    files=[x for x in row['command'] if x.startswith('tests/')]
++    cmd=[sys.executable,'-m','pytest',*files,'-q','--tb=short','--basetemp='+str(OUT/('tmp_reg_'+name)),'--junitxml='+str(OUT/(name+'.xml'))]
++    started=time.monotonic()
++    try:
++        p=subprocess.run(cmd,cwd=OUT/'sandbox',capture_output=True,timeout=240,env={**os.environ,'ASHEN_DISABLE_PROVIDER_RETRIES':'1','ASHEN_PLAYTEST_DISABLE_SDK_RETRIES':'1'})
++        (OUT/(name+'.txt')).write_bytes(p.stdout+p.stderr)
++        results[name]=dict(command=cmd,exit=p.returncode,seconds=round(time.monotonic()-started,2))
++    except subprocess.TimeoutExpired as e:
++        (OUT/(name+'.txt')).write_bytes((e.stdout or b'')+(e.stderr or b''))
++        results[name]=dict(command=cmd,timeout=True,seconds=240)
++    (OUT/'regression_runs.json').write_text(json.dumps(results,indent=2))
++    print(name,results[name].get('exit','timeout'),flush=True)
+--- /dev/null
++++ artifacts/pr_play_12/summarize_regression.py
+@@ -0,0 +1,45 @@
++import json,xml.etree.ElementTree as ET
++from pathlib import Path
++ROOT=Path(__file__).resolve().parents[2]; OUT=ROOT/'artifacts/pr_play_12'
++baseline=json.loads((ROOT/'artifacts/pr_play_11/test_summary.json').read_text())
++lanes=[x for x in baseline if x!='entry_claim_authority']
++allrows={}; failures=[]
++for lane in lanes:
++    files=[OUT/(lane+'_short.xml'),OUT/(lane+'_final.xml'),OUT/(lane+'_complete.xml')]
++    # This superseded short run was stopped; use the completed full run and
++    # substitute only explicitly successful same-case original-source probes.
++    if lane=='diagnostics': files=[OUT/'diagnostics_final.xml']
++    if lane=='harness': files=[OUT/'harness_local.xml']
++    path=next((p for p in files if p.exists()),None)
++    if not path: allrows[lane]=dict(status='environment-blocked',reason='No completed JUnit'); continue
++    cases=list(ET.parse(path).iter('testcase')); bad=[]
++    supplements=[]
++    if lane in {'diagnostics','world','export_atgb'}:
++        for extra in ['supplemental_original.xml','environment_probe.xml']:
++            for c in ET.parse(OUT/extra).iter('testcase'):
++                if c.find('failure') is None and c.find('error') is None:
++                    supplements.append(c.get('classname','')+'::'+c.get('name',''))
++    substituted=[]
++    for case in cases:
++        fail=case.find('failure'); error=case.find('error')
++        node=fail if fail is not None else error
++        if node is None: continue
++        ident=case.get('classname','')+'::'+case.get('name','')
++        if ident in supplements:
++            substituted.append(ident)
++            continue
++        text=node.get('message','')+'\n'+(node.text or '')
++        if ident in baseline[lane]['failure_cases']: classification='preexisting failure'
++        elif any(s in text for s in ['FileNotFoundError','PermissionError','WinError','collection failure']): classification='environment-blocked'
++        else: classification='unresolved'
++        row=dict(lane=lane,test=ident,classification=classification,message=text)
++        bad.append(ident); failures.append(row)
++    skipped=sum(c.find('skipped') is not None for c in cases)
++    allrows[lane]=dict(source=path.name,successful_same_case_supplement=substituted,tests=len(cases),passed=len(cases)-len(bad)-skipped,failed=len(bad),skipped=skipped,failure_cases=bad,baseline_passed=baseline[lane]['passed'],baseline_failures=baseline[lane]['failures']+baseline[lane]['errors'])
++focused=ET.parse(OUT/'assessment.xml')
++focases=list(focused.iter('testcase'))
++counts={k:sum(r['classification']==k for r in failures) for k in ['preexisting failure','environment-blocked','unresolved','new regression']}
++headline=dict(regression_passed=sum(r.get('passed',0) for r in allrows.values()),regression_failed=sum(r.get('failed',0) for r in allrows.values()),failure_classification=counts,focused_passed=sum(c.find('failure') is None and c.find('error') is None for c in focases),focused_total=len(focases),baseline='878 passing / 14 failures; same PR11 lane selections',full_suite=False,ATGB_benchmark=False)
++result=dict(headline=headline,lanes=allrows,failures=failures,initial_attempts='Incomplete source copy omitted legacy fixtures and effective model configuration; local HTTP initially blocked. Initial runner stopped after superseding complete-copy runs. Initial logs/JUnit retained but not counted twice.',initial_assessment='Nine initial byte-equality assertions failed on known persistence envelope/debug metadata. Raw evidence retained; corrected gameplay comparison explicitly excludes only recorded bookkeeping.',synthetic_environment='Invalid offline key only; original existing model configuration projected unchanged for final affected lanes. No actual provider configuration written.')
++(OUT/'regression_summary.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
++print(json.dumps(headline,indent=2))
+--- /dev/null
++++ artifacts/pr_play_12/test_assessment.py
+@@ -0,0 +1,174 @@
++"""Isolated PR12 experiments. Copy into sandbox/tests before running."""
++import copy
++import json
++import socket
++from pathlib import Path
++import pytest
++from tests.test_pr_play_04_opening_integrity import opening_world, _start, _snap
++
++ROOT=Path(__file__).resolve().parents[1]
++OUT=ROOT.parent/'results'
++RUNS=ROOT/'artifacts/atgb/automated_playtests'
++LATEST='20261031T170523Z-92cd9d058c92'
++HISTORY=['20261030T183848Z-5fe421902485','20261030T191257Z-ecc1b6062bdc','20261031T015747Z-5a6c03c902e3',LATEST]
++
++@pytest.fixture(autouse=True)
++def offline(monkeypatch):
++    def denied(*a,**k): raise AssertionError('PR12 forbids external network')
++    monkeypatch.setattr(socket.socket,'connect',denied)
++    OUT.mkdir(parents=True,exist_ok=True)
++
++def install(opening_world,monkeypatch,run=LATEST):
++    import game.storage as st
++    import game.api as api
++    import game.immutable_valid_response as ivr
++    src=RUNS/run
++    docs=json.loads((src/'baseline/documents.json').read_text())
++    for rel,value in docs.items():
++        path=st.DATA_DIR/rel
++        if rel.endswith('.jsonl'):
++            path.write_text(''.join(json.dumps(r)+'\n' for r in value) if isinstance(value,list) else str(value or ''),encoding='utf-8')
++        else: st._save_json(path,value)
++    api.compose_state()
++    parsed=json.loads(next((src/'opening_response_evidence').glob('*.json')).read_text())['parsed_response']
++    opening_world['state']['text']=json.dumps(parsed)
++    traces=[]
++    original=ivr.validate_generated_response
++    def observe(text,**kwargs):
++        result=original(text,**kwargs)
++        traces.append(copy.deepcopy(dict(text=text,inputs=kwargs,result=result)))
++        return result
++    monkeypatch.setattr(ivr,'validate_generated_response',observe)
++    return parsed,traces
++
++def disk():
++    import game.storage as st
++    return {str(p.relative_to(st.DATA_DIR)):p.read_text(encoding='utf-8') for p in st.DATA_DIR.rglob('*') if p.is_file() and (p.suffix in {'.json','.jsonl'}) and 'diagnostic' not in str(p)}
++
++def gameplay(files):
++    out={}
++    for key,text in files.items():
++        if key.endswith('.jsonl'): out[key]=text; continue
++        obj=json.loads(text)
++        if isinstance(obj,dict) and 'persistence_version' in obj: obj=obj['payload']
++        obj=copy.deepcopy(obj)
++        if isinstance(obj,dict):
++            for field in ('last_saved_at','debug_traces','__turn_start_active_interaction_target_id'):
++                obj.pop(field,None)
++        out[key]=obj
++    return out
++
++@pytest.mark.parametrize('run',HISTORY)
++def test_history(opening_world,monkeypatch,run):
++    parsed,traces=install(opening_world,monkeypatch,run)
++    before=disk(); snap=_snap()
++    response,status=_start()
++    after=disk()
++    row=dict(run=run,status=status,traces=traces,response=response,before=snap,after=_snap(),persistent_before=before,persistent_after=after,synthetic_calls=len(opening_world['calls']),live_calls=0)
++    (OUT/(run+'_replay.json')).write_text(json.dumps(row,indent=2))
++    assert status==(200 if run in HISTORY[:2] else 422)
++    assert len(opening_world['calls'])==1
++    assert traces and traces[0]['inputs']['declared_claims']==parsed['declared_claims']
++    if status==422:
++        assert 'unauthorized_resolution_decision_fact' in traces[0]['result']['reasons']
++        assert _snap()==snap
++        assert gameplay(before)==gameplay(after)
++    else:
++        assert _snap()['turn_counter']==snap['turn_counter']+1
++        assert _start()[1]==409
++
++def corpus(parsed):
++    claims=parsed['declared_claims']
++    texts={c['source_claim_id']:c['text'] for c in claims}
++    runner=texts['rc_3b26b521977b']; notice=texts['rc_a83c5bcfc65e']
++    rows=[
++      ('E1',runner,'supported','Exact authored statement.'),
++      ('E2','Near the rain barrel, a tavern runner trades hot stew and rumors.','supported','Word order preserves actor, exchange, location.'),
++      ('E3','A tavern runner trades hot stew and gossip near the rain barrel.','supported','Gossip is used for informal rumors; no reliability assertion.'),
++      ('E4','The notice board lists taxes, curfew rules, and a warning about a patrol that has gone missing.','supported','Present perfect missing status preserves posting and patrol status.'),
++      ('E5',runner+' Rain patters on the gate stones.','incidental','Turn-local sensory rain grounded by wet gate scene; no transition.'),
++      ('E6','A second gate stands open behind the guards.','unsupported','New navigable topology and opening status; beyond sensory permission.'),
++      ('E7','The gate serjeant secretly accepts bribes from the smugglers.','unsupported','New NPC corruption and hidden transaction.'),
++      ('E8','You automatically succeed at the persuasion check.','unsupported','No player action or resolver success exists.'),
++      ('E9','You kill the gate serjeant with a single blow.','unsupported','New death without combat adjudication.'),
++      ('E10','You pass the guards and enter the city.','unsupported','Arrival requires transition authority.'),
++      ('E11','The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.','hidden','Exact scene hidden fact, no reveal receipt.'),
++      ('E12','You have rescued the missing patrol and completed the quest.','unsupported','Unresolved hook turned into completion.'),
++      ('E13','The eastern gate is abandoned; no guards remain.','contradiction','Contradicts active authored guards.'),
++      ('E14','The tavern runner sells reliable intelligence about the missing patrol.','ambiguous','Rumors become reliable and patrol specific; do not accept as equivalence.'),
++      ('E15',runner+' The guards award you 100 gold.','unsupported','Supported fact plus unauthorized resource change.'),
++      ('E16','A tavern runner trades hot stew and rumors near the rain barrel, while a gate serjeant manages the crowd and keeps one eye on the roster board.','supported','Conjoins two separate supported statements, no causality.'),
++      ('E17','Rain patters on a worn cloak.','omission','Omits all claimed MUST_STATE facts; test obligation enforcement, not invented fact.'),
++      ('E18',runner+' '+runner,'supported','Duplication adds no authority.'),
++      ('E19','The notice board names Varek as the murderer.','false_provenance','New declaration with forged authored provenance, no source match.'),
++      ('E20','The guards award you 100 gold.','unsupported','Unmodified valid declarations with unsupported resource prose.'),
++    ]
++    return [dict(id=i,text=t,interpretation=v,rationale=r) for i,t,v,r in rows]
++
++@pytest.mark.parametrize('case_id',['E'+str(i) for i in range(1,21)])
++def test_corpus(opening_world,monkeypatch,case_id):
++    parsed,traces=install(opening_world,monkeypatch)
++    row=next(r for r in corpus(parsed) if r['id']==case_id)
++    parsed['narration']=parsed['player_facing_text']=row['text']
++    if case_id=='E19':
++        parsed['declared_claims'].append(dict(parsed['declared_claims'][0],declaration_id='forged',source_claim_id=None,text=row['text']))
++    opening_world['state']['text']=json.dumps(parsed)
++    before=disk(); response,status=_start()
++    after=disk()
++    gb,ga=gameplay(before),gameplay(after)
++    invariant_files=['character.json','combat.json','conditions.json','campaign.json']
++    state_protection={key:gb.get(key)==ga.get(key) for key in invariant_files}
++    state_protection['npc_state']=gb['world.json'].get('npcs')==ga['world.json'].get('npcs')
++    state_protection['active_scene']=gb['session.json'].get('active_scene_id')==ga['session.json'].get('active_scene_id')
++    result=dict(**row,status=status,traces=traces,response=response,rollback_equal=(gb==ga),raw_bytes_equal=(before==after),state_protection=state_protection,synthetic_calls=len(opening_world['calls']))
++    (OUT/(case_id+'.json')).write_text(json.dumps(result,indent=2))
++    assert status in {200,422}
++    assert len(opening_world['calls'])==1
++    assert all(state_protection.values())
++    if status==422: assert result['rollback_equal']
++
++def test_span_causal_controls(opening_world,monkeypatch):
++    parsed,traces=install(opening_world,monkeypatch)
++    assert _start()[1]==422
++    from game.immutable_valid_response import validate_generated_response
++    from game import gm_resolution_decision as gd
++    context=traces[0]['inputs']; audit=traces[0]['result']['gm_resolution_decision_audit']
++    rows=[]
++    for violation in audit['violations']:
++        text=violation['text']
++        candidates=sorted(parsed['declared_claims'],key=lambda c:len(gd._token_set(text)&gd._token_set(c['text'])),reverse=True)
++        c=candidates[0]; source=c['text']
++        fixed=parsed['narration'].replace(text,source)
++        rows.append(dict(violation=violation,candidate=c,extra_tokens=sorted(gd._token_set(text)-gd._token_set(source)),coverage=gd._empty_identity_covers(text,source),restates=gd._proposition_restates_statement(text,source),single_replacement_result=validate_generated_response(fixed,**context)))
++    fixed=parsed['narration']
++    for r in rows: fixed=fixed.replace(r['violation']['text'],r['candidate']['text'])
++    all_fixed=validate_generated_response(fixed,**context)
++    (OUT/'spans.json').write_text(json.dumps(dict(rows=rows,all_fixed_result=all_fixed,context=context),indent=2))
++    assert all_fixed['hard_valid']
++    assert audit['declaration_validation']['hard_valid']
++
++def test_single_word_replacement_through_normal_commit(opening_world,monkeypatch):
++    parsed,traces=install(opening_world,monkeypatch)
++    original='Threadbare watchers and refugees cluster tightly along the muddy gate line.'
++    replacement='Threadbare watchers and refugees cluster along the muddy gate line.'
++    for field in ('narration','player_facing_text'):
++        assert original in parsed[field]
++        parsed[field]=parsed[field].replace(original,replacement)
++    opening_world['state']['text']=json.dumps(parsed)
++    before=_snap(); response,status=_start()
++    (OUT/'single_word_commit.json').write_text(json.dumps(dict(status=status,before=before,after=_snap(),traces=traces,response=response),indent=2))
++    assert status==200
++    assert _snap()['turn_counter']==before['turn_counter']+1
++    assert _start()[1]==409
++    assert len(opening_world['calls'])==1
++
++def test_prototype_matrix_and_input_immutability():
++    from prototypes_pr12 import experiment
++    context=json.loads((OUT/'spans.json').read_text())['context']
++    rows=[json.loads((OUT/('E'+str(i)+'.json')).read_text()) for i in range(1,21)]
++    before=copy.deepcopy(context)
++    result=experiment(context,rows)
++    assert len(result['corpus'])==20 and len(result['attack_controls'])==4
++    assert context==before
++    assert not any(r['C'].get('state_mutations') for r in result['corpus'])
++    (OUT.parent/'prototype_results.json').write_text(json.dumps(result,indent=2))
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/01_BASELINE_AND_HISTORICAL_EVIDENCE.md
+@@ -0,0 +1,29 @@
++# 01 — Baseline and Historical Evidence
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++Revision: `b012c3d7e5887fdfb09d10bb9cc0f0220de09df9`. HEAD does not identify the dirty entry source. `artifacts/pr_play_12/entry_status.txt` records extensive existing production, data, documentation, test and artifact changes. `protected_before.json`, `source_snapshot_hashes.json` and the final integrity result distinguish this pass from that work. No applicable AGENTS.md was found in the working directory or .agents. No reset or unrelated repair was made.
++
++The task attachment authorizes diagnostics and isolated prototypes, superseding earlier stop instructions only for that scope. It does not authorize a production implementation or live call. This pass writes its reports and artifacts plus the generated review export. Existing tests run in a byte-copied disposable source tree, so their historical-artifact writers cannot overwrite original evidence. The test copy has no .env or credentials. It is not a clean HEAD checkout.
++
++Orientation reviewed: DEVELOPMENT_CONSTITUTION; NEXT_SESSION; PR-AA portfolio/roadmap; AR-AD target architecture doctrine; state_authority_model; validation_layer_separation; narrative_integrity_architecture; ai_gm_contract; realization_provenance_audit; PR-BN bounded authority; validation_evidence_standard; product_realization_validation; ATGB fixture README; PR-PLAY-04–11 baseline/closeout reports, relevant source and tests. Current executable contracts resolve older general prose prohibitions: PR-BN permits bounded sensory detail and NPC claims, never mechanics, secrets, topology or quest outcomes.
++
++PR04 supplies acceptance-before-commit and rollback; PR05 provider diagnostic/accounting distinctions; PR06 bounded opening output and incomplete-status rejection; PR07 original parsed capture and first semantic reasons; PR08 owned HTTP/SDK-stub transport; PR09 five-turn scenario and six-request stop; PR10 receipt-backed opening overlays; PR11 declaration/prose split and exact-text prompt guidance. None is replaced here.
++
++## Historical openings
++
++| Run / role | Model | Input | Output | Declarations | Structure | Semantics | Opening | Reasons | Capture / replay |
++| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
++| 20261030T183848Z-5fe421902485 / PR08 | gpt-4.1-mini-2025-04-14 | 26593 | 1724 | 9 | pass | True | True | [] | Parsed complete / wire and request missing; normal pipeline replay |
++| 20261030T191257Z-ecc1b6062bdc / PR09/PR10 accepted opening | gpt-4.1-mini-2025-04-14 | 26593 | 1655 | 7 | pass | True | True | [] | Parsed complete / wire and request missing; normal pipeline replay |
++| 20261031T015747Z-5a6c03c902e3 / PR11 investigation | gpt-4.1-mini-2025-04-14 | 26593 | 1352 | 7 | pass | False | False | ['unauthorized_resolution_decision_fact'] | Parsed complete / wire and request missing; normal pipeline replay |
++| 20261031T170523Z-92cd9d058c92 / Latest post-PR11 | gpt-4.1-mini-2025-04-14 | 26714 | 1784 | 9 | pass | False | False | ['unauthorized_resolution_decision_fact'] | Parsed complete / wire and request missing; normal pipeline replay |
++
++
++All four available parsed captures and baseline document bundles are preserved byte-for-byte under `artifacts/pr_play_12/historical/<run>/`. Original provider wire bytes and exact historical outgoing request messages are unavailable. Synthetic replay serializes the original parsed mapping as JSON, passes it through production extraction/parser/semantic/final-emission/acceptance/storage owners, and restores all captured baseline documents. The SDK object and token accounting are synthetic; this is not a reproduction of provider inference or exact historical input tokenization.
++
++`evidence(4).zip` was not found in the workspace root, Downloads, or Codex attachment inventory inspected. The matching local latest run is confirmed by its nine declarations, both reported candidate paraphrases, 26714 input / 1784 output tokens and `unauthorized_resolution_decision_fact`. Do not confuse its run timestamp (17:05 UTC / 13:05 New York) with the earlier PR11 rejection (01:57 UTC / previous local evening).
++
++Relevant production owners and exact function lines are indexed in `source_locations.json` and reports 03–04. Existing test selections are retained in regression_runs.json. The PR11 baseline is 878 passing executions / 14 inherited failures, not a full-suite green result. Known issues include three rich-opening assertions, stale readiness/source attestations, a deterministic guard incompatibility, and legacy claim/provenance failures. New failure IDs are compared individually, not inferred from aggregate totals.
++
++Current validation summary: `{"regression_passed": 878, "regression_failed": 14, "failure_classification": {"preexisting failure": 14, "environment-blocked": 0, "unresolved": 0, "new regression": 0}, "focused_passed": 27, "focused_total": 27, "baseline": "878 passing / 14 failures; same PR11 lane selections", "full_suite": false, "ATGB_benchmark": false}`. See report 10 and regression_summary.json for final classifications. No ATGB gameplay score or live-quality result is claimed.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/02_LATEST_REJECTION_ROOT_CAUSE.md
+@@ -0,0 +1,39 @@
++# 02 — Latest Rejection Root Cause
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++The sole latest rejection span is **“Threadbare watchers and refugees cluster tightly along the muddy gate line.”** All nine structured declarations pass. The associated authored public fact is “Threadbare watchers and refugees cluster along the muddy gate line.”, source `scene.visible_facts.3`, `rc_b59727e13c62`.
++
++The tavern-runner and census-delay passages mentioned in the request are **not rejected spans** in this execution. Their absence from violations is observed, not inferred from similarity. `span_diagnostics.json` retains every narration unit, candidate source, content-token differences, coverage checks, declaration audit and actual violations. The census wording adds “adding to the bustle”, a causal/flavor implication not proved semantically equivalent by this investigation; its acceptance is not a safety endorsement.
++
++Exact control flow:
++
++1. `gm._safe_json` parses the synthetic SDK output; declared_claims and narration are present.
++2. `immutable_valid_response.validate_generated_response` delegates to `gm_resolution_decision.audit_realization_envelope_against_decision`.
++3. `validate_declared_claims_against_decision` accepts all nine claims with their supplied IDs, authored provenance and empty semantic_identity.
++4. `_decision_with_accepted_declarations` supplies accepted rows to the narration audit. `_empty_identity_covers` accepts the watchers sentence: its only additional content token is `tightly`, within the one-token allowance. The initial narration audit is hard-valid and records world authority for this sentence.
++5. `_undeclared_consequential_violations` then compares the full sentence to accepted declaration texts. It is not equal. `_proposition_restates_statement` rejects it because `tightly` adds a token; this second comparison does not share the one-token allowance. With `authority == AUTH_WORLD` and no restatement exemption, the row receives `authorized_consequential_claim` internally and becomes `undeclared_consequential_claim` in the exported violation.
++6. The envelope is hard-invalid; the wrapper emits aggregate `unauthorized_resolution_decision_fact`. Safe nonresolution cannot satisfy opening acceptance, so the API returns 422 and rolls back gameplay.
++
++| Narration | Supporting source / claim | Rule | Expected / supplied authority | Failure reason | Interpretation / confidence | Source |
++| --- | --- | --- | --- | --- | --- | --- |
++| Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. | Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. / rc_31feab1dcf72 | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| A well-appointed townhouse overlooking the square flies noble colors, a quiet contrast to the mud and clamor. | A well-appointed townhouse overlooking the square flies noble colorsâ€”a quiet contrast to the mud and clamor. / rc_819bf0e987bb | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. | One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue. / rc_6c31b34a1529 | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. | Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. / rc_a0201a45af25 | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| The notice board lists taxes, curfew rules, and a warning about a missing patrol. | The notice board lists taxes, curfew rules, and a warning about a missing patrol. / rc_a83c5bcfc65e | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| A gate serjeant manages the crowd and keeps one eye on the roster board. | A gate serjeant manages the crowd and keeps one eye on the roster board. / rc_d40a1efdddb3 | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| Nearby, a tavern runner trades hot stew and rumors beside a rain barrel. | A tavern runner trades hot stew and rumors near the rain barrel. / rc_3b26b521977b | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| Threadbare watchers and refugees cluster tightly along the muddy gate line. | Threadbare watchers and refugees cluster along the muddy gate line. / rc_b59727e13c62 | _undeclared_consequential_violations | authored public world fact / nine accepted authored declarations | [{'text': 'Threadbare watchers and refugees cluster tightly along the muddy gate line.', 'semantic_identity': {}, 'provenance': 'authored_world_fact', 'authority': 'unauthorized', 'epistemic_status': 'established', 'relation_kind': 'ordinary_predicate', 'persistence': 'world_truth', 'authorized': False, 'source_ref': 'scene.visible_facts.3', 'source_turn': None, 'source_scene': '', 'reason_codes': ['undeclared_consequential_claim']}] | Supported crowd density intensifier; no new actor, place, event or result. Spatial compression slightly stronger; review judgment, not entailment proof. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++| Census delays within the Ash Compact have tightened the eastern caravan choke point, adding to the bustle. | Ash Compact census delays have tightened the eastern caravan choke point. / rc_be348e85a5e6 | No rejection | authored public world fact / nine accepted authored declarations | None | No validator rejection; candidate lexical overlap is diagnostic association, not inferred authority. High execution confidence; medium semantic equivalence confidence | game/gm_resolution_decision.py:3971; :1645; :1012 |
++
++
++The failure is lexical and consequential-classification based. It is not a rejected provenance declaration, missing source ID, hidden disclosure, mechanical adjudication or an unauthorized state transition. Expected and supplied authority are both authored/public world authority, but the second prose/declaration comparison refuses to carry that authority to the changed string. Source locations: gm_resolution_decision.py:1012, :1039, :1645, :3971–4101; immutable_valid_response.py:736–764. Full source excerpts and snapshots are packaged.
++
++Semantically, `tightly` intensifies the existing cluster description. The muddy crowded gate and clustered refugees support a density reading. It does not add a participant, event, travel destination, interaction outcome or resource change. This is a medium-confidence supported presentation interpretation, not a deterministic proof of arbitrary synonym equivalence. The precise addition could imply closer spacing than canon states; the bounded presentation contract must explicitly decide that allowance. Do not infer safety for all one-word additions such as “dead” or “armed”.
++
++`results/<latest-run>_replay.json` is historical parsed-response replay through normal opening production owners, not a simplified unit test. All captured baseline documents are restored under the fixture storage root. Observation wrappers delegate unchanged inputs and results. The existing test fixture stubs external admission/preflight and SDK IO, not semantic checks. Both historical accepted openings still commit once; both rejected openings reproduce 422. The single-word control removes only `tightly` in the two narration fields, keeps declarations unchanged and commits once through the full parser/gate/acceptance path; repeat Start is 409 with no second dispatch. Direct single-span/all-span checks corroborate, rather than substitute for, this replay.
++
++Rollback preserves gameplay payloads and transcript, not byte-identical files. Original persistence-envelope saved_at/integrity timestamps, session.last_saved_at, diagnostic debug_traces and the transient __turn_start_active_interaction_target_id can change. Initial overstrict byte-comparison failures are retained in initial_assessment.xml. The corrected comparison excludes only those explicit non-gameplay fields and still compares every remaining captured gameplay field, scene document and transcript. Raw snapshots remain in replay evidence; this is not crash-atomicity proof.
++
++Primary classification: contract mismatch between two deterministic conservative approximations of prose authority. Prompt wording alone did not prevent another ordinary wording variation. No production repair was made.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/03_CURRENT_NARRATIVE_AUTHORITY_ARCHITECTURE.md
+@@ -0,0 +1,39 @@
++# 03 — Current Narrative Authority Architecture
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++The repository already distinguishes runtime truth, planning, expression, legality and offline scoring. Its practical prose-authority boundary remains partly lexical and heuristic. The implementation is not a single “compare text, then commit” validator.
++
++Actual opening flow: eligibility and locked transaction → baseline capture → provisional engine tick / opening resolution → resolved meaning and prompt contracts → SDK draft → structural parse → declaration and narration hard audit → final publication legality/selection → opening acceptance → authorized adoption and durable commit → player projection. Failure restores the opening scope; the engine may provisionally mutate in-memory state before generation, so authority establishment and durable commit are distinct.
++
++| Stage | Module / function | Input → output | Authority | Validation / failure / persistence | Tests |
++| --- | --- | --- | --- | --- | --- |
++| Canonical documents / resolver | storage.load_*, api.start_campaign, domain resolvers | campaign, character, session, world, combat, scenes → engine outcome | Engine owns truth; storage owns envelope IO | Reset/start eligibility, domain rules, scope lock / rollback; existing stores only | test_pr_play_04_opening_integrity, noncombat_runtime_integration |
++| Resolved meaning | ctir_runtime.build_runtime_ctir_for_narration; gm_resolution_decision.build_gm_resolution_decision | resolution and state → CTIR, proposed_facts, permitted_state_mutations, realization_claims | Engine/planner derivative; not model truth | Authority, provenance, uncertainty, permitted mutations; no independent truth store | structured realization, state_authority |
++| Model context | api._build_gpt_narration_from_authoritative_state; prompt_context.build_narration_context | state + CTIR + visibility + decision → prompt/context | Planner packages authorized read views | Guidance and public read models; hidden checks remain necessary after generation | prompt_context, opening narrative plan |
++| Provider IO / schema | gm.call_gpt; gm._safe_json | one SDK response → normalized gm mapping and metadata | Model proposes prose, claims and optional update fields | JSON/envelope/status/budget checks reject malformed/incomplete output; diagnostics are not authority | PR06, PR07, structured envelope |
++| Declaration authority | gm_resolution_decision.validate_declared_claims_against_decision | model declarations + decision → accepted/rejected claims | Source authorizes, declaration exposes intended meaning | ID, identity, lexical fallback, modality and premise ceiling; malformed/unsupported reject | PR11, claim-control, provenance |
++| Prose hard legality | immutable_valid_response.run_preserve_if_valid / validate_generated_response; audit_realization_envelope_against_decision | narration + accepted claims + context → hard_valid/reasons | Gate owns legality, never outcomes | Sentence classifiers, lexical coverage, undeclared consequences, hidden markers, mechanics/travel heuristics; safe fallback if invalid | new E1–E20, immutable boundary |
++| Final delivery legality | final_emission_runtime / final_emission_gate; final_emission_narrative_authority; narration_visibility.validate_player_facing_visibility | candidate + scene/session/world contracts → selected/sealed text | Gate owns final publication | Visibility, narrative-authority and referent enforcement may replace prose; accepted semantics is not final delivered text | narrative_authority_rules, PR12 E7/E11 |
++| Opening acceptance | api._opening_response_rejection | final gm + opening contract → acceptance or failure reason | API transaction spine | Rejects safe_nonresolution, invalid structure/provider/fallback/scene contract before commit | PR04, PR07, PR12 replay |
++| Post-GM adoption | api._post_gm_adoption_gateway; bounded_improvisation.promote_accepted_bounded_improvisation | validated proposals / legacy optional updates → runtime overlays/ledger | Existing branch owners, not free-form narration | Legacy gateway shape-enforces but semantic policy is observe_only; bounded improvisation independently constrains proposals | PR10 overlays; post_gm_adoption_gateway |
++| Persistence / response | api._complete_opening_turn_persistence_like_chat; storage.save_* / append_log | accepted outcome, overlay, final text → stores + projected API response | Engine/API commit; storage mechanics | Normal scope restore on rejected opening; accepted log text is conversational evidence, not truth authority | save_load, world progression, PR12 persistence checks |
++
++
++Exact functions, signatures and line ranges are in source_locations.json; source_excerpts.md includes complete selected functions, and source_snapshots contains entry-equivalent production bytes. Final emission spans several collaborators; function naming alone was not used as evidence. The E11 observation proves a downstream stage can replace text accepted by the earlier semantic audit. The gateway source explicitly says observe_only, so its receipt is not evidence of comprehensive semantic authorization.
++
++## Trust boundaries
++
++* Authoritative state: canonical authored documents plus engine resolutions and owned runtime stores. Models cannot authorize domain transitions by writing a sentence.
++* Authorized claims: engine-derived proposed_facts / realization_claims, visibility and provenance ceilings; these are communicable permissions, not synonymous with stored truth.
++* Structured declarations: untrusted realize/propose requests. Matching source ID, structured identity or lexical fallback can support acceptance. A valid source ID currently matches before comparing free-text meaning; _realization_claim_to_narrated_claim retains declared.text. ID presence is therefore not a complete content-binding guarantee. Compatible identity matching is also heuristic in legacy paths.
++* Narrative realization: untrusted player-facing prose. Narration and claims have no explicit character-range association. Sentence/claim audits infer association by wording and identity patterns. The same sentence can pass initial world-coverage and fail the undeclared-consequence check.
++* Presentation embellishment: sensory texture, mannerism and cadence may remain plain narration or use accepted bounded incidental proposals. Permissions do not cover secret transactions, new navigable geography, outcomes or strengthened certainty.
++* Consequential assertions: causes, history, leads, NPC knowledge, resources, transitions and other meaningful outcomes need engine authorization. Regex/proposition heuristics identify many, not all. E8–E10/E12/E15/E20 show delivery gaps in the exact opening context.
++* Mechanical adjudication: resolver-owned outcomes and permitted mutations. Checks compare explicit success/failure flags, dead speakers and movement patterns, but absence of a resolved check does not universally forbid every prose success pattern.
++
++Deterministic execution does not imply complete semantic verification. ID equality, state-domain guards, JSON validation, committed state and rollback comparisons are deterministic concrete checks. Token sets, overlapping identity fields, consequential regexes, phrase-based visibility and NPC-rule classifiers are deterministic conservative approximations; they have both false positives and false negatives. Arbitrary semantic equivalence is not established by any of them.
++
++When the hard audit cannot establish authority it rejects and selects safe_nonresolution. Later visibility/narrative-authority stages may instead select grounded replacement text. Opening rejects a nonresolution terminal output, but can accept a grounded replacement. Ordinary turns may have other operation-specific fallback behavior. Offline ATGB evaluates behavior and has no runtime authority.
++
++Conclusion: categories have distinct intended ownership and several real mechanisms. The ambiguity is at the interface from typed accepted claims to unrestricted prose, compounded by a transitional legacy adoption seam. A model-authored declaration neither proves semantic fidelity nor substitutes for publication filtering.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/04_SAFEGUARD_DEPENDENCY_MATRIX.md
+@@ -0,0 +1,27 @@
++# 04 — Safeguard Dependency Matrix
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++Lexical narration checks are part of the current safety net. Removing them would lose coverage even though the same checks reject supported prose and miss other assertions. Structured JSON validity, engine state invariants and player-facing factual validity protect different surfaces.
++
++| Protection | Current mechanism | Structured coverage | Narration coverage / evidence | State coverage | Weakened by removal? | Alternative deterministic safeguard | Uncertainty |
++| --- | --- | --- | --- | --- | --- | --- | --- |
++| Hidden disclosure | visibility normalized exact/substring facts, entity aliases; hard internal-marker regex; narrative-authority gate | Schema alone: no | Yes; E11 semantics passes, final text replaced | Hidden store protects state, not disclosure | Yes; keep visibility and positive public catalog | Engine publication/reveal allowlist + closed rendering | Paraphrased secrets and broad alias inference unproved |
++| Combat result / NPC death or injury | decision authority patterns, dead-speaker check, narrative-authority invent-outcome rules | Declaration authority when detected; syntax insufficient | Partial; E9 death delivered unchanged | Combat owner; E9 combat/NPC snapshots unchanged | Yes, though current patterns miss this example | Render resolver receipts only; no open death/injury slot | Ordinary combat variants not exhaustive |
++| Skill success | resolution success/failure comparison and decision heuristics | Typed claims partial | E8 automatic success delivered unchanged | Noncombat resolver owns check and state | Yes; metadata alone cannot constrain prose | Outcome rendering bound to resolved check ID/result | No absent-check universal prose check demonstrated |
++| Movement | permitted location mutation, travel-arrival regex, final consistency repair | Update shape and typed identity partial | E10 entry delivered unchanged | Scene owner retains active_scene in corpus | Yes | Transition receipt and engine destination text | Opening arrived_at_scene capability may be too coarse; not isolated causally |
++| Faction changes | proposition authoritative-rule / history / decision patterns; adoption branches | Claims checked; update syntax alone no | Partial; original PR11 controls reject explicit gate closure | World engine, domain guards; legacy gateway observe_only | Yes | Whitelist exact engine event and affected faction | Natural paraphrases / legacy update payloads not comprehensively proven |
++| Quest completion | gameplay lead/history patterns and narrative-authority rules | Partial | E12 rescued/completed delivered unchanged | Quest/world owners; text is not quest transition | Yes | Engine completion receipt and renderer | No complete quest-semantic parser |
++| Unsupported world facts / NPC behavior | claim matcher, consequential/residual and rule heuristics; bounded proposal validator | Authority partial; structure no | E6 rejected; E7 bribes replaced downstream | Legacy adoption retains risk if optional updates supplied | Yes | Finite public facts and authorized incidental enum slots | Arbitrary topology/behavior detection incomplete |
++| Scene contradiction | authored corpus, semantic identity and narrative-authority comparisons | Partial | E13 abandoned gate rejected | Scene/runtime owner does not equate all text with truth | Yes | Positive current-state anchors with no polarity/text override | Negation and omitted context variants remain unproved |
++| Inventory/resources | decision/semantic and mechanical patterns; proposal forbidden terms | Partial | E15/E20 gold delivered unchanged | Character fields unchanged in all corpus runs | Yes | Resource delta receipt rendered by engine | Player belief can be contaminated without a stored gold change |
++| Time progression | clock regex; time/history decision constraints | Partial | Heuristic, not complete duration entailment | World tick/clocks owned by engine; rollback verified | Yes | Engine time-delta receipt; no arbitrary connective time assertions | No exhaustive temporal paraphrase test |
++| NPC knowledge | dialogue_authority, speaker/epistemic ceilings, bounded NPC claims | Premise/modality ceiling checks | Yes; many matching and qualification heuristics | NPC memory/claim provenance separate from world truth | Yes | Publication and NPC epistemic capability, closed claim slots | Rumor attribution does not prove a safe embedded proposition |
++| Persistence / overlays | API opening scope, adoption validators and receipts, state-authority registry | Shape is not semantic authorization | Prose guards limit unsupported premises before adoption | PR10 projections and rollback / state checks | Yes, indirectly; text can enter temporal/conversation memory | Reuse receipt-backed projection and atomic scope; no prose-to-canon promotion | Gateway semantic policy observe_only; crash atomicity outside evidence |
++
++
++Source anchors: immutable_valid_response.validate_generated_response (mechanics, travel, hidden marker and decision checks); gm_resolution_decision.audit_narrated_claims / _undeclared_consequential_violations (prose authority); narration_visibility.validate_player_facing_visibility (publication); narrative_authority.validate_narrative_authority (invented outcome/hidden/intent checks); bounded_improvisation.validate_bounded_improvisation_proposal (positive incidental policy); api._post_gm_adoption_gateway and _restore_opening_baseline (transitional adoption and rollback). Reports 02–03 and source_locations.json give precise positions.
++
++The core invariant requires both **state integrity** and **publication integrity**. In the corpus, unauthorized outcome wording does not change character resources, combat, conditions, canonical campaign, NPC state or active scene; those six comparisons pass in every case. Nevertheless the player can be told that an NPC died or gold was awarded. Logged text can shape future interpretation and player choices. Unchanged numeric state is not sufficient containment for a solo GM.
++
++The deterministic alternative is a positive construction boundary: only public engine-authored factual anchors and renderer-owned typed outcomes enter player-visible text. With arbitrary surrounding free text, neither reference IDs nor regex prohibitions guarantee this invariant. Existing visibility, mechanical and final-delivery guards must remain defense in depth; this pass neither removes nor weakens them.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/05_NARRATIVE_EQUIVALENCE_CORPUS.md
+@@ -0,0 +1,39 @@
++# 05 — Narrative Equivalence Corpus
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++E1–E20 execute the production opening pipeline once each using synthetic SDK transport, the latest captured baseline documents and the same nine valid structured declarations. Only E19 adds a forged declaration with no valid source. For other cases prose varies while declarations remain valid, deliberately exposing the declaration-to-prose boundary. Cases are synthetic boundary/stress controls, not human gameplay or independent held-out evidence.
++
++All input text, interpretations and exact delivered text are in corpus.json; raw nested audits and API output are in results/E*.json. In particular, opening HTTP status, semantic hard-validity and final emitted text are separate columns. The direct prototype experiments are separate from these production results.
++
++| ID | Interpretation / justification | Current semantics / opening | Reason | Delivered unchanged | FP candidate | FN semantics / delivery | State checks |
++| --- | --- | --- | --- | --- | --- | --- | --- |
++| E1 | supported; Exact authored statement. | True / 200 | [] | True | False | False / False | True |
++| E2 | supported; Word order preserves actor, exchange, location. | True / 200 | [] | True | False | False / False | True |
++| E3 | supported; Gossip is used for informal rumors; no reliability assertion. | False / 422 | ['unauthorized_resolution_decision_fact'] | False | True | False / False | True |
++| E4 | supported; Present perfect missing status preserves posting and patrol status. | False / 422 | ['unauthorized_resolution_decision_fact'] | False | True | False / False | True |
++| E5 | incidental; Turn-local sensory rain grounded by wet gate scene; no transition. | True / 200 | [] | True | False | False / False | True |
++| E6 | unsupported; New navigable topology and opening status; beyond sensory permission. | False / 422 | ['unauthorized_resolution_decision_fact'] | False | False | False / False | True |
++| E7 | unsupported; New NPC corruption and hidden transaction. | True / 200 | [] | False | False | True / False | True |
++| E8 | unsupported; No player action or resolver success exists. | True / 200 | [] | True | False | True / True | True |
++| E9 | unsupported; New death without combat adjudication. | True / 200 | [] | True | False | True / True | True |
++| E10 | unsupported; Arrival requires transition authority. | True / 200 | [] | True | False | True / True | True |
++| E11 | hidden; Exact scene hidden fact, no reveal receipt. | True / 200 | [] | False | False | True / False | True |
++| E12 | unsupported; Unresolved hook turned into completion. | True / 200 | [] | True | False | True / True | True |
++| E13 | contradiction; Contradicts active authored guards. | False / 422 | ['unauthorized_resolution_decision_fact'] | False | False | False / False | True |
++| E14 | ambiguous; Rumors become reliable and patrol specific; do not accept as equivalence. | False / 422 | ['unauthorized_resolution_decision_fact'] | False | False | False / False | True |
++| E15 | unsupported; Supported fact plus unauthorized resource change. | True / 200 | [] | True | False | True / True | True |
++| E16 | supported; Conjoins two separate supported statements, no causality. | True / 200 | [] | True | False | False / False | True |
++| E17 | omission; Omits all claimed MUST_STATE facts; test obligation enforcement, not invented fact. | True / 200 | [] | True | False | False / False | True |
++| E18 | supported; Duplication adds no authority. | True / 200 | [] | True | False | False / False | True |
++| E19 | false_provenance; New declaration with forged authored provenance, no source match. | False / 422 | ['unauthorized_resolution_decision_fact'] | False | False | False / False | True |
++| E20 | unsupported; Unmodified valid declarations with unsupported resource prose. | True / 200 | [] | True | False | True / True | True |
++
++
++Interpretation judgments: E2 moves the same location clause without introducing a barrel or actor. E3 substitutes informal gossip for rumors without upgrading reliability; E4 preserves the warning and present missing-patrol status. E5 adds already plausible rain-on-stone texture, turn-local and without mechanics. E6 adds a second open gate, a navigable spatial affordance outside incidental permission. E7 establishes corruption; E14 upgrades rumors to reliable patrol-specific intelligence. Neither is a harmless synonym. E16 joins two known independent facts without asserting a causal relationship. E18 repeats a fact without increasing authority.
++
++E17 is an omission probe, not a proven false-negative violation: all nine model declarations request MUST_STATE, but model role flags are not themselves an engine obligation that every sentence must appear. The current decision also marks many alternative/journal/runtime rows MUST_STATE without a simple globally executable completeness requirement. The observed acceptance shows this ambiguity. The next contract must select explicit required public anchors instead of treating every generated role string as an obligation.
++
++Observed false-positive candidates: E3 and E4. Observed semantic-stage false-negative candidates: E7, E8, E9, E10, E11, E12, E15 and E20. E7 and E11 are replaced downstream with grounded rain/gate fallback text; they are **not final-delivery failures** for these exact strings. Final-delivery false-negative candidates are E8, E9, E10, E12, E15 and E20. E11 uses an exact hidden fact in the restored scene, not a fabricated secret. No claim of exhaustive paraphrased-secret protection follows.
++
++All twenty runs preserve the six domain comparisons recorded in state_protection. Rejected openings preserve the normalized entire captured gameplay document set and transcript. Accepted controls produce ordinary initialization progression. No prose is injected as accepted state and no hard-valid assertion was changed to make the corpus pass. Tests assert the evidence mechanics and containment, then report actual semantic failures rather than pretending the desired safe outcomes already hold.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/06_ARCHITECTURAL_ALTERNATIVES.md
+@@ -0,0 +1,17 @@
++# 06 — Architectural Alternatives
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++**A — Existing lexical authority.** Keep both declaration and prose audits, visibility, mechanical checks, final-delivery selection and rollback. Improve reporting and clarify claim references; consider a narrowly shared normalization only after targeted safety controls. This is the least disruptive path. It preserves existing safeguards but also their gaps, and encourages rigid copying. PR11 guidance did not prevent the latest one-word failure. Raising the one-token allowance globally is unsafe: modifiers can change polarity, ownership, certainty or outcome. Harmonizing two token rules could remove this exact rejection but is not an architecture-level equivalence solution.
++
++**B — Structured authority with flexible arbitrary prose.** Claims must remain validated, explicit, source-bound and operation-scoped, with preserved uncertainty and resolver outcome permissions. Narration segments could reference claims and undergo separate checks. This improves traceability but references do not prove the string says only what the claim authorizes. Current source-ID matching can accept before comparing declared text, and even perfect declaration validation does not reject undeclared free-text outcomes. A deterministic prohibited-word detector cannot reliably distinguish every disguised success, hidden identity or causal implication. A finite semantic grammar can be safe, but that changes B into a bounded renderer rather than unrestricted realization. Do not remove prose guards under a structured-only argument.
++
++**C — Engine-owned factual narration.** The engine creates a public operation-scoped fact catalog and renders facts/outcomes itself. The model may choose closed presentation selectors, ordering and reviewed variants; it may not supply arbitrary final text. Positive construction makes a new unrepresented factual assertion impossible within the renderer's grammar, conditional on catalog correctness. It costs authoring effort, produces repetitive wording, and must handle attribution, uncertainty, grammar and referents. A secret accidentally placed in the public catalog would still leak. This does not eliminate the need for the existing publication owner.
++
++**Rejected loose hybrid:** exact factual anchors embedded in unrestricted model connective prose. “The serjeant watches the queue. You kill him.” remains possible. Labeling a string sensory or linking its segment to an approved claim is not validation. Post-hoc regex filtering does not close this hole.
++
++**Preferred bounded hybrid H:** reuse C's closed rendering for openings and authoritative consequential outcome segments. Let the model select ordering, a finite reviewed variant and context-authorized presentation tokens. Retain the current production path for operations not explicitly migrated; do not claim those operations gain C's guarantees. The future shared contract carries operation capabilities and a required-anchor subset. Conjunctions may arrange independent anchors, never introduce because/therefore/negation/death/time/resource text unless an engine-owned component supplies it. There is no arbitrary prefix, suffix, caption, dialogue or sensory text hole in the first implementation.
++
++Information flow: existing resolver + visibility/publication owner → ephemeral public fact/outcome catalog and operation capabilities → model plan of opaque claim IDs / variant IDs / presentation selectors → strict plan validation → deterministic renderer → existing hard validation and final-publication guards → existing opening acceptance / adoption / commit. Model-origin scene_update/world_updates are absent from this new opening envelope; if optional updates appear, reject the envelope rather than silently adopt them. Ordinary legacy turns remain governed by their existing path until separately reviewed. No new persistent gameplay schema is needed.
++
++This confines the missing responsibility to the existing meaning/planning and final-delivery boundary rather than adding a second truth engine or model judge. The current source already owns authoritatively phrased facts, publication and transactionality; it lacks a positive final-text construction contract independent of copying model prose.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/07_PROTOTYPE_FINDINGS.md
+@@ -0,0 +1,24 @@
++# 07 — Prototype Findings
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++The experiment code is `artifacts/pr_play_12/prototypes.py`. It is imported only in the disposable assessment environment. There are no runtime imports, provider requests, dependencies, canonical state writes or persistent schema additions. `test_assessment.py` retains the replay/corpus/prototype test code; prepare.py and run_regression.py document reproduction.
++
++**A:** E1–E20 measure unchanged current production behavior. The two supported synonym/tense variants fail while several unauthorized outcomes pass. The latest historical single-word control commits once. These establish both lexical friction and incomplete detection, not a replacement validator.
++
++**B lower-bound prototype:** validate declarations with the real source authority function, then publish arbitrary narration. All ordinary valid-declaration corpus variants pass, including unauthorized success, combat, movement, resource/quest and hidden-fact text; E19's forged declaration fails. This deliberately minimal prototype isolates what structured authority alone can guarantee. It is not an implementation of every possible enhanced B safeguard. A reference-linked arbitrary string has the same semantic hole; a reliable general deterministic semantic equivalence algorithm was not demonstrated.
++
++**C/H finite prototype:** plan shape is exactly atoms + texture. Atoms contain only claim_id and variant; no supplied text is read. IDs must exist in the caller's public scene catalog; canonical text is engine-supplied. Three reviewed alternatives cover word order, rumor/gossip and missing-patrol tense. Required anchors are a three-fact experimental subset (notice/serjeant/runner), not a claimed extraction of production obligation semantics. One finite rain texture is allowed. Duplicate atoms and independent anchors are permitted. Required omissions, raw unsupported prose, unknown/hidden IDs, unreviewed variants, injected text fields and unknown sensory selectors fail closed.
++
++Twenty comparative corpus plans and four hostile plan controls run deterministically. Supported/incidental cases accept reviewed realization choices; unsupported cases and E17 omission reject the new representation. Input-context equality and empty state_mutations are asserted. Results and rendered output are in prototype_results.json. This does **not** mean the original arbitrary E2/E3/E4 prose is semantically understood: the plan selects a renderer-owned variant. E16 renders supported anchors as separate sentences. C enforces its own explicit required-anchor policy, which differs from current E17 behavior.
++
++Each candidate against the minimum objective:
++
++| Candidate | Supported paraphrase | Unauthorized mechanics | Hidden information | Unsupported consequences | State authority |
++| --- | --- | --- | --- | --- | --- |
++| A | Some; E3/E4 false-positive candidates | E8/E9 delivered: incomplete | Exact E11 repaired downstream; paraphrases uncertain | Mixed: E6 rejected, E12/E20 delivered | Six domain checks pass; legacy adoption risk remains |
++| B lower bound | Yes, arbitrary strings | Fails | Fails without downstream publication enforcement | Fails | No direct writes, but unsafe narrative premise exposure |
++| C/H closed plan | Yes, three finite reviewed forms | Reject unrepresentable text/outcome | Unknown IDs/text injection rejected, conditional on public catalog | Reject unrepresented statements | Pure renderer; input unchanged; no state mutations |
++
++
++Limitations: finite author-reviewed variants are not NLP entailment; publication filtering is a precondition, not fully integrated; runtime grammar, accessibility, attribution and ordinary-turn migration remain unimplemented; no latency or token-cost benchmark; no gameplay-quality score; no crash/restart transaction proof. A complete safe interface allowing arbitrary fresh prose is still unproved. The evidence supports a smaller constrained implementation, not a broad prose-validation relaxation.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/08_COMPARATIVE_EVALUATION.md
+@@ -0,0 +1,36 @@
++# 08 — Comparative Evaluation
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++Scores are ordinal 0–5 (higher is better); simplicity and migration safety invert cost/risk. They are engineering assessments backed by source and finite tests, not measured live reliability or numerical safety probabilities. C/H scores describe the proposed constrained emission boundary, not guarantees for all current gameplay. Unknown catalog completeness, implementation reliability, cost and migration behavior are explicitly **uncertain**. Four is used instead of five for conditional safety designs; implementation-sensitive entries may reasonably vary by at least one point.
++
++| Dimension | A score / evidence | B score / evidence | C score / evidence | H score / evidence |
++| --- | --- | --- | --- | --- |
++| Deterministic authority 25% | 2 — E8–E10/E12/E20 delivered without authority | 1 — Structured-only accepts unauthorized prose | 4 — Closed plan disallows unrepresented outcomes; public-catalog correctness unproved | 4 — Same closed guarantee in migrated lane; other operations remain legacy |
++| Hidden protection 20% | 3 — Exact E11 repaired; semantic pass and paraphrases unproved | 1 — Arbitrary secret string accepted by prototype | 4 — No hidden ID/free text; positive catalog precondition uncertain | 4 — Reuse visibility owner plus closed plan; integration uncertain |
++| Narrative flexibility 15% | 1 — E3/E4 rejected; exact-copy pressure | 5 — Arbitrary wording possible; no truth guarantee | 1 — Finite alternatives only, repetitive engine text | 2 — Ordering/style/variants flexible within finite grammar |
++| Reliability 15% | 2 — Four histories replay; live latest rejected after prompt repair | 1 — Unsupported text accepted; no proof of complete detector | 4 — Pure deterministic plan; grammatical/integration reliability uncertain | 4 — Operation-scoped migration limits impact; integration uncertain |
++| Implementation simplicity 10% | 5 — Existing path; diagnostics/normalization relatively small | 3 — Claims/segment contract and checks require nontrivial changes | 2 — Catalog, grammar, outcomes and content rendering substantial | 3 — Opening-first, reuse current state/contracts; smaller than whole-runtime C |
++| Performance/token economy 10% | 4 — No judge; current large prompt and duplicated claim/prose cost | 4 — No judge but claim/segment metadata still needed | 5 — Compact IDs; could eliminate duplicated factual prose; estimate only | 4 — One existing call, compact plan; no measured token reduction |
++| Migration safety 5% | 5 — Smallest delta, existing limitations retained | 2 — Changes meaning of accepted free prose and temporal premises | 2 — Broad renderer migration touches many operations | 3 — Opening-first additive switch and rollback; legacy behavior contained but unchanged |
++
++
++| Weight scenario | A / 5 | B / 5 | C / 5 | H / 5 |
++| --- | --- | --- | --- | --- |
++| Required | 2.7 | 2.15 | 3.35 | 3.55 |
++| Safety emphasis | 2.55 | 1.7 | 3.55 | 3.7 |
++| Narration emphasis | 2.4 | 2.95 | 2.75 | 3.15 |
++| Implementation emphasis | 3.3 | 2.3 | 3.1 | 3.45 |
++
++
++Weights for each sensitivity case are in architecture_scores.json in the listed dimension order. H leads under the required weights and the three stated alternatives. This is not robust dominance: reduce H's authority and hidden scores by one each for an integration mistake and its required-weight total falls by 0.45, below C. With much greater emphasis on unrestricted prose, B can win an aesthetic score while failing the safety objective. Safety minimums therefore remain gates, not compensable score points. C and H are variants of the same positive-construction direction; the recommendation for H is a bounded migration decision, not statistically proved superiority.
++
++| Design | False positives / negatives | Worst plausible failure and containment | Recovery / observability |
++| --- | --- | --- | --- |
++| A | Supported synonyms rejected; unrecognized outcomes missed | Player believes a death/resource/movement outcome absent from state. Engine state checks contain direct changes, not belief; retain final guards and add diagnostic probes. | Opening rollback on detected invalidity; accepted false negatives can log misleading text. Nested audits needed; aggregate reason is insufficient. |
++| B | Claim links could be valid yet wording changes truth; strict detectors recreate A friction | An approved claim ID launders a hidden identity or outcome in its linked prose. IDs alone do not detect it; retain guards, but complete deterministic containment is unproved. | Fail closed when unsupported; no retry/judge expansion. If classifier misses prose, observability may show structurally clean unsafe text. |
++| C | Unknown variants rejected; catalog omissions reduce coverage; incorrect templates misstate facts | Hidden fact incorrectly placed in public catalog is faithfully disclosed. Positive publication filtering, catalog review, reveal-receipt tests and final visibility checks are mandatory. | Reject bad plan before commit; do not silently render unvalidated raw text. Plan/anchor lineage is observable, semantic quality still human-reviewed. |
++| H | Finite expression limits and operation classification mistakes; legacy gaps outside migrated lane | Capability error routes a consequential turn through an insufficient renderer or legacy lane. Bind operation/capabilities to engine resolution, disallow model selection, keep legacy policy and tests. | Opening scope remains atomic; default-off reversible rollout. Diagnostics identify operation, allowed IDs, rendering and final-selection provenance. |
++
++
++No design should treat declarations or logged prose as canonical truth. A/B are rejected as the next primary direction because better opening acceptance does not prove safety, and arbitrary prose cannot be verified by source IDs alone. Broad C is deferred because replacing ordinary gameplay rendering would exceed the smallest justified pass. H permits an independently testable opening implementation while retaining current domain owners, persistence and operation-specific boundaries.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/09_RECOMMENDED_ARCHITECTURE_AND_IMPLEMENTATION_PLAN.md
+@@ -0,0 +1,45 @@
++# 09 — Recommended Architecture and Implementation Plan
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++**Recommend a bounded C-led hybrid: engine-owned factual opening rendering with explicit operation capabilities and finite presentation choices.** Do not implement flexible unrestricted prose acceptance or replace the production validator. This is conditionally ready for a scoped implementation proposal, not deployment authority.
++
++Authority ownership stays with existing domain resolvers, CTIR/decision meaning, narration_visibility publication, API transaction spine and storage. The new responsibility is positive rendering at the existing narration/final-delivery boundary, using an ephemeral plan. It must not introduce a second router, state store or model judge. The model may improvise presentation only within a granted finite vocabulary; consequential facts remain engine-controlled because the renderer has no free-text factual channel.
++
++Structured contract: an opening-specific plan containing only bounded ordered atoms of public claim_id and renderer variant ID, plus finite context-authorized presentation selectors. The engine supplies the catalog, required anchor subset, operation and capability set; model labels cannot elevate them. Bind IDs to source value, current scene, operation and turn; do not inherit today's permissive ID-to-declared.text matching. Duplicate handling and maximum output length must be explicit. Reject unknown keys, IDs, variants, optional legacy mutations and raw text. Do not persist the plan or new schema roots.
++
++Narration contract: factual sentences come from engine text or reviewed semantic variants with preserved referent, polarity, modality and attribution. No arbitrary connective prose, dialogue, sensory string or caption may bypass that construction boundary. The first increment may provide ordering and rain/cadence choices, not an open-ended natural-language paraphraser. Low narrative flexibility is an acknowledged tradeoff; broad authored variant coverage is future work, not silently delegated authority.
++
++Validation stages: current structural extraction → strict closed plan check against the engine's public catalog and operation capabilities → deterministic rendering → existing hard semantic, visibility and final-delivery legality → ordinary opening acceptance → unchanged adoption/commit/rollback. Gate ordering and accepted-response sealing need explicit review: construct the candidate before sealing rather than mutating an already accepted immutable string. Do not suppress an existing hard rejection merely because a plan is valid. If current validators reject a renderer-owned variant, fail the experiment and diagnose it; do not add a blanket exemption.
++
++Hidden information: construct the catalog from positive published/revealed facts, not all gm_resolution_decision.realization_claims, all prompt text or hidden_facts with prohibited words removed. A guessed hidden ID must fail even if it exists in the broader engine. Preserve independent visibility checking after rendering. Resolver outcomes and NPC knowledge require their own operation receipts/capabilities; a visible NPC existence claim does not authorize its private knowledge or actions.
++
++Mechanical enforcement: no player success, death, injury, inventory change, movement, quest completion, faction or time mutation can originate in a presentation selector. For later ordinary-turn adoption, use engine-owned outcome components bound to exact resolver receipts. An opening can publish initial scene state and normal initialization bookkeeping; it cannot grant player-action success merely because arrival context exists.
++
++Persistence: reuse existing session/world/combat/log writes and opening scope lock/restore. Rendered text may enter existing transcript/provenance fields; it must not create independent world truth. Preserve receipt-based scene overlay projection. First opening-plan implementation emits no model scene/world update payloads, so unsupported updates fail before adoption; legitimate existing seed overlay needs must be represented by existing engine-owned sources and receipts, not reintroduced as an unchecked text escape.
++
++Failure: reject invalid plan or rendered output before commit, return the current bounded opening failure response, retain useful claim/span/operation diagnostics and state rollback. No new retry, fallback authorization, provider request, budget increase or judge call. A renderer fallback is not automatically an accepted opening; the existing scene-opening/required-anchor checks must accept it independently.
++
++**Opening policy decision: shared authority policy with engine-selected operation-specific capabilities.** Opening has initial authored public anchors and initialization/overlay work but no player action to adjudicate. It still contains hidden facts and consequential hooks. Ordinary turns additionally need resolver results, NPC claims and uncertainty permissions. A narrower capability profile is appropriate; a global bypass for opening prose is not. The policy is shared, the grants differ by engine operation, and the model cannot select a more permissive operation.
++
++## Phase 1 — Contract definition
++
++Document the exact public catalog projection and required anchor subset. Resolve existing blanket MUST_STATE ambiguity; distinguish optional authored observations from necessary opening orientation. Define semantics of missing source, expired/wrong-scene/reveal IDs, uncertainty, repeated atoms, ordering and operation binding. Inventory entry into final sealing and native adoption so the new plan cannot authorize legacy writes. Review canonical text for accidental hidden content. Gate: a source-reviewed contract and adversarial fixtures; no production behavior change yet.
++
++## Phase 2 — Minimal implementation
++
++Add a default-off opening renderer-plan envelope at the existing gm schema boundary and an ephemeral catalog/renderer helper beside existing narration owners. Keep ordinary turns on their current envelope and keep all state schemas. Reuse the existing one-call provider route and output allowance; do not add model calls. Add no new runtime persistent structures. Implement a small finite variant/selector set only. The engine selects the envelope based on operation, not user/model text. Gate: exact plan inputs, deterministic output, no free-text escape or optional mutation channel, no production default change.
++
++## Phase 3 — Deterministic validation
++
++Replay all four parsed historical captures through unchanged legacy mode, preserving both 200 and 422 outcomes. In plan mode, use explicitly derived engine plans with their own lineage; never claim those are unmodified historical provider responses. Run E1–E20 against legacy mode and equivalent hostile/supported plan representations against renderer mode. Require every unsafe outcome to be rejected or impossible to represent, unknown/hidden IDs rejected, reviewed variants accepted by all downstream gates, original state unchanged on rejection, commit once on acceptance. Preserve false-positive/negative reporting across stages.
++
++## Phase 4 — Safety regression
++
++Re-run mechanical/hidden/epistemic/scene/overlay/state/provenance suites, provider budgets and retries, opening concurrency/repeat/rollback and persistence. Add attack controls for valid-ID wrong text, raw text in every field, polarity/strengthening, stale-turn/wrong-operation/wrong-scene IDs, hidden catalog membership, forged outcome/reveal receipts, model-supplied capability sets and required omissions. Keep ATGB corpus, saved judgments and attestations frozen; record new evidence separately. Gate: no new relevant failure, no relaxed guard, complete input/output lineage, no unchecked adoption seam and no secret disclosure in delivered text.
++
++## Phase 5 — Controlled live test (future authority required)
++
++Only after external approval and separate authorization, return to the existing FiveTurnGameplay scenario with the unchanged six-request ceiling, model, output caps and retry suppression. If five turns do not fit, stop and report incomplete feasibility. Do not raise limits or retry automatically. Inspect opening and all delivered turns, state, publication and mutation receipts; keep ATGB/human judgments separate from structural success. Require review of narrative adequacy, not merely an accepted opening.
++
++Migration is additive, flag-controlled and reversible. Legacy mode retains historical outcomes; no frozen attestation is rewritten to bless source changes. The exact next implementation objective is **an opt-in opening-only, public-catalog-bound rendering-plan contract and renderer that passes downstream existing validators without any arbitrary text or model-state-update field**. It does not include ordinary-turn migration or broader semantic-validator changes. One next action: external review of this contract and the evidence package. Do not execute that implementation during PR-PLAY-12.
+--- /dev/null
++++ development/campaigns/product_realization/pr_play_12/10_FINAL_VERDICT_AND_HANDOFF.md
+@@ -0,0 +1,49 @@
++# 10 — Final Verdict and Handoff
++
++PR-PLAY-12 · 2026-10-31 America/New_York. Offline investigation and isolated prototypes only.
++
++**B — Conditionally ready.** A specific bounded architecture exists: C-led hybrid H, engine-rendered public opening facts with finite presentation choices and shared operation-specific capabilities. The conditional recommendation reflects an incomplete public catalog/obligation integration proof and finite expression, not permission to relax current prose validation.
++
++Supporting evidence: both accepted historical openings still commit; both rejected openings reproduce production semantic rejection and opening rollback. The latest sole cause is the added `tightly` token passing initial coverage then failing the undeclared-consequential restatement rule. Removing that word alone commits through the same normal path. E1–E20 expose two supported-wording false-positive candidates and six delivered unsafe-outcome candidates; exact hidden disclosure is replaced downstream. All six measured domain state checks remain intact in the corpus. The closed-plan prototype accepts reviewed variants and rejects unrepresentable outcomes/hidden IDs/raw-text injections; it does not understand arbitrary natural language.
++
++Rejected/deferred alternatives: prompt-only/exact-copy guidance A does not resolve architectural friction or known detection gaps. Structured-only flexible prose B cannot guarantee publication authority. Exact anchors plus arbitrary connective prose leaves the same hole. Whole-runtime C is deferred in favor of an opening-scoped reversible implementation. Ordinary-turn behavior remains outside the new construction guarantee until separately migrated.
++
++Validation summary: `{"regression_passed": 878, "regression_failed": 14, "failure_classification": {"preexisting failure": 14, "environment-blocked": 0, "unresolved": 0, "new regression": 0}, "focused_passed": 27, "focused_total": 27, "baseline": "878 passing / 14 failures; same PR11 lane selections", "full_suite": false, "ATGB_benchmark": false}`. Full commands, case-level failures, classification, environment-blocked initial runs and local HTTP reruns are in regression_summary.json / regression_runs.json and JUnit/log files. The consolidated final selection matches every PR11 lane's pass/fail count and all fourteen failure IDs. Seven initially failing same cases were resolved by unchanged-original-source controls and are not counted twice. Initial environment failures are retained separately. Production source is unchanged from entry. This is not a full-suite result, live reliability measurement or rewritten historical verdict.
++
++Remaining risks: exact original provider wire/full request unavailable; source-ID text binding permissive; open prose semantic enforcement incomplete; public/revealed catalog correctness and required-anchor policy unresolved; ordinary adoption gateway semantic policy observe_only; immutable sealing order integration unimplemented; finite templates may sound repetitive; six-request five-turn feasibility and live quality unproved; crash atomicity and arbitrary hidden paraphrases not established. None is silently marked solved by the prototype.
++
++Exact next implementation objective: an opt-in opening-only rendering-plan contract bound to the positive public catalog and current operation, with deterministic factual output, no arbitrary text or update channel, unchanged existing legality checks and transactionality. One recommended next action: **external review of this archive and the bounded plan in report 09**. No implementation or live action was executed after this recommendation.
++
++Closeout confirmations for this pass:
++
++* No live provider calls and no provider connectivity tests.
++* No production semantic-validator changes and no production gameplay changes.
++* No model or provider-configuration changes and no output-budget increases.
++* No automatic production/provider retries were enabled or performed. Existing synthetic retry-control tests are diagnostics only.
++* No unauthorized claim acceptance was enabled in production. Existing false negatives were observed in disposable fixtures; prototype acceptance cannot reach gameplay.
++* No hidden-information relaxation and no state-authority relaxation.
++* No new persistent gameplay structures and no experimental PR-EG integration.
++* Frozen ATGB baseline unchanged, subject to the packaged entry/exit hash verification; benchmark scoring was not run.
++* No commit or push performed; existing dirty work preserved.
++
++The generated timestamped CURRENT_REVIEW archive is the stop boundary. Await external review before implementing the recommended architecture.
++
++## Consolidated regression selection
++
++| Lane | Selected pass | Fail | PR11 pass / fail | Same-case supplement |
++| --- | --- | --- | --- | --- |
++| harness | 35 | 0 | 35 / 0 | [] |
++| gameplay | 33 | 0 | 33 / 0 | [] |
++| rules_persistence | 53 | 0 | 53 / 0 | [] |
++| conversation | 35 | 0 | 35 / 0 | [] |
++| provider | 88 | 1 | 88 / 1 | [] |
++| diagnostics | 81 | 0 | 81 / 0 | ['tests.test_pr_play_06_opening_budget::test_opening_fixtures[minimal]', 'tests.test_pr_play_07_semantic_acceptance::test_capture_requires_controlled_scope[diagnostics]'] |
++| structured | 60 | 1 | 60 / 1 | [] |
++| opening | 23 | 3 | 23 / 3 | [] |
++| world | 123 | 0 | 123 / 0 | ['tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[0]', 'tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[1]', 'tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[2]', 'tests.test_atgb_r2_04_question_evidence_contract::test_historical_control_through_current_request_and_host[3]'] |
++| export_atgb | 55 | 1 | 55 / 1 | ['tests.test_atgb_infrastructure::test_provider_disabled_host_uses_chat_and_isolates_state'] |
++| overlay | 88 | 0 | 88 / 0 | [] |
++| hidden_faction | 78 | 0 | 78 / 0 | [] |
++| claim_authority | 126 | 8 | 126 / 8 | [] |
++
++Full attempt history is retained. Seven initially failing same cases were resolved with passing unchanged-original-source controls; they are not counted twice. No full-suite or statistical reliability claim.

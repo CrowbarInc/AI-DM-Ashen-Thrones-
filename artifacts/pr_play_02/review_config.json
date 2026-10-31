@@ -1,0 +1,469 @@
+{
+  "campaign_id": "pr_play_02",
+  "campaign_name": "PR-PLAY-02 - Controlled Live-Play Readiness",
+  "campaign_date": "2026-10-19",
+  "purpose": "Bounded offline testing infrastructure preparation; external review before live test",
+  "objective_status": "B - Conditionally ready",
+  "executive_summary": "SDK retries can be disabled for all seven production callers. Existing atomic six-admission budget reused; rejection diagnostics and nonmutating exhaustion gates added. 30 focused tests pass; total completed slices 354 passed and two failures reproduced on entry source. HTTP blocked at 15s. 445 protected files unchanged. Zero live/provider-connectivity calls; no prompt/schema/gameplay/model/endpoint changes. Stop for external review.",
+  "primary_report": "development/reports/pr_play_02/08_final_verdict_and_handoff.md",
+  "supporting_files": [
+    {
+      "path": "development/reports/pr_play_02/01_baseline_and_provider_path_inventory.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/02_retry_control_implementation.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/03_admission_budget_implementation.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/04_deterministic_validation.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/05_campaign_isolation_and_manual_procedure.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/06_diagnostics_and_evidence_export.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/07_regression_and_performance.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/08_final_verdict_and_handoff.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "development/reports/pr_play_02/PR_PLAY_02_LIVE_PLAYTEST.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/baseline.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/campaign_isolation_evidence.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/capture_controls.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/changed_sources.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/compatibility.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/compatibility.xml",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/compatibility_command.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/constructor_evidence.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/entry_compatibility.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/entry_compatibility.xml",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/entry_compatibility_setup_block.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/entry_hashes.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/entry_to_final.diff",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/failure_classification.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/focused.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/focused.xml",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/http.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/http_result.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/integrity.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/mock_concurrent_ledger.jsonl",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/mock_concurrent_snapshot.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/nonhttp.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/nonhttp.xml",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/nonhttp_command.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/performance.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/provider_inventory.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/readiness_comparison.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/regression.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/regression_command.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/repository_status_after.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/repository_status_before.txt",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/sdk_configuration_evidence.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/test_summary.json",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/docs/NEXT_SESSION.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/api.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/api_upstream_preflight.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/expressive_dialogue.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/gm.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/host_constrained_candidates.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/live_chat_interpretation.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/provider_budget.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/semantic_interpreter.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/game/unified_semantic_planning.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/source_before/tools/atgb/accounting.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_pr_play_02_controls.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/conftest.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/helpers/live_model_guard.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_provider_accounting_integrity.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_api_upstream_preflight.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_campaign_reset.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_atgb_r1_02_revision_boundary.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_atgb_r1_07_correction_contract.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_atgb_r2_02_speech_participant_grounding.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_atgb_r2_04_question_evidence_contract.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_pr_ed_provider_efficiency.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_pr_ef_gm_authority.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_final_emission_gate_diagnostics.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_model_routing_config.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_model_routing_runtime.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_model_routing_escalation.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tests/test_pr_dh_live_interpretation.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/api.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/api_upstream_preflight.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/gm.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/host_constrained_candidates.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "tools/atgb/accounting.py",
+      "role": "scoped_implementation_and_evidence",
+      "why": "Explicit PR-PLAY-02 source, entry snapshot, tests, diagnostic or manual handoff evidence."
+    },
+    {
+      "path": "artifacts/pr_play_02/review_config.json",
+      "role": "package_provenance",
+      "why": "Explicit review configuration and source checks."
+    },
+    {
+      "path": "artifacts/pr_play_02/prepackage_checks.json",
+      "role": "package_provenance",
+      "why": "Explicit review configuration and source checks."
+    }
+  ],
+  "changes": {
+    "production": [
+      "Opt-in max_retries=0 constructor kwargs across all seven existing callers.",
+      "Reuse atomic six-request budget; add playtest-only refusal telemetry and safe exhausted-submission gates."
+    ],
+    "validation": [
+      "30 new deterministic production-boundary checks; existing regression and entry-source comparisons."
+    ],
+    "tooling": [
+      "Existing ledger inspector accepts distinct rejection events; no new exporter framework."
+    ],
+    "documentation": [
+      "Eight reports, manual procedure and canonical session orientation."
+    ],
+    "generated_artifacts": [
+      "Entry diff/snapshots, mock ledger, constructor/isolation/integrity evidence, regression results and review ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "30 passed; 3.428s. All seven production constructor/dispatch paths; concurrency and real SDK mocked transport.",
+    "broader": "301 passed/1 preexisting failed in non-HTTP slice; 23 passed/1 preexisting failed in routing/interpretation compatibility; 354 total passes including focused.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Controlled production API/functions and isolated real reset; no live UI or opening.",
+    "model_runtime_boundary": "No live calls. Real SDK request handling uses local MockTransport only.",
+    "new_regressions": "None observed in completed slices.",
+    "pre_existing_failures": "Stale ATGB source attestation and exact provider_call metadata assertion reproduced on entry source; HTTP TestClient blocked at 15s."
+  },
+  "decisions_requiring_human_review": [
+    "Review safeguards and documented gaps, then approve one isolated manual six-attempt session. No live test performed now."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "One continuous process required; no restart continuation. Legacy contract path retains SDK long timeout; operator stops at 60s."
+    ],
+    "pre_existing": [
+      "HTTP environment gap, stale ATGB fingerprint, exact metadata regression assertion; live R1/R2 acceptance remains pending."
+    ]
+  },
+  "does_not_prove": [
+    "Live provider reachability, UI behavior, semantic gameplay quality, provider latency/cost, full regression, refreshed ATGB-worker attestation or benchmark improvement."
+  ],
+  "recommended_next_step": "External review of this ZIP, then separately approve operator-run PR_PLAY_02_LIVE_PLAYTEST.txt.",
+  "self_contained_review_test": "Eight reports, instructions, source diff/snapshots, tests and raw evidence selected; final verification checks ZIP CRC, manifest hashes and secret exclusions."
+}

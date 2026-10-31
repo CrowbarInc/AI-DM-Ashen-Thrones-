@@ -1,0 +1,176 @@
+--- before/game/immutable_valid_response.py
++++ after/game/immutable_valid_response.py
+@@ -11,6 +11,8 @@
+ from __future__ import annotations
+ 
+ import copy
++import hashlib
++import json
+ import re
+ from typing import Any, Callable, Mapping
+ 
+@@ -23,6 +25,31 @@
+ PROVENANCE_REJECTED = "rejected"
+ 
+ ACCEPTED_KEY = "accepted_response"
++TERMINAL_FALLBACK = "I cannot provide a validated response to that request."
++
++
++def seal_delivery_contract(gm: dict[str, Any]) -> None:
++    """Pin the existing adoption record; only authorization code calls this.
++
++    The immutable JSON value is a response seal, not another history or world
++    store. Mutable diagnostic dictionaries cannot change the adopted identity.
++    """
++    record = gm.get("metadata", {}).get(ACCEPTED_KEY)
++    if not isinstance(record, dict) or record.get("immutable") is not True:
++        return
++    record.setdefault("subject", record.get("target", ""))
++    record.setdefault("authorization_source", record.get("provenance", ""))
++    record.setdefault("adoption_status", "safe_fallback_selected" if record.get("provenance") == PROVENANCE_SAFE else "candidate_accepted")
++    payload = {k: v for k, v in record.items() if k not in {"integrity_digest", "skipped_mutators"}}
++    raw = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
++    record["integrity_digest"] = hashlib.sha256(raw.encode("utf-8")).hexdigest()
++    gm["_final_delivery_seal"] = raw
++
++
++def verify_delivery_record(record: Mapping[str, Any]) -> bool:
++    payload = {k: v for k, v in record.items() if k not in {"integrity_digest", "skipped_mutators"}}
++    raw = json.dumps(payload, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
++    return record.get("integrity_digest") == hashlib.sha256(raw.encode("utf-8")).hexdigest()
+ 
+ _STOP = frozenset(
+     {
+@@ -183,6 +210,11 @@
+ def accepted_record(gm: Mapping[str, Any] | None) -> dict[str, Any] | None:
+     if not isinstance(gm, Mapping):
+         return None
++    seal = gm.get("_final_delivery_seal")
++    if isinstance(seal, str):
++        record = json.loads(seal)
++        record["integrity_digest"] = hashlib.sha256(seal.encode("utf-8")).hexdigest()
++        return record
+     metadata = gm.get("metadata")
+     if not isinstance(metadata, Mapping):
+         return None
+@@ -228,6 +260,8 @@
+         return True
+     if str(record.get("provenance") or "") == PROVENANCE_REJECTED:
+         return False
++    if record.get("authorization_source") == "host_terminal_safety":
++        return False
+     if record.get("immutable") is not True:
+         return False
+     return semantic_equal(record.get("text"), (gm or {}).get("player_facing_text") if isinstance(gm, Mapping) else "")
+@@ -244,6 +278,7 @@
+         "text": str(text or ""),
+         "hard_invalid_reasons": list(reasons or []),
+     }
++    gm.pop("_final_delivery_seal", None)
+     return gm
+ 
+ 
+@@ -1300,6 +1335,7 @@
+             "reasons": list(validation.get("reasons") or []),
+             "preserved": provenance != PROVENANCE_SAFE,
+         }
++    seal_delivery_contract(gm)
+     return gm
+ 
+ 
+@@ -1322,6 +1358,14 @@
+     record = accepted_record(gm) or {}
+     accepted = str(record.get("text") or "")
+     emitted = str(gm.get("player_facing_text") or "")
++    if record.get("integrity_digest") and not verify_delivery_record(record):
++        raise ValueError("Final response integrity check failed")
++    # Restore attribution/provenance as well as text from the pinned record.
++    if gm.get("_final_delivery_seal"):
++        current = gm.setdefault("metadata", {}).get(ACCEPTED_KEY)
++        gm["metadata"][ACCEPTED_KEY] = copy.deepcopy(record)
++        if isinstance(current, dict) and current != record:
++            report["metadata_mutation_blocked"] = True
+     report["immutable"] = True
+     report["accepted_response_text"] = accepted
+     report["emitted_response_text"] = emitted
+@@ -1331,7 +1375,8 @@
+     elif semantic_equal(emitted, accepted):
+         report["semantic_match"] = True
+         report["presentation_only"] = True
+-        gm["player_facing_text"] = normalize_presentation(accepted)
++        gm["player_facing_text"] = accepted
++        report["exact_match"] = True
+         report["emitted_response_text"] = gm["player_facing_text"]
+     else:
+         report["mutation_blocked"] = True
+@@ -1439,6 +1484,7 @@
+     record.update(speech_adoption="AUTHORIZED_HOST_SPEECH", authorization_source=source,
+                   speaker_id=speaker_id, canonical=False,
+                   candidate_disposition="UNAUTHORIZED_GENERATED_CANDIDATE" if candidate and not semantic_equal(candidate, line) else "host_selected")
++    seal_delivery_contract(sealed)
+     return sealed
+ 
+ 
+@@ -1482,6 +1528,30 @@
+         world=world,
+         session=session,
+     )
++    if isinstance(resolution, Mapping) and not isinstance(resolution.get("social"), Mapping):
++        # Preserve resolver observations before validation, never by overwriting
++        # an already adopted generic sentence downstream.
++        from game.api_turn_support import _authoritative_resolution_fact_text, _looks_like_generic_resolution_fallback
++
++        fact, _source = _authoritative_resolution_fact_text(resolution=resolution, scene=scene, world=world)
++        if fact:
++            # This is the selected public resolver result, not a provider fact
++            # or the complete (possibly hidden) clue catalog.
++            corpus = corpus + "\n" + fact
++            if _source.get("source") == "clue_text" and gm_decision:
++                selected = str(resolution.get("clue_text") or "").strip()
++                if not selected:
++                    selected = " ".join(str(item) for item in resolution.get("discovered_clues") or [])
++                if selected:
++                    gm_decision = copy.deepcopy(gm_decision)
++                    gm_decision.setdefault("proposed_facts", []).append({
++                        "text": selected, "provenance": "authored_world_fact", "consequence": "consequential",
++                        "authorized": True, "authority": "world_truth", "persistence": "do_not_persist",
++                        "source_ref": "resolution.clue_text", "outcome_classification": "established_or_retrieved",
++                        "reason_codes": ["resolver_selected_public_clue"], "semantic_identity": {}})
++        if _looks_like_generic_resolution_fallback(str(gm.get("player_facing_text") or "")):
++            if fact:
++                gm = {**gm, "player_facing_text": fact}
+ 
+     def _check(candidate: dict[str, Any]) -> dict[str, Any]:
+         candidate_meta = candidate.get("metadata") if isinstance(candidate.get("metadata"), Mapping) else {}
+@@ -1571,6 +1641,23 @@
+     }
+ 
+     def _finish(sealed: dict[str, Any], *, why: str) -> dict[str, Any]:
++        terminal = (sealed.get("metadata") or {}).get(ACCEPTED_KEY) or {}
++        if terminal.get("provenance") == PROVENANCE_REJECTED:
++            # Conflicting NPC authority can invalidate even a generic line in
++            # the NPC validator. The host may only select this fixed GM safety
++            # response, with no NPC attribution or state effects.
++            rejected = copy.deepcopy(terminal)
++            seal_accepted_response(sealed, text=TERMINAL_FALLBACK, provenance=PROVENANCE_SAFE,
++                attempt=int((sealed.get("metadata") or {}).get("generation_attempt_count") or 1),
++                validation={"hard_valid": True, "speaker": "GM", "addressee": "player",
++                            "authority": ["host_terminal_safety"], "reasons": [],
++                            "interaction_complete": False, "contract_satisfying": False},
++                contract=contract, player_text=player, resolution=resolution)
++            record = sealed["metadata"][ACCEPTED_KEY]
++            record.update(speaker_id="", subject="", authority_result="safe_nonresolution", authorization_source="host_terminal_safety",
++                          candidate_disposition="rejected", rejected_candidate=rejected)
++            for key in ("scene_update", "world_updates", "activate_scene_id", "new_scene_draft", "suggested_action"):
++                sealed[key] = None
+         review["acceptance"] = {"why": why, "text": str(sealed.get("player_facing_text") or "")[:2000]}
+         sealed_meta = sealed.setdefault("metadata", {})
+         if isinstance(sealed_meta, dict):
+@@ -1589,6 +1676,7 @@
+                             "acceptance_why": why,
+                         }
+                     hard["decision_acceptance_why"] = why
++        seal_delivery_contract(sealed)
+         return sealed
+ 
+     if first["hard_valid"]:

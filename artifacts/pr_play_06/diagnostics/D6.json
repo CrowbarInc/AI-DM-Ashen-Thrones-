@@ -1,0 +1,174 @@
+{
+  "status": 422,
+  "events": [
+    {
+      "event": "initialized",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:35.316482+00:00"
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "7f46f484891245189e9fd6e4fb026d1c",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:35.317485+00:00",
+      "time": "2026-10-29T02:12:35.317485+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "7f46f484891245189e9fd6e4fb026d1c",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:35.317485+00:00",
+      "time": "2026-10-29T02:12:35.319489+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "7f46f484891245189e9fd6e4fb026d1c",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:35.317485+00:00",
+      "time": "2026-10-29T02:12:35.322490+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": true,
+      "request_id": "synthetic-response",
+      "model": "offline-stub",
+      "input_tokens": 20,
+      "output_tokens": 3000,
+      "total_tokens": 3020,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 0.032
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:35.323489+00:00",
+      "attempt_id": "7f46f484891245189e9fd6e4fb026d1c",
+      "opening_attempt_id": "4d75ad982d6e400d96e346147c442b3b",
+      "stage": "provider_response",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "provider_model": "gpt-4.1-mini",
+      "content_segment_count": null,
+      "provider_content_present": true,
+      "extraction_source": "output_text",
+      "extraction_succeeded": true,
+      "extracted_content_length": 47,
+      "extracted_content_empty": false,
+      "input_tokens": 20,
+      "output_tokens": 3000,
+      "total_tokens": 3020,
+      "provider_request_id": null,
+      "provider_response_id": "synthetic-response",
+      "provider_status": "incomplete",
+      "provider_finish_reason": "max_output_tokens",
+      "provider_output_limit_exhausted": true,
+      "requested_max_output_tokens": 3000,
+      "output_limit_reached": true,
+      "possible_output_truncation": true,
+      "json_parsing_succeeded": false,
+      "expected_envelope_present": false,
+      "recognized_envelope_keys": [],
+      "parser_output_form": "plain",
+      "structured_validation_result": false,
+      "rejection_reason": "missing_structured_envelope",
+      "classification": "json_parse_failure",
+      "provider_response_contract": "structured_realization"
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:35.359047+00:00",
+      "attempt_id": null,
+      "opening_attempt_id": "4d75ad982d6e400d96e346147c442b3b",
+      "stage": "opening_outcome",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "opening_accepted": false,
+      "gameplay_committed": false,
+      "classification": "opening_rejected",
+      "structured_validation_result": false,
+      "rejection_reason": "provider_opening_not_completed",
+      "recovery_classification": "safe_nonresolution"
+    }
+  ],
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "after": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  }
+}

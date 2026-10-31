@@ -1,0 +1,817 @@
+{
+  "turn_number": 7,
+  "player_text": "I give the captain a small nod and step back to the tavern runner, keeping my voice under the rain. \"The captain says the gate won't talk. You will. Whose debts and noble quarrels sit past that milestone, and what does a loose tongue cost around here?\"",
+  "visible_motivation": "The captain says the brass have sealed every mouth at the gate and names the tavern runner as someone who might still know more.",
+  "intended_meaning": "I want the runner to name whose debts and intrigues are tied to the missing patrol.",
+  "generation_attempt_1": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness. \"Past that old milestone, debts weave through the families like smoke—noble quarrels, too, but those are often whispered, cloaked behind veils and favors. Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse. Best not to ask too many questions without a careful ear and a good friend—or a thick purse to pay for silence.\"",
+  "generation_attempt_2": null,
+  "attempt_1_hard_valid": true,
+  "attempt_1_reasons": [],
+  "attempt_2_hard_valid": null,
+  "attempt_2_reasons": [],
+  "regeneration_invoked": false,
+  "regeneration_feedback": null,
+  "rejected_attempt_2_reasons": null,
+  "generation_attempt_count": 1,
+  "accepted_provenance": "initial_generation",
+  "accepted_response_text": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness. \"Past that old milestone, debts weave through the families like smoke—noble quarrels, too, but those are often whispered, cloaked behind veils and favors. Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse. Best not to ask too many questions without a careful ear and a good friend—or a thick purse to pay for silence.\"",
+  "accepted_immutable": true,
+  "final_emitted_response": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness. \"Past that old milestone, debts weave through the families like smoke—noble quarrels, too, but those are often whispered, cloaked behind veils and favors. Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse. Best not to ask too many questions without a careful ear and a good friend—or a thick purse to pay for silence.\"",
+  "gm_text": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness. \"Past that old milestone, debts weave through the families like smoke—noble quarrels, too, but those are often whispered, cloaked behind veils and favors. Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse. Best not to ask too many questions without a careful ear and a good friend—or a thick purse to pay for silence.\"",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "scene_momentum:new_information"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": true,
+  "fast_path_abstained": false,
+  "abstention_reason": null,
+  "interpreter_invoked": false,
+  "proposal_source": "deterministic_fast_path",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I give the captain a small nod and step back to the tavern runner, keeping my voice under the rain. \"The captain says the gate won't talk. You will. Whose debts and noble quarrels sit past that milestone, and what does a loose tongue cost a",
+    "source": "deterministic_fast_path",
+    "primary_operation": "ask",
+    "supporting_operations": [],
+    "raw_target_text": "tavern_runner",
+    "proposed_target_id": null,
+    "target_capture": "none",
+    "has_determiner": false,
+    "interlocutor_id": "tavern_runner",
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "ask",
+  "canonical_target": "Tavern Runner",
+  "target_ref": {
+    "type": "interlocutor",
+    "id_or_text": "Tavern Runner",
+    "source": "explicit_player"
+  },
+  "discourse_ref": {
+    "type": "interlocutor",
+    "id": "tavern_runner",
+    "label": "Tavern Runner",
+    "source_turn": null
+  },
+  "interlocutor_id": "tavern_runner",
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "binding_status": "bound_canonical",
+  "entity_class": "canonical_established",
+  "proposed_interlocutor": null,
+  "bound_interlocutor": "tavern_runner",
+  "entity_id": null,
+  "authority_reasons": [
+    "identity:discourse"
+  ],
+  "entity_binding": {
+    "status": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed_interlocutor": null,
+    "proposed_span": null,
+    "bound_interlocutor_id": "tavern_runner",
+    "entity_id": null,
+    "label": "i lean in",
+    "explicit_new_interlocutor": false,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_03802e098f9b",
+    "turn_index": 8,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Tavern Runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "tavern_runner",
+    "conversational_subject": "Tavern Runner",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "I give the captain a small nod and step back to the tavern runner, keeping my voice under the rain. \"The captain says the gate won't talk. You will. Whose debts and noble quarrels sit past that milestone, and what does a loose tongue cost a",
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": "explicit_target",
+      "referent_reason": "explicit_current_turn_target",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "i lean in"
+        },
+        {
+          "id": "lead_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Investigate the old milestone"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        },
+        {
+          "id": "inc_bc3b34a66d",
+          "type": "interlocutor",
+          "label": "i lean in"
+        },
+        {
+          "id": "inc_bc3b34a66d",
+          "type": "interlocutor",
+          "label": "i lean in"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": "tavern_runner",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "tavern_runner",
+        "canonical_target_label": "Tavern Runner",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "scene",
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "bound_canonical",
+        "entity_class": "canonical_established",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": "tavern_runner",
+        "entity_id": null,
+        "label": "i lean in",
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [
+          "identity:discourse"
+        ],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I give the captain a small nod and step back to the tavern runner, keeping my voice under the rain. \"The captain says the gate won't talk. You will. Whose debts and noble quarrels sit past that milestone, and what does a loose tongue cost a",
+        "source": "deterministic_fast_path",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "raw_target_text": "tavern_runner",
+        "proposed_target_id": null,
+        "target_capture": "none",
+        "has_determiner": false,
+        "interlocutor_id": "tavern_runner",
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": {
+    "id": "tavern_runner",
+    "label": "i lean in",
+    "kind": "interlocutor",
+    "epistemic_status": null,
+    "turn_index": 8,
+    "source": "resolution_contract"
+  },
+  "active_claim": null,
+  "active_inspected": null,
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "i lean in",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 8,
+    "last_committed_contract_id": "rc_03802e098f9b"
+  },
+  "authority_generated": [
+    {
+      "proposition": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authority_retry": [],
+  "authority_emitted": [
+    {
+      "proposition": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "PASS",
+  "failing_gates": [],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 81,
+      "rating": "strong",
+      "passed": true,
+      "semantic_result": "PASS",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "PASS",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 88,
+          "text_preview": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness. \"Past that old milestone, debts weave through "
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "question",
+          "player_terms": [
+            "around",
+            "back",
+            "captain",
+            "cost",
+            "debts",
+            "gate",
+            "give",
+            "keeping",
+            "loose",
+            "milestone",
+            "noble",
+            "past",
+            "quarrels",
+            "rain",
+            "runner",
+            "says",
+            "small",
+            "step",
+            "talk",
+            "tavern",
+            "tongue",
+            "under",
+            "voice",
+            "what",
+            "whose",
+            "won't"
+          ],
+          "gm_terms": [
+            "aren",
+            "ask",
+            "behind",
+            "below",
+            "best",
+            "careful",
+            "cautious",
+            "cloaked",
+            "coin",
+            "cost",
+            "debts",
+            "ear",
+            "families",
+            "far",
+            "favors",
+            "friend",
+            "gives",
+            "glance",
+            "good",
+            "laced"
+          ],
+          "direct_answer_score": 17,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_03802e098f9b",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "ask",
+            "referent_provenance": "explicit_player",
+            "assessment_status": "satisfied",
+            "assessment_reasons": [
+              "inquiry_answered"
+            ],
+            "target": "Tavern Runner",
+            "candidate_answer_target": null,
+            "target_compatible": true,
+            "operation_compatible": true,
+            "dimension_compatible": true,
+            "resolution_kind": "answer",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": "explicit_target",
+              "referent_reason": "explicit_current_turn_target",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "i lean in"
+                },
+                {
+                  "id": "lead_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Investigate the old milestone"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "id": "inc_bc3b34a66d",
+                  "type": "interlocutor",
+                  "label": "i lean in"
+                },
+                {
+                  "id": "inc_bc3b34a66d",
+                  "type": "interlocutor",
+                  "label": "i lean in"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "ask",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": "tavern_runner",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "tavern_runner",
+                "canonical_target_label": "Tavern Runner",
+                "canonical_target_type": "interlocutor",
+                "canonical_basis": "scene",
+                "authoritative_operation": "ask",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "bound_canonical",
+                "entity_class": "canonical_established",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": "tavern_runner",
+                "entity_id": null,
+                "label": "i lean in",
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [
+                  "identity:discourse"
+                ],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I give the captain a small nod and step back to the tavern runner, keeping my voice under the rain. \"The captain says the gate won't talk. You will. Whose debts and noble quarrels sit past that milestone, and what does a loose tongue cost a",
+                "source": "deterministic_fast_path",
+                "primary_operation": "ask",
+                "supporting_operations": [],
+                "raw_target_text": "tavern_runner",
+                "proposed_target_id": null,
+                "target_capture": "none",
+                "has_determiner": false,
+                "interlocutor_id": "tavern_runner",
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_met_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 81,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 17,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 23
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 17,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "has_question": true,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.149,
+          "gm_word_count": 88,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 1
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 11,
+          "topic_overlap_ratio": 0.423,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.093,
+          "player_presses_thread": false,
+          "gm_word_count": 88,
+          "net_new_terms": 46
+        }
+      },
+      "immersion": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": true,
+          "scene_anchor_hits": 1
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: acceptable (17/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (23/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 81,
+        "rating": "strong",
+        "passed": true,
+        "semantic_result": "PASS",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 0,
+  "turn_generation_calls": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "The tavern runner gives a cautious glance below the rain, voice low and laced with a mix of respect and wariness. \"Past that old milestone, debts weave through the families like smoke—noble quarrels, too, but those are often whispered, cloaked behind veils and favors. Loose tongues aren’t taken lightly; speaking out can cost you far more than coin—sometimes your reputation, sometimes worse. Best not to ask too many questions without a careful ear and a good friend—or a thick purse to pay for silence.\""
+    }
+  ],
+  "turn_interpretation_calls": [],
+  "persistence": {
+    "session_id": "a2a06862f50a60c63d84b2bd",
+    "campaign_run_id": "a2a06862f50a60c63d84b2bd",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "i lean in",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 8,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 8,
+      "last_committed_contract_id": "rc_03802e098f9b"
+    },
+    "incidental_entities": [
+      {
+        "entity_id": "inc_bc3b34a66d",
+        "label": "i lean in",
+        "role": "i lean in",
+        "scene_id": "frontier_gate",
+        "provenance": "bounded_incidental",
+        "authority": "bounded_improvisation",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "truth_status": "runtime_incidental",
+        "consequence_level": "incidental"
+      }
+    ],
+    "ledger_entries": [
+      {
+        "id": "inc_bc3b34a66d",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "content": "i lean in",
+        "scope": "scene",
+        "scene_id": "frontier_gate",
+        "consequence_level": "incidental",
+        "source": "player_proposed_interlocutor",
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental"
+      }
+    ],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 413800
+  },
+  "resolution_kind": "question",
+  "api_ok": true
+}

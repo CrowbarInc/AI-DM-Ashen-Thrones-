@@ -1,0 +1,51 @@
+{
+  "case_id": "s30q1",
+  "family": "s30",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "348e88c10ae6546d307d674e0c38f1087364d565c02d23f41a2bdf7d066f2a8e",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Senn does not guard the granary"
+    ],
+    "qualifiers": [
+      "does not",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s30"
+    ],
+    "answered_arguments": [
+      "person"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 explicitly states that Senn does not guard the granary, directly answering the question."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

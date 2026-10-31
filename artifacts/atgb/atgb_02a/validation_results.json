@@ -1,0 +1,69 @@
+{
+  "evidence_scope": "structural_only",
+  "gameplay_performance_claim": false,
+  "provider_calls_authorized": false,
+  "tests": {
+    "focused": {
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "adjacent": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "repeat_initializations": {
+    "passes": 2,
+    "scenarios_each": 10,
+    "equivalent": true,
+    "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a"
+  },
+  "readiness": {
+    "verified_machine_prerequisites": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10"
+    ],
+    "partially_verified_opening_delivery": [
+      "S07",
+      "S09"
+    ],
+    "blocked": [],
+    "narrative_assumptions": "unverified for every scenario"
+  },
+  "environment_failures": [
+    "Initial sandbox temporary directory atomic rename denied.",
+    "Sandbox host-chat attempt timed out in Windows asyncio socketpair before chat.",
+    "First authorized rerun had one intermittent atomic rename denial; final rerun passed."
+  ],
+  "commands": [
+    ".venv/Scripts/python.exe -m pytest tests/test_atgb_readiness.py tests/test_atgb_infrastructure.py -q --tb=short --basetemp=development/tmp/atgb_02a/final_tests --junitxml=artifacts/atgb/atgb_02a/final_focused.xml",
+    ".venv/Scripts/python.exe -m pytest tests/test_playability_eval.py tests/test_review_handoff.py tests/test_validation_evidence_standard.py -q --tb=short --basetemp=development/tmp/atgb_02a/adjacent --junitxml=artifacts/atgb/atgb_02a/adjacent.xml",
+    ".venv/Scripts/python.exe tools/run_atgb.py --mode provider_disabled_host --preflight-only --output artifacts/atgb/atgb_02a/preflight"
+  ],
+  "source_sha256": {
+    "tools/atgb/baseline.py": "8b96561ecd493b9533d2cc10cbf8a6956143d94e1e25e04ed5880c720e0f92dd",
+    "tools/atgb/budget.py": "1668a333d64aed18a1ce717e87a67e76635983cd44aaebaf0dbee307483e648c",
+    "tools/atgb/chat_worker.py": "fae52311326a7e29f85d0b721d35ecccb67a4c6c6b105cf261a37c53c1da5197",
+    "tools/atgb/driver.py": "268df4c22057975af550983b3d902cf6700ad7b42aaa20465fd21c75208a6b1e",
+    "tools/atgb/fixtures.py": "ab4cff96554bd61bd66f9667e6c0415f36b8e0de01e5b99504f3ee4adff4f075",
+    "tools/atgb/isolation.py": "36bc72d9ebae3255cbb45aeae659b755c8bbfb49d883e1b92dbe5b5dc701bb52",
+    "tools/atgb/preflight.py": "498e39109fd4902a6d57031cf613b4c4cf52298446208d7f89388e141ff6d5d9",
+    "tools/atgb/results.py": "c67d68c18a7e903758cf5668675833b49c2fbd1fde1da908a3567a6737fe0f9d",
+    "tools/atgb/worksheet.py": "efa419797297382a3396377c8f9e7b39702c2300f3205da42d4f7214a2e7bca2",
+    "tools/atgb/__init__.py": "16035fd1d68b38c074f623102acf5246529c9e819d2c48d8c96130fe89e0288e",
+    "tools/run_atgb.py": "89638e7afdb3b1065e38cb02eab131b71fd4038a6968b82b86e605c1fe67b225",
+    "tests/test_atgb_readiness.py": "1e692be5c97459b0fef00e4355d7dd723229d7ac2ca185015f4dbabb70fb08cb"
+  }
+}

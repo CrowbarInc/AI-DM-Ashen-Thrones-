@@ -1,0 +1,54 @@
+{
+  "enabled": true,
+  "uncertainty_active": false,
+  "uncertainty_sources": [],
+  "uncertainty_mode": null,
+  "allowed_behaviors": {
+    "ask_clarifying_question": false,
+    "hedge_appropriately": false,
+    "provide_partial_information": false
+  },
+  "disallowed_behaviors": {
+    "invented_certainty": true,
+    "fabricated_authority": true,
+    "meta_system_explanations": true
+  },
+  "diegetic_only": true,
+  "max_clarifying_questions": 1,
+  "prefer_partial_over_question": false,
+  "require_partial_to_state_known_edge": false,
+  "require_partial_to_state_unknown_edge": false,
+  "require_partial_to_offer_next_lead": false,
+  "allowed_hedge_forms": [
+    "I can't swear to it, but",
+    "From what I saw,",
+    "As far as rumor goes,",
+    "Looks like",
+    "Hard to tell, but"
+  ],
+  "forbidden_hedge_forms": [
+    "I lack enough information to answer confidently.",
+    "The system cannot confirm that.",
+    "Canon proves it.",
+    "As an AI, I don't know.",
+    "There is insufficient context available."
+  ],
+  "allowed_authority_bases": [
+    "direct_observation",
+    "established_report",
+    "rumor_marked_as_rumor",
+    "visible_evidence"
+  ],
+  "forbidden_authority_bases": [
+    "unsupported_named_culprit",
+    "unsupported_exact_location",
+    "unsupported_motive_as_fact",
+    "unsupported_procedural_certainty",
+    "system_or_canon_claims"
+  ],
+  "debug": {
+    "activation_reasons": [],
+    "partial_preferred": false,
+    "clarifying_question_allowed": false
+  }
+}

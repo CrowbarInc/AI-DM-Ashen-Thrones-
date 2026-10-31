@@ -1,0 +1,142 @@
+[
+  {
+    "id": "H1",
+    "case": "Successful opening",
+    "expected_observed": "PASS, one commit",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011639Z-812744c9c860"
+  },
+  {
+    "id": "H2",
+    "case": "Output truncation",
+    "expected_observed": "FAIL; provider_output_limit_exhaustion",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011642Z-260875a350ea"
+  },
+  {
+    "id": "H3",
+    "case": "Invalid JSON",
+    "expected_observed": "FAIL; json_parsing_failure",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011644Z-38dca9fa0abf"
+  },
+  {
+    "id": "H4",
+    "case": "Missing envelope",
+    "expected_observed": "FAIL; structured_envelope_failure",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011646Z-b50f15cd8ed0"
+  },
+  {
+    "id": "H5",
+    "case": "Semantic rejection",
+    "expected_observed": "FAIL; semantic_validation_failure",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011648Z-4a74edc8ca5d"
+  },
+  {
+    "id": "H6",
+    "case": "Genuine safe nonresolution",
+    "expected_observed": "FAIL; opening_acceptance_failure; zero commit",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011650Z-e138508a1656"
+  },
+  {
+    "id": "H7",
+    "case": "Provider exception",
+    "expected_observed": "FAIL; provider_exception",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011652Z-7f5984412dd7"
+  },
+  {
+    "id": "H8",
+    "case": "Admission budget rejection",
+    "expected_observed": "FAIL; provider_admission_rejection; zero dispatch",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011654Z-22bbdfb7d160"
+  },
+  {
+    "id": "H9",
+    "case": "Rollback",
+    "expected_observed": "FAIL outcome / PASS state integrity",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011644Z-38dca9fa0abf"
+  },
+  {
+    "id": "H10",
+    "case": "Commit once",
+    "expected_observed": "PASS; turn/log/commit=1",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011639Z-812744c9c860"
+  },
+  {
+    "id": "H11",
+    "case": "Preflight failure",
+    "expected_observed": "BLOCKED; no owned process or provider request",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H12",
+    "case": "Startup timeout",
+    "expected_observed": "BLOCKED; bounded owned-process shutdown",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H13",
+    "case": "Interrupt",
+    "expected_observed": "INCONCLUSIVE; ZIP/state preserved; process stopped",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H14",
+    "case": "Missing journal",
+    "expected_observed": "INCONCLUSIVE; explicit limitation",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H15",
+    "case": "Deterministic boundary",
+    "expected_observed": "Zero live calls; external connect refused",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H16",
+    "case": "Unauthorized Live",
+    "expected_observed": "BLOCKED before worker/provider dispatch",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H17",
+    "case": "Occupied port",
+    "expected_observed": "BLOCKED; unrelated listener survives",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H18",
+    "case": "Evidence archive",
+    "expected_observed": "Readable ZIP; all manifest hashes match",
+    "test_result": "PASS",
+    "evidence": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T011639Z-812744c9c860"
+  },
+  {
+    "id": "H19",
+    "case": "State categories",
+    "expected_observed": "Bookkeeping separated; injected truth mutation rejected",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  },
+  {
+    "id": "H20",
+    "case": "Unknown category",
+    "expected_observed": "Explicit unknown; root cause unestablished",
+    "test_result": "PASS",
+    "evidence": "artifacts/pr_play_08/harness_regression.xml"
+  }
+]

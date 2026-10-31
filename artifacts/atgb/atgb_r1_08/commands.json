@@ -1,0 +1,12 @@
+[
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_08/run_trial.py L1",
+    "exit_code": 0,
+    "provider_outcome": "APIConnectionError; one admission; mandatory stop"
+  },
+  {
+    "command": ".venv/Scripts/python.exe artifacts/atgb/atgb_r1_08/package_review.py",
+    "purpose": "offline analysis, reports, integrity and review export",
+    "initial_attempt": "Offline generation reached standard ZIP, then failed timestamp step: tzdata unavailable. Corrected with explicit EDT UTC-04 offset for 2026-10-19; rerun performs no live calls."
+  }
+]

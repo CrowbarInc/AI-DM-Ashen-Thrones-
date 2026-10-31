@@ -1,0 +1,114 @@
+{
+  "scope": "structural host behavior and exact output comparison; no repair-effect claim",
+  "checks": [
+    {
+      "check": "missing_envelope: exact historical failure sentence",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: structured rejection",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: empty repair",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: default information mode",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: safe seal",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: misleading success state",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: exact historical failure sentence",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: structured rejection",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: empty repair",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: default information mode",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: safe seal",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: misleading success state",
+      "passed": true
+    },
+    {
+      "check": "valid: exact provider narration delivered",
+      "passed": true
+    },
+    {
+      "check": "valid: initial generation seal",
+      "passed": true
+    },
+    {
+      "check": "valid_structured: one SDK mock call",
+      "passed": true
+    },
+    {
+      "check": "valid_structured: repeat blocked without state change",
+      "passed": true
+    },
+    {
+      "check": "rich_structured_rejected: one SDK mock call",
+      "passed": true
+    },
+    {
+      "check": "rich_structured_rejected: repeat blocked without state change",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: one SDK mock call",
+      "passed": true
+    },
+    {
+      "check": "missing_envelope: repeat blocked without state change",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: one SDK mock call",
+      "passed": true
+    },
+    {
+      "check": "historical_seed_missing: repeat blocked without state change",
+      "passed": true
+    },
+    {
+      "check": "provider_exception: one SDK mock call",
+      "passed": true
+    },
+    {
+      "check": "provider_exception: repeat blocked without state change",
+      "passed": true
+    },
+    {
+      "check": "pipeline exception: turn rolled back only",
+      "passed": true
+    },
+    {
+      "check": "pipeline exception: repeat pressure advances",
+      "passed": true
+    },
+    {
+      "check": "pipeline exception: repeat faction pressure advances",
+      "passed": true
+    }
+  ],
+  "passed": 27
+}

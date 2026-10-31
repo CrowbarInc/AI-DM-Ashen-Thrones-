@@ -1,0 +1,156 @@
+[
+  {
+    "id": "matched",
+    "npcs": [
+      {
+        "id": "mara",
+        "name": "Mara",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          },
+          {
+            "id": "ledger",
+            "text": "The miller keeps the night ledger."
+          },
+          {
+            "id": "name",
+            "text": "The north road is called the Crown Way."
+          },
+          {
+            "id": "manager",
+            "text": "The dock clerk manages the ferry schedules."
+          },
+          {
+            "id": "bell",
+            "text": "The harbor bell is called the Tide Bell."
+          },
+          {
+            "id": "password",
+            "text": "The gate password is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      },
+      {
+        "id": "oren",
+        "name": "Oren",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          },
+          {
+            "id": "ledger",
+            "text": "The miller keeps the night ledger."
+          },
+          {
+            "id": "name",
+            "text": "The north road is called the Crown Way."
+          },
+          {
+            "id": "manager",
+            "text": "The dock clerk manages the ferry schedules."
+          },
+          {
+            "id": "bell",
+            "text": "The harbor bell is called the Tide Bell."
+          },
+          {
+            "id": "password",
+            "text": "The gate password is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      }
+    ],
+    "turns": [
+      [
+        "Mara, what did Oren say about the north road?",
+        {
+          "addressee": "mara",
+          "sufficiency": "direct"
+        }
+      ],
+      [
+        "Mara, who keeps the night drum?",
+        {
+          "addressee": "mara",
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Oren, who told you the north road name?",
+        {
+          "addressee": "oren",
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Mara, which person oversees the ferry schedules?",
+        {
+          "addressee": "mara",
+          "sufficiency": "direct"
+        }
+      ],
+      [
+        "I meant the harbor bell.",
+        {
+          "act": "correction"
+        }
+      ],
+      [
+        "No, who keeps the night ledger?",
+        {
+          "act": "correction",
+          "sufficiency": "direct"
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "act": "follow_up",
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Warden, who keeps the night ledger?",
+        {
+          "sufficiency": "clarification"
+        }
+      ],
+      [
+        "Mara, who manages the ferry schedules?",
+        {
+          "addressee": "mara",
+          "sufficiency": "direct"
+        }
+      ],
+      [
+        "Mara, what is the gate password?",
+        {
+          "addressee": "mara",
+          "sufficiency": "refusal"
+        }
+      ]
+    ],
+    "source": "matched_legacy"
+  }
+]

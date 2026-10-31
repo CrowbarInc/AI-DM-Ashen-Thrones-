@@ -1,0 +1,266 @@
+[
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_action_and_chat_investigate_both_mark_runtime_discovery_memory",
+    "time": "0.147",
+    "tag": "failure",
+    "message": "KeyError: 'kind'",
+    "text_tail": "E   KeyError: 'kind'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+    "time": "0.073",
+    "tag": "failure",
+    "message": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x000001B870D70880>('resolution')\n +    where <built-in method get of dict object at 0x000001B870D70880> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get",
+    "text_tail": "E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None\n     +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x000001B870D70880>('resolution')\n     +    where <built-in method get of dict object at 0x000001B870D70880> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_targeted_retry_validator_voice_only",
+    "time": "0.088",
+    "tag": "failure",
+    "message": "assert 'Retry target: validator_voice.' in 'The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts t...|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}'",
+    "text_tail": "E   assert 'Retry target: validator_voice.' in 'The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts t...|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]",
+    "time": "0.095",
+    "tag": "failure",
+    "message": "AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'",
+    "text_tail": "E   AssertionError: global visibility stock: unexpected player-facing phrase 'for a breath, the scene holds'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]",
+    "time": "0.089",
+    "tag": "failure",
+    "message": "AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'",
+    "text_tail": "E   AssertionError: social visible-intro filler: unexpected player-facing phrase 'stands nearby'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+    "time": "0.094",
+    "tag": "failure",
+    "message": "AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}\n +  where 'unknown' = <built-in method get of dict object at 0x000001B86DC24D40>('reply_kind')\n +    where <built-in method get of dict object at 0x000001B86DC24D40> = {'social_intent_class': 'social_exchange', 'npc_id': 'runner', 'npc_name': 'Tavern Runner', 'target_resolved': True, ...}.get",
+    "text_tail": "E   AssertionError: assert 'unknown' in {'answer', 'explanation', 'refusal'}\n     +  where 'unknown' = <built-in method get of dict object at 0x000001B86DC24D40>('reply_kind')\n     +    where <built-in method get of dict object at 0x000001B86DC24D40> = {'social_intent_class': 'social_exchange', 'npc_id': 'runner', 'npc_name': 'Tavern Runner', 'target_resolved': True, ...}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_known_follow_up_bypasses_uncertainty_fallback",
+    "time": "0.090",
+    "tag": "failure",
+    "message": "assert 'retry_strategy:selected=unresolved_question' in ''\n +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, \"Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})",
+    "text_tail": "E   assert 'retry_strategy:selected=unresolved_question' in ''\n     +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, \"Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_targeted_retry_unresolved_question_only",
+    "time": "0.056",
+    "tag": "failure",
+    "message": "assert 0 == 2\n +  where 0 = len([])",
+    "text_tail": "E   assert 0 == 2\n     +  where 0 = len([])"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_targeted_retry_prefers_highest_priority_failure_first",
+    "time": "0.059",
+    "tag": "failure",
+    "message": "assert 0 == 2\n +  where 0 = len([])",
+    "text_tail": "E   assert 0 == 2\n     +  where 0 = len([])"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback",
+    "time": "0.083",
+    "tag": "failure",
+    "message": "assert 1 == 2\n +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...eserve_agency\": false, \"debug_reasons\": [\"no_stricter_authoritative_contract\", \"question_like_non_hostile_guard\"]}}'}]])",
+    "text_tail": "E   assert 1 == 2\n     +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...eserve_agency\": false, \"debug_reasons\": [\"no_stricter_authoritative_contract\", \"question_like_non_hostile_guard\"]}}'}]])"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+    "time": "0.098",
+    "tag": "failure",
+    "message": "assert 1 == 2\n +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...itative_social_target_requires_dialogue\", \"dialogue_turn_contains_question_expectation\", \"social_question_guard\"]}}'}]])",
+    "text_tail": "E   assert 1 == 2\n     +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...itative_social_target_requires_dialogue\", \"dialogue_turn_contains_question_expectation\", \"social_question_guard\"]}}'}]])"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_targeted_retry_scene_stall_only",
+    "time": "0.080",
+    "tag": "failure",
+    "message": "assert 1 == 2\n +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...st_preserve_agency\": false, \"debug_reasons\": [\"no_stricter_authoritative_contract\", \"courteous_or_passive_guard\"]}}'}]])",
+    "text_tail": "E   assert 1 == 2\n     +  where 1 = len([[{'role': 'system', 'content': 'You are the game master for a solo Pathfinder 1e inspired browser campaign.\\n\\nRule P...st_preserve_agency\": false, \"debug_reasons\": [\"no_stricter_authoritative_contract\", \"courteous_or_passive_guard\"]}}'}]])"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_single_wait_in_tense_scene_forces_interaction_pressure",
+    "time": "0.106",
+    "tag": "failure",
+    "message": "assert False\n +  where False = any(<generator object _assert_concrete_pressure.<locals>.<genexpr> at 0x000001B870EFD970>)",
+    "text_tail": "E   assert False\n     +  where False = any(<generator object _assert_concrete_pressure.<locals>.<genexpr> at 0x000001B870EFD970>)"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_repeated_passive_actions_do_not_stall_into_atmosphere",
+    "time": "0.171",
+    "tag": "failure",
+    "message": "assert False\n +  where False = any(<generator object _assert_concrete_pressure.<locals>.<genexpr> at 0x000001B870EFC110>)",
+    "text_tail": "E   assert False\n     +  where False = any(<generator object _assert_concrete_pressure.<locals>.<genexpr> at 0x000001B870EFC110>)"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_passive_scene_prefers_already_introduced_suspicious_figure",
+    "time": "0.109",
+    "tag": "failure",
+    "message": "AssertionError: assert 'No one here ...settled here.' == 'The square s...on wet stone.'\n  \n  - The square stays hushed except for the scrape of boots on wet stone.\n  + No one here can answer that from what is settled here.",
+    "text_tail": "E   AssertionError: assert 'No one here ...settled here.' == 'The square s...on wet stone.'\n      \n      - The square stays hushed except for the scrape of boots on wet stone.\n      + No one here can answer that from what is settled here."
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_passive_wait_with_recent_suspicious_figure_replaces_weak_atmosphere",
+    "time": "0.102",
+    "tag": "failure",
+    "message": "AssertionError: assert 'No one here ...settled here.' == 'The square s...on wet stone.'\n  \n  - The square stays hushed except for the scrape of boots on wet stone.\n  + No one here can answer that from what is settled here.",
+    "text_tail": "E   AssertionError: assert 'No one here ...settled here.' == 'The square s...on wet stone.'\n      \n      - The square stays hushed except for the scrape of boots on wet stone.\n      + No one here can answer that from what is settled here."
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_repeated_social_questions_keep_npc_uncertainty_voice",
+    "time": "0.093",
+    "tag": "failure",
+    "message": "AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'",
+    "text_tail": "E   AssertionError: assert 'tavern runner' in 'rain rattles over the shutters while the crowd churns.'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+    "time": "0.081",
+    "tag": "failure",
+    "message": "assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None\n +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000001B870D640C0>('resolution')\n +    where <built-in method get of dict object at 0x000001B870D640C0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get",
+    "text_tail": "E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None\n     +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000001B870D640C0>('resolution')\n     +    where <built-in method get of dict object at 0x000001B870D640C0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+    "time": "0.094",
+    "tag": "failure",
+    "message": "assert None in {'discover_clue', 'investigate'}\n +  where None = <built-in method get of dict object at 0x000001B86DC9BB40>('kind')\n +    where <built-in method get of dict object at 0x000001B86DC9BB40> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'I investigate the desk (Is Perception needed?)'}.get",
+    "text_tail": "E   assert None in {'discover_clue', 'investigate'}\n     +  where None = <built-in method get of dict object at 0x000001B86DC9BB40>('kind')\n     +    where <built-in method get of dict object at 0x000001B86DC9BB40> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev...orpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'I investigate the desk (Is Perception needed?)'}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]",
+    "time": "0.108",
+    "tag": "failure",
+    "message": "assert None in {'discover_clue', 'investigate'}\n +  where None = <built-in method get of dict object at 0x000001B870E26A40>('kind')\n +    where <built-in method get of dict object at 0x000001B870E26A40> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev... 'Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?'}.get",
+    "text_tail": "E   assert None in {'discover_clue', 'investigate'}\n     +  where None = <built-in method get of dict object at 0x000001B870E26A40>('kind')\n     +    where <built-in method get of dict object at 0x000001B870E26A40> = {'world_tick_events': [{'type': 'faction_pressure', 'text': \"House Verevin's pressure mounts.\", 'source': 'house_verev... 'Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?'}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]",
+    "time": "0.097",
+    "tag": "failure",
+    "message": "AssertionError",
+    "text_tail": "E   AssertionError"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]",
+    "time": "0.103",
+    "tag": "failure",
+    "message": "AssertionError",
+    "text_tail": "E   AssertionError"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]",
+    "time": "0.105",
+    "tag": "failure",
+    "message": "AssertionError",
+    "text_tail": "E   AssertionError"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_action_outcome_contract_survives_inside_active_social_scene",
+    "time": "0.097",
+    "tag": "failure",
+    "message": "AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'",
+    "text_tail": "E   AssertionError: assert 'desk' in 'for a breath, the scene holds while voices shift around you.'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+    "time": "0.105",
+    "tag": "failure",
+    "message": "AssertionError: assert None == 'roll_requirement_query'\n +  where None = <built-in method get of dict object at 0x000001B870E8DFC0>('category')\n +    where <built-in method get of dict object at 0x000001B870E8DFC0> = {}.get",
+    "text_tail": "E   AssertionError: assert None == 'roll_requirement_query'\n     +  where None = <built-in method get of dict object at 0x000001B870E8DFC0>('category')\n     +    where <built-in method get of dict object at 0x000001B870E8DFC0> = {}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+    "time": "0.090",
+    "tag": "failure",
+    "message": "AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'",
+    "text_tail": "E   AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_action_and_chat_mutate_runtime_before_request_build[via_api_chat]",
+    "time": "0.094",
+    "tag": "failure",
+    "message": "AssertionError: assert 'A map indicates patrol locations.' in (([] or []))\n +  where [] = <built-in method get of dict object at 0x000001B870E25980>('discovered_clues')\n +    where <built-in method get of dict object at 0x000001B870E25980> = {'discovered_clues': [], 'searched_targets': []}.get",
+    "text_tail": "E   AssertionError: assert 'A map indicates patrol locations.' in (([] or []))\n     +  where [] = <built-in method get of dict object at 0x000001B870E25980>('discovered_clues')\n     +    where <built-in method get of dict object at 0x000001B870E25980> = {'discovered_clues': [], 'searched_targets': []}.get"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+    "time": "0.131",
+    "tag": "failure",
+    "message": "AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'",
+    "text_tail": "E   AssertionError: unresolved stock: unexpected player-facing phrase 'from here, no certain answer presents itself'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_social_exchange_blocks_advisory_prose_before_emit",
+    "time": "0.124",
+    "tag": "failure",
+    "message": "AssertionError",
+    "text_tail": "E   AssertionError"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+    "time": "0.171",
+    "tag": "failure",
+    "message": "AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'",
+    "text_tail": "E   AssertionError: assert 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.' != 'Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd.'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
+    "time": "0.301",
+    "tag": "failure",
+    "message": "assert False\n +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x000001B870EFBD30>)",
+    "text_tail": "E   assert False\n     +  where False = any(<generator object test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair.<locals>.<genexpr> at 0x000001B870EFBD30>)"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical",
+    "time": "0.099",
+    "tag": "failure",
+    "message": "AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'",
+    "text_tail": "E   AssertionError: assert 'tavern runner' in 'no one here can answer that from what is settled here.'"
+  },
+  {
+    "classname": "tests.test_turn_pipeline_shared",
+    "name": "test_pipeline_strict_social_ragged_stranger_fallback_repaired",
+    "time": "0.103",
+    "tag": "failure",
+    "message": "AssertionError: assert None\n +  where None = <built-in method get of dict object at 0x000001B870F01B00>('speaker_contract_enforcement_reason')\n +    where <built-in method get of dict object at 0x000001B870F01B00> = {}.get",
+    "text_tail": "E   AssertionError: assert None\n     +  where None = <built-in method get of dict object at 0x000001B870F01B00>('speaker_contract_enforcement_reason')\n     +    where <built-in method get of dict object at 0x000001B870F01B00> = {}.get"
+  }
+]

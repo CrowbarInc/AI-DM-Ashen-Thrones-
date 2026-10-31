@@ -1,0 +1,2590 @@
+[
+  {
+    "case": "target_single_tense_wait",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 1,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": null
+        }
+      ],
+      "visible_facts": [
+        "Guards keep glancing at a missing patrol notice beside the checkpoint.",
+        "A tavern runner lingers under an awning, selling rumors for coin."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": null,
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "Guards keep glancing at a missing patrol notice beside the checkpoint.",
+            "A tavern runner lingers under an awning, selling rumors for coin."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": null,
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "Rain beads on the checkpoint while nobody moves first.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [
+              {
+                "type": "faction_pressure",
+                "text": "House Verevin's pressure mounts.",
+                "source": "house_verevin"
+              },
+              {
+                "type": "faction_pressure",
+                "text": "The Ash Cowl's pressure mounts.",
+                "source": "ash_cowl"
+              }
+            ],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "Rain beads on the checkpoint while nobody moves first.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [
+                {
+                  "text": "Rain beads on the checkpoint while nobody moves first.",
+                  "kind": "incidental_fact",
+                  "epistemic_status": "world_truth",
+                  "grounded": false,
+                  "consequential": false,
+                  "family": "incidental"
+                }
+              ],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [
+                  {
+                    "text": "Rain beads on the checkpoint while nobody moves first.",
+                    "provenance": "bounded_incidental",
+                    "consequence": "low",
+                    "authorized": true,
+                    "reason_codes": [
+                      "bounded_incidental_texture"
+                    ],
+                    "authority": "bounded_incidental",
+                    "persistence": "runtime_incidental",
+                    "source_ref": "",
+                    "outcome_classification": "epistemically_qualified",
+                    "semantic_identity": {}
+                  }
+                ],
+                "claim_results": [
+                  {
+                    "text": "Rain beads on the checkpoint while nobody moves first.",
+                    "semantic_identity": {},
+                    "provenance": "bounded_incidental",
+                    "authority": "bounded_incidental",
+                    "epistemic_status": "",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "runtime_incidental",
+                    "authorized": true,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "bounded_incidental_texture"
+                    ]
+                  }
+                ]
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "Guards keep glancing at a missing patrol notice beside the checkpoint.",
+            "A tavern runner lingers under an awning, selling rumors for coin."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case": "target_repeated_passive",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 1,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": null
+        }
+      ],
+      "visible_facts": [
+        "A guard leans near the checkpoint, watching the road.",
+        "A missing patrol notice curls in the damp beside him."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": null,
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A guard leans near the checkpoint, watching the road.",
+            "A missing patrol notice curls in the damp beside him."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": null,
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "The damp air hangs over the gate as everyone watches everyone else.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [
+              {
+                "type": "faction_pressure",
+                "text": "House Verevin's pressure mounts.",
+                "source": "house_verevin"
+              },
+              {
+                "type": "faction_pressure",
+                "text": "The Ash Cowl's pressure mounts.",
+                "source": "ash_cowl"
+              }
+            ],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "The damp air hangs over the gate as everyone watches everyone else.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [],
+                "claim_results": []
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A guard leans near the checkpoint, watching the road.",
+            "A missing patrol notice curls in the damp beside him."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      },
+      {
+        "input": "I hold position and watch.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A guard leans near the checkpoint, watching the road.",
+            "A missing patrol notice curls in the damp beside him."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "As you watch the scene, a guard leans near the checkpoint, watching the road.",
+          "matched_phrases": [],
+          "tags": [
+            "retry_escape_hatch",
+            "forced_retry_fallback",
+            "retry_exhausted",
+            "scene_momentum:consequence_or_opportunity",
+            "passive_scene_pressure"
+          ],
+          "debug_notes": "retry_strategy:selected=scene_stall:attempt=2:reasons=scene_stall:momentum_due_without_progress | retry_context_separation_trace:contract_resolved=True:source=response_policy.context_separation:prior_trouble=False:local_first=False:pf_allowed=False | retry_escape_hatch:class=scene_stall:reasons=scene_stall:momentum_due_without_progress | passive_scene_pressure:visible_figure:streak=2",
+          "final_route": "forced_retry_fallback",
+          "fallback_kind": "retry_escape_hatch",
+          "retry_failure_class": "scene_stall",
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [
+              {
+                "type": "faction_pressure",
+                "text": "Ordo Pyric's pressure mounts.",
+                "source": "ordo_pyric"
+              }
+            ],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": null,
+            "provenance": null,
+            "text": null,
+            "hard_validation": null
+          },
+          "pressure_hook": [
+            {
+              "before": "As you watch the scene, a guard leans near the checkpoint, watching the road.",
+              "after": "As you watch the scene, a guard leans near the checkpoint, watching the road.\n\nAs you watch the scene, a guard leans near the checkpoint, watching the road.",
+              "changed": true,
+              "tags": [
+                "retry_escape_hatch",
+                "forced_retry_fallback",
+                "retry_exhausted",
+                "scene_momentum:consequence_or_opportunity",
+                "passive_scene_pressure"
+              ],
+              "debug_notes": "retry_strategy:selected=scene_stall:attempt=2:reasons=scene_stall:momentum_due_without_progress | retry_context_separation_trace:contract_resolved=True:source=response_policy.context_separation:prior_trouble=False:local_first=False:pf_allowed=False | retry_escape_hatch:class=scene_stall:reasons=scene_stall:momentum_due_without_progress | passive_scene_pressure:visible_figure:streak=2"
+            }
+          ]
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 2,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "Ordo Pyric's pressure mounts.",
+              "source": "ordo_pyric"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 4,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 4,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 3,
+              "agenda_progress": 2
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A guard leans near the checkpoint, watching the road.",
+            "A missing patrol notice curls in the damp beside him."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 2,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I hold position and watch.",
+            "momentum_exchanges_since": 0,
+            "momentum_next_due_in": 3,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              },
+              {
+                "text": "I hold position and watch.",
+                "passive": true,
+                "markers": [
+                  "hold_position",
+                  "watch"
+                ],
+                "resolution_kind": null,
+                "turn": 2
+              }
+            ],
+            "recent_contextual_leads": [
+              {
+                "key": "visible_suspicious_figure_as_you_near_the_checkpoint_watching_the_road",
+                "kind": "visible_suspicious_figure",
+                "subject": "as you",
+                "position": "near the checkpoint, watching the road",
+                "named": false,
+                "positioned": true,
+                "mentions": 1,
+                "last_turn": 2
+              }
+            ],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case": "A_quiet_wait",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 0,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": null
+        }
+      ],
+      "visible_facts": [
+        "Filing shelves crowd one wall; loose papers curl at the edges.",
+        "A brass compass sits beside a blot of spilled ink on the desk."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": null,
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 0,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "Filing shelves crowd one wall; loose papers curl at the edges.",
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": null,
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "The lamp stays steady over the desk.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "The lamp stays steady over the desk.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [],
+                "claim_results": []
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "Filing shelves crowd one wall; loose papers curl at the edges.",
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case": "B_scheduled_faction_threshold",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 0,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": null
+        }
+      ],
+      "visible_facts": [
+        "A brass compass sits beside a blot of spilled ink on the desk."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": null,
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 0,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": null,
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "The lamp stays steady over the desk.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [
+              {
+                "type": "faction_pressure",
+                "text": "House Verevin's pressure mounts.",
+                "source": "house_verevin"
+              }
+            ],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "The lamp stays steady over the desk.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [],
+                "claim_results": []
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case": "C_mobile_npc_pending_move",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 0,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "mobile",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": "scene_investigate"
+        }
+      ],
+      "visible_facts": [
+        "A brass compass sits beside a blot of spilled ink on the desk."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": null,
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 0,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "mobile",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": "scene_investigate"
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": null,
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "The lamp stays steady over the desk.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [
+              {
+                "type": "npc_moved",
+                "text": "Tavern Runner moves off-screen to scene_investigate.",
+                "npc_id": "tavern_runner",
+                "from_scene": "frontier_gate",
+                "to_scene": "scene_investigate"
+              }
+            ],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "The lamp stays steady over the desk.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [],
+                "claim_results": []
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "npc_moved",
+              "text": "Tavern Runner moves off-screen to scene_investigate.",
+              "npc_id": "tavern_runner",
+              "from_scene": "frontier_gate",
+              "to_scene": "scene_investigate"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "scene_investigate",
+              "availability": "mobile",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": "scene_investigate"
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case": "E_repeated_quiet_wait",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 0,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 0,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": null
+        }
+      ],
+      "visible_facts": [
+        "A brass compass sits beside a blot of spilled ink on the desk."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": null,
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 0,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 0,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": null,
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "The lamp stays steady over the desk.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "The lamp stays steady over the desk.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [],
+                "claim_results": []
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      },
+      {
+        "input": "I hold position and watch.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 1,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "A brass compass sits beside a blot of spilled ink on the desk reads a little finer when you let the noise thin. A brass compass sits beside a blot of spilled ink on the desk stands out more sharply on a second pass.",
+          "matched_phrases": [],
+          "tags": [
+            "retry_escape_hatch",
+            "forced_retry_fallback",
+            "retry_exhausted",
+            "scene_momentum:consequence_or_opportunity",
+            "passive_scene_pressure"
+          ],
+          "debug_notes": "retry_strategy:selected=scene_stall:attempt=2:reasons=scene_stall:momentum_due_without_progress | retry_context_separation_trace:contract_resolved=True:source=response_policy.context_separation:prior_trouble=False:local_first=False:pf_allowed=False | retry_escape_hatch:class=scene_stall:reasons=scene_stall:momentum_due_without_progress | passive_scene_pressure:fallback:streak=2",
+          "final_route": "forced_retry_fallback",
+          "fallback_kind": "retry_escape_hatch",
+          "retry_failure_class": "scene_stall",
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": null,
+            "provenance": null,
+            "text": null,
+            "hard_validation": null
+          },
+          "pressure_hook": [
+            {
+              "before": "A brass compass sits beside a blot of spilled ink on the desk reads a little finer when you let the noise thin.",
+              "after": "A brass compass sits beside a blot of spilled ink on the desk reads a little finer when you let the noise thin.\n\nA brass compass sits beside a blot of spilled ink on the desk stands out more sharply on a second pass.",
+              "changed": true,
+              "tags": [
+                "retry_escape_hatch",
+                "forced_retry_fallback",
+                "retry_exhausted",
+                "scene_momentum:consequence_or_opportunity",
+                "passive_scene_pressure"
+              ],
+              "debug_notes": "retry_strategy:selected=scene_stall:attempt=2:reasons=scene_stall:momentum_due_without_progress | retry_context_separation_trace:contract_resolved=True:source=response_policy.context_separation:prior_trouble=False:local_first=False:pf_allowed=False | retry_escape_hatch:class=scene_stall:reasons=scene_stall:momentum_due_without_progress | passive_scene_pressure:fallback:streak=2"
+            }
+          ]
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 2,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 2
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 2,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 2,
+              "agenda_progress": 2
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 2,
+              "agenda_progress": 2
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "A brass compass sits beside a blot of spilled ink on the desk."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 2,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I hold position and watch.",
+            "momentum_exchanges_since": 0,
+            "momentum_next_due_in": 3,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              },
+              {
+                "text": "I hold position and watch.",
+                "passive": true,
+                "markers": [
+                  "hold_position",
+                  "watch"
+                ],
+                "resolution_kind": null,
+                "turn": 2
+              }
+            ],
+            "recent_contextual_leads": [],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  },
+  {
+    "case": "F_valid_atmosphere",
+    "initial": {
+      "label": "initial",
+      "current_date": "Day 1",
+      "turn_counter": 0,
+      "session_clocks": {
+        "suspicion": 0,
+        "unrest": 0,
+        "danger": 0,
+        "occult_instability": 0,
+        "time_pressure": 0
+      },
+      "world_clocks": {},
+      "world_flags": {},
+      "projects": [],
+      "event_log": [],
+      "factions": [
+        {
+          "id": "house_verevin",
+          "name": "House Verevin",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ash_cowl",
+          "name": "The Ash Cowl",
+          "pressure": 2,
+          "agenda_progress": 0
+        },
+        {
+          "id": "ordo_pyric",
+          "name": "Ordo Pyric",
+          "pressure": 1,
+          "agenda_progress": 0
+        }
+      ],
+      "npcs": [
+        {
+          "id": "guard_captain",
+          "name": "Guard Captain",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "patrol_gate",
+          "agenda_move_to_scene_id": null
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "location": "frontier_gate",
+          "availability": "available",
+          "current_agenda": "sell_rumors",
+          "agenda_move_to_scene_id": null
+        }
+      ],
+      "visible_facts": [
+        "Filing shelves crowd one wall; loose papers curl at the edges.",
+        "A brass compass sits beside a blot of spilled ink on the desk.",
+        "Rain taps at shutter slats while distant bells mark the ward."
+      ],
+      "scene_id": "scene_investigate",
+      "scene_location": "Investigator's Office",
+      "runtime": {
+        "passive_action_streak": null,
+        "last_player_action_passive": null,
+        "last_player_action_text": null,
+        "momentum_exchanges_since": null,
+        "momentum_next_due_in": null,
+        "recent_player_actions": null,
+        "recent_contextual_leads": [
+          {
+            "key": "tattered-man-by-the-shuttered-well",
+            "kind": "visible_suspicious_figure",
+            "subject": "the tattered man",
+            "position": "by the shuttered well",
+            "named": false,
+            "positioned": true,
+            "mentions": 2,
+            "last_turn": 1
+          }
+        ],
+        "pending_leads": null
+      }
+    },
+    "turns": [
+      {
+        "input": "I wait.",
+        "http_status": 200,
+        "before": {
+          "label": "before_turn",
+          "current_date": "Day 1",
+          "turn_counter": 0,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 0
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 2,
+              "agenda_progress": 0
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 1,
+              "agenda_progress": 0
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "Filing shelves crowd one wall; loose papers curl at the edges.",
+            "A brass compass sits beside a blot of spilled ink on the desk.",
+            "Rain taps at shutter slats while distant bells mark the ward."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": null,
+            "last_player_action_passive": null,
+            "last_player_action_text": null,
+            "momentum_exchanges_since": null,
+            "momentum_next_due_in": null,
+            "recent_player_actions": null,
+            "recent_contextual_leads": [
+              {
+                "key": "tattered-man-by-the-shuttered-well",
+                "kind": "visible_suspicious_figure",
+                "subject": "the tattered man",
+                "position": "by the shuttered well",
+                "named": false,
+                "positioned": true,
+                "mentions": 2,
+                "last_turn": 1
+              }
+            ],
+            "pending_leads": null
+          }
+        },
+        "response": {
+          "status": true,
+          "player_facing_text": "The square stays hushed except for the scrape of boots on wet stone.",
+          "matched_phrases": [],
+          "tags": [],
+          "debug_notes": "",
+          "final_route": null,
+          "fallback_kind": null,
+          "retry_failure_class": null,
+          "contract": {
+            "kind": null,
+            "selected_resolver": "generation",
+            "operation": "unresolved",
+            "interlocutor_id": null,
+            "resolution_subject": null,
+            "passive_interruption_wait": null,
+            "world_tick_events": [
+              {
+                "type": "faction_pressure",
+                "text": "House Verevin's pressure mounts.",
+                "source": "house_verevin"
+              },
+              {
+                "type": "faction_pressure",
+                "text": "The Ash Cowl's pressure mounts.",
+                "source": "ash_cowl"
+              }
+            ],
+            "immutable": null,
+            "accepted_text": null,
+            "accepted_provenance": null,
+            "hard_valid": null
+          },
+          "accepted_response": {
+            "immutable": true,
+            "provenance": "initial_generation",
+            "text": "The square stays hushed except for the scrape of boots on wet stone.",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [],
+              "gm_resolution_decision_audit": {
+                "decision_id": "rc_d372b1ecef9a",
+                "hard_valid": true,
+                "violations": [],
+                "proposed_facts": [
+                  {
+                    "text": "The square stays hushed except for the scrape of boots on wet stone.",
+                    "provenance": "bounded_incidental",
+                    "consequence": "low",
+                    "authorized": true,
+                    "reason_codes": [
+                      "bounded_incidental_texture"
+                    ],
+                    "authority": "bounded_incidental",
+                    "persistence": "runtime_incidental",
+                    "source_ref": "",
+                    "outcome_classification": "epistemically_qualified",
+                    "semantic_identity": {}
+                  }
+                ],
+                "claim_results": [
+                  {
+                    "text": "The square stays hushed except for the scrape of boots on wet stone.",
+                    "semantic_identity": {},
+                    "provenance": "bounded_incidental",
+                    "authority": "bounded_incidental",
+                    "epistemic_status": "",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "runtime_incidental",
+                    "authorized": true,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "bounded_incidental_texture"
+                    ]
+                  }
+                ]
+              },
+              "decision_acceptance_why": "initial_hard_valid"
+            }
+          },
+          "pressure_hook": []
+        },
+        "after": {
+          "label": "after_turn",
+          "current_date": "Day 1",
+          "turn_counter": 1,
+          "session_clocks": {
+            "suspicion": 0,
+            "unrest": 0,
+            "danger": 0,
+            "occult_instability": 0,
+            "time_pressure": 1
+          },
+          "world_clocks": {},
+          "world_flags": {},
+          "projects": [],
+          "event_log": [
+            {
+              "type": "faction_pressure",
+              "text": "House Verevin's pressure mounts.",
+              "source": "house_verevin"
+            },
+            {
+              "type": "faction_pressure",
+              "text": "The Ash Cowl's pressure mounts.",
+              "source": "ash_cowl"
+            }
+          ],
+          "factions": [
+            {
+              "id": "house_verevin",
+              "name": "House Verevin",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ash_cowl",
+              "name": "The Ash Cowl",
+              "pressure": 3,
+              "agenda_progress": 1
+            },
+            {
+              "id": "ordo_pyric",
+              "name": "Ordo Pyric",
+              "pressure": 2,
+              "agenda_progress": 1
+            }
+          ],
+          "npcs": [
+            {
+              "id": "guard_captain",
+              "name": "Guard Captain",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "patrol_gate",
+              "agenda_move_to_scene_id": null
+            },
+            {
+              "id": "tavern_runner",
+              "name": "Tavern Runner",
+              "location": "frontier_gate",
+              "availability": "available",
+              "current_agenda": "sell_rumors",
+              "agenda_move_to_scene_id": null
+            }
+          ],
+          "visible_facts": [
+            "Filing shelves crowd one wall; loose papers curl at the edges.",
+            "A brass compass sits beside a blot of spilled ink on the desk.",
+            "Rain taps at shutter slats while distant bells mark the ward."
+          ],
+          "scene_id": "scene_investigate",
+          "scene_location": "Investigator's Office",
+          "runtime": {
+            "passive_action_streak": 1,
+            "last_player_action_passive": true,
+            "last_player_action_text": "I wait.",
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "recent_player_actions": [
+              {
+                "text": "I wait.",
+                "passive": true,
+                "markers": [
+                  "wait"
+                ],
+                "resolution_kind": null,
+                "turn": 1
+              }
+            ],
+            "recent_contextual_leads": [
+              {
+                "key": "tattered-man-by-the-shuttered-well",
+                "kind": "visible_suspicious_figure",
+                "subject": "the tattered man",
+                "position": "by the shuttered well",
+                "named": false,
+                "positioned": true,
+                "mentions": 2,
+                "last_turn": 1
+              }
+            ],
+            "pending_leads": []
+          }
+        }
+      }
+    ]
+  }
+]

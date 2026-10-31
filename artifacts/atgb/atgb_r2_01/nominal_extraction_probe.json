@@ -1,0 +1,31 @@
+{
+  "evidence_scope": "structural_only",
+  "semantic_behavioral_evidence": false,
+  "method": "AST-selected unmodified pure regex helpers; no gameplay modules imported",
+  "source": "game/interaction_completion.py",
+  "source_sha256": "39d63fa6069354c817d45952a80f6e56c258b412f5c4d742d37ab7bd749d57f7",
+  "results": [
+    {
+      "player_input": "If I ask you again later, will you still tell me that same thing?",
+      "extracted_nominal": "you again later",
+      "content_words": [
+        "you",
+        "again",
+        "later"
+      ]
+    },
+    {
+      "player_input": "Tell me more about that.",
+      "extracted_nominal": "me more",
+      "content_words": [
+        "me",
+        "more"
+      ]
+    },
+    {
+      "player_input": "Who told you that?",
+      "extracted_nominal": "",
+      "content_words": []
+    }
+  ]
+}

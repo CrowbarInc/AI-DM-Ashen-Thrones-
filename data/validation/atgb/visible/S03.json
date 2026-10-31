@@ -1,0 +1,130 @@
+{
+  "scenario_id": "S03",
+  "title": "The runner's account",
+  "catalog_heading": "S03 — The runner's account",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "development_visible",
+  "catalog_partition": "development-visible",
+  "evidence_status": "development_visible",
+  "evidence_status_note": "Developers may open this conversation while diagnosing a failure.",
+  "primary_capability": "npc_dialogue_coherence",
+  "secondary_capabilities": ["conversational_continuity", "corrections_and_clarifications", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. No active interlocutor.",
+  "authoritative_facts": [
+    "The runner's only owned topic is the footprint rumor, as hearsay.",
+    "The notice's track sentence is not this NPC's topic unless the player introduces it, as S03.4 does."
+  ],
+  "npc_knowledge": [
+    "Tavern Runner may say the heard rumor.",
+    "The runner does not have an authored source, an authored price, or an authored promise of a second rumor.",
+    "A commitment to repeat this same rumor is compatible with current_agenda sell_rumors. A commitment to a new secret is not."
+  ],
+  "expected_outcomes": [
+    "The runner is the speaker.",
+    "The rumor stays hearsay.",
+    "The source is unknown.",
+    "The same rumor can be repeated later.",
+    "The notice comparison does not weld the two accounts into one witness."
+  ],
+  "acceptable_variations": [
+    "The runner may mention that stew is also on offer, then answer the rumor.",
+    "Another speaker describing what the runner is hawking can pass S03.1 only if the player is not left talking to the wrong person on S03.2."
+  ],
+  "unacceptable_behaviors": [
+    "Gate Guard or Gate Serjeant delivering this rumor as their own knowledge.",
+    "A named informant, a coin price, a new faction, the Thoran sentence, or the route-change sentence spoken as the runner's rumor."
+  ],
+  "required_evidence": ["Shared packet plus speaker id on each turn."],
+  "setup_dependencies": [
+    "Question-only lines can collapse to the sole world NPC in some older paths. Here the player names the runner. Binding anyone else is an interpretation failure, not an excuse."
+  ],
+  "determinism": "provider-dependent for wording; the addressee and the owned sentence are host-checkable when the social path binds tavern_runner.",
+  "turns": [
+    {
+      "turn_id": "S03.1",
+      "catalog_heading": "S03.1 — primary: NPC dialogue coherence",
+      "primary_capability": "npc_dialogue_coherence",
+      "player_input": "Tavern runner, what's the rumor you're selling?",
+      "communicative_act": "Social question to tavern_runner.",
+      "interpretation_pass": "Social question to tavern_runner.",
+      "response_pass": "The footprint rumor, marked as heard or sold rumor, not as a confirmed sighting by the player.",
+      "authority_pass": "No extra witness, place, or time.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Speaker id."]
+    },
+    {
+      "turn_id": "S03.2",
+      "catalog_heading": "S03.2 — primary: NPC dialogue coherence",
+      "primary_capability": "npc_dialogue_coherence",
+      "player_input": "Who told you that?",
+      "communicative_act": "Source question about the rumor just given.",
+      "interpretation_pass": "Source question about the rumor just given.",
+      "response_pass": "The runner does not name a source. Uncertainty or a refusal to invent one.",
+      "authority_pass": "No new proper noun.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["A named informant."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if that is the rumor from S03.1. lost if the runner answers about Thoran, the curfew, or a different story.",
+      "required_evidence": ["Speaker id."]
+    },
+    {
+      "turn_id": "S03.3",
+      "catalog_heading": "S03.3 — primary: NPC dialogue coherence",
+      "primary_capability": "npc_dialogue_coherence",
+      "player_input": "If I ask you again later, will you still tell me that same thing?",
+      "communicative_act": "A commitment question, not a purchase and not a request for a new rumor.",
+      "interpretation_pass": "A commitment question, not a purchase and not a request for a new rumor.",
+      "response_pass": "The runner can repeat this rumor, or says they only have this one. The answer is about the same claim.",
+      "authority_pass": "No price, no second secret, and no quest.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved when the commitment refers to the footprint rumor. lost when the runner commits to a story that was never told.",
+      "required_evidence": ["Speaker id."]
+    },
+    {
+      "turn_id": "S03.4",
+      "catalog_heading": "S03.4 — primary: conversational continuity",
+      "primary_capability": "conversational_continuity",
+      "player_input": "Earlier the notice said they took a track past the crates. Is that the same story you heard?",
+      "communicative_act": "Comparison of two accounts. The player brings the notice content in. The scenario does not depend on S02.",
+      "interpretation_pass": "Comparison of two accounts.",
+      "response_pass": "They are similar and not identical. The runner heard footprints northwest of the crates. The notice line, as the player stated it, is the track past the crates. The reply may say the runner cannot confirm the notice.",
+      "authority_pass": "No claim that one person saw both, and no denial that the runner just told the footprint rumor.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Welding the two accounts into one witness."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved for the S03.1 rumor. The notice clause is in the player's current line, so forgetting the rumor is the continuity failure that matters.",
+      "required_evidence": ["Speaker id."]
+    },
+    {
+      "turn_id": "S03.5",
+      "catalog_heading": "S03.5 — primary: corrections and clarifications",
+      "primary_capability": "corrections_and_clarifications",
+      "player_input": "No, I don't want a new rumor. I want to know if those two accounts match.",
+      "communicative_act": "Correction that rejects a new story and repeats the comparison.",
+      "interpretation_pass": "Correction that rejects a new story and repeats the comparison.",
+      "response_pass": "The match question is answered as in S03.4, briefly.",
+      "authority_pass": "Still no welded witness and no new rumor.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if both accounts remain the footprint rumor and the track-past-the-crates line. lost if either account is replaced.",
+      "required_evidence": ["Speaker id."]
+    }
+  ]
+}

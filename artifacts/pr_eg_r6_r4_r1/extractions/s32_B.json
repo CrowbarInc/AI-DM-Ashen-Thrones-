@@ -1,0 +1,78 @@
+{
+  "family": "s32",
+  "architecture": "B",
+  "source_ids": [
+    "s32"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f1",
+        "source_id": "s32",
+        "relationship": "ratified",
+        "roles": [
+          {
+            "name": "agent",
+            "value": "The harbor assembly",
+            "evidence": "The harbor assembly ratified the pilots' compact"
+          },
+          {
+            "name": "object",
+            "value": "the pilots' compact",
+            "evidence": "The harbor assembly ratified the pilots' compact"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [
+          "after three readings"
+        ],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "The harbor assembly ratified the pilots' compact after three readings"
+      },
+      "validation": {
+        "level": "STRUCTURALLY_VALID",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    },
+    {
+      "fact": {
+        "fact_id": "f2",
+        "source_id": "s32",
+        "relationship": "deferred",
+        "roles": [
+          {
+            "name": "agent",
+            "value": "The harbor assembly",
+            "evidence": "The harbor assembly deferred the dredging charter"
+          },
+          {
+            "name": "object",
+            "value": "the dredging charter",
+            "evidence": "The harbor assembly deferred the dredging charter"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "but deferred the dredging charter"
+      },
+      "validation": {
+        "level": "STRUCTURALLY_VALID",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

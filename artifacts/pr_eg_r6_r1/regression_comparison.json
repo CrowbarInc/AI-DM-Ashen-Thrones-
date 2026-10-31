@@ -1,0 +1,291 @@
+{
+  "baseline_passed": 222,
+  "baseline_failed": 26,
+  "final_passed": 231,
+  "final_failed": 70,
+  "new_failures": {
+    "tests.test_pr_eg_r2c_speech_adoption::test_authorized_disclosure_survives_superseded_candidate_and_json_roundtrip[Guards watch the north gate throughout the night.]": {
+      "failed": true,
+      "message": "assert 'guards watch the north gate throughout the night' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'guards watch the north gate throughout the night' = <built-in method rstrip of str object at 0x00000194C8092970>('.')\n +    where <built-in method rstrip of str object at 0x00000194C8092970> = 'guards watch the north gate throughout the night.'.rstrip\n +      where 'guards watch the north gate throughout the night.' = <built-in method lower of str object at 0x00000194C8093150>()\n +        where <built-in method lower of str object at 0x00000194C8093150> = 'Guards watch the north gate throughout the night.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194C80925B0>()\n +    where <built-in method lower of str object at 0x00000194C80925B0> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_authorized_disclosure_survives_superseded_candidate_and_json_roundtrip[The patrol changes every hour at the east post.]": {
+      "failed": true,
+      "message": "assert 'the patrol changes every hour at the east post' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'the patrol changes every hour at the east post' = <built-in method rstrip of str object at 0x00000194CBEBDDD0>('.')\n +    where <built-in method rstrip of str object at 0x00000194CBEBDDD0> = 'the patrol changes every hour at the east post.'.rstrip\n +      where 'the patrol changes every hour at the east post.' = <built-in method lower of str object at 0x00000194C80931B0>()\n +        where <built-in method lower of str object at 0x00000194C80931B0> = 'The patrol changes every hour at the east post.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBDD10>()\n +    where <built-in method lower of str object at 0x00000194CBEBDD10> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_authorized_disclosure_survives_superseded_candidate_and_json_roundtrip[The council owns the eastern ferry.]": {
+      "failed": true,
+      "message": "assert 'the council owns the eastern ferry' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'the council owns the eastern ferry' = <built-in method rstrip of str object at 0x00000194CBF0A4C0>('.')\n +    where <built-in method rstrip of str object at 0x00000194CBF0A4C0> = 'the council owns the eastern ferry.'.rstrip\n +      where 'the council owns the eastern ferry.' = <built-in method lower of str object at 0x00000194C8A5F960>()\n +        where <built-in method lower of str object at 0x00000194C8A5F960> = 'The council owns the eastern ferry.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBDE90>()\n +    where <built-in method lower of str object at 0x00000194CBEBDE90> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_authorized_disclosure_survives_superseded_candidate_and_json_roundtrip[I have heard the council may own it, but I am not sure.]": {
+      "failed": true,
+      "message": "assert 'i have heard the council may own it, but i am not sure' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'i have heard the council may own it, but i am not sure' = <built-in method rstrip of str object at 0x00000194C80925B0>('.')\n +    where <built-in method rstrip of str object at 0x00000194C80925B0> = 'i have heard the council may own it, but i am not sure.'.rstrip\n +      where 'i have heard the council may own it, but i am not sure.' = <built-in method lower of str object at 0x00000194C8093210>()\n +        where <built-in method lower of str object at 0x00000194C8093210> = 'I have heard the council may own it, but I am not sure.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBE5F450>()\n +    where <built-in method lower of str object at 0x00000194CBE5F450> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_authorized_disclosure_survives_superseded_candidate_and_json_roundtrip[The street beyond the gate is called the north road.]": {
+      "failed": true,
+      "message": "assert 'the street beyond the gate is called the north road' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'the street beyond the gate is called the north road' = <built-in method rstrip of str object at 0x00000194CBEBDD10>('.')\n +    where <built-in method rstrip of str object at 0x00000194CBEBDD10> = 'the street beyond the gate is called the north road.'.rstrip\n +      where 'the street beyond the gate is called the north road.' = <built-in method lower of str object at 0x00000194C8093270>()\n +        where <built-in method lower of str object at 0x00000194C8093270> = 'The street beyond the gate is called the north road.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBDEF0>()\n +    where <built-in method lower of str object at 0x00000194CBEBDEF0> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_frozen_holdout[H1]": {
+      "failed": true,
+      "message": "assert 'the west archive remains open at midnight' in 'archivist iona says, \"i cannot share that information.\"'\n +  where 'the west archive remains open at midnight' = <built-in method rstrip of str object at 0x00000194CBEBE1F0>('.')\n +    where <built-in method rstrip of str object at 0x00000194CBEBE1F0> = 'the west archive remains open at midnight.'.rstrip\n +      where 'the west archive remains open at midnight.' = <built-in method lower of str object at 0x00000194CBD887B0>()\n +        where <built-in method lower of str object at 0x00000194CBD887B0> = 'The west archive remains open at midnight.'.lower\n +  and   'archivist iona says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBE130>()\n +    where <built-in method lower of str object at 0x00000194CBEBE130> = 'Archivist Iona says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_frozen_holdout[H2]": {
+      "failed": true,
+      "message": "assert 'i have heard the council may own it, but i am not sure' in 'ferryman orr says, \"i cannot share that information.\"'\n +  where 'i have heard the council may own it, but i am not sure' = <built-in method rstrip of str object at 0x00000194CBEBE3D0>('.')\n +    where <built-in method rstrip of str object at 0x00000194CBEBE3D0> = 'i have heard the council may own it, but i am not sure.'.rstrip\n +      where 'i have heard the council may own it, but i am not sure.' = <built-in method lower of str object at 0x00000194CBD88DB0>()\n +        where <built-in method lower of str object at 0x00000194CBD88DB0> = 'I have heard the council may own it, but I am not sure.'.lower\n +  and   'ferryman orr says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBE2B0>()\n +    where <built-in method lower of str object at 0x00000194CBEBE2B0> = 'Ferryman Orr says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_frozen_holdout[H6]": {
+      "failed": true,
+      "message": "assert 'the west archive remains open at midnight' in 'archivist iona says, \"i cannot share that information.\"'\n +  where 'the west archive remains open at midnight' = <built-in method rstrip of str object at 0x00000194C80925B0>('.')\n +    where <built-in method rstrip of str object at 0x00000194C80925B0> = 'the west archive remains open at midnight.'.rstrip\n +      where 'the west archive remains open at midnight.' = <built-in method lower of str object at 0x00000194CBD88F90>()\n +        where <built-in method lower of str object at 0x00000194CBD88F90> = 'The west archive remains open at midnight.'.lower\n +  and   'archivist iona says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194C8092310>()\n +    where <built-in method lower of str object at 0x00000194C8092310> = 'Archivist Iona says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_gm_and_absent_npc_recall_remain_owned_by_gm": {
+      "failed": true,
+      "message": "AssertionError: assert ('gm' == 'gm'\n  \n    gm and 'north road' in 'Which earlier statement do you mean?')"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T01]": {
+      "failed": true,
+      "message": "AssertionError: assert 'dialogue_aut...losure_denied' == 'dialogue_aut..._prior_speech'\n  \n  - dialogue_authority.reuse_prior_speech\n  + dialogue_authority.disclosure_denied"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T02]": {
+      "failed": true,
+      "message": "AssertionError: assert 'dialogue_aut...losure_denied' == 'dialogue_aut..._prior_speech'\n  \n  - dialogue_authority.reuse_prior_speech\n  + dialogue_authority.disclosure_denied"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T03]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T04]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T05]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T06]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T09]": {
+      "failed": true,
+      "message": "assert 'guards watch the north gate throughout the night.' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'guards watch the north gate throughout the night.' = <built-in method lower of str object at 0x00000194C8093150>()\n +    where <built-in method lower of str object at 0x00000194C8093150> = 'Guards watch the north gate throughout the night.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBE1F0>()\n +    where <built-in method lower of str object at 0x00000194CBEBE1F0> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T10]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T11]": {
+      "failed": true,
+      "message": "assert 'guards watch the north gate throughout the night.' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'guards watch the north gate throughout the night.' = <built-in method lower of str object at 0x00000194C8093150>()\n +    where <built-in method lower of str object at 0x00000194C8093150> = 'Guards watch the north gate throughout the night.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBE0D0>()\n +    where <built-in method lower of str object at 0x00000194CBEBE0D0> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T12]": {
+      "failed": true,
+      "message": "assert 'guards watch the north gate throughout the night.' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'guards watch the north gate throughout the night.' = <built-in method lower of str object at 0x00000194C8093150>()\n +    where <built-in method lower of str object at 0x00000194C8093150> = 'Guards watch the north gate throughout the night.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CC09F4B0>()\n +    where <built-in method lower of str object at 0x00000194CC09F4B0> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T15]": {
+      "failed": true,
+      "message": "assert 'guards watch the north gate throughout the night.' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'guards watch the north gate throughout the night.' = <built-in method lower of str object at 0x00000194C8093150>()\n +    where <built-in method lower of str object at 0x00000194C8093150> = 'Guards watch the north gate throughout the night.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CBEBE250>()\n +    where <built-in method lower of str object at 0x00000194CBEBE250> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T20]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T21]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T22]": {
+      "failed": true,
+      "message": "assert ('gm' == 'gm'\n  \n    gm and 'Which earlie... do you mean?' == 'Sergeant Mar... north road.\"'\n  \n  - Sergeant Mara said: \"The street beyond the gate is the north road.\"\n  + Which earlier statement do you mean?)"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_topic_grounding_and_recall_matrix[T27]": {
+      "failed": true,
+      "message": "assert 'guards watch the north gate throughout the night.' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'guards watch the north gate throughout the night.' = <built-in method lower of str object at 0x00000194C8093150>()\n +    where <built-in method lower of str object at 0x00000194C8093150> = 'Guards watch the north gate throughout the night.'.lower\n +  and   'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CC09FF30>()\n +    where <built-in method lower of str object at 0x00000194CC09FF30> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_exact_recall_keeps_long_delivered_statement_and_uncertainty": {
+      "failed": true,
+      "message": "assert 'Ves says, \"I...information.\"' == 'Ves mutters,...emain open. \"'\n  \n  - Ves mutters, \"I believe the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. the old archive may remain open. \"\n  + Ves says, \"I cannot share that information.\""
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_historical_watch_reference_does_not_discover_competing_road": {
+      "failed": true,
+      "message": "assert 'Sergeant Mar...information.\"' == 'Sergeant Mar...t the night.\"'\n  \n  - Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"\n  + Sergeant Mara says, \"I cannot share that information.\""
+    },
+    "tests.test_pr_eg_r2c_speech_adoption::test_provider_evidence_cannot_recall_fact_for_incompatible_question": {
+      "failed": true,
+      "message": "assert 'couldn' in 'Sergeant Mara says, \"I cannot share that information.\"'"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_direct_authorized_fact_is_not_replaced_by_generation": {
+      "failed": true,
+      "message": "assert 'throughout the night' in 'sergeant mara says, \"i cannot share that information.\"'\n +  where 'sergeant mara says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CC09CE10>()\n +    where <built-in method lower of str object at 0x00000194CC09CE10> = 'Sergeant Mara says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_t11_t18_proposition_identity_recall_and_ambiguity": {
+      "failed": true,
+      "message": "AssertionError: assert 'The street beyond the gate is the north road.' in 'Which earlier statement do you mean?'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_partial_fact_reaches_the_player_without_topic_promotion": {
+      "failed": true,
+      "message": "assert 'throughout the night' in 'sergeant mara says, \"i cannot share that information.\"'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_frozen_holdout[R1H08]": {
+      "failed": true,
+      "message": "assert 'south road' in 'miller os says, \"i cannot share that information.\"'\n +  where 'south road' = <built-in method lower of str object at 0x00000194CBE1A6F0>()\n +    where <built-in method lower of str object at 0x00000194CBE1A6F0> = 'south road'.lower\n +  and   'miller os says, \"i cannot share that information.\"' = <built-in method lower of str object at 0x00000194CC1A0A50>()\n +    where <built-in method lower of str object at 0x00000194CC1A0A50> = 'Miller Os says, \"I cannot share that information.\"'.lower"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_frozen_holdout[R1H10]": {
+      "failed": true,
+      "message": "AssertionError: assert 'sentries watch the west gate throughout the night.' in 'which earlier statement do you mean?'\n +  where 'sentries watch the west gate throughout the night.' = <built-in method lower of str object at 0x00000194CBDF9FB0>()\n +    where <built-in method lower of str object at 0x00000194CBDF9FB0> = 'Sentries watch the west gate throughout the night.'.lower\n +  and   'which earlier statement do you mean?' = <built-in method lower of str object at 0x00000194CBD44B20>()\n +    where <built-in method lower of str object at 0x00000194CBD44B20> = 'Which earlier statement do you mean?'.lower"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[immediate_clarification]": {
+      "failed": true,
+      "message": "assert False\n +  where False = _contains('Sergeant Mara says, \"I cannot share that information.\"', ['north road'])\n +    where ['north road'] = <built-in method get of dict object at 0x00000194CBE82000>('quote_must_contain')\n +      where <built-in method get of dict object at 0x00000194CBE82000> = {'id': 'immediate_clarification', 'player': 'What did you mean by that?', 'present': ['sergeant_mara'], 'active': 'sergeant_mara', ...}.get"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[pronoun_followup]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'ask'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[paraphrase_followup]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'answer'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[earlier_topic]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'answer'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[gm_about_npc_statement]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'answer'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[repeated_preference]": {
+      "failed": true,
+      "message": "assert False is True"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[conversational_correction]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'answer'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[npc_uncertainty]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'ask'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[absent_npc_reference]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'clarify'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[ambiguous_history]": {
+      "failed": true,
+      "message": "AssertionError: None\nassert None == 'clarify'"
+    },
+    "tests.test_pr_eg_r1_continuity::test_frozen_continuity_holdout[rejected_narration_not_history]": {
+      "failed": true,
+      "message": "assert False\n +  where False = _contains('Sergeant Mara says, \"I cannot share that information.\"', ['north road'])\n +    where ['north road'] = <built-in method get of dict object at 0x00000194CBE95B00>('quote_must_contain')\n +      where <built-in method get of dict object at 0x00000194CBE95B00> = {'id': 'rejected_narration_not_history', 'player': 'What did you mean by that?', 'present': ['sergeant_mara'], 'active': 'sergeant_mara', ...}.get"
+    },
+    "tests.test_pr_eg_r1_continuity::test_followup_quotes_the_delivered_line_without_narration": {
+      "failed": true,
+      "message": "ValueError: Delivered speech speaker does not match adoption"
+    }
+  },
+  "inherited_failures": {
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H01]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H02]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H03]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H04]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H05]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H06]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H07]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H08]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H09]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_frozen_holdout[H10]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_mission_paraphrase_explanation_and_integrity": {
+      "failed": true,
+      "message": "assert ('outside' in 'sergeant mara mutters, \"word is, the street beyond the gate is the north road.\"')\n +  where 'sergeant mara mutters, \"word is, the street beyond the gate is the north road.\"' = <built-in method lower of str object at 0x00000194CBDD5CB0>()\n +    where <built-in method lower of str object at 0x00000194CBDD5CB0> = 'Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"'.lower"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_mission_characterization_blocks_security_reason": {
+      "failed": true,
+      "message": "assert 'easier' in 'sergeant mara says, \"i prefer the evening.\"'\n +  where 'sergeant mara says, \"i prefer the evening.\"' = <built-in method lower of str object at 0x00000194CBD8AA90>()\n +    where <built-in method lower of str object at 0x00000194CBD8AA90> = 'Sergeant Mara says, \"I prefer the evening.\"'.lower"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_rejected_candidate_is_not_delivered_or_retained": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_uncertainty_and_refusal_are_relevant": {
+      "failed": true,
+      "message": "assert \"don't know\" in 'sergeant mara says, \"i couldn\\'t tell you.\"'\n +  where 'sergeant mara says, \"i couldn\\'t tell you.\"' = <built-in method lower of str object at 0x00000194CC09CFF0>()\n +    where <built-in method lower of str object at 0x00000194CC09CFF0> = 'Sergeant Mara says, \"I couldn\\'t tell you.\"'.lower"
+    },
+    "tests.test_pr_eg_r3_expressive_dialogue::test_verbatim_explanation_is_not_adopted": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_t01_t02_authorized_preference_explanation_allows_harmless_grammar": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_t03_t06_unauthorized_explanations_are_rejected": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_t19_t23_answer_sufficiency_and_refusal": {
+      "failed": true,
+      "message": "KeyError: 'answer_sufficiency'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_t24_t28_mixed_rejection_persistence_and_no_canonical_mutation": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_t29_t30_relevant_modules_keep_single_expression_call": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_degree_grammar_can_modify_an_authorized_feeling": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_frozen_holdout[R1H01]": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_frozen_holdout[R1H02]": {
+      "failed": true,
+      "message": "KeyError: 'expression_generation'"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_frozen_holdout[R1H03]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_pr_eg_r3_r1_expression_semantics::test_frozen_holdout[R1H04]": {
+      "failed": true,
+      "message": "TypeError: 'NoneType' object is not subscriptable"
+    },
+    "tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance": {
+      "failed": true,
+      "message": "AssertionError: assert 'authorized_host_speech' == 'initial_generation'\n  \n  - initial_generation\n  + authorized_host_speech"
+    }
+  },
+  "focused_passed": 84
+}

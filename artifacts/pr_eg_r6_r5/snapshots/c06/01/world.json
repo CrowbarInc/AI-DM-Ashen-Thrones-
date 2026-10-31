@@ -1,0 +1,91 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "vesper",
+      "name": "Vesper",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "roster",
+          "text": "Tamsin keeps the night roster.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "letter",
+          "text": "Vesper copied Brin's letter on Monday.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "map",
+          "text": "Brin copied Vesper's map on Thursday.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "seal",
+          "text": "The archive seal phrase is red thread.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    },
+    {
+      "id": "brin",
+      "name": "Brin",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "shelf",
+          "text": "The tax rolls sit on the third shelf.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "letter",
+          "text": "Brin copied Vesper's letter on Monday.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "seal",
+          "text": "The archive seal phrase is red thread.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

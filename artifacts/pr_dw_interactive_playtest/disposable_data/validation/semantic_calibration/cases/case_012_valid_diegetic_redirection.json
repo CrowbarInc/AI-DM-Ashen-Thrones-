@@ -1,0 +1,16 @@
+{
+  "case_id": "case_012_valid_diegetic_redirection",
+  "category": "positive.valid_diegetic_redirection",
+  "player_input": "I glance at the notice.",
+  "prior_context": "The gate guard wants the player moving, but the notice remains visible.",
+  "gm_response": "The notice lists curfew rules and a missing patrol reward before the guard taps the board. \"Read fast, then move.\"",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "The response fulfills the observation before redirecting diegetically.",
+  "provenance": {"kind": "synthetic_boundary_example"},
+  "synthetic": true,
+  "action_type": "observation"
+}

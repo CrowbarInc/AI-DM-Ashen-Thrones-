@@ -1,0 +1,17 @@
+{
+  "case_id": "case_008_valid_terse_dialogue",
+  "category": "positive.valid_terse_dialogue",
+  "player_input": "Did you kill him?",
+  "prior_context": "Direct yes/no accusation in dialogue.",
+  "gm_response": "No.",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "A one-word yes/no answer can be complete in context.",
+  "provenance": {"kind": "synthetic_boundary_example"},
+  "synthetic": true,
+  "action_type": "question",
+  "whether_terseness_is_valid": true
+}

@@ -1,0 +1,42 @@
+{
+  "enabled": true,
+  "authoritative_outcome_available": false,
+  "resolution_kind": "investigate",
+  "success_state_available": false,
+  "mechanical_result_available": false,
+  "active_speaker_id": null,
+  "active_target_id": null,
+  "visible_fact_strings": [
+    "the bell's wooden yoke is split",
+    "the bell's leather hanger is torn"
+  ],
+  "hidden_fact_strings_present": false,
+  "discoverable_hinting_allowed": false,
+  "forbid_unresolved_outcome_assertions": true,
+  "forbid_hidden_fact_assertions": true,
+  "forbid_npc_intent_assertions_without_basis": true,
+  "allow_bounded_intent_reading_only_when_player_asked": false,
+  "allowed_deferrals": [
+    "ask_for_roll",
+    "bounded_uncertainty",
+    "branch_outcome"
+  ],
+  "preferred_deferral_order": [
+    "ask_for_roll",
+    "branch_outcome",
+    "bounded_uncertainty"
+  ],
+  "debug_reason": "narrative_authority: authoritative_outcome=False kind='investigate' mechanical_risky=True",
+  "debug_inputs": {
+    "has_resolution": true,
+    "has_narration_visibility": true,
+    "has_scene_state_anchor_contract": true,
+    "has_speaker_selection_contract": true,
+    "has_session_view": true
+  },
+  "debug_flags": {
+    "mechanical_risky": true,
+    "pending_player_roll": false,
+    "anchor_contract_enabled": true
+  }
+}

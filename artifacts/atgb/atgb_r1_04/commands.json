@@ -1,0 +1,31 @@
+[
+  {
+    "command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_04_readiness.py -q --tb=short --basetemp=development/tmp/atgb_r1_04 --junitxml=artifacts/atgb/atgb_r1_04/targeted.xml > artifacts/atgb/atgb_r1_04/targeted.txt 2>&1",
+    "exit_code": 0,
+    "tests": 28,
+    "failures": 0,
+    "skips": 0,
+    "note": "Initial implementation; superseded by expanded final slice."
+  },
+  {
+    "command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_02_revision_boundary.py tests/test_pr_ef_r4_authorization.py tests/test_state_authority.py -q --tb=short --basetemp=development/tmp/atgb_r1_04_regression --junitxml=artifacts/atgb/atgb_r1_04/regression.xml > artifacts/atgb/atgb_r1_04/regression.txt 2>&1",
+    "exit_code": 1,
+    "tests": null,
+    "failures": null,
+    "skips": null,
+    "note": "Interrupted at existing TestClient boundary after progress output; no JUnit/completed totals. Tool session 94913 terminated with Ctrl-C. No automatic timeout was set; not a completed failure-count result."
+  },
+  {
+    "command": ".venv/Scripts/python.exe -m pytest tests/test_atgb_r1_04_readiness.py tests/test_atgb_r1_02_revision_boundary.py tests/test_state_authority.py -q --tb=short --basetemp=development/tmp/atgb_r1_04_release --junitxml=artifacts/atgb/atgb_r1_04/final.xml > artifacts/atgb/atgb_r1_04/final.txt 2>&1",
+    "exit_code": 0,
+    "tests": 167,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "new_readiness_tests": 36,
+    "existing_r1_02_tests": 105,
+    "existing_state_authority_tests": 26,
+    "duration_seconds": 6.67,
+    "note": "Final authoritative result. Intermediate final/verified directory runs also passed, then final evidence was regenerated after added routing-model assertions. Not a full-suite result."
+  }
+]

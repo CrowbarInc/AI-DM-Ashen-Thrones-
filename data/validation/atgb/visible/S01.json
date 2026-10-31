@@ -1,0 +1,113 @@
+{
+  "scenario_id": "S01",
+  "title": "Gate small talk",
+  "catalog_heading": "S01 — Gate small talk",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "development_visible",
+  "catalog_partition": "development-visible",
+  "evidence_status": "development_visible",
+  "evidence_status_note": "Developers may open this conversation while diagnosing a failure.",
+  "primary_capability": "intent_recognition",
+  "secondary_capabilities": ["response_relevance", "initiative_and_naturalness", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. No interlocutor selected. No clue discovered.",
+  "authoritative_facts": [
+    "The shared visible list applies. Thoran's sentence belongs to gate_guard.",
+    "Stew quality and price are unauthored. The offer of hot stew and rumor is visible.",
+    "Scene remains frontier_gate. Discovering notice_patrol_route on the look, without a board investigation, is an authority failure."
+  ],
+  "npc_knowledge": [
+    "Nobody has spoken. Hidden facts stay hidden.",
+    "A speaker who does not own watch_command does not know a commander beyond what the visible watch presence supports, and does not invent a name."
+  ],
+  "expected_outcomes": [
+    "A look is treated as looking.",
+    "A watch question is treated as a question.",
+    "A stew remark is not answered with the patrol.",
+    "A just-looking line ends the pressure."
+  ],
+  "acceptable_variations": [
+    "GM narration or an NPC remark, as long as the job and the facts hold.",
+    "One sensory detail already in the opening is enough for the look."
+  ],
+  "unacceptable_behaviors": [
+    "A journey, a new location, a hidden fact, a price, a commander other than Thoran stated as fact, or a command menu in place of a reply."
+  ],
+  "required_evidence": [
+    "The shared turn packet. The state diff must show no scene change."
+  ],
+  "setup_dependencies": [
+    "guard_captain and gate_guard are different ids. S01.2 must not be failed solely because the host asks which watch member the player means."
+  ],
+  "determinism": "mixed. S01.2 and S01.3 are provider-dependent if the host does not already hold a grounded answer.",
+  "turns": [
+    {
+      "turn_id": "S01.1",
+      "catalog_heading": "S01.1 — primary: intent recognition",
+      "primary_capability": "intent_recognition",
+      "player_input": "I look around the gate.",
+      "communicative_act": "This is an action, not a question.",
+      "interpretation_pass": "Observation of the current scene.",
+      "response_pass": "At least two visible public facts, in place.",
+      "authority_pass": "No exit, no hidden fact, and no invented building the player then occupies.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "Asking the player what they want to look at is unnecessary_fail.",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Shared turn packet.", "State diff must show no scene change."]
+    },
+    {
+      "turn_id": "S01.2",
+      "catalog_heading": "S01.2 — primary: intent recognition",
+      "primary_capability": "intent_recognition",
+      "player_input": "Who's running the watch tonight?",
+      "communicative_act": "This is a question in ordinary speech.",
+      "interpretation_pass": "Information question, not travel and not combat.",
+      "response_pass": "Either the owning speaker reports that Captain Thoran commands the gate watch tonight, or one focused clarification asks whom to address, or a speaker without that fact says they cannot name the commander.",
+      "authority_pass": "No other personal name is introduced as the commander. No new post, order, or biography.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "necessary_pass only if no addressee can own the fact yet. unnecessary_fail if the owning speaker is already bound and the reply still asks.",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Shared turn packet."]
+    },
+    {
+      "turn_id": "S01.3",
+      "catalog_heading": "S01.3 — primary: response relevance",
+      "primary_capability": "response_relevance",
+      "player_input": "Is the stew any good, or are you just shouting?",
+      "communicative_act": "A question about the visible stew offer, addressed to the runner if an addressee is chosen.",
+      "interpretation_pass": "A question about the visible stew offer.",
+      "response_pass": "Stays on stew or on the fact that the runner is hawking stew and rumor. Quality may be unknown. A reply that only restates the missing-patrol warning fails response even if that warning is true.",
+      "authority_pass": "No price, no serving, and no coin. The patrol route is not the answer.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Answering with the patrol route."],
+      "clarification_expected": "none",
+      "clarification_notes": "unnecessary_fail if the player is asked whether they meant stew or the weather.",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Shared turn packet."]
+    },
+    {
+      "turn_id": "S01.4",
+      "catalog_heading": "S01.4 — primary: initiative and naturalness",
+      "primary_capability": "initiative_and_naturalness",
+      "player_input": "Fair enough. I'm just getting a sense of the place.",
+      "communicative_act": "Withdrawal from the previous topic, not a new investigation order.",
+      "interpretation_pass": "Withdrawal from the previous topic, not a new investigation order.",
+      "response_pass": "A short in-character acknowledgement. The patrol briefing does not restart. The player is not told to type a command.",
+      "authority_pass": "No scene change and no new clue.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["A menu of ask questions or investigate further."],
+      "clarification_expected": "none",
+      "clarification_notes": "A menu of ask questions or investigate further is unnecessary_fail and a major response failure.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the reply does not resurrect a topic the player just set down. lost if it resumes the stew pitch or the watch question as though the player asked again.",
+      "required_evidence": ["Shared turn packet."]
+    }
+  ]
+}

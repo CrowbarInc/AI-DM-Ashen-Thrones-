@@ -1,0 +1,69 @@
+{
+  "family": "s00",
+  "architecture": "C",
+  "source_ids": [
+    "s00"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f00",
+        "source_id": "s00",
+        "relationship": "keeps",
+        "roles": [
+          {
+            "name": "keeper",
+            "value": "The surveyor",
+            "evidence": "The surveyor keeps the amber lens"
+          },
+          {
+            "name": "object",
+            "value": "the amber lens",
+            "evidence": "The surveyor keeps the amber lens"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [
+          "in a padded case"
+        ],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "The surveyor keeps the amber lens in a padded case."
+      },
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    },
+    {
+      "fact": {
+        "fact_id": "f01",
+        "source_id": "s00",
+        "relationship": "ownership_recorded",
+        "roles": [],
+        "unknown_roles": [],
+        "qualifiers": [
+          "not recorded"
+        ],
+        "negated": true,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Ownership is not recorded."
+      },
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

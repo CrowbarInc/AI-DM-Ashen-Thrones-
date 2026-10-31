@@ -1,0 +1,26 @@
+{
+  "campaign_id": "confirmed_baseline_repair_20260919",
+  "campaign_name": "Confirmed Baseline Repair",
+  "campaign_date": "2026-09-19",
+  "purpose": "Repair only eight root causes confirmed against current product and architecture authority.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "The suite moved from 36 to 23 failures with no new final failures. Seven RCs are complete. RC-04 is partial: its production FEM bypass is repaired, while its aggregate test remains red solely for two frozen test-only imports. RC-17 no longer crashes and emits the canonical unresolved NPC-pursuit fallback. RC-12 preserves Old Milestone destination context. Thirteen expected failing tests became green; no validation authority, semantic evaluator behavior, policy question, or unresolved case changed.",
+  "changes": {"production": ["Repaired NPC-pursuit fallback, destination grounding, policy provenance routing, visibility stamping ownership, and narrative-authenticity dependency direction."], "validation": ["Corrected canonical attribution interpretation, removed retired projection alias, and restored protected assertion recurrence routing."], "tooling": ["Added JUnit-backed repair ledger generator."], "documentation": ["Added canonical repair report."], "generated_artifacts": ["Added pre/post JUnit, repair ledger, updated queue status, and review handoff."]},
+  "testing": {"focused": "All directly repaired cluster tests and broader social, scene, visibility, attribution, narrative-authenticity, replay, recurrence, and layer-boundary suites passed except known out-of-scope reds.", "broader": "Visibility and recurrence regression passes were clean after correcting an over-broad first implementation.", "full_suite": "Pre: 6,445 collected, 6,310 passed, 36 failed, 99 skipped. Post: 6,445 collected, 6,323 passed, 23 failed, 99 skipped.", "runtime_validation": "RC-17 reaches npc_pursuit_neutral_fallback without NameError; RC-12 emits destination-grounded Old Milestone narration.", "model_runtime_boundary": "No model invocation occurred.", "new_regressions": "None in final JUnit. One intermediate transcript-order failure passed immediately in isolation and on final rerun.", "pre_existing_failures": "Twenty-three remain intentionally outside repair scope or in RC-04's cleanup-only residue."},
+  "decisions_requiring_human_review": ["RC-10 local raw-token policy.", "RC-21 destination redirect lead authority."],
+  "known_problems": {"campaign_specific": ["RC-04 aggregate test remains red for frozen test-only imports."], "pre_existing": ["RC-11 and RC-13 remain unresolved; validation cleanup and governance drift remain."]},
+  "missing_concepts": ["Validation cleanup, governance repair, policy resolution, Calibration Round 2, State-to-Narration Consistency, and browser validation remain out of scope."],
+  "does_not_prove": ["That the remaining 23 failures are production defects.", "That stale tests or governance metadata have been repaired.", "That evaluator policy or validation authority changed."],
+  "recommended_next_step": "Review the 36-to-23 repair delta, then authorize a separate Validation Cleanup and Governance Repair campaign.",
+  "primary_report": "docs/confirmed_baseline_repair.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "artifacts/confirmed_baseline_repair/repair_ledger.json", "role": "repair_ledger", "why": "Accounts for all RC outcomes and the exact failure delta.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/confirmed_baseline_repair/pre_repair_suite.xml", "role": "pre_junit", "why": "Authoritative starting baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/confirmed_baseline_repair/post_repair_suite.xml", "role": "post_junit", "why": "Authoritative ending baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/baseline_triage/confirmed_repair_queue.json", "role": "updated_queue", "why": "Preserves original queue and implementation outcomes.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/validation_cleanup_queue.json", "role": "frozen_cleanup", "why": "Shows work deliberately left untouched.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/policy_decisions.md", "role": "frozen_policy", "why": "Shows decisions deliberately left unresolved.", "behavioral_evidence": false, "human_review_required": true}
+  ],
+  "self_contained_review_test": "PASS: the bundle contains the report, queue outcomes, complete repair ledger, frozen cleanup/policy inputs, and machine-readable pre/post baselines."
+}

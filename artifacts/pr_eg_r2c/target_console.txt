@@ -1,0 +1,39 @@
+.....................F.......                                            [100%]
+================================== FAILURES ===================================
+___________________________ test_frozen_holdout[H6] ___________________________
+
+case = {'id': 'H6', 'npc_id': 'archivist_iona', 'name': 'Archivist Iona', 'question': 'Can you repeat that in simpler words?', ...}
+
+    @pytest.mark.parametrize('case', HOLDOUTS, ids=lambda c:c['id'])
+    def test_frozen_holdout(case):
+        freeze=json.loads((H/'freeze.json').read_text())
+        assert hashlib.sha256((H/'frozen_holdouts.json').read_bytes()).hexdigest()==freeze['sha256']
+        session={}; q=case['question']
+        if case.get('prior'):
+            record_delivered_exchange(session,player_text='Which archive is open?',
+                delivered_text=f'{case["name"]} says, "{case["prior"]}"',
+                social=dict(npc_id=case['npc_id'],npc_name=case['name']))
+        res=resolution(q,case.get('fact',''),session,case['npc_id'],case['name'])
+        out=adopt(res,q,case['candidate'],session)
+        accepted=out['metadata']['accepted_response']
+        assert accepted['speaker_id']==case['npc_id']
+>       if case.get('required'): assert case['required'].lower().rstrip('.') in out['player_facing_text'].lower()
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       assert 'the west archive remains open at midnight' in 'archivist iona says, "i couldn\'t tell you."'
+E        +  where 'the west archive remains open at midnight' = <built-in method rstrip of str object at 0x00000260D0F43BD0>('.')
+E        +    where <built-in method rstrip of str object at 0x00000260D0F43BD0> = 'the west archive remains open at midnight.'.rstrip
+E        +      where 'the west archive remains open at midnight.' = <built-in method lower of str object at 0x00000260D0F43510>()
+E        +        where <built-in method lower of str object at 0x00000260D0F43510> = 'The west archive remains open at midnight.'.lower
+E        +  and   'archivist iona says, "i couldn\'t tell you."' = <built-in method lower of str object at 0x00000260D0F43F90>()
+E        +    where <built-in method lower of str object at 0x00000260D0F43F90> = 'Archivist Iona says, "I couldn\'t tell you."'.lower
+
+tests\test_pr_eg_r2c_speech_adoption.py:101: AssertionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_eg_r2c_speech_adoption.py::test_frozen_holdout[H6] - ass...
+1 failed, 28 passed, 1 warning in 2.79s

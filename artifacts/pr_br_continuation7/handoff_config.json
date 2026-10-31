@@ -1,0 +1,109 @@
+{
+  "campaign_id": "pr-br-continuation-7",
+  "campaign_name": "PR-BR Continuation 7 — Resolution-Outcome Precedence",
+  "campaign_date": "2026-09-28",
+  "purpose": "Review resolution-outcome precedence, post-resolution integrity, and the five-turn focused live sample. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Continuation 6's 5/5 automated PASS was a false success (manual 2/5). Continuation 7 adds categorical outcome precedence, truthful nonresolution classification, repeat-contamination detection, scene-momentum rejection when it would corrupt a satisfied answer, a final satisfaction check, and recovery of the last valid answer. Deterministic band: 198 passed, 0 failed. Focused live: 5 completed, 0 aborted, 5 model calls. Manual human-DM: 5/5 requests addressed. Evaluator: 5/5 PASS. False PASS of an explicit non-answer: 0. Unjustified nonresolution of a valid answer: 0. Scene-momentum splice corruption: 0. Residuals: clipped claim labels, and a wear answer cut mid-word. READY FOR SMOKE GATE: NO. READY FOR FULL SYNTHETIC GATE: NO. No smoke gate was run. No 4×10 gate was run. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, continuation uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [
+    "artifacts/pr_br_continuation7/20260929T004855Z"
+  ],
+  "changes": {
+    "production": [
+      "game/resolution_contract.py: outcome precedence, explicit non-answer classification, repeat contamination, local repair, final preservation",
+      "game/social.py, game/speaker_contract_enforcement.py, game/final_emission_visibility_fallback.py, game/perception_grounding.py, game/gm_retry.py, game/response_policy_enforcement.py, game/api_turn_support.py: reject downgrades of a valid answer",
+      "game/playability_eval.py: fail explicit non-answers, contaminated repeats, and destroyed answers"
+    ],
+    "validation": [
+      "tests/test_pr_br_outcome_precedence.py matrix A-R plus /api/chat"
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation7_probes.py focused five-turn runner"
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 7 section"
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation7/20260929T004855Z live transcript, traces, manual assessment"
+    ]
+  },
+  "testing": {
+    "focused": "198 passed, 0 failed. Continuation 6 regression band plus tests/test_pr_br_outcome_precedence.py.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "5 completed live turns, 0 aborted, 5 model calls, 0 retries. No smoke. No 4×10.",
+    "model_runtime_boundary": "gpt-4.1-mini via call_gpt. Token telemetry unavailable.",
+    "new_regressions": "Matrix A-R and one real /api/chat path.",
+    "pre_existing_failures": "None in the 198-test band."
+  },
+  "decisions_requiring_human_review": [
+    "Whether the clipped claim label and the mid-word wear tail block the smoke gate. This report says NO.",
+    "PR-BR remains open. Do not start PR-BS from this packet."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Active claim labels clip mid-phrase, so repeat continuity preserves only the stored prefix.",
+      "A speaker-grounding bridge can cut a still-satisfied answer mid-token. Turn 5 ends at 'shadowing t'.",
+      "Inspection still opens with the stock 'nothing new' frame before the real sheet contents."
+    ],
+    "pre_existing": [
+      "call_gpt does not record token usage."
+    ]
+  },
+  "missing_concepts": [
+    "Claim labels long enough to hold a multi-sentence rumor.",
+    "A final-emission length cut that preserves sentence boundaries when an answer already keeps_answer."
+  ],
+  "does_not_prove": [
+    "Does not prove smoke-gate health.",
+    "Does not prove 4×10 synthetic-gate health.",
+    "Does not prove general narration quality.",
+    "Five turns do not prove the residuals are rare."
+  ],
+  "recommended_next_step": "Human review of this packet. Do not run the smoke gate or the 4×10 gate until that review says the clipped-claim and mid-word residuals are acceptable. PR-BR stays open.",
+  "supporting_files": [
+    {
+      "path": "tests/test_pr_br_outcome_precedence.py",
+      "role": "regression",
+      "why": "Outcome-precedence matrix A-R and the /api/chat regression.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation7/20260929T004855Z/transcript.md",
+      "role": "live_transcript",
+      "why": "Five-turn player-visible transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation7/20260929T004855Z/turns.json",
+      "role": "live_trace",
+      "why": "Generated candidate, final response, precedence, and scene-momentum traces.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation7/20260929T004855Z/summary.json",
+      "role": "cost_accounting",
+      "why": "Completed turns, model calls, and gate confirmations.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation7/20260929T004855Z/provenance.json",
+      "role": "provenance",
+      "why": "HEAD and confirmation that smoke and the full gate were not run.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation7/20260929T004855Z/MANUAL_ASSESSMENT.md",
+      "role": "manual_assessment",
+      "why": "Human-DM assessment and evaluator disagreement notes.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

@@ -7,9 +7,9 @@
     "forecast_confidence": 1.0,
     "forecast_effectiveness": 1.0,
     "low_confidence": false,
-    "predicted_recurrences": 2,
+    "predicted_recurrences": 5,
     "protected_replay_only": true,
-    "realized_recurrences": 2,
+    "realized_recurrences": 5,
     "report_only": true,
     "schema_version": 1
   },
@@ -17,68 +17,69 @@
     "advisory_only": true,
     "confidence_adjusted": false,
     "conversion_definition": "Advisory conversion rates from current governance funnel snapshot: watchlist_conversion_rate is investigate_keys / max(watch_keys, 1); investigate_conversion_rate is prioritize_keys / max(investigate_keys, 1); prioritize_conversion_rate is remediation_ready_keys / max(prioritize_keys, 1), where remediation_ready_keys have reduction_potential >= investigate threshold; retirement_conversion_rate is retirement_outcome_keys / max(total_governed_keys, 1).",
-    "governance_effectiveness": 0.5,
+    "governance_effectiveness": 0.5833,
     "investigate_conversion_rate": 1.0,
     "prioritize_conversion_rate": 1.0,
     "protected_replay_only": true,
     "report_only": true,
     "retirement_conversion_rate": 0.0,
     "schema_version": 1,
-    "watchlist_conversion_rate": 0.0
+    "watchlist_conversion_rate": 0.3333
   },
   "legacy_unified_regression_recurrence_rate": {
     "advisory_only": true,
     "compatibility_only": true,
     "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-    "denominator": 8,
+    "denominator": 11,
     "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
     "metric": "regression_recurrence_rate",
-    "numerator": 7,
+    "numerator": 9,
     "population": "legacy_unified",
-    "rate": 0.875,
+    "rate": 0.8181818181818182,
     "report_only": true,
     "schema_version": 1
   },
   "outcome_validation_summary": {
-    "active_keys": 2,
+    "active_keys": 5,
     "advisory_only": true,
     "definition": "Advisory protected replay outcome validation accepts only evidenced lifecycle closures (retired/dormant keys with event-log or inactivity backing), measurable trajectory recurrence reduction, or confirmed remediation impact on targeted keys. Synthetic keys, manually forced statuses, and inferred success without evidence are rejected.",
     "dormant_keys": 0,
-    "has_validated_outcomes": false,
+    "has_validated_outcomes": true,
     "outcome_evidence_strength_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
     "protected_replay_only": true,
-    "rejected_signals": [
-      {
-        "candidate_signal": "measurable_recurrence_reduction",
-        "rejection_reason": "insufficient_evidence"
-      }
-    ],
+    "rejected_signals": [],
     "report_only": true,
     "retired_keys": 0,
     "schema_version": 1,
-    "total_keys": 2,
+    "total_keys": 5,
     "validated_closure_rate": 0.0,
-    "validated_outcome_count": 0,
-    "validated_outcomes": [],
-    "validated_recurrence_reduction_rate": 0.0,
+    "validated_outcome_count": 1,
+    "validated_outcomes": [
+      {
+        "absolute_change": -0.5,
+        "evidence_source": "trajectory_portfolio_risk_decrease",
+        "signal_type": "measurable_recurrence_reduction"
+      }
+    ],
+    "validated_recurrence_reduction_rate": 0.5,
     "validated_remediation_impact_rate": 0.0
   },
   "persistence_population": "protected_replay_history",
   "portfolio_trajectory_summary": {
     "advisory_only": true,
     "baseline_only": false,
-    "concentration_baseline": 1.0,
+    "concentration_baseline": 0.5207,
     "concentration_change": 0.0,
-    "concentration_current": 1.0,
+    "concentration_current": 0.5207,
     "governance_health_baseline": 55.2,
-    "governance_health_change": -18.8,
-    "governance_health_current": 36.4,
+    "governance_health_change": -5.1,
+    "governance_health_current": 50.1,
     "lifecycle_health_baseline": 45.0,
-    "lifecycle_health_change": -15.0,
-    "lifecycle_health_current": 30.0,
+    "lifecycle_health_change": -21.0,
+    "lifecycle_health_current": 24.0,
     "portfolio_risk_baseline": 44.1,
-    "portfolio_risk_change": 20.2,
-    "portfolio_risk_current": 64.3,
+    "portfolio_risk_change": -0.5,
+    "portfolio_risk_current": 43.6,
     "protected_replay_only": true,
     "report_only": true,
     "schema_version": 1,
@@ -88,23 +89,23 @@
   "protected_replay_regression_recurrence_rate": {
     "advisory_only": true,
     "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-    "denominator": 2,
+    "denominator": 5,
     "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
     "metric": "regression_recurrence_rate",
-    "numerator": 1,
+    "numerator": 2,
     "population": "protected_replay_history",
-    "rate": 0.5,
+    "rate": 0.4,
     "report_only": true,
     "schema_version": 1
   },
   "recurrence_age_distribution": {
-    "average_age_days": 53.6728,
-    "median_age_days": 53.6728,
+    "average_age_days": 36.4521,
+    "median_age_days": 8.7451,
     "oldest_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
-    "youngest_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py"
+    "youngest_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py"
   },
   "recurrence_closure_effectiveness": {
-    "active_keys": 2,
+    "active_keys": 5,
     "advisory_only": true,
     "closure_rate": 0.0,
     "closure_rate_definition": "Advisory closure rate: (retired_keys + dormant_keys) / max(total_keys, 1).",
@@ -119,9 +120,9 @@
     "completion_distance_definition": "Estimated completion distance is 100 - overall_completion_score; lower values indicate closer proximity to program graduation.",
     "completion_gap_analysis": [
       {
-        "current_value": 36.4,
+        "current_value": 50.1,
         "dimension": "governance",
-        "gap": 43.6,
+        "gap": 29.9,
         "requirement": "governance_health_target_met",
         "roadmap_dependency": "data_volume_expansion",
         "target_value": 80.0
@@ -181,7 +182,7 @@
           "completion_score": 75.0,
           "requirements": [
             {
-              "current_value": 36.4,
+              "current_value": 50.1,
               "met": false,
               "requirement": "governance_health_target_met",
               "target_value": 80.0
@@ -288,13 +289,13 @@
           "completion_score": 100.0,
           "requirements": [
             {
-              "current_value": 91.3,
+              "current_value": 100.0,
               "met": true,
               "requirement": "operational_readiness_target_met",
               "target_value": 80.0
             },
             {
-              "current_value": 0.9,
+              "current_value": 1.0,
               "met": true,
               "requirement": "effectiveness_confidence_target_met",
               "target_value": 0.75
@@ -387,7 +388,7 @@
       "completion_score": 75.0,
       "requirements": [
         {
-          "current_value": 36.4,
+          "current_value": 50.1,
           "met": false,
           "requirement": "governance_health_target_met",
           "target_value": 80.0
@@ -495,13 +496,13 @@
       "completion_score": 100.0,
       "requirements": [
         {
-          "current_value": 91.3,
+          "current_value": 100.0,
           "met": true,
           "requirement": "operational_readiness_target_met",
           "target_value": 80.0
         },
         {
-          "current_value": 0.9,
+          "current_value": 1.0,
           "met": true,
           "requirement": "effectiveness_confidence_target_met",
           "target_value": 0.75
@@ -583,12 +584,12 @@
     "report_only": true,
     "roadmap_reference": {
       "advisory_only": true,
-      "estimated_initiatives_remaining": 3,
+      "estimated_initiatives_remaining": 2,
       "highest_gap_dimension": "lifecycle",
       "highest_roi_initiative": "data_volume_expansion",
-      "next_recommended_initiative": "data_volume_expansion",
-      "projected_next_maturity_level": "measured",
-      "projected_next_maturity_score": 78.2,
+      "next_recommended_initiative": "lifecycle_closure_tracking",
+      "projected_next_maturity_level": "optimized",
+      "projected_next_maturity_score": 82.6,
       "protected_replay_only": true,
       "report_only": true,
       "roadmap_priority_guidance": "Execute roadmap sequence in dependency order to reach optimized maturity.",
@@ -630,9 +631,9 @@
   },
   "recurrence_completion_gap_analysis": [
     {
-      "current_value": 36.4,
+      "current_value": 50.1,
       "dimension": "governance",
-      "gap": 43.6,
+      "gap": 29.9,
       "requirement": "governance_health_target_met",
       "roadmap_dependency": "data_volume_expansion",
       "target_value": 80.0
@@ -734,40 +735,40 @@
     ],
     "calibration_definition": "Advisory confidence calibration compares reported confidence metrics against evidence strength derived from protected replay observation volume, key coverage, trajectory availability, forecast accuracy, governance posture, and lifecycle/remediation outcomes. calibration_gap = reported_confidence - evidence_strength. Positive gaps indicate overconfidence; negative gaps indicate underconfidence; gaps within tolerance indicate calibration.",
     "effectiveness_confidence_audit": {
-      "calibration_gap": 0.7,
+      "calibration_gap": 0.52,
       "confidence_status": "overconfident",
       "evidence_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
-      "evidence_strength": 0.2,
+      "evidence_strength": 0.48,
       "outcome_supported": false,
-      "reported_confidence": 0.9,
+      "reported_confidence": 1.0,
       "trajectory_available": true,
       "validated_closure_rate": 0.0,
-      "validated_outcome_count": 0,
-      "validated_recurrence_reduction_rate": 0.0,
+      "validated_outcome_count": 1,
+      "validated_recurrence_reduction_rate": 0.5,
       "validated_remediation_impact_rate": 0.0
     },
     "forecast_confidence_audit": {
-      "calibration_gap": 0.07,
+      "calibration_gap": 0.0,
       "confidence_status": "calibrated",
       "evidence_definition": "Weighted blend: 30% observation volume factor min(1, observations/5), 20% key coverage factor min(1, keys/3), 25% trajectory factor (1.0 when trajectory_available else 0.4), 25% accuracy evidence forecast_accuracy * observation volume factor.",
-      "evidence_strength": 0.93,
+      "evidence_strength": 1.0,
       "forecast_accuracy": 1.0,
       "reported_confidence": 1.0,
-      "total_keys": 2,
-      "total_observations": 16,
+      "total_keys": 5,
+      "total_observations": 33,
       "trajectory_available": true
     },
     "governance_confidence_audit": {
-      "calibration_gap": 0.34,
+      "calibration_gap": 0.22,
       "confidence_status": "overconfident",
       "evidence_definition": "Weighted blend: 30% observation volume factor, 25% watchlist coverage watchlist_size/max(keys,1), 20% owner dispersion 1 - owner_concentration_ratio, 25% governance_health_score/100.",
-      "evidence_strength": 0.66,
-      "governance_health_score": 36.4,
-      "owner_concentration_ratio": 0.8828,
-      "owner_count": 1,
+      "evidence_strength": 0.78,
+      "governance_health_score": 50.1,
+      "owner_concentration_ratio": 0.4821,
+      "owner_count": 4,
       "reported_confidence": 1.0,
-      "total_observations": 16,
-      "watchlist_size": 2
+      "total_observations": 33,
+      "watchlist_size": 5
     },
     "graduation_threshold_validation": [
       {
@@ -778,14 +779,14 @@
         "validation_status": "supported"
       },
       {
-        "current_value": 0.9,
+        "current_value": 1.0,
         "rationale": "Effectiveness confidence meets threshold but substantially exceeds remediation, closure, and trajectory evidence.",
         "target_value": 0.75,
         "threshold": "effectiveness_confidence",
         "validation_status": "optimistic"
       },
       {
-        "current_value": 91.3,
+        "current_value": 100.0,
         "rationale": "Operational readiness meets target while overall maturity remains below program target.",
         "target_value": 80.0,
         "threshold": "operational_readiness",
@@ -807,27 +808,28 @@
       }
     ],
     "outcome_validation_summary": {
-      "active_keys": 2,
+      "active_keys": 5,
       "advisory_only": true,
       "definition": "Advisory protected replay outcome validation accepts only evidenced lifecycle closures (retired/dormant keys with event-log or inactivity backing), measurable trajectory recurrence reduction, or confirmed remediation impact on targeted keys. Synthetic keys, manually forced statuses, and inferred success without evidence are rejected.",
       "dormant_keys": 0,
-      "has_validated_outcomes": false,
+      "has_validated_outcomes": true,
       "outcome_evidence_strength_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
       "protected_replay_only": true,
-      "rejected_signals": [
-        {
-          "candidate_signal": "measurable_recurrence_reduction",
-          "rejection_reason": "insufficient_evidence"
-        }
-      ],
+      "rejected_signals": [],
       "report_only": true,
       "retired_keys": 0,
       "schema_version": 1,
-      "total_keys": 2,
+      "total_keys": 5,
       "validated_closure_rate": 0.0,
-      "validated_outcome_count": 0,
-      "validated_outcomes": [],
-      "validated_recurrence_reduction_rate": 0.0,
+      "validated_outcome_count": 1,
+      "validated_outcomes": [
+        {
+          "absolute_change": -0.5,
+          "evidence_source": "trajectory_portfolio_risk_decrease",
+          "signal_type": "measurable_recurrence_reduction"
+        }
+      ],
+      "validated_recurrence_reduction_rate": 0.5,
       "validated_remediation_impact_rate": 0.0
     },
     "protected_replay_only": true,
@@ -839,15 +841,15 @@
     ],
     "recurrence_confidence_calibration_summary": {
       "advisory_only": true,
-      "average_calibration_gap": 0.37,
-      "confidence_calibration_score": 53.0,
+      "average_calibration_gap": 0.25,
+      "confidence_calibration_score": 65.3,
       "effectiveness_status": "overconfident",
       "forecast_status": "calibrated",
       "governance_status": "overconfident",
       "graduation_confidence_ready": false,
       "interpretation": "needs_monitoring",
       "interpretation_label": "Needs monitoring",
-      "largest_calibration_gap": 0.7,
+      "largest_calibration_gap": 0.52,
       "protected_replay_only": true,
       "report_only": true,
       "schema_version": 1,
@@ -859,15 +861,15 @@
   },
   "recurrence_confidence_calibration_summary": {
     "advisory_only": true,
-    "average_calibration_gap": 0.37,
-    "confidence_calibration_score": 53.0,
+    "average_calibration_gap": 0.25,
+    "confidence_calibration_score": 65.3,
     "effectiveness_status": "overconfident",
     "forecast_status": "calibrated",
     "governance_status": "overconfident",
     "graduation_confidence_ready": false,
     "interpretation": "needs_monitoring",
     "interpretation_label": "Needs monitoring",
-    "largest_calibration_gap": 0.7,
+    "largest_calibration_gap": 0.52,
     "protected_replay_only": true,
     "report_only": true,
     "schema_version": 1,
@@ -885,64 +887,64 @@
         "trajectory_available": false
       },
       "bqc4_current": {
-        "confidence_calibration_score": 53.0,
+        "confidence_calibration_score": 65.3,
         "graduation_confidence_ready": false,
-        "largest_calibration_gap": 0.7,
-        "snapshot_count": 34,
+        "largest_calibration_gap": 0.52,
+        "snapshot_count": 43,
         "trajectory_available": true
       },
-      "calibration_score_delta": -4.3,
-      "largest_gap_delta": 0.09,
+      "calibration_score_delta": 8.0,
+      "largest_gap_delta": -0.09,
       "trajectory_activated": true
     },
     "confidence_recalculation": {
       "effectiveness_confidence_audit": {
-        "calibration_gap": 0.7,
+        "calibration_gap": 0.52,
         "confidence_status": "overconfident",
         "evidence_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
-        "evidence_strength": 0.2,
+        "evidence_strength": 0.48,
         "outcome_supported": false,
-        "reported_confidence": 0.9,
+        "reported_confidence": 1.0,
         "trajectory_available": true,
         "validated_closure_rate": 0.0,
-        "validated_outcome_count": 0,
-        "validated_recurrence_reduction_rate": 0.0,
+        "validated_outcome_count": 1,
+        "validated_recurrence_reduction_rate": 0.5,
         "validated_remediation_impact_rate": 0.0
       },
       "forecast_confidence_audit": {
-        "calibration_gap": 0.07,
+        "calibration_gap": 0.0,
         "confidence_status": "calibrated",
         "evidence_definition": "Weighted blend: 30% observation volume factor min(1, observations/5), 20% key coverage factor min(1, keys/3), 25% trajectory factor (1.0 when trajectory_available else 0.4), 25% accuracy evidence forecast_accuracy * observation volume factor.",
-        "evidence_strength": 0.93,
+        "evidence_strength": 1.0,
         "forecast_accuracy": 1.0,
         "reported_confidence": 1.0,
-        "total_keys": 2,
-        "total_observations": 16,
+        "total_keys": 5,
+        "total_observations": 33,
         "trajectory_available": true
       },
       "governance_confidence_audit": {
-        "calibration_gap": 0.34,
+        "calibration_gap": 0.22,
         "confidence_status": "overconfident",
         "evidence_definition": "Weighted blend: 30% observation volume factor, 25% watchlist coverage watchlist_size/max(keys,1), 20% owner dispersion 1 - owner_concentration_ratio, 25% governance_health_score/100.",
-        "evidence_strength": 0.66,
-        "governance_health_score": 36.4,
-        "owner_concentration_ratio": 0.8828,
-        "owner_count": 1,
+        "evidence_strength": 0.78,
+        "governance_health_score": 50.1,
+        "owner_concentration_ratio": 0.4821,
+        "owner_count": 4,
         "reported_confidence": 1.0,
-        "total_observations": 16,
-        "watchlist_size": 2
+        "total_observations": 33,
+        "watchlist_size": 5
       },
       "recurrence_confidence_calibration_summary": {
         "advisory_only": true,
-        "average_calibration_gap": 0.37,
-        "confidence_calibration_score": 53.0,
+        "average_calibration_gap": 0.25,
+        "confidence_calibration_score": 65.3,
         "effectiveness_status": "overconfident",
         "forecast_status": "calibrated",
         "governance_status": "overconfident",
         "graduation_confidence_ready": false,
         "interpretation": "needs_monitoring",
         "interpretation_label": "Needs monitoring",
-        "largest_calibration_gap": 0.7,
+        "largest_calibration_gap": 0.52,
         "protected_replay_only": true,
         "report_only": true,
         "schema_version": 1,
@@ -956,18 +958,18 @@
     "formal_graduation_criteria_met": false,
     "graduation_readiness": {
       "critical_blind_spots": 0,
-      "graduation_readiness_score": 93.5,
-      "operational_readiness_score": 91.3,
+      "graduation_readiness_score": 94.7,
+      "operational_readiness_score": 100.0,
       "overall_completion_score": 96.2,
-      "overall_maturity_score": 68.5,
+      "overall_maturity_score": 76.8,
       "program_graduated": false,
       "readiness_label": "Ready for graduation",
       "readiness_level": "ready_for_graduation"
     },
     "protected_replay_only": true,
     "remaining_blockers": [
-      "calibration score below target (53.0 < 70)",
-      "largest calibration gap above target (0.70 > 0.20)",
+      "calibration score below target (65.3 < 70)",
+      "largest calibration gap above target (0.52 > 0.20)",
       "graduation_confidence_ready is false",
       "completion dimensions incomplete: governance"
     ],
@@ -975,15 +977,15 @@
     "schema_version": 1,
     "trajectory_activation": {
       "baseline_only": false,
-      "effectiveness_change": -0.04,
-      "governance_health_change": -18.8,
-      "lifecycle_health_change": -15.0,
-      "maturity_change": -9.0,
+      "effectiveness_change": 0.0,
+      "governance_health_change": -5.1,
+      "lifecycle_health_change": -21.0,
+      "maturity_change": -0.9,
       "message": "Trajectory change detection active across baseline and current snapshots.",
-      "operational_readiness_change": -7.5,
-      "portfolio_risk_change": 20.2,
-      "snapshot_count": 34,
-      "stability_change": -25.0,
+      "operational_readiness_change": 0.0,
+      "portfolio_risk_change": -0.5,
+      "snapshot_count": 43,
+      "stability_change": -15.0,
       "trajectory_available": true
     }
   },
@@ -999,22 +1001,22 @@
     "forecast_summary": {
       "advisory_only": true,
       "concentrated_keys": 1,
-      "elevated_keys": 0,
+      "elevated_keys": 1,
       "forecast_confidence": 1.0,
-      "forecast_risk_score": 46.3,
+      "forecast_risk_score": 40.8,
       "protected_replay_only": true,
       "report_only": true,
       "schema_version": 1,
-      "stability_score": 50.0,
+      "stability_score": 60.0,
       "stable_keys": 0,
-      "watch_keys": 1
+      "watch_keys": 3
     },
     "key_forecasts": [
       {
         "first_seen": "2026-06-04T22:31:59Z",
         "forecast_classification": "watch",
         "last_seen": "2026-06-04T22:31:59Z",
-        "observation_share": 0.0625,
+        "observation_share": 0.0303,
         "occurrence_count": 1,
         "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
         "recurrence_velocity": 1.0,
@@ -1023,34 +1025,64 @@
       {
         "first_seen": "2026-09-19T16:01:46Z",
         "forecast_classification": "concentrated",
-        "last_seen": "2026-09-19T23:25:45Z",
-        "observation_share": 0.9375,
-        "occurrence_count": 15,
+        "last_seen": "2026-10-09T22:31:51Z",
+        "observation_share": 0.6364,
+        "occurrence_count": 21,
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "recurrence_velocity": 48.6505,
-        "trend_classification": "recurring"
+        "recurrence_velocity": 1.036,
+        "trend_classification": "persistent"
+      },
+      {
+        "first_seen": "2026-10-09T22:38:39Z",
+        "forecast_classification": "elevated",
+        "last_seen": "2026-10-18T16:26:55Z",
+        "observation_share": 0.2727,
+        "occurrence_count": 9,
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "recurrence_velocity": 1.0295,
+        "trend_classification": "persistent"
+      },
+      {
+        "first_seen": "2026-10-09T22:38:39Z",
+        "forecast_classification": "watch",
+        "last_seen": "2026-10-09T22:38:39Z",
+        "observation_share": 0.0303,
+        "occurrence_count": 1,
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "recurrence_velocity": 1.0,
+        "trend_classification": "emerging"
+      },
+      {
+        "first_seen": "2026-10-18T16:31:34Z",
+        "forecast_classification": "watch",
+        "last_seen": "2026-10-18T16:31:34Z",
+        "observation_share": 0.0303,
+        "occurrence_count": 1,
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "recurrence_velocity": 1.0,
+        "trend_classification": "emerging"
       }
     ],
     "protected_replay_only": true,
     "regression_recurrence_rate": {
       "advisory_only": true,
       "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-      "denominator": 2,
+      "denominator": 5,
       "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
       "metric": "regression_recurrence_rate",
-      "numerator": 1,
-      "rate": 0.5,
+      "numerator": 2,
+      "rate": 0.4,
       "report_only": true,
       "schema_version": 1
     },
     "report_only": true,
     "risk_concentration": {
-      "concentration_ratio": 0.8828,
+      "concentration_ratio": 0.4821,
       "dominant_recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-      "top_key_share": 0.9375,
-      "top_three_key_share": 1.0,
-      "total_keys": 2,
-      "total_observations": 16
+      "top_key_share": 0.6364,
+      "top_three_key_share": 0.9394,
+      "total_keys": 5,
+      "total_observations": 33
     },
     "schema_version": 1,
     "stability_score_definition": "100 * (1 - regression_recurrence_rate.rate). 100 means no protected recurrence keys have repeated observations; 0 means every observed key is recurrence-active."
@@ -1058,13 +1090,13 @@
   "recurrence_governance": {
     "advisory_only": true,
     "governance_confidence": 1.0,
-    "governance_health_score": 36.4,
+    "governance_health_score": 50.1,
     "governance_status_classification_definition": "Deterministic priority order: retire_candidate when trend is dormant or status is retired; prioritize when roi_score >= prioritize_threshold (25), roi_confidence >= 0.15, and reduction_potential >= investigate_threshold (50); investigate when forecast is elevated/concentrated, trend is recurring/persistent, reduction_potential >= investigate_threshold (50) with non-emerging trend, or recurrence_rate >= 0.5 with at least two observations; watch when trend is emerging or forecast is watch; otherwise observe.",
     "governance_summary": {
       "advisory_only": true,
       "governance_confidence": 1.0,
       "governance_confidence_definition": "Weighted blend of roi_confidence (40%), forecast_confidence (35%), and observation volume factor min(1, total_observations / 5) (25%).",
-      "governance_health_score": 36.4,
+      "governance_health_score": 50.1,
       "governance_health_score_definition": "Advisory 0-100 score: 30% stability_score/100 + 25% (1 - portfolio_risk_score/100) + 20% (1 - watchlist_size/max(total_keys, 1)) + 15% (1 - prioritized_targets/max(total_keys, 1)) + 10% (1 - regression_recurrence_rate). Higher scores indicate healthier governance posture.",
       "governance_status_definitions": {
         "investigate": "Elevated or concentrated recurrence risk warrants root-cause review.",
@@ -1080,7 +1112,7 @@
       "retire_candidates": 0,
       "retirement_opportunities": 0,
       "schema_version": 1,
-      "watchlist_size": 2
+      "watchlist_size": 5
     },
     "highest_governance_load_owner": "speaker_drift",
     "intervention_thresholds": {
@@ -1092,6 +1124,27 @@
     },
     "owners": [
       {
+        "governed_keys": 1,
+        "owner": "emission_drift",
+        "prioritized_keys": 0,
+        "retire_candidates": 0,
+        "watch_keys": 0
+      },
+      {
+        "governed_keys": 1,
+        "owner": "fallback_drift",
+        "prioritized_keys": 0,
+        "retire_candidates": 0,
+        "watch_keys": 1
+      },
+      {
+        "governed_keys": 1,
+        "owner": "semantic_drift",
+        "prioritized_keys": 0,
+        "retire_candidates": 0,
+        "watch_keys": 1
+      },
+      {
         "governed_keys": 2,
         "owner": "speaker_drift",
         "prioritized_keys": 1,
@@ -1100,6 +1153,9 @@
       }
     ],
     "ownership_distribution": {
+      "emission_drift": 1,
+      "fallback_drift": 1,
+      "semantic_drift": 1,
       "speaker_drift": 2
     },
     "protected_replay_only": true,
@@ -1115,8 +1171,8 @@
       "schema_version": 1
     },
     "schema_version": 1,
-    "total_keys": 2,
-    "total_observations": 16,
+    "total_keys": 5,
+    "total_observations": 33,
     "watchlist": [
       {
         "forecast_classification": "concentrated",
@@ -1126,7 +1182,37 @@
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
         "roi_score": 100.0,
         "scenario": "(null)",
-        "trend_classification": "recurring"
+        "trend_classification": "persistent"
+      },
+      {
+        "forecast_classification": "elevated",
+        "governance_status": "investigate",
+        "owner": "emission_drift",
+        "recommended_action": "investigate_root_cause",
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "roi_score": 100.0,
+        "scenario": "(null)",
+        "trend_classification": "persistent"
+      },
+      {
+        "forecast_classification": "watch",
+        "governance_status": "watch",
+        "owner": "fallback_drift",
+        "recommended_action": "gather_more_history",
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "roi_score": 46.2,
+        "scenario": "(null)",
+        "trend_classification": "emerging"
+      },
+      {
+        "forecast_classification": "watch",
+        "governance_status": "watch",
+        "owner": "semantic_drift",
+        "recommended_action": "gather_more_history",
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "roi_score": 46.2,
+        "scenario": "(null)",
+        "trend_classification": "emerging"
       },
       {
         "forecast_classification": "watch",
@@ -1134,7 +1220,7 @@
         "owner": "speaker_drift",
         "recommended_action": "gather_more_history",
         "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
-        "roi_score": 85.9,
+        "roi_score": 46.2,
         "scenario": "(null)",
         "trend_classification": "emerging"
       }
@@ -1144,7 +1230,7 @@
     "advisory_only": true,
     "governance_confidence": 1.0,
     "governance_confidence_definition": "Weighted blend of roi_confidence (40%), forecast_confidence (35%), and observation volume factor min(1, total_observations / 5) (25%).",
-    "governance_health_score": 36.4,
+    "governance_health_score": 50.1,
     "governance_health_score_definition": "Advisory 0-100 score: 30% stability_score/100 + 25% (1 - portfolio_risk_score/100) + 20% (1 - watchlist_size/max(total_keys, 1)) + 15% (1 - prioritized_targets/max(total_keys, 1)) + 10% (1 - regression_recurrence_rate). Higher scores indicate healthier governance posture.",
     "governance_status_definitions": {
       "investigate": "Elevated or concentrated recurrence risk warrants root-cause review.",
@@ -1160,7 +1246,7 @@
     "retire_candidates": 0,
     "retirement_opportunities": 0,
     "schema_version": 1,
-    "watchlist_size": 2
+    "watchlist_size": 5
   },
   "recurrence_graduation_audit": {
     "advisory_only": true,
@@ -1188,7 +1274,7 @@
       {
         "capability_id": "historical_persistence",
         "capability_label": "Historical Persistence",
-        "confidence": 0.67,
+        "confidence": 1.0,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1197,7 +1283,7 @@
       {
         "capability_id": "trend_analytics",
         "capability_label": "Trend Analytics",
-        "confidence": 0.77,
+        "confidence": 1.0,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1215,7 +1301,7 @@
       {
         "capability_id": "portfolio_analytics",
         "capability_label": "Portfolio Analytics",
-        "confidence": 0.97,
+        "confidence": 1.0,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1224,7 +1310,7 @@
       {
         "capability_id": "remediation_targeting",
         "capability_label": "Remediation Targeting",
-        "confidence": 0.63,
+        "confidence": 0.9,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1233,7 +1319,7 @@
       {
         "capability_id": "roi_analytics",
         "capability_label": "ROI Analytics",
-        "confidence": 0.62,
+        "confidence": 0.85,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1253,7 +1339,7 @@
       {
         "capability_id": "lifecycle_management",
         "capability_label": "Lifecycle Management",
-        "confidence": 0.87,
+        "confidence": 1.0,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1262,7 +1348,7 @@
       {
         "capability_id": "effectiveness_measurement",
         "capability_label": "Effectiveness Measurement",
-        "confidence": 0.9,
+        "confidence": 1.0,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1271,7 +1357,7 @@
       {
         "capability_id": "maturity_assessment",
         "capability_label": "Maturity Assessment",
-        "confidence": 0.69,
+        "confidence": 0.77,
         "implemented": true,
         "operational": true,
         "remaining_concerns": [],
@@ -1355,7 +1441,7 @@
       },
       {
         "confidence": 0.4,
-        "current_value": 36.4,
+        "current_value": 50.1,
         "dimension": "governance",
         "requirement": "governance_health_target_met",
         "status": "unmet",
@@ -1499,7 +1585,7 @@
       },
       {
         "confidence": 0.9,
-        "current_value": 91.3,
+        "current_value": 100.0,
         "dimension": "operational_readiness",
         "requirement": "operational_readiness_target_met",
         "status": "met",
@@ -1508,7 +1594,7 @@
       },
       {
         "confidence": 0.9,
-        "current_value": 0.9,
+        "current_value": 1.0,
         "dimension": "operational_readiness",
         "requirement": "effectiveness_confidence_target_met",
         "status": "met",
@@ -1535,7 +1621,7 @@
       },
       {
         "confidence": 0.85,
-        "current_value": 68.5,
+        "current_value": 76.8,
         "dimension": "program",
         "requirement": "overall_maturity_target_met",
         "status": "unmet",
@@ -1552,8 +1638,8 @@
         "threshold_appropriate": true
       },
       {
-        "confidence": 0.9,
-        "current_value": 0.9,
+        "confidence": 1.0,
+        "current_value": 1.0,
         "dimension": "program",
         "requirement": "effectiveness_confidence_graduation",
         "status": "met",
@@ -1595,7 +1681,7 @@
         "rationale": "Forecast effectiveness metrics available with non-trivial confidence."
       },
       {
-        "current_value": 0.5,
+        "current_value": 0.5833,
         "evidence_status": "supported_by_evidence",
         "metric": "governance_effectiveness",
         "rationale": "Zero conversion rates indicate governance funnel not yet exercised by history volume."
@@ -1614,17 +1700,17 @@
       }
     ],
     "graduation_readiness": {
-      "average_capability_confidence": 0.82,
+      "average_capability_confidence": 0.94,
       "critical_blind_spots": 0,
       "critical_redundancies": 1,
-      "graduation_readiness_score": 93.5,
+      "graduation_readiness_score": 94.7,
       "operational_capability_ratio": 1.0,
       "readiness_definition": "Advisory 0-100 graduation readiness score: 45% overall_completion_score + 30% operational_capability_ratio*100 + 15% validated_capability_ratio*100 + 10% average_capability_confidence*100 - 8 per critical blind spot - 3 per critical redundancy. Interpretation: 90-100 ready; 70-89 minor gaps; 50-69 moderate gaps; <50 major gaps.",
       "readiness_label": "Ready for graduation",
       "readiness_level": "ready_for_graduation",
       "validated_capability_ratio": 1.0
     },
-    "protected_observation_count": 16,
+    "protected_observation_count": 33,
     "protected_replay_only": true,
     "readiness_definition": "Advisory 0-100 graduation readiness score: 45% overall_completion_score + 30% operational_capability_ratio*100 + 15% validated_capability_ratio*100 + 10% average_capability_confidence*100 - 8 per critical blind spot - 3 per critical redundancy. Interpretation: 90-100 ready; 70-89 minor gaps; 50-69 moderate gaps; <50 major gaps.",
     "recommended_next_action": "Execute roadmap sequence in dependency order to reach optimized maturity.",
@@ -1633,7 +1719,7 @@
       "capabilities_complete": 12,
       "critical_blind_spots": 0,
       "critical_redundancies": 1,
-      "graduation_readiness_score": 93.5,
+      "graduation_readiness_score": 94.7,
       "program_graduated": false,
       "protected_replay_only": true,
       "readiness_definition": "Advisory 0-100 graduation readiness score: 45% overall_completion_score + 30% operational_capability_ratio*100 + 15% validated_capability_ratio*100 + 10% average_capability_confidence*100 - 8 per critical blind spot - 3 per critical redundancy. Interpretation: 90-100 ready; 70-89 minor gaps; 50-69 moderate gaps; <50 major gaps.",
@@ -1736,14 +1822,14 @@
       }
     ],
     "schema_version": 1,
-    "unique_recurrence_keys": 2
+    "unique_recurrence_keys": 5
   },
   "recurrence_graduation_audit_summary": {
     "advisory_only": true,
     "capabilities_complete": 12,
     "critical_blind_spots": 0,
     "critical_redundancies": 1,
-    "graduation_readiness_score": 93.5,
+    "graduation_readiness_score": 94.7,
     "program_graduated": false,
     "protected_replay_only": true,
     "readiness_definition": "Advisory 0-100 graduation readiness score: 45% overall_completion_score + 30% operational_capability_ratio*100 + 15% validated_capability_ratio*100 + 10% average_capability_confidence*100 - 8 per critical blind spot - 3 per critical redundancy. Interpretation: 90-100 ready; 70-89 minor gaps; 50-69 moderate gaps; <50 major gaps.",
@@ -1755,16 +1841,16 @@
     "validated_capabilities": 12
   },
   "recurrence_lifecycle": {
-    "advancement_rate": 0.5,
+    "advancement_rate": 0.8,
     "advisory_only": true,
     "age_distribution": {
-      "average_age_days": 53.6728,
-      "median_age_days": 53.6728,
+      "average_age_days": 36.4521,
+      "median_age_days": 8.7451,
       "oldest_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
-      "youngest_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py"
+      "youngest_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py"
     },
     "closure_effectiveness": {
-      "active_keys": 2,
+      "active_keys": 5,
       "advisory_only": true,
       "closure_rate": 0.0,
       "closure_rate_definition": "Advisory closure rate: (retired_keys + dormant_keys) / max(total_keys, 1).",
@@ -1781,35 +1867,74 @@
         "governance_status": "watch",
         "last_seen": "2026-06-04T22:31:59Z",
         "lifecycle_stage": "emerging",
-        "lifecycle_velocity": 0.0093,
-        "observations_per_day": 0.0093,
+        "lifecycle_velocity": 0.0074,
+        "observations_per_day": 0.0074,
         "occurrence_count": 1,
-        "recurrence_age_days": 107.0373,
+        "recurrence_age_days": 135.7497,
         "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
         "trend_classification": "emerging"
       },
       {
-        "active_duration_days": 0.3083,
+        "active_duration_days": 20.2709,
         "first_seen": "2026-09-19T16:01:46Z",
         "governance_status": "prioritize",
-        "last_seen": "2026-09-19T23:25:45Z",
-        "lifecycle_stage": "recurring",
-        "lifecycle_velocity": 15.0,
-        "observations_per_day": 15.0,
-        "occurrence_count": 15,
-        "recurrence_age_days": 0.3083,
+        "last_seen": "2026-10-09T22:31:51Z",
+        "lifecycle_stage": "persistent",
+        "lifecycle_velocity": 0.7236,
+        "observations_per_day": 0.7236,
+        "occurrence_count": 21,
+        "recurrence_age_days": 29.0207,
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "trend_classification": "recurring"
+        "trend_classification": "persistent"
+      },
+      {
+        "active_duration_days": 8.7419,
+        "first_seen": "2026-10-09T22:38:39Z",
+        "governance_status": "investigate",
+        "last_seen": "2026-10-18T16:26:55Z",
+        "lifecycle_stage": "persistent",
+        "lifecycle_velocity": 1.0291,
+        "observations_per_day": 1.0291,
+        "occurrence_count": 9,
+        "recurrence_age_days": 8.7451,
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "trend_classification": "persistent"
+      },
+      {
+        "active_duration_days": 0.0,
+        "first_seen": "2026-10-09T22:38:39Z",
+        "governance_status": "watch",
+        "last_seen": "2026-10-09T22:38:39Z",
+        "lifecycle_stage": "emerging",
+        "lifecycle_velocity": 0.1143,
+        "observations_per_day": 0.1143,
+        "occurrence_count": 1,
+        "recurrence_age_days": 8.7451,
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "trend_classification": "emerging"
+      },
+      {
+        "active_duration_days": 0.0,
+        "first_seen": "2026-10-18T16:31:34Z",
+        "governance_status": "watch",
+        "last_seen": "2026-10-18T16:31:34Z",
+        "lifecycle_stage": "emerging",
+        "lifecycle_velocity": 1.0,
+        "observations_per_day": 1.0,
+        "occurrence_count": 1,
+        "recurrence_age_days": 0.0,
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "trend_classification": "emerging"
       }
     ],
     "lifecycle_distribution": {
       "dormant": 0,
-      "emerging": 1,
-      "persistent": 0,
-      "recurring": 1,
+      "emerging": 3,
+      "persistent": 2,
+      "recurring": 0,
       "retired": 0
     },
-    "lifecycle_health_score": 30.0,
+    "lifecycle_health_score": 24.0,
     "lifecycle_stage_classification_definition": "Deterministic lifecycle stage from trend classification and recurrence status: retired when status is retired/deprecated or dormant inactivity exceeds retirement threshold; otherwise lifecycle stage mirrors trend classification (emerging, recurring, persistent, dormant).",
     "lifecycle_stage_definitions": {
       "dormant": "Historical protected recurrence without observation within the last 30 days.",
@@ -1819,14 +1944,14 @@
       "retired": "Explicitly retired recurrence status, or dormant beyond 90.0 days of inactivity."
     },
     "lifecycle_summary": {
-      "active_keys": 2,
-      "advancement_rate": 0.5,
+      "active_keys": 5,
+      "advancement_rate": 0.8,
       "advisory_only": true,
-      "average_age_days": 53.6728,
+      "average_age_days": 36.4521,
       "closure_rate": 0.0,
       "closure_rate_definition": "Advisory closure rate: (retired_keys + dormant_keys) / max(total_keys, 1).",
       "dormant_keys": 0,
-      "lifecycle_health_score": 30.0,
+      "lifecycle_health_score": 24.0,
       "lifecycle_health_score_definition": "Advisory 0-100 score: 25% retired_ratio + 15% dormant_ratio + 20% (1 - persistent_ratio) + 20% (1 - min(1, advancement_rate * 2)) + 20% emerging_ratio. Higher scores indicate healthier lifecycle posture with more closures and fewer advancing persistent recurrences.",
       "protected_replay_only": true,
       "report_only": true,
@@ -1837,33 +1962,37 @@
     "protected_replay_only": true,
     "report_only": true,
     "schema_version": 1,
-    "total_keys": 2,
+    "total_keys": 5,
     "transition_summary": {
-      "advancing_transitions": 1,
+      "advancing_transitions": 4,
       "advisory_only": true,
       "protected_replay_only": true,
       "report_only": true,
       "retiring_transitions": 0,
       "schema_version": 1,
-      "stalled_key_count": 1,
+      "stalled_key_count": 2,
       "stalled_keys": [
-        "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py"
+        "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py"
       ],
-      "transition_count": 1,
+      "transition_count": 4,
       "transitions": [
-        "emerging->recurring"
+        "emerging->recurring",
+        "recurring->persistent",
+        "emerging->recurring",
+        "recurring->persistent"
       ]
     }
   },
   "recurrence_lifecycle_summary": {
-    "active_keys": 2,
-    "advancement_rate": 0.5,
+    "active_keys": 5,
+    "advancement_rate": 0.8,
     "advisory_only": true,
-    "average_age_days": 53.6728,
+    "average_age_days": 36.4521,
     "closure_rate": 0.0,
     "closure_rate_definition": "Advisory closure rate: (retired_keys + dormant_keys) / max(total_keys, 1).",
     "dormant_keys": 0,
-    "lifecycle_health_score": 30.0,
+    "lifecycle_health_score": 24.0,
     "lifecycle_health_score_definition": "Advisory 0-100 score: 25% retired_ratio + 15% dormant_ratio + 20% (1 - persistent_ratio) + 20% (1 - min(1, advancement_rate * 2)) + 20% emerging_ratio. Higher scores indicate healthier lifecycle posture with more closures and fewer advancing persistent recurrences.",
     "protected_replay_only": true,
     "report_only": true,
@@ -1881,61 +2010,61 @@
       "remediation": 0.15
     },
     "forecasting_maturity": {
-      "confidence": 0.93,
-      "maturity_level": "measured",
-      "maturity_score": 73.3,
-      "rationale": "Forecasting maturity from model availability (2 key forecasts), forecast_confidence 1.00, confidence-weighted accuracy 1.00, scaled by volume factor 0.67."
+      "confidence": 1.0,
+      "maturity_level": "optimized",
+      "maturity_score": 100.0,
+      "rationale": "Forecasting maturity from model availability (5 key forecasts), forecast_confidence 1.00, confidence-weighted accuracy 1.00, scaled by volume factor 1.00."
     },
     "governance_maturity": {
-      "confidence": 0.92,
-      "maturity_level": "managed",
-      "maturity_score": 59.1,
-      "rationale": "Governance maturity from watchlist/ownership/retirement structures (5/5 present), governance_health_score 36.4, and governance_confidence 1.00."
+      "confidence": 1.0,
+      "maturity_level": "measured",
+      "maturity_score": 62.5,
+      "rationale": "Governance maturity from watchlist/ownership/retirement structures (5/5 present), governance_health_score 50.1, and governance_confidence 1.00."
     },
     "lifecycle_maturity": {
-      "confidence": 0.9,
+      "confidence": 1.0,
       "maturity_level": "managed",
-      "maturity_score": 42.5,
-      "rationale": "Lifecycle maturity from lifecycle tracking (2 keys), transition_summary present, age_distribution present, and lifecycle_health_score 30.0."
+      "maturity_score": 41.0,
+      "rationale": "Lifecycle maturity from lifecycle tracking (5 keys), transition_summary present, age_distribution present, and lifecycle_health_score 24.0."
     },
     "maturity_gap_analysis": [
       {
-        "current_score": 42.5,
+        "current_score": 41.0,
         "dimension": "lifecycle",
-        "gap": 37.5,
+        "gap": 39.0,
         "improvement_priority": "high",
         "target_score": 80.0
       },
       {
-        "current_score": 49.0,
+        "current_score": 55.0,
         "dimension": "remediation",
-        "gap": 31.0,
+        "gap": 25.0,
         "improvement_priority": "high",
         "target_score": 80.0
       },
       {
-        "current_score": 59.1,
+        "current_score": 62.5,
         "dimension": "governance",
-        "gap": 20.9,
+        "gap": 17.5,
         "improvement_priority": "medium",
         "target_score": 80.0
       },
       {
-        "current_score": 73.3,
-        "dimension": "forecasting",
-        "gap": 6.7,
-        "improvement_priority": "low",
-        "target_score": 80.0
-      },
-      {
-        "current_score": 83.3,
+        "current_score": 90.0,
         "dimension": "observability",
         "gap": 0.0,
         "improvement_priority": "low",
         "target_score": 80.0
       },
       {
-        "current_score": 91.3,
+        "current_score": 100.0,
+        "dimension": "forecasting",
+        "gap": 0.0,
+        "improvement_priority": "low",
+        "target_score": 80.0
+      },
+      {
+        "current_score": 100.0,
         "dimension": "operational_readiness",
         "gap": 0.0,
         "improvement_priority": "low",
@@ -1946,89 +2075,89 @@
     "maturity_level_definition": "Maturity levels map 0-100 scores to capability stages: 0-19 Initial, 20-39 Developing, 40-59 Managed, 60-79 Measured, 80-100 Optimized.",
     "maturity_scores": {
       "dimension_scores": {
-        "forecasting": 73.3,
-        "governance": 59.1,
-        "lifecycle": 42.5,
-        "observability": 83.3,
-        "operational_readiness": 91.3,
-        "remediation": 49.0
+        "forecasting": 100.0,
+        "governance": 62.5,
+        "lifecycle": 41.0,
+        "observability": 90.0,
+        "operational_readiness": 100.0,
+        "remediation": 55.0
       },
       "forecasting_maturity": {
-        "confidence": 0.93,
-        "maturity_level": "measured",
-        "maturity_score": 73.3,
-        "rationale": "Forecasting maturity from model availability (2 key forecasts), forecast_confidence 1.00, confidence-weighted accuracy 1.00, scaled by volume factor 0.67."
+        "confidence": 1.0,
+        "maturity_level": "optimized",
+        "maturity_score": 100.0,
+        "rationale": "Forecasting maturity from model availability (5 key forecasts), forecast_confidence 1.00, confidence-weighted accuracy 1.00, scaled by volume factor 1.00."
       },
       "governance_maturity": {
-        "confidence": 0.92,
-        "maturity_level": "managed",
-        "maturity_score": 59.1,
-        "rationale": "Governance maturity from watchlist/ownership/retirement structures (5/5 present), governance_health_score 36.4, and governance_confidence 1.00."
+        "confidence": 1.0,
+        "maturity_level": "measured",
+        "maturity_score": 62.5,
+        "rationale": "Governance maturity from watchlist/ownership/retirement structures (5/5 present), governance_health_score 50.1, and governance_confidence 1.00."
       },
       "lifecycle_maturity": {
-        "confidence": 0.9,
+        "confidence": 1.0,
         "maturity_level": "managed",
-        "maturity_score": 42.5,
-        "rationale": "Lifecycle maturity from lifecycle tracking (2 keys), transition_summary present, age_distribution present, and lifecycle_health_score 30.0."
+        "maturity_score": 41.0,
+        "rationale": "Lifecycle maturity from lifecycle tracking (5 keys), transition_summary present, age_distribution present, and lifecycle_health_score 24.0."
       },
       "observability_maturity": {
-        "confidence": 0.93,
+        "confidence": 1.0,
         "maturity_level": "optimized",
-        "maturity_score": 83.3,
-        "rationale": "Observability reflects analytics coverage (6/6 signals present: recurrence_history, trend_analytics, forecasting, portfolio_analytics, governance_signals, longitudinal_measurements). Volume quality factor 0.67 from 16 observations across 2 keys."
+        "maturity_score": 90.0,
+        "rationale": "Observability reflects analytics coverage (6/6 signals present: recurrence_history, trend_analytics, forecasting, portfolio_analytics, governance_signals, longitudinal_measurements). Volume quality factor 1.00 from 33 observations across 5 keys."
       },
       "operational_readiness": {
-        "confidence": 0.9,
+        "confidence": 1.0,
         "maturity_level": "optimized",
-        "maturity_score": 91.3,
-        "rationale": "Operational readiness from governance_confidence 1.00, effectiveness_confidence 0.90, forecast_confidence 1.00, trajectory_available true, and data sufficiency factor 0.67."
+        "maturity_score": 100.0,
+        "rationale": "Operational readiness from governance_confidence 1.00, effectiveness_confidence 1.00, forecast_confidence 1.00, trajectory_available true, and data sufficiency factor 1.00."
       },
-      "overall_maturity_score": 68.5,
+      "overall_maturity_score": 76.8,
       "remediation_maturity": {
-        "confidence": 0.9,
+        "confidence": 1.0,
         "maturity_level": "managed",
-        "maturity_score": 49.0,
+        "maturity_score": 55.0,
         "rationale": "Remediation maturity from targeting/ROI structures (present), recurrence_reduction_rate 0.00, remediation_effectiveness 0.00, remediation_confidence 1.00."
       },
-      "total_keys": 2,
-      "total_observations": 16
+      "total_keys": 5,
+      "total_observations": 33
     },
     "observability_maturity": {
-      "confidence": 0.93,
+      "confidence": 1.0,
       "maturity_level": "optimized",
-      "maturity_score": 83.3,
-      "rationale": "Observability reflects analytics coverage (6/6 signals present: recurrence_history, trend_analytics, forecasting, portfolio_analytics, governance_signals, longitudinal_measurements). Volume quality factor 0.67 from 16 observations across 2 keys."
+      "maturity_score": 90.0,
+      "rationale": "Observability reflects analytics coverage (6/6 signals present: recurrence_history, trend_analytics, forecasting, portfolio_analytics, governance_signals, longitudinal_measurements). Volume quality factor 1.00 from 33 observations across 5 keys."
     },
     "operational_readiness": {
-      "confidence": 0.9,
+      "confidence": 1.0,
       "maturity_level": "optimized",
-      "maturity_score": 91.3,
-      "rationale": "Operational readiness from governance_confidence 1.00, effectiveness_confidence 0.90, forecast_confidence 1.00, trajectory_available true, and data sufficiency factor 0.67."
+      "maturity_score": 100.0,
+      "rationale": "Operational readiness from governance_confidence 1.00, effectiveness_confidence 1.00, forecast_confidence 1.00, trajectory_available true, and data sufficiency factor 1.00."
     },
     "overall_maturity_score_definition": "Advisory 0-100 weighted maturity score: 20% observability + 15% governance + 15% forecasting + 15% remediation + 15% lifecycle + 20% operational_readiness. Higher scores indicate a more mature recurrence capability independent of program outcome effectiveness.",
     "protected_replay_only": true,
     "recurrence_maturity_summary": {
       "advisory_only": true,
-      "forecasting_score": 73.3,
-      "governance_score": 59.1,
-      "highest_dimension": "operational_readiness",
-      "lifecycle_score": 42.5,
+      "forecasting_score": 100.0,
+      "governance_score": 62.5,
+      "highest_dimension": "forecasting",
+      "lifecycle_score": 41.0,
       "lowest_dimension": "lifecycle",
       "maturity_level_definition": "Maturity levels map 0-100 scores to capability stages: 0-19 Initial, 20-39 Developing, 40-59 Managed, 60-79 Measured, 80-100 Optimized.",
-      "observability_score": 83.3,
-      "operational_readiness_score": 91.3,
+      "observability_score": 90.0,
+      "operational_readiness_score": 100.0,
       "overall_maturity_level": "measured",
-      "overall_maturity_score": 68.5,
+      "overall_maturity_score": 76.8,
       "overall_maturity_score_definition": "Advisory 0-100 weighted maturity score: 20% observability + 15% governance + 15% forecasting + 15% remediation + 15% lifecycle + 20% operational_readiness. Higher scores indicate a more mature recurrence capability independent of program outcome effectiveness.",
       "protected_replay_only": true,
-      "remediation_score": 49.0,
+      "remediation_score": 55.0,
       "report_only": true,
       "schema_version": 1
     },
     "remediation_maturity": {
-      "confidence": 0.9,
+      "confidence": 1.0,
       "maturity_level": "managed",
-      "maturity_score": 49.0,
+      "maturity_score": 55.0,
       "rationale": "Remediation maturity from targeting/ROI structures (present), recurrence_reduction_rate 0.00, remediation_effectiveness 0.00, remediation_confidence 1.00."
     },
     "report_only": true,
@@ -2036,42 +2165,42 @@
   },
   "recurrence_maturity_gap_analysis": [
     {
-      "current_score": 42.5,
+      "current_score": 41.0,
       "dimension": "lifecycle",
-      "gap": 37.5,
+      "gap": 39.0,
       "improvement_priority": "high",
       "target_score": 80.0
     },
     {
-      "current_score": 49.0,
+      "current_score": 55.0,
       "dimension": "remediation",
-      "gap": 31.0,
+      "gap": 25.0,
       "improvement_priority": "high",
       "target_score": 80.0
     },
     {
-      "current_score": 59.1,
+      "current_score": 62.5,
       "dimension": "governance",
-      "gap": 20.9,
+      "gap": 17.5,
       "improvement_priority": "medium",
       "target_score": 80.0
     },
     {
-      "current_score": 73.3,
-      "dimension": "forecasting",
-      "gap": 6.7,
-      "improvement_priority": "low",
-      "target_score": 80.0
-    },
-    {
-      "current_score": 83.3,
+      "current_score": 90.0,
       "dimension": "observability",
       "gap": 0.0,
       "improvement_priority": "low",
       "target_score": 80.0
     },
     {
-      "current_score": 91.3,
+      "current_score": 100.0,
+      "dimension": "forecasting",
+      "gap": 0.0,
+      "improvement_priority": "low",
+      "target_score": 80.0
+    },
+    {
+      "current_score": 100.0,
       "dimension": "operational_readiness",
       "gap": 0.0,
       "improvement_priority": "low",
@@ -2080,19 +2209,19 @@
   ],
   "recurrence_maturity_summary": {
     "advisory_only": true,
-    "forecasting_score": 73.3,
-    "governance_score": 59.1,
-    "highest_dimension": "operational_readiness",
-    "lifecycle_score": 42.5,
+    "forecasting_score": 100.0,
+    "governance_score": 62.5,
+    "highest_dimension": "forecasting",
+    "lifecycle_score": 41.0,
     "lowest_dimension": "lifecycle",
     "maturity_level_definition": "Maturity levels map 0-100 scores to capability stages: 0-19 Initial, 20-39 Developing, 40-59 Managed, 60-79 Measured, 80-100 Optimized.",
-    "observability_score": 83.3,
-    "operational_readiness_score": 91.3,
+    "observability_score": 90.0,
+    "operational_readiness_score": 100.0,
     "overall_maturity_level": "measured",
-    "overall_maturity_score": 68.5,
+    "overall_maturity_score": 76.8,
     "overall_maturity_score_definition": "Advisory 0-100 weighted maturity score: 20% observability + 15% governance + 15% forecasting + 15% remediation + 15% lifecycle + 20% operational_readiness. Higher scores indicate a more mature recurrence capability independent of program outcome effectiveness.",
     "protected_replay_only": true,
-    "remediation_score": 49.0,
+    "remediation_score": 55.0,
     "report_only": true,
     "schema_version": 1
   },
@@ -2108,56 +2237,57 @@
         "reported_confidence": 0.82
       },
       "bqc5_current": {
-        "calibration_gap": 0.7,
-        "confidence_calibration_score": 53.0,
-        "evidence_strength": 0.2,
+        "calibration_gap": 0.52,
+        "confidence_calibration_score": 65.3,
+        "evidence_strength": 0.48,
         "graduation_confidence_ready": false,
-        "largest_calibration_gap": 0.7,
-        "reported_confidence": 0.9
+        "largest_calibration_gap": 0.52,
+        "reported_confidence": 1.0
       },
-      "calibration_score_delta": -8.3,
-      "effectiveness_evidence_delta": 0.02,
-      "largest_gap_delta": 0.06
+      "calibration_score_delta": 4.0,
+      "effectiveness_evidence_delta": 0.3,
+      "largest_gap_delta": -0.12
     },
     "effectiveness_confidence_audit": {
-      "calibration_gap": 0.7,
+      "calibration_gap": 0.52,
       "confidence_status": "overconfident",
       "evidence_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
-      "evidence_strength": 0.2,
+      "evidence_strength": 0.48,
       "outcome_supported": false,
-      "reported_confidence": 0.9,
+      "reported_confidence": 1.0,
       "trajectory_available": true,
       "validated_closure_rate": 0.0,
-      "validated_outcome_count": 0,
-      "validated_recurrence_reduction_rate": 0.0,
+      "validated_outcome_count": 1,
+      "validated_recurrence_reduction_rate": 0.5,
       "validated_remediation_impact_rate": 0.0
     },
     "final_graduation_recommendation": "one_additional_validation_period_required",
-    "final_graduation_recommendation_rationale": "Trajectory is active but no validated outcome evidence exists; one additional validation period is required.",
+    "final_graduation_recommendation_rationale": "Some outcome evidence exists but calibration or effectiveness support remains insufficient for graduation.",
     "formal_graduation_criteria_met": false,
-    "missing_outcome_signal": "At least one validated outcome event is required: retired key, dormant key, measurable recurrence reduction, or confirmed remediation impact.",
+    "missing_outcome_signal": null,
     "outcome_validation_summary": {
-      "active_keys": 2,
+      "active_keys": 5,
       "advisory_only": true,
       "definition": "Advisory protected replay outcome validation accepts only evidenced lifecycle closures (retired/dormant keys with event-log or inactivity backing), measurable trajectory recurrence reduction, or confirmed remediation impact on targeted keys. Synthetic keys, manually forced statuses, and inferred success without evidence are rejected.",
       "dormant_keys": 0,
-      "has_validated_outcomes": false,
+      "has_validated_outcomes": true,
       "outcome_evidence_strength_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
       "protected_replay_only": true,
-      "rejected_signals": [
-        {
-          "candidate_signal": "measurable_recurrence_reduction",
-          "rejection_reason": "insufficient_evidence"
-        }
-      ],
+      "rejected_signals": [],
       "report_only": true,
       "retired_keys": 0,
       "schema_version": 1,
-      "total_keys": 2,
+      "total_keys": 5,
       "validated_closure_rate": 0.0,
-      "validated_outcome_count": 0,
-      "validated_outcomes": [],
-      "validated_recurrence_reduction_rate": 0.0,
+      "validated_outcome_count": 1,
+      "validated_outcomes": [
+        {
+          "absolute_change": -0.5,
+          "evidence_source": "trajectory_portfolio_risk_decrease",
+          "signal_type": "measurable_recurrence_reduction"
+        }
+      ],
+      "validated_recurrence_reduction_rate": 0.5,
       "validated_remediation_impact_rate": 0.0
     },
     "protected_replay_only": true,
@@ -2231,40 +2361,40 @@
       ],
       "calibration_definition": "Advisory confidence calibration compares reported confidence metrics against evidence strength derived from protected replay observation volume, key coverage, trajectory availability, forecast accuracy, governance posture, and lifecycle/remediation outcomes. calibration_gap = reported_confidence - evidence_strength. Positive gaps indicate overconfidence; negative gaps indicate underconfidence; gaps within tolerance indicate calibration.",
       "effectiveness_confidence_audit": {
-        "calibration_gap": 0.7,
+        "calibration_gap": 0.52,
         "confidence_status": "overconfident",
         "evidence_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
-        "evidence_strength": 0.2,
+        "evidence_strength": 0.48,
         "outcome_supported": false,
-        "reported_confidence": 0.9,
+        "reported_confidence": 1.0,
         "trajectory_available": true,
         "validated_closure_rate": 0.0,
-        "validated_outcome_count": 0,
-        "validated_recurrence_reduction_rate": 0.0,
+        "validated_outcome_count": 1,
+        "validated_recurrence_reduction_rate": 0.5,
         "validated_remediation_impact_rate": 0.0
       },
       "forecast_confidence_audit": {
-        "calibration_gap": 0.07,
+        "calibration_gap": 0.0,
         "confidence_status": "calibrated",
         "evidence_definition": "Weighted blend: 30% observation volume factor min(1, observations/5), 20% key coverage factor min(1, keys/3), 25% trajectory factor (1.0 when trajectory_available else 0.4), 25% accuracy evidence forecast_accuracy * observation volume factor.",
-        "evidence_strength": 0.93,
+        "evidence_strength": 1.0,
         "forecast_accuracy": 1.0,
         "reported_confidence": 1.0,
-        "total_keys": 2,
-        "total_observations": 16,
+        "total_keys": 5,
+        "total_observations": 33,
         "trajectory_available": true
       },
       "governance_confidence_audit": {
-        "calibration_gap": 0.34,
+        "calibration_gap": 0.22,
         "confidence_status": "overconfident",
         "evidence_definition": "Weighted blend: 30% observation volume factor, 25% watchlist coverage watchlist_size/max(keys,1), 20% owner dispersion 1 - owner_concentration_ratio, 25% governance_health_score/100.",
-        "evidence_strength": 0.66,
-        "governance_health_score": 36.4,
-        "owner_concentration_ratio": 0.8828,
-        "owner_count": 1,
+        "evidence_strength": 0.78,
+        "governance_health_score": 50.1,
+        "owner_concentration_ratio": 0.4821,
+        "owner_count": 4,
         "reported_confidence": 1.0,
-        "total_observations": 16,
-        "watchlist_size": 2
+        "total_observations": 33,
+        "watchlist_size": 5
       },
       "graduation_threshold_validation": [
         {
@@ -2275,14 +2405,14 @@
           "validation_status": "supported"
         },
         {
-          "current_value": 0.9,
+          "current_value": 1.0,
           "rationale": "Effectiveness confidence meets threshold but substantially exceeds remediation, closure, and trajectory evidence.",
           "target_value": 0.75,
           "threshold": "effectiveness_confidence",
           "validation_status": "optimistic"
         },
         {
-          "current_value": 91.3,
+          "current_value": 100.0,
           "rationale": "Operational readiness meets target while overall maturity remains below program target.",
           "target_value": 80.0,
           "threshold": "operational_readiness",
@@ -2304,27 +2434,28 @@
         }
       ],
       "outcome_validation_summary": {
-        "active_keys": 2,
+        "active_keys": 5,
         "advisory_only": true,
         "definition": "Advisory protected replay outcome validation accepts only evidenced lifecycle closures (retired/dormant keys with event-log or inactivity backing), measurable trajectory recurrence reduction, or confirmed remediation impact on targeted keys. Synthetic keys, manually forced statuses, and inferred success without evidence are rejected.",
         "dormant_keys": 0,
-        "has_validated_outcomes": false,
+        "has_validated_outcomes": true,
         "outcome_evidence_strength_definition": "Outcome-grounded 0-1 effectiveness evidence: 20% trajectory factor + 40% validated outcome coverage (validated_outcomes / total_keys) + 40% max(validated_closure_rate, validated_recurrence_reduction_rate, validated_remediation_impact_rate).",
         "protected_replay_only": true,
-        "rejected_signals": [
-          {
-            "candidate_signal": "measurable_recurrence_reduction",
-            "rejection_reason": "insufficient_evidence"
-          }
-        ],
+        "rejected_signals": [],
         "report_only": true,
         "retired_keys": 0,
         "schema_version": 1,
-        "total_keys": 2,
+        "total_keys": 5,
         "validated_closure_rate": 0.0,
-        "validated_outcome_count": 0,
-        "validated_outcomes": [],
-        "validated_recurrence_reduction_rate": 0.0,
+        "validated_outcome_count": 1,
+        "validated_outcomes": [
+          {
+            "absolute_change": -0.5,
+            "evidence_source": "trajectory_portfolio_risk_decrease",
+            "signal_type": "measurable_recurrence_reduction"
+          }
+        ],
+        "validated_recurrence_reduction_rate": 0.5,
         "validated_remediation_impact_rate": 0.0
       },
       "protected_replay_only": true,
@@ -2336,15 +2467,15 @@
       ],
       "recurrence_confidence_calibration_summary": {
         "advisory_only": true,
-        "average_calibration_gap": 0.37,
-        "confidence_calibration_score": 53.0,
+        "average_calibration_gap": 0.25,
+        "confidence_calibration_score": 65.3,
         "effectiveness_status": "overconfident",
         "forecast_status": "calibrated",
         "governance_status": "overconfident",
         "graduation_confidence_ready": false,
         "interpretation": "needs_monitoring",
         "interpretation_label": "Needs monitoring",
-        "largest_calibration_gap": 0.7,
+        "largest_calibration_gap": 0.52,
         "protected_replay_only": true,
         "report_only": true,
         "schema_version": 1,
@@ -2356,15 +2487,15 @@
     },
     "recurrence_confidence_calibration_summary": {
       "advisory_only": true,
-      "average_calibration_gap": 0.37,
-      "confidence_calibration_score": 53.0,
+      "average_calibration_gap": 0.25,
+      "confidence_calibration_score": 65.3,
       "effectiveness_status": "overconfident",
       "forecast_status": "calibrated",
       "governance_status": "overconfident",
       "graduation_confidence_ready": false,
       "interpretation": "needs_monitoring",
       "interpretation_label": "Needs monitoring",
-      "largest_calibration_gap": 0.7,
+      "largest_calibration_gap": 0.52,
       "protected_replay_only": true,
       "report_only": true,
       "schema_version": 1,
@@ -2380,41 +2511,93 @@
     "categories": [
       {
         "category": "replay_drift",
-        "observations": 15,
+        "observations": 21,
         "recurrence_keys": 1,
-        "risk_share": 0.9375
+        "risk_share": 0.6364
+      },
+      {
+        "category": "validator",
+        "observations": 9,
+        "recurrence_keys": 1,
+        "risk_share": 0.2727
+      },
+      {
+        "category": "fallback",
+        "observations": 1,
+        "recurrence_keys": 1,
+        "risk_share": 0.0303
       },
       {
         "category": "projection",
         "observations": 1,
         "recurrence_keys": 1,
-        "risk_share": 0.0625
+        "risk_share": 0.0303
+      },
+      {
+        "category": "sanitizer",
+        "observations": 1,
+        "recurrence_keys": 1,
+        "risk_share": 0.0303
       }
     ],
-    "category_concentration_ratio": 0.8828,
-    "field_path_concentration_ratio": 1.0,
+    "category_concentration_ratio": 0.4821,
+    "field_path_concentration_ratio": 0.5207,
     "field_paths": [
       {
         "field_path": "selected_speaker_id",
-        "observations": 16,
+        "observations": 22,
         "recurrence_keys": 2,
-        "risk_share": 1.0
+        "risk_share": 0.6667
+      },
+      {
+        "field_path": "response_type_candidate_ok",
+        "observations": 9,
+        "recurrence_keys": 1,
+        "risk_share": 0.2727
+      },
+      {
+        "field_path": "final_emitted_source",
+        "observations": 1,
+        "recurrence_keys": 1,
+        "risk_share": 0.0303
+      },
+      {
+        "field_path": "scaffold_leakage",
+        "observations": 1,
+        "recurrence_keys": 1,
+        "risk_share": 0.0303
       }
     ],
     "highest_risk_category": "replay_drift",
     "highest_risk_field_path": "selected_speaker_id",
     "highest_risk_owner": "replay",
     "highest_risk_scenario": "writer_bridge",
-    "owner_concentration_ratio": 0.8828,
-    "owner_count": 2,
+    "owner_concentration_ratio": 0.4821,
+    "owner_count": 5,
     "owners": [
       {
         "elevated_keys": 1,
-        "observations": 15,
+        "observations": 21,
         "owner": "replay",
         "recurrence_keys": 1,
         "recurring_keys": 1,
-        "risk_share": 0.9375
+        "risk_share": 0.6364
+      },
+      {
+        "elevated_keys": 1,
+        "observations": 9,
+        "owner": "validator",
+        "recurrence_keys": 1,
+        "recurring_keys": 1,
+        "risk_share": 0.2727
+      },
+      {
+        "elevated_keys": 0,
+        "observations": 1,
+        "owner": "fallback",
+        "recurrence_keys": 1,
+        "recurring_keys": 0,
+        "risk_share": 0.0303
       },
       {
         "elevated_keys": 0,
@@ -2422,66 +2605,104 @@
         "owner": "projection",
         "recurrence_keys": 1,
         "recurring_keys": 0,
-        "risk_share": 0.0625
+        "risk_share": 0.0303
+      },
+      {
+        "elevated_keys": 0,
+        "observations": 1,
+        "owner": "sanitizer",
+        "recurrence_keys": 1,
+        "recurring_keys": 0,
+        "risk_share": 0.0303
       }
     ],
     "portfolio_summary": {
       "advisory_only": true,
-      "category_concentration_ratio": 0.8828,
+      "category_concentration_ratio": 0.4821,
       "concentration_definition": "Herfindahl index (sum of squared observation risk shares) per dimension. High concentration means risk is localized (easier remediation); low concentration means distributed risk (broader systemic concern).",
-      "field_path_concentration_ratio": 1.0,
+      "field_path_concentration_ratio": 0.5207,
       "forecast_confidence": 1.0,
       "largest_risk_bucket": {
-        "concentration_ratio": 1.0,
+        "concentration_ratio": 0.5207,
         "dimension": "field_path",
         "label": "selected_speaker_id"
       },
-      "owner_concentration_ratio": 0.8828,
-      "portfolio_risk_score": 64.3,
+      "owner_concentration_ratio": 0.4821,
+      "portfolio_risk_score": 43.6,
       "portfolio_risk_score_definition": "Advisory 0-100 blend: 60% forecast_risk_score/100 + 10% each dimension concentration ratio (owner, category, field_path, scenario). Higher scores indicate greater localized or forecast-weighted recurrence risk.",
       "protected_replay_only": true,
       "report_only": true,
-      "scenario_concentration_ratio": 0.8828,
+      "scenario_concentration_ratio": 0.4307,
       "schema_version": 1
     },
     "protected_replay_only": true,
     "report_only": true,
-    "scenario_concentration_ratio": 0.8828,
+    "scenario_concentration_ratio": 0.4307,
     "scenarios": [
       {
-        "observations": 15,
+        "observations": 21,
         "recurrence_keys": 1,
-        "risk_share": 0.9375,
+        "risk_share": 0.6364,
         "scenario_id": "writer_bridge"
+      },
+      {
+        "observations": 3,
+        "recurrence_keys": 2,
+        "risk_share": 0.0909,
+        "scenario_id": "sanitizer_scaffold_leakage"
+      },
+      {
+        "observations": 3,
+        "recurrence_keys": 2,
+        "risk_share": 0.0909,
+        "scenario_id": "vocative_override_after_prior_continuity"
+      },
+      {
+        "observations": 2,
+        "recurrence_keys": 1,
+        "risk_share": 0.0606,
+        "scenario_id": "lead_followup_with_dialogue_lock"
+      },
+      {
+        "observations": 2,
+        "recurrence_keys": 1,
+        "risk_share": 0.0606,
+        "scenario_id": "wrong_speaker_strict_social_emission"
       },
       {
         "observations": 1,
         "recurrence_keys": 1,
-        "risk_share": 0.0625,
-        "scenario_id": "vocative_override_after_prior_continuity"
+        "risk_share": 0.0303,
+        "scenario_id": "directed_npc_question"
+      },
+      {
+        "observations": 1,
+        "recurrence_keys": 1,
+        "risk_share": 0.0303,
+        "scenario_id": "thin_answer_action_outcome_final_emission"
       }
     ],
     "schema_version": 1,
-    "total_keys": 2,
-    "total_observations": 16
+    "total_keys": 5,
+    "total_observations": 33
   },
   "recurrence_portfolio_summary": {
     "advisory_only": true,
-    "category_concentration_ratio": 0.8828,
+    "category_concentration_ratio": 0.4821,
     "concentration_definition": "Herfindahl index (sum of squared observation risk shares) per dimension. High concentration means risk is localized (easier remediation); low concentration means distributed risk (broader systemic concern).",
-    "field_path_concentration_ratio": 1.0,
+    "field_path_concentration_ratio": 0.5207,
     "forecast_confidence": 1.0,
     "largest_risk_bucket": {
-      "concentration_ratio": 1.0,
+      "concentration_ratio": 0.5207,
       "dimension": "field_path",
       "label": "selected_speaker_id"
     },
-    "owner_concentration_ratio": 0.8828,
-    "portfolio_risk_score": 64.3,
+    "owner_concentration_ratio": 0.4821,
+    "portfolio_risk_score": 43.6,
     "portfolio_risk_score_definition": "Advisory 0-100 blend: 60% forecast_risk_score/100 + 10% each dimension concentration ratio (owner, category, field_path, scenario). Higher scores indicate greater localized or forecast-weighted recurrence risk.",
     "protected_replay_only": true,
     "report_only": true,
-    "scenario_concentration_ratio": 0.8828,
+    "scenario_concentration_ratio": 0.4307,
     "schema_version": 1
   },
   "recurrence_program_effectiveness": {
@@ -2489,44 +2710,44 @@
     "effectiveness_metrics": {
       "baseline_only": false,
       "closure_rate": 0.0,
-      "concentration_baseline": 1.0,
+      "concentration_baseline": 0.5207,
       "concentration_change": 0.0,
-      "concentration_current": 1.0,
-      "effectiveness_confidence": 0.9,
+      "concentration_current": 0.5207,
+      "effectiveness_confidence": 1.0,
       "forecast_accuracy": 1.0,
       "forecast_confidence": 1.0,
       "forecast_effectiveness": 1.0,
-      "governance_effectiveness": 0.5,
+      "governance_effectiveness": 0.5833,
       "governance_health_baseline": 55.2,
-      "governance_health_change": -18.8,
-      "governance_health_current": 36.4,
+      "governance_health_change": -5.1,
+      "governance_health_current": 50.1,
       "improved_keys": 0,
       "investigate_conversion_rate": 1.0,
       "lifecycle_health_baseline": 45.0,
-      "lifecycle_health_change": -15.0,
-      "lifecycle_health_current": 30.0,
+      "lifecycle_health_change": -21.0,
+      "lifecycle_health_current": 24.0,
       "portfolio_risk_baseline": 44.1,
-      "portfolio_risk_change": 20.2,
-      "portfolio_risk_current": 64.3,
-      "predicted_recurrences": 2,
+      "portfolio_risk_change": -0.5,
+      "portfolio_risk_current": 43.6,
+      "predicted_recurrences": 5,
       "prioritize_conversion_rate": 1.0,
-      "program_effectiveness_score": 32.2,
-      "realized_recurrences": 2,
+      "program_effectiveness_score": 35.6,
+      "realized_recurrences": 5,
       "recurrence_rate_baseline": 0.25,
-      "recurrence_rate_change": 0.25,
-      "recurrence_rate_current": 0.5,
+      "recurrence_rate_change": 0.15,
+      "recurrence_rate_current": 0.4,
       "recurrence_reduction_rate": 0.0,
       "remediation_effectiveness": 0.0,
       "retirement_conversion_rate": 0.0,
-      "stability_change": -25.0,
+      "stability_change": -15.0,
       "stability_score_baseline": 75.0,
-      "stability_score_current": 50.0,
-      "targeted_keys": 2,
-      "total_keys": 2,
-      "total_observations": 16,
+      "stability_score_current": 60.0,
+      "targeted_keys": 5,
+      "total_keys": 5,
+      "total_observations": 33,
       "trajectory_available": true,
-      "unresolved_keys": 2,
-      "watchlist_conversion_rate": 0.0,
+      "unresolved_keys": 5,
+      "watchlist_conversion_rate": 0.3333,
       "watchlist_pressure": 1.0
     },
     "forecast_effectiveness_summary": {
@@ -2536,9 +2757,9 @@
       "forecast_confidence": 1.0,
       "forecast_effectiveness": 1.0,
       "low_confidence": false,
-      "predicted_recurrences": 2,
+      "predicted_recurrences": 5,
       "protected_replay_only": true,
-      "realized_recurrences": 2,
+      "realized_recurrences": 5,
       "report_only": true,
       "schema_version": 1
     },
@@ -2546,30 +2767,30 @@
       "advisory_only": true,
       "confidence_adjusted": false,
       "conversion_definition": "Advisory conversion rates from current governance funnel snapshot: watchlist_conversion_rate is investigate_keys / max(watch_keys, 1); investigate_conversion_rate is prioritize_keys / max(investigate_keys, 1); prioritize_conversion_rate is remediation_ready_keys / max(prioritize_keys, 1), where remediation_ready_keys have reduction_potential >= investigate threshold; retirement_conversion_rate is retirement_outcome_keys / max(total_governed_keys, 1).",
-      "governance_effectiveness": 0.5,
+      "governance_effectiveness": 0.5833,
       "investigate_conversion_rate": 1.0,
       "prioritize_conversion_rate": 1.0,
       "protected_replay_only": true,
       "report_only": true,
       "retirement_conversion_rate": 0.0,
       "schema_version": 1,
-      "watchlist_conversion_rate": 0.0
+      "watchlist_conversion_rate": 0.3333
     },
     "portfolio_trajectory_summary": {
       "advisory_only": true,
       "baseline_only": false,
-      "concentration_baseline": 1.0,
+      "concentration_baseline": 0.5207,
       "concentration_change": 0.0,
-      "concentration_current": 1.0,
+      "concentration_current": 0.5207,
       "governance_health_baseline": 55.2,
-      "governance_health_change": -18.8,
-      "governance_health_current": 36.4,
+      "governance_health_change": -5.1,
+      "governance_health_current": 50.1,
       "lifecycle_health_baseline": 45.0,
-      "lifecycle_health_change": -15.0,
-      "lifecycle_health_current": 30.0,
+      "lifecycle_health_change": -21.0,
+      "lifecycle_health_current": 24.0,
       "portfolio_risk_baseline": 44.1,
-      "portfolio_risk_change": 20.2,
-      "portfolio_risk_current": 64.3,
+      "portfolio_risk_change": -0.5,
+      "portfolio_risk_current": 43.6,
       "protected_replay_only": true,
       "report_only": true,
       "schema_version": 1,
@@ -2578,23 +2799,23 @@
     },
     "program_effectiveness_summary": {
       "advisory_only": true,
-      "effectiveness_confidence": 0.9,
+      "effectiveness_confidence": 1.0,
       "effectiveness_confidence_definition": "Weighted blend of forecast_confidence (35%), governance_confidence (35%), and observation/key volume factor min(1, observations/5)*min(1, keys/3) scaled by 0.4 when trajectory history is unavailable (30%).",
       "forecast_accuracy": 1.0,
       "forecast_effectiveness": 1.0,
-      "governance_effectiveness": 0.5,
-      "program_effectiveness_score": 32.2,
+      "governance_effectiveness": 0.5833,
+      "program_effectiveness_score": 35.6,
       "program_effectiveness_score_definition": "Advisory 0-100 score: 100 * clamp01(0.20*closure_rate + 0.20*(forecast_accuracy*forecast_confidence) + 0.20*(stability_score/100) + 0.15*(1-regression_rate) + 0.15*(governance_health_score/100) + 0.10*(lifecycle_health_score/100)) * (1 - 0.30*watchlist_pressure), where watchlist_pressure is watchlist_size/max(total_keys,1). Higher scores indicate improving program outcomes.",
       "protected_replay_only": true,
       "recurrence_reduction_rate": 0.0,
       "remediation_effectiveness": 0.0,
       "report_only": true,
       "schema_version": 1,
-      "stability_change": -25.0,
+      "stability_change": -15.0,
       "stability_trajectory": {
-        "recurrence_rate_change": 0.25,
-        "stability_change": -25.0,
-        "stability_score_current": 50.0,
+        "recurrence_rate_change": 0.15,
+        "stability_change": -15.0,
+        "stability_score_current": 60.0,
         "trajectory_available": true
       }
     },
@@ -2608,8 +2829,8 @@
       "remediation_effectiveness": 0.0,
       "report_only": true,
       "schema_version": 1,
-      "targeted_keys": 2,
-      "unresolved_keys": 2
+      "targeted_keys": 5,
+      "unresolved_keys": 5
     },
     "report_only": true,
     "schema_version": 1,
@@ -2618,36 +2839,36 @@
       "baseline_only": false,
       "protected_replay_only": true,
       "recurrence_rate_baseline": 0.25,
-      "recurrence_rate_change": 0.25,
-      "recurrence_rate_current": 0.5,
+      "recurrence_rate_change": 0.15,
+      "recurrence_rate_current": 0.4,
       "report_only": true,
       "schema_version": 1,
-      "stability_change": -25.0,
+      "stability_change": -15.0,
       "stability_score_baseline": 75.0,
-      "stability_score_current": 50.0,
+      "stability_score_current": 60.0,
       "trajectory_available": true,
       "trajectory_definition": "Stability trajectory reports current stability_score and regression_recurrence_rate against baseline values; change metrics are zero when no prior baseline snapshot exists."
     }
   },
   "recurrence_program_effectiveness_summary": {
     "advisory_only": true,
-    "effectiveness_confidence": 0.9,
+    "effectiveness_confidence": 1.0,
     "effectiveness_confidence_definition": "Weighted blend of forecast_confidence (35%), governance_confidence (35%), and observation/key volume factor min(1, observations/5)*min(1, keys/3) scaled by 0.4 when trajectory history is unavailable (30%).",
     "forecast_accuracy": 1.0,
     "forecast_effectiveness": 1.0,
-    "governance_effectiveness": 0.5,
-    "program_effectiveness_score": 32.2,
+    "governance_effectiveness": 0.5833,
+    "program_effectiveness_score": 35.6,
     "program_effectiveness_score_definition": "Advisory 0-100 score: 100 * clamp01(0.20*closure_rate + 0.20*(forecast_accuracy*forecast_confidence) + 0.20*(stability_score/100) + 0.15*(1-regression_rate) + 0.15*(governance_health_score/100) + 0.10*(lifecycle_health_score/100)) * (1 - 0.30*watchlist_pressure), where watchlist_pressure is watchlist_size/max(total_keys,1). Higher scores indicate improving program outcomes.",
     "protected_replay_only": true,
     "recurrence_reduction_rate": 0.0,
     "remediation_effectiveness": 0.0,
     "report_only": true,
     "schema_version": 1,
-    "stability_change": -25.0,
+    "stability_change": -15.0,
     "stability_trajectory": {
-      "recurrence_rate_change": 0.25,
-      "stability_change": -25.0,
-      "stability_score_current": 50.0,
+      "recurrence_rate_change": 0.15,
+      "stability_change": -15.0,
+      "stability_score_current": 60.0,
       "trajectory_available": true
     }
   },
@@ -2659,12 +2880,12 @@
         "advisory_only": true,
         "compatibility_only": true,
         "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-        "denominator": 8,
+        "denominator": 11,
         "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
         "metric": "regression_recurrence_rate",
-        "numerator": 7,
+        "numerator": 9,
         "population": "legacy_unified",
-        "rate": 0.875,
+        "rate": 0.8181818181818182,
         "report_only": true,
         "schema_version": 1
       }
@@ -2674,12 +2895,12 @@
       "recurrence_rate": {
         "advisory_only": true,
         "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-        "denominator": 2,
+        "denominator": 5,
         "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
         "metric": "regression_recurrence_rate",
-        "numerator": 1,
+        "numerator": 2,
         "population": "protected_replay_history",
-        "rate": 0.5,
+        "rate": 0.4,
         "report_only": true,
         "schema_version": 1
       }
@@ -2689,13 +2910,13 @@
       "recurrence_rate": {
         "advisory_only": true,
         "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-        "denominator": 6,
+        "denominator": 8,
         "event_source_filter": "session",
         "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
         "metric": "regression_recurrence_rate",
-        "numerator": 6,
+        "numerator": 7,
         "population": "session_diagnostic",
-        "rate": 1.0,
+        "rate": 0.875,
         "report_only": true,
         "schema_version": 1
       }
@@ -2718,9 +2939,9 @@
   },
   "recurrence_remediation_summary": {
     "advisory_only": true,
-    "estimated_portfolio_reduction": 90.2,
+    "estimated_portfolio_reduction": 70.6,
     "estimated_portfolio_reduction_definition": "Advisory estimate: highest key reduction_potential multiplied by remediation_confidence.",
-    "field_path_reduction_opportunity": 78.0,
+    "field_path_reduction_opportunity": 53.1,
     "highest_leverage_field_path": "selected_speaker_id",
     "highest_leverage_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
     "highest_leverage_owner": "replay",
@@ -2728,87 +2949,158 @@
     "highest_leverage_target": {
       "dimension": "key",
       "label": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-      "reduction_potential": 90.2,
-      "remediation_priority": "critical"
+      "reduction_potential": 70.6,
+      "remediation_priority": "high"
     },
-    "owner_reduction_opportunity": 90.2,
+    "owner_reduction_opportunity": 70.6,
     "protected_replay_only": true,
     "remediation_confidence": 1.0,
     "remediation_confidence_definition": "forecast_confidence multiplied by min(1, total_observations / 5).",
     "report_only": true,
-    "scenario_reduction_opportunity": 90.2,
+    "scenario_reduction_opportunity": 70.6,
     "schema_version": 1
   },
   "recurrence_remediation_targets": {
     "advisory_only": true,
-    "field_path_reduction_opportunity": 78.0,
+    "field_path_reduction_opportunity": 53.1,
     "field_paths": [
       {
         "field_path": "selected_speaker_id",
-        "observations": 16,
+        "observations": 22,
         "recurrence_keys": 2,
-        "reduction_potential": 78.0,
-        "remediation_priority": "critical",
-        "risk_share": 1.0
+        "reduction_potential": 53.1,
+        "remediation_priority": "high",
+        "risk_share": 0.6667
+      },
+      {
+        "field_path": "response_type_candidate_ok",
+        "observations": 9,
+        "recurrence_keys": 1,
+        "reduction_potential": 47.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.2727
+      },
+      {
+        "field_path": "final_emitted_source",
+        "observations": 1,
+        "recurrence_keys": 1,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303
+      },
+      {
+        "field_path": "scaffold_leakage",
+        "observations": 1,
+        "recurrence_keys": 1,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303
       }
     ],
     "highest_leverage_field_path": {
       "field_path": "selected_speaker_id",
-      "observations": 16,
+      "observations": 22,
       "recurrence_keys": 2,
-      "reduction_potential": 78.0,
-      "remediation_priority": "critical",
-      "risk_share": 1.0
+      "reduction_potential": 53.1,
+      "remediation_priority": "high",
+      "risk_share": 0.6667
     },
     "highest_leverage_owner": {
       "elevated_keys": 1,
-      "observations": 15,
+      "observations": 21,
       "owner": "replay",
       "recurrence_keys": 1,
       "recurring_keys": 1,
-      "reduction_potential": 90.2,
-      "remediation_priority": "critical",
-      "risk_share": 0.9375
+      "reduction_potential": 70.6,
+      "remediation_priority": "high",
+      "risk_share": 0.6364
     },
     "highest_leverage_scenario": {
-      "observations": 15,
+      "observations": 21,
       "recurrence_keys": 1,
-      "reduction_potential": 90.2,
-      "remediation_priority": "critical",
-      "risk_share": 0.9375,
+      "reduction_potential": 70.6,
+      "remediation_priority": "high",
+      "risk_share": 0.6364,
       "scenario_id": "writer_bridge"
     },
     "keys": [
       {
         "forecast_classification": "concentrated",
-        "observations": 15,
+        "observations": 21,
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical",
-        "risk_share": 0.9375,
-        "trend_classification": "recurring"
+        "reduction_potential": 70.6,
+        "remediation_priority": "high",
+        "risk_share": 0.6364,
+        "trend_classification": "persistent"
+      },
+      {
+        "forecast_classification": "elevated",
+        "observations": 9,
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "reduction_potential": 47.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.2727,
+        "trend_classification": "persistent"
+      },
+      {
+        "forecast_classification": "watch",
+        "observations": 1,
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "trend_classification": "emerging"
+      },
+      {
+        "forecast_classification": "watch",
+        "observations": 1,
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "trend_classification": "emerging"
       },
       {
         "forecast_classification": "watch",
         "observations": 1,
         "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
-        "reduction_potential": 17.1,
+        "reduction_potential": 14.8,
         "remediation_priority": "low",
-        "risk_share": 0.0625,
+        "risk_share": 0.0303,
         "trend_classification": "emerging"
       }
     ],
-    "owner_reduction_opportunity": 90.2,
+    "owner_reduction_opportunity": 70.6,
     "owners": [
       {
         "elevated_keys": 1,
-        "observations": 15,
+        "observations": 21,
         "owner": "replay",
         "recurrence_keys": 1,
         "recurring_keys": 1,
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical",
-        "risk_share": 0.9375
+        "reduction_potential": 70.6,
+        "remediation_priority": "high",
+        "risk_share": 0.6364
+      },
+      {
+        "elevated_keys": 1,
+        "observations": 9,
+        "owner": "validator",
+        "recurrence_keys": 1,
+        "recurring_keys": 1,
+        "reduction_potential": 47.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.2727
+      },
+      {
+        "elevated_keys": 0,
+        "observations": 1,
+        "owner": "fallback",
+        "recurrence_keys": 1,
+        "recurring_keys": 0,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303
       },
       {
         "elevated_keys": 0,
@@ -2816,9 +3108,19 @@
         "owner": "projection",
         "recurrence_keys": 1,
         "recurring_keys": 0,
-        "reduction_potential": 17.1,
+        "reduction_potential": 14.8,
         "remediation_priority": "low",
-        "risk_share": 0.0625
+        "risk_share": 0.0303
+      },
+      {
+        "elevated_keys": 0,
+        "observations": 1,
+        "owner": "sanitizer",
+        "recurrence_keys": 1,
+        "recurring_keys": 0,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303
       }
     ],
     "protected_replay_only": true,
@@ -2826,9 +3128,9 @@
     "remediation_priority_definition": "Deterministic priority from reduction_potential: critical >= 75, high >= 50, medium >= 25, low < 25.",
     "remediation_summary": {
       "advisory_only": true,
-      "estimated_portfolio_reduction": 90.2,
+      "estimated_portfolio_reduction": 70.6,
       "estimated_portfolio_reduction_definition": "Advisory estimate: highest key reduction_potential multiplied by remediation_confidence.",
-      "field_path_reduction_opportunity": 78.0,
+      "field_path_reduction_opportunity": 53.1,
       "highest_leverage_field_path": "selected_speaker_id",
       "highest_leverage_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
       "highest_leverage_owner": "replay",
@@ -2836,40 +3138,80 @@
       "highest_leverage_target": {
         "dimension": "key",
         "label": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical"
+        "reduction_potential": 70.6,
+        "remediation_priority": "high"
       },
-      "owner_reduction_opportunity": 90.2,
+      "owner_reduction_opportunity": 70.6,
       "protected_replay_only": true,
       "remediation_confidence": 1.0,
       "remediation_confidence_definition": "forecast_confidence multiplied by min(1, total_observations / 5).",
       "report_only": true,
-      "scenario_reduction_opportunity": 90.2,
+      "scenario_reduction_opportunity": 70.6,
       "schema_version": 1
     },
     "report_only": true,
-    "scenario_reduction_opportunity": 90.2,
+    "scenario_reduction_opportunity": 70.6,
     "scenarios": [
       {
-        "observations": 15,
+        "observations": 21,
         "recurrence_keys": 1,
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical",
-        "risk_share": 0.9375,
+        "reduction_potential": 70.6,
+        "remediation_priority": "high",
+        "risk_share": 0.6364,
         "scenario_id": "writer_bridge"
+      },
+      {
+        "observations": 3,
+        "recurrence_keys": 2,
+        "reduction_potential": 36.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.0909,
+        "scenario_id": "sanitizer_scaffold_leakage"
+      },
+      {
+        "observations": 3,
+        "recurrence_keys": 2,
+        "reduction_potential": 36.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.0909,
+        "scenario_id": "vocative_override_after_prior_continuity"
+      },
+      {
+        "observations": 2,
+        "recurrence_keys": 1,
+        "reduction_potential": 34.4,
+        "remediation_priority": "medium",
+        "risk_share": 0.0606,
+        "scenario_id": "lead_followup_with_dialogue_lock"
+      },
+      {
+        "observations": 2,
+        "recurrence_keys": 1,
+        "reduction_potential": 34.4,
+        "remediation_priority": "medium",
+        "risk_share": 0.0606,
+        "scenario_id": "wrong_speaker_strict_social_emission"
       },
       {
         "observations": 1,
         "recurrence_keys": 1,
-        "reduction_potential": 17.1,
+        "reduction_potential": 32.6,
+        "remediation_priority": "medium",
+        "risk_share": 0.0303,
+        "scenario_id": "directed_npc_question"
+      },
+      {
+        "observations": 1,
+        "recurrence_keys": 1,
+        "reduction_potential": 14.8,
         "remediation_priority": "low",
-        "risk_share": 0.0625,
-        "scenario_id": "vocative_override_after_prior_continuity"
+        "risk_share": 0.0303,
+        "scenario_id": "thin_answer_action_outcome_final_emission"
       }
     ],
     "schema_version": 1,
-    "total_keys": 2,
-    "total_observations": 16
+    "total_keys": 5,
+    "total_observations": 33
   },
   "recurrence_retirement_summary": {
     "advisory_only": true,
@@ -2884,44 +3226,44 @@
   "recurrence_roadmap": {
     "advisory_only": true,
     "current_maturity_level": "measured",
-    "current_maturity_score": 68.5,
+    "current_maturity_score": 76.8,
     "highest_gap_dimension": "lifecycle",
     "highest_roi_initiative": "data_volume_expansion",
     "initiatives": [
       {
-        "completed": false,
+        "completed": true,
         "dependencies": [],
         "dependency_count": 0,
         "dimension_deltas": {
-          "forecasting": 15.0,
-          "governance": 10.0,
-          "lifecycle": 6.7,
-          "observability": 6.7,
-          "operational_readiness": 23.3,
-          "remediation": 12.5
+          "forecasting": 13.5,
+          "governance": 9.0,
+          "lifecycle": 6.0,
+          "observability": 6.0,
+          "operational_readiness": 21.0,
+          "remediation": 11.2
         },
-        "expected_maturity_gain": 12.63,
+        "expected_maturity_gain": 11.36,
         "gap_alignment": 0.43,
         "implementation_complexity": 12.0,
         "initiative_id": "data_volume_expansion",
         "initiative_label": "Data Volume Expansion",
-        "initiative_score": 14.9,
-        "investment_priority_score": 80.2,
-        "maturity_impact": 12.63,
+        "initiative_score": 13.5,
+        "investment_priority_score": 80.0,
+        "maturity_impact": 11.36,
         "maturity_roi": 100.0,
         "projected_maturity_after_completion": {
           "dimension_scores": {
-            "forecasting": 88.3,
-            "governance": 69.1,
-            "lifecycle": 49.2,
-            "observability": 90.0,
+            "forecasting": 100.0,
+            "governance": 71.5,
+            "lifecycle": 47.0,
+            "observability": 96.0,
             "operational_readiness": 100.0,
-            "remediation": 61.5
+            "remediation": 66.2
           },
-          "overall_maturity_level": "measured",
-          "overall_maturity_score": 78.2
+          "overall_maturity_level": "optimized",
+          "overall_maturity_score": 81.9
         },
-        "readiness_impact": 0.23
+        "readiness_impact": 0.21
       },
       {
         "completed": true,
@@ -2938,25 +3280,25 @@
           "remediation": 4.0
         },
         "expected_maturity_gain": 8.6,
-        "gap_alignment": 0.24,
+        "gap_alignment": 0.2,
         "implementation_complexity": 27.0,
         "initiative_id": "trajectory_establishment",
         "initiative_label": "Trajectory Establishment",
         "initiative_score": 10.6,
-        "investment_priority_score": 27.9,
+        "investment_priority_score": 28.0,
         "maturity_impact": 8.6,
-        "maturity_roi": 30.3,
+        "maturity_roi": 33.6,
         "projected_maturity_after_completion": {
           "dimension_scores": {
-            "forecasting": 81.3,
-            "governance": 65.1,
-            "lifecycle": 48.5,
-            "observability": 88.3,
+            "forecasting": 100.0,
+            "governance": 68.5,
+            "lifecycle": 47.0,
+            "observability": 95.0,
             "operational_readiness": 100.0,
-            "remediation": 53.0
+            "remediation": 59.0
           },
-          "overall_maturity_level": "measured",
-          "overall_maturity_score": 74.8
+          "overall_maturity_level": "optimized",
+          "overall_maturity_score": 80.2
         },
         "readiness_impact": 0.2
       },
@@ -2975,25 +3317,25 @@
           "remediation": 6.0
         },
         "expected_maturity_gain": 7.6,
-        "gap_alignment": 0.42,
+        "gap_alignment": 0.44,
         "implementation_complexity": 29.0,
         "initiative_id": "lifecycle_closure_tracking",
         "initiative_label": "Lifecycle Closure Tracking",
         "initiative_score": 8.2,
-        "investment_priority_score": 35.8,
+        "investment_priority_score": 37.9,
         "maturity_impact": 7.6,
-        "maturity_roi": 24.9,
+        "maturity_roi": 27.7,
         "projected_maturity_after_completion": {
           "dimension_scores": {
-            "forecasting": 77.3,
-            "governance": 64.1,
-            "lifecycle": 67.5,
-            "observability": 85.3,
-            "operational_readiness": 97.3,
-            "remediation": 55.0
+            "forecasting": 100.0,
+            "governance": 67.5,
+            "lifecycle": 66.0,
+            "observability": 92.0,
+            "operational_readiness": 100.0,
+            "remediation": 61.0
           },
-          "overall_maturity_level": "measured",
-          "overall_maturity_score": 76.1
+          "overall_maturity_level": "optimized",
+          "overall_maturity_score": 82.6
         },
         "readiness_impact": 0.06
       },
@@ -3013,25 +3355,25 @@
           "remediation": 30.0
         },
         "expected_maturity_gain": 9.75,
-        "gap_alignment": 0.51,
+        "gap_alignment": 0.48,
         "implementation_complexity": 42.0,
         "initiative_id": "remediation_feedback_loop",
         "initiative_label": "Remediation Feedback Loop",
         "initiative_score": 10.8,
         "investment_priority_score": 37.8,
         "maturity_impact": 9.75,
-        "maturity_roi": 22.1,
+        "maturity_roi": 24.5,
         "projected_maturity_after_completion": {
           "dimension_scores": {
-            "forecasting": 78.3,
-            "governance": 65.1,
-            "lifecycle": 50.5,
-            "observability": 85.3,
+            "forecasting": 100.0,
+            "governance": 68.5,
+            "lifecycle": 49.0,
+            "observability": 92.0,
             "operational_readiness": 100.0,
-            "remediation": 79.0
+            "remediation": 85.0
           },
-          "overall_maturity_level": "measured",
-          "overall_maturity_score": 78.0
+          "overall_maturity_level": "optimized",
+          "overall_maturity_score": 83.8
         },
         "readiness_impact": 0.1
       },
@@ -3050,25 +3392,25 @@
           "remediation": 8.0
         },
         "expected_maturity_gain": 9.0,
-        "gap_alignment": 0.29,
+        "gap_alignment": 0.27,
         "implementation_complexity": 40.0,
         "initiative_id": "operationalization",
         "initiative_label": "Operationalization",
         "initiative_score": 11.0,
-        "investment_priority_score": 38.1,
+        "investment_priority_score": 40.2,
         "maturity_impact": 9.0,
-        "maturity_roi": 21.4,
+        "maturity_roi": 23.8,
         "projected_maturity_after_completion": {
           "dimension_scores": {
-            "forecasting": 79.3,
-            "governance": 67.1,
-            "lifecycle": 48.5,
-            "observability": 87.3,
+            "forecasting": 100.0,
+            "governance": 70.5,
+            "lifecycle": 47.0,
+            "observability": 94.0,
             "operational_readiness": 100.0,
-            "remediation": 57.0
+            "remediation": 63.0
           },
-          "overall_maturity_level": "measured",
-          "overall_maturity_score": 75.2
+          "overall_maturity_level": "optimized",
+          "overall_maturity_score": 80.9
         },
         "readiness_impact": 0.2
       },
@@ -3088,41 +3430,41 @@
           "remediation": 6.0
         },
         "expected_maturity_gain": 7.85,
-        "gap_alignment": 0.22,
+        "gap_alignment": 0.17,
         "implementation_complexity": 38.0,
         "initiative_id": "forecast_validation",
         "initiative_label": "Forecast Validation",
         "initiative_score": 8.7,
-        "investment_priority_score": 26.4,
+        "investment_priority_score": 25.8,
         "maturity_impact": 7.85,
-        "maturity_roi": 19.6,
+        "maturity_roi": 21.8,
         "projected_maturity_after_completion": {
           "dimension_scores": {
-            "forecasting": 98.3,
-            "governance": 63.1,
-            "lifecycle": 46.5,
-            "observability": 85.3,
-            "operational_readiness": 99.3,
-            "remediation": 55.0
+            "forecasting": 100.0,
+            "governance": 66.5,
+            "lifecycle": 45.0,
+            "observability": 92.0,
+            "operational_readiness": 100.0,
+            "remediation": 61.0
           },
           "overall_maturity_level": "measured",
-          "overall_maturity_score": 76.4
+          "overall_maturity_score": 79.3
         },
         "readiness_impact": 0.08
       }
     ],
     "investment_priority_definition": "Advisory 0-100 investment priority blends maturity ROI (45%), gap alignment (35%), and readiness impact (20%). Gap alignment weights initiative dimension deltas against current maturity gap analysis; readiness impact favors initiatives that unlock downstream dependencies when volume or trajectory prerequisites are unmet.",
     "maturity_roi_definition": "Advisory 0-100 maturity ROI: 100 * (expected_maturity_gain / implementation_complexity) / max_initiative_raw_roi, where expected_maturity_gain is the weighted sum of projected dimension deltas using recurrence maturity dimension weights and implementation_complexity is base complexity plus 5 per dependency. Higher values indicate better maturity return per unit implementation effort.",
-    "next_recommended_initiative": "data_volume_expansion",
+    "next_recommended_initiative": "lifecycle_closure_tracking",
     "protected_replay_only": true,
     "recurrence_roadmap_summary": {
       "advisory_only": true,
-      "estimated_initiatives_remaining": 3,
+      "estimated_initiatives_remaining": 2,
       "highest_gap_dimension": "lifecycle",
       "highest_roi_initiative": "data_volume_expansion",
-      "next_recommended_initiative": "data_volume_expansion",
-      "projected_next_maturity_level": "measured",
-      "projected_next_maturity_score": 78.2,
+      "next_recommended_initiative": "lifecycle_closure_tracking",
+      "projected_next_maturity_level": "optimized",
+      "projected_next_maturity_score": 82.6,
       "protected_replay_only": true,
       "report_only": true,
       "roadmap_priority_guidance": "Execute roadmap sequence in dependency order to reach optimized maturity.",
@@ -3164,12 +3506,12 @@
     "roadmap_priority_guidance": "Execute roadmap sequence in dependency order to reach optimized maturity.",
     "roadmap_sequence": [
       {
-        "completed": false,
+        "completed": true,
         "dependencies": [],
         "dependency_count": 0,
         "initiative_id": "data_volume_expansion",
         "initiative_label": "Data Volume Expansion",
-        "investment_priority_score": 80.2,
+        "investment_priority_score": 80.0,
         "maturity_roi": 100.0,
         "sequence_step": 1
       },
@@ -3181,8 +3523,8 @@
         "dependency_count": 1,
         "initiative_id": "trajectory_establishment",
         "initiative_label": "Trajectory Establishment",
-        "investment_priority_score": 27.9,
-        "maturity_roi": 30.3,
+        "investment_priority_score": 28.0,
+        "maturity_roi": 33.6,
         "sequence_step": 2
       },
       {
@@ -3194,8 +3536,8 @@
         "dependency_count": 2,
         "initiative_id": "forecast_validation",
         "initiative_label": "Forecast Validation",
-        "investment_priority_score": 26.4,
-        "maturity_roi": 19.6,
+        "investment_priority_score": 25.8,
+        "maturity_roi": 21.8,
         "sequence_step": 3
       },
       {
@@ -3206,8 +3548,8 @@
         "dependency_count": 1,
         "initiative_id": "lifecycle_closure_tracking",
         "initiative_label": "Lifecycle Closure Tracking",
-        "investment_priority_score": 35.8,
-        "maturity_roi": 24.9,
+        "investment_priority_score": 37.9,
+        "maturity_roi": 27.7,
         "sequence_step": 4
       },
       {
@@ -3220,7 +3562,7 @@
         "initiative_id": "remediation_feedback_loop",
         "initiative_label": "Remediation Feedback Loop",
         "investment_priority_score": 37.8,
-        "maturity_roi": 22.1,
+        "maturity_roi": 24.5,
         "sequence_step": 5
       },
       {
@@ -3231,8 +3573,8 @@
         "dependency_count": 1,
         "initiative_id": "operationalization",
         "initiative_label": "Operationalization",
-        "investment_priority_score": 38.1,
-        "maturity_roi": 21.4,
+        "investment_priority_score": 40.2,
+        "maturity_roi": 23.8,
         "sequence_step": 6
       }
     ],
@@ -3241,12 +3583,12 @@
   },
   "recurrence_roadmap_summary": {
     "advisory_only": true,
-    "estimated_initiatives_remaining": 3,
+    "estimated_initiatives_remaining": 2,
     "highest_gap_dimension": "lifecycle",
     "highest_roi_initiative": "data_volume_expansion",
-    "next_recommended_initiative": "data_volume_expansion",
-    "projected_next_maturity_level": "measured",
-    "projected_next_maturity_score": 78.2,
+    "next_recommended_initiative": "lifecycle_closure_tracking",
+    "projected_next_maturity_level": "optimized",
+    "projected_next_maturity_score": 82.6,
     "protected_replay_only": true,
     "report_only": true,
     "roadmap_priority_guidance": "Execute roadmap sequence in dependency order to reach optimized maturity.",
@@ -3259,169 +3601,331 @@
     "field_paths": [
       {
         "cost_classification": "medium",
-        "estimated_remediation_cost": 48.9,
-        "expected_benefit": 78.0,
-        "expected_portfolio_reduction": 78.0,
-        "field_path": "selected_speaker_id",
-        "observations": 16,
-        "projected_recurrence_reduction": 78.0,
-        "projected_risk_reduction": 50.2,
-        "projected_stability_improvement": 39.0,
-        "recurrence_keys": 2,
-        "reduction_potential": 78.0,
-        "remediation_priority": "critical",
-        "risk_share": 1.0,
+        "estimated_remediation_cost": 44.0,
+        "expected_benefit": 47.2,
+        "expected_portfolio_reduction": 47.2,
+        "field_path": "response_type_candidate_ok",
+        "observations": 9,
+        "projected_recurrence_reduction": 47.2,
+        "projected_risk_reduction": 20.6,
+        "projected_stability_improvement": 18.9,
+        "recurrence_keys": 1,
+        "reduction_potential": 47.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.2727,
         "roi_rank": 1,
         "roi_score": 100.0
+      },
+      {
+        "cost_classification": "medium",
+        "estimated_remediation_cost": 53.5,
+        "expected_benefit": 53.1,
+        "expected_portfolio_reduction": 53.1,
+        "field_path": "selected_speaker_id",
+        "observations": 22,
+        "projected_recurrence_reduction": 53.1,
+        "projected_risk_reduction": 23.2,
+        "projected_stability_improvement": 21.2,
+        "recurrence_keys": 2,
+        "reduction_potential": 53.1,
+        "remediation_priority": "high",
+        "risk_share": 0.6667,
+        "roi_rank": 2,
+        "roi_score": 99.3
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "field_path": "final_emitted_source",
+        "observations": 1,
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_keys": 1,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 3,
+        "roi_score": 46.2
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "field_path": "scaffold_leakage",
+        "observations": 1,
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_keys": 1,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 4,
+        "roi_score": 46.2
       }
     ],
     "highest_roi_field_path": {
       "cost_classification": "medium",
-      "estimated_remediation_cost": 48.9,
-      "expected_benefit": 78.0,
-      "expected_portfolio_reduction": 78.0,
-      "field_path": "selected_speaker_id",
-      "observations": 16,
-      "projected_recurrence_reduction": 78.0,
-      "projected_risk_reduction": 50.2,
-      "projected_stability_improvement": 39.0,
-      "recurrence_keys": 2,
-      "reduction_potential": 78.0,
-      "remediation_priority": "critical",
-      "risk_share": 1.0,
+      "estimated_remediation_cost": 44.0,
+      "expected_benefit": 47.2,
+      "expected_portfolio_reduction": 47.2,
+      "field_path": "response_type_candidate_ok",
+      "observations": 9,
+      "projected_recurrence_reduction": 47.2,
+      "projected_risk_reduction": 20.6,
+      "projected_stability_improvement": 18.9,
+      "recurrence_keys": 1,
+      "reduction_potential": 47.2,
+      "remediation_priority": "medium",
+      "risk_share": 0.2727,
       "roi_rank": 1,
       "roi_score": 100.0
     },
     "highest_roi_key": {
-      "cost_classification": "low",
-      "estimated_remediation_cost": 33.4,
-      "expected_benefit": 90.2,
-      "expected_portfolio_reduction": 90.2,
+      "cost_classification": "medium",
+      "estimated_remediation_cost": 45.5,
+      "expected_benefit": 70.6,
+      "expected_portfolio_reduction": 70.6,
       "forecast_classification": "concentrated",
-      "observations": 15,
-      "projected_recurrence_reduction": 90.2,
-      "projected_risk_reduction": 58.0,
-      "projected_stability_improvement": 45.1,
+      "observations": 21,
+      "projected_recurrence_reduction": 70.6,
+      "projected_risk_reduction": 30.8,
+      "projected_stability_improvement": 28.2,
       "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-      "reduction_potential": 90.2,
-      "remediation_priority": "critical",
-      "risk_share": 0.9375,
+      "reduction_potential": 70.6,
+      "remediation_priority": "high",
+      "risk_share": 0.6364,
       "roi_rank": 1,
       "roi_score": 100.0,
-      "trend_classification": "recurring"
+      "trend_classification": "persistent"
     },
     "highest_roi_owner": {
-      "cost_classification": "low",
+      "cost_classification": "medium",
       "elevated_keys": 1,
-      "estimated_remediation_cost": 33.4,
-      "expected_benefit": 90.2,
-      "expected_portfolio_reduction": 90.2,
-      "observations": 15,
+      "estimated_remediation_cost": 45.5,
+      "expected_benefit": 70.6,
+      "expected_portfolio_reduction": 70.6,
+      "observations": 21,
       "owner": "replay",
-      "projected_recurrence_reduction": 90.2,
-      "projected_risk_reduction": 58.0,
-      "projected_stability_improvement": 45.1,
+      "projected_recurrence_reduction": 70.6,
+      "projected_risk_reduction": 30.8,
+      "projected_stability_improvement": 28.2,
       "recurrence_keys": 1,
       "recurring_keys": 1,
-      "reduction_potential": 90.2,
-      "remediation_priority": "critical",
-      "risk_share": 0.9375,
+      "reduction_potential": 70.6,
+      "remediation_priority": "high",
+      "risk_share": 0.6364,
       "roi_rank": 1,
       "roi_score": 100.0
     },
     "highest_roi_scenario": {
-      "cost_classification": "low",
-      "estimated_remediation_cost": 33.4,
-      "expected_benefit": 90.2,
-      "expected_portfolio_reduction": 90.2,
-      "observations": 15,
-      "projected_recurrence_reduction": 90.2,
-      "projected_risk_reduction": 58.0,
-      "projected_stability_improvement": 45.1,
+      "cost_classification": "medium",
+      "estimated_remediation_cost": 45.5,
+      "expected_benefit": 70.6,
+      "expected_portfolio_reduction": 70.6,
+      "observations": 21,
+      "projected_recurrence_reduction": 70.6,
+      "projected_risk_reduction": 30.8,
+      "projected_stability_improvement": 28.2,
       "recurrence_keys": 1,
-      "reduction_potential": 90.2,
-      "remediation_priority": "critical",
-      "risk_share": 0.9375,
+      "reduction_potential": 70.6,
+      "remediation_priority": "high",
+      "risk_share": 0.6364,
       "roi_rank": 1,
       "roi_score": 100.0,
       "scenario_id": "writer_bridge"
     },
     "keys": [
       {
-        "cost_classification": "low",
-        "estimated_remediation_cost": 33.4,
-        "expected_benefit": 90.2,
-        "expected_portfolio_reduction": 90.2,
+        "cost_classification": "medium",
+        "estimated_remediation_cost": 45.5,
+        "expected_benefit": 70.6,
+        "expected_portfolio_reduction": 70.6,
         "forecast_classification": "concentrated",
-        "observations": 15,
-        "projected_recurrence_reduction": 90.2,
-        "projected_risk_reduction": 58.0,
-        "projected_stability_improvement": 45.1,
+        "observations": 21,
+        "projected_recurrence_reduction": 70.6,
+        "projected_risk_reduction": 30.8,
+        "projected_stability_improvement": 28.2,
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical",
-        "risk_share": 0.9375,
+        "reduction_potential": 70.6,
+        "remediation_priority": "high",
+        "risk_share": 0.6364,
         "roi_rank": 1,
         "roi_score": 100.0,
-        "trend_classification": "recurring"
+        "trend_classification": "persistent"
       },
       {
-        "cost_classification": "trivial",
-        "estimated_remediation_cost": 19.9,
-        "expected_benefit": 17.1,
-        "expected_portfolio_reduction": 17.1,
+        "cost_classification": "medium",
+        "estimated_remediation_cost": 44.0,
+        "expected_benefit": 47.2,
+        "expected_portfolio_reduction": 47.2,
+        "forecast_classification": "elevated",
+        "observations": 9,
+        "projected_recurrence_reduction": 47.2,
+        "projected_risk_reduction": 20.6,
+        "projected_stability_improvement": 18.9,
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "reduction_potential": 47.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.2727,
+        "roi_rank": 2,
+        "roi_score": 100.0,
+        "trend_classification": "persistent"
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
         "forecast_classification": "watch",
         "observations": 1,
-        "projected_recurrence_reduction": 17.1,
-        "projected_risk_reduction": 11.0,
-        "projected_stability_improvement": 8.6,
-        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
-        "reduction_potential": 17.1,
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "reduction_potential": 14.8,
         "remediation_priority": "low",
-        "risk_share": 0.0625,
-        "roi_rank": 2,
-        "roi_score": 85.9,
+        "risk_share": 0.0303,
+        "roi_rank": 3,
+        "roi_score": 46.2,
+        "trend_classification": "emerging"
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "forecast_classification": "watch",
+        "observations": 1,
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 4,
+        "roi_score": 46.2,
+        "trend_classification": "emerging"
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "forecast_classification": "watch",
+        "observations": 1,
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 5,
+        "roi_score": 46.2,
         "trend_classification": "emerging"
       }
     ],
     "owners": [
       {
-        "cost_classification": "low",
+        "cost_classification": "medium",
         "elevated_keys": 1,
-        "estimated_remediation_cost": 33.4,
-        "expected_benefit": 90.2,
-        "expected_portfolio_reduction": 90.2,
-        "observations": 15,
+        "estimated_remediation_cost": 45.5,
+        "expected_benefit": 70.6,
+        "expected_portfolio_reduction": 70.6,
+        "observations": 21,
         "owner": "replay",
-        "projected_recurrence_reduction": 90.2,
-        "projected_risk_reduction": 58.0,
-        "projected_stability_improvement": 45.1,
+        "projected_recurrence_reduction": 70.6,
+        "projected_risk_reduction": 30.8,
+        "projected_stability_improvement": 28.2,
         "recurrence_keys": 1,
         "recurring_keys": 1,
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical",
-        "risk_share": 0.9375,
+        "reduction_potential": 70.6,
+        "remediation_priority": "high",
+        "risk_share": 0.6364,
         "roi_rank": 1,
         "roi_score": 100.0
       },
       {
-        "cost_classification": "trivial",
+        "cost_classification": "medium",
+        "elevated_keys": 1,
+        "estimated_remediation_cost": 44.0,
+        "expected_benefit": 47.2,
+        "expected_portfolio_reduction": 47.2,
+        "observations": 9,
+        "owner": "validator",
+        "projected_recurrence_reduction": 47.2,
+        "projected_risk_reduction": 20.6,
+        "projected_stability_improvement": 18.9,
+        "recurrence_keys": 1,
+        "recurring_keys": 1,
+        "reduction_potential": 47.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.2727,
+        "roi_rank": 2,
+        "roi_score": 100.0
+      },
+      {
+        "cost_classification": "low",
         "elevated_keys": 0,
-        "estimated_remediation_cost": 19.9,
-        "expected_benefit": 17.1,
-        "expected_portfolio_reduction": 17.1,
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
         "observations": 1,
-        "owner": "projection",
-        "projected_recurrence_reduction": 17.1,
-        "projected_risk_reduction": 11.0,
-        "projected_stability_improvement": 8.6,
+        "owner": "fallback",
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
         "recurrence_keys": 1,
         "recurring_keys": 0,
-        "reduction_potential": 17.1,
+        "reduction_potential": 14.8,
         "remediation_priority": "low",
-        "risk_share": 0.0625,
-        "roi_rank": 2,
-        "roi_score": 85.9
+        "risk_share": 0.0303,
+        "roi_rank": 3,
+        "roi_score": 46.2
+      },
+      {
+        "cost_classification": "low",
+        "elevated_keys": 0,
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "observations": 1,
+        "owner": "projection",
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_keys": 1,
+        "recurring_keys": 0,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 4,
+        "roi_score": 46.2
+      },
+      {
+        "cost_classification": "low",
+        "elevated_keys": 0,
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "observations": 1,
+        "owner": "sanitizer",
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_keys": 1,
+        "recurring_keys": 0,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 5,
+        "roi_score": 46.2
       }
     ],
     "projected_improvement_definition": "projected_recurrence_reduction is expected_benefit; projected_risk_reduction is expected_benefit multiplied by portfolio_risk_score / 100; projected_stability_improvement is expected_benefit multiplied by (100 - stability_score) / 100.",
@@ -3432,20 +3936,20 @@
     "roi_summary": {
       "advisory_only": true,
       "estimated_remediation_cost_definition": "Advisory 0-100 estimate: 25% key_scope + 25% owner_dispersion + 20% field_path_dispersion + 15% scenario_scope + 15% recurrence_depth, where key_scope is min(1, recurrence_keys / max(total_keys, 1)), owner_dispersion is 1 - owner_concentration_ratio, field_path_dispersion is 1 - field_path_concentration_ratio, scenario_scope is min(1, scenario_count / 5), and recurrence_depth is min(1, observations / 10). Higher concentration lowers cost; broader scope raises it.",
-      "highest_roi_field_path": "selected_speaker_id",
+      "highest_roi_field_path": "response_type_candidate_ok",
       "highest_roi_owner": "replay",
       "highest_roi_scenario": "writer_bridge",
       "highest_roi_target": {
-        "cost_classification": "low",
+        "cost_classification": "medium",
         "dimension": "key",
-        "expected_benefit": 90.2,
+        "expected_benefit": 70.6,
         "label": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
         "roi_score": 100.0
       },
       "portfolio_roi_score": 100.0,
       "projected_improvement_definition": "projected_recurrence_reduction is expected_benefit; projected_risk_reduction is expected_benefit multiplied by portfolio_risk_score / 100; projected_stability_improvement is expected_benefit multiplied by (100 - stability_score) / 100.",
-      "projected_risk_reduction": 58.0,
-      "projected_stability_gain": 45.1,
+      "projected_risk_reduction": 30.8,
+      "projected_stability_gain": 28.2,
       "protected_replay_only": true,
       "report_only": true,
       "roi_confidence": 1.0,
@@ -3455,61 +3959,146 @@
     },
     "scenarios": [
       {
-        "cost_classification": "low",
-        "estimated_remediation_cost": 33.4,
-        "expected_benefit": 90.2,
-        "expected_portfolio_reduction": 90.2,
-        "observations": 15,
-        "projected_recurrence_reduction": 90.2,
-        "projected_risk_reduction": 58.0,
-        "projected_stability_improvement": 45.1,
+        "cost_classification": "medium",
+        "estimated_remediation_cost": 45.5,
+        "expected_benefit": 70.6,
+        "expected_portfolio_reduction": 70.6,
+        "observations": 21,
+        "projected_recurrence_reduction": 70.6,
+        "projected_risk_reduction": 30.8,
+        "projected_stability_improvement": 28.2,
         "recurrence_keys": 1,
-        "reduction_potential": 90.2,
-        "remediation_priority": "critical",
-        "risk_share": 0.9375,
+        "reduction_potential": 70.6,
+        "remediation_priority": "high",
+        "risk_share": 0.6364,
         "roi_rank": 1,
         "roi_score": 100.0,
         "scenario_id": "writer_bridge"
       },
       {
-        "cost_classification": "trivial",
-        "estimated_remediation_cost": 19.9,
-        "expected_benefit": 17.1,
-        "expected_portfolio_reduction": 17.1,
-        "observations": 1,
-        "projected_recurrence_reduction": 17.1,
-        "projected_risk_reduction": 11.0,
-        "projected_stability_improvement": 8.6,
+        "cost_classification": "low",
+        "estimated_remediation_cost": 33.5,
+        "expected_benefit": 34.4,
+        "expected_portfolio_reduction": 34.4,
+        "observations": 2,
+        "projected_recurrence_reduction": 34.4,
+        "projected_risk_reduction": 15.0,
+        "projected_stability_improvement": 13.8,
         "recurrence_keys": 1,
-        "reduction_potential": 17.1,
-        "remediation_priority": "low",
-        "risk_share": 0.0625,
+        "reduction_potential": 34.4,
+        "remediation_priority": "medium",
+        "risk_share": 0.0606,
         "roi_rank": 2,
-        "roi_score": 85.9,
+        "roi_score": 100.0,
+        "scenario_id": "lead_followup_with_dialogue_lock"
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 33.5,
+        "expected_benefit": 34.4,
+        "expected_portfolio_reduction": 34.4,
+        "observations": 2,
+        "projected_recurrence_reduction": 34.4,
+        "projected_risk_reduction": 15.0,
+        "projected_stability_improvement": 13.8,
+        "recurrence_keys": 1,
+        "reduction_potential": 34.4,
+        "remediation_priority": "medium",
+        "risk_share": 0.0606,
+        "roi_rank": 3,
+        "roi_score": 100.0,
+        "scenario_id": "wrong_speaker_strict_social_emission"
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 32.6,
+        "expected_portfolio_reduction": 32.6,
+        "observations": 1,
+        "projected_recurrence_reduction": 32.6,
+        "projected_risk_reduction": 14.2,
+        "projected_stability_improvement": 13.0,
+        "recurrence_keys": 1,
+        "reduction_potential": 32.6,
+        "remediation_priority": "medium",
+        "risk_share": 0.0303,
+        "roi_rank": 4,
+        "roi_score": 100.0,
+        "scenario_id": "directed_npc_question"
+      },
+      {
+        "cost_classification": "medium",
+        "estimated_remediation_cost": 40.0,
+        "expected_benefit": 36.2,
+        "expected_portfolio_reduction": 36.2,
+        "observations": 3,
+        "projected_recurrence_reduction": 36.2,
+        "projected_risk_reduction": 15.8,
+        "projected_stability_improvement": 14.5,
+        "recurrence_keys": 2,
+        "reduction_potential": 36.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.0909,
+        "roi_rank": 5,
+        "roi_score": 90.5,
+        "scenario_id": "sanitizer_scaffold_leakage"
+      },
+      {
+        "cost_classification": "medium",
+        "estimated_remediation_cost": 40.0,
+        "expected_benefit": 36.2,
+        "expected_portfolio_reduction": 36.2,
+        "observations": 3,
+        "projected_recurrence_reduction": 36.2,
+        "projected_risk_reduction": 15.8,
+        "projected_stability_improvement": 14.5,
+        "recurrence_keys": 2,
+        "reduction_potential": 36.2,
+        "remediation_priority": "medium",
+        "risk_share": 0.0909,
+        "roi_rank": 6,
+        "roi_score": 90.5,
         "scenario_id": "vocative_override_after_prior_continuity"
+      },
+      {
+        "cost_classification": "low",
+        "estimated_remediation_cost": 32.0,
+        "expected_benefit": 14.8,
+        "expected_portfolio_reduction": 14.8,
+        "observations": 1,
+        "projected_recurrence_reduction": 14.8,
+        "projected_risk_reduction": 6.5,
+        "projected_stability_improvement": 5.9,
+        "recurrence_keys": 1,
+        "reduction_potential": 14.8,
+        "remediation_priority": "low",
+        "risk_share": 0.0303,
+        "roi_rank": 7,
+        "roi_score": 46.2,
+        "scenario_id": "thin_answer_action_outcome_final_emission"
       }
     ],
     "schema_version": 1,
-    "total_keys": 2,
-    "total_observations": 16
+    "total_keys": 5,
+    "total_observations": 33
   },
   "recurrence_roi_summary": {
     "advisory_only": true,
     "estimated_remediation_cost_definition": "Advisory 0-100 estimate: 25% key_scope + 25% owner_dispersion + 20% field_path_dispersion + 15% scenario_scope + 15% recurrence_depth, where key_scope is min(1, recurrence_keys / max(total_keys, 1)), owner_dispersion is 1 - owner_concentration_ratio, field_path_dispersion is 1 - field_path_concentration_ratio, scenario_scope is min(1, scenario_count / 5), and recurrence_depth is min(1, observations / 10). Higher concentration lowers cost; broader scope raises it.",
-    "highest_roi_field_path": "selected_speaker_id",
+    "highest_roi_field_path": "response_type_candidate_ok",
     "highest_roi_owner": "replay",
     "highest_roi_scenario": "writer_bridge",
     "highest_roi_target": {
-      "cost_classification": "low",
+      "cost_classification": "medium",
       "dimension": "key",
-      "expected_benefit": 90.2,
+      "expected_benefit": 70.6,
       "label": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
       "roi_score": 100.0
     },
     "portfolio_roi_score": 100.0,
     "projected_improvement_definition": "projected_recurrence_reduction is expected_benefit; projected_risk_reduction is expected_benefit multiplied by portfolio_risk_score / 100; projected_stability_improvement is expected_benefit multiplied by (100 - stability_score) / 100.",
-    "projected_risk_reduction": 58.0,
-    "projected_stability_gain": 45.1,
+    "projected_risk_reduction": 30.8,
+    "projected_stability_gain": 28.2,
     "protected_replay_only": true,
     "report_only": true,
     "roi_confidence": 1.0,
@@ -3559,13 +4148,40 @@
       "trend_classification": "emerging"
     },
     {
-      "active_duration_days": 0.3083,
+      "active_duration_days": 20.2709,
       "first_seen": "2026-09-19T16:01:46Z",
-      "last_seen": "2026-09-19T23:25:45Z",
-      "occurrence_count": 15,
+      "last_seen": "2026-10-09T22:31:51Z",
+      "occurrence_count": 21,
       "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-      "recurrence_velocity": 48.6505,
-      "trend_classification": "recurring"
+      "recurrence_velocity": 1.036,
+      "trend_classification": "persistent"
+    },
+    {
+      "active_duration_days": 8.7419,
+      "first_seen": "2026-10-09T22:38:39Z",
+      "last_seen": "2026-10-18T16:26:55Z",
+      "occurrence_count": 9,
+      "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+      "recurrence_velocity": 1.0295,
+      "trend_classification": "persistent"
+    },
+    {
+      "active_duration_days": 0.0,
+      "first_seen": "2026-10-09T22:38:39Z",
+      "last_seen": "2026-10-09T22:38:39Z",
+      "occurrence_count": 1,
+      "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+      "recurrence_velocity": 1.0,
+      "trend_classification": "emerging"
+    },
+    {
+      "active_duration_days": 0.0,
+      "first_seen": "2026-10-18T16:31:34Z",
+      "last_seen": "2026-10-18T16:31:34Z",
+      "occurrence_count": 1,
+      "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+      "recurrence_velocity": 1.0,
+      "trend_classification": "emerging"
     }
   ],
   "recurrence_trajectory_history": {
@@ -4118,6 +4734,150 @@
         "stability_score": 50.0,
         "timestamp": "2026-09-19T23:25:45Z",
         "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.78,
+        "governance_health_score": 36.4,
+        "lifecycle_health_score": 30.0,
+        "maturity_score": 64.0,
+        "operational_readiness_score": 68.9,
+        "portfolio_risk_score": 64.5,
+        "program_effectiveness_score": 32.2,
+        "protected_observation_count": 17,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 35,
+        "stability_score": 50.0,
+        "timestamp": "2026-09-24T10:08:10Z",
+        "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.78,
+        "governance_health_score": 36.3,
+        "lifecycle_health_score": 30.0,
+        "maturity_score": 64.0,
+        "operational_readiness_score": 68.9,
+        "portfolio_risk_score": 64.8,
+        "program_effectiveness_score": 32.2,
+        "protected_observation_count": 18,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 36,
+        "stability_score": 50.0,
+        "timestamp": "2026-09-24T10:54:00Z",
+        "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.78,
+        "governance_health_score": 36.3,
+        "lifecycle_health_score": 30.0,
+        "maturity_score": 64.0,
+        "operational_readiness_score": 68.9,
+        "portfolio_risk_score": 64.9,
+        "program_effectiveness_score": 32.2,
+        "protected_observation_count": 19,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 37,
+        "stability_score": 50.0,
+        "timestamp": "2026-09-24T11:11:07Z",
+        "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.78,
+        "governance_health_score": 36.2,
+        "lifecycle_health_score": 30.0,
+        "maturity_score": 64.0,
+        "operational_readiness_score": 68.9,
+        "portfolio_risk_score": 65.1,
+        "program_effectiveness_score": 32.2,
+        "protected_observation_count": 20,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 38,
+        "stability_score": 50.0,
+        "timestamp": "2026-09-26T14:51:57Z",
+        "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.78,
+        "governance_health_score": 36.2,
+        "lifecycle_health_score": 30.0,
+        "maturity_score": 64.0,
+        "operational_readiness_score": 68.9,
+        "portfolio_risk_score": 65.2,
+        "program_effectiveness_score": 32.2,
+        "protected_observation_count": 21,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 39,
+        "stability_score": 50.0,
+        "timestamp": "2026-09-26T15:02:44Z",
+        "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.78,
+        "governance_health_score": 36.1,
+        "lifecycle_health_score": 20.0,
+        "maturity_score": 63.6,
+        "operational_readiness_score": 68.9,
+        "portfolio_risk_score": 65.4,
+        "program_effectiveness_score": 31.4,
+        "protected_observation_count": 22,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 40,
+        "stability_score": 50.0,
+        "timestamp": "2026-10-09T22:31:51Z",
+        "unique_recurrence_keys": 2
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.82,
+        "governance_health_score": 43.3,
+        "lifecycle_health_score": 25.0,
+        "maturity_score": 71.8,
+        "operational_readiness_score": 76.4,
+        "portfolio_risk_score": 51.8,
+        "program_effectiveness_score": 32.5,
+        "protected_observation_count": 28,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 41,
+        "stability_score": 50.0,
+        "timestamp": "2026-10-09T22:38:39Z",
+        "unique_recurrence_keys": 4
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.82,
+        "governance_health_score": 44.4,
+        "lifecycle_health_score": 20.0,
+        "maturity_score": 71.7,
+        "operational_readiness_score": 76.4,
+        "portfolio_risk_score": 47.4,
+        "program_effectiveness_score": 32.3,
+        "protected_observation_count": 32,
+        "regression_recurrence_rate": 0.5,
+        "snapshot_index": 42,
+        "stability_score": 50.0,
+        "timestamp": "2026-10-18T16:26:55Z",
+        "unique_recurrence_keys": 4
+      },
+      {
+        "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
+        "effectiveness_score": 0.82,
+        "governance_health_score": 50.1,
+        "lifecycle_health_score": 24.0,
+        "maturity_score": 72.1,
+        "operational_readiness_score": 76.4,
+        "portfolio_risk_score": 43.6,
+        "program_effectiveness_score": 35.6,
+        "protected_observation_count": 33,
+        "regression_recurrence_rate": 0.4,
+        "snapshot_index": 43,
+        "stability_score": 60.0,
+        "timestamp": "2026-10-18T16:31:34Z",
+        "unique_recurrence_keys": 5
       }
     ]
   },
@@ -4142,111 +4902,115 @@
     },
     "current_snapshot": {
       "artifact_source": "artifacts\\golden_replay\\bug_recurrence_history.json",
-      "effectiveness_score": 0.78,
-      "governance_health_score": 36.4,
-      "lifecycle_health_score": 30.0,
-      "maturity_score": 64.0,
-      "operational_readiness_score": 68.9,
-      "portfolio_risk_score": 64.3,
-      "program_effectiveness_score": 32.2,
-      "protected_observation_count": 16,
-      "regression_recurrence_rate": 0.5,
-      "snapshot_index": 34,
-      "stability_score": 50.0,
-      "timestamp": "2026-09-19T23:25:45Z",
-      "unique_recurrence_keys": 2
+      "effectiveness_score": 0.82,
+      "governance_health_score": 50.1,
+      "lifecycle_health_score": 24.0,
+      "maturity_score": 72.1,
+      "operational_readiness_score": 76.4,
+      "portfolio_risk_score": 43.6,
+      "program_effectiveness_score": 35.6,
+      "protected_observation_count": 33,
+      "regression_recurrence_rate": 0.4,
+      "snapshot_index": 43,
+      "stability_score": 60.0,
+      "timestamp": "2026-10-18T16:31:34Z",
+      "unique_recurrence_keys": 5
     },
     "definition": "Trajectory summary compares the current snapshot against the baseline snapshot. With one snapshot only, trajectory_available=false and change metrics remain zero.",
-    "effectiveness_change": -0.04,
+    "effectiveness_change": 0.0,
     "effectiveness_trajectory": {
-      "absolute_change": -0.04,
+      "absolute_change": 0.0,
       "baseline": 0.82,
-      "current": 0.78,
-      "direction": "regressing",
-      "percent_change": -4.88
+      "current": 0.82,
+      "direction": "stable",
+      "percent_change": 0.0
     },
-    "governance_health_change": -18.8,
+    "governance_health_change": -5.1,
     "governance_trajectory": {
-      "absolute_change": -18.8,
+      "absolute_change": -5.1,
       "baseline": 55.2,
-      "current": 36.4,
+      "current": 50.1,
       "direction": "regressing",
-      "percent_change": -34.06
+      "percent_change": -9.24
     },
-    "lifecycle_health_change": -15.0,
+    "lifecycle_health_change": -21.0,
     "lifecycle_trajectory": {
-      "absolute_change": -15.0,
+      "absolute_change": -21.0,
       "baseline": 45.0,
-      "current": 30.0,
+      "current": 24.0,
       "direction": "regressing",
-      "percent_change": -33.33
+      "percent_change": -46.67
     },
-    "maturity_change": -9.0,
+    "maturity_change": -0.9,
     "maturity_trajectory": {
-      "absolute_change": -9.0,
+      "absolute_change": -0.9,
       "baseline": 73.0,
-      "current": 64.0,
+      "current": 72.1,
       "direction": "regressing",
-      "percent_change": -12.33
+      "percent_change": -1.23
     },
     "message": "Trajectory change detection active across baseline and current snapshots.",
-    "operational_readiness_change": -7.5,
+    "operational_readiness_change": 0.0,
     "operational_readiness_trajectory": {
-      "absolute_change": -7.5,
+      "absolute_change": 0.0,
       "baseline": 76.4,
-      "current": 68.9,
-      "direction": "regressing",
-      "percent_change": -9.82
+      "current": 76.4,
+      "direction": "stable",
+      "percent_change": 0.0
     },
-    "portfolio_risk_change": 20.2,
+    "portfolio_risk_change": -0.5,
     "portfolio_trajectory": {
-      "absolute_change": 20.2,
+      "absolute_change": -0.5,
       "baseline": 44.1,
-      "current": 64.3,
-      "direction": "regressing",
-      "percent_change": 45.8
+      "current": 43.6,
+      "direction": "improving",
+      "percent_change": -1.13
     },
     "program_effectiveness_trajectory": {
-      "absolute_change": -9.1,
+      "absolute_change": -5.7,
       "baseline": 41.3,
-      "current": 32.2,
+      "current": 35.6,
       "direction": "regressing",
-      "percent_change": -22.03
+      "percent_change": -13.8
     },
     "protected_replay_only": true,
     "regression_rate_trajectory": {
-      "absolute_change": 0.25,
+      "absolute_change": 0.15,
       "baseline": 0.25,
-      "current": 0.5,
+      "current": 0.4,
       "direction": "regressing",
-      "percent_change": 100.0
+      "percent_change": 60.0
     },
     "report_only": true,
     "schema_version": 1,
-    "snapshot_count": 34,
+    "snapshot_count": 43,
     "stability_trajectory": {
-      "absolute_change": -25.0,
+      "absolute_change": -15.0,
       "baseline": 75.0,
-      "current": 50.0,
+      "current": 60.0,
       "direction": "regressing",
-      "percent_change": -33.33
+      "percent_change": -20.0
     },
     "trajectory_available": true
   },
   "recurrence_transition_summary": {
-    "advancing_transitions": 1,
+    "advancing_transitions": 4,
     "advisory_only": true,
     "protected_replay_only": true,
     "report_only": true,
     "retiring_transitions": 0,
     "schema_version": 1,
-    "stalled_key_count": 1,
+    "stalled_key_count": 2,
     "stalled_keys": [
-      "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py"
+      "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
+      "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py"
     ],
-    "transition_count": 1,
+    "transition_count": 4,
     "transitions": [
-      "emerging->recurring"
+      "emerging->recurring",
+      "recurring->persistent",
+      "emerging->recurring",
+      "recurring->persistent"
     ]
   },
   "recurrence_trends": {
@@ -4258,14 +5022,29 @@
       "recurring": "Multiple protected observations with recent activity and without an extended active span."
     },
     "dormant_keys": 0,
-    "emerging_keys": 1,
-    "growth_rate": 0.5,
+    "emerging_keys": 3,
+    "growth_rate": 0.6,
     "growth_rate_definition": "Share of protected recurrence keys currently classified as emerging (first observation only).",
     "newest_recurrence_keys": [
       {
+        "first_seen": "2026-10-18T16:31:34Z",
+        "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+        "trend_classification": "emerging"
+      },
+      {
+        "first_seen": "2026-10-09T22:38:39Z",
+        "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+        "trend_classification": "emerging"
+      },
+      {
+        "first_seen": "2026-10-09T22:38:39Z",
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "trend_classification": "persistent"
+      },
+      {
         "first_seen": "2026-09-19T16:01:46Z",
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "trend_classification": "recurring"
+        "trend_classification": "persistent"
       },
       {
         "first_seen": "2026-06-04T22:31:59Z",
@@ -4273,18 +5052,18 @@
         "trend_classification": "emerging"
       }
     ],
-    "persistent_keys": 0,
+    "persistent_keys": 2,
     "protected_replay_only": true,
-    "recurring_keys": 1,
+    "recurring_keys": 0,
     "regression_recurrence_rate": {
       "advisory_only": true,
       "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-      "denominator": 2,
+      "denominator": 5,
       "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
       "metric": "regression_recurrence_rate",
-      "numerator": 1,
+      "numerator": 2,
       "population": "protected_replay_history",
-      "rate": 0.5,
+      "rate": 0.4,
       "report_only": true,
       "schema_version": 1
     },
@@ -4292,12 +5071,17 @@
     "schema_version": 1,
     "top_recurring_keys": [
       {
-        "occurrence_count": 15,
+        "occurrence_count": 21,
         "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
-        "trend_classification": "recurring"
+        "trend_classification": "persistent"
+      },
+      {
+        "occurrence_count": 9,
+        "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+        "trend_classification": "persistent"
       }
     ],
-    "total_keys": 2
+    "total_keys": 5
   },
   "recurrence_watchlist": [
     {
@@ -4308,7 +5092,37 @@
       "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
       "roi_score": 100.0,
       "scenario": "(null)",
-      "trend_classification": "recurring"
+      "trend_classification": "persistent"
+    },
+    {
+      "forecast_classification": "elevated",
+      "governance_status": "investigate",
+      "owner": "emission_drift",
+      "recommended_action": "investigate_root_cause",
+      "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+      "roi_score": 100.0,
+      "scenario": "(null)",
+      "trend_classification": "persistent"
+    },
+    {
+      "forecast_classification": "watch",
+      "governance_status": "watch",
+      "owner": "fallback_drift",
+      "recommended_action": "gather_more_history",
+      "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+      "roi_score": 46.2,
+      "scenario": "(null)",
+      "trend_classification": "emerging"
+    },
+    {
+      "forecast_classification": "watch",
+      "governance_status": "watch",
+      "owner": "semantic_drift",
+      "recommended_action": "gather_more_history",
+      "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+      "roi_score": 46.2,
+      "scenario": "(null)",
+      "trend_classification": "emerging"
     },
     {
       "forecast_classification": "watch",
@@ -4316,7 +5130,7 @@
       "owner": "speaker_drift",
       "recommended_action": "gather_more_history",
       "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
-      "roi_score": 85.9,
+      "roi_score": 46.2,
       "scenario": "(null)",
       "trend_classification": "emerging"
     }
@@ -4352,23 +5166,84 @@
         "selected_speaker_id"
       ],
       "first_seen_index": 1,
-      "last_seen_index": 15,
+      "last_seen_index": 21,
       "latest_input_status": "active",
       "latest_investigate_first": "tests/helpers/golden_replay.py",
-      "occurrence_count": 15,
+      "occurrence_count": 21,
       "owner": "replay",
       "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
+      "status": "active"
+    },
+    {
+      "affected_scenarios": [
+        "directed_npc_question",
+        "lead_followup_with_dialogue_lock",
+        "sanitizer_scaffold_leakage",
+        "vocative_override_after_prior_continuity",
+        "wrong_speaker_strict_social_emission"
+      ],
+      "categories": [
+        "validator"
+      ],
+      "field_paths": [
+        "response_type_candidate_ok"
+      ],
+      "first_seen_index": 22,
+      "last_seen_index": 31,
+      "latest_input_status": "active",
+      "latest_investigate_first": "game/final_emission_gate.py",
+      "occurrence_count": 9,
+      "owner": "validator",
+      "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
+      "status": "active"
+    },
+    {
+      "affected_scenarios": [
+        "thin_answer_action_outcome_final_emission"
+      ],
+      "categories": [
+        "fallback"
+      ],
+      "field_paths": [
+        "final_emitted_source"
+      ],
+      "first_seen_index": 25,
+      "last_seen_index": 25,
+      "latest_input_status": "active",
+      "latest_investigate_first": "game/final_emission_gate.py",
+      "occurrence_count": 1,
+      "owner": "fallback",
+      "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+      "status": "active"
+    },
+    {
+      "affected_scenarios": [
+        "sanitizer_scaffold_leakage"
+      ],
+      "categories": [
+        "sanitizer"
+      ],
+      "field_paths": [
+        "scaffold_leakage"
+      ],
+      "first_seen_index": 32,
+      "last_seen_index": 32,
+      "latest_input_status": "active",
+      "latest_investigate_first": "game/output_sanitizer.py",
+      "occurrence_count": 1,
+      "owner": "sanitizer",
+      "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
       "status": "active"
     }
   ],
   "regression_recurrence_rate": {
     "advisory_only": true,
     "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-    "denominator": 2,
+    "denominator": 5,
     "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
     "metric": "regression_recurrence_rate",
-    "numerator": 1,
-    "rate": 0.5,
+    "numerator": 2,
+    "rate": 0.4,
     "report_only": true,
     "schema_version": 1
   },
@@ -4381,21 +5256,21 @@
     "remediation_effectiveness": 0.0,
     "report_only": true,
     "schema_version": 1,
-    "targeted_keys": 2,
-    "unresolved_keys": 2
+    "targeted_keys": 5,
+    "unresolved_keys": 5
   },
   "report_only": true,
   "schema_version": 1,
   "session_diagnostic_regression_recurrence_rate": {
     "advisory_only": true,
     "definition": "Share of observed recurrence keys with occurrence_count >= 2 in the measured history window.",
-    "denominator": 6,
+    "denominator": 8,
     "event_source_filter": "session",
     "interpretation": "Initial measurable proxy for recurrence keys that became active after prior observation; refine when richer state transitions exist. Advisory and report-only; does not gate protected replay.",
     "metric": "regression_recurrence_rate",
-    "numerator": 6,
+    "numerator": 7,
     "population": "session_diagnostic",
-    "rate": 1.0,
+    "rate": 0.875,
     "report_only": true,
     "schema_version": 1
   },
@@ -4404,13 +5279,13 @@
     "baseline_only": false,
     "protected_replay_only": true,
     "recurrence_rate_baseline": 0.25,
-    "recurrence_rate_change": 0.25,
-    "recurrence_rate_current": 0.5,
+    "recurrence_rate_change": 0.15,
+    "recurrence_rate_current": 0.4,
     "report_only": true,
     "schema_version": 1,
-    "stability_change": -25.0,
+    "stability_change": -15.0,
     "stability_score_baseline": 75.0,
-    "stability_score_current": 50.0,
+    "stability_score_current": 60.0,
     "trajectory_available": true,
     "trajectory_definition": "Stability trajectory reports current stability_score and regression_recurrence_rate against baseline values; change metrics are zero when no prior baseline snapshot exists."
   },
@@ -4426,12 +5301,35 @@
         "selected_speaker_id"
       ],
       "first_seen_index": 1,
-      "last_seen_index": 15,
+      "last_seen_index": 21,
       "latest_input_status": "active",
       "latest_investigate_first": "tests/helpers/golden_replay.py",
-      "occurrence_count": 15,
+      "occurrence_count": 21,
       "owner": "replay",
       "recurrence_key": "recurrence:v1:speaker_drift|replay_drift|selected_speaker_id|tests/helpers/golden_replay.py",
+      "status": "active"
+    },
+    {
+      "affected_scenarios": [
+        "directed_npc_question",
+        "lead_followup_with_dialogue_lock",
+        "sanitizer_scaffold_leakage",
+        "vocative_override_after_prior_continuity",
+        "wrong_speaker_strict_social_emission"
+      ],
+      "categories": [
+        "validator"
+      ],
+      "field_paths": [
+        "response_type_candidate_ok"
+      ],
+      "first_seen_index": 22,
+      "last_seen_index": 31,
+      "latest_input_status": "active",
+      "latest_investigate_first": "game/final_emission_gate.py",
+      "occurrence_count": 9,
+      "owner": "validator",
+      "recurrence_key": "recurrence:v1:emission_drift|validator|response_type_candidate_ok|game/final_emission_gate.py",
       "status": "active"
     },
     {
@@ -4452,6 +5350,44 @@
       "owner": "projection",
       "recurrence_key": "recurrence:v1:speaker_drift|projection|selected_speaker_id|tests/helpers/golden_replay.py",
       "status": "watch"
+    },
+    {
+      "affected_scenarios": [
+        "thin_answer_action_outcome_final_emission"
+      ],
+      "categories": [
+        "fallback"
+      ],
+      "field_paths": [
+        "final_emitted_source"
+      ],
+      "first_seen_index": 25,
+      "last_seen_index": 25,
+      "latest_input_status": "active",
+      "latest_investigate_first": "game/final_emission_gate.py",
+      "occurrence_count": 1,
+      "owner": "fallback",
+      "recurrence_key": "recurrence:v1:fallback_drift|fallback|final_emitted_source|game/final_emission_gate.py",
+      "status": "watch"
+    },
+    {
+      "affected_scenarios": [
+        "sanitizer_scaffold_leakage"
+      ],
+      "categories": [
+        "sanitizer"
+      ],
+      "field_paths": [
+        "scaffold_leakage"
+      ],
+      "first_seen_index": 32,
+      "last_seen_index": 32,
+      "latest_input_status": "active",
+      "latest_investigate_first": "game/output_sanitizer.py",
+      "occurrence_count": 1,
+      "owner": "sanitizer",
+      "recurrence_key": "recurrence:v1:semantic_drift|sanitizer|scaffold_leakage|game/output_sanitizer.py",
+      "status": "watch"
     }
   ],
   "synthetic_test_artifact_regression_recurrence_rate": {
@@ -4466,6 +5402,6 @@
     "report_only": true,
     "schema_version": 1
   },
-  "total_rows": 16,
-  "unique_recurrence_count": 2
+  "total_rows": 33,
+  "unique_recurrence_count": 5
 }

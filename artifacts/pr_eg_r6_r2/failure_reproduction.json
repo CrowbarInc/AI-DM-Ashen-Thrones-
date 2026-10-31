@@ -1,0 +1,80 @@
+[
+  {
+    "question": "Mara, what did Oren say about the road?",
+    "plan": {
+      "locked": true,
+      "plan_version": "pr-eg-r6.1",
+      "conversational_act": "information_question",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "mara, what did oren say about the road",
+      "requested_relationship": "attribute_of(mara_oren_road)",
+      "question_text": "Mara, what did Oren say about the road?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "addressee",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Which person do you mean?",
+      "reason": "addressee_not_grounded",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.81
+    }
+  },
+  {
+    "question": "Oren, what did Mara say about the road?",
+    "plan": {
+      "locked": true,
+      "plan_version": "pr-eg-r6.1",
+      "conversational_act": "information_question",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "oren, what did mara say about the road",
+      "requested_relationship": "attribute_of(oren_mara_road)",
+      "question_text": "Oren, what did Mara say about the road?",
+      "correction_of_prior_question": false,
+      "correction_target": "",
+      "referenced_prior_proposition": "",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "clarification",
+      "response_kind": "clarification",
+      "ambiguity_type": "addressee",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "Which person do you mean?",
+      "reason": "addressee_not_grounded",
+      "provider_calls": 0,
+      "provider_usage": {},
+      "latency_ms": 0.1
+    }
+  },
+  {
+    "relationship": "keep_of(night_drum)",
+    "question": "Quill, who keeps the night drum?",
+    "source": "The miller keeps the night ledger.",
+    "coverage": "direct"
+  },
+  {
+    "relationship": "source_of(road_name)",
+    "question": "Clerk Oren, who told you the road name?",
+    "source": "The road is called the north road.",
+    "coverage": "unrelated"
+  },
+  {
+    "relationship": "responsible_for(departures)",
+    "question": "Who ensures departures?",
+    "source": "The miller manages the boats.",
+    "coverage": "unrelated"
+  }
+]

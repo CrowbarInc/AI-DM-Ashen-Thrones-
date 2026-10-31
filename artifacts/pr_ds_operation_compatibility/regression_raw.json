@@ -1,0 +1,152 @@
+[
+  {
+    "name": "PR-DS",
+    "args": [
+      "tests/test_pr_ds_operation_compatibility.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 180,
+    "timed_out": false,
+    "return_code": 0,
+    "summary": "7 passed",
+    "failed": [],
+    "output_tail": ".......                                                                  [100%]"
+  },
+  {
+    "name": "PR-DR",
+    "args": [
+      "tests/test_pr_dr_live_vertical_slice.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 180,
+    "timed_out": false,
+    "return_code": 0,
+    "summary": "12 passed",
+    "failed": [],
+    "output_tail": "............                                                             [100%]"
+  },
+  {
+    "name": "PR-DQ",
+    "args": [
+      "tests/test_pr_dq_ic_ooc_messages.py",
+      "tests/test_pr_dq_vertical_slice.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 180,
+    "timed_out": false,
+    "return_code": 0,
+    "summary": "23 passed",
+    "failed": [],
+    "output_tail": ".......................                                                  [100%]"
+  },
+  {
+    "name": "PR-DO",
+    "args": [
+      "tests/test_pr_do_authority_separation.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 120,
+    "timed_out": false,
+    "return_code": 0,
+    "summary": "12 passed",
+    "failed": [],
+    "output_tail": "............                                                             [100%]"
+  },
+  {
+    "name": "Exploration",
+    "args": [
+      "tests/test_exploration_resolution.py",
+      "tests/test_exploration_skill_checks.py",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 300,
+    "timed_out": false,
+    "return_code": 1,
+    "summary": "57 passed, 9 failed",
+    "failed": [
+      "tests/test_exploration_resolution.py::test_chat_quarterstaff_attack_mechanical_resolution_absent",
+      "tests/test_exploration_resolution.py::test_chat_observe_area_resolution_kwarg_to_build_messages",
+      "tests/test_exploration_resolution.py::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution",
+      "tests/test_exploration_resolution.py::test_chat_exploration_parsed_routes_through_exploration",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_abstract_reference_does_not_become_physical",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_hidden_object_is_not_revealed_by_naming",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_creates_no_world_facts",
+      "tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock"
+    ],
+    "output_tail": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_referenced_surface_grounding_inspection_resolution.py:257: AssertionError: assert 'dock fees' in 'as you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. a gate serjeant manages the crowd and keeps one eye on the roster board.'\nE   AssertionError: assert ('no such thing' in 'you pry up the hopper and pocket the brass token.' or 'nothing here matches' in 'you pry up the hopper and pocket the brass token.')\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_referenced_surface_grounding_inspection_resolution.py:273: AssertionError: assert ('no such thing' in 'you pry up the hopper and pocket the brass token.' or 'nothing here matches' in 'you pry up the hopper and pocket the brass token.')\nE   AssertionError: assert 'four new overseers' not in 'the kiln sc...w overseers.'\n      \n      'four new overseers' is contained here:\n        the kiln schedule names four new overseers.\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_referenced_surface_grounding_inspection_resolution.py:310: AssertionError: assert 'four new overseers' not in 'the kiln sc...w overseers.'\nE   AssertionError: assert 'as you watch the scene' not in 'as you watc...oster board.'\n      \n      'as you watch the scene' is contained here:\n        as you watch the scene, threadbare watchers and refugees cluster along the muddy gate line. a gate serjeant manages the crowd and keeps one eye on the roster board.\n      ? ++++++++++++++++++++++\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_referenced_surface_grounding_inspection_resolution.py:385: AssertionError: assert 'as you watch the scene' not in 'as you watc...oster board.'\n=========================== short test summary info ===========================\nFAILED tests/test_exploration_resolution.py::test_chat_quarterstaff_attack_mechanical_resolution_absent\nFAILED tests/test_exploration_resolution.py::test_chat_observe_area_resolution_kwarg_to_build_messages\nFAILED tests/test_exploration_resolution.py::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution\nFAILED tests/test_exploration_resolution.py::test_chat_exploration_parsed_routes_through_exploration\nFAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_abstract_reference_does_not_become_physical\nFAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_readable_surface_communicates_contents\nFAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_hidden_object_is_not_revealed_by_naming\nFAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_general_failed_inspection_creates_no_world_facts\nFAILED tests/test_referenced_surface_grounding_inspection_resolution.py::test_frontier_gate_roster_http_does_not_use_observe_stock"
+  },
+  {
+    "name": "Authority",
+    "args": [
+      "tests/test_pr_cx_authority_assurance.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 180,
+    "timed_out": false,
+    "return_code": 0,
+    "summary": "9 passed",
+    "failed": [],
+    "output_tail": ".........                                                                [100%]"
+  },
+  {
+    "name": "Conversation",
+    "args": [
+      "tests/test_conversational_memory_window.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 180,
+    "timed_out": false,
+    "return_code": 0,
+    "summary": "34 passed",
+    "failed": [],
+    "output_tail": "..................................                                       [100%]"
+  },
+  {
+    "name": "Turn pipeline",
+    "args": [
+      "tests/test_turn_pipeline_shared.py",
+      "-q",
+      "--tb=line"
+    ],
+    "timeout": 300,
+    "timed_out": false,
+    "return_code": 1,
+    "summary": "41 passed, 24 failed",
+    "failed": [
+      "tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape",
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]",
+      "tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]",
+      "tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback",
+      "tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback",
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only",
+      "tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first",
+      "tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback",
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice",
+      "tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication",
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata",
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]",
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]",
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]",
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]",
+      "tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene",
+      "tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane",
+      "tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels",
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit",
+      "tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit",
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract",
+      "tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair",
+      "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical",
+      "tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired"
+    ],
+    "output_tail": "     +  where None = <built-in method get of dict object at 0x000001FDFD625040>('speaker_contract_enforcement_reason')\n     +    where <built-in method get of dict object at 0x000001FDFD625040> = {}.get\n---------------------------- Captured stdout call -----------------------------\n[PROMPT] fresh campaign prompt constructed\nC:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tests\\test_turn_pipeline_shared.py:2103: AssertionError: assert None\n=========================== short test summary info ===========================\nFAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape\nFAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[scene_hold_filler]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_dialogue_lock_final_output_beats_generic_fillers_and_keeps_contract_meta[visible_intro_filler]\nFAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback\nFAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback\nFAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only\nFAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first\nFAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback\nFAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_social_questions_keep_npc_uncertainty_voice\nFAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[Approaching the notice board, Galinor studies the posting about the missing patrol. Does it have any other details?-notice_board-Does it have any other details?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I check the notice. Is there more written below?-notice_board-Is there more written below?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I examine the broken lantern; does it show signs of tampering?-broken_lantern-does it show signs of tampering?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_scene_object_investigation_question_recovers_action_outcome[I study the strange brass device. Anything unusual?-brass_device-Anything unusual?]\nFAILED tests/test_turn_pipeline_shared.py::test_chat_action_outcome_contract_survives_inside_active_social_scene\nFAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane\nFAILED tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels\nFAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit\nFAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit\nFAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract\nFAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_questioning_can_end_clean_refusal_after_emit_repair\nFAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_wrong_opening_speaker_repaired_to_canonical\nFAILED tests/test_turn_pipeline_shared.py::test_pipeline_strict_social_ragged_stranger_fallback_repaired"
+  }
+]

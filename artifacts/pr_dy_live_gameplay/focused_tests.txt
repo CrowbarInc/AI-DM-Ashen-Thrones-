@@ -1,0 +1,31 @@
+FOCUSED PR-DY SUITE
+Command:
+python -m pytest tests/test_pr_dy_live_gameplay.py tests/test_pr_du_player_pipeline.py tests/test_pr_dr_live_vertical_slice.py tests/test_pr_dq_ic_ooc_messages.py tests/test_pr_dq_vertical_slice.py tests/test_pr_do_authority_separation.py tests/test_pr_ds_operation_compatibility.py tests/test_pr_dp_contract_qualification.py tests/test_pr_dh_live_interpretation.py tests/test_pr_dn_interpretation_robustness.py tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_boundary_is_nonmutating_before_gameplay_pipeline tests/test_turn_pipeline_shared.py::test_chat_communication_mode_override_conflict_is_nonmutating tests/test_turn_pipeline_shared.py::test_chat_explicit_ic_strips_declaration_before_narration_context tests/test_turn_pipeline_shared.py::test_chat_explicit_ooc_stays_adjudication_without_gpt tests/test_turn_pipeline_shared.py::test_chat_adjudication_question_with_active_interlocutor_stays_answer_shaped tests/test_model_routing_runtime.py::test_provider_disable_short_circuits_before_openai_client -q --tb=line
+
+Result: exit 0. 99 tests collected. 99 passed, 0 failed.
+
+PR-DY unit coverage in tests/test_pr_dy_live_gameplay.py:
+- live inspect reaches the resolver and records accepted interpretation metadata
+- unsupported interpretation does not fall through or advance the turn
+- malformed interpretation does not execute
+- AUTO out-of-character correction is non-mutating
+- clarification does not mutate
+- explicit OOC does not call interpretation
+- explicit IC still executes a validated action when the model labels the message OOC
+- providers and live interpretation disabled do not call the interpreter
+- bridge rejection of a wrong-kind target does not execute
+- a repeated identical submission commits a second turn (recorded limitation)
+
+PR-DX FILE SET, rerun for comparison
+Command:
+python -m pytest tests/test_pr_dw_disposable_data_dir.py tests/test_pr_du_player_pipeline.py tests/test_pr_dq_ic_ooc_messages.py tests/test_pr_dq_vertical_slice.py tests/test_pr_dr_live_vertical_slice.py tests/test_pr_ds_operation_compatibility.py tests/test_turn_pipeline_shared.py tests/test_conversational_memory_window.py tests/test_exploration_resolution.py tests/test_state_authority.py -q --tb=no
+
+Collected: 228
+Failed: 29
+Passed: 199
+Errors: 0
+Skipped: 0
+
+PR-DX recorded 203 passed / 29 failed on this same file list (232 outcomes). This run has the same failure count. Collection is 4 tests lower, and the pass count is 4 lower by the same amount. PR-DX did not preserve individual failure names, so name-level identity with that earlier 29 is not proven. Names from this run are in pytest_prdx_set.txt and PR-DY_regression_results.md.
+
+Pytest was invoked with its configured addopts (-q). The process exit code and the FAILED list are the count evidence. No per-test timeout flag exists in this suite; the runs finished in about 5 seconds (focused) and about 12 seconds (regression file set).

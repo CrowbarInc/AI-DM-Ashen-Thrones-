@@ -1,0 +1,81 @@
+{
+  "case": "O14",
+  "fixture": "captured PR-PLAY-09 snapshots with explicit adversarial deltas",
+  "operation": "classify captured accepted opening",
+  "expected_integrity": true,
+  "actual": {
+    "integrity": true,
+    "changes": [
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/discoverable_clues_add",
+        "change": "added",
+        "before": null,
+        "after": [],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "authorized_gameplay_mutation",
+        "reason": "accepted_opening_authored_scene_update",
+        "authority_evidence": {
+          "source": "game.api._apply_post_gm_updates; game.storage",
+          "native_operation": "apply_gm_scene_update_layers",
+          "authored_scene": "scenes/frontier_gate.json"
+        }
+      },
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/hidden_facts_add",
+        "change": "added",
+        "before": null,
+        "after": [],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "authorized_gameplay_mutation",
+        "reason": "accepted_opening_authored_scene_update",
+        "authority_evidence": {
+          "source": "game.api._apply_post_gm_updates; game.storage",
+          "native_operation": "apply_gm_scene_update_layers",
+          "authored_scene": "scenes/frontier_gate.json"
+        }
+      },
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/mode",
+        "change": "added",
+        "before": null,
+        "after": "social",
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "authorized_gameplay_mutation",
+        "reason": "accepted_opening_authored_scene_update",
+        "authority_evidence": {
+          "source": "game.api._apply_post_gm_updates; game.storage",
+          "native_operation": "apply_gm_scene_update_layers",
+          "authored_scene": "scenes/frontier_gate.json"
+        }
+      },
+      {
+        "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add",
+        "change": "modified",
+        "before": [],
+        "after": [
+          "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
+          "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+          "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+          "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+          "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
+        ],
+        "scene_id": "frontier_gate",
+        "overlay_id": "frontier_gate",
+        "classification": "authorized_gameplay_mutation",
+        "reason": "accepted_opening_authored_scene_update",
+        "authority_evidence": {
+          "source": "game.api._apply_post_gm_updates; game.storage",
+          "native_operation": "apply_gm_scene_update_layers",
+          "authored_scene": "scenes/frontier_gate.json"
+        }
+      }
+    ],
+    "omitted_entries": 0,
+    "total_changes": 4,
+    "snapshots_preserved": true
+  },
+  "passed": true
+}

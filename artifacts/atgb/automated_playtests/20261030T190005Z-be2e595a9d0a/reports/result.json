@@ -1,0 +1,807 @@
+{
+  "schema_version": 1,
+  "run_id": "20261030T190005Z-be2e595a9d0a",
+  "timestamp": "2026-10-30T19:00:05.866633+00:00",
+  "mode": "Deterministic",
+  "scenario": {
+    "id": "FiveTurnGameplay",
+    "version": "1.0.0",
+    "description": "Opening followed by five production chat intents; bounded at six provider requests",
+    "fixture": "frontier-gate-v1",
+    "execution_modes": [
+      "Deterministic",
+      "Live",
+      "ScriptedGameplay"
+    ],
+    "actions": [
+      {
+        "kind": "initialize_campaign"
+      },
+      {
+        "kind": "capture_baseline"
+      },
+      {
+        "kind": "start_campaign"
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T1",
+        "interaction_category": "observation",
+        "player_input": "I take a moment to look around the gate district. What do I notice?",
+        "subject_terms": [
+          "gate",
+          "rain",
+          "crowd"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": [
+          "Q6"
+        ]
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T2",
+        "interaction_category": "conversation",
+        "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "subject_terms": [
+          "serjeant",
+          "patrol"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": [],
+        "required_npc": "gate_serjeant"
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T3",
+        "interaction_category": "environment",
+        "player_input": "I examine the notice board carefully. What notices are posted?",
+        "subject_terms": [
+          "notice",
+          "board",
+          "tax",
+          "curfew"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": [
+          "Q6"
+        ],
+        "required_object": "notice_board"
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T4",
+        "interaction_category": "investigation",
+        "player_input": "I want to investigate the missing patrol. What leads can I pursue from here?",
+        "subject_terms": [
+          "patrol",
+          "track",
+          "board",
+          "lead"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": []
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T5",
+        "interaction_category": "movement",
+        "player_input": "I approach the gate and try to enter the city.",
+        "subject_terms": [
+          "gate",
+          "city",
+          "market",
+          "Cinderwatch"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [
+          "market_quarter"
+        ],
+        "inapplicable_dimensions": []
+      },
+      {
+        "kind": "capture_final_state"
+      }
+    ],
+    "expected_invariants": {
+      "campaign_started": true,
+      "opening_commits": 1,
+      "turn_delta": 1,
+      "log_delta": 1
+    },
+    "maximum_action_count": 9,
+    "provider_request_ceiling": 6,
+    "token_budgets": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "timeouts": {
+      "preflight": 30,
+      "startup": 30,
+      "request": 90,
+      "scenario": 180,
+      "evidence": 30,
+      "shutdown": 5
+    },
+    "evidence_requirements": [
+      "provider_usage.jsonl",
+      "baseline",
+      "after",
+      "result.json",
+      "SUMMARY.md"
+    ],
+    "stop_conditions": [
+      "first_failed_step",
+      "budget_exhaustion",
+      "timeout",
+      "interruption"
+    ],
+    "budget_feasibility": {
+      "readiness": "B_CONDITIONAL",
+      "six_requests_guarantee": "Ceiling enforced; completion of five turns cannot be guaranteed",
+      "expected_exposure": "Opening 1; informational turns may use 1 interpretation; resolved actions may add narration. A normal two-operation path for all five actions would require 11; SDK/host retries disabled. Six-request run stops before unfinished turns.",
+      "alternative": "Review six-request diagnostic run with possible partial completion; authorize any larger scope separately."
+    }
+  },
+  "repository": {
+    "revision": "b012c3d7e5887fdfb09d10bb9cc0f0220de09df9",
+    "worktree_dirty": true,
+    "note": "HEAD identifies the commit. A dirty worktree means the running files can differ from that commit."
+  },
+  "environment_verification": {
+    "repository_root": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm",
+    "python": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "python_version": "3.12.0",
+    "fixture_hash_verified": true,
+    "provider_request_ceiling": 6,
+    "token_allowances": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "live_authorization": false,
+    "retry_configuration": "SDK=0, host=0",
+    "response_capture_opt_in": true,
+    "application": {
+      "pid": 5852,
+      "port": 55459,
+      "data_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T190005Z-be2e595a9d0a\\data",
+      "isolation_verified": true,
+      "model": "gpt-4.1-mini",
+      "opening_output_allowance": 3000,
+      "limits": [
+        6,
+        200000,
+        20000,
+        220000
+      ],
+      "sdk_retries": 0,
+      "host_retries": 0,
+      "diagnostics_enabled": true,
+      "credentials_present": false,
+      "connectivity_diagnostics": false
+    }
+  },
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "2ed69a9d30d74667a68e182dc642b617",
+    "requests": 1,
+    "request_upper_bound": 1,
+    "dispatched_requests": 1,
+    "pending_requests": 0,
+    "input_tokens": 20,
+    "output_tokens": 10,
+    "total_tokens": 30,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-30T19:00:07.653837+00:00",
+        "time": "2026-10-30T19:00:07.656837+00:00",
+        "sequence": 1,
+        "admission": "admitted",
+        "budget_remaining": 5,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "sent": true,
+        "request_id": "synthetic-response",
+        "model": "gpt-4.1-mini",
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "total_tokens": 30,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 0.033
+      }
+    ],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.321723+00:00"
+      },
+      {
+        "event": "admitted",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-30T19:00:07.653837+00:00",
+        "time": "2026-10-30T19:00:07.653837+00:00",
+        "sequence": 1,
+        "admission": "admitted",
+        "budget_remaining": 5,
+        "sdk_retries": 0,
+        "host_retries": "disabled"
+      },
+      {
+        "event": "dispatch_attempted",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-30T19:00:07.653837+00:00",
+        "time": "2026-10-30T19:00:07.655836+00:00",
+        "sequence": 1,
+        "admission": "admitted",
+        "budget_remaining": 5,
+        "sdk_retries": 0,
+        "host_retries": "disabled"
+      },
+      {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-30T19:00:07.653837+00:00",
+        "time": "2026-10-30T19:00:07.656837+00:00",
+        "sequence": 1,
+        "admission": "admitted",
+        "budget_remaining": 5,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "sent": true,
+        "request_id": "synthetic-response",
+        "model": "gpt-4.1-mini",
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "total_tokens": 30,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 0.033
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.659343+00:00",
+        "attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "opening_attempt_id": "fb60e00ea87d4dc2b6a550bbe577e85b",
+        "stage": "provider_response",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "provider_model": "gpt-4.1-mini",
+        "content_segment_count": null,
+        "provider_content_present": true,
+        "extraction_source": "output_text",
+        "extraction_succeeded": true,
+        "extracted_content_length": 7,
+        "extracted_content_empty": false,
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "total_tokens": 30,
+        "narration_present": false,
+        "narration_length": null,
+        "player_facing_text_present": false,
+        "player_facing_text_length": null,
+        "declarations_present": false,
+        "declaration_count": null,
+        "provider_request_id": null,
+        "provider_response_id": "synthetic-response",
+        "provider_status": "completed",
+        "provider_finish_reason": null,
+        "provider_output_limit_exhausted": null,
+        "requested_max_output_tokens": 3000,
+        "output_limit_reached": false,
+        "possible_output_truncation": false,
+        "json_parsing_succeeded": false,
+        "expected_envelope_present": false,
+        "recognized_envelope_keys": [],
+        "parser_output_form": "plain",
+        "structured_validation_result": false,
+        "rejection_reason": "missing_structured_envelope",
+        "classification": "json_parse_failure",
+        "provider_response_contract": "structured_realization"
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.660348+00:00",
+        "attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "opening_attempt_id": "fb60e00ea87d4dc2b6a550bbe577e85b",
+        "stage": "opening_response_capture",
+        "logical_operation": "scene_opening",
+        "classification": "capture_failed",
+        "sensitive_game_content": true
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.689979+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "fb60e00ea87d4dc2b6a550bbe577e85b",
+        "stage": "opening_semantics",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "semantic_classification": "candidate_rejected",
+        "classification_source": "game.immutable_valid_response.run_preserve_if_valid._check",
+        "classification_reason": "hard_validation_failed",
+        "semantic_reasons": [
+          "structured_contract_failure"
+        ],
+        "narration_present": true,
+        "narration_length": 332,
+        "declarations_present": false,
+        "declaration_count": null
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.695987+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "fb60e00ea87d4dc2b6a550bbe577e85b",
+        "stage": "opening_semantics",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "semantic_classification": "safe_nonresolution",
+        "classification_source": "game.immutable_valid_response.run_preserve_if_valid._finish",
+        "classification_reason": "safe_nonresolution",
+        "nonresolution_origin": "application"
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.697989+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "fb60e00ea87d4dc2b6a550bbe577e85b",
+        "stage": "opening_validation",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "classification_source": "game.api._opening_response_rejection",
+        "classification_reason": "missing_structured_envelope",
+        "opening_accepted": false,
+        "semantic_classification": "rejected"
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "2ed69a9d30d74667a68e182dc642b617",
+        "time": "2026-10-30T19:00:07.704500+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "fb60e00ea87d4dc2b6a550bbe577e85b",
+        "stage": "opening_outcome",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "opening_accepted": false,
+        "gameplay_committed": false,
+        "classification": "opening_rejected",
+        "provider_attempt_id": "449f7d82ccf64f13a0449defdac749ac",
+        "provider_status": "completed",
+        "structured_validation_result": false,
+        "semantic_classification": "safe_nonresolution",
+        "classification_source": "game.immutable_valid_response.run_preserve_if_valid._finish",
+        "classification_reason": "safe_nonresolution",
+        "semantic_reasons": [
+          "structured_contract_failure"
+        ],
+        "narration_present": true,
+        "narration_length": 332,
+        "player_facing_text_present": false,
+        "player_facing_text_length": null,
+        "declarations_present": false,
+        "declaration_count": null,
+        "final_validation_passed": false,
+        "rejection_stage": "game.api._opening_response_rejection",
+        "nonresolution_origin": "application",
+        "rejection_reason": "missing_structured_envelope",
+        "recovery_classification": "safe_nonresolution"
+      }
+    ],
+    "allowances": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "remaining_budget": {
+      "input": 199980,
+      "output": 19990,
+      "total": 219970
+    },
+    "budget_rejections": []
+  },
+  "state_comparison": {
+    "gameplay_mutations": [],
+    "bookkeeping_mutations": [
+      "combat.json",
+      "session.json"
+    ],
+    "unexpected_mutations": [],
+    "integrity": true,
+    "changed_fields": {},
+    "turn_delta": 0,
+    "log_delta": 0,
+    "campaign_started": false,
+    "scene_identity": "frontier_gate",
+    "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+  },
+  "structural_validation": false,
+  "semantic_validation": "safe_nonresolution",
+  "opening_acceptance": false,
+  "ui": {
+    "status": "NOT_TESTED",
+    "reason": "No repository browser runner/dependency; API evidence does not establish rendered UI behavior."
+  },
+  "steps": [
+    {
+      "action": "initialize_campaign",
+      "ok": true,
+      "http_status": 200,
+      "response": {
+        "status": "ok",
+        "ok": true,
+        "ui_mode": "player",
+        "upstream_dependent_run_gate": {
+          "upstream_runtime_healthy": null,
+          "preflight_available": false,
+          "startup_run_valid": false,
+          "manual_testing_blocked": false,
+          "block_reason": "preflight_skipped_by_env",
+          "preflight_health_class": null,
+          "preflight_checked_at": null
+        },
+        "upstream_dependent_run_gate_operator": {
+          "upstream_gate_disposition": "preflight_skipped_by_env",
+          "startup_run_valid": false,
+          "manual_testing_blocked": false,
+          "upstream_runtime_healthy": null,
+          "preflight_available": false,
+          "preflight_health_class": null,
+          "preflight_checked_at": null,
+          "block_reason": "preflight_skipped_by_env",
+          "gameplay_conclusions_valid": false,
+          "action_hint": "Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.",
+          "compact_banner": "UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established"
+        },
+        "campaign_run_id": "59e012ad92fc5406ba893495",
+        "session_id": "59e012ad92fc5406ba893495",
+        "transcript_entry_count_after_reset": 0,
+        "silent_reset_no_implicit_transcript": true
+      }
+    },
+    {
+      "action": "capture_baseline",
+      "ok": true
+    },
+    {
+      "action": "start_campaign",
+      "ok": false,
+      "http_status": 422,
+      "response": {
+        "ok": false,
+        "status": "opening_failed",
+        "error": "The campaign opening could not be generated. No gameplay turn was completed. You may try starting the campaign again.",
+        "opening_failure_reason": "missing_structured_envelope",
+        "campaign_started": false,
+        "gameplay_committed": false
+      },
+      "narration_present": false
+    }
+  ],
+  "uncertainties": [
+    "Bounded provider response unavailable (disabled, capture failed, or response unparsed)",
+    "Rendered UI, live adequacy, and gameplay quality not established by deterministic API execution"
+  ],
+  "verdict": "FAIL",
+  "evidence_zip": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T190005Z-be2e595a9d0a\\evidence\\evidence.zip",
+  "opening_state_comparison": {
+    "gameplay_mutations": [],
+    "bookkeeping_mutations": [
+      "combat.json",
+      "session.json"
+    ],
+    "unexpected_mutations": [],
+    "integrity": true,
+    "changed_fields": {},
+    "turn_delta": 0,
+    "log_delta": 0,
+    "campaign_started": false,
+    "scene_identity": "frontier_gate",
+    "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+  },
+  "process_cleanup": {
+    "owned": true,
+    "pid": 5852,
+    "stopped": true,
+    "exit_code": 1
+  },
+  "accounting_reconciliation": {
+    "version": "ATGB-03B-1",
+    "status": "recorded",
+    "request_upper_bound": 1,
+    "observed_sent_requests": 1,
+    "pending_requests": 0,
+    "reason": "durable_admissions_bound_dispatches",
+    "usage_status": "recorded"
+  },
+  "correlation": {
+    "harness_run_id": "20261030T190005Z-be2e595a9d0a",
+    "scenario_id": "FiveTurnGameplay",
+    "provider_run_ids": [
+      "2ed69a9d30d74667a68e182dc642b617"
+    ],
+    "opening_attempt_ids": [
+      "fb60e00ea87d4dc2b6a550bbe577e85b"
+    ],
+    "provider_attempt_ids": [
+      "449f7d82ccf64f13a0449defdac749ac"
+    ],
+    "limitation": "Missing native identifiers remain unavailable; harness run ID maps to isolated journal, not fabricated provider IDs."
+  },
+  "provider_completion": {
+    "provider_status": "completed",
+    "provider_finish_reason": null,
+    "provider_output_limit_exhausted": null,
+    "classification": "json_parse_failure"
+  },
+  "provider_response_evidence": [],
+  "opening_commits_observed": 0,
+  "provider_exposure": {
+    "live_calls": 0,
+    "transport": "synthetic_sdk_with_external_socket_denial"
+  },
+  "failure_classification": {
+    "category": "json_parsing_failure",
+    "stage": "parsing",
+    "evidence_record": "diagnostics/provider_usage.jsonl",
+    "record_index": 4,
+    "field": "json_parsing_succeeded",
+    "observed_value": false,
+    "source": "game/provider_budget.py",
+    "root_cause": "Not established",
+    "inferred": false
+  },
+  "elapsed_seconds": 1.812,
+  "attempted_turns": 0,
+  "completed_turns": 0,
+  "gameplay_turns": [],
+  "state_integrity_findings": [],
+  "earliest": {
+    "mechanical_failure": {
+      "step_id": "opening",
+      "player_input": "[Start Campaign]",
+      "dm_response": null,
+      "category": "json_parsing_failure",
+      "source": "native opening acceptance/state comparison",
+      "diagnostics": "diagnostics/provider_usage.jsonl",
+      "state_comparison": {
+        "gameplay_mutations": [],
+        "bookkeeping_mutations": [
+          "combat.json",
+          "session.json"
+        ],
+        "unexpected_mutations": [],
+        "integrity": true,
+        "changed_fields": {},
+        "turn_delta": 0,
+        "log_delta": 0,
+        "campaign_started": false,
+        "scene_identity": "frontier_gate",
+        "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+      }
+    },
+    "semantic_failure": null,
+    "quality_concern": null
+  },
+  "stop_reason": "json_parsing_failure",
+  "skipped_turns": [
+    {
+      "step_id": "T1",
+      "reason": "json_parsing_failure"
+    },
+    {
+      "step_id": "T2",
+      "reason": "json_parsing_failure"
+    },
+    {
+      "step_id": "T3",
+      "reason": "json_parsing_failure"
+    },
+    {
+      "step_id": "T4",
+      "reason": "json_parsing_failure"
+    },
+    {
+      "step_id": "T5",
+      "reason": "json_parsing_failure"
+    }
+  ],
+  "five_meaningful_interactions": "NOT_ESTABLISHED"
+}

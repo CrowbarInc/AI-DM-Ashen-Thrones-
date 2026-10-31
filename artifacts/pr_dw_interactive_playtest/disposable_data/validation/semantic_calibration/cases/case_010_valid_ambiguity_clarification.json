@@ -1,0 +1,16 @@
+{
+  "case_id": "case_010_valid_ambiguity_clarification",
+  "category": "positive.valid_ambiguity_clarification",
+  "player_input": "I check it.",
+  "prior_context": "Multiple objects are equally salient: door, notice, and satchel.",
+  "gm_response": "Which one are you checking: the door, the notice, or the satchel?",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "The player request is ambiguous, so asking for clarification is appropriate.",
+  "provenance": {"kind": "manually_authored_positive_control"},
+  "synthetic": true,
+  "action_type": "ambiguous_action"
+}

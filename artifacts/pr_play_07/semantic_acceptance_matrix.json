@@ -1,0 +1,154 @@
+[
+  {
+    "fixture": "S1",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S2",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": "generic_information_request_fallback",
+    "semantic_reasons": [],
+    "acceptance": false,
+    "gameplay_commit": false,
+    "expected": false,
+    "actual_http": 422,
+    "pass": true
+  },
+  {
+    "fixture": "S3",
+    "structural": "structured_validation_failure",
+    "semantic": "safe_nonresolution",
+    "reason": "malformed_envelope",
+    "semantic_reasons": [
+      "structured_contract_failure"
+    ],
+    "acceptance": false,
+    "gameplay_commit": false,
+    "expected": false,
+    "actual_http": 422,
+    "pass": true
+  },
+  {
+    "fixture": "S4",
+    "structural": "missing_structured_envelope",
+    "semantic": "safe_nonresolution",
+    "reason": "malformed_envelope",
+    "semantic_reasons": [
+      "structured_contract_failure"
+    ],
+    "acceptance": false,
+    "gameplay_commit": false,
+    "expected": false,
+    "actual_http": 422,
+    "pass": true
+  },
+  {
+    "fixture": "S5",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S6",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S7",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S8",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S9",
+    "structural": "accepted_structured_response",
+    "semantic": "safe_nonresolution",
+    "reason": "safe_nonresolution",
+    "semantic_reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "acceptance": false,
+    "gameplay_commit": false,
+    "expected": false,
+    "actual_http": 422,
+    "pass": true
+  },
+  {
+    "fixture": "S10",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S11",
+    "structural": "accepted_structured_response",
+    "semantic": "initial_generation",
+    "reason": null,
+    "semantic_reasons": [],
+    "acceptance": true,
+    "gameplay_commit": true,
+    "expected": true,
+    "actual_http": 200,
+    "pass": true
+  },
+  {
+    "fixture": "S12",
+    "structural": "accepted_structured_response",
+    "semantic": "safe_nonresolution",
+    "reason": "safe_nonresolution",
+    "semantic_reasons": [
+      "unauthorized_resolution_decision_fact"
+    ],
+    "acceptance": false,
+    "gameplay_commit": false,
+    "expected": false,
+    "actual_http": 422,
+    "pass": true
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "case_id": "case_007_valid_refusal",
+  "category": "positive.valid_refusal",
+  "player_input": "Who paid you to open the side gate?",
+  "prior_context": "Veyra has reason to protect the payer.",
+  "gm_response": "\"I'm not telling you that,\" Veyra says, folding her arms.",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "A coherent refusal addresses the player's intent without revealing the information.",
+  "provenance": {"kind": "manually_authored_positive_control"},
+  "synthetic": true,
+  "action_type": "question"
+}

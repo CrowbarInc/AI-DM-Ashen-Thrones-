@@ -1,0 +1,860 @@
+{
+  "by_architecture": {
+    "A": {
+      "operation_correct": {
+        "count": 87,
+        "denominator": 132
+      },
+      "referent_correct": {
+        "count": 28,
+        "denominator": 94
+      },
+      "roles_correct": {
+        "count": 71,
+        "denominator": 132
+      },
+      "correction_success": {
+        "count": 0,
+        "denominator": 40
+      },
+      "follow_up_success": {
+        "count": 0,
+        "denominator": 41
+      },
+      "false_clarification": {
+        "count": 1,
+        "denominator": 132
+      },
+      "clarification_success": {
+        "count": 1,
+        "denominator": 13
+      },
+      "meaning_success": {
+        "count": 3,
+        "denominator": 132
+      },
+      "malformed": {
+        "count": 0,
+        "denominator": 132
+      },
+      "security_pass": {
+        "count": 132,
+        "denominator": 132
+      },
+      "source_correct": {
+        "count": 2,
+        "denominator": 6
+      },
+      "selection_correct": {
+        "count": 0,
+        "denominator": 0
+      },
+      "latency_ms_mean": 2015.4,
+      "latency_ms_p95": 2514.901,
+      "input_tokens_mean": 1900.8,
+      "output_tokens_mean": 160.0,
+      "calls": 132
+    },
+    "B": {
+      "operation_correct": {
+        "count": 90,
+        "denominator": 132
+      },
+      "referent_correct": {
+        "count": 57,
+        "denominator": 94
+      },
+      "roles_correct": {
+        "count": 53,
+        "denominator": 132
+      },
+      "correction_success": {
+        "count": 14,
+        "denominator": 40
+      },
+      "follow_up_success": {
+        "count": 13,
+        "denominator": 41
+      },
+      "false_clarification": {
+        "count": 12,
+        "denominator": 132
+      },
+      "clarification_success": {
+        "count": 5,
+        "denominator": 13
+      },
+      "meaning_success": {
+        "count": 34,
+        "denominator": 132
+      },
+      "malformed": {
+        "count": 0,
+        "denominator": 132
+      },
+      "security_pass": {
+        "count": 132,
+        "denominator": 132
+      },
+      "source_correct": {
+        "count": 0,
+        "denominator": 6
+      },
+      "selection_correct": {
+        "count": 0,
+        "denominator": 0
+      },
+      "latency_ms_mean": 1696.4,
+      "latency_ms_p95": 2112.453,
+      "input_tokens_mean": 850.1,
+      "output_tokens_mean": 109.7,
+      "calls": 132
+    },
+    "C": {
+      "operation_correct": {
+        "count": 106,
+        "denominator": 132
+      },
+      "referent_correct": {
+        "count": 74,
+        "denominator": 94
+      },
+      "roles_correct": {
+        "count": 76,
+        "denominator": 132
+      },
+      "correction_success": {
+        "count": 25,
+        "denominator": 40
+      },
+      "follow_up_success": {
+        "count": 27,
+        "denominator": 41
+      },
+      "false_clarification": {
+        "count": 1,
+        "denominator": 132
+      },
+      "clarification_success": {
+        "count": 2,
+        "denominator": 13
+      },
+      "meaning_success": {
+        "count": 59,
+        "denominator": 132
+      },
+      "malformed": {
+        "count": 0,
+        "denominator": 132
+      },
+      "security_pass": {
+        "count": 132,
+        "denominator": 132
+      },
+      "source_correct": {
+        "count": 0,
+        "denominator": 6
+      },
+      "selection_correct": {
+        "count": 57,
+        "denominator": 126
+      },
+      "latency_ms_mean": 1484.8,
+      "latency_ms_p95": 1872.269,
+      "input_tokens_mean": 703.8,
+      "output_tokens_mean": 66.7,
+      "calls": 132
+    }
+  },
+  "paired": {
+    "validation": {
+      "A_vs_B": {
+        "correction_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 5,
+          "neither": 10,
+          "net_B_minus_A": 5
+        },
+        "follow_up_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 3,
+          "neither": 11,
+          "net_B_minus_A": 3
+        },
+        "referent_correct": {
+          "both": 5,
+          "only_A": 4,
+          "only_B": 13,
+          "neither": 12,
+          "net_B_minus_A": 9
+        },
+        "roles_correct": {
+          "both": 10,
+          "only_A": 16,
+          "only_B": 8,
+          "neither": 14,
+          "net_B_minus_A": -8
+        },
+        "meaning_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 10,
+          "neither": 38,
+          "net_B_minus_A": 10
+        }
+      },
+      "A_vs_C": {
+        "correction_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 10,
+          "neither": 5,
+          "net_C_minus_A": 10
+        },
+        "follow_up_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 12,
+          "neither": 2,
+          "net_C_minus_A": 12
+        },
+        "referent_correct": {
+          "both": 9,
+          "only_A": 0,
+          "only_C": 20,
+          "neither": 5,
+          "net_C_minus_A": 20
+        },
+        "roles_correct": {
+          "both": 18,
+          "only_A": 8,
+          "only_C": 11,
+          "neither": 11,
+          "net_C_minus_A": 3
+        },
+        "meaning_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 25,
+          "neither": 23,
+          "net_C_minus_A": 25
+        }
+      },
+      "B_vs_C": {
+        "correction_success": {
+          "both": 4,
+          "only_B": 1,
+          "only_C": 6,
+          "neither": 4,
+          "net_C_minus_B": 5
+        },
+        "follow_up_success": {
+          "both": 3,
+          "only_B": 0,
+          "only_C": 9,
+          "neither": 2,
+          "net_C_minus_B": 9
+        },
+        "referent_correct": {
+          "both": 16,
+          "only_B": 2,
+          "only_C": 13,
+          "neither": 3,
+          "net_C_minus_B": 11
+        },
+        "roles_correct": {
+          "both": 14,
+          "only_B": 4,
+          "only_C": 15,
+          "neither": 15,
+          "net_C_minus_B": 11
+        },
+        "meaning_success": {
+          "both": 8,
+          "only_B": 2,
+          "only_C": 17,
+          "neither": 21,
+          "net_C_minus_B": 15
+        }
+      }
+    },
+    "holdout": {
+      "A_vs_B": {
+        "correction_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 4,
+          "neither": 9,
+          "net_B_minus_A": 4
+        },
+        "follow_up_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 4,
+          "neither": 9,
+          "net_B_minus_A": 4
+        },
+        "referent_correct": {
+          "both": 5,
+          "only_A": 1,
+          "only_B": 13,
+          "neither": 11,
+          "net_B_minus_A": 12
+        },
+        "roles_correct": {
+          "both": 7,
+          "only_A": 13,
+          "only_B": 9,
+          "neither": 13,
+          "net_B_minus_A": -4
+        },
+        "meaning_success": {
+          "both": 0,
+          "only_A": 2,
+          "only_B": 11,
+          "neither": 29,
+          "net_B_minus_A": 9
+        }
+      },
+      "A_vs_C": {
+        "correction_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 6,
+          "neither": 7,
+          "net_C_minus_A": 6
+        },
+        "follow_up_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 6,
+          "neither": 7,
+          "net_C_minus_A": 6
+        },
+        "referent_correct": {
+          "both": 5,
+          "only_A": 1,
+          "only_C": 17,
+          "neither": 7,
+          "net_C_minus_A": 16
+        },
+        "roles_correct": {
+          "both": 15,
+          "only_A": 5,
+          "only_C": 9,
+          "neither": 13,
+          "net_C_minus_A": 4
+        },
+        "meaning_success": {
+          "both": 1,
+          "only_A": 1,
+          "only_C": 14,
+          "neither": 26,
+          "net_C_minus_A": 13
+        }
+      },
+      "B_vs_C": {
+        "correction_success": {
+          "both": 2,
+          "only_B": 2,
+          "only_C": 4,
+          "neither": 5,
+          "net_C_minus_B": 2
+        },
+        "follow_up_success": {
+          "both": 3,
+          "only_B": 1,
+          "only_C": 3,
+          "neither": 6,
+          "net_C_minus_B": 2
+        },
+        "referent_correct": {
+          "both": 13,
+          "only_B": 5,
+          "only_C": 9,
+          "neither": 3,
+          "net_C_minus_B": 4
+        },
+        "roles_correct": {
+          "both": 10,
+          "only_B": 6,
+          "only_C": 14,
+          "neither": 12,
+          "net_C_minus_B": 8
+        },
+        "meaning_success": {
+          "both": 5,
+          "only_B": 6,
+          "only_C": 10,
+          "neither": 21,
+          "net_C_minus_B": 4
+        }
+      }
+    },
+    "development": {
+      "A_vs_B": {
+        "correction_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 5,
+          "neither": 7,
+          "net_B_minus_A": 5
+        },
+        "follow_up_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_B": 6,
+          "neither": 8,
+          "net_B_minus_A": 6
+        },
+        "referent_correct": {
+          "both": 10,
+          "only_A": 3,
+          "only_B": 11,
+          "neither": 6,
+          "net_B_minus_A": 8
+        },
+        "roles_correct": {
+          "both": 12,
+          "only_A": 13,
+          "only_B": 7,
+          "neither": 10,
+          "net_B_minus_A": -6
+        },
+        "meaning_success": {
+          "both": 0,
+          "only_A": 1,
+          "only_B": 13,
+          "neither": 28,
+          "net_B_minus_A": 12
+        }
+      },
+      "A_vs_C": {
+        "correction_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 9,
+          "neither": 3,
+          "net_C_minus_A": 9
+        },
+        "follow_up_success": {
+          "both": 0,
+          "only_A": 0,
+          "only_C": 9,
+          "neither": 5,
+          "net_C_minus_A": 9
+        },
+        "referent_correct": {
+          "both": 11,
+          "only_A": 2,
+          "only_C": 12,
+          "neither": 5,
+          "net_C_minus_A": 10
+        },
+        "roles_correct": {
+          "both": 17,
+          "only_A": 8,
+          "only_C": 6,
+          "neither": 11,
+          "net_C_minus_A": -2
+        },
+        "meaning_success": {
+          "both": 0,
+          "only_A": 1,
+          "only_C": 19,
+          "neither": 22,
+          "net_C_minus_A": 18
+        }
+      },
+      "B_vs_C": {
+        "correction_success": {
+          "both": 4,
+          "only_B": 1,
+          "only_C": 5,
+          "neither": 2,
+          "net_C_minus_B": 4
+        },
+        "follow_up_success": {
+          "both": 5,
+          "only_B": 1,
+          "only_C": 4,
+          "neither": 4,
+          "net_C_minus_B": 3
+        },
+        "referent_correct": {
+          "both": 19,
+          "only_B": 2,
+          "only_C": 4,
+          "neither": 5,
+          "net_C_minus_B": 2
+        },
+        "roles_correct": {
+          "both": 12,
+          "only_B": 7,
+          "only_C": 11,
+          "neither": 12,
+          "net_C_minus_B": 4
+        },
+        "meaning_success": {
+          "both": 9,
+          "only_B": 4,
+          "only_C": 10,
+          "neither": 19,
+          "net_C_minus_B": 6
+        }
+      }
+    }
+  },
+  "by_partition": {
+    "development": {
+      "A": {
+        "meaning_success": {
+          "count": 1,
+          "denominator": 42
+        },
+        "correction_success": {
+          "count": 0,
+          "denominator": 12
+        },
+        "follow_up_success": {
+          "count": 0,
+          "denominator": 14
+        },
+        "referent_correct": {
+          "count": 13,
+          "denominator": 30
+        },
+        "roles_correct": {
+          "count": 25,
+          "denominator": 42
+        },
+        "operation_correct": {
+          "count": 32,
+          "denominator": 42
+        },
+        "false_clarification": {
+          "count": 0,
+          "denominator": 42
+        },
+        "security_pass": {
+          "count": 42,
+          "denominator": 42
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 42
+        }
+      },
+      "B": {
+        "meaning_success": {
+          "count": 13,
+          "denominator": 42
+        },
+        "correction_success": {
+          "count": 5,
+          "denominator": 12
+        },
+        "follow_up_success": {
+          "count": 6,
+          "denominator": 14
+        },
+        "referent_correct": {
+          "count": 21,
+          "denominator": 30
+        },
+        "roles_correct": {
+          "count": 19,
+          "denominator": 42
+        },
+        "operation_correct": {
+          "count": 32,
+          "denominator": 42
+        },
+        "false_clarification": {
+          "count": 5,
+          "denominator": 42
+        },
+        "security_pass": {
+          "count": 42,
+          "denominator": 42
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 42
+        }
+      },
+      "C": {
+        "meaning_success": {
+          "count": 19,
+          "denominator": 42
+        },
+        "correction_success": {
+          "count": 9,
+          "denominator": 12
+        },
+        "follow_up_success": {
+          "count": 9,
+          "denominator": 14
+        },
+        "referent_correct": {
+          "count": 23,
+          "denominator": 30
+        },
+        "roles_correct": {
+          "count": 23,
+          "denominator": 42
+        },
+        "operation_correct": {
+          "count": 34,
+          "denominator": 42
+        },
+        "false_clarification": {
+          "count": 1,
+          "denominator": 42
+        },
+        "security_pass": {
+          "count": 42,
+          "denominator": 42
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 42
+        }
+      }
+    },
+    "validation": {
+      "A": {
+        "meaning_success": {
+          "count": 0,
+          "denominator": 48
+        },
+        "correction_success": {
+          "count": 0,
+          "denominator": 15
+        },
+        "follow_up_success": {
+          "count": 0,
+          "denominator": 14
+        },
+        "referent_correct": {
+          "count": 9,
+          "denominator": 34
+        },
+        "roles_correct": {
+          "count": 26,
+          "denominator": 48
+        },
+        "operation_correct": {
+          "count": 31,
+          "denominator": 48
+        },
+        "false_clarification": {
+          "count": 0,
+          "denominator": 48
+        },
+        "security_pass": {
+          "count": 48,
+          "denominator": 48
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 48
+        }
+      },
+      "B": {
+        "meaning_success": {
+          "count": 10,
+          "denominator": 48
+        },
+        "correction_success": {
+          "count": 5,
+          "denominator": 15
+        },
+        "follow_up_success": {
+          "count": 3,
+          "denominator": 14
+        },
+        "referent_correct": {
+          "count": 18,
+          "denominator": 34
+        },
+        "roles_correct": {
+          "count": 18,
+          "denominator": 48
+        },
+        "operation_correct": {
+          "count": 31,
+          "denominator": 48
+        },
+        "false_clarification": {
+          "count": 3,
+          "denominator": 48
+        },
+        "security_pass": {
+          "count": 48,
+          "denominator": 48
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 48
+        }
+      },
+      "C": {
+        "meaning_success": {
+          "count": 25,
+          "denominator": 48
+        },
+        "correction_success": {
+          "count": 10,
+          "denominator": 15
+        },
+        "follow_up_success": {
+          "count": 12,
+          "denominator": 14
+        },
+        "referent_correct": {
+          "count": 29,
+          "denominator": 34
+        },
+        "roles_correct": {
+          "count": 29,
+          "denominator": 48
+        },
+        "operation_correct": {
+          "count": 41,
+          "denominator": 48
+        },
+        "false_clarification": {
+          "count": 0,
+          "denominator": 48
+        },
+        "security_pass": {
+          "count": 48,
+          "denominator": 48
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 48
+        }
+      }
+    },
+    "holdout": {
+      "A": {
+        "meaning_success": {
+          "count": 2,
+          "denominator": 42
+        },
+        "correction_success": {
+          "count": 0,
+          "denominator": 13
+        },
+        "follow_up_success": {
+          "count": 0,
+          "denominator": 13
+        },
+        "referent_correct": {
+          "count": 6,
+          "denominator": 30
+        },
+        "roles_correct": {
+          "count": 20,
+          "denominator": 42
+        },
+        "operation_correct": {
+          "count": 24,
+          "denominator": 42
+        },
+        "false_clarification": {
+          "count": 1,
+          "denominator": 42
+        },
+        "security_pass": {
+          "count": 42,
+          "denominator": 42
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 42
+        }
+      },
+      "B": {
+        "meaning_success": {
+          "count": 11,
+          "denominator": 42
+        },
+        "correction_success": {
+          "count": 4,
+          "denominator": 13
+        },
+        "follow_up_success": {
+          "count": 4,
+          "denominator": 13
+        },
+        "referent_correct": {
+          "count": 18,
+          "denominator": 30
+        },
+        "roles_correct": {
+          "count": 16,
+          "denominator": 42
+        },
+        "operation_correct": {
+          "count": 27,
+          "denominator": 42
+        },
+        "false_clarification": {
+          "count": 4,
+          "denominator": 42
+        },
+        "security_pass": {
+          "count": 42,
+          "denominator": 42
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 42
+        }
+      },
+      "C": {
+        "meaning_success": {
+          "count": 15,
+          "denominator": 42
+        },
+        "correction_success": {
+          "count": 6,
+          "denominator": 13
+        },
+        "follow_up_success": {
+          "count": 6,
+          "denominator": 13
+        },
+        "referent_correct": {
+          "count": 22,
+          "denominator": 30
+        },
+        "roles_correct": {
+          "count": 24,
+          "denominator": 42
+        },
+        "operation_correct": {
+          "count": 31,
+          "denominator": 42
+        },
+        "false_clarification": {
+          "count": 0,
+          "denominator": 42
+        },
+        "security_pass": {
+          "count": 42,
+          "denominator": 42
+        },
+        "malformed": {
+          "count": 0,
+          "denominator": 42
+        }
+      }
+    }
+  }
+}

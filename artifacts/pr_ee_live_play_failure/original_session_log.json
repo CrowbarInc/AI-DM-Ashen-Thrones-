@@ -1,0 +1,1000 @@
+[
+  {
+    "timestamp": "2026-10-16T20:12:25.130642Z",
+    "player_input": "I'm ready to begin play!",
+    "player_facing_text": "What are you trying to accomplish?",
+    "request": {
+      "chat": "I'm ready to begin play!"
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "I'm ready to begin play!",
+      "prompt": "I'm ready to begin play!",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "The player signals readiness to start the role-playing session in the current scene.",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [
+            "intention"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "clarification_required",
+          "confidence": 0.55,
+          "ambiguity": null,
+          "player_facing_text": "What are you trying to accomplish?",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": ""
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player signals readiness to start the role-playing session in the current scene.\"},\"asserted_premises\":[{\"text\":\"The player is at Cinderwatch Gate District, where there is rain, choke traffic, a notice board, and gate watch pressure related to a missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"Begin the role-playing session from this point in the scene.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "purpose": "interpretation",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_010eacf9672ff01e006ad28526cb5887d29745e2fde69725a7",
+              "input_tokens": 736,
+              "output_tokens": 154,
+              "total_tokens": 890,
+              "latency_ms": 3204.669,
+              "estimated_input_tokens": 1297,
+              "max_output_tokens": 320,
+              "usage_consistent": true
+            }
+          ],
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player signals readiness to start the role-playing session in the current scene."
+            },
+            "asserted_premises": [
+              {
+                "text": "The player is at Cinderwatch Gate District, where there is rain, choke traffic, a notice board, and gate watch pressure related to a missing patrol inquiry.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Begin the role-playing session from this point in the scene.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 3247,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 1,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    },
+    "gm_output": {
+      "player_facing_text": "What are you trying to accomplish?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:clarification_required"
+    },
+    "log_meta": {
+      "player_input": "I'm ready to begin play!",
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "processing_outcome": "conversational_clarify",
+      "authoritative_mutation": false,
+      "resolver_invoked": false
+    }
+  },
+  {
+    "timestamp": "2026-10-16T20:12:40.669145Z",
+    "player_input": "I'd like you to start the campaign.",
+    "player_facing_text": "What are you trying to accomplish?",
+    "request": {
+      "chat": "I'd like you to start the campaign."
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "I'd like you to start the campaign.",
+      "prompt": "I'd like you to start the campaign.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "The player wants to begin the campaign or game session.",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [
+            "intention"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "clarification_required",
+          "confidence": 0.55,
+          "ambiguity": null,
+          "player_facing_text": "What are you trying to accomplish?",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": ""
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\":\"OTHER\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player wants to begin the campaign or game session.\"},\"asserted_premises\":[{\"text\":\"The player is indicating readiness to start the campaign.\"}],\"requested_outcomes\":[{\"text\":\"The campaign or game session begins.\"}],\"action_components\":[],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "purpose": "interpretation",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_01cab4aa5c58a5b1006ad28536ae3087d296d562038615477c",
+              "input_tokens": 764,
+              "output_tokens": 120,
+              "total_tokens": 884,
+              "latency_ms": 2677.942,
+              "estimated_input_tokens": 1339,
+              "max_output_tokens": 320,
+              "usage_consistent": true
+            }
+          ],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player wants to begin the campaign or game session."
+            },
+            "asserted_premises": [
+              {
+                "text": "The player is indicating readiness to start the campaign.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "The campaign or game session begins.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 2683,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 1,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    },
+    "gm_output": {
+      "player_facing_text": "What are you trying to accomplish?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:clarification_required"
+    },
+    "log_meta": {
+      "player_input": "I'd like you to start the campaign.",
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "processing_outcome": "conversational_clarify",
+      "authoritative_mutation": false,
+      "resolver_invoked": false
+    }
+  },
+  {
+    "timestamp": "2026-10-16T20:12:50.048696Z",
+    "player_input": "Begin.",
+    "player_facing_text": "You asked to Start the campaign or scene at Cinderwatch Gate District.. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+    "request": {
+      "chat": "Begin."
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "Begin.",
+      "prompt": "Begin.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "Start the campaign or scene at Cinderwatch Gate District.",
+          "intent_family": "multi_action",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [
+            "confirmed_step"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "compound_intention_needs_confirmation",
+          "confidence": 0.8,
+          "ambiguity": null,
+          "player_facing_text": "You asked to Start the campaign or scene at Cinderwatch Gate District.. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": {
+                "kind": "compound_sequence",
+                "operation": "OTHER",
+                "original_text": "The player intends to start the campaign or scene at the Cinderwatch Gate District.",
+                "steps": [
+                  {
+                    "text": "Start the campaign or scene at Cinderwatch Gate District.",
+                    "label": "Start the campaign or scene at Cinderwatch Gate District.",
+                    "operation": "OTHER",
+                    "target_id": "",
+                    "supported": false,
+                    "consequential": true,
+                    "dependency": "sequence",
+                    "status": "pending"
+                  }
+                ],
+                "scene_id": ""
+              }
+            }
+          },
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": "clarify_before_execution"
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "interpretation_rejected",
+          "eligibility_disposition": "UNSUPPORTED_OPERATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player intends to start the campaign or scene at the Cinderwatch Gate District.\"},\"asserted_premises\":[{\"text\":\"The scene is set at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure.\"},{\"text\":\"There is a missing patrol inquiry ongoing.\"}],\"requested_outcomes\":[{\"text\":\"Begin the campaign or scene at the described location.\"}],\"action_components\":[{\"order\":1,\"description\":\"Start the campaign or scene at Cinderwatch Gate District.\",\"target_ref\":null,\"operation_class\":\"INVENTORY_GRANT\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "purpose": "interpretation",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_072e05e4ec890d93006ad2853fbfa487d2abb96b6c5adb07de",
+              "input_tokens": 782,
+              "output_tokens": 190,
+              "total_tokens": 972,
+              "latency_ms": 2643.207,
+              "estimated_input_tokens": 1364,
+              "max_output_tokens": 320,
+              "usage_consistent": true
+            }
+          ],
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player intends to start the campaign or scene at the Cinderwatch Gate District."
+            },
+            "asserted_premises": [
+              {
+                "text": "The scene is set at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "There is a missing patrol inquiry ongoing.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Begin the campaign or scene at the described location.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Start the campaign or scene at Cinderwatch Gate District.",
+                "target_ref": null,
+                "operation_class": "INVENTORY_GRANT"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 2648,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 1,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    },
+    "gm_output": {
+      "player_facing_text": "You asked to Start the campaign or scene at Cinderwatch Gate District.. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:compound_intention_needs_confirmation"
+    },
+    "log_meta": {
+      "player_input": "Begin.",
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "processing_outcome": "conversational_clarify",
+      "authoritative_mutation": false,
+      "resolver_invoked": false
+    }
+  },
+  {
+    "timestamp": "2026-10-16T20:12:59.066206Z",
+    "player_input": "Yes.",
+    "player_facing_text": "I have not done this: Start the campaign or scene at Cinderwatch Gate District.. It is not a supported action I can resolve safely yet.",
+    "request": {
+      "chat": "Yes."
+    },
+    "resolution": {
+      "kind": "conversational_decline",
+      "action_id": "conversational_decline",
+      "label": "Yes.",
+      "prompt": "Yes.",
+      "success": false,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_decline",
+        "conversational_decision": {
+          "category": "DECLINE",
+          "primary_intention": "Start the campaign or scene at Cinderwatch Gate District.",
+          "intent_family": "multi_action",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "unsupported_compound_step",
+          "confidence": 0.75,
+          "ambiguity": null,
+          "player_facing_text": "I have not done this: Start the campaign or scene at Cinderwatch Gate District.. It is not a supported action I can resolve safely yet.",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": {
+                "kind": "compound_sequence",
+                "operation": "OTHER",
+                "original_text": "The player intends to start the campaign or scene at the Cinderwatch Gate District.",
+                "steps": [
+                  {
+                    "text": "Start the campaign or scene at Cinderwatch Gate District.",
+                    "label": "Start the campaign or scene at Cinderwatch Gate District.",
+                    "operation": "OTHER",
+                    "target_id": "",
+                    "supported": false,
+                    "consequential": true,
+                    "dependency": "sequence",
+                    "status": "pending"
+                  }
+                ],
+                "scene_id": ""
+              }
+            }
+          },
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": "decline_unauthorized_route"
+        },
+        "live_chat_interpretation": null,
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 4,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 0,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_decline",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    },
+    "gm_output": {
+      "player_facing_text": "I have not done this: Start the campaign or scene at Cinderwatch Gate District.. It is not a supported action I can resolve safely yet.",
+      "tags": [
+        "conversational_orchestration",
+        "decline",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:unsupported_compound_step"
+    },
+    "log_meta": {
+      "player_input": "Yes.",
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "processing_outcome": "conversational_decline",
+      "authoritative_mutation": false,
+      "resolver_invoked": false
+    }
+  },
+  {
+    "timestamp": "2026-10-16T20:13:12.503872Z",
+    "player_input": "Why not?",
+    "player_facing_text": "Who are you asking?",
+    "request": {
+      "chat": "Why not?"
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "Why not?",
+      "prompt": "Why not?",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "Why not?",
+          "intent_family": "world_operation",
+          "incidental_context": [],
+          "proposed_operation": "ASK",
+          "proposed_target": null,
+          "proposed_record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player character is asking 'Why not?' in response to a previous statement or situation in the scene, likely seeking an explanation or reason."
+            },
+            "asserted_premises": [
+              {
+                "text": "The scene is set at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Receive an explanation or reason in response to the question 'Why not?'",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Player character utters the question 'Why not?' directed at an interlocutor in the scene.",
+                "target_ref": null,
+                "operation_class": "ASK"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          },
+          "missing_information": [
+            "interlocutor"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "missing_target",
+          "confidence": 0.7,
+          "ambiguity": null,
+          "player_facing_text": "Who are you asking?",
+          "context_update": null,
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": ""
+        },
+        "live_chat_interpretation": {
+          "status": "accepted",
+          "reason": "eligible_for_bridge",
+          "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+          "model_communication_mode": "IN_WORLD_ACTION",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"The player character is asking 'Why not?' in response to a previous statement or situation in the scene, likely seeking an explanation or reason.\"},\"asserted_premises\":[{\"text\":\"The scene is set at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"Receive an explanation or reason in response to the question 'Why not?'\"}],\"action_components\":[{\"order\":1,\"description\":\"Player character utters the question 'Why not?' directed at an interlocutor in the scene.\",\"target_ref\":null,\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "purpose": "interpretation",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_0df47bc2f21d6fc4006ad28556f22887d2b84bef40a22a67f2",
+              "input_tokens": 832,
+              "output_tokens": 202,
+              "total_tokens": 1034,
+              "latency_ms": 2245.36,
+              "estimated_input_tokens": 1434,
+              "max_output_tokens": 320,
+              "usage_consistent": true
+            }
+          ],
+          "record": {
+            "communication_mode": "IN_WORLD_ACTION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "The player character is asking 'Why not?' in response to a previous statement or situation in the scene, likely seeking an explanation or reason."
+            },
+            "asserted_premises": [
+              {
+                "text": "The scene is set at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "Receive an explanation or reason in response to the question 'Why not?'",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Player character utters the question 'Why not?' directed at an interlocutor in the scene.",
+                "target_ref": null,
+                "operation_class": "ASK"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          }
+        },
+        "stored_interpretation_bridge": {
+          "source": "stored_interpretation",
+          "accepted": false,
+          "reason": "missing_target",
+          "operation": "ASK"
+        },
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 2250,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 1,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    },
+    "gm_output": {
+      "player_facing_text": "Who are you asking?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:missing_target"
+    },
+    "log_meta": {
+      "player_input": "Why not?",
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "processing_outcome": "conversational_clarify",
+      "authoritative_mutation": false,
+      "resolver_invoked": false
+    }
+  },
+  {
+    "timestamp": "2026-10-16T20:13:33.411883Z",
+    "player_input": "You, in the capacity of game-master.",
+    "player_facing_text": "You asked to Player addresses the game-master directly, invoking their role as game-master.. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+    "request": {
+      "chat": "You, in the capacity of game-master."
+    },
+    "resolution": {
+      "kind": "conversational_clarify",
+      "action_id": "conversational_clarify",
+      "label": "You, in the capacity of game-master.",
+      "prompt": "You, in the capacity of game-master.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "metadata": {
+        "communication_mode": "AUTO",
+        "mode_source": "automatic",
+        "authoritative_mutation": false,
+        "resolver_invoked": false,
+        "gameplay_parser_invoked": false,
+        "narration_invoked": false,
+        "processing_outcome": "conversational_clarify",
+        "conversational_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "Player addresses the game-master directly, invoking their role as game-master.",
+          "intent_family": "multi_action",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [
+            "confirmed_step"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "compound_intention_needs_confirmation",
+          "confidence": 0.8,
+          "ambiguity": null,
+          "player_facing_text": "You asked to Player addresses the game-master directly, invoking their role as game-master.. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": {
+                "kind": "compound_sequence",
+                "operation": "OTHER",
+                "original_text": "Address the game-master directly, possibly to initiate or discuss game-master actions or scene management.",
+                "steps": [
+                  {
+                    "text": "Player addresses the game-master directly, invoking their role as game-master.",
+                    "label": "Player addresses the game-master directly, invoking their role as game-master.",
+                    "operation": "OTHER",
+                    "target_id": "",
+                    "supported": false,
+                    "consequential": true,
+                    "dependency": "sequence",
+                    "status": "pending"
+                  }
+                ],
+                "scene_id": ""
+              }
+            }
+          },
+          "intent_modality": "committed",
+          "secondary_intentions": [],
+          "execution_policy": "clarify_before_execution"
+        },
+        "live_chat_interpretation": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "raw_interpretation": "{\"communication_mode\":\"OTHER\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Address the game-master directly, possibly to initiate or discuss game-master actions or scene management.\"},\"asserted_premises\":[{\"text\":\"The player is speaking directly to the game-master in their role.\"}],\"requested_outcomes\":[{\"text\":\"The game-master acknowledges the player's address and responds accordingly.\"}],\"action_components\":[{\"order\":1,\"description\":\"Player addresses the game-master directly, invoking their role as game-master.\",\"target_ref\":null,\"operation_class\":\"SOCIAL_SIGNAL\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"What specific action or information do you request from the game-master in this context?\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+          "provider_requests": [
+            {
+              "purpose": "interpretation",
+              "sent": true,
+              "configured_model": "gpt-4.1-mini",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "request_id": "resp_0e4ceca28eba8931006ad2856a553887d2a803e058ac18385e",
+              "input_tokens": 801,
+              "output_tokens": 184,
+              "total_tokens": 985,
+              "latency_ms": 3701.401,
+              "estimated_input_tokens": 1387,
+              "max_output_tokens": 320,
+              "usage_consistent": true
+            }
+          ],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Address the game-master directly, possibly to initiate or discuss game-master actions or scene management."
+            },
+            "asserted_premises": [
+              {
+                "text": "The player is speaking directly to the game-master in their role.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "The game-master acknowledges the player's address and responds accordingly.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [
+              {
+                "order": 1,
+                "description": "Player addresses the game-master directly, invoking their role as game-master.",
+                "target_ref": null,
+                "operation_class": "SOCIAL_SIGNAL"
+              }
+            ],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "What specific action or information do you request from the game-master in this context?",
+            "correction": {
+              "subject": "NONE",
+              "note": ""
+            }
+          }
+        },
+        "stored_interpretation_bridge": null,
+        "provider_calls": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "ooc_assistance_requests": 0,
+          "retries": 0
+        },
+        "performance": {
+          "elapsed_ms": 3706,
+          "interpretation_ms": null,
+          "resolution_ms": null,
+          "narration_ms": null,
+          "validation_ms": null,
+          "retry_ms": null,
+          "provider_call_count": 1,
+          "input_tokens": null,
+          "output_tokens": null,
+          "retry_count": 0,
+          "retry_reason": null,
+          "disposition": "conversational_clarify",
+          "successful": true,
+          "provider_narration_skipped": false
+        }
+      }
+    },
+    "gm_output": {
+      "player_facing_text": "You asked to Player addresses the game-master directly, invoking their role as game-master.. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+      "tags": [
+        "conversational_orchestration",
+        "clarify",
+        "non_mutating"
+      ],
+      "scene_update": null,
+      "activate_scene_id": null,
+      "new_scene_draft": null,
+      "world_updates": null,
+      "suggested_action": null,
+      "debug_notes": "conversational_orchestration:compound_intention_needs_confirmation"
+    },
+    "log_meta": {
+      "player_input": "You, in the capacity of game-master.",
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "processing_outcome": "conversational_clarify",
+      "authoritative_mutation": false,
+      "resolver_invoked": false
+    }
+  }
+]

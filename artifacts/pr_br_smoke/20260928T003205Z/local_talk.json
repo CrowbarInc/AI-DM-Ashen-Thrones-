@@ -1,0 +1,401 @@
+[
+  {
+    "turn_index": 0,
+    "player_text": "I catch the tavern runner between errands and ask what a newcomer should watch for tonight.",
+    "gm_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "contract_id": "rc_0c5a6e8729ef",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "target": null,
+    "discourse_ref": null,
+    "epistemic_mode": "unknown_allowed",
+    "semantic_result": "PASS",
+    "assessment": {
+      "status": "PASS",
+      "passed": true,
+      "reason_codes": [],
+      "evidence": {
+        "request_kind": "observation",
+        "player_terms": [
+          "between",
+          "catch",
+          "errands",
+          "newcomer",
+          "runner",
+          "tavern",
+          "tonight",
+          "watch",
+          "what"
+        ],
+        "gm_terms": [
+          "captain",
+          "commands",
+          "gate",
+          "guard",
+          "mutters",
+          "thoran",
+          "tonight",
+          "watch",
+          "word"
+        ],
+        "direct_answer_score": 23,
+        "player_intent_score": 18,
+        "resolution_contract": {
+          "contract_id": "rc_0c5a6e8729ef",
+          "dimension": null,
+          "dimensions": [],
+          "operation": "ask",
+          "referent_provenance": "explicit_player",
+          "assessment_status": "unchecked",
+          "assessment_reasons": [
+            "no_dimension"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "turn_index": 1,
+    "player_text": "That last part — who passed it to you?",
+    "gm_text": "Guard Captain shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "contract_id": "rc_3eac7a84e5b0",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "target": {
+      "type": "object",
+      "id_or_text": "guard_captain",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "epistemic_mode": "unknown_allowed",
+    "semantic_result": "PASS",
+    "assessment": {
+      "status": "PASS",
+      "passed": true,
+      "reason_codes": [],
+      "evidence": {
+        "request_kind": "question",
+        "player_terms": [
+          "last",
+          "part",
+          "passed"
+        ],
+        "gm_terms": [
+          "cannot",
+          "captain",
+          "guard",
+          "head",
+          "heard",
+          "shakes",
+          "talk",
+          "verify"
+        ],
+        "direct_answer_score": 17,
+        "player_intent_score": 9,
+        "resolution_contract": {
+          "contract_id": "rc_3eac7a84e5b0",
+          "dimension": null,
+          "dimensions": [],
+          "operation": "ask",
+          "referent_provenance": "explicit_player",
+          "assessment_status": "unchecked",
+          "assessment_reasons": [
+            "no_dimension"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "turn_index": 2,
+    "player_text": "Do you actually believe it, or are you just repeating it?",
+    "gm_text": "Guard Captain says, \"I couldn't tell you Do you actually believe it, or are you just repeating it; you will need another source.\"",
+    "contract_id": "rc_2fd0f1ccbda2",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "target": {
+      "type": "object",
+      "id_or_text": "guard_captain",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "epistemic_mode": "unknown_allowed",
+    "semantic_result": "PASS",
+    "assessment": {
+      "status": "PASS",
+      "passed": true,
+      "reason_codes": [],
+      "evidence": {
+        "request_kind": "question",
+        "player_terms": [
+          "actually",
+          "believe",
+          "repeating"
+        ],
+        "gm_terms": [
+          "actually",
+          "another",
+          "believe",
+          "captain",
+          "couldn't",
+          "guard",
+          "need",
+          "repeating",
+          "says",
+          "source",
+          "tell"
+        ],
+        "direct_answer_score": 22,
+        "player_intent_score": 18,
+        "resolution_contract": {
+          "contract_id": "rc_2fd0f1ccbda2",
+          "dimension": null,
+          "dimensions": [],
+          "operation": "ask",
+          "referent_provenance": "explicit_player",
+          "assessment_status": "unchecked",
+          "assessment_reasons": [
+            "no_dimension"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "turn_index": 3,
+    "player_text": "If there is a place I should go because of that, point me at it.",
+    "gm_text": "Guard Captain says, \"I couldn't tell you the requested information; you will need another source.\"",
+    "contract_id": "rc_633b9ff2b869",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "target": {
+      "type": "object",
+      "id_or_text": "guard_captain",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "epistemic_mode": "unknown_allowed",
+    "semantic_result": "FAIL",
+    "assessment": {
+      "status": "FAIL",
+      "passed": false,
+      "reason_codes": [
+        "intent_addressed:player_action_or_request_lost"
+      ],
+      "evidence": {
+        "request_kind": "action_or_statement",
+        "player_terms": [
+          "because",
+          "place",
+          "point"
+        ],
+        "gm_terms": [
+          "another",
+          "captain",
+          "couldn't",
+          "guard",
+          "information",
+          "need",
+          "requested",
+          "says",
+          "source",
+          "tell"
+        ],
+        "direct_answer_score": 23,
+        "player_intent_score": 9,
+        "resolution_contract": {
+          "contract_id": "rc_633b9ff2b869",
+          "dimension": null,
+          "dimensions": [],
+          "operation": "ask",
+          "referent_provenance": "explicit_player",
+          "assessment_status": "unchecked",
+          "assessment_reasons": [
+            "no_dimension"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "turn_index": 4,
+    "player_text": "Take me as far as the gate allows toward that place.",
+    "gm_text": "Guard Captain mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "contract_id": "rc_627f41c5e79e",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "target": {
+      "type": "object",
+      "id_or_text": "guard_captain",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "epistemic_mode": "unknown_allowed",
+    "semantic_result": "PASS",
+    "assessment": {
+      "status": "PASS",
+      "passed": true,
+      "reason_codes": [],
+      "evidence": {
+        "request_kind": "action_or_statement",
+        "player_terms": [
+          "allows",
+          "gate",
+          "place",
+          "take",
+          "toward"
+        ],
+        "gm_terms": [
+          "captain",
+          "commands",
+          "gate",
+          "guard",
+          "mutters",
+          "thoran",
+          "tonight",
+          "watch",
+          "word"
+        ],
+        "direct_answer_score": 23,
+        "player_intent_score": 18,
+        "resolution_contract": {
+          "contract_id": "rc_627f41c5e79e",
+          "dimension": null,
+          "dimensions": [],
+          "operation": "ask",
+          "referent_provenance": "explicit_player",
+          "assessment_status": "unchecked",
+          "assessment_reasons": [
+            "no_dimension"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "turn_index": 5,
+    "player_text": "Before I commit, what can I see from here that confirms I am heading the right way?",
+    "gm_text": "You move as if to cross into it, but the way stays unfinished and leaves you where you began.",
+    "contract_id": "rc_8ec1c8eacafe",
+    "operation": "act",
+    "dimension": "location",
+    "dimensions": [
+      "location"
+    ],
+    "referent_provenance": "inherited_discourse",
+    "target": {
+      "type": "claim",
+      "id_or_text": "guard_captain",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "claim",
+      "id": null,
+      "label": "guard_captain",
+      "source_turn": 6
+    },
+    "epistemic_mode": "npc_claim",
+    "semantic_result": "FAIL",
+    "assessment": {
+      "status": "FAIL",
+      "passed": false,
+      "reason_codes": [
+        "intent_addressed:resolution_contract_unsatisfied"
+      ],
+      "evidence": {
+        "request_kind": "question",
+        "player_terms": [
+          "before",
+          "commit",
+          "confirms",
+          "heading",
+          "right",
+          "what"
+        ],
+        "gm_terms": [
+          "began",
+          "cross",
+          "leaves",
+          "move",
+          "stays",
+          "unfinished",
+          "way",
+          "where"
+        ],
+        "direct_answer_score": 17,
+        "player_intent_score": 9,
+        "resolution_contract": {
+          "contract_id": "rc_8ec1c8eacafe",
+          "dimension": "location",
+          "dimensions": [
+            "location"
+          ],
+          "operation": "act",
+          "referent_provenance": "inherited_discourse",
+          "assessment_status": "unsatisfied",
+          "assessment_reasons": [
+            "dimension_not_addressed"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "turn_index": 6,
+    "player_text": "I take that step.",
+    "gm_text": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "contract_id": "rc_640191c07966",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "ambiguous",
+    "target": null,
+    "discourse_ref": null,
+    "epistemic_mode": "unknown_allowed",
+    "semantic_result": "PASS",
+    "assessment": {
+      "status": "PASS",
+      "passed": true,
+      "reason_codes": [],
+      "evidence": {
+        "request_kind": "action_or_statement",
+        "player_terms": [
+          "step",
+          "take"
+        ],
+        "gm_terms": [
+          "cannot",
+          "guard",
+          "head",
+          "heard",
+          "shakes",
+          "talk",
+          "verify"
+        ],
+        "direct_answer_score": 23,
+        "player_intent_score": 9,
+        "resolution_contract": {
+          "contract_id": "rc_640191c07966",
+          "dimension": null,
+          "dimensions": [],
+          "operation": "ask",
+          "referent_provenance": "ambiguous",
+          "assessment_status": "legitimate_nonresolution",
+          "assessment_reasons": [
+            "clarification_or_inability"
+          ]
+        }
+      }
+    }
+  }
+]

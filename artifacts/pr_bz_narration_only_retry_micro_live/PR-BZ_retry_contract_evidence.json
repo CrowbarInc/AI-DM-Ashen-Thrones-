@@ -1,0 +1,24 @@
+{
+  "retry_observed": false,
+  "provider_attempts": 1,
+  "selected_envelope": "narration_only",
+  "initial_provider_contract": "narration_only",
+  "initial_response_shape": {
+    "json_object": true,
+    "keys": [
+      "narration"
+    ]
+  },
+  "regeneration_feedback": null,
+  "retry_context": "",
+  "retry_contract_preserved": null,
+  "retry_contract_not_exercised": true,
+  "deterministic_pr_by_evidence": {
+    "focused_tests": "22 passed",
+    "phase0_prelive_passed": true,
+    "narration_only_response_contract": "NARRATION-ONLY RESPONSE CONTRACT: Return valid JSON only in this exact shape: {\"narration\": \"player-facing response\"}. Do not include other fields. The application will normalize this internally.",
+    "declared_claims_in_narration_only_system_prompt": false,
+    "smuggled_declaration_rejected": true
+  },
+  "classification": "NO RETRY OBSERVED. Live retry path not exercised."
+}

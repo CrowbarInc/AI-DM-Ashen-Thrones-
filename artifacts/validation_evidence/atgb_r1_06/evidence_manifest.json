@@ -1,0 +1,521 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "behavioral",
+  "campaign": {
+    "campaign_id": "ATGB-R1-06",
+    "what_was_tested": "Offline analysis of three preserved completed correction trials; no new executions",
+    "runtime_path": "Historical direct game.api.chat production route; current pass JSON/source inspection only",
+    "gm_boundary": "Historical production interpretation, orchestration and final emission",
+    "player_input_mode": "Preserved fixed original and paraphrase inputs",
+    "run_count": 3,
+    "turn_count": 3,
+    "automated_conclusion": "B — Conditional causal proposal; not a repair measurement"
+  },
+  "claim_types": [
+    "runtime_evidence",
+    "semantic_behavioral_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "L3",
+      "scenario_run_id": "L3",
+      "turn_index": 2,
+      "player_input": "No, I was asking about the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Exact authorized controlled correction or existing frozen pending-ASK control; no simulated model response.",
+      "prior_player_context": "What's in front of me right now?",
+      "prior_gm_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Do you want a description of the people present at the gate district instead of the weather?",
+      "historical_result": "Original S08.2 mechanical misrouting; provisional AI-assisted FAIL, not authenticated human review.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "routing": {
+          "status": "INDETERMINATE"
+        },
+        "interpretation": {
+          "status": "PASS (correct subject; unnecessary clarification posture)"
+        },
+        "evidence_selection": {
+          "status": "FAIL"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "trial": "L3",
+        "player_input": "No, I was asking about the people, not the weather.",
+        "final_response": "Do you want a description of the people present at the gate district instead of the weather?",
+        "application_admissions": 1,
+        "dispatched": 1,
+        "completed_provider_responses": 1,
+        "failed_dispatches": 0,
+        "input_tokens": 2008,
+        "output_tokens": 212,
+        "total_tokens": 2220,
+        "end_to_end_ms": 3459.428,
+        "estimated_cost": null,
+        "routing": "INDETERMINATE",
+        "interpretation": "PASS (correct subject; unnecessary clarification posture)",
+        "evidence_selection": "FAIL",
+        "response_adequacy": "FAIL",
+        "authority": "PASS",
+        "authority_scope": "Exact attempted isolated execution only; not broad assurance.",
+        "changed_domains": [
+          "session",
+          "log"
+        ],
+        "session_changed_keys": [
+          "conversational_context",
+          "last_saved_at"
+        ],
+        "world_changed_keys": [],
+        "pending_intentions": {
+          "pending_intention": {
+            "before": null,
+            "after": null
+          },
+          "pending_clarification": {
+            "before": null,
+            "after": null
+          },
+          "last_executed_intention": {
+            "before": null,
+            "after": null
+          }
+        },
+        "turn_counter_before": 0,
+        "turn_counter_after": 0,
+        "clocks_before": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "clocks_after": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "trace_functions": [
+          "public_conversation_evidence",
+          "request_interpretation",
+          "interpret_production_turn",
+          "_pending_revision_decision",
+          "_communication_decision",
+          "decision_from_interpretation_record",
+          "_nonmutating_conversational_decision_response"
+        ],
+        "note": "GM/CLARIFICATION, evidence_refs=[], no unresolved references. Bridge NEEDS_CLARIFICATION stops before revision gate. No mechanical misrouting observed, but repaired seam not exercised."
+      },
+      "automated_evaluation": {
+        "method": "AI-assisted independent six-dimension assessment over retained traces; no gameplay scorer."
+      },
+      "runtime_validity": "VALID live completed paraphrase",
+      "final_emission_metadata": {
+        "source": "artifacts/atgb/atgb_r1_03/L3/response.json"
+      },
+      "continuation_action": "Stop; no retry or next pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_03/L3/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; AI-assisted assessment only."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "historical_campaign_id": "atgb_r1_03",
+      "r1_06_analysis": {
+        "subject_recognition": "correct",
+        "conversational_disposition": "incorrect",
+        "evidence_selection": "incorrect_for_answerable_correction",
+        "response_realization": "faithful_to_wrong_plan",
+        "revision_guard": "raw_trace_reached_returns_null",
+        "historical_judgments_preserved": true
+      }
+    },
+    {
+      "example_id": "ATGB-R1-05-L1",
+      "scenario_run_id": "L1",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "exact_gm_output": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "runtime_validity": {
+        "status": "VALID",
+        "preflight": "ready",
+        "live_model": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_r1_05/L1/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "AI-assisted provisional criteria analysis; no authenticated human adjudication."
+      },
+      "relevant_prior_context": {
+        "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+        "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      },
+      "simulated_player_rationale": "User-specified fixed reproduction/control; no generated player.",
+      "semantic_result": "FAIL",
+      "semantic_result_basis": "Provisional AI-assisted analysis of explicit pass criteria; not the playability evaluator or human scoring.",
+      "mandatory_gates": {
+        "routing": {
+          "status": "PASS"
+        },
+        "interpretation": {
+          "status": "PASS"
+        },
+        "evidence_selection": {
+          "status": "FAIL"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "status": "NOT_RUN",
+        "reason": "No playability scorer invoked"
+      },
+      "automated_evaluation": {
+        "status": "NOT_RUN",
+        "criteria_analysis": {
+          "routing": "PASS",
+          "interpretation": "PASS",
+          "evidence_selection": "FAIL",
+          "response_adequacy": "FAIL",
+          "authority": "PASS"
+        }
+      },
+      "historical_result": "Original S08.2 response inadequate",
+      "final_emission_metadata": {
+        "accepted_response": {
+          "addressee": "player",
+          "adoption_status": "candidate_accepted",
+          "attempt": 0,
+          "authority_result": "accepted",
+          "authorization_provenance": {
+            "addressee": "player",
+            "authority_category": "host_operation",
+            "authorized_proposition": "",
+            "epistemic_status": "none",
+            "operation": "ask",
+            "policy_version": "pr-eg-r6-r1-r1",
+            "provenance_id": "2608602d877553f8",
+            "source_id": "",
+            "speaker_id": "",
+            "validation": "host_operation"
+          },
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "candidate_disposition": "host_selected",
+          "canonical": false,
+          "contract": {
+            "contract_id": "",
+            "expected_resolution": "",
+            "interlocutor_id": "",
+            "operation": ""
+          },
+          "contract_satisfying": true,
+          "generation_attempts": 0,
+          "grounding_result": "not_a_replacement_trigger",
+          "hard_validation": {
+            "authority": [
+              "conversational_decision:communication_before_execution"
+            ],
+            "gm_resolution_decision_audit": null,
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": []
+          },
+          "immutable": true,
+          "interaction_completion": true,
+          "operation": "ask",
+          "player_input": "I meant the people, not the weather.",
+          "provenance": "authorized_host_speech",
+          "resolution_kind": "conversational_clarify",
+          "speaker": "GM",
+          "speaker_id": "",
+          "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+          "subject": "",
+          "target": "",
+          "text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+          "turn_identity": "",
+          "integrity_digest": "173ff2237b572aee9e701dbc96e5e12985007792cd38f5935370ce642c65f93b"
+        },
+        "emission_debug": {
+          "accepted_response_provenance": "authorized_host_speech",
+          "generation_attempts": 0,
+          "legacy_emission_authority": false,
+          "semantic_degradation": false,
+          "semantic_degradation_reasons": [],
+          "resolution_contract_semantic": {
+            "status": "satisfied",
+            "reasons": [],
+            "preserved": true
+          },
+          "accepted_emitted_equality": {
+            "exact_match": true,
+            "semantic_match": true,
+            "presentation_only": false,
+            "mutation_blocked": false,
+            "attempted_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?"
+          }
+        }
+      },
+      "continuation_decision": {
+        "action": "STOP",
+        "reason": "Specified trial complete; no automatic continuation"
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "history": [],
+        "calibration_reference": null
+      },
+      "interpretation_qualification": "Subject change recognized, but redundant clarification posture is incorrect; passing this narrow criterion is not full interpretation adequacy.",
+      "unexpected_behavior": null,
+      "historical_campaign_id": "atgb_r1_05",
+      "r1_06_analysis": {
+        "subject_recognition": "correct",
+        "conversational_disposition": "incorrect",
+        "evidence_selection": "incorrect_for_answerable_correction",
+        "response_realization": "faithful_to_wrong_plan",
+        "revision_guard": "raw_trace_reached_returns_null",
+        "historical_judgments_preserved": true
+      }
+    },
+    {
+      "example_id": "ATGB-R1-05-L2",
+      "scenario_run_id": "L2",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "exact_gm_output": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+      "runtime_validity": {
+        "status": "VALID",
+        "preflight": "ready",
+        "live_model": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_r1_05/L2/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "AI-assisted provisional criteria analysis; no authenticated human adjudication."
+      },
+      "relevant_prior_context": {
+        "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+        "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+        "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+        "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      },
+      "simulated_player_rationale": "User-specified fixed reproduction/control; no generated player.",
+      "semantic_result": "FAIL",
+      "semantic_result_basis": "Provisional AI-assisted analysis of explicit pass criteria; not the playability evaluator or human scoring.",
+      "mandatory_gates": {
+        "routing": {
+          "status": "PASS"
+        },
+        "interpretation": {
+          "status": "PASS"
+        },
+        "evidence_selection": {
+          "status": "FAIL"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "status": "NOT_RUN",
+        "reason": "No playability scorer invoked"
+      },
+      "automated_evaluation": {
+        "status": "NOT_RUN",
+        "criteria_analysis": {
+          "routing": "PASS",
+          "interpretation": "PASS",
+          "evidence_selection": "FAIL",
+          "response_adequacy": "FAIL",
+          "authority": "PASS"
+        }
+      },
+      "historical_result": "Original S08.2 response inadequate",
+      "final_emission_metadata": {
+        "accepted_response": {
+          "addressee": "player",
+          "adoption_status": "candidate_accepted",
+          "attempt": 0,
+          "authority_result": "accepted",
+          "authorization_provenance": {
+            "addressee": "player",
+            "authority_category": "host_operation",
+            "authorized_proposition": "",
+            "epistemic_status": "none",
+            "operation": "ask",
+            "policy_version": "pr-eg-r6-r1-r1",
+            "provenance_id": "2608602d877553f8",
+            "source_id": "",
+            "speaker_id": "",
+            "validation": "host_operation"
+          },
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "candidate_disposition": "host_selected",
+          "canonical": false,
+          "contract": {
+            "contract_id": "",
+            "expected_resolution": "",
+            "interlocutor_id": "",
+            "operation": ""
+          },
+          "contract_satisfying": true,
+          "generation_attempts": 0,
+          "grounding_result": "not_a_replacement_trigger",
+          "hard_validation": {
+            "authority": [
+              "conversational_decision:communication_before_execution"
+            ],
+            "gm_resolution_decision_audit": null,
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": []
+          },
+          "immutable": true,
+          "interaction_completion": true,
+          "operation": "ask",
+          "player_input": "I meant the people, not the weather.",
+          "provenance": "authorized_host_speech",
+          "resolution_kind": "conversational_clarify",
+          "speaker": "GM",
+          "speaker_id": "",
+          "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+          "subject": "",
+          "target": "",
+          "text": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+          "turn_identity": "",
+          "integrity_digest": "35b5758984392c44463faf0ebf58abab19e1bb37996b88ac8d775d3b382e8791"
+        },
+        "emission_debug": {
+          "accepted_response_provenance": "authorized_host_speech",
+          "generation_attempts": 0,
+          "legacy_emission_authority": false,
+          "semantic_degradation": false,
+          "semantic_degradation_reasons": [],
+          "resolution_contract_semantic": {
+            "status": "satisfied",
+            "reasons": [],
+            "preserved": true
+          },
+          "accepted_emitted_equality": {
+            "exact_match": true,
+            "semantic_match": true,
+            "presentation_only": false,
+            "mutation_blocked": false,
+            "attempted_text": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?"
+          }
+        }
+      },
+      "continuation_decision": {
+        "action": "STOP",
+        "reason": "Specified trial complete; no automatic continuation"
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "history": [],
+        "calibration_reference": null
+      },
+      "interpretation_qualification": "Subject change recognized, but redundant clarification posture is incorrect; passing this narrow criterion is not full interpretation adequacy.",
+      "unexpected_behavior": null,
+      "historical_campaign_id": "atgb_r1_05",
+      "r1_06_analysis": {
+        "subject_recognition": "correct",
+        "conversational_disposition": "incorrect",
+        "evidence_selection": "incorrect_for_answerable_correction",
+        "response_realization": "faithful_to_wrong_plan",
+        "revision_guard": "raw_trace_reached_returns_null",
+        "historical_judgments_preserved": true
+      }
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "SELECTED",
+      "example_id": "L3",
+      "statement": null
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "SELECTED",
+      "example_id": "L3",
+      "statement": null
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [
+    {
+      "name": "Distinct conversational correction and genuine GM clarification need",
+      "evidence": "Three preserved interpretations understand the corrected subject and redundantly confirm it.",
+      "status": "Proposed clarification within existing owner; not implemented"
+    }
+  ],
+  "limitations_and_unproven_claims": [
+    "All runtime behavior is historical; zero new calls or gameplay tests.",
+    "Human review UNREVIEWED; historical criteria judgments preserved.",
+    "No measured repair benefit or independent generalization.",
+    "Raw R1-03 L3 contradicts the earlier claim that revision guard was not reached."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "case_id": "s13q4",
+  "family": "s13",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "23b43a27c9562f37309375793c75f5d7d5fbcdbefbed06c1a31be4d962e215e8",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Magistrate Vale guarantees Heth's debt to Pera"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s13"
+    ],
+    "answered_arguments": [
+      "guarantor",
+      "debt_owner"
+    ],
+    "missing_arguments": [
+      "amount"
+    ],
+    "conflict": false,
+    "reason": "The guarantor is Magistrate Vale, and the debt owner is Heth's debt to Pera, but the amount of the debt is not specified in the provided facts."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

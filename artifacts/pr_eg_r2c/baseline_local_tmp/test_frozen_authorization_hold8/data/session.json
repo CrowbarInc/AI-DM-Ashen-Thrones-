@@ -1,0 +1,100 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T09:55:13.216704Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T09:55:13.216704Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "pending_clarification": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask the taller guard about the gate.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "target_resolution": "ambiguous"
+      },
+      "pending_intention": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask the taller guard about the gate.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "target_resolution": "ambiguous"
+      },
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I ask the taller guard about the gate.",
+          "delivered_text": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "I ask the taller guard about the gate.",
+        "response": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "0e58c43f89d739b21e464784de2f5a9026e64f233618cb062857fd95122b2825",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

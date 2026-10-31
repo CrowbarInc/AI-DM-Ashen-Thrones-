@@ -1,0 +1,84 @@
+{
+  "status": "verified_provisional_import",
+  "discrepancies": [],
+  "scope": "Artifact integrity and rubric consistency; no re-scoring or human adjudication",
+  "authoritative_turns": 37,
+  "unique_review_ids": 37,
+  "baseline_source_text_state_trial_match": true,
+  "scenario_conversation_trials_match": true,
+  "rubric_consistency": "pass",
+  "aggregate_summary_agreement": "pass",
+  "dimension_counts": {
+    "interpretation": {
+      "pass": 18,
+      "fail": 16,
+      "uncertain": 3
+    },
+    "response": {
+      "pass": 10,
+      "fail": 25,
+      "uncertain": 2
+    },
+    "authority": {
+      "pass": 35,
+      "fail": 0,
+      "uncertain": 2
+    }
+  },
+  "other_summary_counts": {
+    "failure_severity": {
+      "": 9,
+      "major": 25,
+      "minor": 3
+    },
+    "clarification": {
+      "none": 30,
+      "unnecessary_fail": 5,
+      "missing_when_needed_fail": 1,
+      "necessary_pass": 1
+    },
+    "continuity": {
+      "not_applicable": 15,
+      "preserved": 11,
+      "lost": 11
+    }
+  },
+  "response_counts_by_partition": {
+    "development_visible": {
+      "pass": 7,
+      "fail": 18
+    },
+    "held_out": {
+      "uncertain": 2,
+      "fail": 5,
+      "pass": 1
+    },
+    "related_variation": {
+      "pass": 2,
+      "fail": 2
+    }
+  },
+  "setup_qualified_review_ids": [
+    "S07.1/trial-1",
+    "S07.2/trial-1",
+    "S07.3/trial-1",
+    "S07.4/trial-1",
+    "S09.1/trial-1",
+    "S09.2/trial-1"
+  ],
+  "authority_uncertain_review_ids": [
+    "S03.4/trial-1",
+    "S05.4/trial-1"
+  ],
+  "source_files_byte_identical": true,
+  "source_manifest": "source_manifest.json",
+  "protected_entry_files_unchanged": 1620,
+  "protected_ATGB_05_files_unchanged": 609,
+  "human_review_attestation": false,
+  "human_report_rejection": "Entered judgments require reviewer, date and explicit human attestation",
+  "authenticated_human_scoring": "pending",
+  "operational_ATGB_v1_setup": "complete",
+  "conversational_competence": "not_established",
+  "gameplay_behavior_changed": false,
+  "live_provider_requests": 0
+}

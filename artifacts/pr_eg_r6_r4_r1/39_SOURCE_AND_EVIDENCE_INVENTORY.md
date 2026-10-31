@@ -1,0 +1,3 @@
+# 39 — Source and Evidence Inventory
+
+602 selected current evidence/source files hashed in source_inventory.json. historical_inventory.json contains 180 predecessor JSONL paths/hashes; historical_examples.jsonl contains exact re-opened excerpts. freeze.json fixes corpus/adapter/kernel hashes; baseline.json preserves complete game/data hashes and Git baseline. calls/ contains real raw provider evidence; results/ normalized primary predictions and frozen scores; extractions/ includes per-fact validation; reuse_results.json proves unchanged cache hashes. Human adjudication is pending. Packaging uses the existing CURRENT_REVIEW builder and explicit allowlisted support paths, excluding credentials and unrelated state/evidence.

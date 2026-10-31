@@ -1,0 +1,162 @@
+[
+  {
+    "case": {
+      "id": "L01",
+      "name": "Scribe Una",
+      "question": "I ask Scribe Una about the interlocutor.",
+      "annotation": "interlocutor"
+    },
+    "result": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "speaker"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "speaker"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "current subject",
+        "evidence_refs": []
+      }
+    },
+    "evidence": {
+      "annotations": [
+        {
+          "annotation": "interlocutor",
+          "role": "addressee",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Scribe Una"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": false
+  },
+  {
+    "case": {
+      "id": "L02",
+      "name": "Warden Kes",
+      "question": "I ask Warden Kes about the addressee.",
+      "annotation": "addressee"
+    },
+    "result": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "speaker"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "speaker"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "current subject",
+        "evidence_refs": []
+      }
+    },
+    "evidence": {
+      "annotations": [
+        {
+          "annotation": "addressee",
+          "role": "addressee",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "speaker",
+        "candidate_target_ids": [
+          "speaker"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "speaker",
+            "label": "Warden Kes"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "passed": false
+  }
+]

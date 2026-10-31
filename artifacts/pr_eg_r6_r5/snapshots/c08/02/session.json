@@ -1,0 +1,135 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-19T00:40:34.901013Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-19T00:40:34.901013Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Doss, what did Nia tell you about the fever?",
+          "delivered_text": "I can't reliably answer that just now.",
+          "subject": "Doss, what did Nia tell you about the fever?",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "unified_semantic_plan": {
+            "locked": true,
+            "request_proposition": {
+              "predicate": "tell",
+              "predicate_evidence": "tell you about the fever",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [
+                {
+                  "name": "speaker",
+                  "value": "Nia",
+                  "entity_id": "nia",
+                  "evidence": "Nia"
+                },
+                {
+                  "name": "addressee",
+                  "value": "Doss",
+                  "entity_id": "doss",
+                  "evidence": "you"
+                }
+              ],
+              "requested_role": "message_content",
+              "object_evidence": "",
+              "subject_evidence": "",
+              "object": "",
+              "missing_argument": "",
+              "subject": ""
+            },
+            "entity_roles": [],
+            "mentioned_entity_ids": [
+              "doss",
+              "nia"
+            ],
+            "correction_target": "",
+            "referent_operation": {
+              "target_referent_id": "",
+              "operation": "",
+              "changed_fields": [],
+              "follow_up_relationship": "",
+              "changed_roles": [],
+              "evidence": "",
+              "target_evidence": ""
+            },
+            "referent_eligible": false,
+            "plan_version": "pr-eg-r6-r2-r2.1",
+            "conversational_act": "information_question",
+            "addressee_id": "",
+            "requested_subject": "Nia",
+            "requested_relationship": "tell(nia)",
+            "question_text": "Doss, what did Nia tell you about the fever?",
+            "selected_source_ids": [],
+            "answer_sufficiency": "unknown",
+            "answer_status": "unknown",
+            "response_kind": "unknown",
+            "ambiguity_type": "",
+            "referenced_prior_proposition": "",
+            "rejected_source_ids": [],
+            "authorized_text": "",
+            "host_line": "I can't reliably answer that just now.",
+            "reason": "unwitnessed_referent_request",
+            "epistemic_status": "none",
+            "canonical": false
+          },
+          "proposition_id": "",
+          "response_integrity_digest": "1e9b859411796d5482c1e16f4c7b63f69bcb6828efa0191c44cbedc8d4e304ad",
+          "authorization_source": "conversational_decision:unified_semantic_plan_rejected",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Doss, what did Nia tell you about the fever?",
+        "response": "I can't reliably answer that just now.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "4d67551b27b423ef895b84ca0ec6a509cd06edfd12b76eabb7d357b64b07cedb",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

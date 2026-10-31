@@ -1,0 +1,373 @@
+[
+  {
+    "probe_id": "ask_rumor",
+    "player_text": "What rumor are the travelers here repeating?",
+    "gm_text": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. From what I saw, there's talk of strange delays farther along the eastern caravan routes, possibly tied to increased Ash Compact census checks that have tightened the choke point. The accounts are fragmented and conflicting—some mention an ambush, others hint at bureaucratic snares. If you want clearer answers, keeping an ear on the threadbare watchers and refugees there might be your best next step.",
+    "model_excerpt": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. From what I saw, there's talk of strange delays farther along the eastern caravan routes, possibly tied to increased Ash Compact census checks that have tightened the choke point. The accounts are fragmented and conflicting—some mention an ambush, others hint at bureaucratic snares. If you want clearer answers, keeping an ear on the threadbare watchers and refugees there might be your best next step.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. From what I saw, there's talk of strange delays farther along the eastern caravan routes, possibly tied to increased Ash Compact census checks that have tightened the choke point. The accounts are fragmented and conflicting—some mention an ambush, others hint at bureaucratic snares. If you want clearer answers, keeping an ear on the threadbare watchers and refugees there might be your best next step."
+      }
+    ],
+    "contract_id": "rc_d6e68488c9c6",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": null,
+    "discourse_ref": null,
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_keeps_answer": true,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "inquiry_answered"
+    ],
+    "final_keeps_answer": true,
+    "semantic_destruction": false,
+    "recovery_used": true,
+    "downgrade_attempted": true,
+    "downgrade_rejected": true,
+    "downgrade_reason": "post_processing_destroyed_answer",
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": true,
+      "downgrade_reason": "post_processing_destroyed_answer",
+      "recovery_used": true,
+      "recovery_source": "candidate",
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "tags": [
+      "scene_momentum:new_information",
+      "live_bounded_improvisation_proposal"
+    ],
+    "semantic_result": "PASS",
+    "active_claim": {
+      "id": "bi_40b9d22f50bc",
+      "label": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "claim_ledger"
+    },
+    "active_inspected": null,
+    "final_emission": {}
+  },
+  {
+    "probe_id": "repeat_rumor",
+    "player_text": "Could you repeat that rumor?",
+    "gm_text": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol.",
+    "model_excerpt": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. From what I saw, there's talk of strange delays farther along the eastern caravan routes, possibly tied to increased Ash Compact census checks that have tightened the choke point. The accounts are fragmented and conflicting—some mention an ambush, others hint at bureaucratic snares. For clearer insights, you might want to listen closely to the threadbare watchers and refugees who cluster there; they seem to be connected to whatever obstruction or authority governs these delays.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. From what I saw, there's talk of strange delays farther along the eastern caravan routes, possibly tied to increased Ash Compact census checks that have tightened the choke point. The accounts are fragmented and conflicting—some mention an ambush, others hint at bureaucratic snares. For clearer insights, you might want to listen closely to the threadbare watchers and refugees who cluster there; they seem to be connected to whatever obstruction or authority governs these delays."
+      }
+    ],
+    "contract_id": "rc_24e2d4ea0ad9",
+    "operation": "repeat",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "claim",
+      "id_or_text": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "claim",
+      "id": "bi_40b9d22f50bc",
+      "label": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "source_turn": 1
+    },
+    "model_contract_status": "partial",
+    "model_resolution_kind": "answer",
+    "model_keeps_answer": false,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "repeat_restated"
+    ],
+    "final_keeps_answer": true,
+    "semantic_destruction": false,
+    "recovery_used": true,
+    "downgrade_attempted": true,
+    "downgrade_rejected": true,
+    "downgrade_reason": "post_processing_destroyed_answer",
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": true,
+      "downgrade_reason": "post_processing_destroyed_answer",
+      "recovery_used": true,
+      "recovery_source": "candidate_repaired",
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "tags": [
+      "scene_momentum:consequence_or_opportunity",
+      "live_bounded_improvisation_proposal"
+    ],
+    "semantic_result": "PASS",
+    "active_claim": {
+      "id": "bi_40b9d22f50bc",
+      "label": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": null,
+    "final_emission": {}
+  },
+  {
+    "probe_id": "inspect_sheet",
+    "player_text": "I'll look the posted sheet over.",
+    "gm_text": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_excerpt": "You examine the posted sheet pinned to the weather-beaten board just inside the Cinderwatch Gate District. The lists are densely packed: new tax rates imposed on merchants; curfew hours enforced strictly after sunset; and, most unnerving, a warning about a local patrol that has gone missing. The notice specifies that the patrol vanished while taking the northwest mud track past the stacked crates—which is just beyond the gate area. Nearby, a gate serjeant keeps a watchful eye on the board, his expression grim as if this troubling news adds to an already heavy burden.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": false,
+        "model_player_facing_excerpt": "You examine the posted sheet pinned to the weather-beaten board just inside the Cinderwatch Gate District. The lists are densely packed: new tax rates imposed on merchants; curfew hours enforced strictly after sunset; and, most unnerving, a warning about a local patrol that has gone missing. The notice specifies that the patrol vanished while taking the northwest mud track past the stacked crates—which is just beyond the gate area. Nearby, a gate serjeant keeps a watchful eye on the board, his expression grim as if this troubling news adds to an already heavy burden."
+      }
+    ],
+    "contract_id": "rc_29c138ea9b62",
+    "operation": "inspect",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_keeps_answer": true,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "target_observation"
+    ],
+    "final_keeps_answer": true,
+    "semantic_destruction": false,
+    "recovery_used": true,
+    "downgrade_attempted": true,
+    "downgrade_rejected": true,
+    "downgrade_reason": "post_processing_destroyed_answer",
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": true,
+      "downgrade_reason": "post_processing_destroyed_answer",
+      "recovery_used": true,
+      "recovery_source": "candidate",
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "tags": [
+      "referenced_surface_realization",
+      "resolution_contract_semantic_preserved"
+    ],
+    "semantic_result": "PASS",
+    "active_claim": {
+      "id": "bi_40b9d22f50bc",
+      "label": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "final_emission": {}
+  },
+  {
+    "probe_id": "sheet_content",
+    "player_text": "What does it actually say?",
+    "gm_text": "The notice board currently shows three main things: updated taxes that local merchants and travelers must pay, new curfew rules that restrict movement after dark, and a posted warning about a recently missing patrol. The details on the patrol note are limited; it names the group as part of the city watch and indicates their absence without explanation. This has unsettled both the guards and the crowd. For now, the actual cause or circumstances behind the patrol's disappearance remain unclear, with whispers only and no official statement. You might watch and listen among the threadbare watchers and refugees clustered nearby for more concrete leads.",
+    "model_excerpt": "The notice board currently shows three main things: updated taxes that local merchants and travelers must pay, new curfew rules that restrict movement after dark, and a posted warning about a recently missing patrol. The details on the patrol note are limited; it names the group as part of the city watch and indicates their absence without explanation. This has unsettled both the guards and the crowd. For now, the actual cause or circumstances behind the patrol's disappearance remain unclear, with whispers only and no official statement. You might watch and listen among the threadbare watchers and refugees clustered nearby for more concrete leads.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": false,
+        "model_player_facing_excerpt": "The notice board currently shows three main things: updated taxes that local merchants and travelers must pay, new curfew rules that restrict movement after dark, and a posted warning about a recently missing patrol. The details on the patrol note are limited; it names the group as part of the city watch and indicates their absence without explanation. This has unsettled both the guards and the crowd. For now, the actual cause or circumstances behind the patrol's disappearance remain unclear, with whispers only and no official statement. You might watch and listen among the threadbare watchers and refugees clustered nearby for more concrete leads."
+      }
+    ],
+    "contract_id": "rc_14eb18c5b9c8",
+    "operation": "ask",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "source_turn": 3
+    },
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_keeps_answer": true,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "content_addressed"
+    ],
+    "final_keeps_answer": true,
+    "semantic_destruction": false,
+    "recovery_used": true,
+    "downgrade_attempted": true,
+    "downgrade_rejected": true,
+    "downgrade_reason": "post_processing_destroyed_answer",
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": true,
+      "downgrade_reason": "post_processing_destroyed_answer",
+      "recovery_used": true,
+      "recovery_source": "candidate",
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "tags": [
+      "scene_momentum:new_information",
+      "final_emission_gate_replaced",
+      "first_mention_enforcement_replaced",
+      "first_mention_violation:pronoun_before_first_explicit_entity"
+    ],
+    "semantic_result": "PASS",
+    "active_claim": {
+      "id": "bi_40b9d22f50bc",
+      "label": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "final_emission": {}
+  },
+  {
+    "probe_id": "sheet_use",
+    "player_text": "Does it look like people handle it often?",
+    "gm_text": "The posted sheet looks well-handled enough to remain legible despite the weather, though it's smeared from repeated touches. Judging by the worn edges and the steady presence of a gate serjeant keeping an eye on it, the notice board is frequently consulted by travelers and locals alike. Still, the recent warning about the missing patrol has unsettled both the crowd and the guards, making this handling more tense and vigilant than usual. To learn how often exactly or who maintains it, shadowing t",
+    "model_excerpt": "The posted sheet looks well-handled enough to remain legible despite the weather, though it's smeared from repeated touches. Judging by the worn edges and the steady presence of a gate serjeant keeping an eye on it, the notice board is frequently consulted by travelers and locals alike. Still, the recent warning about the missing patrol has unsettled both the crowd and the guards, making this handling more tense and vigilant than usual. To learn how often exactly or who maintains it, shadowing the threadbare watchers and ragged refugees near the muddy gate line might yield clearer answers.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "The posted sheet looks well-handled enough to remain legible despite the weather, though it's smeared from repeated touches. Judging by the worn edges and the steady presence of a gate serjeant keeping an eye on it, the notice board is frequently consulted by travelers and locals alike. Still, the recent warning about the missing patrol has unsettled both the crowd and the guards, making this handling more tense and vigilant than usual. To learn how often exactly or who maintains it, shadowing the threadbare watchers and ragged refugees near the muddy gate line might yield clearer answers."
+      }
+    ],
+    "contract_id": "rc_c7ba99308041",
+    "operation": "perceive",
+    "dimension": "appearance",
+    "dimensions": [
+      "appearance"
+    ],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "source_turn": 3
+    },
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_keeps_answer": true,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "covered:appearance"
+    ],
+    "final_keeps_answer": true,
+    "semantic_destruction": false,
+    "recovery_used": false,
+    "downgrade_attempted": false,
+    "downgrade_rejected": false,
+    "downgrade_reason": null,
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "tags": [
+      "scene_momentum:new_information",
+      "live_bounded_improvisation_proposal",
+      "final_emission_gate_replaced",
+      "final_emission_gate:neutral_speaker_grounding_bridge",
+      "accepted_bounded_resolution_delivered"
+    ],
+    "semantic_result": "PASS",
+    "active_claim": {
+      "id": "bi_40b9d22f50bc",
+      "label": "I can't swear to the full details, but the travelers gathered near the muddy gate line seem to be whispering about the sudden disappearance of a local patrol. F",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "final_emission": {}
+  }
+]

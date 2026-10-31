@@ -1,0 +1,255 @@
+{
+  "attempt_1": {
+    "text": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+    "reasons": [],
+    "gm_resolution_decision_audit": {
+      "decision_id": "rc_dd7293b4258c",
+      "hard_valid": true,
+      "declaration_validation": {
+        "schema_version": 1,
+        "structured_contract_present": true,
+        "hard_valid": true,
+        "accepted_claims": [],
+        "rejected_claims": [],
+        "violations": []
+      },
+      "narration_validation": {
+        "decision_id": "rc_dd7293b4258c",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {}
+          },
+          {
+            "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            }
+          },
+          {
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "provenance": "gm_inference",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "authorized_qualified_inference"
+            ],
+            "authority": "observation",
+            "persistence": "do_not_persist",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "semantic_identity": {},
+            "provenance": "bounded_incidental",
+            "authority": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "runtime_incidental",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ]
+          },
+          {
+            "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "world_truth"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "world_truth",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          },
+          {
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "provenance": "gm_inference",
+            "authority": "observation",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "persistence": "do_not_persist",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "authorized_qualified_inference"
+            ]
+          }
+        ]
+      },
+      "violations": [],
+      "proposed_facts": [
+        {
+          "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+          "provenance": "bounded_incidental",
+          "consequence": "low",
+          "authorized": true,
+          "reason_codes": [
+            "bounded_incidental_texture"
+          ],
+          "authority": "bounded_incidental",
+          "persistence": "runtime_incidental",
+          "source_ref": "",
+          "outcome_classification": "epistemically_qualified",
+          "semantic_identity": {}
+        },
+        {
+          "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+          "provenance": "npc_claim",
+          "consequence": "epistemic",
+          "authorized": true,
+          "reason_codes": [
+            "epistemically_qualified"
+          ],
+          "authority": "claim_only",
+          "persistence": "claim_only",
+          "source_ref": "",
+          "outcome_classification": "epistemically_qualified",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "world_truth"
+          }
+        },
+        {
+          "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "provenance": "gm_inference",
+          "consequence": "epistemic",
+          "authorized": true,
+          "reason_codes": [
+            "authorized_qualified_inference"
+          ],
+          "authority": "observation",
+          "persistence": "do_not_persist",
+          "source_ref": "",
+          "outcome_classification": "epistemically_qualified",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "inferred"
+          }
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+          "semantic_identity": {},
+          "provenance": "bounded_incidental",
+          "authority": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "persistence": "runtime_incidental",
+          "authorized": true,
+          "source_ref": "",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "bounded_incidental_texture"
+          ]
+        },
+        {
+          "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "world_truth"
+          },
+          "provenance": "npc_claim",
+          "authority": "claim_only",
+          "epistemic_status": "world_truth",
+          "relation_kind": "epistemic_status",
+          "persistence": "claim_only",
+          "authorized": true,
+          "source_ref": "",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "epistemically_qualified"
+          ]
+        },
+        {
+          "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "inferred"
+          },
+          "provenance": "gm_inference",
+          "authority": "observation",
+          "epistemic_status": "inferred",
+          "relation_kind": "epistemic_status",
+          "persistence": "do_not_persist",
+          "authorized": true,
+          "source_ref": "",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "authorized_qualified_inference"
+          ]
+        }
+      ],
+      "accepted_realized_claims": []
+    }
+  },
+  "attempt_2": null,
+  "retry_context": "",
+  "acceptance": {
+    "why": "initial_hard_valid",
+    "text": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer."
+  },
+  "hard_validation_attempt_1": {
+    "hard_valid": true,
+    "reasons": [],
+    "soft_flags": [
+      "low_confidence_locate"
+    ],
+    "text": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer."
+  },
+  "hard_validation_attempt_2": null,
+  "regeneration_feedback": null,
+  "regeneration_invoked": null,
+  "provider_response_contract": "narration_only"
+}

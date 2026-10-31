@@ -3,8 +3,8 @@
 ## Run Summary
 
 - Status: `failed`
-- Command: `C:\Users\Master Mandalcio\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pytest\__main__.py tests/test_co102_live_protected_replay_pipeline.py -q --tb=short`
-- Generated at: `2026-06-28T10:45:45Z`
+- Command: `C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pytest\__main__.py -m golden_replay -q --tb=short -o addopts=--basetemp=development/tmp/maintenance_golden --junitxml=development/tmp/github_checkpoint/golden_after.xml`
+- Generated at: `2026-10-18T16:31:34Z`
 - Artifact location: `artifacts/golden_replay/replay_failure_report.md`
 - Classified failures: `1`
 
@@ -12,61 +12,43 @@
 
 | Scenario | Source Path | Branch | Turn Index | Turn ID | Failed Invariant | Test Node |
 |---|---|---|---:|---|---|---|
-| wrong_speaker_strict_social_emission | none | none | 0 | none | fallback_family: unexpected unavailable field | tests/test_co102_live_protected_replay_pipeline.py::test_co102_live_protected_replay_records_session_failure_artifacts |
+| sanitizer_scaffold_leakage | none | none | 0 | none | scaffold_leakage: exact value mismatch | tests/test_golden_replay_structural_invariants.py::test_golden_replay_sanitizer_scaffold_leakage_structural_invariants |
 
 ## Failure Table
 
 | Scenario | Test Node | Turn | Failed Invariant | Drift Type | Expected | Actual | Category | Severity | Primary Owner | Secondary Owner | Investigate First | Owner Drift Bucket |
 |---|---|---:|---|---|---|---|---|---|---|---|---|---|
-| wrong_speaker_strict_social_emission | tests/test_co102_live_protected_replay_pipeline.py::test_co102_live_protected_replay_records_session_failure_artifacts | 0 | fallback_family: unexpected unavailable field | structural_drift | available or explicitly allowed unavailable; allowed=[] | none | projection | medium | projection | none | tests/helpers/golden_replay.py | fallback_drift |
+| sanitizer_scaffold_leakage | tests/test_golden_replay_structural_invariants.py::test_golden_replay_sanitizer_scaffold_leakage_structural_invariants | 0 | scaffold_leakage: exact value mismatch | semantic_drift | False | True | sanitizer | critical | sanitizer | emission | game/output_sanitizer.py | semantic_drift |
 
 ## Classification Summary
 
-- Categories: `projection` (1)
-- Primary owners: `projection` (1)
+- Categories: `sanitizer` (1)
+- Primary owners: `sanitizer` (1)
 
 
 ## Owner Drift Breakdown
 
 ```
-fallback_drift .................. 1
+semantic_drift .................. 1
 ```
 
 ## Fallback Summary
 
 | Scenario | Final Source | Fallback Family | Temporal Frame | Opening Authorship | Opening Owner | Sealed Owner | Sanitizer Empty Owner |
 |---|---|---|---|---|---|---|---|
-| wrong_speaker_strict_social_emission | normalized_social_candidate | none | none | none | unknown-ambiguous | none | none |
+| sanitizer_scaffold_leakage | none | none | none | none | unknown-ambiguous | none | none |
 
 ## Sanitizer Summary
 
 | Scenario | Mode | Changed | Dropped | Empty Fallback | Empty Owner | Legacy Rewrite | Strict Social Owner |
 |---|---|---:|---:|---|---|---|---|
-| wrong_speaker_strict_social_emission | <object object at 0x000001F3D35703F0> | none | none | none | none | False | none |
-
-## Runtime Lineage Summary
-
-- **Total lineage events:** 2
-- **Fallback selected:** 0
-- **Speaker repair:** 0
-- **Mutation:** 1
-- **Gate outcome:** 1
-- **Top recurring recurrence keys:** _(none)_
-- **Top fallback kinds:** _(none)_
-- **Top fallback authorship sources:** _(none)_
-- **Top fallback owner buckets:** _(none)_
-- **Top fallback selection owners:** _(none)_
-- **Top fallback content owners:** _(none)_
-- **Top repair kinds:** _(none)_
-- **Top mutation kinds:** `final_emission_mutation` (1)
-- **Top gate paths:** `strict_social_accept` (1)
-
+| sanitizer_scaffold_leakage | none | none | none | none | none | none | none |
 ## Reproduce Locally
 
 ### Focused failing tests
 
 ```bash
-python -m pytest tests/test_co102_live_protected_replay_pipeline.py::test_co102_live_protected_replay_records_session_failure_artifacts -q --tb=short
+python -m pytest tests/test_golden_replay_structural_invariants.py::test_golden_replay_sanitizer_scaffold_leakage_structural_invariants -q --tb=short
 ```
 
 ### Protected replay lane

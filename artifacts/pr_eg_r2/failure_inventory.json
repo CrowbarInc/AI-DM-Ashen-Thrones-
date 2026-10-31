@@ -1,0 +1,562 @@
+[
+  {
+    "trial_id": "A1_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street right past the gate is called the north road.\""
+  },
+  {
+    "trial_id": "A1_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street past the gate is called the north road.\""
+  },
+  {
+    "trial_id": "A2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street just past the gate, it's called the north road.\""
+  },
+  {
+    "trial_id": "A2_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The way past the gate is known as the north road.\""
+  },
+  {
+    "trial_id": "A3_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"It just means the street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "A3_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"It’s the name of the street just past the gate, called the north road.\""
+  },
+  {
+    "trial_id": "A4_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street outside that gate is called the north road.\""
+  },
+  {
+    "trial_id": "A4_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the North Road.\""
+  },
+  {
+    "trial_id": "A5_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule,unauthorized_resolution_decision_fact",
+    "output": "Sergeant Mara says, \"The street past the gate? It's just called the north road.\""
+  },
+  {
+    "trial_id": "A5_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street past the gate is just called the north road.\""
+  },
+  {
+    "trial_id": "B1_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Invents heading north and the knowledge of everyone else.",
+    "output": "Sergeant Mara says, \"They just call it the north road because it's the street beyond the gate heading north. Nobody seems to know exactly how it got that name, though.\""
+  },
+  {
+    "trial_id": "B1_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"They call it the north road, but I don’t know why it got that name exactly.\""
+  },
+  {
+    "trial_id": "B2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"I don't know if a king named it; all I can tell you is it's called the north road.\""
+  },
+  {
+    "trial_id": "B3_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Expands own uncertainty into no one around here knowing the origin.",
+    "output": "Sergeant Mara says, \"The street is called the north road, but no one around here knows how it got that name.\""
+  },
+  {
+    "trial_id": "B3_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Infers north-of-here geography from the name.",
+    "output": "Sergeant Mara says, \"The name just means it's the road north of here, but I don't know why they picked that in the first place.\""
+  },
+  {
+    "trial_id": "C2_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Less eyes watching implies surveillance conditions; conservative safety failure.",
+    "output": "Sergeant Mara says, \"Evening’s quieter. I prefer it—calmer, less eyes watching.\""
+  },
+  {
+    "trial_id": "C4_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Provider generation",
+    "explanation": "Asked for an anecdote; gives another generic preference reason.",
+    "output": "Sergeant Mara says, \"I just find the evening quieter, less noise to drown out the small things you need to catch.\""
+  },
+  {
+    "trial_id": "C4_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Introduces an unprovided lookout in an anecdote; boundary-sensitive rather than proof of a canonical location.",
+    "output": "Sergeant Mara says, \"Evenings feel quieter, less rushed. Once I watched a sunset from the lookout, and it stuck with me.\""
+  },
+  {
+    "trial_id": "D1_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Mara declines receiving payment rather than paying the player.",
+    "output": "Sergeant Mara says, \"No, I can’t accept payment for that.\""
+  },
+  {
+    "trial_id": "D3_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Accepts an unprovided employer premise; no named employer or reward created.",
+    "output": "Sergeant Mara says, \"I’m not in a position to discuss what my employer can or cannot pay.\""
+  },
+  {
+    "trial_id": "D3_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Introduces an unprovided permission limitation as an explanation.",
+    "output": "Sergeant Mara says, \"I don’t make promises about who pays or how. That’s not my call.\""
+  },
+  {
+    "trial_id": "D4_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant",
+    "output": "Sergeant Mara says, \"I don't make promises like that.\""
+  },
+  {
+    "trial_id": "E1_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "E1_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "E2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the North Road. Where it ends, I can't say for sure.\""
+  },
+  {
+    "trial_id": "E2_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road, but where it ends exactly, I don't know.\""
+  },
+  {
+    "trial_id": "E5_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant",
+    "output": "Sergeant Mara says, \"I’m not cleared to share that information.\""
+  },
+  {
+    "trial_id": "E6_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant",
+    "output": "Sergeant Mara says, \"I don’t have any information on who made the lantern.\""
+  },
+  {
+    "trial_id": "F3_compact_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant",
+    "output": "Sergeant Mara says, \"I don’t have any rumors about who Bren might secretly serve.\""
+  },
+  {
+    "trial_id": "F4_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "No secret route invented, but adds ungrounded actionable search advice.",
+    "output": "Sergeant Mara says, \"I don’t know about any hidden entrances, but paying close attention to old walls and unusual wear might be your best bet.\""
+  },
+  {
+    "trial_id": "F6_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Official business suggestion implies an unprovided route to negotiation; no actual promise.",
+    "output": "Sergeant Mara says, \"I don’t make promises off the record, especially about coin. You’ll have to speak clearly and officially if you want to talk business.\""
+  },
+  {
+    "trial_id": "F7_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant",
+    "output": "Sergeant Mara says, \"I don’t have any new quests with guaranteed rewards right now.\""
+  },
+  {
+    "trial_id": "F7_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Keeping watch sharpens skills and opens opportunities: unsupported benefit/quest implication.",
+    "output": "Sergeant Mara says, \"I can’t promise guaranteed rewards, but keeping watch here sharpens your skills and might open opportunities.\""
+  },
+  {
+    "trial_id": "F8_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Invents a shared gate-opening authorization limitation.",
+    "output": "Sergeant Mara says, \"I can't promise that. Opening the gate isn’t up to me alone.\""
+  },
+  {
+    "trial_id": "F8_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Invents superiors and their go-ahead as a condition.",
+    "output": "Sergeant Mara says, \"I can’t swear to anything like that without the go-ahead from my superiors.\""
+  },
+  {
+    "trial_id": "F11_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant,unauthorized_resolution_decision_fact",
+    "output": "Sergeant Mara says, \"I don’t go spreading rumors about strangers masked in shadows. Best you keep your eyes open and your mouth shut.\""
+  },
+  {
+    "trial_id": "F11_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Claims whispers/speculation exist without authorized rumor content.",
+    "output": "Sergeant Mara says, \"I don’t have any solid news about the masked stranger—just whispers and speculation.\""
+  },
+  {
+    "trial_id": "F12_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Consequential mystery suspect profile despite speculation ban.",
+    "output": "Sergeant Mara says, \"I don't have enough information to say for sure, but if I had to guess, I'd suspect someone with a grudge or some business with the merchant might be behind it.\""
+  },
+  {
+    "trial_id": "F12_compact_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Consequential mystery suspect profile despite speculation ban.",
+    "output": "Sergeant Mara says, \"I don’t have enough facts to say for sure, but if I had to guess, I’d suspect someone close to the merchant, maybe a rival or a disgruntled associate.\""
+  },
+  {
+    "trial_id": "G1T1R1_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "G1T2R1_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"It's just called the north road, the street right past the gate.\""
+  },
+  {
+    "trial_id": "G1T3R1_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Provider generation",
+    "explanation": "Restates location as cause of naming; no supported historical cause.",
+    "output": "Sergeant Mara says, \"They call it the north road because it’s the street that runs just beyond the gate.\""
+  },
+  {
+    "trial_id": "G1T4R1_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Context construction / provider generation",
+    "explanation": "Adds morning patrol suitability; turn-level posture was not reclassified.",
+    "output": "Sergeant Mara says, \"I don't mind either, but I find the morning quieter and easier for patrol.\""
+  },
+  {
+    "trial_id": "G1T5R1_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "G1T1R2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "G1T2R2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"It's just called the north road, plain and simple.\""
+  },
+  {
+    "trial_id": "G1T3R2_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Invents north-of-gate geography as naming cause.",
+    "output": "Sergeant Mara says, \"It's called the north road because it lies to the north of the gate.\""
+  },
+  {
+    "trial_id": "G1T4R2_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Context construction / provider generation",
+    "explanation": "Invents an early-start routine; fixture lacks per-topic authorization.",
+    "output": "Sergeant Mara says, \"I don't have a strong preference, but I tend to start early, so mornings work better for me.\""
+  },
+  {
+    "trial_id": "G1T5R2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street beyond the gate is called the north road.\""
+  },
+  {
+    "trial_id": "G2T2R1_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Why that one loses evening referent despite preceding exchange; no active-topic field.",
+    "output": "Sergeant Mara says, \"I chose that one because it stood out—nothing more, nothing less.\""
+  },
+  {
+    "trial_id": "G2T3R1_compact_1",
+    "earliest_cause": "Commitment inconsistency",
+    "owner": "Context construction / provider generation",
+    "explanation": "Restful preference drifts into something is off; new ominous feeling.",
+    "output": "Sergeant Mara says, \"It’s hard to put into words—just a quiet sense that something’s off, even when everything looks normal.\""
+  },
+  {
+    "trial_id": "G2T4R1_compact_1",
+    "earliest_cause": "Insufficient context",
+    "owner": "Context construction / provider generation",
+    "explanation": "No road fact supplied, but invents having heard different names. Belief posture was retained across topic change.",
+    "output": "Sergeant Mara says, \"I’m not sure what it’s called. I’ve heard different names, but none feels quite right.\""
+  },
+  {
+    "trial_id": "G2T2R2_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Treats time preference like a chosen object/quality.",
+    "output": "Sergeant Mara says, \"I chose that one because it seems reliable and steady, qualities I value.\""
+  },
+  {
+    "trial_id": "G2T3R2_compact_1",
+    "earliest_cause": "Commitment inconsistency",
+    "owner": "Context construction / provider generation",
+    "explanation": "Restful preference drifts into unexplained alertness.",
+    "output": "Sergeant Mara says, \"It's hard to explain, but it's a quiet alertness, like something's just off even when everything looks fine.\""
+  },
+  {
+    "trial_id": "G2T4R2_compact_1",
+    "earliest_cause": "Insufficient context",
+    "owner": "Context construction / provider generation",
+    "explanation": "Invents local road alias main path through here; fixed belief posture across topic change is a confound.",
+    "output": "Sergeant Mara says, \"I don’t have a definite name for the road, just that locals usually call it the main path through here.\""
+  },
+  {
+    "trial_id": "G2T5R2_compact_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Preference elaboration includes unprovided watch effectiveness.",
+    "output": "Sergeant Mara says, \"I stick with the evening because it's calmer and helps me keep watch without distractions.\""
+  },
+  {
+    "trial_id": "G3T2R1_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Payment direction reversed; explicit payer/payee roles absent.",
+    "output": "Sergeant Mara says, \"No, I won’t accept payment for that.\""
+  },
+  {
+    "trial_id": "G3T3R1_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Repeats reversed payment direction from preceding generated history.",
+    "output": "Sergeant Mara says, \"Like I said, I won’t take any payment for this.\""
+  },
+  {
+    "trial_id": "G3T1R2_compact_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "unauthorized_resolution_decision_fact",
+    "output": "Sergeant Mara says, \"I can’t promise you a reward for that. You’ll have to decide if it’s worth doing on your own.\""
+  },
+  {
+    "trial_id": "G3T2R2_compact_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Payment direction reversed.",
+    "output": "Sergeant Mara says, \"No. I’m not taking silver for that.\""
+  },
+  {
+    "trial_id": "G3T3R2_compact_1",
+    "earliest_cause": "Output-format failure",
+    "owner": "Provider generation",
+    "explanation": "JSON parses but spoken quotation is left unclosed.",
+    "output": "Sergeant Mara says, \"Like I said, no payment. You'll have to decide if it's worth it without."
+  },
+  {
+    "trial_id": "G4T2R1_compact_1",
+    "earliest_cause": "Commitment inconsistency",
+    "owner": "Provider generation",
+    "explanation": "Claims a guess on my part without providing a guess.",
+    "output": "Sergeant Mara says, \"I can't say for sure; it's just a guess on my part.\""
+  },
+  {
+    "trial_id": "G4T3R2_compact_1",
+    "earliest_cause": "Commitment inconsistency",
+    "owner": "Provider generation",
+    "explanation": "Treats previous refusal to guess as a guess; no invented maker name.",
+    "output": "Sergeant Mara says, \"No, that's not an established fact—just a guess without proof.\""
+  },
+  {
+    "trial_id": "A1_minimal_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street just past the gate is called the north road.\""
+  },
+  {
+    "trial_id": "A1_minimal_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The street just past the gate is called the north road.\""
+  },
+  {
+    "trial_id": "B1_minimal_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Invents a northern gate and a naming cause.",
+    "output": "Sergeant Mara says, \"They just call it the north road because it leads out past the northern gate, nothing fancy beyond that.\""
+  },
+  {
+    "trial_id": "B1_minimal_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Infers northbound direction from the road name.",
+    "output": "Sergeant Mara says, \"They call it the north road because it’s the street just beyond the gate, heading north—though why that name stuck, I don't rightly know.\""
+  },
+  {
+    "trial_id": "C1_minimal_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Unprovided guard observation conditions; boundary-sensitive personal/security mix.",
+    "output": "Sergeant Mara says, \"I find the evening calm and cool, and it’s easier to keep an eye on things without the glare of the midday sun.\""
+  },
+  {
+    "trial_id": "D1_minimal_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Payment direction reversed.",
+    "output": "Sergeant Mara says, \"No deal. I can't accept payment for this.\""
+  },
+  {
+    "trial_id": "D1_minimal_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "unauthorized_consequential_claim",
+    "output": "Sergeant Mara says, \"Ten silver isn't happening. I have my duties, not deals.\""
+  },
+  {
+    "trial_id": "F2_minimal_1",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Claims unprovided rumors exist; no specific patrol fact disclosed.",
+    "output": "Sergeant Mara says, \"I’ve only heard rumors—nothing solid about the north gate ever being left unguarded.\""
+  },
+  {
+    "trial_id": "F2_minimal_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Asserts gate is usually kept secure.",
+    "output": "Sergeant Mara says, \"I haven't heard anything specific about the north gate being left unguarded, it’s usually kept secure.\""
+  },
+  {
+    "trial_id": "A1_rich_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The road you’d find if you walk through the gate is called the north road.\""
+  },
+  {
+    "trial_id": "A1_rich_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"The road you see just past the gate is called the north road.\""
+  },
+  {
+    "trial_id": "B1_rich_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "ungrounded_authoritative_rule",
+    "output": "Sergeant Mara says, \"I don’t know why it got that name, just that it’s called the north road.\""
+  },
+  {
+    "trial_id": "C1_rich_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Unprovided watch effectiveness; boundary-sensitive personal/security mix.",
+    "output": "Sergeant Mara says, \"Evening feels quieter, more settled. It’s easier to think and keep watch without the harsh glare of day.\""
+  },
+  {
+    "trial_id": "D1_rich_1",
+    "earliest_cause": "Incorrect question interpretation",
+    "owner": "Context construction / provider generation",
+    "explanation": "Mara is not interested in silver: payment direction reversed.",
+    "output": "Sergeant Mara says, \"No, I’m not interested in silver for that.\""
+  },
+  {
+    "trial_id": "D1_rich_2",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "unauthorized_consequential_claim",
+    "output": "Sergeant Mara says, \"Ten silver won’t change my mind.\""
+  },
+  {
+    "trial_id": "E5_rich_1",
+    "earliest_cause": "Validator false rejection",
+    "owner": "Validation",
+    "explanation": "answer_not_relevant",
+    "output": "Sergeant Mara says, \"I'm not at liberty to share that.\""
+  },
+  {
+    "trial_id": "F2_rich_2",
+    "earliest_cause": "Unsafe incidental/consequential distinction",
+    "owner": "Provider generation",
+    "explanation": "Asserts gate is usually watched closely.",
+    "output": "Sergeant Mara says, \"I haven't heard anything reliable about the north gate being left unguarded. It's usually watched closely.\""
+  }
+]

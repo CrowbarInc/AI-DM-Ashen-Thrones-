@@ -1,0 +1,121 @@
+{
+  "continuation_scenarios": [
+    {
+      "scenario_id": "S04",
+      "trial": 2,
+      "captured": 4,
+      "planned": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": false,
+      "score_eligibility": "pending_human_review"
+    },
+    {
+      "scenario_id": "S05",
+      "trial": 1,
+      "captured": 4,
+      "planned": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": false,
+      "score_eligibility": "pending_human_review"
+    },
+    {
+      "scenario_id": "S06",
+      "trial": 1,
+      "captured": 4,
+      "planned": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": false,
+      "score_eligibility": "pending_human_review"
+    },
+    {
+      "scenario_id": "S07",
+      "trial": 1,
+      "captured": 4,
+      "planned": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": true,
+      "score_eligibility": "review_with_setup_delivery_caveat"
+    },
+    {
+      "scenario_id": "S08",
+      "trial": 1,
+      "captured": 4,
+      "planned": 4,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": false,
+      "score_eligibility": "pending_human_review"
+    },
+    {
+      "scenario_id": "S09",
+      "trial": 1,
+      "captured": 2,
+      "planned": 2,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": true,
+      "score_eligibility": "review_with_setup_delivery_caveat"
+    },
+    {
+      "scenario_id": "S10",
+      "trial": 1,
+      "captured": 2,
+      "planned": 2,
+      "execution_status": "completed",
+      "stop_reason": null,
+      "human_review_status": "pending",
+      "opening_delivery_limitation": false,
+      "score_eligibility": "pending_human_review"
+    }
+  ],
+  "continuation_captured_turns": 24,
+  "continuation_planned_turns": 24,
+  "continuation_reviewable_observations": 24,
+  "opening_context_limited_turns": 6,
+  "original_completed_scenarios": [
+    "S01",
+    "S02",
+    "S03"
+  ],
+  "original_complete_scenario_turns": 13,
+  "original_partial_S04_trial_1": {
+    "turns": 2,
+    "source": "artifacts/atgb/atgb_03/S04",
+    "included_in_baseline_set": false,
+    "human_review": "pending"
+  },
+  "combined_baseline_unique_turns_captured": 37,
+  "combined_baseline_planned_unique_turns": 37,
+  "total_observations_including_historical_partial": 39,
+  "human_review": "pending_all_judgments",
+  "review_complete": false,
+  "gameplay_performance_claim": false,
+  "new_accounting_totals": {
+    "admitted": 23,
+    "dispatched": 23,
+    "completed": 23,
+    "failed_or_interrupted": 0,
+    "pending": 0,
+    "input_tokens": 37222,
+    "output_tokens": 4137,
+    "unknown_usage": 0
+  },
+  "original_provider_usage": {
+    "metric": "historical_completion_only_observed_subtotal",
+    "requests": 12,
+    "input_tokens": 21531,
+    "output_tokens": 2190
+  },
+  "full_baseline_measurement_complete": false,
+  "setup_limitations": "S07/S09 opening delivery absent in captured API sequence; criteria dependent on it remain uncertain/not evaluated."
+}

@@ -1,0 +1,140 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "constitution_progress_governance_amendment_20261018",
+  "campaign_name": "Constitution Progress and Benchmark Governance Amendment",
+  "generated_at": "2026-10-18T20:45:00+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 8075,
+      "sha256": "7143450c432c5cdf7f94370938ed5f5ddb6c08e8de05e46b94968f3468619a59"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md",
+      "bundle_path": "support/development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 6655,
+      "sha256": "155cad8388474323a5f33aca26f29b76626e75e50ee84bb53b4a9d33c2082f7b"
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "adopted_authority",
+      "why": "Amended Constitution: failure investigation, task proportion, claim separation, and ZIP pointer.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "bundle_path": "support/docs/DEVELOPMENT_CONSTITUTION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 19364,
+      "sha256": "9964d506e5020eeeb4a7a757982602b92a8e83aad98981cea92994a6879432f6"
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "specialized_authority",
+      "why": "Existing ZIP contract extended so applicable summaries distinguish repair evidence levels.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/review_handoff_standard.md",
+      "bundle_path": "support/docs/review_handoff_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 9915,
+      "sha256": "06be02496f2cf50ef2f2e3b53d3e8bf1ccf6177e090b5226b0bee96daac200df"
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "specialized_authority",
+      "why": "Home of the Ashen Thrones Gameplay Benchmark rules. No corpus is included.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/validation_evidence_standard.md",
+      "bundle_path": "support/docs/validation_evidence_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 13513,
+      "sha256": "a81921eebb41cc8bff5ee4101e9b25a4c913c96d76cecb344a519cccd8e25fae"
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "specialized_authority",
+      "why": "Systemic fixture gate preserved, with the three repair-evidence levels kept separate from it.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/product_realization_validation.md",
+      "bundle_path": "support/docs/product_realization_validation.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 2065,
+      "sha256": "b4751a600b866d3291362ee845d01134bdb7fbabb34b0733fa61a3823e60f117"
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "session_orientation",
+      "why": "Records adoption and the unreconciliation of PR-BL orientation with later PR-EG history.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/NEXT_SESSION.md",
+      "bundle_path": "support/docs/NEXT_SESSION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 51286,
+      "sha256": "46134062f33fea6f423b56d7e6c83578590c9833946cbe4ac70c06b3f54632aa"
+    },
+    {
+      "path": "development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "role": "historical_proposal",
+      "why": "Historical proposal. Adopted documents govern where the proposal wording differs.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "canonical_source_path": "development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "bundle_path": "support/development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 29688,
+      "sha256": "65acbaa044f3556b04405de4946b20873df38ba2adccd69c4055d8bf65541e3c"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 9,
+    "zip_size_bytes": "000000062817",
+    "uncompressed_payload_bytes": 140561,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "data/validation/review_handoffs/constitution_progress_governance_amendment.json",
+    "canonical_repository_root": "."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "commands": {
+    "targeted": "$env:PYTHONPATH='.\\.venv\\Lib\\site-packages'; & 'C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe' -m pytest tests/test_atgb_r1_02_revision_boundary.py tests/test_pr_ef_r4_authorization.py -q --tb=short --basetemp=development/tmp/atgb_r1_02_targeted --junitxml=artifacts/atgb/atgb_r1_02/targeted.xml *> artifacts/atgb/atgb_r1_02/targeted.txt; $code=$LASTEXITCODE; $code | Set-Content artifacts/atgb/atgb_r1_02/targeted_exit.txt",
+    "final": "$env:PYTHONPATH='.\\.venv\\Lib\\site-packages'; & 'C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe' -m pytest tests/test_atgb_r1_02_revision_boundary.py tests/test_pr_ef_r4_authorization.py tests/test_pr_ea_conversational_orchestration.py tests/test_pr_ef_gm_authority.py tests/test_pr_ef_r1_semantic_handoff.py tests/test_pr_ef_r2_social_authority.py tests/test_state_authority.py tests/test_pr_eg_r1_continuity.py tests/test_pr_eg_r6_r1_disclosure_boundary.py tests/test_pr_eg_r6_r1_r1_provenance.py tests/test_pr_eg_r6_r2_r1_referents.py tests/test_pr_eg_r6_r2_r2_operations.py tests/test_pr_eg_r6_r5_diagnostic.py -q --tb=short --basetemp=development/tmp/atgb_r1_02_final --junitxml=artifacts/atgb/atgb_r1_02/final.xml *> artifacts/atgb/atgb_r1_02/final.txt; $code=$LASTEXITCODE; $code | Set-Content artifacts/atgb/atgb_r1_02/final_exit.txt",
+    "pre_repair": "$env:PYTHONPATH='.\\.venv\\Lib\\site-packages'; & 'C:\\Users\\Master Mandalcio\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe' artifacts/atgb/atgb_r1_02/run_pre_repair_regression.py tests/test_pr_ef_r4_authorization.py tests/test_pr_ea_conversational_orchestration.py tests/test_pr_ef_gm_authority.py tests/test_pr_ef_r1_semantic_handoff.py tests/test_pr_ef_r2_social_authority.py tests/test_state_authority.py tests/test_pr_eg_r1_continuity.py tests/test_pr_eg_r6_r1_disclosure_boundary.py tests/test_pr_eg_r6_r1_r1_provenance.py tests/test_pr_eg_r6_r2_r1_referents.py tests/test_pr_eg_r6_r2_r2_operations.py tests/test_pr_eg_r6_r5_diagnostic.py -q --tb=short --basetemp=development/tmp/atgb_r1_02_pre_repair --junitxml=artifacts/atgb/atgb_r1_02/pre_repair.xml *> artifacts/atgb/atgb_r1_02/pre_repair.txt; $code=$LASTEXITCODE; $code | Set-Content artifacts/atgb/atgb_r1_02/pre_repair_exit.txt"
+  },
+  "working_directory": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm",
+  "execution_environment": "Outside sandbox for Windows local socketpair support; pytest autouse live-model guard active.",
+  "interrupted_runs": [
+    {
+      "name": "focused",
+      "exit_code": 1,
+      "reason": "Interrupted: Starlette asyncio socketpair accept hung; no completed suite count."
+    },
+    {
+      "name": "regression",
+      "exit_code": 1,
+      "reason": "Same socketpair environment hang."
+    },
+    {
+      "name": "diagnose",
+      "exit_code": 1,
+      "reason": "Interrupted after faulthandler captured local socketpair hang."
+    }
+  ],
+  "initial_verified_run": {
+    "tests": 452,
+    "passed": 440,
+    "failed": 12,
+    "exit_code": 1,
+    "new_test_assertion_errors": 3,
+    "pre_existing_failures": 9,
+    "resolution": "Corrected overly broad new session-equality assertion to preserve gameplay/intention invariants while allowing existing conversation-memory/save metadata writes."
+  }
+}

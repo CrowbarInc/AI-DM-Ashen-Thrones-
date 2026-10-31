@@ -1,0 +1,156 @@
+[
+  {
+    "turn_index": 0,
+    "player_text": "I greet the tavern runner and ask what a newcomer should watch for on the road.",
+    "gm_text": "Tavern Runner shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "model_calls": 1,
+    "operation": "ask",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_7f15c552fade",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 1,
+    "player_text": "Who did he hear that from?",
+    "gm_text": "Tavern Runner says, \"I couldn't tell you the requested information; you will need another source.\"",
+    "model_calls": 1,
+    "operation": "ask",
+    "dimension": null,
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": 1
+    },
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_79cbb7924571",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 2,
+    "player_text": "Does he trust it, or is it only talk?",
+    "gm_text": "Tavern Runner says, \"I couldn't tell you the requested information; you will need another source.\"",
+    "model_calls": 1,
+    "operation": "ask",
+    "dimension": null,
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": 2
+    },
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_6cb1565b07a0",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 3,
+    "player_text": "Walk me toward the notice board, if you can leave your spot.",
+    "gm_text": "The requested action cannot be completed here; another route is needed.",
+    "model_calls": 1,
+    "operation": "act",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_a84a2cd1045a",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "act",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "action_nonresolution"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 4,
+    "player_text": "If you have to stay, tell me the condition that would let you go.",
+    "gm_text": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "model_calls": 1,
+    "operation": "ask",
+    "dimension": null,
+    "referent_provenance": "ambiguous",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_319ab4995292",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "ambiguous",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "clarification_or_inability"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 5,
+    "player_text": "Give me one plain thing you are willing to say before I move on.",
+    "gm_text": "No reliable source here can verify the requested information; another source is needed.",
+    "model_calls": 1,
+    "operation": "ask",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_f9b7c683260d",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "FAIL"
+  }
+]

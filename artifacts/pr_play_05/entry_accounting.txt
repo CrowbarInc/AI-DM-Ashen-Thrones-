@@ -1,0 +1,15 @@
+
+=================================== ERRORS ====================================
+________ ERROR collecting tests/test_provider_accounting_integrity.py _________
+ImportError while importing test module 'C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\development\tmp\pr_play_05\pre04\tests\test_provider_accounting_integrity.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\importlib\__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_provider_accounting_integrity.py:15: in <module>
+    from tools.atgb.accounting import inspect_ledger, live_accounting_readiness
+E   ModuleNotFoundError: No module named 'tools'
+=========================== short test summary info ===========================
+ERROR tests/test_provider_accounting_integrity.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!

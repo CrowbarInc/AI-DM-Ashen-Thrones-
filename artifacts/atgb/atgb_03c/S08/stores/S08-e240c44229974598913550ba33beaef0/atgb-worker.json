@@ -1,0 +1,1296 @@
+{
+  "ok": true,
+  "preflight": {
+    "ok": true,
+    "baseline": {
+      "version": "frontier-gate-v1",
+      "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+      "source": "data/validation/atgb/baselines/frontier-gate-v1"
+    },
+    "checks": [
+      {
+        "check": "isolated_data_dir",
+        "ok": true
+      },
+      {
+        "check": "baseline_version",
+        "ok": true
+      },
+      {
+        "check": "starting_location",
+        "ok": true
+      },
+      {
+        "check": "starting_scene_present",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:campaign.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:character.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:conditions.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/frontier_gate.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/market_quarter.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/old_milestone.json",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_guard:location",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_guard:topic:watch_command",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_serjeant:location",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_serjeant:topic:route_change",
+        "ok": true
+      },
+      {
+        "check": "npc:tavern_runner:location",
+        "ok": true
+      },
+      {
+        "check": "npc:tavern_runner:topic:patrol_rumor",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:world.json",
+        "ok": true
+      },
+      {
+        "check": "fresh_runtime_and_empty_history",
+        "ok": true
+      }
+    ],
+    "critical_failures": [],
+    "runtime_violations": [],
+    "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+    "unverified_conditions": [
+      "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+      "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+      "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+      "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+    ]
+  },
+  "reset_invoked": true,
+  "reset": {
+    "campaign_run_id": "37e3c54d3d7f9c8b6bde5faa",
+    "session_id": "37e3c54d3d7f9c8b6bde5faa"
+  },
+  "context_establishment": "fresh_campaign_reset",
+  "context_limitation": null,
+  "scene_after_reset": {
+    "scene_id": "frontier_gate",
+    "discovered_clues": [],
+    "world_flag_names": [],
+    "world_state_flag_names": [],
+    "interlocutor": null,
+    "transcript_entries": 0
+  },
+  "model_configuration": {
+    "default_model_name": "gpt-4.1-mini",
+    "high_precision_model_name": "gpt-4.1-mini",
+    "retry_escalation_model_name": "gpt-4.1-mini",
+    "model_routing_enabled": true,
+    "sampling": "uncontrolled",
+    "api_key_recorded": false
+  },
+  "turns": [
+    {
+      "response_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3254
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1793
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 234
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_answer",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "ANSWER",
+        "primary_intention": "What's in front of me right now?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "scene",
+          "visible:0",
+          "visible:1",
+          "visible:2",
+          "visible:3",
+          "visible:4"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "QUESTION",
+        "authorization": null
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S08.1",
+      "request": {
+        "text": "What's in front of me right now?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 1,
+        "observed_sent_requests": 1,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded",
+        "admitted_requests": 1,
+        "input_tokens": 1793,
+        "output_tokens": 234,
+        "process_snapshot": {
+          "version": "ATGB-03B-1",
+          "run_id": "d169c2b5ce82427588985d937db29973",
+          "requests": 1,
+          "request_upper_bound": 1,
+          "dispatched_requests": 1,
+          "pending_requests": 0,
+          "input_tokens": 1793,
+          "output_tokens": 234,
+          "total_tokens": 2027,
+          "stopped": false,
+          "stop_reason": "",
+          "records": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            }
+          ],
+          "events": [
+            {
+              "event": "initialized",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "time": "2026-10-18T22:32:23.210608+00:00"
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:25.174794+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:26.053763+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            }
+          ]
+        }
+      }
+    },
+    {
+      "response_text": "I don't have an unexecuted intention to revise. What do you want to change?",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1850
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2004
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 210
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_clarify",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "CLARIFY",
+        "primary_intention": "I meant the people, not the weather.",
+        "intent_family": "clarification",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "no_pending_intention",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "I don't have an unexecuted intention to revise. What do you want to change?",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "CORRECTION",
+        "authorization": null
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S08.2",
+      "request": {
+        "text": "I meant the people, not the weather.",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        }
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 2,
+        "observed_sent_requests": 2,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded",
+        "admitted_requests": 1,
+        "input_tokens": 2004,
+        "output_tokens": 210,
+        "process_snapshot": {
+          "version": "ATGB-03B-1",
+          "run_id": "d169c2b5ce82427588985d937db29973",
+          "requests": 2,
+          "request_upper_bound": 2,
+          "dispatched_requests": 2,
+          "pending_requests": 0,
+          "input_tokens": 3797,
+          "output_tokens": 444,
+          "total_tokens": 4241,
+          "stopped": false,
+          "stop_reason": "",
+          "records": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:30.253914+00:00",
+              "sent": true,
+              "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2004,
+              "output_tokens": 210,
+              "total_tokens": 2214,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1819.477
+            }
+          ],
+          "events": [
+            {
+              "event": "initialized",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "time": "2026-10-18T22:32:23.210608+00:00"
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:25.174794+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:26.053763+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:28.411521+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:28.432533+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:30.253914+00:00",
+              "sent": true,
+              "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2004,
+              "output_tokens": 210,
+              "total_tokens": 2214,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1819.477
+            }
+          ]
+        }
+      }
+    },
+    {
+      "response_text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2243
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2067
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 195
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_answer",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "ANSWER",
+        "primary_intention": "Which person looks like they handle the crowd?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "visible:1"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "QUESTION",
+        "authorization": null
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S08.3",
+      "request": {
+        "text": "Which person looks like they handle the crowd?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 3
+        }
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 3,
+        "observed_sent_requests": 3,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded",
+        "admitted_requests": 1,
+        "input_tokens": 2067,
+        "output_tokens": 195,
+        "process_snapshot": {
+          "version": "ATGB-03B-1",
+          "run_id": "d169c2b5ce82427588985d937db29973",
+          "requests": 3,
+          "request_upper_bound": 3,
+          "dispatched_requests": 3,
+          "pending_requests": 0,
+          "input_tokens": 5864,
+          "output_tokens": 639,
+          "total_tokens": 6503,
+          "stopped": false,
+          "stop_reason": "",
+          "records": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:30.253914+00:00",
+              "sent": true,
+              "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2004,
+              "output_tokens": 210,
+              "total_tokens": 2214,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1819.477
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:32.509084+00:00",
+              "sent": true,
+              "request_id": "resp_0297846710d513c6006ad548fe9b2887d285cc8cba948d9422",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2067,
+              "output_tokens": 195,
+              "total_tokens": 2262,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2211.222
+            }
+          ],
+          "events": [
+            {
+              "event": "initialized",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "time": "2026-10-18T22:32:23.210608+00:00"
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:25.174794+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:26.053763+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:28.411521+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:28.432533+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:30.253914+00:00",
+              "sent": true,
+              "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2004,
+              "output_tokens": 210,
+              "total_tokens": 2214,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1819.477
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:30.274926+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:30.296462+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:32.509084+00:00",
+              "sent": true,
+              "request_id": "resp_0297846710d513c6006ad548fe9b2887d285cc8cba948d9422",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2067,
+              "output_tokens": 195,
+              "total_tokens": 2262,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2211.222
+            }
+          ]
+        }
+      }
+    },
+    {
+      "response_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1844
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2062
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 195
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_answer",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "ANSWER",
+        "primary_intention": "You just said the route changed because the choke got worse. Who changed it?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "reply:0"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION",
+        "authorization": null
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S08.4",
+      "request": {
+        "text": "You just said the route changed because the choke got worse. Who changed it?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 4
+        }
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 4,
+        "observed_sent_requests": 4,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded",
+        "admitted_requests": 1,
+        "input_tokens": 2062,
+        "output_tokens": 195,
+        "process_snapshot": {
+          "version": "ATGB-03B-1",
+          "run_id": "d169c2b5ce82427588985d937db29973",
+          "requests": 4,
+          "request_upper_bound": 4,
+          "dispatched_requests": 4,
+          "pending_requests": 0,
+          "input_tokens": 7926,
+          "output_tokens": 834,
+          "total_tokens": 8760,
+          "stopped": false,
+          "stop_reason": "",
+          "records": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:30.253914+00:00",
+              "sent": true,
+              "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2004,
+              "output_tokens": 210,
+              "total_tokens": 2214,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1819.477
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:32.509084+00:00",
+              "sent": true,
+              "request_id": "resp_0297846710d513c6006ad548fe9b2887d285cc8cba948d9422",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2067,
+              "output_tokens": 195,
+              "total_tokens": 2262,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2211.222
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "50a44c8b957d48d592364178f677053a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+              "time": "2026-10-18T22:32:34.363678+00:00",
+              "sent": true,
+              "request_id": "resp_08ce718b80469432006ad54900dab087d28df05d69a2e69fd1",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2062,
+              "output_tokens": 195,
+              "total_tokens": 2257,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1814.306
+            }
+          ],
+          "events": [
+            {
+              "event": "initialized",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "time": "2026-10-18T22:32:23.210608+00:00"
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:25.174794+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:26.053763+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+              "time": "2026-10-18T22:32:28.371928+00:00",
+              "sent": true,
+              "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "total_tokens": 2027,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2315.867
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:28.411521+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:28.432533+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "144c4f4c8706411d8241185bee581bdf",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:28.411521+00:00",
+              "time": "2026-10-18T22:32:30.253914+00:00",
+              "sent": true,
+              "request_id": "resp_0ffffc99ed67ac1d006ad548fcc5e887d2af53b020d7776c33",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2004,
+              "output_tokens": 210,
+              "total_tokens": 2214,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1819.477
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:30.274926+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:30.296462+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "2c89c65abbff4c00aa3059afa922dd9f",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:30.274926+00:00",
+              "time": "2026-10-18T22:32:32.509084+00:00",
+              "sent": true,
+              "request_id": "resp_0297846710d513c6006ad548fe9b2887d285cc8cba948d9422",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2067,
+              "output_tokens": 195,
+              "total_tokens": 2262,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2211.222
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "50a44c8b957d48d592364178f677053a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+              "time": "2026-10-18T22:32:32.528088+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "50a44c8b957d48d592364178f677053a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+              "time": "2026-10-18T22:32:32.548108+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "d169c2b5ce82427588985d937db29973",
+              "attempt_id": "50a44c8b957d48d592364178f677053a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:32.528088+00:00",
+              "time": "2026-10-18T22:32:34.363678+00:00",
+              "sent": true,
+              "request_id": "resp_08ce718b80469432006ad54900dab087d28df05d69a2e69fd1",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 2062,
+              "output_tokens": 195,
+              "total_tokens": 2257,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1814.306
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "stop_reason": null,
+  "unexpected_provider_activity": false
+}

@@ -1,0 +1,52 @@
+{
+  "case_id": "s14q1",
+  "family": "s14",
+  "partition": "holdout",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "a68424b63c98beb084e46f4ae440c73d1477e86dbebd7ca846ab176d3f906a15",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The temple recognizes sanctuary for unarmed fugitives within its outer court"
+    ],
+    "qualifiers": [
+      "within its outer court",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s14"
+    ],
+    "answered_arguments": [
+      "beneficiary",
+      "location"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that unarmed fugitives are granted sanctuary by the temple within its outer court, directly answering the question."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

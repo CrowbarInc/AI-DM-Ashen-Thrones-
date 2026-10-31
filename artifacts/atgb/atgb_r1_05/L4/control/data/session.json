@@ -1,0 +1,132 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-19T09:38:02.222723Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-19T09:38:02.222723Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "pending_clarification": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "target_resolution": "ambiguous",
+        "revised_text": "Instead, make that a question about the lamp."
+      },
+      "pending_intention": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "waystation_courtyard",
+        "original_text": "I ask one of them what happened.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "target_resolution": "ambiguous",
+        "revised_text": "Instead, make that a question about the lamp."
+      },
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I ask one of them what happened.",
+          "delivered_text": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "e2acecae8467ad1d341d99e619a42407d69a177dba2f2fbcda18c433a7c78211",
+          "authorization_source": "conversational_decision:unresolved_addressee",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Instead, make that a question about the lamp.",
+          "delivered_text": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "be28292a093c588d4cb04a67e24cbe7bf5501f65c257c7119d70b1f4082efcf8",
+          "authorization_source": "conversational_decision:pending_intention_revised",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CORRECTION",
+        "subject": "Instead, make that a question about the lamp.",
+        "response": "I've revised that unexecuted intention. It has not been attempted. Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "f2becfd1af8ac22e695147d4c19e1197795a9f3a7715668d473e6e1bb08f0367",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

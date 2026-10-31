@@ -1,0 +1,397 @@
+{
+  "campaign_id": "pr_eg_r6_r3_interpretation_boundary_20261017",
+  "campaign_name": "PR-EG-R6-R3 \u2014 Conversational Interpretation Boundary Reassessment",
+  "campaign_date": "2026-10-17",
+  "purpose": "Compare structured planning, host compilation, and host-constrained candidate selection without a production rewrite.",
+  "objective_status": "B \u2014 DECISION SUPPORTED WITH LIMITATIONS",
+  "executive_summary": "**B \u2014 DECISION SUPPORTED WITH LIMITATIONS.** Architecture C, host-built candidates with provider selection, is the only option that materially improves referent binding under the pre-registered rule. On the frozen holdout it binds 22/30 dependent referents against Architecture A's 6/30 (paired net +16). Validation moves the same way (paired net +20). Security leaks are 0/396. The composite correction and follow-up scores are not a fair production comparison: A accepted 5/132 interpretations because production authorization rejects uncovered propositions, while C accepted 124/132 compiled selections. Absolute holdout correction success for C is still 6/13 and follow-up success 6/13. Ambiguity remains unsolved (C 2/13). Do not migrate production in this cycle.",
+  "self_contained_review_test": "Structural package verification only. This is not independent human review.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "tests/test_pr_eg_r6_r3_harness.py"
+    ],
+    "tooling": [
+      "experiments/pr_eg_r6_r3/corpus.py",
+      "experiments/pr_eg_r6_r3/common.py",
+      "experiments/pr_eg_r6_r3/architecture_a.py",
+      "experiments/pr_eg_r6_r3/architecture_b.py",
+      "experiments/pr_eg_r6_r3/architecture_c.py",
+      "experiments/pr_eg_r6_r3/run_eval.py",
+      "experiments/pr_eg_r6_r3/audit_grader.py",
+      "experiments/pr_eg_r6_r3/CONTRACT.md",
+      "tools/write_pr_eg_r6_r3_review.py"
+    ],
+    "documentation": [
+      "33 numbered review artifacts."
+    ]
+  },
+  "testing": {
+    "focused": "Harness tests passed without provider calls. Official comparison: 396 real provider calls.",
+    "broader": "The 14 inherited contract failures were re-read and not re-run. Five older inherited failures were not re-run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Isolated interpretation comparison, not production /api/chat qualification.",
+    "model_runtime_boundary": "gpt-4.1-mini, temperature 0, one call per turn, no retries.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "14 R6-R2-R2 contract-expectation failures plus 5 inherited failures."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Composite success confounded by production source rejection on A.",
+      "Ambiguity unsolved.",
+      "Internal labels.",
+      "C compiler does not yet pass production bind."
+    ],
+    "pre_existing": [
+      "Fourteen red contract tests and five inherited failures."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Whether to authorize a gated Architecture C implementation that still ends in current bind and disclosure checks."
+  ],
+  "does_not_prove": [
+    "Production qualification, human gold labels, equal acceptance gates, or ambiguity competence."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R6-R3. Await external review. Do not begin PR-EH or migrate the production planner.",
+  "primary_report": "artifacts/pr_eg_r6_r3/01_EXECUTIVE_SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6_r3/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/02_REPOSITORY_BASELINE.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/03_HISTORICAL_FAILURE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/04_FAILURE_TAXONOMY.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/05_GRADER_RELIABILITY_AUDIT.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/06_INDEPENDENT_EVALUATION_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/07_TEST_CORPUS_DESIGN.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/08_CORPUS_PARTITIONING_AND_HASHES.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/09_COMMON_EXPERIMENTAL_CONDITIONS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/10_ARCHITECTURE_A_SPECIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/11_ARCHITECTURE_B_SPECIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/12_ARCHITECTURE_C_SPECIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/13_PROTOTYPE_ISOLATION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/14_EXPERIMENTAL_OUTPUT_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/15_PROVIDER_CALL_DISCIPLINE.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/16_CORRECTION_EXPERIMENTS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/17_FOLLOW_UP_EXPERIMENTS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/18_MULTI_ROLE_EXPERIMENTS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/19_AMBIGUITY_EXPERIMENTS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/20_SECURITY_EXPERIMENTS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/21_COST_AND_LATENCY.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/22_GENERALIZATION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/23_PER_CASE_RESULTS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/24_FAILURE_ATTRIBUTION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/25_COMPARISON_MATRIX.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/26_STATISTICAL_LIMITATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/27_REGRESSION_REVIEW.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/28_ARCHITECTURE_DECISION.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/29_IMPLEMENTATION_READINESS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/30_REMAINING_UNKNOWNS.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/31_RECOMMENDED_NEXT_CYCLE.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/32_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/33_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/summary.json",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/freeze.json",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/per_case_results.jsonl",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/grader_reliability_audit.json",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/development_cases.json",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/validation_cases.json",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3/holdout_cases.json",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/corpus.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/architecture_a.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/architecture_b.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/architecture_c.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/common.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/run_eval.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r3_harness.py",
+      "role": "cycle_evidence",
+      "why": "Interpretation-boundary comparison evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ],
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000
+}

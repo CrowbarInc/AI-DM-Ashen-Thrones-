@@ -655,6 +655,7 @@ if(startCampaignBtn){
     startCampaignBusy = true;
     startCampaignBtn.disabled = true;
     const thinking = addMessage('system','System','Preparing opening…');
+    const openingFailure = 'Campaign opening could not be completed. Your campaign has not started, and no gameplay progress was committed. You can try again.';
     try {
       const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST'});
       const data = await res.json();
@@ -662,17 +663,22 @@ if(startCampaignBtn){
         replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));
         return;
       }
-      if(res.status === 409 || data.ok === false){
-        replaceMessage(thinking,'error','System', data.error || 'Could not start campaign.');
-        await reloadAll();
+      if(!res.ok || res.status === 422 || res.status === 409 || data.ok === false){
+        // Loading the persisted log replaces chat nodes, including this error.
+        // Refresh state only so failure feedback remains visible and retryable.
+        replaceMessage(thinking,'error','System', data.status === 'already_started' ? 'Your campaign has already started.' : openingFailure);
+        try { await loadState(); } catch (_refreshError) { /* Keep opening failure visible. */ }
         return;
       }
       if(!data.ok){
-        replaceMessage(thinking,'error','System', data.error || 'Unknown error');
+        replaceMessage(thinking,'error','System', openingFailure);
         return;
       }
       replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);
       await reloadAll();
+    } catch (_error) {
+      replaceMessage(thinking,'error','System', 'The opening request could not be confirmed. Refresh campaign state before trying again.');
+      try { await loadState(); } catch (_refreshError) { /* Keep visible feedback. */ }
     } finally {
       startCampaignBusy = false;
       if(state) updateCampaignBootstrapUI(state);

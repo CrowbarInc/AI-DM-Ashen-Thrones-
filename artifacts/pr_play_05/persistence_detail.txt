@@ -1,0 +1,50 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.0, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm
+configfile: pytest.ini
+plugins: anyio-4.14.2
+collected 15 items / 14 deselected / 1 selected
+
+tests\test_pr_play_05_diagnostics.py F                                   [100%]
+
+================================== FAILURES ===================================
+___ test_production_diagnostic_matrix[D2-missing_structured_envelope-False] ___
+tests\test_pr_play_05_diagnostics.py:116: in test_production_diagnostic_matrix
+    assert after_value==before_value, name
+E   AssertionError: session.json
+E   assert {'persistence...h': 'sha256'}} == {'persistence...h': 'sha256'}}
+E     
+E     Omitting 2 identical items, use -vv to show
+E     Differing items:
+E     {'payload': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 0, ...}} != {'payload': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 0, ...}}
+E     {'integrity': {'payload_sha256': '47943f6621d064cb7771b0ee4170358643023af7656f26aee66e5fb0411857de', 'canonicalization': 'json/sort_keys,separators', 'hash': 'sha256'}} != {'integrity': {'payload_sha256': '81e349a244c4f712e017ab303defee7...
+E     
+E     ...Full output truncated (2 lines hidden), use '-vv' to show
+        accepted   = False
+        after_value = {'persistence_version': 1, 'kind': 'session', 'payload': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['f...b7771b0ee4170358643023af7656f26aee66e5fb0411857de', 'canonicalization': 'json/sort_keys,separators', 'hash': 'sha256'}}
+        before     = {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}
+        before_value = {'persistence_version': 1, 'kind': 'session', 'payload': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['f...2e017ab303defee734db70ea96f81d16bc6429fffb9b9394d', 'canonicalization': 'json/sort_keys,separators', 'hash': 'sha256'}}
+        body       = {'ok': False, 'status': 'opening_failed', 'error': 'The campaign opening could not be generated. No gameplay turn was completed. You may try starting the campaign again.', 'opening_failure_reason': 'malformed_envelope', ...}
+        calls      = [{'keys': ['input', 'max_output_tokens', 'model']}]
+        case       = 'D2'
+        category   = 'missing_structured_envelope'
+        create     = <function test_production_diagnostic_matrix.<locals>.create at 0x00000235B50F0680>
+        diagnostic_world = {'calls': [{'keys': ['input', 'max_output_tokens', 'model']}], 'state': {'text': '{"declared_claims": [], "narration":...', 'raise': False}, 'before': {'campaign_started': False, 'turn_counter': 0, 'time_pressure': 0, 'log_length': 0, ...}}
+        files_after = {'campaign.json': b'{\r\n  "title": "Ashen Thrones",\r\n  "premise": "A grimdark political sandbox where fractured pow..."Shield",\r\n    "kind": "spell_effect",\r\n    "default_effects": {\r\n      "ac_bonus": 4\r\n    }\r\n  }\r\n}', ...}
+        files_before = {'campaign.json': b'{\r\n  "title": "Ashen Thrones",\r\n  "premise": "A grimdark political sandbox where fractured pow..."Shield",\r\n    "kind": "spell_effect",\r\n    "default_effects": {\r\n      "ac_bonus": 4\r\n    }\r\n  }\r\n}', ...}
+        monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000235B50BB170>
+        name       = 'session.json'
+        response   = namespace(output_text='{"ordinary": true}', model='offline-stub', id='synthetic-response', usage=namespace(input_tokens=20, output_tokens=10, total_tokens=30), status='completed')
+        status     = 422
+        storage    = <module 'game.storage' from 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\storage.py'>
+        text       = '{"ordinary": true}'
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started c63a23781c8ed9d8a7d96308
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[NON-SOCIAL RESOLUTION REPAIR] empty output repaired
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_05_diagnostics.py::test_production_diagnostic_matrix[D2-missing_structured_envelope-False]
+====================== 1 failed, 14 deselected in 2.34s =======================

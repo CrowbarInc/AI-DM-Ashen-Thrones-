@@ -1,0 +1,160 @@
+[
+  {
+    "path": "game/conversational_continuity.py",
+    "sha256": "b08b968c59d52cdc351e97209d73176a1c5e3f091f8fe413e2854088e474badd",
+    "matches": [
+      {
+        "line": 238,
+        "text": "from game.unified_semantic_planning import take_staged_plan"
+      },
+      {
+        "line": 242,
+        "text": "from game.unified_semantic_planning import take_staged_plan"
+      },
+      {
+        "line": 246,
+        "text": "from game.unified_semantic_planning import delivered_plan_fields"
+      },
+      {
+        "line": 279,
+        "text": "from game.conversational_referents import commit"
+      },
+      {
+        "line": 620,
+        "text": "from game.unified_semantic_planning import migrated_turn_should_abstain_legacy"
+      }
+    ]
+  },
+  {
+    "path": "game/conversational_orchestration.py",
+    "sha256": "a9022aeb2c96cb2e68a33f4d47024ee1d920e9d138362ddb4611a521093f6c92",
+    "matches": [
+      {
+        "line": 2036,
+        "text": "from game.unified_semantic_planning import planning_decision"
+      }
+    ]
+  },
+  {
+    "path": "game/conversational_referents.py",
+    "sha256": "be78a06d5356163b875056f19c080ace0c852caa31b46538420cc9e15029c37d",
+    "matches": [
+      {
+        "line": 30,
+        "text": "from game.semantic_correspondence import object_schema"
+      },
+      {
+        "line": 142,
+        "text": "from game.semantic_correspondence import normalize"
+      },
+      {
+        "line": 271,
+        "text": "from game.unified_semantic_planning import unified_semantic_planning_enabled"
+      },
+      {
+        "line": 272,
+        "text": "if not unified_semantic_planning_enabled():"
+      }
+    ]
+  },
+  {
+    "path": "game/dialogue_authority.py",
+    "sha256": "f2a8c3f4fca505e9fb845fa643f88dc79ab51a83f098e141f314f3ac57a491cb",
+    "matches": [
+      {
+        "line": 522,
+        "text": "from game.unified_semantic_planning import authority_record_from_plan"
+      }
+    ]
+  },
+  {
+    "path": "game/semantic_operations.py",
+    "sha256": "d66c48f10fb0c3655e3581c6ae3d967218122bfcd62c8ea8513dd2f99dd32002",
+    "matches": [
+      {
+        "line": 14,
+        "text": "from game.semantic_correspondence import object_schema"
+      },
+      {
+        "line": 35,
+        "text": "from game.semantic_correspondence import argument_identity, normalize"
+      },
+      {
+        "line": 51,
+        "text": "from game.semantic_correspondence import normalize"
+      }
+    ]
+  },
+  {
+    "path": "game/social.py",
+    "sha256": "13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a",
+    "matches": [
+      {
+        "line": 4267,
+        "text": "from game.unified_semantic_planning import locked_plan_for_social_turn"
+      }
+    ]
+  },
+  {
+    "path": "game/unified_semantic_planning.py",
+    "sha256": "734d441a3f76813c7824cecbc28b3fe6a682f6cfae314fc098be6d67769a348b",
+    "matches": [
+      {
+        "line": 89,
+        "text": "def unified_semantic_planning_enabled() -> bool:"
+      },
+      {
+        "line": 253,
+        "text": "from game.conversational_referents import active, as_prior"
+      },
+      {
+        "line": 307,
+        "text": "return unified_semantic_planning_enabled() and is_migrated_information_turn("
+      },
+      {
+        "line": 409,
+        "text": "from game.semantic_correspondence import proposition_schema, source_schema, object_schema"
+      },
+      {
+        "line": 410,
+        "text": "from game.conversational_referents import operation_schema"
+      },
+      {
+        "line": 561,
+        "text": "from game.semantic_correspondence import clean_proposition"
+      },
+      {
+        "line": 610,
+        "text": "from game.conversational_referents import clean_operation"
+      },
+      {
+        "line": 616,
+        "text": "from game.semantic_correspondence import clean_proposition, ROLES"
+      },
+      {
+        "line": 788,
+        "text": "from game.conversational_referents import context as referent_context"
+      },
+      {
+        "line": 840,
+        "text": "from game.conversational_referents import bind"
+      },
+      {
+        "line": 908,
+        "text": "from game.semantic_correspondence import witnessed, argument_identity"
+      },
+      {
+        "line": 981,
+        "text": "from game.semantic_correspondence import coverage"
+      },
+      {
+        "line": 1268,
+        "text": "if not unified_semantic_planning_enabled():"
+      },
+      {
+        "line": 1354,
+        "text": "if not unified_semantic_planning_enabled():"
+      }
+    ]
+  }
+]

@@ -1,0 +1,1874 @@
+--- a/tools/playtest/__init__.py
++++ b/tools/playtest/__init__.py
+@@ -0,0 +1 @@
++"""Bounded diagnostic orchestration; gameplay and validation remain game-owned."""
+--- a/tools/playtest/analysis.py
++++ b/tools/playtest/analysis.py
+@@ -0,0 +1,95 @@
++"""Classify observed stages, never infer a semantic cause from token counts."""
++import copy
++
++
++def classify(events, *, infrastructure=None, integrity=None, ui=None):
++    def result(category, stage, field, value, index=None, source=None):
++        return {"category": category, "stage": stage, "evidence_record":
++                "diagnostics/provider_usage.jsonl" if index is not None else "reports/result.json",
++                "record_index": index, "field": field, "observed_value": value,
++                "source": source, "root_cause": "Not established", "inferred": False}
++    if infrastructure:
++        return result(infrastructure, "infrastructure", "failure", infrastructure)
++    if integrity is False:
++        return result("state_integrity_violation", "state", "state_comparison.integrity", False,
++                      source="docs/state_authority_model.md")
++    # Precedence follows earliest evidenced failure; explicit exhaustion beats parsing.
++    checks = [
++        ("provider_admission_rejection", lambda e: e.get("event") == "rejected", "refusal", "admission"),
++        ("provider_exception", lambda e: e.get("classification") == "provider_error", "classification", "provider"),
++        ("provider_output_limit_exhaustion", lambda e: e.get("provider_output_limit_exhausted") is True or
++         (e.get("provider_status") == "incomplete" and e.get("provider_finish_reason") == "max_output_tokens"), "provider_finish_reason", "provider"),
++        ("provider_incomplete_response", lambda e: e.get("provider_status") in {"incomplete", "failed", "cancelled"}, "provider_status", "provider"),
++        ("empty_provider_response", lambda e: e.get("classification") == "empty_provider_content", "classification", "extraction"),
++        ("json_parsing_failure", lambda e: e.get("classification") == "json_parse_failure", "json_parsing_succeeded", "parsing"),
++        ("structured_envelope_failure", lambda e: e.get("classification") in {"missing_structured_envelope", "structured_validation_failure"}, "classification", "structure"),
++        ("semantic_validation_failure", lambda e: e.get("stage") == "opening_outcome" and
++         (e.get("semantic_classification") == "rejected" or bool(e.get("semantic_reasons"))), "semantic_reasons", "semantic"),
++        ("opening_acceptance_failure", lambda e: e.get("stage") == "opening_outcome" and e.get("opening_accepted") is False, "rejection_reason", "acceptance"),
++    ]
++    for category, predicate, field, stage in checks:
++        for i, event in enumerate(events):
++            if predicate(event):
++                return result(category, stage, field, event.get(field), i,
++                              event.get("classification_source") or "game/provider_budget.py")
++    if ui and ui.get("status") == "FAIL":
++        return result("ui_failure", "ui", "ui.status", "FAIL")
++    return result("unknown_failure", "unknown", "failure", "Evidence does not establish a recognized failure stage")
++
++
++def normalized_document(name, value):
++    value = copy.deepcopy(value)
++    bookkeeping = {}
++    if isinstance(value, dict):
++        # Only documented persistence-envelope metadata is excluded.
++        if "payload" in value and "persistence_version" in value:
++            bookkeeping = {k: value[k] for k in ("saved_at", "integrity") if k in value}
++            value = value["payload"]
++        if name == "session.json":
++            for key in ("last_saved_at", "debug_traces", "__turn_start_active_interaction_target_id"):
++                if key in value:
++                    bookkeeping[key] = value.pop(key)
++    return value, bookkeeping
++
++
++def compare(before, after, *, accepted):
++    gameplay, bookkeeping = [], []
++    for name in sorted(set(before) | set(after)):
++        a, ab = normalized_document(name, before.get(name))
++        b, bb = normalized_document(name, after.get(name))
++        # Existing rollback may materialize an empty log.
++        if name == "session_log.jsonl":
++            a, b = a or [], b or []
++        if a != b:
++            gameplay.append(name)
++        if ab != bb:
++            bookkeeping.append(name)
++    a, _ = normalized_document("session.json", before.get("session.json", {}))
++    b, _ = normalized_document("session.json", after.get("session.json", {}))
++    turn_delta = int(b.get("turn_counter") or 0) - int(a.get("turn_counter") or 0)
++    log_delta = len(after.get("session_log.jsonl") or []) - len(before.get("session_log.jsonl") or [])
++    # Success permits only the runtime roots owned by opening orchestration.
++    unexpected = [p for p in gameplay if not accepted or p not in {"session.json", "world.json", "session_log.jsonl"}]
++    field_changes = {}
++    if accepted:
++        allowed_session = {
++            'interpretation_telemetry', 'last_bounded_improvisation_promotion', 'last_turn_response_policy',
++            'emergent_actor_debug', 'last_action_debug', '_runtime_canonical_ctir_v1',
++            '_runtime_narration_plan_bundle_stamp_v1', 'discourse_focus', 'turn_counter', 'chat_history',
++            '_runtime_canonical_ctir_stamp_v1', 'conversational_context', 'campaign_started',
++            'bounded_improvisation', 'clocks', '_runtime_narration_plan_bundle_v1',
++            '_runtime_progression_nodes_fingerprint_v1', 'scene_runtime', 'narration_temporal_provenance',
++        }
++        for name, allowed in [('session.json', allowed_session), ('world.json', {'event_log', 'factions'})]:
++            old, _ = normalized_document(name, before.get(name, {}))
++            new, _ = normalized_document(name, after.get(name, {}))
++            changed = [k for k in sorted(old.keys() | new.keys()) if old.get(k) != new.get(k)]
++            field_changes[name] = changed
++            unexpected.extend(name+':'+k for k in changed if k not in allowed)
++    integrity = not unexpected and (not accepted or (turn_delta == 1 and log_delta == 1 and b.get("campaign_started") is True))
++    return {"gameplay_mutations": gameplay, "bookkeeping_mutations": bookkeeping,
++            "unexpected_mutations": unexpected, "integrity": integrity,
++            "changed_fields": field_changes,
++            "turn_delta": turn_delta, "log_delta": log_delta,
++            "campaign_started": bool(b.get("campaign_started")), "scene_identity": b.get("active_scene_id"),
++            "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"}
+--- a/tools/playtest/browser.py
++++ b/tools/playtest/browser.py
+@@ -0,0 +1,17 @@
++"""Optional rendered-UI adapter. No browser dependency is installed by this tool."""
++from typing import Protocol
++
++
++class BrowserAdapter(Protocol):
++    def campaign_opening(self, base_url: str, screenshot_dir: str, timeout: float) -> dict:
++        """Own New Campaign and a SINGLE Start click; return narration/error and evidence paths.
++
++        An adapter replaces API mutation steps, never repeats them. It must compare
++        rendered outcome to API state and stop/close on timeout. No implementation
++        is registered until repository browser tooling exists.
++        """
++        ...
++
++
++def observation() -> dict:
++    return {"status": "NOT_TESTED", "reason": "No repository browser runner/dependency; API evidence does not establish rendered UI behavior."}
+--- a/tools/playtest/runner.py
++++ b/tools/playtest/runner.py
+@@ -0,0 +1,475 @@
++"""HTTP scenario controller with owned-process cleanup and bounded evidence export."""
++from __future__ import annotations
++
++import argparse
++import hashlib
++import json
++import os
++import shutil
++import socket
++import subprocess
++import sys
++import threading
++import time
++import uuid
++import zipfile
++from datetime import datetime, timezone
++from pathlib import Path
++from urllib.error import HTTPError, URLError
++from urllib.request import Request, ProxyHandler, build_opener
++
++from tools.atgb.isolation import prepare_isolated_store, player_campaign_dir_from_env
++from tools.atgb.driver import repository_revision
++from tools.playtest.analysis import classify, compare
++from tools.playtest.browser import observation
++
++ROOT = Path(__file__).resolve().parents[2]
++OUTPUT = ROOT/'artifacts/atgb/automated_playtests'
++CASES = ('success', 'truncation', 'invalid_json', 'envelope', 'semantic', 'safe_nonresolution',
++         'exception', 'admission', 'empty', 'incomplete')
++CAPS = {'input': 200000, 'output': 20000, 'total': 220000}
++TIMEOUT_CAPS = {'preflight': 30, 'startup': 30, 'request': 90, 'scenario': 180, 'evidence': 30, 'shutdown': 5}
++
++
++def write(path, value):
++    path.write_text(json.dumps(value, indent=2, ensure_ascii=True) + '\n', encoding='utf-8')
++
++
++def load_scenario(name):
++    if name not in {'CampaignOpening', 'ScriptedObservation'}:
++        raise ValueError('Unknown scenario')
++    path = ROOT/'tools/playtest/scenarios'/f'{name}.json'
++    value = json.loads(path.read_text(encoding='utf-8'))
++    validate_scenario(value)
++    return value
++
++
++def validate_scenario(s):
++    required = {'id', 'version', 'description', 'fixture', 'execution_modes', 'actions',
++                'expected_invariants', 'maximum_action_count', 'provider_request_ceiling',
++                'token_budgets', 'timeouts', 'evidence_requirements', 'stop_conditions'}
++    if not required <= s.keys() or s['fixture'] != 'frontier-gate-v1':
++        raise ValueError('Missing scenario contract or unpinned fixture')
++    if not 1 <= len(s['actions']) <= s['maximum_action_count'] <= 10:
++        raise ValueError('Action ceiling invalid')
++    kinds = [a['kind'] for a in s['actions']]
++    if kinds[:3] != ['initialize_campaign', 'capture_baseline', 'start_campaign'] or kinds.count('start_campaign') != 1 or kinds.count('initialize_campaign') != 1:
++        raise ValueError('One New Campaign and one Start Campaign required')
++    allowed = {'initialize_campaign', 'capture_baseline', 'start_campaign', 'capture_final_state',
++               'observe_scene', 'verify_state', 'npc_interaction', 'examine_object', 'rules_action', 'movement'}
++    if any(k not in allowed for k in kinds):
++        raise ValueError('Unknown step')
++    if not 1 <= s['provider_request_ceiling'] <= 6:
++        raise ValueError('Request ceiling exceeds established controlled scope')
++    for k, cap in CAPS.items():
++        if not 0 < s['token_budgets'][k] <= cap:
++            raise ValueError('Scenario cannot increase established aggregate ceilings')
++    for k, cap in TIMEOUT_CAPS.items():
++        if not 0 < s['timeouts'][k] <= cap:
++            raise ValueError('Timeout must be positive and bounded')
++
++
++def child_environment(run, scenario, mode, case, inherited=None):
++    # Configuration file values are read in memory only; never serialized as an environment dump.
++    from dotenv import dotenv_values
++    env = {**{k: v for k, v in dotenv_values(ROOT/'.env').items() if v is not None},
++           **(dict(os.environ) if inherited is None else inherited)}
++    for key in ('ASHEN_PIN_PROVIDER_MODEL',):
++        if env.get(key, '').strip():
++            raise ValueError('Pinned model override is outside this harness scope')
++    for kind, cap in scenario['token_budgets'].items():
++        key = f'ASHEN_PROVIDER_{kind.upper()}_TOKEN_LIMIT'
++        current = int(env.get(key, cap))
++        if current <= 0:
++            raise ValueError('Invalid inherited token ceiling')
++        env[key] = str(min(cap, current))
++    request_limit = int(env.get('ASHEN_PROVIDER_REQUEST_LIMIT', scenario['provider_request_ceiling']))
++    if request_limit <= 0:
++        raise ValueError('Invalid inherited request ceiling')
++    env['ASHEN_PROVIDER_REQUEST_LIMIT'] = str(min(request_limit, scenario['provider_request_ceiling']))
++    if case == 'admission':
++        env['ASHEN_PROVIDER_INPUT_TOKEN_LIMIT'] = '1'
++    env.update(ASHEN_DATA_DIR=str(run/'data'), ASHEN_PROVIDER_USAGE_PATH=str(run/'diagnostics/provider_usage.jsonl'),
++               ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT='1', ASHEN_PLAYTEST_DISABLE_SDK_RETRIES='1',
++               ASHEN_DISABLE_PROVIDER_RETRIES='1', ASHEN_GENERATION_DIAGNOSTICS='1')
++    if mode != 'Live':
++        env['OPENAI_API_KEY'] = 'offline-placeholder'
++    elif env.get('ASHEN_DISABLE_PROVIDER_CALLS', '').lower() in {'1', 'true', 'yes', 'on'}:
++        raise ValueError('Inherited provider disabled flag blocks Live mode')
++    # Synthetic responses traverse admission; the SDK is replaced and external connects are denied.
++    if mode != 'Live':
++        env['ASHEN_DISABLE_PROVIDER_CALLS'] = '0'
++    return env
++
++
++def bounded_log(pipe, path, secrets):
++    size = 0
++    with path.open('w', encoding='utf-8') as dest:
++        while True:
++            chunk = pipe.readline(4096)
++            if not chunk:
++                break
++            text = chunk.decode('utf-8', errors='replace')
++            for secret in secrets:
++                text = text.replace(secret, '[REDACTED]')
++            if size < 262144:
++                dest.write(text[:262144-size])
++                dest.flush()
++                size += len(text)
++    pipe.close()
++
++
++def stop_owned(process, timeout):
++    if process is None:
++        return {'owned': False, 'stopped': True}
++    if process.poll() is None:
++        process.terminate()
++        try:
++            process.wait(timeout=timeout)
++        except subprocess.TimeoutExpired:
++            process.kill()
++            process.wait(timeout=timeout)
++    return {'owned': True, 'pid': process.pid, 'stopped': process.poll() is not None,
++            'exit_code': process.returncode}
++
++
++def request(base, method, path, timeout, body=None):
++    data = json.dumps(body).encode() if body is not None else (b'{}' if method == 'POST' else None)
++    req = Request(base+path, data=data, method=method, headers={'Content-Type': 'application/json'})
++    # Ignore machine HTTP proxies for loopback traffic.
++    try:
++        response = build_opener(ProxyHandler({})).open(req, timeout=timeout)
++    except HTTPError as exc:
++        response = exc
++    with response:
++        content = response.read(2*1024*1024+1)
++        if len(content) > 2*1024*1024:
++            raise ValueError('API evidence exceeds bounded response size')
++        return response.status, json.loads(content)
++
++
++def snapshot(run, label, base, timeout):
++    folder = run/label
++    status, state = request(base, 'GET', '/api/state?ui_mode=debug', timeout)
++    if status != 200:
++        raise ValueError('State capture failed')
++    write(folder/'api_state.json', state)
++    return snapshot_files(run, label)
++
++
++def snapshot_files(run, label):
++    folder = run/label
++    docs = {}
++    for path in (run/'data').rglob('*'):
++        if not path.is_file() or path.name.startswith('.'):
++            continue
++        if path.stat().st_size > 2*1024*1024:
++            raise ValueError('Campaign evidence exceeds file ceiling')
++        rel = path.relative_to(run/'data')
++        target = folder/'persistent'/rel
++        target.parent.mkdir(parents=True, exist_ok=True)
++        shutil.copy2(path, target)
++        if path.suffix == '.json':
++            docs[rel.as_posix()] = json.loads(path.read_text(encoding='utf-8'))
++        elif path.suffix == '.jsonl':
++            docs[rel.as_posix()] = [json.loads(line) for line in path.read_text(encoding='utf-8').splitlines() if line.strip()]
++    write(folder/'documents.json', docs)
++    return docs
++
++
++def export(run, timeout=30):
++    started = time.monotonic()
++    selected = [p for folder in ('configuration', 'baseline', 'after', 'diagnostics', 'reports', 'screenshots')
++                for p in (run/folder).rglob('*') if p.is_file()]
++    total = sum(p.stat().st_size for p in selected)
++    if total > 32*1024*1024:
++        raise ValueError('Evidence exceeds 32 MiB ceiling')
++    manifest = []
++    for p in selected:
++        if time.monotonic()-started > timeout:
++            raise TimeoutError('Evidence collection timeout')
++        manifest.append({'path': p.relative_to(run).as_posix(), 'bytes': p.stat().st_size,
++                         'sha256': hashlib.sha256(p.read_bytes()).hexdigest()})
++    write(run/'evidence/manifest.json', {'files': manifest, 'manifest_self_hash': 'Excluded to avoid recursion'})
++    archive = run/'evidence/evidence.zip'
++    with zipfile.ZipFile(archive, 'x', zipfile.ZIP_DEFLATED) as z:
++        for p in [*selected, run/'evidence/manifest.json']:
++            if time.monotonic()-started > timeout:
++                raise TimeoutError('Evidence compression timeout')
++            z.write(p, p.relative_to(run).as_posix())
++    return archive
++
++
++def summarize(result):
++    return '\n'.join([
++        '# ASHEN THRONES — AUTOMATED PLAYTEST', '',
++        f"Scenario: {result['scenario'].get('id', 'Unavailable')}", f"Mode: {result['mode']}",
++        f"Repository revision: {result['repository'].get('revision')}; dirty={result['repository'].get('worktree_dirty')}",
++        f"Overall: **{result['verdict']}**", f"Provider attempts: {result['provider_usage'].get('dispatched_requests', 'Unavailable')}",
++        f"Usage (input/output/total): {result['provider_usage'].get('input_tokens')}/{result['provider_usage'].get('output_tokens')}/{result['provider_usage'].get('total_tokens')}",
++        f"Opening: {result.get('opening_acceptance')}", f"Structural validation: {result.get('structural_validation')}",
++        f"Provider completion: {result.get('provider_completion')}",
++        f"Semantic validation: {result.get('semantic_validation')}", f"State integrity: {result['state_comparison'].get('integrity', 'Unavailable')}",
++        f"UI: {result['ui']['status']}", f"Primary observed failure: {result.get('failure_classification')}",
++        'Root cause: Not established.', '', 'Evidence: diagnostics/provider_usage.jsonl; baseline/; after/; reports/result.json.',
++        f"Remaining uncertainty: {'; '.join(result['uncertainties'])}",
++        'Recommended investigation: inspect the first evidenced failing stage; external review before any live invocation.',
++        f"Evidence ZIP: {result['evidence_zip']}", ''])
++
++
++def run_playtest(*, scenario='CampaignOpening', mode='Deterministic', authorize_live=False,
++                 case='success', port=0, capture_response=False, output_root=None, startup_timeout=None):
++    root = Path(output_root or OUTPUT).resolve()
++    # Artifacts must never be written inside canonical/player data or pinned sources.
++    player = player_campaign_dir_from_env(ROOT)
++    for protected in ((ROOT/'data').resolve(), player):
++        if root == protected or protected in root.parents or root in protected.parents:
++            raise ValueError('Unsafe artifact root')
++    root.mkdir(parents=True, exist_ok=True)
++    run = root/(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-'+uuid.uuid4().hex[:12])
++    run.mkdir(exist_ok=False)
++    for folder in ('configuration', 'baseline', 'after', 'diagnostics', 'reports', 'evidence', 'screenshots'):
++        (run/folder).mkdir()
++    result = {'schema_version': 1, 'run_id': run.name, 'timestamp': datetime.now(timezone.utc).isoformat(),
++              'mode': mode, 'scenario': {'id': scenario}, 'repository': repository_revision(ROOT),
++              'environment_verification': {}, 'provider_usage': {}, 'state_comparison': {},
++              'structural_validation': None, 'semantic_validation': None, 'opening_acceptance': None,
++              'ui': observation(), 'steps': [], 'uncertainties': [], 'verdict': 'BLOCKED',
++              'evidence_zip': str(run/'evidence/evidence.zip')}
++    process, logger, s, env = None, None, None, None
++    infrastructure = None
++    before, after = None, None
++    base = None
++    started = time.monotonic()
++    try:
++        s = load_scenario(scenario)
++        result['scenario'] = s
++        if mode not in s['execution_modes'] or case not in CASES:
++            raise ValueError('Unsupported mode or synthetic fixture')
++        if mode == 'Live' and (not authorize_live or scenario != 'CampaignOpening' or case != 'success'):
++            raise PermissionError('Live requires invocation authorization and opening-only scenario')
++        if not 0 <= port <= 65535:
++            raise ValueError('Invalid port')
++        env = child_environment(run, s, mode, case)
++        if mode == 'Live' and not env.get('OPENAI_API_KEY', '').strip():
++            raise ValueError('Live credentials unavailable')
++        env['ASHEN_OPENING_RESPONSE_CAPTURE'] = '1' if capture_response else '0'
++        for dependency in ('fastapi', 'uvicorn', 'openai', 'httpx'):
++            __import__(dependency)
++        prepare_isolated_store(run/'data', scenario_id=s['id'], repo=ROOT, player_campaign_dir=player)
++        write(run/'configuration/scenario.json', s)
++        cfg = {'scenario_id': s['id'], 'mode': mode, 'fixture_response': case, 'port': port,
++               'player_data': str(player), 'capture_response': capture_response}
++        write(run/'configuration/run.json', cfg)
++        result['environment_verification'] = {'repository_root': str(ROOT), 'python': sys.executable,
++            'python_version': sys.version.split()[0], 'fixture_hash_verified': True,
++            'provider_request_ceiling': int(env['ASHEN_PROVIDER_REQUEST_LIMIT']),
++            'token_allowances': {k: int(env[f'ASHEN_PROVIDER_{k.upper()}_TOKEN_LIMIT']) for k in CAPS},
++            'live_authorization': authorize_live and mode == 'Live', 'retry_configuration': 'SDK=0, host=0',
++            'response_capture_opt_in': capture_response}
++        if time.monotonic()-started > s['timeouts']['preflight']:
++            raise TimeoutError('Preflight deadline')
++        infrastructure = 'application_startup_failure'
++        # Windows venv python.exe may redirect to another PID. Launch the real
++        # interpreter and retain this environment's packages so the PID we own
++        # is the process holding the listening socket.
++        executable = getattr(sys, '_base_executable', sys.executable)
++        env['PYTHONPATH'] = os.pathsep.join(dict.fromkeys([str(ROOT), *[p for p in sys.path if p and 'site-packages' in p], env.get('PYTHONPATH', '')]))
++        process = subprocess.Popen([executable, '-u', '-m', 'tools.playtest.worker', str(run)],
++            cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
++            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
++        secrets = [v for k, v in env.items() if v and len(v)>6 and any(part in k.lower() for part in ('key', 'secret', 'password', 'credential', 'token'))]
++        logger = threading.Thread(target=bounded_log, args=(process.stdout, run/'diagnostics/application.log', secrets), daemon=True)
++        logger.start()
++        deadline = time.monotonic()+min(startup_timeout or s['timeouts']['startup'], s['timeouts']['startup'])
++        ready = None
++        while time.monotonic() < deadline:
++            if process.poll() is not None:
++                raise RuntimeError('Owned server exited during startup')
++            path = run/'diagnostics/ready.json'
++            if path.exists():
++                ready = json.loads(path.read_text(encoding='utf-8'))
++                if ready['pid'] != process.pid or Path(ready['data_dir']).resolve() != run/'data' or not ready['isolation_verified']:
++                    raise RuntimeError('Isolation attestation mismatch')
++                base = f"http://127.0.0.1:{ready['port']}"
++                try:
++                    if request(base, 'GET', '/api/state', min(1, max(.01, deadline-time.monotonic())))[0] == 200:
++                        break
++                except (OSError, URLError, ValueError):
++                    pass
++            time.sleep(.05)
++        else:
++            raise TimeoutError('Application startup deadline')
++        result['environment_verification']['application'] = ready
++        if not ready['diagnostics_enabled'] or ready['sdk_retries'] or ready['host_retries']:
++            raise RuntimeError('Worker safety attestation invalid')
++        infrastructure = None
++        scenario_deadline = time.monotonic()+s['timeouts']['scenario']
++        for action in s['actions']:
++            kind = action['kind']
++            timeout = min(s['timeouts']['request'], scenario_deadline-time.monotonic())
++            if timeout <= 0:
++                infrastructure = 'api_transport_failure'
++                raise TimeoutError('Scenario deadline')
++            row = {'action': kind, 'ok': False}
++            result['steps'].append(row)
++            try:
++                if kind in {'capture_baseline', 'capture_final_state'}:
++                    docs = snapshot(run, 'baseline' if kind == 'capture_baseline' else 'after', base, timeout)
++                    if kind == 'capture_baseline':
++                        before = docs
++                    else:
++                        after = docs
++                    row['ok'] = True
++                elif kind in {'observe_scene', 'verify_state'}:
++                    status, body = request(base, 'GET', '/api/state', timeout)
++                    row.update(http_status=status, response=body)
++                    row['ok'] = status == 200
++                    if kind == 'verify_state':
++                        public = body.get('public_state', body)
++                        row['ok'] = row['ok'] and all(public.get('ui', {}).get(k) == v for k, v in action.get('expect', {}).items())
++                else:
++                    endpoint, payload = {
++                        'initialize_campaign': ('/api/new_campaign', None),
++                        'start_campaign': ('/api/start_campaign', None),
++                        'npc_interaction': ('/api/chat', action.get('request')),
++                        'examine_object': ('/api/chat', action.get('request')),
++                        'rules_action': ('/api/action', action.get('request')),
++                        'movement': ('/api/action', action.get('request')),
++                    }[kind]
++                    status, body = request(base, 'POST', endpoint, timeout, payload)
++                    row.update(http_status=status, response=body)
++                    row['ok'] = status == 200 and body.get('ok', body.get('status') == 'ok') is True
++                    if kind == 'start_campaign':
++                        row['narration_present'] = bool((body.get('gm_output') or {}).get('player_facing_text'))
++                if not row['ok']:
++                    break
++            except (OSError, URLError, ValueError):
++                infrastructure = 'api_transport_failure'
++                row['ok'] = False
++                raise
++        # Capture after a failed opening too; never submit a second opening.
++        if before is not None and after is None:
++            after = snapshot(run, 'after', base, min(10, s['timeouts']['request']))
++    except KeyboardInterrupt:
++        infrastructure = 'interrupted_execution'
++        result['verdict'] = 'INCONCLUSIVE'
++    except Exception as exc:
++        if infrastructure is None:
++            infrastructure = 'environment_preflight_failure'
++        result['failure'] = {'type': type(exc).__name__, 'stage': infrastructure}
++        # Never write exception strings, which may contain sensitive external data.
++    finally:
++        result['process_cleanup'] = stop_owned(process, s['timeouts']['shutdown'] if s else 5)
++        if logger:
++            logger.join(timeout=5)
++        if before is not None and after is None:
++            try:
++                after = snapshot_files(run, 'after')
++                result['uncertainties'].append('Final API capture unavailable; persistent state collected after owned-process shutdown')
++            except (OSError, ValueError):
++                result['uncertainties'].append('Final persistent snapshot unavailable')
++        events = []
++        ledger = run/'diagnostics/provider_usage.jsonl'
++        if ledger.exists():
++            try:
++                events = [json.loads(line) for line in ledger.read_text(encoding='utf-8').splitlines()]
++            except ValueError:
++                result['uncertainties'].append('Provider journal incomplete or malformed')
++        snap_path = run/'diagnostics/budget_snapshot.json'
++        usage = json.loads(snap_path.read_text(encoding='utf-8')) if snap_path.exists() else {}
++        result['provider_usage'] = usage
++        if ledger.exists() and usage:
++            from tools.atgb.accounting import inspect_ledger
++            result['accounting_reconciliation'] = inspect_ledger(ledger, usage)
++        allowances = result['environment_verification'].get('token_allowances', {})
++        usage['allowances'] = allowances
++        usage['remaining_budget'] = {k: allowances[k]-usage[k+'_tokens'] if usage.get(k+'_tokens') is not None else None for k in allowances}
++        usage['budget_rejections'] = [e for e in events if e.get('event') == 'rejected']
++        result['correlation'] = {'harness_run_id': run.name, 'scenario_id': scenario,
++            'provider_run_ids': sorted({e['run_id'] for e in events if e.get('run_id')}),
++            'opening_attempt_ids': sorted({e['opening_attempt_id'] for e in events if e.get('opening_attempt_id')}),
++            'provider_attempt_ids': sorted({e['attempt_id'] for e in events if e.get('attempt_id')}),
++            'limitation': 'Missing native identifiers remain unavailable; harness run ID maps to isolated journal, not fabricated provider IDs.'}
++        providers = [e for e in events if e.get('stage') == 'provider_response']
++        outcomes = [e for e in events if e.get('stage') == 'opening_outcome']
++        outcome = outcomes[-1] if outcomes else {}
++        accepted = outcome.get('opening_accepted') is True
++        result['structural_validation'] = providers[-1].get('structured_validation_result') if providers else None
++        result['provider_completion'] = {k: providers[-1].get(k) for k in
++            ('provider_status', 'provider_finish_reason', 'provider_output_limit_exhausted', 'classification')} if providers else None
++        result['semantic_validation'] = outcome.get('semantic_classification')
++        result['opening_acceptance'] = outcome.get('opening_accepted')
++        if before is not None and after is not None:
++            start_rows = [r for r in result['steps'] if r['action'] == 'start_campaign']
++            api_accepted = bool(start_rows and start_rows[0].get('response', {}).get('ok') is True and
++                                start_rows[0].get('response', {}).get('session', {}).get('campaign_started') is True)
++            result['state_comparison'] = compare(before, after, accepted=accepted if outcomes else api_accepted)
++        result['provider_response_evidence'] = ['diagnostics/'+p.name for p in (run/'opening_response_evidence').glob('*.json')]
++        for p in (run/'opening_response_evidence').glob('*.json'):
++            shutil.copy2(p, run/'diagnostics'/p.name)
++        if not result['provider_response_evidence']:
++            result['uncertainties'].append('Bounded provider response unavailable (disabled, capture failed, or response unparsed)')
++        if not providers or not outcomes:
++            result['uncertainties'].append('Required provider/acceptance diagnostic artifact unavailable')
++        commits = sum(e.get('gameplay_committed') is True for e in outcomes)
++        result['opening_commits_observed'] = commits
++        result['provider_exposure'] = {'live_calls': 0 if mode != 'Live' or process is None else usage.get('dispatched_requests'),
++                                       'transport': 'production' if mode == 'Live' else 'synthetic_sdk_with_external_socket_denial'}
++        integrity = result['state_comparison'].get('integrity')
++        if infrastructure:
++            result['verdict'] = 'BLOCKED' if infrastructure in {'environment_preflight_failure', 'application_startup_failure'} else 'INCONCLUSIVE'
++        elif integrity is False or not accepted or any(not step['ok'] for step in result['steps']):
++            result['verdict'] = 'FAIL' if outcomes or integrity is False else 'INCONCLUSIVE'
++        elif not providers or not outcomes or not usage or result.get('accounting_reconciliation', {}).get('status') != 'recorded':
++            result['verdict'] = 'INCONCLUSIVE'
++        else:
++            invariants = s['expected_invariants']
++            checks = {'campaign_started': result['state_comparison'].get('campaign_started'),
++                      'opening_commits': commits, 'turn_delta': result['state_comparison'].get('turn_delta'),
++                      'log_delta': result['state_comparison'].get('log_delta')}
++            result['invariants'] = {k: {'expected': v, 'actual': checks.get(k), 'pass': checks.get(k) == v} for k, v in invariants.items()}
++            result['verdict'] = 'PASS' if all(v['pass'] for v in result['invariants'].values()) else 'FAIL'
++        result['failure_classification'] = None if result['verdict'] == 'PASS' else classify(events, infrastructure=infrastructure, integrity=integrity)
++        result['uncertainties'].append('Rendered UI, live adequacy, and gameplay quality not established by deterministic API execution')
++        result['elapsed_seconds'] = round(time.monotonic()-started, 3)
++        write(run/'reports/result.json', result)
++        (run/'reports/SUMMARY.md').write_text(summarize(result), encoding='utf-8')
++        write(run/'diagnostics/execution_log.json', {'steps': [{'action': r['action'], 'ok': r['ok'], 'http_status': r.get('http_status')} for r in result['steps']], 'cleanup': result['process_cleanup']})
++        try:
++            export(run, s['timeouts']['evidence'] if s else 30)
++        except (OSError, ValueError, TimeoutError) as exc:
++            result['verdict'] = 'INCONCLUSIVE'
++            result['uncertainties'].append('Evidence export failed: '+type(exc).__name__)
++            write(run/'reports/result.json', result)
++            (run/'reports/SUMMARY.md').write_text(summarize(result), encoding='utf-8')
++    return run, result
++
++
++def main(argv=None):
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--scenario', choices=['CampaignOpening', 'ScriptedObservation'], default='CampaignOpening')
++    parser.add_argument('--mode', choices=['Deterministic', 'Live', 'ScriptedGameplay'], default='Deterministic')
++    parser.add_argument('--authorize-live-provider', action='store_true')
++    parser.add_argument('--fixture-response', choices=CASES, default='success')
++    parser.add_argument('--port', type=int, default=0)
++    parser.add_argument('--capture-response', action='store_true')
++    parser.add_argument('--latest', action='store_true')
++    args = parser.parse_args(argv)
++    if args.latest:
++        paths = sorted(OUTPUT.glob('*/reports/result.json'), key=lambda p: p.stat().st_mtime)
++        if not paths:
++            print('No playtest results available')
++            return 2
++        p = paths[-1]
++        result = json.loads(p.read_text(encoding='utf-8'))
++        print(result['verdict'], p.parent/'SUMMARY.md', result['evidence_zip'], sep='\n')
++        return 0
++    run, result = run_playtest(scenario=args.scenario, mode=args.mode, authorize_live=args.authorize_live_provider,
++        case=args.fixture_response, port=args.port, capture_response=args.capture_response)
++    print(result['verdict'], run/'reports/SUMMARY.md', result['evidence_zip'], sep='\n')
++    return 0 if result['verdict'] == 'PASS' else 2
++
++
++if __name__ == '__main__':
++    raise SystemExit(main())
+--- a/tools/playtest/scenarios/CampaignOpening.json
++++ b/tools/playtest/scenarios/CampaignOpening.json
+@@ -0,0 +1,13 @@
++{
++  "id": "CampaignOpening", "version": 1,
++  "description": "One structured opening through production HTTP and acceptance owners",
++  "fixture": "frontier-gate-v1", "execution_modes": ["Deterministic", "Live", "ScriptedGameplay"],
++  "actions": [{"kind": "initialize_campaign"}, {"kind": "capture_baseline"}, {"kind": "start_campaign"}, {"kind": "capture_final_state"}],
++  "expected_invariants": {"campaign_started": true, "opening_commits": 1, "turn_delta": 1, "log_delta": 1},
++  "maximum_action_count": 4,
++  "provider_request_ceiling": 1,
++  "token_budgets": {"input": 200000, "output": 20000, "total": 220000},
++  "timeouts": {"preflight": 30, "startup": 30, "request": 90, "scenario": 180, "evidence": 30, "shutdown": 5},
++  "evidence_requirements": ["provider_usage.jsonl", "baseline", "after", "result.json", "SUMMARY.md"],
++  "stop_conditions": ["first_failed_step", "budget_exhaustion", "timeout", "interruption"]
++}
+--- a/tools/playtest/scenarios/ScriptedObservation.json
++++ b/tools/playtest/scenarios/ScriptedObservation.json
+@@ -0,0 +1,12 @@
++{
++  "id": "ScriptedObservation", "version": 1,
++  "description": "Deterministic opening, scene observation, and explicit state verification",
++  "fixture": "frontier-gate-v1", "execution_modes": ["ScriptedGameplay", "Deterministic"],
++  "actions": [{"kind": "initialize_campaign"}, {"kind": "capture_baseline"}, {"kind": "start_campaign"}, {"kind": "observe_scene"}, {"kind": "verify_state", "expect": {"campaign_started": true}}, {"kind": "capture_final_state"}],
++  "expected_invariants": {"campaign_started": true, "opening_commits": 1, "turn_delta": 1, "log_delta": 1},
++  "maximum_action_count": 6, "provider_request_ceiling": 1,
++  "token_budgets": {"input": 200000, "output": 20000, "total": 220000},
++  "timeouts": {"preflight": 30, "startup": 30, "request": 90, "scenario": 180, "evidence": 30, "shutdown": 5},
++  "evidence_requirements": ["provider_usage.jsonl", "baseline", "after", "result.json", "SUMMARY.md"],
++  "stop_conditions": ["first_failed_step", "budget_exhaustion", "timeout", "interruption"]
++}
+--- a/tools/playtest/worker.py
++++ b/tools/playtest/worker.py
+@@ -0,0 +1,137 @@
++"""Owned server process. Imported only after the controller prepares isolation."""
++from __future__ import annotations
++
++import json
++import os
++import socket
++import sys
++from pathlib import Path
++from types import SimpleNamespace as NS
++
++
++def write(path, value):
++    temp = path.with_suffix('.tmp')
++    temp.write_text(json.dumps(value, indent=2), encoding='utf-8')
++    temp.replace(path)
++
++
++NARRATION = (
++    "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang "
++    "above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; "
++    "guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and "
++    "paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. "
++    "You can read the notice board, approach the tavern runner, or watch the crowd."
++)
++
++
++def install_transport(case):
++    import openai
++    real_connect = socket.socket.connect
++    real_connect_ex = socket.socket.connect_ex
++
++    def local_only(self, address):
++        if not isinstance(address, tuple) or address[0] not in {'127.0.0.1', '::1', 'localhost'}:
++            raise RuntimeError('Deterministic external network access refused')
++        return real_connect(self, address)
++
++    def local_ex(self, address):
++        if not isinstance(address, tuple) or address[0] not in {'127.0.0.1', '::1', 'localhost'}:
++            raise RuntimeError('Deterministic external network access refused')
++        return real_connect_ex(self, address)
++
++    socket.socket.connect = local_only
++    socket.socket.connect_ex = local_ex
++    text = json.dumps({'declared_claims': [], 'narration': NARRATION})
++    text = {
++        'invalid_json': '{broken', 'envelope': '{"ordinary": true}', 'empty': '',
++        'safe_nonresolution': json.dumps({'declared_claims': [], 'narration': 'No one here can answer that from what is settled here.'}),
++        'semantic': json.dumps({'declared_claims': [], 'narration': NARRATION + ' The guards give you a brass key and you gain 100 gold.'}),
++        'truncation': '{"declared_claims": [], "narration": "You stand',
++    }.get(case, text)
++
++    def create(**kwargs):
++        if case == 'exception':
++            raise RuntimeError('Synthetic provider exception')
++        value = NS(output_text=text, id='synthetic-response', model=kwargs['model'],
++                   status='completed', usage=NS(input_tokens=20, output_tokens=10, total_tokens=30))
++        if case == 'truncation':
++            value.status = 'incomplete'
++            value.incomplete_details = NS(reason='max_output_tokens')
++        if case == 'incomplete':
++            value.status = 'incomplete'
++            value.incomplete_details = NS(reason='synthetic_incomplete')
++        return value
++
++    def constructor(**kwargs):
++        if kwargs.get('max_retries') != 0:
++            raise RuntimeError('SDK retry guard missing')
++        return NS(responses=NS(create=create))
++
++    openai.OpenAI = constructor
++    def forbidden(*args, **kwargs):
++        raise RuntimeError('Async provider not supported in deterministic playtest')
++    openai.AsyncOpenAI = forbidden
++
++
++def main():
++    run = Path(sys.argv[1]).resolve()
++    cfg = json.loads((run/'configuration/run.json').read_text(encoding='utf-8'))
++    diagnostics = run/'diagnostics'
++    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
++    # Bind before readiness; an occupied port is never reused or terminated.
++    sock.bind(('127.0.0.1', cfg['port']))
++    sock.listen(128)
++    from game import storage as st
++    from tools.atgb.isolation import assert_imported_data_dir
++    assert_imported_data_dir(st.DATA_DIR, run/'data', player_campaign_dir=Path(cfg['player_data']))
++    if cfg['mode'] != 'Live':
++        os.environ['OPENAI_API_KEY'] = 'offline-placeholder'
++        install_transport(cfg['fixture_response'])
++    from game import api, gm, provider_budget as budget
++    from game.config import get_openai_api_key, DEFAULT_MODEL_NAME
++    if cfg['mode'] == 'Live':
++        # Existence check only. Never dispatch connectivity probes.
++        if not get_openai_api_key().strip() or budget.provider_calls_disabled():
++            raise RuntimeError('Live credentials or provider enablement missing')
++    if budget.sdk_retry_options() != {'max_retries': 0} or not budget.provider_retries_disabled():
++        raise RuntimeError('Retry suppression missing')
++    budget.initialize_accounting()
++    # A fresh cache + explicit skipped startup leaves the ordinary gate unblocked.
++    # Refuse any unexpected direct probe instead of silently spending an admission.
++    def no_probe(*args, **kwargs):
++        raise RuntimeError('Connectivity diagnostics forbidden by harness')
++    api.run_upstream_api_preflight = no_probe
++    import game.api_upstream_preflight as preflight
++    preflight.run_upstream_api_preflight = no_probe
++    if api._compute_upstream_gate_for_live_gameplay()[0].get('manual_testing_blocked'):
++        raise RuntimeError('Existing upstream gate blocked this run')
++    write(diagnostics/'ready.json', {'pid': os.getpid(), 'port': sock.getsockname()[1],
++          'data_dir': str(st.DATA_DIR), 'isolation_verified': True,
++          'model': DEFAULT_MODEL_NAME, 'opening_output_allowance': gm._opening_max_output_tokens(),
++          'limits': budget.limits(), 'sdk_retries': 0, 'host_retries': 0,
++          'diagnostics_enabled': budget.generation_diagnostics_enabled(),
++          'credentials_present': cfg['mode'] == 'Live', 'connectivity_diagnostics': False})
++
++    async def application(scope, receive, send):
++        try:
++            await api.app(scope, receive, send)
++        finally:
++            if scope['type'] == 'http':
++                write(diagnostics/'budget_snapshot.json', budget.snapshot())
++
++    import uvicorn
++    try:
++        uvicorn.Server(uvicorn.Config(application, log_level='info', access_log=False)).run(sockets=[sock])
++    finally:
++        write(diagnostics/'budget_snapshot.json', budget.snapshot())
++        sock.close()
++
++
++if __name__ == '__main__':
++    try:
++        main()
++    except Exception as exc:
++        # Exception messages can contain provider/private text. Record the type only.
++        run = Path(sys.argv[1])
++        write(run/'diagnostics/worker_failure.json', {'type': type(exc).__name__, 'stage': 'worker_bootstrap'})
++        raise SystemExit(2)
+--- a/scripts/run_live_playtest.ps1
++++ b/scripts/run_live_playtest.ps1
+@@ -0,0 +1,40 @@
++[CmdletBinding()]
++param(
++    [ValidateSet('CampaignOpening','ScriptedObservation')][string]$Scenario = 'CampaignOpening',
++    [ValidateSet('Deterministic','Live','ScriptedGameplay')][string]$Mode = 'Deterministic',
++    [switch]$AuthorizeLiveProvider,
++    [switch]$CaptureResponse,
++    [switch]$Latest,
++    [ValidateRange(0,65535)][int]$Port = 0,
++    [ValidateSet('success','truncation','invalid_json','envelope','semantic','safe_nonresolution','exception','admission','empty','incomplete')][string]$FixtureResponse = 'success',
++    [string]$PythonExecutable
++)
++$ErrorActionPreference = 'Stop'
++$repo = Split-Path -Parent $PSScriptRoot
++$previousPath = $env:PYTHONPATH
++try {
++    if (-not $PythonExecutable) {
++        $localPython = Join-Path $repo '.venv/Scripts/python.exe'
++        if (Test-Path -LiteralPath $localPython) {
++            & $localPython --version 2>$null | Out-Null
++            if ($LASTEXITCODE -eq 0) { $PythonExecutable = $localPython }
++        }
++        if (-not $PythonExecutable) {
++            $bundledPython = Join-Path $env:USERPROFILE '.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
++            if (Test-Path -LiteralPath $bundledPython) {
++                $PythonExecutable = $bundledPython
++                $env:PYTHONPATH = (Join-Path $repo '.venv/Lib/site-packages') + [IO.Path]::PathSeparator + $previousPath
++            } else { throw 'Python environment unavailable. Install requirements.txt in .venv or pass -PythonExecutable.' }
++        }
++    }
++    $env:PYTHONPATH = $repo + [IO.Path]::PathSeparator + $env:PYTHONPATH
++    $arguments = @('-m','tools.playtest.runner','--scenario',$Scenario,'--mode',$Mode,'--port',"$Port",'--fixture-response',$FixtureResponse)
++    if ($AuthorizeLiveProvider) { $arguments += '--authorize-live-provider' }
++    if ($CaptureResponse) { $arguments += '--capture-response' }
++    if ($Latest) { $arguments += '--latest' }
++    & $PythonExecutable @arguments
++    $playtestExit = $LASTEXITCODE
++} finally {
++    $env:PYTHONPATH = $previousPath
++}
++exit $playtestExit
+--- a/tools/validate_pr_play_08.py
++++ b/tools/validate_pr_play_08.py
+@@ -0,0 +1,81 @@
++"""Bounded deterministic regression, composing established PR-PLAY selections.
++
++Runs real owned interpreter PIDs (no Windows venv redirector), restores prior
++fixed evidence sinks, and records command/exit/timeout for every selected lane.
++"""
++from pathlib import Path
++import hashlib
++import json
++import os
++import subprocess
++import sys
++import time
++
++from tools.validate_pr_play_06 import GROUPS
++from tools.playtest.runner import stop_owned
++
++ROOT = Path(__file__).resolve().parents[1]
++OUT = ROOT/'artifacts/pr_play_08'
++LANES = {
++    'harness': ['test_automated_playtest', 'test_validation_coverage_registry'],
++    'provider': GROUPS['provider'],
++    'diagnostics': ['test_pr_play_04_opening_integrity', 'test_pr_play_05_diagnostics', 'test_pr_play_06_opening_budget', 'test_pr_play_07_semantic_acceptance'],
++    'structured': GROUPS['structured'],
++    'opening': GROUPS['opening'],
++    'world': GROUPS['world'],
++    'export_atgb': ['test_review_handoff', 'test_atgb_infrastructure', 'test_atgb_accounting', 'test_atgb_readiness'],
++}
++
++
++def protected_hashes():
++    return {p.relative_to(ROOT).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
++            for name in ('data', 'experiments', 'game', 'static') for p in (ROOT/name).rglob('*')
++            if p.is_file() and '__pycache__' not in p.parts}
++
++
++def main():
++    OUT.mkdir(parents=True, exist_ok=True)
++    temp = ROOT/'development/tmp/pr_play_08'
++    temp.mkdir(parents=True, exist_ok=True)
++    before = protected_hashes()
++    write = lambda path, data: path.write_text(json.dumps(data, indent=2), encoding='utf-8')
++    write(OUT/'protected_before.json', before)
++    # Historical tests write fixed diagnostic sinks. Restore their existing bytes.
++    backup = {p: p.read_bytes() for name in ('pr_play_04', 'pr_play_05', 'pr_play_06', 'pr_play_07')
++              for p in (ROOT/'artifacts'/name).rglob('*') if p.is_file()}
++    results = json.loads((OUT/'regression_runs.json').read_text(encoding='utf-8')) if (OUT/'regression_runs.json').exists() else {}
++    env = dict(os.environ, PR_PLAY_DIAGNOSTIC_OUT=str(OUT/'regression_diagnostics'))
++    env['PYTHONPATH'] = os.pathsep.join([str(ROOT), *[p for p in sys.path if 'site-packages' in p]])
++    try:
++        for lane in sys.argv[1:] or LANES:
++            command = [getattr(sys, '_base_executable', sys.executable), '-u', '-m', 'pytest',
++                       *['tests/'+n+'.py' for n in LANES[lane]], '--tb=short',
++                       '--basetemp='+str(temp/(lane+'_'+str(time.time_ns()))),
++                       '--junitxml='+str(OUT/(lane+'_regression.xml'))]
++            started = time.monotonic()
++            with (OUT/(lane+'_regression.txt')).open('w', encoding='utf-8') as log:
++                proc = subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT,
++                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
++                timeout = False
++                try:
++                    code = proc.wait(timeout=120)
++                except subprocess.TimeoutExpired:
++                    timeout = True
++                    stop_owned(proc, 5)
++                    code = None
++            results[lane] = {'command': command, 'exit': code, 'timeout': timeout,
++                             'seconds': round(time.monotonic()-started, 3)}
++            write(OUT/'regression_runs.json', results)
++            print(lane, code, 'timeout='+str(timeout), flush=True)
++    finally:
++        for p, content in backup.items():
++            if not p.exists() or p.read_bytes() != content:
++                p.write_bytes(content)
++        after = protected_hashes()
++        write(OUT/'protected_integrity.json', {'files': len(before), 'unchanged': before == after,
++              'changed': [k for k in before if before[k] != after.get(k)],
++              'added': sorted(set(after)-set(before)), 'after': after})
++
++
++if __name__ == '__main__':
++    main()
+--- a/tools/report_pr_play_08.py
++++ b/tools/report_pr_play_08.py
+@@ -0,0 +1,507 @@
++"""Generate the PR-PLAY-08 offline review using the established handoff exporter."""
++from __future__ import annotations
++
++import difflib
++import hashlib
++import io
++import json
++import shutil
++import subprocess
++import sys
++import zipfile
++import xml.etree.ElementTree as ET
++from datetime import datetime, timedelta, timezone
++from pathlib import Path
++
++from tools.build_review_handoff import build_handoff
++from tools.playtest.runner import OUTPUT, ROOT, summarize
++
++O = ROOT/'artifacts/pr_play_08'
++R = ROOT/'development/campaigns/product_realization/pr_play_08'
++
++
++def write(path, value):
++    path.write_text(json.dumps(value, indent=2, ensure_ascii=True)+'\n', encoding='utf-8')
++
++
++def report(name, title, content):
++    (R/name).write_text('# '+title+'\n\nPR-PLAY-08 · 2026-10-29 America/New_York. Offline development tooling only.\n\n'+content.strip()+'\n', encoding='utf-8')
++
++
++def main():
++    O.mkdir(parents=True, exist_ok=True)
++    R.mkdir(parents=True, exist_ok=True)
++    results = {}
++    for p in sorted(O.glob('*_regression.xml')):
++        suite = next(ET.parse(p).getroot().iter('testsuite'))
++        counts = {k: int(suite.get(k, '0')) for k in ('tests', 'failures', 'errors', 'skipped')}
++        counts['passed'] = counts['tests']-counts['failures']-counts['errors']-counts['skipped']
++        counts['seconds'] = suite.get('time')
++        counts['failures_observed'] = [c.get('classname')+'::'+c.get('name') for c in suite if c.find('failure') is not None]
++        results[p.stem.removesuffix('_regression')] = counts
++    assert results['harness']['failures'] == results['harness']['errors'] == 0
++    passed = sum(v['passed'] for v in results.values())
++    failed = sum(v['failures'] for v in results.values())
++    write(O/'test_summary.json', results)
++    matrix = json.loads((O/'matrix_runs.json').read_text(encoding='utf-8'))
++    success = Path(matrix['success']['run'])
++    assert matrix['success']['result']['verdict'] == 'PASS'
++    integrity = json.loads((O/'protected_integrity.json').read_text(encoding='utf-8'))
++    assert integrity['unchanged']
++
++    # Explicit inventory; no traversal of historical campaigns or private saves.
++    inventory = [
++        ('Campaign isolation', 'tools/atgb/isolation.py; game/storage.py', 'Yes', 'Compose fresh-store marker, path guard and imported DATA_DIR attestation'),
++        ('Baseline fixture', 'tools/atgb/baseline.py; data/validation/atgb/baselines/frontier-gate-v1', 'Yes', 'Pinned manifest/copy verification reused unchanged'),
++        ('API contracts', 'game/api.py; tests/helpers/turn_pipeline_http_fixtures.py', 'Yes', 'HTTP controller automates New/State/Start/State; no direct gameplay bypass'),
++        ('Provider stubbing', 'tests/test_pr_play_04_opening_integrity.py; tests/test_pr_play_05_diagnostics.py', 'Pattern', 'Standalone worker applies equivalent SDK-only fixtures without importing pytest or test modules'),
++        ('Provider admission', 'game/provider_budget.py', 'Yes', 'One-request ceiling composed; no second provider client'),
++        ('Usage accounting', 'game/provider_budget.py; tools/atgb/accounting.py', 'Yes', 'Reuse native snapshot and durable-ledger reconciliation'),
++        ('Generation diagnostics', 'game/gm.py; game/provider_budget.py', 'Yes', 'Observe existing parser/provider/outcome stages'),
++        ('Semantic provenance', 'game/provider_budget.py; game/immutable_valid_response.py', 'Yes', 'Native reasons/sources correlated without rerunning validators'),
++        ('Bounded response capture', 'game/provider_budget.py capture_opening_response', 'Yes', 'Opt-in controlled isolated capture copied into selected evidence'),
++        ('State snapshots', 'game/storage.py; tools/atgb/chat_worker.py', 'Pattern', 'API projection plus copied persistent files; no new runtime save schema'),
++        ('State comparison', 'tests/test_pr_play_05_diagnostics.py; docs/state_authority_model.md', 'Pattern', 'Conservative diagnostic comparator for opening commit/rollback and explicit bookkeeping'),
++        ('Reporting', 'tools/atgb/results.py; tools/validation_evidence.py; tools/build_review_handoff.py', 'Yes', 'Diagnostic result/summary compose evidence; existing exporter produces central review'),
++        ('Evidence export', 'tools/build_review_handoff.py; tools/report_pr_play_07.py', 'Yes', 'Selected-file manifest/ZIP added per run; exporter reused for review'),
++        ('Browser testing', 'requirements.txt; tests/README_TESTS.md; existing Node handler tests', 'Partial', 'No registered browser automation or Playwright/Selenium dependency; adapter contract, UI NOT_TESTED'),
++        ('Process management', 'tools/atgb/driver.py; tools/validate_pr_play_06.py', 'Pattern', 'Owned real interpreter PID, socket binding/readiness/deadlines and finally cleanup'),
++        ('ATGB execution', 'tools/run_atgb.py; tools/atgb/driver.py; tools/atgb/chat_worker.py', 'Yes', 'Reuse fixture/isolation/accounting/revision helpers; opening harness does not alter benchmark driver or score'),
++    ]
++    table = '| Capability | Existing implementation | Reusable? | Gap / integration |\n|---|---|---|---|\n'+''.join('| '+' | '.join(row)+' |\n' for row in inventory)
++    report('01_EXISTING_INFRASTRUCTURE_INVENTORY.md', 'Existing Infrastructure Inventory', f'''
++Baseline HEAD: `b012c3d7e5887fdfb09d10bb9cc0f0220de09df9`. Extensive dirty production,
++canonical play data, tests, documentation and generated evidence predate this pass.
++No baseline reset, commit, or push. Entry orientation: development constitution,
++NEXT_SESSION, validation evidence/product realization standards, testing guides,
++PR-AA portfolio/roadmap, review standard, state authority, PR-PLAY-02–07 and ATGB
++implementation. PR-PLAY-08 explicitly authorizes tooling, not gameplay repairs.
++
++{table}
++
++No second gameplay engine, semantic interpreter, behavioral evaluator, or test
++framework was introduced. Pytest owns harness checks; game code owns outcomes.
++''')
++    report('02_HARNESS_ARCHITECTURE.md', 'Harness Architecture', '''
++`scripts/run_live_playtest.ps1` resolves repository/interpreter and forwards flags.
++`tools/playtest/runner.py` validates scenario/configuration, prepares a fresh store,
++starts an owned server process, drives HTTP, collects snapshots, classifies and
++exports. `worker.py` binds its socket, attests DATA_DIR/PID, configures transport,
++and serves the existing ASGI application. `analysis.py` compares observations and
++classifies stages. `browser.py` defines a future rendered-UI adapter. JSON scenario
++definitions follow existing repository JSON conventions.
++
++Scenario contracts contain ID/version/description/fixture/modes/actions/invariants,
++action and request ceilings, input/output/total budgets, six stage timeouts,
++evidence requirements and stop conditions. Unknown actions, unpinned fixtures,
++repeated New/Start, expanded established limits and unbounded timeouts are refused.
++Bundled scenarios are selected by name; arbitrary external code is not loaded.
++
++Deterministic is default: synthetic SDK Responses transport, external socket
++connect/connect_ex denied, real production admission and validation. Live is
++explicitly flagged, opening-only, single-admission, no retries. ScriptedGameplay
++is deterministic only. A failed step stops further player actions; final evidence
++capture is permitted and never invokes another opening/provider request.
++
++Ownership justification: the existing ATGB driver owns benchmark conversations,
++partitions, score worksheets and chat turns. It does not expose a bounded owned
++Uvicorn lifecycle or one-opening HTTP diagnostic transaction. Extending it with
++these unrelated semantics would change its frozen benchmark contract. This small
++controller composes its existing fixture/isolation/accounting/revision helpers
++and leaves benchmark authority unchanged. Production API and provider owners are
++unchanged. No new persistent gameplay structure is introduced.
++
++Isolation root is `artifacts/atgb/automated_playtests/`, fitting the existing ATGB
++safe-path guard. Unique UTC+UUID directories never reuse prior stores. Environment
++changes stay in the worker; PowerShell restores PYTHONPATH. A Windows venv redirector
++is avoided when launching the worker so the attested PID is the owned server PID.
++Readiness uses safe GET state polling only after socket binding and isolation
++attestation. No connection to an unrelated running server is accepted.
++''')
++    report('03_IMPLEMENTATION_SUMMARY.md', 'Implementation Summary', f'''
++New source: `tools/playtest/{{runner,worker,analysis,browser,__init__}}.py`, two scenario
++JSON definitions, `scripts/run_live_playtest.ps1`, `tools/validate_pr_play_08.py`,
++`tools/report_pr_play_08.py`, and `tests/test_automated_playtest.py`. Updated only
++the coverage registry and canonical NEXT_SESSION; added the guide. Production
++`game/`, `static/`, ordinary `data/`, and `experiments/` were not edited.
++
++The transaction is New Campaign → capture baseline → Start once → capture after.
++HTTP statuses/bodies, narration presence, API-visible state, session metadata,
++turn/scene/log, complete selected persistent files, native provider journal,
++budget snapshot, structural/semantic/outcome stages and correlations are retained.
++The report checks acceptance, one diagnostic commit, turn delta one, log delta
++one and state-integrity constraints; HTTP 200 is insufficient.
++
++Failure/interruption closes only the owned worker. After an interruption, persistent
++after-state is copied after shutdown when the final API projection cannot be read.
++Port collisions block without attaching to or terminating other processes.
++No task implementation changes were made in response to production failures.
++
++Evidence: `artifacts/pr_play_08/source_diff.patch`, source snapshots, matrix_runs.json,
++JUnit XML/logs, protected integrity, and the complete example run at
++`{success.relative_to(ROOT).as_posix()}`. The initial development failures identified
++PID redirection, request-bookkeeping comparison, missing-diagnostic verdict and
++fixture-expectation mistakes in the harness; final checks cover their corrections.
++''')
++    report('04_DIAGNOSTIC_CLASSIFICATION.md', 'Diagnostic Classification', '''
++Precedence: infrastructure/preflight/startup/transport/interruption first; then
++proven state-integrity violation; admission rejection; provider exception; explicit
++output-limit exhaustion; other incomplete provider response; empty content; JSON
++parse failure; envelope/structured-validation failure; evidenced semantic rejection;
++opening-acceptance rejection; UI failure if observed; unknown otherwise.
++
++Output-limit exhaustion requires explicit provider evidence, not token-count
++coincidence. `incomplete` plus `max_output_tokens` outranks a downstream parse error.
++Successful structured validation plus semantic reasons is semantic-stage evidence.
++A genuine safe nonresolution can be structurally valid and fail opening acceptance
++without evidence of a failed semantic validator; H6 is classified at acceptance.
++
++Each non-PASS report carries category, stage, record path, zero-based record index
++when applicable, field, observed value and native source owner when available.
++The provider journal remains the native diagnostic format. No provenance ID is
++fabricated: harness run/scenario maps to the journal's actual run/opening/provider
++attempt IDs, with missing-ID limitations explicit. Parser/outcome details are
++reported independently. Classifications describe observations; root cause remains
++`Not established`, with `inferred=false`. No hypothesis is promoted to a defect.
++
++Missing required diagnostics prevents PASS. Unknown fields/stages remain unknown;
++empty or failed evidence does not become a fabricated success. Browser status is
++NOT_TESTED, not PASS. Failure categories do not alter replay taxonomy or evaluators.
++''')
++    report('05_STATE_INTEGRITY_VALIDATION.md', 'State-Integrity Validation', '''
++Baseline and after capture both API projection and all bounded isolated persistent
++documents, including session/world/combat/character/campaign/conditions/scenes/log.
++Copied files are retained exactly; normalization applies to comparison only.
++
++Gameplay comparison unwraps known persistence envelopes and excludes saved_at /
++derived integrity metadata plus session last_saved_at, diagnostic debug_traces,
++and __turn_start_active_interaction_target_id request metadata. Empty rollback log
++materialization is equivalent to an absent empty log. These explicit exclusions
++are reported as bookkeeping changes; arbitrary JSON changes are not ignored.
++
++Failure requires no normalized gameplay mutation. Success requires exactly one
++turn/log increment, started=true, and only documented opening-owned runtime roots
++and top-level fields may change. Character/conditions/authored scenes/combat or
++unknown session/world fields are unexpected. Changed fields and unexpected files
++are recorded. The conservative allowance is versioned in the tooling; it is not
++an independent semantic authority over world ticks. Nested changes within allowed
++opening-owned fields are observed, not a full gameplay-quality proof.
++
++H2–H9 negative fixtures preserve gameplay state; H1/H10 commit exactly once.
++H19 distinguishes timestamp bookkeeping from an injected world mutation. Persistent
++after-state survives interruption even if API after-state is unavailable. Every
++relevant protected file was hash-checked across validation; ordinary saves and
++frozen fixture bytes stayed unchanged. See protected_before.json and
++protected_integrity.json. Frozen ATGB content was never used as a writable store.
++''')
++    report('06_PROVIDER_SAFETY_VALIDATION.md', 'Provider Safety Validation', '''
++No live provider or provider-connectivity calls were performed. Deterministic
++transport replaces SDK constructors before requests, rejects asynchronous clients,
++and rejects external socket connections. Real game admission still accounts for
++synthetic operations; journal attempts in deterministic mode are not billable calls.
++H15 verifies this boundary; H16 blocks unauthorized Live before starting a worker.
++Live multi-turn/scenario misuse is refused even if an invocation flag is supplied.
++
++Live requires both mode and explicit authorization flag, normal configured credential
++presence, provider enablement, retry suppression, fresh isolated DATA_DIR and known
++output allowance. Startup and direct connectivity probes are disabled; no health
++request consumes a hidden admission. The skipped upstream gate is explicitly not
++evidence of provider health. Existing model routing is retained; pin overrides are
++refused. Opening output allowance is read from the game owner, never raised by the
++harness. SDK max_retries=0 and host suppression use existing controls.
++
++Default opening ceiling: one admission. Scenario ceilings cannot exceed the prior
++controlled manual scope: six requests / 200000 input / 20000 output / 220000 total;
++opening scenario itself requests one. Inherited stricter environment/.env limits
++are retained using min, not replaced. Existing admission reservations and post-call
++accounting remain authoritative. Tokens are estimates at admission and observed
++usage after completion; an exhausted or unknown accounting record prevents PASS.
++Usage, allowances, remaining budget and rejections are reported without inventing
++pricing or failed-call token usage. No retry, budget expansion, model change, or
++extra production operation occurs after a failure.
++
++Credentials are never serialized. Exception strings are omitted; worker logs are
++bounded and redact known environment secret values. Evidence selects only isolated
++campaign and explicit diagnostic files, never canonical private play data or .env.
++The review generator checks the selected bytes against configured secret values.
++Residual: existing static readiness/source attestations are stale, producing two
++baseline regression failures. They were not rewritten or relaxed. Native runtime
++admission/accounting controls pass their other checks. External review remains
++required before any first Live invocation.
++''')
++    hrows = [
++        ('H1','Successful opening','PASS, one commit','success'),
++        ('H2','Output truncation','FAIL; provider_output_limit_exhaustion','truncation'),
++        ('H3','Invalid JSON','FAIL; json_parsing_failure','invalid_json'),
++        ('H4','Missing envelope','FAIL; structured_envelope_failure','envelope'),
++        ('H5','Semantic rejection','FAIL; semantic_validation_failure','semantic'),
++        ('H6','Genuine safe nonresolution','FAIL; opening_acceptance_failure; zero commit','safe_nonresolution'),
++        ('H7','Provider exception','FAIL; provider_exception','exception'),
++        ('H8','Admission budget rejection','FAIL; provider_admission_rejection; zero dispatch','admission'),
++        ('H9','Rollback','FAIL outcome / PASS state integrity','invalid_json'),
++        ('H10','Commit once','PASS; turn/log/commit=1','success'),
++        ('H11','Preflight failure','BLOCKED; no owned process or provider request',None),
++        ('H12','Startup timeout','BLOCKED; bounded owned-process shutdown',None),
++        ('H13','Interrupt','INCONCLUSIVE; ZIP/state preserved; process stopped',None),
++        ('H14','Missing journal','INCONCLUSIVE; explicit limitation',None),
++        ('H15','Deterministic boundary','Zero live calls; external connect refused',None),
++        ('H16','Unauthorized Live','BLOCKED before worker/provider dispatch',None),
++        ('H17','Occupied port','BLOCKED; unrelated listener survives',None),
++        ('H18','Evidence archive','Readable ZIP; all manifest hashes match','success'),
++        ('H19','State categories','Bookkeeping separated; injected truth mutation rejected',None),
++        ('H20','Unknown category','Explicit unknown; root cause unestablished',None),
++    ]
++    write(O/'H1_H20_results.json', [{'id': h, 'case': desc, 'expected_observed': outcome,
++          'test_result': 'PASS', 'evidence': matrix[case]['run'] if case else 'artifacts/pr_play_08/harness_regression.xml'} for h, desc, outcome, case in hrows])
++    htable = '| ID | Case | Observed / asserted | Check |\n|---|---|---|---|\n'+''.join(f'| {h} | {desc} | {outcome} | PASS |\n' for h, desc, outcome, _ in hrows)
++    regtable = '| Lane | Passed | Failed | Errors | Timeouts |\n|---|---:|---:|---:|---|\n'+''.join(f"| {k} | {v['passed']} | {v['failures']} | {v['errors']} | None |\n" for k,v in results.items())
++    report('07_DETERMINISTIC_TEST_RESULTS.md', 'Deterministic Test Results', f'''
++Final harness/coverage lane: 35 passed (26 harness checks plus nine registry checks).
++H1–H20 are deterministic tooling assertions; negative fixture outcomes deliberately
++FAIL while their corresponding harness test PASS confirms correct measurement.
++
++{htable}
++
++Additional checks: scripted observation, Live multi-turn refusal, scenario/global
++limit enforcement, incomplete/empty categories, classification precedence and log
++redaction. Evidence: harness_regression.xml/.txt; H1_H20_results.json; matrix_runs.json.
++
++{regtable}
++
++Completed scope totals: **{passed} passed / {failed} failed / zero errors/timeouts**.
++No full-suite claim. All lanes use existing pytest/live-model guards and bounded
++120-second owned-process timeouts. The final harness-only rerun updated its exact
++command record; broader XML and logs retain measured outcomes, with lane commands
++defined in tools/validate_pr_play_08.py.
++
++Failure classification: six preexisting defects, zero demonstrated new production
++regressions. Three rich-opening emission/length assertions and the saved stew-price
++conversation assertion match documented PR-PLAY-06/07 baseline failures. Two tests
++call the same stale provider source-attestation readiness audit (one provider test,
++one ATGB accounting test). The production and frozen fixture sources those tests
++inspect are hash-identical across this pass, and none of those test files changed.
++No unrelated repair, threshold relaxation, source-attestation rewrite or production
++change was made to obtain green results. Details remain in each failing lane log.
++
++Initial HTTP runs under the restricted sandbox were environment-blocked at Python
++socketpair/event-loop creation; bounded local-only probe reproduced it. With
++localhost execution permitted, the same deterministic harness and HTTP regression
++paths complete. Early harness-development failures and their corrected reruns
++are preserved separately; they are not counted as final product regressions.
++''')
++    report('08_BROWSER_AND_GAMEPLAY_EXTENSION.md', 'Browser and Gameplay Extension', '''
++Assessment: requirements.txt has FastAPI/Uvicorn/OpenAI/Pydantic/Pytest/HTTPX,
++with no Playwright/Selenium. Existing frontend tests exercise Node handlers but
++do not run a rendered browser. No large browser dependency was introduced.
++`tools/playtest/browser.py` defines the adapter boundary: own New/Start-once clicks,
++bounded wait, visible narration/error, screenshots, API/UI agreement and close.
++A future browser adapter must replace API mutation steps, not repeat them.
++Current reports always show UI NOT_TESTED. Screenshots directory is reserved.
++
++ScriptedObservation implements deterministic opening, scene observation and explicit
++started-state verification, with per-step collection and stop-on-first-failure.
++Dispatcher contracts also map NPC interaction/examination to existing /api/chat
++and rules/movement to /api/action request bodies. No gameplay behavior is authored
++by the dispatcher. Future scenarios need reviewed deterministic response/request
++fixtures and extended outcome invariants. Current opening comparator is deliberately
++conservative; arbitrary five-/ten-turn progression is not claimed implemented.
++
++No live multi-turn testing, autonomous play, large scenario library, ATGB scoring,
++or PR-EG integration occurred. API success does not establish UI success or
++AI-DM communication quality. These limitations are explicit in result/summary/guide.
++''')
++    report('09_USER_GUIDE_AND_OPERATIONAL_READINESS.md', 'User Guide and Operational Readiness', f'''
++The standalone guide is `docs/AUTOMATED_PLAYTEST_GUIDE.md`. It covers installation,
++all modes, exact commands, authorization/cost, result interpretation, ZIP discovery,
++timeouts, safe recovery and limitations without requiring implementation knowledge.
++
++Deterministic command (executed successfully through PowerShell):
++
++```powershell
++.\\scripts\\run_live_playtest.ps1 -Scenario CampaignOpening -Mode Deterministic -CaptureResponse
++```
++
++Latest summary/verdict and exact evidence ZIP path:
++
++```powershell
++.\\scripts\\run_live_playtest.ps1 -Latest
++```
++
++Scripted deterministic example:
++
++```powershell
++.\\scripts\\run_live_playtest.ps1 -Scenario ScriptedObservation -Mode ScriptedGameplay
++```
++
++Example PASS summary: `{(success/'reports/SUMMARY.md').relative_to(ROOT).as_posix()}`.
++Example machine report: `{(success/'reports/result.json').relative_to(ROOT).as_posix()}`.
++Example evidence: `{(success/'evidence/evidence.zip').relative_to(ROOT).as_posix()}`.
++Run layout is unique, local, path-space safe and compatible with the established
++ATGB isolation root. A fixed optional localhost port refuses an existing listener.
++No manual environment setup, fixture copying, Uvicorn window, API invocation,
++journal collection or compression is needed. Exit 0 means PASS; 2 means another
++verdict. PowerShell may display a nonzero native command exit as its own failure.
++No live command has been executed. Read report 10 before considering one.
++''')
++    confirmations = [
++        'No live provider calls.', 'No provider connectivity diagnostics.', 'No model changes.',
++        'No output-budget increases.', 'No automatic retries.', 'No additional production provider operations.',
++        'No gameplay implementation changes.', 'No unauthorized gameplay-state mutations.',
++        'No new persistent gameplay structures.', 'No experimental PR-EG integration.',
++        'Frozen ATGB baseline unchanged.', 'No secrets included.', 'No commit or push performed.',
++    ]
++    write(O/'final_verdict.json', {'verdict': 'B — Conditionally ready', 'live_calls': 0,
++          'reason': 'Deterministic controls pass; rendered/live adequacy untested and six preexisting regression failures remain.',
++          'confirmations': confirmations, 'next_action': 'External review only; do not run Live in this pass'})
++    report('10_FINAL_VERDICT_AND_HANDOFF.md', 'Final Verdict and Handoff', f'''
++**B — Conditionally ready.** The complete deterministic harness and H1–H20 controls
++pass. Evidence supports isolated one-opening orchestration, safety controls,
++classification and export. Six preexisting regression failures remain, including
++stale source attestations; rendered UI and actual provider adequacy remain untested.
++The readiness conclusion is scoped to tooling and does not assert a live opening
++will be accepted or repair the prior semantic cause.
++
++Evidence: {passed} passing checks, six unchanged-source baseline failures, complete
++negative/positive matrices, hashed example ZIP and {integrity['files']} protected files
++unchanged. Source diff isolates this tooling pass from extensive entry worktree dirt.
++
++One recommended next action: external review of CURRENT_REVIEW and the timestamped
++completion ZIP. Stop here and await that review. After separate authorization, the
++exact first Live command is:
++
++```powershell
++.\\scripts\\run_live_playtest.ps1 -Scenario CampaignOpening -Mode Live -AuthorizeLiveProvider -CaptureResponse
++```
++
++Expected exposure: at most **one live provider attempt**, zero SDK/host retries,
++normal configured model, existing opening allowance (normally 3000), aggregate
++limits no greater than 200000/20000/220000 and any stricter inherited limits.
++Failed-call usage may be unknown; no cost estimate is fabricated. This command
++is documented for review and **was not executed**. No follow-on implementation or
++live automated playtest is authorized by this closeout.
++
++Closeout confirmations:
++
++'''+ '\n'.join('- '+c for c in confirmations))
++
++    sources = sorted([p for p in (ROOT/'tools/playtest').rglob('*') if p.is_file() and '__pycache__' not in p.parts])
++    sources += [ROOT/p for p in ('scripts/run_live_playtest.ps1', 'tools/validate_pr_play_08.py',
++        'tools/report_pr_play_08.py', 'tests/test_automated_playtest.py', 'tests/validation_coverage_registry.py',
++        'docs/AUTOMATED_PLAYTEST_GUIDE.md', 'docs/NEXT_SESSION.md')]
++    delta = []
++    for p in sources:
++        rel = p.relative_to(ROOT)
++        if rel.as_posix() == 'docs/NEXT_SESSION.md':
++            before = (O/'entry_sources/docs/NEXT_SESSION.md').read_text(encoding='utf-8')
++        elif rel.as_posix() == 'tests/validation_coverage_registry.py':
++            before = (O/'entry_sources/validation_coverage_registry.py').read_text(encoding='utf-8-sig')
++        else:
++            before = ''
++        delta.extend(difflib.unified_diff(before.splitlines(keepends=True), p.read_text(encoding='utf-8').splitlines(keepends=True),
++                                        fromfile='a/'+rel.as_posix(), tofile='b/'+rel.as_posix()))
++        snap = O/'source_snapshots'/rel
++        snap.parent.mkdir(parents=True, exist_ok=True)
++        shutil.copy2(p, snap)
++    (O/'source_diff.patch').write_text(''.join(delta), encoding='utf-8')
++    status = subprocess.run(['git', 'status', '--short'], cwd=ROOT, capture_output=True, text=True, timeout=15)
++    (O/'repository_status.txt').write_text(status.stdout, encoding='utf-8')
++
++    # Select only scoped explicit evidence, never private canonical data.
++    support = [*sources, *R.glob('*.md')]
++    support += [p for p in O.rglob('*') if p.is_file() and 'source_snapshots' not in p.parts and 'entry_sources' not in p.parts and p.name not in {'review_config.json', 'package_verification.json'}]
++    for record in matrix.values():
++        run = Path(record['run'])
++        support += [p for folder in ('configuration', 'baseline', 'after', 'diagnostics', 'reports')
++                    for p in (run/folder).rglob('*') if p.is_file()]
++        support.append(run/'evidence/manifest.json')
++    config = {
++        'campaign_id': 'pr_play_08', 'campaign_name': 'PR-PLAY-08 — Automated Live Playtest and Diagnostic Harness',
++        'campaign_date': '2026-10-29', 'purpose': 'Offline tooling implementation and review; stop before live execution.',
++        'objective_status': 'B — Conditionally ready',
++        'executive_summary': f'Isolated one-command HTTP harness implemented; H1–H20 pass. Completed lanes: {passed} passed / {failed} preexisting failures. No production edits or live/provider-connectivity calls. External review required.',
++        'primary_report': str((R/'10_FINAL_VERDICT_AND_HANDOFF.md').relative_to(ROOT)),
++        'supporting_files': [{'path': p.relative_to(ROOT).as_posix(), 'role': 'source' if p in sources else 'evidence',
++                              'why': 'Explicit scoped source, guide, report or deterministic evidence.'} for p in dict.fromkeys(support)],
++        'changes': {'production': [], 'validation': ['H1–H20 and additional boundary/registry checks; existing regression selections.'],
++                    'tooling': ['Isolated owned-server HTTP controller, synthetic transport, conservative comparator, classifier and evidence ZIP.'],
++                    'documentation': ['Ten reports, standalone guide and canonical handoff.'],
++                    'generated_artifacts': ['Matrix/JUnit/logs/source diff/status/hashes, example report/summary/ZIP.']},
++        'testing': {'focused': '35 harness/coverage checks passed.', 'broader': f'{passed} passed / {failed} preexisting failures across completed lanes.',
++                    'full_suite': 'Not run; bounded relevant regression only.',
++                    'runtime_validation': 'Real localhost HTTP with synthetic SDK transport; API acceptance, commit and rollback owners.',
++                    'model_runtime_boundary': 'Zero live/provider-connectivity calls. Deterministic external connects denied.',
++                    'new_regressions': 'None demonstrated in completed scope.',
++                    'pre_existing_failures': 'Three rich-opening assertions, saved conversation assertion, two stale provider source-attestation assertions.'},
++        'decisions_requiring_human_review': ['Review conditional readiness before separately authorizing the first Live harness invocation.'],
++        'known_problems': {'campaign_specific': ['No rendered browser adapter or live adequacy evidence; comparator is conservative and opening-scoped.'],
++                           'pre_existing': ['Six unchanged-production-source regression failures remain; no unrelated repair authorized.']},
++        'does_not_prove': ['Actual provider success, rendered UI success, ATGB scores, held-out generalization, or improved gameplay communication.'],
++        'recommended_next_step': 'External review only. Do not execute the documented next Live command in this pass.',
++        'self_contained_review_test': 'Ten reports, guide, scoped source/diff, H1–H20, regression logs/XML, hashes, complete example evidence and manifest verification.',
++    }
++    write(O/'review_config.json', config)
++    build_handoff(config, archive_history=False)
++
++    # User explicitly requires a complete example evidence ZIP inside the review
++    # ZIP. The normal exporter excludes nested archives; add only this verified,
++    # isolated non-review archive and update the manifest, never arbitrary ZIPs.
++    handoff = ROOT/'handoff'
++    zpath = handoff/'CURRENT_REVIEW.zip'
++    with zipfile.ZipFile(zpath) as z:
++        members = {n: z.read(n) for n in z.namelist()}
++    example_rel = (success/'evidence/evidence.zip').relative_to(ROOT).as_posix()
++    name = 'support/'+example_rel
++    data = (ROOT/example_rel).read_bytes()
++    members[name] = data
++    manifest = json.loads(members['REVIEW_MANIFEST.json'])
++    manifest['included_files'].append({'bundle_path': name, 'canonical_source_path': example_rel,
++        'role': 'complete_deterministic_example_archive', 'canonical': True, 'generated': False,
++        'why': 'Explicit PR-PLAY-08 user requirement; isolated diagnostic ZIP, no recursive review archive.',
++        'size_bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()})
++    manifest['file_count'] = len(members)
++    manifest['nested_archive_policy_exception'] = 'Only the explicit isolated deterministic example requested by the user.'
++    members['REVIEW_MANIFEST.json'] = (json.dumps(manifest, indent=2)+'\n').encode()
++    buf = io.BytesIO()
++    with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as z:
++        for key, value in members.items():
++            z.writestr(key, value)
++    zpath.write_bytes(buf.getvalue())
++    (handoff/'REVIEW_MANIFEST.json').write_bytes(members['REVIEW_MANIFEST.json'])
++    # October 29 client context is EDT (UTC-04:00); filenames follow local time.
++    local = datetime.now(timezone(timedelta(hours=-4)))
++    timestamped = handoff/('CURRENT_REVIEW('+local.strftime('%Y%m%d-%H%M%S')+').zip')
++    if timestamped.exists():
++        raise FileExistsError('Refusing to overwrite a prior completion archive')
++    shutil.copy2(zpath, timestamped)
++    verify(zpath, sources)
++    print(timestamped)
++
++
++def verify(path, sources):
++    from dotenv import dotenv_values
++    configured = dotenv_values(ROOT/'.env')
++    secret_values = [v.encode() for k,v in configured.items() if v and len(v)>8 and any(s in k.lower() for s in ('key', 'secret', 'password', 'credential'))]
++    with zipfile.ZipFile(path) as z:
++        assert z.testzip() is None
++        manifest = json.loads(z.read('REVIEW_MANIFEST.json'))
++        for row in manifest['included_files']:
++            if row['bundle_path'] == 'REVIEW_MANIFEST.json':
++                continue
++            assert hashlib.sha256(z.read(row['bundle_path'])).hexdigest() == row['sha256']
++        for name in z.namelist():
++            payload = z.read(name)
++            assert not any(s in payload for s in secret_values), 'Configured secret found in selected bytes'
++            if name.endswith('.zip'):
++                with zipfile.ZipFile(io.BytesIO(payload)) as nested:
++                    assert nested.testzip() is None
++                    for n in nested.namelist():
++                        assert not any(s in nested.read(n) for s in secret_values)
++        assert len([n for n in z.namelist() if '/pr_play_08/' in n and n.endswith('.md') and '/development/' in n]) == 10
++        assert any(n.endswith('docs/AUTOMATED_PLAYTEST_GUIDE.md') for n in z.namelist())
++    write(O/'package_verification.json', {'zip': str(path), 'readable': True, 'manifest_hashes_valid': True,
++          'ten_reports_present': True, 'configured_secret_scan': 'PASS', 'nested_example_readable': True,
++          'source_files': len(sources), 'bytes': path.stat().st_size})
++
++
++if __name__ == '__main__':
++    main()
+--- a/tests/test_automated_playtest.py
++++ b/tests/test_automated_playtest.py
+@@ -0,0 +1,215 @@
++"""H1–H20: real isolated HTTP orchestration, no provider connectivity."""
++import copy
++import json
++import socket
++import zipfile
++from pathlib import Path
++
++import pytest
++
++from tools.playtest import runner
++from tools.playtest.analysis import classify, compare
++
++pytestmark = pytest.mark.integration
++OUT = Path('artifacts/pr_play_08')
++
++
++@pytest.fixture(scope='module')
++def cases():
++    results = {}
++    for name in runner.CASES:
++        path, result = runner.run_playtest(case=name, capture_response=True, startup_timeout=10)
++        results[name] = (path, result)
++    OUT.mkdir(exist_ok=True, parents=True)
++    runner.write(OUT/'matrix_runs.json', {k: {'run': str(p), 'result': r} for k, (p, r) in results.items()})
++    return results
++
++
++def test_H1_successful_opening(cases):
++    result = cases['success'][1]
++    assert result['verdict'] == 'PASS'
++    assert result['opening_commits_observed'] == 1
++    assert result['steps'][2]['narration_present'] is True
++
++
++@pytest.mark.parametrize('identifier,case,category', [
++    ('H2', 'truncation', 'provider_output_limit_exhaustion'),
++    ('H3', 'invalid_json', 'json_parsing_failure'),
++    ('H4', 'envelope', 'structured_envelope_failure'),
++    ('H5', 'semantic', 'semantic_validation_failure'),
++    ('H6', 'safe_nonresolution', 'opening_acceptance_failure'),
++    ('H7', 'exception', 'provider_exception'),
++    ('H8', 'admission', 'provider_admission_rejection'),
++])
++def test_failure_matrix(cases, identifier, case, category):
++    result = cases[case][1]
++    assert result['verdict'] == 'FAIL', result
++    assert result['failure_classification']['category'] == category
++    assert result['failure_classification']['inferred'] is False
++    assert result['opening_commits_observed'] == 0
++    assert result['state_comparison']['integrity'] is True
++    assert result['provider_usage']['dispatched_requests'] == (0 if case == 'admission' else 1)
++
++
++def test_H9_failed_opening_preserves_state(cases):
++    for name, (_, result) in cases.items():
++        if name == 'success':
++            continue
++        assert result['state_comparison']['integrity'] is True
++        assert not result['state_comparison']['gameplay_mutations']
++
++
++def test_H10_commits_once(cases):
++    result = cases['success'][1]
++    assert result['state_comparison']['turn_delta'] == result['state_comparison']['log_delta'] == 1
++    assert sum(step['action'] == 'start_campaign' for step in result['steps']) == 1
++    assert result['provider_usage']['dispatched_requests'] == 1
++
++
++def test_H11_preflight_blocked(monkeypatch):
++    monkeypatch.setattr(runner, 'load_scenario', lambda _: (_ for _ in ()).throw(ValueError('Missing fixture')))
++    path, result = runner.run_playtest()
++    assert result['verdict'] == 'BLOCKED'
++    assert not result['process_cleanup']['owned']
++    assert not result['steps']
++    assert (path/'evidence/evidence.zip').exists()
++
++
++def test_H12_startup_timeout(monkeypatch):
++    # A real owned server cannot complete readiness before this bounded deadline.
++    path, result = runner.run_playtest(startup_timeout=.001)
++    assert result['verdict'] == 'BLOCKED'
++    assert result['failure']['type'] == 'TimeoutError'
++    assert result['process_cleanup']['stopped']
++    assert result['elapsed_seconds'] < 15
++    assert not result['steps']
++
++
++def test_H13_interruption(monkeypatch):
++    real_request = runner.request
++    def interrupt(base, method, path, *args, **kwargs):
++        if path == '/api/start_campaign':
++            raise KeyboardInterrupt
++        return real_request(base, method, path, *args, **kwargs)
++    monkeypatch.setattr(runner, 'request', interrupt)
++    path, result = runner.run_playtest(startup_timeout=10)
++    assert result['verdict'] == 'INCONCLUSIVE'
++    assert result['process_cleanup']['owned'] and result['process_cleanup']['stopped']
++    assert result['failure_classification']['category'] == 'interrupted_execution'
++    assert (path/'evidence/evidence.zip').exists()
++
++
++def test_H14_missing_diagnostic(monkeypatch):
++    real_stop = runner.stop_owned
++    def remove_diagnostic(process, timeout):
++        value = real_stop(process, timeout)
++        # Fault injection preserves the source artifact under a different name.
++        if process:
++            run = Path(process.args[-1])
++            (run/'diagnostics/provider_usage.jsonl').rename(run/'diagnostics/unavailable_journal.jsonl')
++        return value
++    monkeypatch.setattr(runner, 'stop_owned', remove_diagnostic)
++    _, result = runner.run_playtest(startup_timeout=10)
++    assert result['verdict'] == 'INCONCLUSIVE'
++    assert any('diagnostic artifact unavailable' in u for u in result['uncertainties'])
++
++
++def test_H15_deterministic_transport(cases):
++    for _, result in cases.values():
++        assert result['mode'] == 'Deterministic'
++        assert result['environment_verification']['application']['sdk_retries'] == 0
++        assert result['environment_verification']['application']['host_retries'] == 0
++        assert not result['environment_verification']['application']['connectivity_diagnostics']
++        assert result['provider_usage']['dispatched_requests'] <= 1
++    # A non-local connection is rejected before the real socket connect.
++    from tools.playtest.worker import install_transport
++    # Run this assertion in a bounded subprocess; never mutate pytest's sockets.
++    code = "from tools.playtest.worker import install_transport; import socket; install_transport('success'); socket.socket().connect(('192.0.2.1',443))"
++    proc = runner.subprocess.run([runner.sys.executable, '-c', code], capture_output=True, timeout=10)
++    assert proc.returncode != 0 and b'external network access refused' in proc.stderr
++
++
++def test_H16_unauthorized_live():
++    _, result = runner.run_playtest(mode='Live')
++    assert result['verdict'] == 'BLOCKED'
++    assert result['failure']['type'] == 'PermissionError'
++    assert not result['process_cleanup']['owned'] and not result['steps']
++
++
++def test_H17_existing_port_preserved():
++    with socket.socket() as server:
++        server.bind(('127.0.0.1', 0))
++        server.listen()
++        port = server.getsockname()[1]
++        _, result = runner.run_playtest(port=port, startup_timeout=5)
++        assert result['verdict'] == 'BLOCKED'
++        assert not result['steps']
++        assert server.fileno() != -1
++        assert server.getsockname()[1] == port
++
++
++def test_H18_archive_manifest(cases):
++    run, result = cases['success']
++    with zipfile.ZipFile(result['evidence_zip']) as z:
++        assert z.testzip() is None
++        manifest = json.loads(z.read('evidence/manifest.json'))
++        for record in manifest['files']:
++            assert runner.hashlib.sha256(z.read(record['path'])).hexdigest() == record['sha256']
++        assert {'baseline/documents.json', 'after/documents.json', 'reports/result.json', 'reports/SUMMARY.md'} <= set(z.namelist())
++        assert result['provider_response_evidence'][0] in z.namelist()
++
++
++def test_H19_gameplay_vs_bookkeeping(cases):
++    run, _ = cases['invalid_json']
++    before = json.loads((run/'baseline/documents.json').read_text())
++    after = copy.deepcopy(before)
++    after['session.json']['saved_at'] = 'changed'
++    result = compare(before, after, accepted=False)
++    assert result['integrity'] and result['bookkeeping_mutations'] == ['session.json']
++    assert not result['gameplay_mutations']
++    after['world.json']['test_unauthorized_mutation'] = True
++    result = compare(before, after, accepted=False)
++    assert not result['integrity'] and result['unexpected_mutations'] == ['world.json']
++
++
++def test_H20_unknown_failure():
++    result = classify([{'classification': 'unrecognized', 'observed': True}])
++    assert result['category'] == 'unknown_failure'
++    assert result['root_cause'] == 'Not established'
++    assert result['evidence_record'] == 'reports/result.json'
++
++
++def test_scripted_observation_and_no_live_multiturn():
++    _, result = runner.run_playtest(scenario='ScriptedObservation', mode='ScriptedGameplay', startup_timeout=10)
++    assert result['verdict'] == 'PASS'
++    assert len(result['steps']) == 6
++    assert result['provider_usage']['dispatched_requests'] == 1
++    _, refused = runner.run_playtest(scenario='ScriptedObservation', mode='Live', authorize_live=True)
++    assert refused['verdict'] == 'BLOCKED' and not refused['process_cleanup']['owned']
++
++
++def test_scenario_and_inherited_limits_cannot_expand(tmp_path):
++    scenario = runner.load_scenario('CampaignOpening')
++    scenario['token_budgets']['total'] += 1
++    with pytest.raises(ValueError):
++        runner.validate_scenario(scenario)
++    scenario = runner.load_scenario('CampaignOpening')
++    env = runner.child_environment(tmp_path, scenario, 'Deterministic', 'success', inherited={
++        'ASHEN_PROVIDER_INPUT_TOKEN_LIMIT': '300', 'ASHEN_PROVIDER_REQUEST_LIMIT': '1'})
++    assert env['ASHEN_PROVIDER_INPUT_TOKEN_LIMIT'] == '300'
++    assert env['ASHEN_PROVIDER_REQUEST_LIMIT'] == '1'
++
++
++@pytest.mark.parametrize('events,category', [
++    ([{'provider_status': 'incomplete', 'provider_finish_reason': 'max_output_tokens', 'classification': 'json_parse_failure'}], 'provider_output_limit_exhaustion'),
++    ([{'provider_status': 'incomplete'}], 'provider_incomplete_response'),
++    ([{'classification': 'empty_provider_content'}], 'empty_provider_response'),
++])
++def test_precedence_and_additional_categories(events, category):
++    assert classify(events)['category'] == category
++
++
++def test_secret_log_redaction(tmp_path):
++    import io
++    runner.bounded_log(io.BytesIO(b'authorization sentinel-secret\n'), tmp_path/'log', ['sentinel-secret'])
++    assert (tmp_path/'log').read_text() == 'authorization [REDACTED]\n'
+--- a/tests/validation_coverage_registry.py
++++ b/tests/validation_coverage_registry.py
+@@ -129,6 +129,18 @@
+ # ---------------------------------------------------------------------------
+ 
+ REGISTRY: Final[tuple[CoverageEntry, ...]] = (
++    CoverageEntry(
++        feature_id="automated_playtest_harness",
++        title="Isolated automated opening diagnostics and evidence export",
++        owner_domain="tooling",
++        status=CoverageStatus.ACTIVE,
++        required_surfaces=frozenset({RequiredSurface.INTEGRATION_SMOKE}),
++        transcript_modules=(), behavioral_gauntlet_axes=(), manual_gauntlets=(),
++        playability_scenarios=(), unit_contract_modules=(),
++        integration_smoke_modules=("tests/test_automated_playtest.py",),
++        notes="Production HTTP, acceptance, admission and ledger owners; synthetic transport. No gameplay-quality scoring authority.",
++        optional_smoke_overlap=(),
++    ),
+     # Validation-layer *contracts* (Objective #11): fast unit/AST contract tests;
+     # not defended by playability/transcript/gauntlet lanes.
+     CoverageEntry(
+--- a/docs/AUTOMATED_PLAYTEST_GUIDE.md
++++ b/docs/AUTOMATED_PLAYTEST_GUIDE.md
+@@ -0,0 +1,177 @@
++# Automated playtest guide
++
++Run an isolated campaign opening, collect diagnostics, and export evidence with
++one PowerShell command from the repository root. Your ordinary campaign is never
++used as the test store. Each run copies the pinned `frontier-gate-v1` fixture.
++
++## Requirements
++
++Windows PowerShell or PowerShell 7, Python 3.12+, and the repository's
++`requirements.txt` installed in `.venv`. No additional testing framework or browser
++download is required. The command supports paths containing spaces and resolves
++the repository from its own location. If the local virtual environment cannot
++run, it can use the installed Codex bundled Python with local environment packages.
++You may explicitly select an interpreter with `-PythonExecutable <path>`.
++
++Localhost networking must be permitted. A sandbox that blocks loopback can cause
++startup timeouts inside Python's event-loop initialization. Run from ordinary
++PowerShell, or allow localhost execution in your automation environment. Do not
++disable provider safety controls to address a networking failure.
++
++## Deterministic opening — default, zero live provider calls
++
++```powershell
++.\scripts\run_live_playtest.ps1 -Scenario CampaignOpening -Mode Deterministic
++```
++
++The worker substitutes synthetic SDK transport and denies external socket
++connections. It exercises the real HTTP endpoints, provider admission, parser,
++semantic validation, opening acceptance, and persistence. Reported provider
++attempts in this mode are synthetic attempts. This tests infrastructure and
++contracts; it does not measure live generation or conversational quality.
++
++Optionally preserve the existing bounded response artifact:
++
++```powershell
++.\scripts\run_live_playtest.ps1 -CaptureResponse
++```
++
++Capture is disabled by default. Captures can contain campaign content; review
++before sharing. The production capture owner limits each artifact to 64 KiB and
++six per diagnostic scope. Unparsed/empty responses may have no capture; reports
++state that limitation explicitly.
++
++Exercise a negative control, with exactly one opening submission:
++
++```powershell
++.\scripts\run_live_playtest.ps1 -FixtureResponse truncation
++```
++
++Other fixtures: `invalid_json`, `envelope`, `semantic`, `safe_nonresolution`,
++`exception`, `admission`, `empty`, `incomplete`, and `success`. Negative controls
++normally produce FAIL and exit 2. Their failure is an intended fixture outcome.
++
++## Scripted deterministic scenario
++
++```powershell
++.\scripts\run_live_playtest.ps1 -Scenario ScriptedObservation -Mode ScriptedGameplay
++```
++
++This opens once, observes the scene, verifies the started flag, and captures state.
++The dispatcher also defines NPC interaction, examination, rules-action, and
++movement steps using existing chat/action request contracts. There is no autonomous
++player, unbounded scenario loop, or live multi-turn mode. Future scenarios require
++reviewed request fixtures, appropriate invariants, and bounded limits.
++
++## Live opening — only after separate review and authorization
++
++PR-PLAY-08 does **not** authorize running this command. After external review and
++separate authorization, the exact command is:
++
++```powershell
++.\scripts\run_live_playtest.ps1 -Scenario CampaignOpening -Mode Live -AuthorizeLiveProvider -CaptureResponse
++```
++
++Both `-Mode Live` and `-AuthorizeLiveProvider` are required at invocation time.
++Existing credentials must already be configured through the application's normal
++environment or `.env`. Never put credentials on the command line. Provider calls
++must be enabled in existing settings; disabled flags block Live mode. Credentials
++are checked for presence, never tested with a connectivity request or stored in
++the report.
++
++This permits **at most one provider admission/attempt**, with SDK and host retries
++disabled. A failure ends the scenario; Start Campaign is never automatically
++submitted again. Existing model routing and opening output allowance remain
++unchanged (normally 3,000). Scenario aggregate ceilings are 200,000 input, 20,000
++output, 220,000 total, matching the prior controlled manual scope. Any inherited
++stricter limit is retained. The one-request limit is stricter than that manual
++scope's six admissions. Admission uses the application's existing input estimates;
++usage after completion can still establish exhaustion. Unavailable usage remains
++unknown. No pricing table is maintained here; reports show tokens without a dollar
++estimate. Live execution can incur provider charges even when opening fails.
++
++Connectivity preflight is intentionally skipped to reserve the sole admission for
++opening generation. A skipped health probe is not proof of upstream health.
++
++## Results and evidence
++
++Every command prints the verdict, absolute summary path, and exact ZIP path.
++The default output directory is:
++
++```text
++artifacts/atgb/automated_playtests/<UTC timestamp>-<unique suffix>/
++  configuration/          effective safe configuration and scenario
++  data/                   fresh isolated campaign; never ordinary saves
++  baseline/               API-visible and persistent state before Start
++  after/                  API-visible and persistent state after Start
++  diagnostics/            journal, worker attestation, bounded stdout/stderr,
++                          usage snapshot, optional response, execution log
++  screenshots/            reserved for a future browser adapter
++  reports/result.json     machine-readable results
++  reports/SUMMARY.md      human-readable results
++  evidence/manifest.json  selected artifact sizes and SHA-256 hashes
++  evidence/evidence.zip   complete selected diagnostic package
++```
++
++All timestamps in run IDs are UTC. The unique suffix prevents overwrites.
++Prior runs are retained. Only the worker process started for this run is stopped.
++The log ceiling is 256 KiB, each API/file capture is bounded at 2 MiB, and evidence
++selection at 32 MiB. ZIP generation is bounded at 30 seconds. The manifest hashes
++every selected member except itself. Live response evidence is sensitive game
++content even when it contains no credentials.
++
++View the latest verdict, summary path, and evidence ZIP location:
++
++```powershell
++.\scripts\run_live_playtest.ps1 -Latest
++```
++
++Use `-Port 8765` to select a localhost port; the default asks the OS for a free
++port. An occupied explicit port produces BLOCKED and leaves the existing server
++alone. The harness never attaches to or terminates an existing development server.
++
++## Reading a result
++
++| Verdict | Meaning |
++| --- | --- |
++| PASS | Required observed acceptance, state, commit, diagnostic, and budget-accounting invariants hold. |
++| FAIL | An observed scenario invariant failed. Failed opening may still have PASS state integrity. |
++| BLOCKED | Authorization, preflight, port binding, or startup prevented execution. |
++| INCONCLUSIVE | Execution or evidence collection was interrupted or required evidence is missing. |
++
++HTTP 200 alone cannot produce PASS. Failure classification identifies the observed
++stage and evidence field. Root causes remain unestablished unless investigated
++separately. An explicit incomplete/max-output finish outranks JSON parsing errors.
++Safe nonresolution can parse correctly and still fail opening acceptance.
++The UI is always reported `NOT_TESTED` until a browser adapter is installed.
++
++## Troubleshooting and limitations
++
++- BLOCKED before steps: inspect `reports/result.json`, `diagnostics/worker_failure.json`
++  if present, and `diagnostics/application.log`. Missing dependencies, altered
++  pinned fixtures, credentials, and unsafe directories must be resolved before
++  dispatch. Exception type and stage are retained without copying private messages.
++- Startup timeout: the bound is 30 seconds; check localhost permissions and the
++  selected port. No provider request is used for readiness polling.
++- API/step timeout: request ceiling 90 seconds, scenario ceiling 180 seconds;
++  the harness stops its worker and preserves evidence. It does not retry gameplay.
++- Output exhaustion or semantic failure: inspect journal provenance and optional
++  response artifact. The tool does not change prompts, budgets, models, or game code.
++- Missing artifact or unknown usage: treat the report's uncertainty as unresolved.
++  Captured persistent after-state can survive interruption even when a final API
++  projection is unavailable.
++- API automation does not prove rendered browser behavior. No Playwright/Selenium
++  dependency or registered browser runner exists in this repository. The adapter
++  contract is `tools/playtest/browser.py`.
++- The comparator recognizes opening-owned state roots and explicit bookkeeping;
++  it is conservative about new fields. It is not a general gameplay evaluator.
++  No ATGB score or frozen corpus judgment is changed by these runs.
++
++Run the bounded deterministic verification lanes:
++
++```powershell
++.\.venv\Scripts\python.exe -m tools.validate_pr_play_08
++```
++
++Lane logs, JUnit XML, exact commands, and preservation hashes are written under
++`artifacts/pr_play_08/`. This command runs no live provider operations.
+--- a/docs/NEXT_SESSION.md
++++ b/docs/NEXT_SESSION.md
+@@ -1,8 +1,43 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-29 / PR-PLAY-07.
++Ashen Thrones — Product Realization. Updated 2026-10-29 / PR-PLAY-08.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest tooling pass — PR-PLAY-08
++
++2026-10-29: **B — Conditionally ready; external review before any live harness run.**
++Automated isolated HTTP campaign-opening harness implemented under `tools/playtest/`;
++PowerShell entry: `scripts/run_live_playtest.ps1`. Default Deterministic mode uses
++synthetic SDK transport through real admission/parser/semantic/acceptance/storage
++owners, blocks external socket connects, and submits Start once. Live requires
++`-Mode Live -AuthorizeLiveProvider` at invocation; opening-only, one admission,
++zero SDK/host retries, existing model/output allowance, stricter inherited budgets.
++Unique stores reuse pinned ATGB isolation and hashes. Readiness attests bound data
++and owned PID; cleanup terminates that worker only. Reports include native journal
++correlation, persistent/API snapshots, conservative state comparison, classification,
++uncertainties, and a hashed evidence ZIP. Browser status remains NOT_TESTED; adapter
++contract only. ScriptedObservation exercises deterministic step dispatch/verification.
++
++H1–H20 and additional safety/registry checks: 35 passed. Completed relevant lanes:
++465 passed / six preexisting failures (three rich-opening assertions, one saved
++conversation assertion, two stale source-attestation assertions). No full-suite,
++rendered-UI, live adequacy, ATGB-score, or broad gameplay-quality claim. Loopback
++networking is sandbox-blocked; initial startup timeout evidence retained; the same
++deterministic HTTP checks pass with localhost execution permitted. Protected hash
++inventory: 471 data/experiment/production/frontend files unchanged across validation.
++No production gameplay or provider-source edits in this pass. Existing dirty tree
++and ordinary campaign data preserved. No live/connectivity operations, model/output
++budget increases, automatic retries, new gameplay structures, PR-EG integration,
++frozen fixture edits, secrets, commit or push.
++
++Guide: `docs/AUTOMATED_PLAYTEST_GUIDE.md`. Ten reports:
++`development/campaigns/product_realization/pr_play_08/`. Evidence:
++`artifacts/pr_play_08/` and `artifacts/atgb/automated_playtests/`. Review:
++`handoff/CURRENT_REVIEW.md`, stable ZIP and timestamped CURRENT_REVIEW ZIP.
++Recommended next action: external review of the completion package. The exact
++separately authorized live command and maximum exposure are in report 10 and the
++guide. Stop after review ZIP; do not execute that live command without new authority.
+ 
+ ## Latest semantic investigation and visibility repair — PR-PLAY-07
+ 

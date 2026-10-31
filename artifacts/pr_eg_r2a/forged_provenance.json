@@ -1,0 +1,87 @@
+[
+  {
+    "id": "expansion01",
+    "envelope": {
+      "speech": "The north road runs directly to the royal fortress.",
+      "claims": [
+        {
+          "text": "The north road runs directly to the royal fortress.",
+          "source_id": "F1",
+          "incidental": true,
+          "commitment": false,
+          "uncertain": false
+        }
+      ]
+    },
+    "result": "ABSTAIN",
+    "expected": "REJECT"
+  },
+  {
+    "id": "mixed02",
+    "envelope": {
+      "speech": "The street is called the north road, and it leads to the fortress.",
+      "claims": [
+        {
+          "text": "The street is called the north road, and it leads to the fortress.",
+          "source_id": "F1",
+          "incidental": true,
+          "commitment": false,
+          "uncertain": false
+        }
+      ]
+    },
+    "result": "ABSTAIN",
+    "expected": "REJECT"
+  },
+  {
+    "id": "contradiction01",
+    "envelope": {
+      "speech": "The street beyond the gate is called the south road.",
+      "claims": [
+        {
+          "text": "The street beyond the gate is called the south road.",
+          "source_id": "F1",
+          "incidental": true,
+          "commitment": false,
+          "uncertain": false
+        }
+      ]
+    },
+    "result": "ABSTAIN",
+    "expected": "REJECT"
+  },
+  {
+    "id": "hidden01",
+    "envelope": {
+      "speech": "The password you need is ember.",
+      "claims": [
+        {
+          "text": "The password you need is ember.",
+          "source_id": "F1",
+          "incidental": true,
+          "commitment": false,
+          "uncertain": false
+        }
+      ]
+    },
+    "result": "REJECT",
+    "expected": "REJECT"
+  },
+  {
+    "id": "paraphrase01",
+    "envelope": {
+      "speech": "The road outside the gate is called the north road.",
+      "claims": [
+        {
+          "text": "The road outside the gate is called the north road.",
+          "source_id": "F1",
+          "incidental": true,
+          "commitment": false,
+          "uncertain": false
+        }
+      ]
+    },
+    "result": "ABSTAIN",
+    "expected": "ACCEPT"
+  }
+]

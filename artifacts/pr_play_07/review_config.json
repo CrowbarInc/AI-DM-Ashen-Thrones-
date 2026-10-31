@@ -1,0 +1,724 @@
+{
+  "campaign_id": "pr_play_07",
+  "campaign_name": "PR-PLAY-07 — Opening Semantic Acceptance and Safe-Nonresolution Investigation",
+  "campaign_date": "2026-10-29",
+  "purpose": "Offline investigation and bounded diagnostics/UI repair; stop after review ZIP.",
+  "objective_status": "B — Conditionally ready",
+  "executive_summary": "Historical cause unresolved; no speculative semantic/prompt change. Repaired missing diagnostics/capture and erased UI failure feedback. S1–S12 pass; 405 checks pass / one entry-reproduced preexisting failure; 9 UI boundary checks pass. HTTP coverage bounded timeout. No live provider calls; no provider connectivity diagnostics; no model changes; no output-budget increases; no automatic retries; no additional provider operations; no unauthorized gameplay-state mutations; no new persistent gameplay structures; no experimental PR-EG integration; frozen ATGB baseline unchanged; no secrets included; no commit or push performed.",
+  "primary_report": "development/campaigns/product_realization/pr_play_07/09_final_verdict_and_handoff.md",
+  "supporting_files": [
+    {
+      "path": "game/gm.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "static/app.js",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "tools/atgb/accounting.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "tests/test_pr_play_07_semantic_acceptance.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "tests/helpers/pr_play_07_ui.cjs",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "tests/helpers/pr_play_07_entry_source.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "tools/validate_pr_play_07.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "tools/report_pr_play_07.py",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "source",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/01_historical_evidence_and_baseline.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/02_opening_execution_and_classification_map.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/03_semantic_contract_analysis.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/04_root_cause_and_implementation.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/05_diagnostic_improvements.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/06_ui_failure_feedback.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/07_deterministic_validation.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/08_live_test_readiness.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/09_final_verdict_and_handoff.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_07/PR_PLAY_07_LIVE_OPENING_TEST.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/classification_decision_table.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/classification_inventory.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostic_examples.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry_accounting.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry_accounting.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry_accounting_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry_head.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry_status.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/export.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/export.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/export_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/final_status.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_direct.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_direct.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_direct_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_final.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_final.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_final_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/focused_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/historical_inventory.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/historical_ledger.jsonl",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/historical_state.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/integrity.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/opening.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/opening_direct.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/opening_direct_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/opening_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/opening_source_map.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ordinary.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ordinary.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ordinary_direct.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ordinary_direct.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ordinary_direct_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ordinary_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/protected.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/provider.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/provider.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/provider_final.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/provider_final.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/provider_final_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/provider_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/semantic.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/semantic_acceptance_matrix.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/semantic_acceptance_matrix.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/source_diff.patch",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/state_integrity_results.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/structured.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/structured.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/structured_direct.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/structured_direct.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/structured_direct_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/structured_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/test_summary.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/ui_results.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/world.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/world.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/world_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/budget.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/concurrent.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D1.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D10.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D2.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D3.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D4.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D5.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D6.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D7.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D8.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/D9.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/extraction.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/placeholder.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/repeat.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/retry.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/diagnostics/validation.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/export.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/export.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/export_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/focused.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/focused.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/focused_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/opening.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/ordinary.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/ordinary.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/ordinary_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/provider.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/provider.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/provider_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/structured.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/structured.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/structured_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/world.txt",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/world.xml",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/initial_run/world_run.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S1.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S10.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S11.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S12.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S2.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S3.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S4.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S5.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S6.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S7.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S8.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/matrix/S9.json",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry/docs/NEXT_SESSION.md",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry/game/api.py",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry/game/gm.py",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry/game/immutable_valid_response.py",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry/game/provider_budget.py",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    },
+    {
+      "path": "artifacts/pr_play_07/entry/tools/atgb/accounting.py",
+      "role": "evidence",
+      "why": "Scoped PR-PLAY-07 source, reports, manual and deterministic validation."
+    }
+  ],
+  "changes": {
+    "production": [
+      "Opening diagnostics/capture and localized player failure feedback."
+    ],
+    "validation": [
+      "S1–S12, bounded capture/ledger controls and actual JS handler tests."
+    ],
+    "tooling": [
+      "Accounting observational stages; bounded driver/report generator."
+    ],
+    "documentation": [
+      "Nine reports, PowerShell manual, canonical session handoff."
+    ],
+    "generated_artifacts": [
+      "Explicit diff/matrices/source/decision maps, status/integrity and review."
+    ]
+  },
+  "testing": {
+    "focused": "86 passed.",
+    "broader": "405 total current checks pass / one preexisting failure; report 07 gives disjoint counts.",
+    "full_suite": "Not run; bounded relevant slices.",
+    "runtime_validation": "Synthetic SDK through actual endpoint/semantic/persistence owners; 9 Node boundary cases; HTTP suites timed out.",
+    "model_runtime_boundary": "No live provider or connectivity calls.",
+    "new_regressions": "None in completed scope. Development diagnostic-consumer mismatch fixed.",
+    "pre_existing_failures": "Stale source attestation reproduced with saved dirty entry production sources."
+  },
+  "decisions_requiring_human_review": [
+    "Accept/redirect conditional readiness before any future one-Start operator test."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Historical response/reasons absent; unresolved-answer guidance conflict; HTTP coverage timed out."
+    ],
+    "pre_existing": [
+      "Frozen attestation stale; historical rich-emission/conversation failures not newly reproduced."
+    ]
+  },
+  "does_not_prove": [
+    "Exact historical semantic cause, live/rendered success, reliability, independent generalization or ATGB performance."
+  ],
+  "recommended_next_step": "External review; stop without further implementation or live opening.",
+  "configuration_source": "artifacts/pr_play_07/review_config.json",
+  "self_contained_review_test": "Verify nine reports, exact manual path, diff/matrices/status and ZIP manifest hashes."
+}

@@ -1,0 +1,68 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:17:36.058105Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:17:36.058105Z",
+    "conversational_context": {
+      "focused_destination": {
+        "exit_id": "exit_docks",
+        "label": "the docks",
+        "scene_id": "waystation_courtyard"
+      },
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Can I reach the docks from here?",
+          "delivered_text": "From here, the docks is an established way you could take. You have not moved.",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:movement_question",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "GM",
+        "purpose": "EXPLANATION",
+        "subject": "Ask whether a destination can be reached.",
+        "response": "From here, the docks is an established way you could take. You have not moved.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "dce51059563a6b3440946c2e0c7cf81c0ca68e40ef766981bd30bdf9d91bcd37",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

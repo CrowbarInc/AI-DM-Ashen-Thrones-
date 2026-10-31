@@ -1,0 +1,785 @@
+{
+  "campaign_id": "pr_eg_r6_r2_grounding_20261017",
+  "campaign_name": "PR-EG-R6-R2 \u2014 Entity-Role Grounding and Semantic Relevance",
+  "campaign_date": "2026-10-17",
+  "purpose": "Implement and qualify bounded semantic correspondence while preserving host authority.",
+  "objective_status": "C \u2014 SEMANTIC GROUNDING BELOW ACCEPTANCE",
+  "executive_summary": "**C \u2014 SEMANTIC GROUNDING BELOW ACCEPTANCE.** Implemented bounded entity-role and proposition correspondence under the existing R6 gate. 384 tests passed; 5 inherited failures; 0 new failures. Fresh production /api/chat recorded 122 turns across 9 conversations. Matching improved in selected cases, but correction and follow-up failures and clarification loops prevent qualification. No positive qualification is claimed.",
+  "changes": {
+    "production": [
+      "game/unified_semantic_planning.py",
+      "game/semantic_correspondence.py"
+    ],
+    "validation": [
+      "37 new controlled cases, 120 target fresh turns, frozen holdouts."
+    ],
+    "tooling": [
+      "tools/qualify_pr_eg_r6_r2.py",
+      "tools/baseline_pr_eg_r6_r2.py",
+      "tools/compare_pr_eg_r6_r2.py",
+      "tools/supplement_pr_eg_r6_r2.py",
+      "tools/assess_pr_eg_r6_r2_local.py",
+      "tools/controlled_compare_pr_eg_r6_r2.py",
+      "tools/write_pr_eg_r6_r2_review.py"
+    ],
+    "documentation": [
+      "36 numbered review artifacts."
+    ],
+    "generated_artifacts": [
+      "Transcripts, model traces, JUnit, matched comparisons, score audit and metrics."
+    ]
+  },
+  "testing": {
+    "focused": "68 focused tests passed.",
+    "broader": "384 passed / 5 inherited failed",
+    "full_suite": "Not run.",
+    "runtime_validation": "122 final-code fresh turns / 9 groups.",
+    "model_runtime_boundary": "Configured provider; actual model IDs in usage. Separate local transcript scoring is not human qualification.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "['tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C01]', 'tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C02]', 'tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C03]', 'tests.test_pr_eg_r3_r1_expression_semantics::test_t19_t23_answer_sufficiency_and_refusal', 'tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance']"
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Corrections and follow-ups fail; generic clarification loops.",
+      "Argument paraphrase and source interpretation remain limited.",
+      "Observed latency and token targets passed; semantic quality remains below acceptance."
+    ],
+    "pre_existing": [
+      "Five failures in expanded baseline selection; includes two previously known failures."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review below-acceptance result and proposed architecture revision."
+  ],
+  "missing_concepts": [
+    "Durable delivered-question identities and robust semantic correction binding."
+  ],
+  "does_not_prove": [
+    "A/B qualification, universal semantic correctness, external independent holdout authorship, or full arbitrary-state nonmutation."
+  ],
+  "recommended_next_step": "External review of PR-EG-R6-R2. Keep default gate off. Stop; do not begin PR-EH.",
+  "primary_report": "artifacts/pr_eg_r6_r2/01_EXECUTIVE_SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6_r2/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/02_BASELINE_AND_REPOSITORY_STATE.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/03_FAILURE_REPRODUCTION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/04_ENTITY_ROLE_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/05_ADDRESSEE_GROUNDING.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/06_RELATIONSHIP_ARGUMENT_GROUNDING.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/07_SEMANTIC_PROPOSITION_REPRESENTATION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/08_SOURCE_PROPOSITION_REPRESENTATION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/09_SEMANTIC_RELEVANCE.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/10_SEMANTIC_MATCHING_ARCHITECTURE.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/11_PROVIDER_RESPONSIBILITIES.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/12_HOST_RESPONSIBILITIES.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/13_CANDIDATE_SOURCE_SELECTION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/14_ANSWER_SUFFICIENCY.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/15_CORRECTION_SEMANTICS.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/16_CORRECTION_TARGET_BINDING.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/17_FOLLOW_UP_CONTINUITY.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/18_CLARIFICATION_QUALITY.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/19_RESPONSE_PLANNING.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/20_AUTHORIZATION_PRESERVATION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/21_LEGACY_PATH_ISOLATION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/22_FEATURE_GATE_BEHAVIOR.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/23_CONTROLLED_TEST_RESULTS.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/24_INDEPENDENT_HOLDOUTS.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/25_ADVERSARIAL_SEMANTIC_TESTS.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/26_MATCHED_BASELINE_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/27_FRESH_PROVIDER_CONVERSATIONS.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/28_TURN_LEVEL_QUALIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/29_DIALOGUE_QUALITY_AND_PLAYABILITY.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/30_PERFORMANCE.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/31_REGRESSION_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/32_ACCEPTANCE_GATES.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/33_REMAINING_LIMITATIONS.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/34_RECOMMENDED_NEXT_ACTION.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/35_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/36_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/acceptance_gates.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/baseline_junit.xml",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/baseline_repository.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/baseline_tests.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/controlled_matched_comparison.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/external_audit_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/failure_reproduction.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/focused_junit.xml",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/focused_tests.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/freeze.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/holdout_results.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/integrity_results.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/judge_scores.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/judge_usage.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/live_console.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/local_assessment_method.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_legacy_console.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r2_console.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r6_console.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/performance.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/pilot_console.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/pilot_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/pilot_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/planning_changes.diff",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/primary_live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/primary_live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/quality_metrics.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/regression_comparison.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/regression_junit.xml",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/regression_tests.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/source_locations.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/supplement_console.txt",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_legacy/live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_legacy/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_legacy/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_legacy/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r2/live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r2/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r2/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r2/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r2/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r6/live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r6/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r6/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/matched_r6/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/supplement/live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/supplement/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/supplement/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/supplement/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/supplement/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/baseline_sources/game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_correspondence.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r2_grounding.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/baseline_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/compare_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/supplement_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/assess_pr_eg_r6_r2_local.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/controlled_compare_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tools/write_pr_eg_r6_r2_review.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_speech_adoption.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_r2_reference_eligibility.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_expressive_dialogue.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_r1_expression_semantics.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r4_r1_delivery_integrity.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r1_disclosure_boundary.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r1_r1_provenance.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_social_question_relevance_answer_selection.py",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6/freeze.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r1_r1/regression_comparison.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r1_r1/live_status.json",
+      "role": "cycle_evidence",
+      "why": "R6-R2 implementation, preserved baseline, or qualification evidence.",
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/evidence_inventory.json",
+      "role": "inventory",
+      "why": "Hashed source and evidence manifest."
+    }
+  ],
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000
+}

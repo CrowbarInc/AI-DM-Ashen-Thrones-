@@ -1,0 +1,80 @@
+{
+  "scenario_id": "S09",
+  "title": "The quiet pair",
+  "catalog_heading": "S09 — The quiet pair",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "held_out",
+  "catalog_partition": "held-out",
+  "evidence_status": "held_out_previously_exposed",
+  "evidence_status_note": "S09 was included in the ATGB-01 review catalog so a reviewer could judge it. The held-out partition remains. It is not fully independent unseen evaluation data.",
+  "primary_capability": "ambiguity_handling",
+  "secondary_capabilities": ["npc_dialogue_coherence", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. Held-out. Not a tuning set.",
+  "authoritative_facts": [
+    "The ragged stranger and the threadbare watcher are both present addressables.",
+    "Neither has an owned topic in world.json.",
+    "The stranger hangs back and watches the crowd. The watcher stands still, gaze moving to packs and faces.",
+    "Neither has an authored name beyond those labels, and neither owns the patrol rumor."
+  ],
+  "npc_knowledge": [
+    "Neither bystander has an authored answer to who they are beyond the public label.",
+    "Delivering the runner's rumor in either voice is an authority failure. Delivering a hidden fact is critical."
+  ],
+  "expected_outcomes": [
+    "The first line is ambiguous between two people and is clarified.",
+    "The second line selects the watcher.",
+    "No patrol story is borrowed."
+  ],
+  "acceptable_variations": [
+    "The clarification may be in character or a single concise OC line.",
+    "Either person may be described with the visible posture cues while the question is asked."
+  ],
+  "unacceptable_behaviors": [
+    "Answering as the tavern runner.",
+    "Inventing personal names.",
+    "Stating how long either has stood there.",
+    "Revealing the signal, the face list, the noble agent, or the Ash Cowl contact."
+  ],
+  "required_evidence": ["Shared packet, labeled held_out."],
+  "setup_dependencies": [
+    "The engine is not required to role-play two NPCs in one reply. One clarifying question is the successful path. A crowd conversation system is unsupported and is not a pass condition."
+  ],
+  "determinism": "mixed. A host clarification that names both people is host-checkable. What the chosen NPC then says, if anything, is live-lane.",
+  "turns": [
+    {
+      "turn_id": "S09.1",
+      "catalog_heading": "S09.1 — primary: ambiguity handling",
+      "primary_capability": "ambiguity_handling",
+      "player_input": "I ask either the ragged stranger or the threadbare watcher who they are.",
+      "communicative_act": "The addressee is unresolved between refugee and threadbare_watcher.",
+      "interpretation_pass": "The addressee is unresolved between those two ids, refugee and threadbare_watcher.",
+      "response_pass": "One question that names both and does not answer as a third person.",
+      "authority_pass": "No biography.",
+      "acceptable_variations": ["The clarification may be in character or a single concise OC line."],
+      "unacceptable_behaviors": ["Answering as the tavern runner."],
+      "clarification_expected": "necessary_pass",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Shared packet, labeled held_out."]
+    },
+    {
+      "turn_id": "S09.2",
+      "catalog_heading": "S09.2 — primary: ambiguity handling",
+      "primary_capability": "ambiguity_handling",
+      "player_input": "The threadbare watcher.",
+      "communicative_act": "threadbare_watcher is now the addressee, and the pending question is who they are.",
+      "interpretation_pass": "threadbare_watcher is now the addressee, and the pending question is who they are.",
+      "response_pass": "The public label is the available identity. The reply does not invent a personal name or a secret role.",
+      "authority_pass": "No hidden fact. The runner's rumor is not moved into this mouth.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Inventing a personal name or revealing a hidden fact."],
+      "clarification_expected": "none",
+      "clarification_notes": "Asking the same choice again is unnecessary_fail.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the who-question from S09.1 is what gets answered.",
+      "required_evidence": ["Shared packet, labeled held_out."]
+    }
+  ]
+}

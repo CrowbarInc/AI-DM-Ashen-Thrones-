@@ -1,0 +1,136 @@
+PR-PLAY-05 — ONE CONTROLLED OPENING, OPERATOR HANDOFF ONLY
+2026-10-27, America/New_York. Supersedes PR-PLAY-02 for the next test.
+Do not execute until external review accepts this package. No live trial was
+performed during PR-PLAY-05. One user-initiated Start Campaign attempt only.
+An attempt may consume multiple provider requests; the ceiling is SIX transport
+admissions across all supported callers, including failures. It is not six Starts.
+SDK retries and host retries must both remain disabled. No automatic retry.
+
+1. PREPARE IN A FRESH POWERSHELL WINDOW
+Close previous test servers. Preserve the normal campaign. Paste:
+
+Set-Location -LiteralPath 'C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm'
+$playStamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$playRoot = Join-Path (Get-Location) "artifacts\pr_play_05\manual-$playStamp"
+if (Test-Path -LiteralPath $playRoot) { throw 'Folder exists. Stop.' }
+$env:ASHEN_DATA_DIR = Join-Path $playRoot 'data'
+New-Item -ItemType Directory -Path $env:ASHEN_DATA_DIR -ErrorAction Stop | Out-Null
+Copy-Item -LiteralPath 'data\validation\atgb\baselines\frontier-gate-v1\campaign.json','data\validation\atgb\baselines\frontier-gate-v1\character.json','data\validation\atgb\baselines\frontier-gate-v1\conditions.json','data\validation\atgb\baselines\frontier-gate-v1\world.json' -Destination $env:ASHEN_DATA_DIR -ErrorAction Stop
+Copy-Item -LiteralPath 'data\validation\atgb\baselines\frontier-gate-v1\scenes' -Destination $env:ASHEN_DATA_DIR -Recurse -ErrorAction Stop
+New-Item -ItemType Directory -Path (Join-Path $playRoot 'screenshots') -ErrorAction Stop | Out-Null
+New-Item -ItemType File -Path (Join-Path $playRoot 'notes.txt') -ErrorAction Stop | Out-Null
+Write-Host "ISOLATED OPENING TEST: $playRoot"
+
+Stop on any command error. Do not edit .env, normal data, prompts or models.
+
+2. SET CONTROLS, VERIFY WITHOUT NETWORK, THEN LAUNCH
+In that SAME window, after review approval:
+
+$env:ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT = '1'
+$env:ASHEN_PLAYTEST_DISABLE_SDK_RETRIES = '1'
+$env:ASHEN_DISABLE_PROVIDER_RETRIES = '1'
+$env:ASHEN_GENERATION_DIAGNOSTICS = '1'
+$env:ASHEN_PROVIDER_REQUEST_LIMIT = '6'
+$env:ASHEN_PROVIDER_INPUT_TOKEN_LIMIT = '200000'
+$env:ASHEN_PROVIDER_OUTPUT_TOKEN_LIMIT = '20000'
+$env:ASHEN_PROVIDER_TOTAL_TOKEN_LIMIT = '220000'
+$env:ASHEN_PROVIDER_USAGE_PATH = Join-Path $playRoot 'provider_usage.jsonl'
+Remove-Item Env:ASHEN_DISABLE_PROVIDER_CALLS -ErrorAction SilentlyContinue
+Remove-Item Env:ASHEN_DISABLE_LIVE_INTERPRETATION -ErrorAction SilentlyContinue
+Remove-Item Env:ASHEN_DISABLE_EXPRESSION_GENERATION -ErrorAction SilentlyContinue
+& .venv\Scripts\python.exe -c "import os; from game.storage import DATA_DIR; from game.provider_budget import sdk_retry_options,limits,generation_diagnostics_enabled,provider_retries_disabled; print('DATA:',DATA_DIR); print('SDK:',sdk_retry_options(),'LIMITS:',limits(),'DIAGNOSTICS:',generation_diagnostics_enabled()); assert str(DATA_DIR)==os.environ['ASHEN_DATA_DIR']; assert sdk_retry_options()=={'max_retries':0} and provider_retries_disabled() and limits()[0]==6 and generation_diagnostics_enabled(); assert int(os.environ.get('ASHEN_NARRATION_MAX_OUTPUT_TOKENS','600'))==600; assert not os.environ.get('ASHEN_PIN_PROVIDER_MODEL','').strip()"
+if ($LASTEXITCODE -ne 0) { throw 'Configuration mismatch. Stop; do not change configuration to pass.' }
+& .venv\Scripts\python.exe -m uvicorn game.api:app --host 127.0.0.1 --port 8765 --workers 1
+
+DATA must be the new manual folder, SDK max_retries 0, limit 6, diagnostics True.
+No --reload, extra workers, restart, connectivity probe or provider preflight.
+The existing narration limit remains 600; no model pin is introduced. Other
+model/response-format/prompt settings remain production defaults.
+If port 8765 is busy, stop; do not connect to an unknown server or kill it.
+Open http://127.0.0.1:8765/ in one tab; verify this server receives the requests.
+
+3. NEW CAMPAIGN, BEFORE SNAPSHOT, START ONCE
+Click New Campaign once in Play/player mode. It initializes the disposable
+campaign and does not narrate. Save a screenshot. In a SECOND PowerShell window,
+set $playRoot to the full printed path from step 1 (replace MANUAL_FOLDER):
+
+$playRoot = 'MANUAL_FOLDER'
+Invoke-RestMethod -Uri 'http://127.0.0.1:8765/api/state' | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath (Join-Path $playRoot 'before_state.json') -Encoding utf8
+Copy-Item -LiteralPath (Join-Path $playRoot 'data') -Destination (Join-Path $playRoot 'before') -Recurse -ErrorAction Stop
+Get-Content -LiteralPath (Join-Path $playRoot 'provider_usage.jsonl')
+
+Before Start the ledger should contain initialization only, no admitted or
+dispatch_attempted rows. If there is provider activity already, STOP and export.
+The /api/state request above is local application inspection, not a provider call.
+Return to the browser. Click Start Campaign ONCE. Do not send any chat or action.
+Time the attempt; record exact visible result and seconds in notes.txt.
+
+4. EXPECTED RESULT AND STOP CONDITIONS
+Success: scene-setting narration, campaign_started true, one committed opening
+turn; the final ledger observation says accepted_structured_opening and
+gameplay_committed true. This establishes one successful sample only.
+Failure: explicit opening error (normally HTTP 422 opening_failed), no GM
+fallback presented as successful narration, campaign_started false, no committed
+turn/time/faction progression. Budget refusal is HTTP 409 blocked.
+
+STOP AND EXPORT AFTER SUCCESS AS WELL AS FAILURE. Also stop for generic
+information fallback, exhausted budget, unexpected automatic retry, unresponsive
+application/no reply after 60 seconds, or progression after an explicit failure.
+Do not press Start again, continue NPC conversation, take actions, restart to
+continue the same budget, raise limits or change models/prompts/output caps.
+PR-PLAY-04's UI error may offer another try; this procedure forbids that retry.
+If there are extra provider operations despite the zero-retry controls, retain
+every admission and stop; one click is not assumed to equal one provider request.
+
+5. CAPTURE LOCAL STATE, STOP SERVER, EXPORT
+If responsive, in the SECOND window use this read-only local endpoint:
+
+Invoke-RestMethod -Uri 'http://127.0.0.1:8765/api/state' | ConvertTo-Json -Depth 100 | Set-Content -LiteralPath (Join-Path $playRoot 'after_state.json') -Encoding utf8
+
+If unresponsive, do not wait indefinitely or resend. Note the missing snapshot.
+Save screenshots/result/stop reason into the printed folder. Press Ctrl+C in the
+SERVER window and wait for the process to stop. Then in that SAME server window:
+
+Copy-Item -LiteralPath $env:ASHEN_DATA_DIR -Destination (Join-Path $playRoot 'after') -Recurse -ErrorAction Stop
+if (Test-Path -LiteralPath $env:ASHEN_PROVIDER_USAGE_PATH) {
+    $playRows = Get-Content -LiteralPath $env:ASHEN_PROVIDER_USAGE_PATH | ForEach-Object { $_ | ConvertFrom-Json }
+    $playRows | Where-Object event -eq 'generation_diagnostic' | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath (Join-Path $playRoot 'generation_diagnostics.json') -Encoding utf8
+    $playRows | Where-Object event -eq 'completed' | Select-Object attempt_id,purpose,sent,completion_status,input_tokens,output_tokens,total_tokens,usage_consistent | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $playRoot 'provider_completions.json') -Encoding utf8
+}
+$playZip = "$playRoot-EVIDENCE.zip"
+Compress-Archive -LiteralPath $playRoot -DestinationPath $playZip -ErrorAction Stop
+Write-Host "REVIEW EVIDENCE: $playZip"
+
+Do not invent a ledger when startup failed. Preserve partial lines, missing
+usage/finish metadata and pending requests. Tokens are available from completed
+rows ONLY; do not sum diagnostic copies or treat null usage as zero. Count
+admitted rows for application request admissions and dispatch_attempted for
+transport invocations. Provider request IDs and attempt IDs correlate observations.
+completion_status is host accounting status; provider_status and
+provider_finish_reason in provider_response diagnostics are provider evidence.
+output_limit_reached alone is NOT confirmed truncation. Only explicit
+provider_finish_reason=max_output_tokens records reported output exhaustion.
+
+Expected artifacts: before/after data, optional before/after state JSON,
+provider_usage.jsonl (all lifecycle and diagnostic observations), diagnostic and
+completion extracts, notes and screenshots. Failed openings need not add a game
+log row; their diagnostics persist independently in the EXISTING provider ledger.
+The opening_outcome row records final rejection/recovery and commit disposition
+after rollback/commit. Missing outcome after interruption is unknown; inspect
+the snapshots rather than inferring no mutation. Do not delete partial evidence.
+No full provider content/request or credentials are captured by the new mode.
+Campaign snapshots contain hidden game information; review notes/screenshots for
+personal data and share only with the intended reviewer. Never include .env,
+keys, authorization headers, unrelated saves, or unsanitized server output.
+
+6. RESTORE NORMAL ENVIRONMENT
+After stopping and exporting, close both disposable PowerShell windows and the
+test tab. Process-local environment changes disappear. In a NEW window:
+
+Set-Location -LiteralPath 'C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm'
+& .venv\Scripts\python.exe run.py
+
+Normal URL is http://127.0.0.1:8000/. Normal campaign files were never overwritten.
+Keep the disposable folder/ZIP. An existing ledger deliberately cannot be reused
+after restart. A new attempt requires separate review/authorization.
+Return the evidence ZIP and await review. Do not broaden this opening test.

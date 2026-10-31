@@ -1,0 +1,551 @@
+{
+  "ok": true,
+  "preflight": {
+    "ok": true,
+    "baseline": {
+      "version": "frontier-gate-v1",
+      "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+      "source": "data/validation/atgb/baselines/frontier-gate-v1"
+    },
+    "checks": [
+      {
+        "check": "isolated_data_dir",
+        "ok": true
+      },
+      {
+        "check": "baseline_version",
+        "ok": true
+      },
+      {
+        "check": "starting_location",
+        "ok": true
+      },
+      {
+        "check": "starting_scene_present",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:campaign.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:character.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:conditions.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/frontier_gate.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/market_quarter.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/old_milestone.json",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_guard:location",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_guard:topic:watch_command",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_serjeant:location",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_serjeant:topic:route_change",
+        "ok": true
+      },
+      {
+        "check": "npc:tavern_runner:location",
+        "ok": true
+      },
+      {
+        "check": "npc:tavern_runner:topic:patrol_rumor",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:world.json",
+        "ok": true
+      },
+      {
+        "check": "fresh_runtime_and_empty_history",
+        "ok": true
+      }
+    ],
+    "critical_failures": [],
+    "runtime_violations": [],
+    "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+    "unverified_conditions": [
+      "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+      "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+      "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+      "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+    ]
+  },
+  "reset_invoked": true,
+  "reset": {
+    "campaign_run_id": "e2f7fcdc7204a2176c7e2e76",
+    "session_id": "e2f7fcdc7204a2176c7e2e76"
+  },
+  "context_establishment": "fresh_campaign_reset",
+  "context_limitation": null,
+  "scene_after_reset": {
+    "scene_id": "frontier_gate",
+    "discovered_clues": [],
+    "world_flag_names": [],
+    "world_state_flag_names": [],
+    "interlocutor": null,
+    "transcript_entries": 0
+  },
+  "model_configuration": {
+    "default_model_name": "gpt-4.1-mini",
+    "high_precision_model_name": "gpt-4.1-mini",
+    "retry_escalation_model_name": "gpt-4.1-mini",
+    "model_routing_enabled": true,
+    "sampling": "uncontrolled",
+    "api_key_recorded": false
+  },
+  "turns": [
+    {
+      "response_text": "I couldn't read that as a gameplay action. Please say it again in plain words.",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3828
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1801
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 255
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "interpretation_rejected",
+      "communication_mode": "AUTO",
+      "conversational_decision": "malformed_interpretation",
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S09.1",
+      "request": {
+        "text": "I ask either the ragged stranger or the threadbare watcher who they are.",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 1,
+        "observed_sent_requests": 1,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded",
+        "admitted_requests": 1,
+        "input_tokens": 1801,
+        "output_tokens": 255,
+        "process_snapshot": {
+          "version": "ATGB-03B-1",
+          "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+          "requests": 1,
+          "request_upper_bound": 1,
+          "dispatched_requests": 1,
+          "pending_requests": 0,
+          "input_tokens": 1801,
+          "output_tokens": 255,
+          "total_tokens": 2056,
+          "stopped": false,
+          "stop_reason": "",
+          "records": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:51.956524+00:00",
+              "sent": true,
+              "request_id": "resp_03005edbd9a651e4006ad54911908087d2945faf6b31902ebc",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1801,
+              "output_tokens": 255,
+              "total_tokens": 2056,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2940.167
+            }
+          ],
+          "events": [
+            {
+              "event": "initialized",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "time": "2026-10-18T22:32:46.459751+00:00"
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:48.161179+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:49.013854+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:51.956524+00:00",
+              "sent": true,
+              "request_id": "resp_03005edbd9a651e4006ad54911908087d2945faf6b31902ebc",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1801,
+              "output_tokens": 255,
+              "total_tokens": 2056,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2940.167
+            }
+          ]
+        }
+      }
+    },
+    {
+      "response_text": "Do you intend to speak to or about the 'threadbare watcher' NPC, or is this a description or question about them?",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1994
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1859
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 209
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_clarify",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "CLARIFY",
+        "primary_intention": "Clarify the intended meaning or action behind the utterance 'The threadbare watcher.'",
+        "intent_family": "clarification",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [
+          "interpretable_action"
+        ],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "interpretation_not_interpreted",
+        "confidence": 0.5,
+        "ambiguity": null,
+        "player_facing_text": "Do you intend to speak to or about the 'threadbare watcher' NPC, or is this a description or question about them?",
+        "context_update": null,
+        "intent_modality": "committed",
+        "secondary_intentions": [],
+        "execution_policy": "",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION",
+        "authorization": null
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S09.2",
+      "request": {
+        "text": "The threadbare watcher.",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        }
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "status": "recorded",
+        "request_upper_bound": 2,
+        "observed_sent_requests": 2,
+        "pending_requests": 0,
+        "reason": "durable_admissions_bound_dispatches",
+        "usage_status": "recorded",
+        "admitted_requests": 1,
+        "input_tokens": 1859,
+        "output_tokens": 209,
+        "process_snapshot": {
+          "version": "ATGB-03B-1",
+          "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+          "requests": 2,
+          "request_upper_bound": 2,
+          "dispatched_requests": 2,
+          "pending_requests": 0,
+          "input_tokens": 3660,
+          "output_tokens": 464,
+          "total_tokens": 4124,
+          "stopped": false,
+          "stop_reason": "",
+          "records": [
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:51.956524+00:00",
+              "sent": true,
+              "request_id": "resp_03005edbd9a651e4006ad54911908087d2945faf6b31902ebc",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1801,
+              "output_tokens": 255,
+              "total_tokens": 2056,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2940.167
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+              "time": "2026-10-18T22:32:53.957163+00:00",
+              "sent": true,
+              "request_id": "resp_03e681be9310f8f7006ad5491455e487d28af13981f724185c",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1859,
+              "output_tokens": 209,
+              "total_tokens": 2068,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1945.55
+            }
+          ],
+          "events": [
+            {
+              "event": "initialized",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "time": "2026-10-18T22:32:46.459751+00:00"
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:48.161179+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:49.013854+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "789a9d2205e04cdfbcd7033404eee08a",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:48.161179+00:00",
+              "time": "2026-10-18T22:32:51.956524+00:00",
+              "sent": true,
+              "request_id": "resp_03005edbd9a651e4006ad54911908087d2945faf6b31902ebc",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1801,
+              "output_tokens": 255,
+              "total_tokens": 2056,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 2940.167
+            },
+            {
+              "event": "admitted",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+              "time": "2026-10-18T22:32:51.989599+00:00"
+            },
+            {
+              "event": "dispatch_attempted",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+              "time": "2026-10-18T22:32:52.010626+00:00"
+            },
+            {
+              "event": "completed",
+              "version": "ATGB-03B-1",
+              "run_id": "cf04dbdd9a73456a812789b42999bb1e",
+              "attempt_id": "a0bcdb8d8a8a41ec9965abf7fd3788f2",
+              "purpose": "interpretation",
+              "owner": "live_chat_interpretation.request_interpretation",
+              "configured_model": "gpt-4.1-mini",
+              "admitted_at": "2026-10-18T22:32:51.989599+00:00",
+              "time": "2026-10-18T22:32:53.957163+00:00",
+              "sent": true,
+              "request_id": "resp_03e681be9310f8f7006ad5491455e487d28af13981f724185c",
+              "model": "gpt-4.1-mini-2025-04-14",
+              "input_tokens": 1859,
+              "output_tokens": 209,
+              "total_tokens": 2068,
+              "usage_consistent": true,
+              "refusal": null,
+              "completion_status": "completed",
+              "dispatch_attempted": true,
+              "latency_ms": 1945.55
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "stop_reason": null,
+  "unexpected_provider_activity": false
+}

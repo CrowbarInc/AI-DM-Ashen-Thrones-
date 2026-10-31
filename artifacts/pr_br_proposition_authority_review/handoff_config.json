@@ -1,0 +1,231 @@
+{
+  "campaign_id": "pr-br-proposition-authority-review",
+  "campaign_name": "PR-BR Proposition-Level Narration Authority",
+  "campaign_date": "2026-10-03",
+  "purpose": "Architectural review of sentence-level authority inheritance and temporal provenance. Discovery only. No production edits and no model calls.",
+  "primary_report": "artifacts/pr_br_proposition_authority_review/ARCHITECTURAL_REVIEW.md",
+  "executive_summary": "The pre-narration decision is sound and should be kept. Authority is still applied to a whole sentence: the first licensed subject and value stamp that sentence as world truth, and a sentence the classifier does not recognize is kept unlabeled. That is the A2 to A3 to A4 chain. A2's 'indicate it was left unfired' inherited the split-jar fact. The process-disruption sentence was never classified and was emitted anyway. A3 opened only an actor slot and treated the player's hypothesis as the event, because prior GM prose has no provenance tag. A4 labeled 'no signs of firing' as the intact-pots fact, left the kiln sentence unlabeled, and preservation deleted the uncertainty sentence. The salvage is claim-level control on the existing semantic identity, not a new narration stack and not a larger single identity. Decision A.",
+  "objective_status": "architecture_salvageable_by_proposition_level_claim_control",
+  "changes": {
+    "production": [],
+    "validation": [],
+    "tooling": [],
+    "documentation": [
+      "Wrote the architectural review at artifacts/pr_br_proposition_authority_review/ARCHITECTURAL_REVIEW.md. No production code was changed."
+    ],
+    "generated_artifacts": [
+      "handoff/CURRENT_REVIEW.md, handoff/REVIEW_MANIFEST.json, and handoff/CURRENT_REVIEW.zip package this review with the A2-A4 and B1-B4 evidence and the current classifier, preservation, and provenance modules."
+    ]
+  },
+  "testing": {
+    "focused": "Not run. This cycle is review only.",
+    "broader": "Not run. The 4x10 gate was not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "None. Zero gameplay turns and zero model calls in this cycle. Findings use the completed 20261003T223147Z multi-turn run.",
+    "model_runtime_boundary": "0 gameplay turns. 0 generation calls. 0 interpretation calls. 0 preflight calls. 0 total model/API calls.",
+    "new_regressions": "No production patch.",
+    "pre_existing_failures": "Split-quotation attributed testimony and guard_captain versus gate_guard were not repaired and were not reinterpreted."
+  },
+  "self_contained_review_test": "The bundle contains the architectural review, the prior validation report, A2-A4 and B1-B4 turn evidence, and the production modules that classify narrated facts, preserve sentences, store incidental and rejected proposals, and record NPC claims.",
+  "decisions_requiring_human_review": [
+    "A. CURRENT ARCHITECTURE IS SALVAGEABLE BY MOVING AUTHORITY FROM SENTENCE-LEVEL MATCHING TO PROPOSITION-LEVEL CLAIM CONTROL."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "classify_narrated_fact copies the first matching semantic identity onto the entire sentence.",
+      "A sentence that matches no identity and no consequential family returns None and preservation keeps it.",
+      "unsupported_narrator_lead removed A4's uncertainty sentence while the kiln certainty remained.",
+      "Prior GM prose enters the next prompt as unlabeled P|G text, so a player hypothesis becomes the event.",
+      "Rejected consequential proposals and accepted incidental lines are not ledger records.",
+      "B3's thanks was dropped because executable_obligations returns empty when 'head out to' is not a move span. Secondary."
+    ],
+    "pre_existing": [
+      "Split quotation / attributed-testimony edge case remains unrepaired.",
+      "guard_captain versus gate_guard addressability mismatch remains unrepaired."
+    ]
+  },
+  "missing_concepts": [
+    "Multiple claim units per narrated sentence, reusing semantic identity rather than replacing it.",
+    "An epistemic act on the decision: establish, infer, or leave unresolved.",
+    "A small typed record for GM inference, player hypothesis, accepted incidental, and rejected consequential identity.",
+    "Preservation that refuses a mixed sentence instead of sealing it as the matched fact."
+  ],
+  "does_not_prove": [
+    "Does not prove a post-hoc English parser can recover residual claims without NLI.",
+    "Does not implement the claim record, the ledger, or a preservation change.",
+    "Does not show the commit store would adopt the kiln sentence on a later turn.",
+    "Does not rerun the multi-turn sequences or the 4x10 gate.",
+    "Does not authorize PR-BS."
+  ],
+  "recommended_next_step": "Implement only the minimum claim-control boundary in section 23 of the architectural review. Deterministic tests in section 24 come before any further live call.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/validation_report.md",
+      "role": "prior_validation_report",
+      "why": "The 4 PASS / 4 FAIL measurement this review explains.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/turn_record.json",
+      "role": "turn_evidence",
+      "why": "A2 contract, decision, and emitted causal narration.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/generations.json",
+      "role": "turn_evidence",
+      "why": "A2 initial generation and empty retry.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A2/gm_output.json",
+      "role": "turn_evidence",
+      "why": "A2 audit: indicate-sentence stamped authored world truth; process sentence unlabeled; lead rejected.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/turn_record.json",
+      "role": "turn_evidence",
+      "why": "A3 decision with unresolved qualifier actor only.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/generations.json",
+      "role": "turn_evidence",
+      "why": "A3 narration treating the unfired leaving as the event.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A3/gm_output.json",
+      "role": "turn_evidence",
+      "why": "A3 audit and prompt history containing A2's unlabeled inference.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/turn_record.json",
+      "role": "turn_evidence",
+      "why": "A4 emitted kiln certainty and the player's known-versus-possible question.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/generations.json",
+      "role": "turn_evidence",
+      "why": "A4 initial certainty-plus-hedge and the rejected retry hedge.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_A/A4/gm_output.json",
+      "role": "turn_evidence",
+      "why": "A4 audit: firing sentence inherits intact pots; kiln sentence unlabeled; hedge rejected; preservation seals the certainty.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/turn_record.json",
+      "role": "turn_evidence",
+      "why": "B1 ordinary talk. Incidental lines were not ledger entries.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B1/generations.json",
+      "role": "turn_evidence",
+      "why": "B1 emitted mundane improvisation.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B2/turn_record.json",
+      "role": "turn_evidence",
+      "why": "B2 brine-cask statement held as hearsay.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/turn_record.json",
+      "role": "turn_evidence",
+      "why": "B3 movement decision held. Supporting obligations empty. Secondary mixed-intent finding.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B3/generations.json",
+      "role": "turn_evidence",
+      "why": "B3 arrival narration omitting the thanks.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/turn_record.json",
+      "role": "turn_evidence",
+      "why": "B4 destination continuity. Footprint sentence not emitted.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/generations.json",
+      "role": "turn_evidence",
+      "why": "B4 rejected footprint draft and accepted retry.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_multiturn_provenance/20261003T223147Z/sequence_B/B4/gm_output.json",
+      "role": "turn_evidence",
+      "why": "B4 audit reason physical_investigative_evidence, and the rejection was not ledgered.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Sentence classifier, semantic identity match, overreach, narrator-lead rejection, and decision structure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/proposition_authority.py",
+      "role": "production_code",
+      "why": "Sentence-level proposition families and the default world-truth epistemic frame.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "production_code",
+      "why": "Bounded sentence preservation and the immutable accepted-response seal.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/bounded_improvisation.py",
+      "role": "production_code",
+      "why": "Incidental and rejected-proposal ledger. Decision-audit rejections do not enter it today.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "production_code",
+      "why": "NPC claim provenance. No equivalent record exists for a GM inference.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/player_commitment.py",
+      "role": "production_code",
+      "why": "Supporting-obligation construction. B3 thanks is discarded when the move span misses.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

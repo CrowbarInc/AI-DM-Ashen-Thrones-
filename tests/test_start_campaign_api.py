@@ -19,6 +19,14 @@ from tests.helpers.turn_pipeline_http_fixtures import FAKE_GPT_RESPONSE, _seed_c
 
 pytestmark = pytest.mark.integration
 
+CONTRACT_OPENING_GPT_RESPONSE = {
+    **FAKE_GPT_RESPONSE,
+    "player_facing_text": (
+        "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone while guards hold the crowd. "
+        "You can read the notice board or watch the wagons."
+    ),
+}
+
 RICH_OPENING_GPT_RESPONSE = {
     **FAKE_GPT_RESPONSE,
     "player_facing_text": (
@@ -49,6 +57,17 @@ SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE = {
         "prepared_scene_opening_text": RICH_OPENING_GPT_RESPONSE["player_facing_text"],
     },
 }
+
+
+def _structured_opening_fixture(narration: str, messages: list | None = None) -> dict:
+    from game.gm import _safe_json
+    payload = json.loads(messages[-1]["content"]) if messages else {}
+    claims = (payload.get("gm_resolution_decision") or {}).get("realization_claims") or []
+    declarations = [{"declaration_mode": "realize", "source_claim_id": claim["claim_id"],
+                     "text": claim["text"], "relation_kind": claim.get("relation_kind", "observation")}
+                    for claim in claims if claim.get("text") and claim["text"] in narration]
+    return _safe_json(json.dumps({"declared_claims": declarations, "narration": narration}),
+                      require_structured_claims=True)
 
 
 def _assert_scene_opening_reads_like_scene(text: str) -> None:
@@ -94,7 +113,7 @@ def test_compose_state_ui_campaign_flags_fresh_vs_started(tmp_path: Path, monkey
         public0 = st0["public_state"]
         assert public0["ui"]["campaign_can_start"] is True
         assert public0["ui"]["campaign_started"] is False
-        monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+        monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_GPT_RESPONSE))
         assert client.post("/api/start_campaign").status_code == 200
         st1 = compose_state()
         assert st1["ui"]["campaign_can_start"] is False
@@ -285,7 +304,8 @@ def test_start_campaign_frontier_gate_uses_journal_seed_facts_when_opening_seed_
 ) -> None:
     _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: _structured_opening_fixture(
+        CONTRACT_OPENING_GPT_RESPONSE["player_facing_text"], _a[0]))
 
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
@@ -311,7 +331,8 @@ def test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_fac
 ) -> None:
     _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+    journal_fact = "You stand at Cinderwatch's eastern gate as rain spatters soot-dark stone."
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: _structured_opening_fixture(journal_fact, _a[0]))
 
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
@@ -322,33 +343,37 @@ def test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_fac
         scene.pop("campaign_spine_opening_facts", None)
         scene.pop("spine_opening_facts", None)
         scene["visible_facts"] = ["VISIBLE FACT SHOULD NOT APPEAR"]
-        scene["journal_seed_facts"] = ["JOURNAL FACT SHOULD APPEAR"]
+        scene["journal_seed_facts"] = [journal_fact]
         gate_path.write_text(json.dumps(gate, indent=2), encoding="utf-8")
 
         sc = client.post("/api/start_campaign")
-        assert sc.status_code == 200
+        assert sc.status_code == 200, sc.json()
         data = sc.json()
 
     text = str(data.get("gm_output", {}).get("player_facing_text") or "")
-    assert "JOURNAL FACT SHOULD APPEAR" in text
+    assert journal_fact in text
     assert "VISIBLE FACT SHOULD NOT APPEAR" not in text
 
     gm_output = (load_log()[0].get("gm_output") or {})
     emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
     final_meta = gm_output.get("_final_emission_meta") or {}
     assert emission_debug.get("opening_selector_source_used") == "journal_seed_facts"
-    assert emission_debug.get("opening_selector_selected_facts") == ["JOURNAL FACT SHOULD APPEAR"]
-    assert emission_debug.get("opening_curated_facts") == ["JOURNAL FACT SHOULD APPEAR"]
-    assert final_meta.get("opening_final_fallback_basis") == ["JOURNAL FACT SHOULD APPEAR"]
-    assert final_meta.get("opening_final_basis_matches_selector") is True
-    if data.get("resolution", {}).get("kind") == "scene_opening":
-        assert final_meta.get("opening_final_basis_matches_selector") is True
+    assert emission_debug.get("opening_selector_selected_facts") == [journal_fact]
+    assert emission_debug.get("opening_curated_facts") == [journal_fact]
+    assert final_meta.get("opening_selector_selected_facts") == [journal_fact]
+    # A valid immutable opening does not select a fallback. Exercise its actual
+    # context owner separately so fallback-basis coverage remains meaningful.
+    from game.opening_deterministic_fallback import opening_context_from_gm_output
+    from game.final_emission_opening_fallback import build_opening_fallback_result_meta
+    fallback_meta = build_opening_fallback_result_meta(context=opening_context_from_gm_output(gm_output))
+    assert fallback_meta["opening_final_fallback_basis"] == [journal_fact]
+    assert fallback_meta["opening_final_basis_matches_selector"] is True
 
 
 def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_GPT_RESPONSE))
 
     with TestClient(app) as client:
         client.post("/api/new_campaign")
@@ -362,7 +387,7 @@ def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch
 def test_second_start_campaign_rejected(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _seed_campaign_start_storage(tmp_path, monkeypatch)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_GPT_RESPONSE))
 
     with TestClient(app) as client:
         client.post("/api/new_campaign")
@@ -383,7 +408,7 @@ def test_start_campaign_prompt_includes_opening_contract_fields(
 
     def _spy(messages: list, **_kwargs: Any) -> dict:
         captured.append(messages)
-        return dict(FAKE_GPT_RESPONSE)
+        return dict(CONTRACT_OPENING_GPT_RESPONSE)
 
     monkeypatch.setattr("game.api.call_gpt", _spy)
 

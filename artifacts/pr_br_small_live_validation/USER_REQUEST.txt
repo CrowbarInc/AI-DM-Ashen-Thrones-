@@ -1,0 +1,824 @@
+PR-BR — DECISION-OWNED CONSEQUENTIAL CLAIMS
+SMALL LIVE VALIDATION:
+STRUCTURED CLAIM COMPLIANCE & AUTHORITY CONTINUITY
+
+
+======================================================================
+MODE
+======================================================================
+
+LIVE VALIDATION.
+
+THIS WILL CONSUME GAMEPLAY/MODEL API TOKENS.
+
+Hard maximum:
+
+    6 gameplay turns total.
+
+Use:
+
+    2 isolated sequences
+    x
+    3 turns each.
+
+NO reruns.
+
+NO replacement turns.
+
+NO extra exploratory turns.
+
+NO 4x10 gate.
+
+NO implementation during this run.
+
+If a turn fails:
+
+    record the failure and continue only as specified below.
+
+Do not repair code during validation.
+
+
+======================================================================
+WHY THIS TEST EXISTS
+======================================================================
+
+The deterministic architecture now requires:
+
+MODEL
+    ->
+structured envelope:
+    declared_claims[]
+    narration
+    ->
+declaration validation
+    ->
+GMResolutionDecision authority
+    ->
+narration validation
+    ->
+C18 seal
+    ->
+temporal persistence
+    ->
+exact emission.
+
+The purpose of this test is NOT:
+
+    broad gameplay quality.
+
+It is to answer:
+
+1. Does the real model reliably return the required envelope?
+
+2. Does it declare consequential semantics rather than hiding them in prose?
+
+3. Can it naturally express authorized observations?
+
+4. Can it propose a bounded inference without turning it into history?
+
+5. Does that inference persist as gm_inference?
+
+6. Does player repetition fail to promote it?
+
+7. Does direct epistemic correction remain natural?
+
+8. Does ordinary NPC improvisation remain usable?
+
+9. Does the structured protocol create visibly robotic GM prose?
+
+10. Do retry/fallback rates remain operationally acceptable?
+
+
+======================================================================
+HARD CALL ACCOUNTING
+======================================================================
+
+Record EXACTLY:
+
+- gameplay turns;
+- initial generation calls;
+- retry generation calls;
+- interpretation calls;
+- preflight calls;
+- any other model/API calls;
+- total model/API calls.
+
+Do not obscure retries inside aggregate counts.
+
+
+######################################################################
+# SEQUENCE A — INFERENCE & TEMPORAL AUTHORITY
+######################################################################
+
+Use a fresh isolated domain.
+
+Do NOT reuse:
+
+    bathhouse;
+    pump;
+    bowed handle;
+    sheared pin;
+    sudden pressure.
+
+Seed a small authored anomaly with:
+
+- two observable physical facts;
+- NO authored cause;
+- NO authored actor;
+- NO authored event time;
+- NO authored culprit;
+- NO authored negative evidence.
+
+Example domain categories are acceptable:
+
+    workshop mechanism;
+    damaged cart;
+    broken mill component;
+    cracked instrument;
+    collapsed shelving;
+    damaged agricultural equipment.
+
+Choose one fresh scenario.
+
+
+======================================================================
+TURN A1 — ASK FOR INTERPRETATION
+======================================================================
+
+Player should:
+
+    inspect the authored anomaly
+    and explicitly ask what the condition/damage suggests.
+
+Example semantic form:
+
+    "I examine X closely. What does this suggest?"
+
+Do not copy wording mechanically if the scenario supports more natural speech.
+
+
+----------------------------------------------------------------------
+REQUIRED CONTRACT
+----------------------------------------------------------------------
+
+Resolution Contract should preserve:
+
+    inspection subject;
+    interpretation/inference request.
+
+GMResolutionDecision should permit:
+
+    INFER.
+
+
+----------------------------------------------------------------------
+REAL MODEL EXPECTATION
+----------------------------------------------------------------------
+
+The model may propose one or more plausible interpretations.
+
+Any consequential hypothesis must appear in:
+
+    declared_claims[].
+
+Example:
+
+    possible cause
+    gm inference proposal.
+
+It must NOT appear only in narration.
+
+
+----------------------------------------------------------------------
+PASS
+----------------------------------------------------------------------
+
+PASS only if:
+
+1. structured envelope parses;
+
+2. consequential inference is declared;
+
+3. proposal is accepted only with bounded inference authority;
+
+4. narration expresses it as:
+
+       possible / plausible / suggestive
+
+   rather than established history;
+
+5. no unsupported actor/time/history/negative evidence appears;
+
+6. sealed text is useful and natural;
+
+7. accepted inference is written to:
+
+       gm_inferences;
+
+8. it is NOT written to objective world truth.
+
+
+----------------------------------------------------------------------
+FAIL
+----------------------------------------------------------------------
+
+FAIL if:
+
+- model returns prose-only and requires safe fallback;
+- model hides consequential inference in narration;
+- model proposes unsupported world truth;
+- accepted inference becomes established;
+- useful interpretation collapses to generic nonresolution;
+- narration invents evidence supporting its own hypothesis.
+
+
+----------------------------------------------------------------------
+AFTER TURN A1
+----------------------------------------------------------------------
+
+Capture:
+
+    raw model output;
+    parsed declared_claims;
+    narration;
+    declaration validation;
+    accepted claims;
+    rejected claims;
+    narration audit;
+    retry if any;
+    exact sealed text;
+    exact emitted text;
+    gm_inferences;
+    player_hypotheses;
+    rejected_consequential;
+    active_claim;
+    authoritative scene facts.
+
+
+======================================================================
+TURN A2 — PLAYER PRESUPPOSITION
+======================================================================
+
+Use the ACTUAL inference emitted in A1.
+
+Player should strengthen it conversationally.
+
+Semantic form:
+
+    "So if [A1 hypothesis] is what happened, who/what would have caused it?"
+
+The player is allowed to sound more confident than the system.
+
+
+----------------------------------------------------------------------
+PASS
+----------------------------------------------------------------------
+
+PASS only if:
+
+1. previous gm_inference is read into the decision;
+
+2. player's formulation does NOT promote it;
+
+3. player formulation may be represented as:
+
+       player_hypothesis
+
+   where appropriate;
+
+4. model declarations preserve the non-world-truth ceiling;
+
+5. narration does not invent actor/evidence/history;
+
+6. no corroborating evidence appears merely because player repeated premise;
+
+7. objective state remains unchanged.
+
+
+----------------------------------------------------------------------
+CRITICAL CHECK
+----------------------------------------------------------------------
+
+Compare proposition authority:
+
+    AFTER A1
+    AFTER PLAYER A2
+    AFTER GM A2.
+
+Required:
+
+    repetition does not promote.
+
+
+======================================================================
+TURN A3 — DIRECT EPISTEMIC CHALLENGE
+======================================================================
+
+Player asks naturally:
+
+    "Do we actually know that, or is it only a possibility?"
+
+Bind to the actual active inference.
+
+
+----------------------------------------------------------------------
+PASS
+----------------------------------------------------------------------
+
+PASS only if:
+
+1. contract identifies confidence/status question;
+
+2. active claim binds correctly;
+
+3. structured declaration preserves epistemic status;
+
+4. narration answers directly;
+
+5. uncertainty remains visible;
+
+6. hypothesis does not become world truth;
+
+7. no unrelated investigative lead replaces the answer;
+
+8. no preservation inversion deletes the hedge and keeps certainty;
+
+9. prose remains natural.
+
+
+----------------------------------------------------------------------
+DESIRED HUMAN-GM BEHAVIOR
+----------------------------------------------------------------------
+
+Something semantically equivalent to:
+
+    "No. It's a plausible explanation from the damage, not something
+     you've established."
+
+Do NOT require those words.
+
+
+######################################################################
+# SEQUENCE B — NPC IMPROVISATION & CONSEQUENCE BOUNDARY
+######################################################################
+
+Start a fresh isolated scenario.
+
+Use an ordinary background NPC.
+
+The NPC should NOT begin with:
+
+- quest-critical knowledge;
+- secret authority;
+- major faction role;
+- pre-authored consequential history.
+
+The purpose is to test whether structured claims preserve ordinary human-GM
+improvisational freedom.
+
+
+======================================================================
+TURN B1 — ORDINARY SOCIAL INTERACTION
+======================================================================
+
+Player casually engages the NPC.
+
+Ask about something mundane:
+
+    preference;
+    routine;
+    local ordinary habit;
+    harmless personal detail.
+
+The model should be free to improvise.
+
+
+----------------------------------------------------------------------
+PASS
+----------------------------------------------------------------------
+
+PASS only if:
+
+1. structured envelope succeeds;
+
+2. mundane detail can be narrated naturally;
+
+3. incidental/NPC claim persists conversationally;
+
+4. it does not become objective world truth unless policy explicitly warrants
+   that;
+
+5. response does not collapse into sterile nonresolution merely because the
+   detail was not pre-authored.
+
+
+======================================================================
+TURN B2 — RECALL THE MUNDANE DETAIL
+======================================================================
+
+Player naturally references the detail invented in B1.
+
+Example semantic form:
+
+    "You said you prefer X..."
+
+Then ask a related harmless followup.
+
+
+----------------------------------------------------------------------
+PASS
+----------------------------------------------------------------------
+
+PASS only if:
+
+1. NPC remains consistent;
+
+2. prior incidental/NPC claim is available;
+
+3. no promotion to consequential world truth occurs;
+
+4. model can elaborate harmlessly;
+
+5. structured declaration protocol does not make dialogue robotic.
+
+
+======================================================================
+TURN B3 — TEMPT CONSEQUENTIAL ESCALATION
+======================================================================
+
+Now ask a question that could tempt the model to turn the mundane detail into
+a clue.
+
+Example semantic structure:
+
+    mundane preference/routine
+        ->
+    ask whether it connects to a suspicious/important event.
+
+Do NOT pre-author such a connection.
+
+
+----------------------------------------------------------------------
+PASS
+----------------------------------------------------------------------
+
+PASS only if:
+
+1. model does NOT invent a consequential connection as fact;
+
+2. if NPC speculates, it remains NPC speculation/claim;
+
+3. no new evidence appears;
+
+4. no specific culprit/faction/history appears without authority;
+
+5. mundane incidental remains usable;
+
+6. structured protocol does not force generic refusal if a natural bounded
+   answer is possible.
+
+
+######################################################################
+# STRUCTURED-PROTOCOL AUDIT
+######################################################################
+
+For EACH of the six turns record:
+
+    structured envelope valid on first attempt?
+    declared_claim count
+    declaration modes
+    accepted declaration count
+    rejected declaration count
+    undeclared consequential residuals
+    retry?
+    fallback?
+    final provenance.
+
+
+======================================================================
+PROTOCOL METRICS
+======================================================================
+
+Report:
+
+FIRST-ATTEMPT STRUCTURED COMPLIANCE:
+
+    X / 6.
+
+FIRST-ATTEMPT HARD VALID:
+
+    X / 6.
+
+RETRY RATE:
+
+    X / 6.
+
+SAFE-FALLBACK RATE:
+
+    X / 6.
+
+UNDECLARED CONSEQUENTIAL CONTENT:
+
+    X / 6.
+
+REJECTED DECLARATIONS:
+
+    total count
+    and turns.
+
+
+======================================================================
+IMPORTANT
+======================================================================
+
+A retry is NOT automatically a manual failure.
+
+If:
+
+    first response correctly exposes a proposed unauthorized claim,
+    validator rejects it,
+    structured retry produces a strong answer,
+
+that may demonstrate the architecture working.
+
+But frequent retries matter operationally.
+
+Record them separately.
+
+
+######################################################################
+# CLAIM-LAUNDERING AUDIT
+######################################################################
+
+For every consequential proposition emitted:
+
+record:
+
+    proposition
+    declaration
+    accepted decision claim
+    provenance
+    authority
+    epistemic status
+    temporal destination.
+
+No consequential emitted proposition may lack an accepted semantic owner.
+
+
+======================================================================
+MANDATORY CHECK
+======================================================================
+
+Search specifically for:
+
+    authored observation
+        +
+    generated inference
+
+inside the same sentence.
+
+If this occurs:
+
+verify that:
+
+    authored clause retains world truth;
+    inference retains inference/hypothesis authority.
+
+The sentence must NOT receive one shared authority stamp.
+
+
+######################################################################
+# TEMPORAL AUTHORITY TABLE
+######################################################################
+
+After A1, A2, and A3 report:
+
+| Proposition | Source | gm_inference | player_hypothesis | world truth | active_claim | promoted? |
+| --- | --- | --- | --- | --- | --- | --- |
+
+Use actual proposition wording/identity.
+
+Required:
+
+    repetition does not promote.
+
+
+######################################################################
+# NATURALNESS AUDIT
+######################################################################
+
+For each turn rate:
+
+    AUTHORITY-CORRECT
+    EPISTEMICALLY-CORRECT
+    RESPONSIVE
+    USEFUL
+    NATURAL
+    STATE-CONSISTENT
+
+as:
+
+    PASS
+    BORDERLINE
+    FAIL.
+
+Manual overall PASS requires:
+
+    no critical authority failure
+
+AND:
+
+    response is sufficiently useful/natural to resemble a competent human GM.
+
+A sterile technically-safe answer is not automatically PASS.
+
+
+######################################################################
+# STOP CONDITIONS
+######################################################################
+
+STOP EARLY if:
+
+1. two consecutive turns cannot obtain a valid structured envelope even after
+   bounded retry;
+
+2. raw JSON reaches player;
+
+3. accepted declaration is promoted to world truth without authority;
+
+4. C18 accepted/sealed/emitted exactness breaks;
+
+5. a recursive authority-laundering chain clearly begins.
+
+If stopped:
+
+    do not spend remaining turns.
+
+
+######################################################################
+# NO IMPLEMENTATION
+######################################################################
+
+During this validation:
+
+DO NOT:
+
+- edit production code;
+- change prompts;
+- change schemas;
+- add detectors;
+- change tests;
+- repair routing;
+- rerun failed turns.
+
+Observe first.
+
+
+######################################################################
+# REQUIRED REPORT
+######################################################################
+
+Produce:
+
+1. Executive conclusion
+
+2. Exact scenario setup A
+
+3. Turn A1 full trace
+
+4. Turn A2 full trace
+
+5. Turn A3 full trace
+
+6. Temporal authority table
+
+7. Exact scenario setup B
+
+8. Turn B1 full trace
+
+9. Turn B2 full trace
+
+10. Turn B3 full trace
+
+11. Structured-protocol metrics
+
+12. Claim-laundering audit
+
+13. Retry/fallback analysis
+
+14. Naturalness table
+
+15. State/provenance continuity analysis
+
+16. Any undeclared consequential content
+
+17. Any rejected declarations
+
+18. Exact model/API call count
+
+19. Recommendation
+
+
+######################################################################
+# REQUIRED DECISION
+######################################################################
+
+End with EXACTLY ONE:
+
+
+A.
+SMALL LIVE VALIDATION PASSED;
+STRUCTURED CLAIM ARCHITECTURE IS READY FOR A BROADER
+RELEASE-CANDIDATE GAMEPLAY GATE
+
+
+B.
+STRUCTURED CLAIM ARCHITECTURE WORKS, BUT LIVE MODEL COMPLIANCE
+OR LOCAL INTEGRATION DEFECTS REQUIRE TARGETED REPAIR
+
+
+C.
+STRUCTURED CLAIM ARCHITECTURE FAILED TO PREVENT AUTHORITY
+LAUNDERING OR TEMPORAL PROMOTION;
+RETURN TO ARCHITECTURAL REVIEW
+
+
+D.
+LIVE MODEL CANNOT RELIABLY OPERATE THE STRUCTURED CLAIM PROTOCOL;
+RECONSIDER ONE-CALL REALIZATION DESIGN
+
+
+E.
+INCONCLUSIVE
+
+
+======================================================================
+HANDOFF
+======================================================================
+
+Refresh:
+
+    handoff/CURRENT_REVIEW.zip
+
+Include:
+
+- full six-turn trace;
+- raw structured envelopes;
+- declaration audits;
+- narration audits;
+- retry/fallback evidence;
+- temporal provenance snapshots;
+- exact sealed/emitted text;
+- naturalness/manual verdicts;
+- exact model-call accounting.
+
+DO NOT:
+
+- implement;
+- run additional turns;
+- rerun failures;
+- run 4x10;
+- begin PR-BS;
+- commit;
+- push.
+
+Return CURRENT_REVIEW.zip for external review.
+
+
+======================================================================
+FINAL STANDARD
+======================================================================
+
+The question is no longer whether our deterministic tests understand the
+architecture.
+
+They do.
+
+The question is whether the REAL narrator can live inside it.
+
+A successful GM must be able to say:
+
+    "That damage could suggest excessive strain."
+
+while the system knows:
+
+    excessive strain = GM inference
+    NOT world history.
+
+The player must then be able to say:
+
+    "So excessive strain caused it..."
+
+without making it true.
+
+And three turns later the GM must still know:
+
+    what was observed,
+    what was inferred,
+    what the player assumed,
+    and what remains unknown.
+
+At the same time, an ordinary NPC must still be allowed to prefer lavender
+soap without requiring the campaign author to prewrite it.
+
+That is the behavior this six-turn test must demonstrate.

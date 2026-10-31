@@ -1,0 +1,69 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T16:16:47.959744Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T16:16:47.959744Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Would leaving be prudent? Provided it is, we will depart.",
+          "delivered_text": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "d864d219eacbd3d9f5745ce7ab1d35e0c7b23819df23fcba56a9c0c0000eb0bf",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "MIXED",
+        "purpose": "QUESTION",
+        "subject": "Would leaving be prudent? Provided it is, we will depart.",
+        "response": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "557665909bc99bddfd64399e9df32548877d85475cfc2b314f64f5c4ff78abb5",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

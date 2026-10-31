@@ -1,0 +1,965 @@
+[
+  {
+    "turn_number": 1,
+    "shape": "canonical npc",
+    "player_input": "I catch the tavern runner's eye and ask what people around the gate have been saying tonight.",
+    "player_text": "I catch the tavern runner's eye and ask what people around the gate have been saying tonight.",
+    "intended_meaning": "Ask the established tavern runner what people at the gate have been saying.",
+    "intended_operation": "ask",
+    "operation": "ask",
+    "target": "",
+    "proposed_interlocutor": null,
+    "interlocutor": "tavern_runner",
+    "bound_interlocutor": "tavern_runner",
+    "binding_status": "bound_canonical",
+    "entity_class": "canonical_established",
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "dimension": "content",
+    "claim_binding": "none",
+    "active_claim_before": null,
+    "active_interlocutor_before": null,
+    "fast_path_or_interpreter": "fast_path",
+    "interpretation_calls_this_turn": 0,
+    "resolution_contract": {
+      "contract_id": "rc_d6a7ee366e73",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": null,
+      "interlocutor_id": "tavern_runner",
+      "conversational_subject": null,
+      "dimension": "content",
+      "dimensions": [
+        "content"
+      ],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I catch the tavern runner's eye and ask what people around the gate have been saying tonight.",
+      "construction": {
+        "cues": [
+          "content"
+        ],
+        "referent_slot": null,
+        "referent_reason": "no_anaphor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "tavern_runner"
+          },
+          {
+            "id": "frontier_gate",
+            "type": "place",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "place",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "place",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          },
+          {
+            "id": "gate_guard",
+            "type": "interlocutor",
+            "label": "Gate Guard"
+          },
+          {
+            "id": "gate_serjeant",
+            "type": "interlocutor",
+            "label": "Gate Serjeant"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "ask",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": null,
+        "canonicalization_attempted": true,
+        "canonical_target_found": false,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "bound_canonical",
+          "entity_class": "canonical_established",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": "tavern_runner",
+          "entity_id": null,
+          "label": "tavern_runner",
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [
+            "identity:discourse"
+          ],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I catch the tavern runner's eye and ask what people around the gate have been saying tonight.",
+          "source": "deterministic_fast_path",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": "tavern_runner",
+          "conversational_subject": null,
+          "dimension": "content",
+          "dimensions": [
+            "content"
+          ],
+          "expected_resolution": "answer",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        }
+      }
+    },
+    "generation_attempt_1": "\"Don't ask me,\" the tavern runner mutters, glancing nervously over his shoulder. \"People are too jumpy tonight, and no one’s saying much—at least not anywhere I can safely hear. The chatter’s mostly rumors, and it’s better not to spread them wrong.\" He shifts his weight and shakes his head. \"If you want real talk, you’d have better luck with the guard captain, but I doubt he'll be sharing freely either.\"",
+    "attempt_1_hard_valid": true,
+    "hard_invalid_reasons": [],
+    "regeneration_invoked": false,
+    "regeneration_feedback": "",
+    "generation_attempt_2": null,
+    "accepted_provenance": "initial_generation",
+    "accepted_response_text": "\"Don't ask me,\" the tavern runner mutters, glancing nervously over his shoulder. \"People are too jumpy tonight, and no one’s saying much—at least not anywhere I can safely hear. The chatter’s mostly rumors, and it’s better not to spread them wrong.\" He shifts his weight and shakes his head. \"If you want real talk, you’d have better luck with the guard captain, but I doubt he'll be sharing freely either.\"",
+    "final_emitted_response": "\"Don't ask me,\" the tavern runner mutters, glancing nervously over his shoulder. \"People are too jumpy tonight, and no one’s saying much—at least not anywhere I can safely hear. The chatter’s mostly rumors, and it’s better not to spread them wrong.\" He shifts his weight and shakes his head. \"If you want real talk, you’d have better luck with the guard captain, but I doubt he'll be sharing freely either.\"",
+    "accepted_emitted_exact_match": true,
+    "accepted_emitted_semantic_match": true,
+    "semantic_degradation_after_acceptance": false,
+    "evaluator_result": "PASS",
+    "generation_attempts": 1,
+    "active_claim_after": null,
+    "active_interlocutor_after": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "incidental_entity_id": null,
+    "authority_review": [],
+    "unauthorized_emitted": [],
+    "immutable": true
+  },
+  {
+    "turn_number": 2,
+    "shape": "incidental switch",
+    "player_input": "I step away from him and ask a porter hauling crates whether anyone came down from the north today.",
+    "player_text": "I step away from him and ask a porter hauling crates whether anyone came down from the north today.",
+    "intended_meaning": "Leave the runner and ask a porter who is plausibly in the crowd.",
+    "intended_operation": "ask",
+    "operation": "ask",
+    "target": "porter hauling crates",
+    "proposed_interlocutor": "porter hauling crates",
+    "interlocutor": "inc_23a2c479b9",
+    "bound_interlocutor": "inc_23a2c479b9",
+    "binding_status": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "authority_reasons": [
+      "scene:populated",
+      "pr_bn:accepted"
+    ],
+    "dimension": null,
+    "claim_binding": "none",
+    "active_claim_before": null,
+    "active_interlocutor_before": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "fast_path_or_interpreter": "fast_path",
+    "interpretation_calls_this_turn": 0,
+    "resolution_contract": {
+      "contract_id": "rc_20865dfd8c56",
+      "turn_index": 2,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "interlocutor",
+        "id_or_text": "porter hauling crates",
+        "source": "explicit_player"
+      },
+      "interlocutor_id": "inc_23a2c479b9",
+      "conversational_subject": "porter hauling crates",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": {
+        "type": "interlocutor",
+        "id": "inc_23a2c479b9",
+        "label": "porter hauling crates",
+        "source_turn": null
+      },
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I step away from him and ask a porter hauling crates whether anyone came down from the north today.",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "explicit_target",
+        "referent_reason": "bounded_incidental_interlocutor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "tavern_runner"
+          },
+          {
+            "id": "frontier_gate",
+            "type": "place",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "place",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "place",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          },
+          {
+            "id": "gate_guard",
+            "type": "interlocutor",
+            "label": "Gate Guard"
+          },
+          {
+            "id": "gate_serjeant",
+            "type": "interlocutor",
+            "label": "Gate Serjeant"
+          },
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "ask",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": "porter hauling crates",
+        "canonicalization_attempted": true,
+        "canonical_target_found": true,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "inc_23a2c479b9",
+          "canonical_target_label": "porter hauling crates",
+          "canonical_target_type": "interlocutor",
+          "canonical_basis": "bounded_incidental",
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": true,
+        "entity_binding": {
+          "status": "bound_incidental",
+          "entity_class": "permitted_bounded_incidental",
+          "proposed_interlocutor": "porter hauling crates",
+          "proposed_span": "a porter hauling crates",
+          "bound_interlocutor_id": "inc_23a2c479b9",
+          "entity_id": "inc_23a2c479b9",
+          "label": "porter hauling crates",
+          "explicit_new_interlocutor": true,
+          "authority_reasons": [
+            "scene:populated",
+            "pr_bn:accepted"
+          ],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I step away from him and ask a porter hauling crates whether anyone came down from the north today.",
+          "source": "deterministic_fast_path",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": "porter hauling crates",
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": "inc_23a2c479b9",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        }
+      }
+    },
+    "generation_attempt_1": "\"Not that I’ve seen,\" the porter hauling crates says, wiping sweat from his brow despite the rain. \"Most of the traffic today’s been coming from the east and south—nothing from the north pass through here since dawn. If anyone’s arrived from that direction, it’s slipped by before I could notice.\" He shifts the weight of his load carefully. \"You might check with the guard captain if you want anything more certain.\"",
+    "attempt_1_hard_valid": true,
+    "hard_invalid_reasons": [],
+    "regeneration_invoked": false,
+    "regeneration_feedback": "",
+    "generation_attempt_2": null,
+    "accepted_provenance": "initial_generation",
+    "accepted_response_text": "\"Not that I’ve seen,\" the porter hauling crates says, wiping sweat from his brow despite the rain. \"Most of the traffic today’s been coming from the east and south—nothing from the north pass through here since dawn. If anyone’s arrived from that direction, it’s slipped by before I could notice.\" He shifts the weight of his load carefully. \"You might check with the guard captain if you want anything more certain.\"",
+    "final_emitted_response": "\"Not that I’ve seen,\" the porter hauling crates says, wiping sweat from his brow despite the rain. \"Most of the traffic today’s been coming from the east and south—nothing from the north pass through here since dawn. If anyone’s arrived from that direction, it’s slipped by before I could notice.\" He shifts the weight of his load carefully. \"You might check with the guard captain if you want anything more certain.\"",
+    "accepted_emitted_exact_match": true,
+    "accepted_emitted_semantic_match": true,
+    "semantic_degradation_after_acceptance": false,
+    "evaluator_result": "PASS",
+    "generation_attempts": 1,
+    "active_claim_after": null,
+    "active_interlocutor_after": {
+      "id": "inc_23a2c479b9",
+      "label": "porter hauling crates",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "incidental_entity_id": "inc_23a2c479b9",
+    "authority_review": [
+      {
+        "proposition": "\"Not that I’ve seen,\" the porter hauling crates says, wiping sweat from his brow despite the rain.",
+        "authority_class": "incidental_fact",
+        "grounded": false,
+        "epistemic_framing": "world_truth",
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "proposition": "If anyone’s arrived from that direction, it’s slipped by before I could notice.",
+        "authority_class": "npc_claim",
+        "grounded": false,
+        "epistemic_framing": "uncertain",
+        "consequential": false,
+        "family": "none"
+      },
+      {
+        "proposition": "\"You might check with the guard captain if you want anything more certain.",
+        "authority_class": "npc_claim",
+        "grounded": false,
+        "epistemic_framing": "uncertain",
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "immutable": true
+  },
+  {
+    "turn_number": 3,
+    "shape": "pronoun source follow-up",
+    "player_input": "I ask him who he heard that from.",
+    "player_text": "I ask him who he heard that from.",
+    "intended_meaning": "Ask that same porter where the account came from.",
+    "intended_operation": "ask",
+    "operation": "ask",
+    "target": "porter hauling crates",
+    "proposed_interlocutor": null,
+    "interlocutor": "inc_23a2c479b9",
+    "bound_interlocutor": "inc_23a2c479b9",
+    "binding_status": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "dimension": "source",
+    "claim_binding": "unresolved",
+    "active_claim_before": null,
+    "active_interlocutor_before": {
+      "id": "inc_23a2c479b9",
+      "label": "porter hauling crates",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "fast_path_or_interpreter": "interpreter",
+    "interpretation_calls_this_turn": 1,
+    "resolution_contract": {
+      "contract_id": "rc_0384707cb058",
+      "turn_index": 3,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "interlocutor",
+        "id_or_text": "porter hauling crates",
+        "source": "explicit_player"
+      },
+      "interlocutor_id": "inc_23a2c479b9",
+      "conversational_subject": "porter hauling crates",
+      "dimension": "source",
+      "dimensions": [
+        "source"
+      ],
+      "expected_resolution": "answer",
+      "epistemic_mode": "npc_claim",
+      "discourse_ref": {
+        "type": "interlocutor",
+        "id": "inc_23a2c479b9",
+        "label": "porter hauling crates",
+        "source_turn": null
+      },
+      "referent_provenance": "inherited_discourse",
+      "ambiguous": false,
+      "raw_input": "I ask him who he heard that from.",
+      "construction": {
+        "cues": [
+          "source",
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "claim_unresolved",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": false,
+        "fast_path_abstained": true,
+        "fast_path_abstention_reason": "insufficient_discourse_context",
+        "model_interpreter_invoked": true,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 1,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          },
+          {
+            "id": "frontier_gate",
+            "type": "place",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "place",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "place",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          },
+          {
+            "id": "gate_guard",
+            "type": "interlocutor",
+            "label": "Gate Guard"
+          },
+          {
+            "id": "gate_serjeant",
+            "type": "interlocutor",
+            "label": "Gate Serjeant"
+          },
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          },
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          }
+        ],
+        "proposal_source": "model_assisted",
+        "proposed_operation": "ask",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": "who he heard that from",
+        "canonicalization_attempted": true,
+        "canonical_target_found": true,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "inc_23a2c479b9",
+          "canonical_target_label": "porter hauling crates",
+          "canonical_target_type": "interlocutor",
+          "canonical_basis": "discourse",
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "bound_incidental",
+          "entity_class": "permitted_bounded_incidental",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": "inc_23a2c479b9",
+          "entity_id": null,
+          "label": "porter hauling crates",
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [
+            "identity:discourse"
+          ],
+          "claim_binding": "unresolved"
+        },
+        "authoritative": true,
+        "semantic_completeness": "not_applied",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I ask him who he heard that from.",
+          "source": "model_assisted",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": "who he heard that from",
+          "proposed_target_id": "inc_23a2c479b9",
+          "target_capture": "model",
+          "has_determiner": false,
+          "interlocutor_id": "inc_23a2c479b9",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [
+            "content",
+            "source"
+          ],
+          "expected_resolution": null,
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": "high",
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        }
+      }
+    },
+    "generation_attempt_1": "\"I can't say for sure who, sir,\" the porter hauling crates replies, pausing as his gaze shifts briefly toward the muddy path where the patrol was last reported. \"Most of the chatter I've caught is from passing travelers and wagon drivers coming from the east and south. No clear talk from the north, though, beyond hushed rumors—you'd do better asking the guard captain for anything more reliable.\"",
+    "attempt_1_hard_valid": true,
+    "hard_invalid_reasons": [],
+    "regeneration_invoked": false,
+    "regeneration_feedback": "",
+    "generation_attempt_2": null,
+    "accepted_provenance": "initial_generation",
+    "accepted_response_text": "\"I can't say for sure who, sir,\" the porter hauling crates replies, pausing as his gaze shifts briefly toward the muddy path where the patrol was last reported. \"Most of the chatter I've caught is from passing travelers and wagon drivers coming from the east and south. No clear talk from the north, though, beyond hushed rumors—you'd do better asking the guard captain for anything more reliable.\"",
+    "final_emitted_response": "\"I can't say for sure who, sir,\" the porter hauling crates replies, pausing as his gaze shifts briefly toward the muddy path where the patrol was last reported. \"Most of the chatter I've caught is from passing travelers and wagon drivers coming from the east and south. No clear talk from the north, though, beyond hushed rumors—you'd do better asking the guard captain for anything more reliable.\"",
+    "accepted_emitted_exact_match": true,
+    "accepted_emitted_semantic_match": true,
+    "semantic_degradation_after_acceptance": false,
+    "evaluator_result": "PASS",
+    "generation_attempts": 1,
+    "active_claim_after": null,
+    "active_interlocutor_after": {
+      "id": "inc_23a2c479b9",
+      "label": "porter hauling crates",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "incidental_entity_id": null,
+    "authority_review": [],
+    "unauthorized_emitted": [],
+    "immutable": true
+  },
+  {
+    "turn_number": 4,
+    "shape": "ordinary inspection",
+    "player_input": "I leave him and look over the notice board.",
+    "player_text": "I leave him and look over the notice board.",
+    "intended_meaning": "Look at the notice board.",
+    "intended_operation": "inspect",
+    "operation": "inspect",
+    "target": "",
+    "proposed_interlocutor": null,
+    "interlocutor": null,
+    "bound_interlocutor": null,
+    "binding_status": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "authority_reasons": [],
+    "dimension": null,
+    "claim_binding": "none",
+    "active_claim_before": null,
+    "active_interlocutor_before": {
+      "id": "inc_23a2c479b9",
+      "label": "porter hauling crates",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "fast_path_or_interpreter": "fast_path",
+    "interpretation_calls_this_turn": 0,
+    "resolution_contract": {
+      "contract_id": "rc_31517ff62b2b",
+      "turn_index": 4,
+      "request_kind": "inquiry",
+      "operation": "inspect",
+      "target_ref": null,
+      "interlocutor_id": null,
+      "conversational_subject": "I leave him and look over the notice board.",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I leave him and look over the notice board.",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": null,
+        "referent_reason": "explicit_interlocutor_rejected",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          },
+          {
+            "id": "frontier_gate",
+            "type": "place",
+            "label": "Cinderwatch Gate District"
+          },
+          {
+            "id": "notice_board",
+            "type": "object",
+            "label": "Notice board"
+          },
+          {
+            "id": "market_quarter",
+            "type": "place",
+            "label": "Enter Cinderwatch"
+          },
+          {
+            "id": "old_milestone",
+            "type": "place",
+            "label": "Follow the missing patrol rumor"
+          },
+          {
+            "id": "guard_captain",
+            "type": "interlocutor",
+            "label": "Guard Captain"
+          },
+          {
+            "id": "tavern_runner",
+            "type": "interlocutor",
+            "label": "Tavern Runner"
+          },
+          {
+            "id": "refugee",
+            "type": "interlocutor",
+            "label": "Ragged stranger"
+          },
+          {
+            "id": "threadbare_watcher",
+            "type": "interlocutor",
+            "label": "Threadbare watcher"
+          },
+          {
+            "id": "gate_guard",
+            "type": "interlocutor",
+            "label": "Gate Guard"
+          },
+          {
+            "id": "gate_serjeant",
+            "type": "interlocutor",
+            "label": "Gate Serjeant"
+          },
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          },
+          {
+            "id": "inc_23a2c479b9",
+            "type": "interlocutor",
+            "label": "porter hauling crates"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "inspect",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": null,
+        "canonicalization_attempted": true,
+        "canonical_target_found": false,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "inspect",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": true,
+        "entity_binding": {
+          "status": "unresolved",
+          "entity_class": "ambiguous_unresolved",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": null,
+          "entity_id": null,
+          "label": null,
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I leave him and look over the notice board.",
+          "source": "deterministic_fast_path",
+          "primary_operation": "inspect",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        }
+      }
+    },
+    "generation_attempt_1": "The notice board looms before you, its worn wooden surface plastered with a variety of official postings. Prominently listed are the new taxes imposed on local traders, the strict curfew rules that have recently taken effect, and a bold warning about a missing patrol. The notice specifically mentions that this patrol was last observed taking the northwest mud track past the stacked crates near the gate. The rain beads on the board's edges, partially smudging some of the ink, but the warning remains clear and urgent.",
+    "attempt_1_hard_valid": true,
+    "hard_invalid_reasons": [],
+    "regeneration_invoked": false,
+    "regeneration_feedback": "",
+    "generation_attempt_2": null,
+    "accepted_provenance": "initial_generation",
+    "accepted_response_text": "The notice board looms before you, its worn wooden surface plastered with a variety of official postings. Prominently listed are the new taxes imposed on local traders, the strict curfew rules that have recently taken effect, and a bold warning about a missing patrol. The notice specifically mentions that this patrol was last observed taking the northwest mud track past the stacked crates near the gate. The rain beads on the board's edges, partially smudging some of the ink, but the warning remains clear and urgent.",
+    "final_emitted_response": "The notice board looms before you, its worn wooden surface plastered with a variety of official postings. Prominently listed are the new taxes imposed on local traders, the strict curfew rules that have recently taken effect, and a bold warning about a missing patrol. The notice specifically mentions that this patrol was last observed taking the northwest mud track past the stacked crates near the gate. The rain beads on the board's edges, partially smudging some of the ink, but the warning remains clear and urgent.",
+    "accepted_emitted_exact_match": true,
+    "accepted_emitted_semantic_match": true,
+    "semantic_degradation_after_acceptance": false,
+    "evaluator_result": "PASS",
+    "generation_attempts": 1,
+    "active_claim_after": null,
+    "active_interlocutor_after": null,
+    "incidental_entity_id": null,
+    "authority_review": [
+      {
+        "proposition": "The notice board looms before you, its worn wooden surface plastered with a variety of official postings.",
+        "authority_class": "incidental_fact",
+        "grounded": false,
+        "epistemic_framing": "world_truth",
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "proposition": "The notice specifically mentions that this patrol was last observed taking the northwest mud track past the stacked crates near the gate.",
+        "authority_class": "incidental_fact",
+        "grounded": false,
+        "epistemic_framing": "world_truth",
+        "consequential": false,
+        "family": "incidental"
+      },
+      {
+        "proposition": "The rain beads on the board's edges, partially smudging some of the ink, but the warning remains clear and urgent.",
+        "authority_class": "incidental_fact",
+        "grounded": false,
+        "epistemic_framing": "world_truth",
+        "consequential": false,
+        "family": "incidental"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "immutable": true
+  }
+]

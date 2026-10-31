@@ -1,0 +1,91 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "pell",
+      "name": "Pell",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "skiff",
+          "text": "The skiff departs at the evening tide.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "stew",
+          "text": "The fish stew uses river eel.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "storm",
+          "text": "Sailors say a storm sits beyond the bar.",
+          "epistemic": "rumor"
+        },
+        {
+          "id": "ledger",
+          "text": "The smuggler's mark is salt ledger.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    },
+    {
+      "id": "bram",
+      "name": "Bram",
+      "role": "local",
+      "aliases": [],
+      "availability": "available",
+      "disposition": "wary",
+      "topics": [
+        {
+          "id": "paid",
+          "text": "Bram paid Pell for the skiff with two coins.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "rope",
+          "text": "The spare rope hangs behind the bar.",
+          "epistemic": "npc_knowledge"
+        },
+        {
+          "id": "ledger",
+          "text": "The smuggler's mark is salt ledger.",
+          "epistemic": "npc_knowledge",
+          "disclosure": "secret",
+          "secret": true
+        }
+      ],
+      "location": "waystation_courtyard"
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

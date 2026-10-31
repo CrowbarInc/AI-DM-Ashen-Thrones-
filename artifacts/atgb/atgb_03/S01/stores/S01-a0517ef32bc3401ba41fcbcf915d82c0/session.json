@@ -1,0 +1,207 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-18T21:01:22.495035Z",
+  "payload": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "62a41a317c930ec139cd170e",
+    "session_id": "62a41a317c930ec139cd170e",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-18T21:01:22.495035Z",
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I look around the gate.",
+          "delivered_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "467b1f9a5ede5fb72adca70869a06db480392f4184dd637e4f5f6830294b53ed",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Who's running the watch tonight?",
+          "delivered_text": "That has not been established in the information available to you.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "95ad56e0ab9a051440a20cca5a034456ff3fcddfd7ddddab31a19b48fbe23da8",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Is the stew any good, or are you just shouting?",
+          "delivered_text": "I cannot tell who that is addressed to. Nothing has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "e976d6d050a23a5c10f9312bbe4ae17b7bf532043cae42611fd6ad472d57d370",
+          "authorization_source": "conversational_decision:ungrounded_provider_target",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Fair enough. I'm just getting a sense of the place.",
+          "delivered_text": "I don't have an established ruling for that question. No action or roll has been made.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "6db989fadeb4a34c69d364ebe15e7c32bd1ca55ce044c967362b1f68fce6c1e9",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "SESSION",
+        "purpose": "OBSERVATION",
+        "subject": "Fair enough. I'm just getting a sense of the place.",
+        "response": "I don't have an established ruling for that question. No action or roll has been made.",
+        "refusal_reason": null,
+        "scene_id": "frontier_gate"
+      },
+      "pending_clarification": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "frontier_gate",
+        "original_text": "Is the stew any good, or are you just shouting?",
+        "choices": [
+          {
+            "entity_id": "gate_guard",
+            "label": "Gate Guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "clarification": "",
+        "target_resolution": "none_required"
+      },
+      "pending_intention": {
+        "kind": "ambiguous_addressee",
+        "operation": "ASK",
+        "status": "pending",
+        "scene_id": "frontier_gate",
+        "original_text": "Is the stew any good, or are you just shouting?",
+        "choices": [
+          {
+            "entity_id": "gate_guard",
+            "label": "Gate Guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "clarification": "",
+        "target_resolution": "none_required"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "ebefa950ad504cacb5592a3d42095a18659589af74e9203bc20e223f1e3d6af1",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

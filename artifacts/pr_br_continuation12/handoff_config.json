@@ -1,0 +1,192 @@
+{
+  "campaign_id": "pr-br-continuation-12",
+  "campaign_name": "PR-BR Continuation 12 — Fast-Path Competence, Discourse Typing & Contract-Honoring Resolution",
+  "campaign_date": "2026-09-30",
+  "purpose": "Make the fast path abstain when a parse is semantically incomplete, keep interlocutor identity out of active_claim, and stop a validated contract from being denied or replaced by a generic nonanswer. Six focused live turns. No smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Fast-path success now requires the operation's missing pieces, not merely a recognized verb. Elliptical, referential, and multi-reference lines bind uniquely or abstain into one interpretation call. An interlocutor name cannot become active_claim. A satisfying Gate Guard or notice-board answer is not replaced by an absence line or the canned wear line. Deterministic band: 256 passed, 0 failed. Live turns: 6. Fast path: 2. Abstentions: 4. Interpretation calls: 4. Generation calls: 7. Evaluator model calls: 0. Retries: 1. Correct contracts 6/6. Manual PASS 2/6. Evaluator PASS 6/6 with 4 false PASS. Remaining break: useful generated answers on turns 2 and 3 were still replaced downstream. READY FOR INDEPENDENT 10-TURN SMOKE: NO. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/interpretation_proposal.py abstains when a fast-path proposal is semantically incomplete.",
+      "game/resolution_contract.py routes ellipsis and referential action, and keeps a satisfying answer over an absence or canned-use line.",
+      "game/discourse_state.py accepts only a proposition into active_claim.",
+      "game/playability_eval.py fails literal steps, canonical denials, and the canned use line.",
+      "game/final_emission_response_type.py keeps a contract-satisfying ask or inspection."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation12_competence.py and the stubbed /api/chat cases in tests/test_pr_br_model_interpretation.py.",
+      "Broader band: 256 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation12_live.py runs at most six focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 12 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation12 live transcript, manual review, junit, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Competence tests and stubbed /api/chat tests passed inside the 256-test band.",
+    "broader": "256 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation12/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 2 fast-path. 4 abstentions. 4 interpretation calls. No smoke. No 4x10 gate.",
+    "model_runtime_boundary": "4 interpretation calls. 7 generation calls. 0 evaluator model calls. 1 generation retry. 0 aborted.",
+    "new_regressions": "None in this band.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Do not authorize independent smoke. Contracts were right and two of six replies were.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Turn 2 replaced a timing answer with the source/certainty template.",
+      "Turn 3 replaced a full notice-board reading with the clue frame.",
+      "The evaluator passed both replacements."
+    ],
+    "pre_existing": [
+      "The omitted-index unscoped nominal bridge remains for callers that do not pass a catalog."
+    ]
+  },
+  "missing_concepts": [
+    "A final-emission rule that refuses to replace a candidate which already answers the contract, including clue frames and claim-follow-up templates."
+  ],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest."
+  ],
+  "recommended_next_step": "Stop the claim-follow-up template and the clue frame from replacing a candidate that already answers the contract. Do not start independent smoke. Do not start PR-BS.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+      "role": "audit",
+      "why": "Continuation 12 record.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "fast_path",
+      "why": "Semantic-completeness abstention.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "contract",
+      "why": "Routing, premise checks, and answer precedence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "discourse",
+      "why": "Claim slot accepts only a proposition.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/playability_eval.py",
+      "role": "evaluator",
+      "why": "Repaired-family failures.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api_turn_support.py",
+      "role": "emission",
+      "why": "Contract fallback no longer treats the repaired mismatches as success.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/final_emission_response_type.py",
+      "role": "emission",
+      "why": "Keeps a contract-satisfying answer instead of the generic action clause.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation12_competence.py",
+      "role": "tests",
+      "why": "Routing, typing, premise, and evaluator fixtures.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_model_interpretation.py",
+      "role": "tests",
+      "why": "Stubbed /api/chat integration.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/junit.xml",
+      "role": "regression",
+      "why": "256 passed, 0 failed.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/manual_review.md",
+      "role": "manual_review",
+      "why": "Human-DM review of the six live turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/provenance.json",
+      "role": "provenance",
+      "why": "HEAD and cost bounds.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/20260930T111602Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/20260930T111602Z/turns.json",
+      "role": "traces",
+      "why": "Per-turn contracts, discourse slots, and generated versus final text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/20260930T111602Z/summary.json",
+      "role": "cost",
+      "why": "Call counts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/20260930T111602Z/generation_calls.json",
+      "role": "traces",
+      "why": "Generated candidates before final emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation12/20260930T111602Z/interpretation_calls.json",
+      "role": "traces",
+      "why": "Structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation12_live.py",
+      "role": "harness",
+      "why": "Six-turn cap and the live shapes.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

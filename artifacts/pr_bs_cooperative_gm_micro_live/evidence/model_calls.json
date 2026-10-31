@@ -1,0 +1,104 @@
+[
+  {
+    "index": 1,
+    "probe": null,
+    "kind": "preflight",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T00:55:06.842802+00:00",
+    "input_chars": 134,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": false,
+    "retry_context_present": false,
+    "raw_output": "OK",
+    "response_id": "resp_0de9588d94172c3c006ac2f56b527887d1b3be89956d0774e6",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 24,
+      "output_tokens": 2,
+      "total_tokens": 26,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T00:55:08.923011+00:00",
+    "latency_seconds": 2.08
+  },
+  {
+    "index": 2,
+    "probe": "P2",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T00:55:09.398977+00:00",
+    "input_chars": 121438,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": false,
+    "raw_output": "{\n  \"declared_claims\": [],\n  \"narration\": \"\\\"Ah, that's a bit of a secret I keep close to the vest,\\\" the baker says, glancing away briefly before meeting your eyes again. \\\"I prefer not to say which loaf I keep for myself—it just wouldn't feel right to share that.\\\"\",\n  \"player_facing_text\": \"\\\"Ah, that's a bit of a secret I keep close to the vest,\\\" the baker says, glancing away briefly before meeting your eyes again. \\\"I prefer not to say which loaf I keep for myself—it just wouldn't feel right to share that.\\\"\",\n  \"tags\": [\"scene_momentum:new_information\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The baker shifts uneasily, glancing at the loaves while carefully guarding the secret of their favorite bread.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"none\",\n      \"source\": \"dm_improvisation\",\n      \"speaker_id\": \"baker\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Baker refuses to disclose which loaf they keep, respecting player question with a guarded refusal.\"\n}",
+    "response_id": "resp_0d56eec6c891beee006ac2f56ddd5087d195dcf4a4a63864cb",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 27795,
+      "output_tokens": 309,
+      "total_tokens": 28104,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T00:55:12.678902+00:00",
+    "latency_seconds": 3.28
+  },
+  {
+    "index": 3,
+    "probe": "P3",
+    "kind": "generation",
+    "retry_attempt": 0,
+    "model": "gpt-4.1-mini",
+    "started": "2026-10-05T00:55:13.190799+00:00",
+    "input_chars": 110665,
+    "roles": [
+      "system",
+      "user"
+    ],
+    "recipe_present": true,
+    "retry_context_present": false,
+    "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_db5ec0aa65c3\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's wooden yoke is split.\"\n    },\n    {\n      \"declaration_id\": \"rc_b31ecb1fd1c7\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": null,\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"The bell's leather hanger is torn.\"\n    }\n  ],\n  \"narration\": \"The bell's wooden yoke is indeed split, and its leather hanger torn. However, whether these damages were caused deliberately is uncertain from the visible evidence alone.\",\n  \"player_facing_text\": \"The bell's wooden yoke is indeed split, and its leather hanger torn. However, whether these damages were caused deliberately is uncertain from the visible evidence alone.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Direct answer respecting authoritative visible facts without inferring motive.\"\n}",
+    "response_id": "resp_0fe58001a890a1d8006ac2f571a6d487d1afac060d69a052e8",
+    "response_model": "gpt-4.1-mini-2025-04-14",
+    "usage": {
+      "input_tokens": 25233,
+      "output_tokens": 400,
+      "total_tokens": 25633,
+      "input_tokens_details": {
+        "cached_tokens": 0,
+        "cache_write_tokens": 0
+      },
+      "output_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "status": "completed",
+    "meaningful_generation": true,
+    "finished": "2026-10-05T00:55:17.005204+00:00",
+    "latency_seconds": 3.814
+  }
+]

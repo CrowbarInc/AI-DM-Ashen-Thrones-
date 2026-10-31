@@ -1,0 +1,54 @@
+{
+  "case_id": "s06q4",
+  "family": "s06",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "09cd8f322d552d36a38ec4296f1f04b34848042b9f1cf29dafb2c3367e9b12f3",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "Neri runs the ferry"
+    ],
+    "qualifiers": [
+      "unless the red flag is raised",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s06"
+    ],
+    "answered_arguments": [
+      "agent"
+    ],
+    "missing_arguments": [
+      "fare"
+    ],
+    "conflict": false,
+    "reason": "The fact states that Neri ferries passengers across the inlet unless the red flag is raised, which answers who runs the ferry. However, there is no information about the fare."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_answer",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

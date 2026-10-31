@@ -1,0 +1,988 @@
+[
+  {
+    "turn": "T1",
+    "player_input": "Baker, which loaf do you usually keep for yourself?",
+    "prior_conversational_context": {
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [],
+      "rejected_consequential": [],
+      "active_claim": null,
+      "discourse_focus": {},
+      "turn_counter": 1,
+      "active_scene_id": "bread_stall"
+    },
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequentiality": false,
+    "selected_envelope": "narration_only",
+    "provider_response_contract": [
+      "narration_only"
+    ],
+    "provider_attempts": 1,
+    "retry": false,
+    "retry_reasons": "",
+    "input_tokens": 23413,
+    "output_tokens": 54,
+    "total_tokens": 23467,
+    "declaration_validation": {
+      "accepted_model_authored_declarations": false,
+      "declaration_authorship": false,
+      "normalized_empty_declarations": true,
+      "normalized_declared_claims": []
+    },
+    "narration_validation": {
+      "attempt_1_reasons": [],
+      "attempt_2_reasons": null,
+      "regeneration_feedback": null,
+      "accepted": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I’m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+      "sealed": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I’m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+      "emitted": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I’m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+      "c18_exact_equal": true
+    },
+    "state_changes": {
+      "authority_problems": [],
+      "temporal_after": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 2,
+            "source": "resolution_contract"
+          },
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 2,
+          "last_committed_contract_id": "rc_d4c97cad4722"
+        },
+        "turn_counter": 2,
+        "active_scene_id": "bread_stall"
+      }
+    },
+    "provenance_changes": {
+      "before": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {},
+        "turn_counter": 1,
+        "active_scene_id": "bread_stall"
+      },
+      "after": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 2,
+            "source": "resolution_contract"
+          },
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 2,
+          "last_committed_contract_id": "rc_d4c97cad4722"
+        },
+        "turn_counter": 2,
+        "active_scene_id": "bread_stall"
+      }
+    }
+  },
+  {
+    "turn": "T2",
+    "player_input": "Surely you have a favorite. What makes you reluctant to say?",
+    "prior_conversational_context": {
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [
+        {
+          "semantic_identity": {},
+          "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+          "authority": "bounded_incidental",
+          "provenance": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "bread_stall",
+          "source_turn": 2
+        }
+      ],
+      "rejected_consequential": [],
+      "active_claim": null,
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "bread_stall",
+        "active_interlocutor": {
+          "id": "baker",
+          "label": "Baker",
+          "kind": "interlocutor",
+          "scene_id": "bread_stall",
+          "turn_index": 2,
+          "source": "resolution_contract"
+        },
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 2,
+        "last_committed_contract_id": "rc_d4c97cad4722"
+      },
+      "turn_counter": 2,
+      "active_scene_id": "bread_stall"
+    },
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequentiality": false,
+    "selected_envelope": "narration_only",
+    "provider_response_contract": [
+      "narration_only"
+    ],
+    "provider_attempts": 1,
+    "retry": false,
+    "retry_reasons": "",
+    "input_tokens": 24124,
+    "output_tokens": 76,
+    "total_tokens": 24200,
+    "declaration_validation": {
+      "accepted_model_authored_declarations": false,
+      "declaration_authorship": false,
+      "normalized_empty_declarations": true,
+      "normalized_declared_claims": []
+    },
+    "narration_validation": {
+      "attempt_1_reasons": [],
+      "attempt_2_reasons": null,
+      "regeneration_feedback": null,
+      "accepted": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private — perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable.",
+      "sealed": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private — perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable.",
+      "emitted": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private — perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable.",
+      "c18_exact_equal": true
+    },
+    "state_changes": {
+      "authority_problems": [],
+      "temporal_after": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 3,
+            "source": "resolution_contract"
+          },
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 3,
+          "last_committed_contract_id": "rc_1e3fe37bac4d"
+        },
+        "turn_counter": 3,
+        "active_scene_id": "bread_stall"
+      }
+    },
+    "provenance_changes": {
+      "before": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 2,
+            "source": "resolution_contract"
+          },
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 2,
+          "last_committed_contract_id": "rc_d4c97cad4722"
+        },
+        "turn_counter": 2,
+        "active_scene_id": "bread_stall"
+      },
+      "after": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 3,
+            "source": "resolution_contract"
+          },
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 3,
+          "last_committed_contract_id": "rc_1e3fe37bac4d"
+        },
+        "turn_counter": 3,
+        "active_scene_id": "bread_stall"
+      }
+    }
+  },
+  {
+    "turn": "T3",
+    "player_input": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+    "prior_conversational_context": {
+      "gm_inferences": [],
+      "player_hypotheses": [],
+      "accepted_incidentals": [
+        {
+          "semantic_identity": {},
+          "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+          "authority": "bounded_incidental",
+          "provenance": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "bread_stall",
+          "source_turn": 2
+        }
+      ],
+      "rejected_consequential": [],
+      "active_claim": null,
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "bread_stall",
+        "active_interlocutor": {
+          "id": "baker",
+          "label": "Baker",
+          "kind": "interlocutor",
+          "scene_id": "bread_stall",
+          "turn_index": 3,
+          "source": "resolution_contract"
+        },
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 3,
+        "last_committed_contract_id": "rc_1e3fe37bac4d"
+      },
+      "turn_counter": 3,
+      "active_scene_id": "bread_stall"
+    },
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequentiality": false,
+    "selected_envelope": "narration_only",
+    "provider_response_contract": [
+      "narration_only"
+    ],
+    "provider_attempts": 1,
+    "retry": false,
+    "retry_reasons": "",
+    "input_tokens": 24890,
+    "output_tokens": 78,
+    "total_tokens": 24968,
+    "declaration_validation": {
+      "accepted_model_authored_declarations": false,
+      "declaration_authorship": false,
+      "normalized_empty_declarations": true,
+      "normalized_declared_claims": []
+    },
+    "narration_validation": {
+      "attempt_1_reasons": [],
+      "attempt_2_reasons": null,
+      "regeneration_feedback": null,
+      "accepted": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn’t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\"",
+      "sealed": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn’t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\"",
+      "emitted": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn’t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\"",
+      "c18_exact_equal": true
+    },
+    "state_changes": {
+      "authority_problems": [],
+      "temporal_after": {
+        "gm_inferences": [
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          }
+        ],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": {
+          "id": "claim_5d4455409b",
+          "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "kind": "claim",
+          "scene_id": "bread_stall",
+          "turn_index": 4,
+          "source": "gm_inference",
+          "epistemic_status": "inferred"
+        },
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 4,
+            "source": "resolution_contract"
+          },
+          "active_claim": {
+            "id": "claim_5d4455409b",
+            "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "kind": "claim",
+            "scene_id": "bread_stall",
+            "turn_index": 4,
+            "source": "gm_inference",
+            "epistemic_status": "inferred"
+          },
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 4,
+          "last_committed_contract_id": "rc_d9723da53bd1"
+        },
+        "turn_counter": 4,
+        "active_scene_id": "bread_stall"
+      }
+    },
+    "provenance_changes": {
+      "before": {
+        "gm_inferences": [],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": null,
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 3,
+            "source": "resolution_contract"
+          },
+          "active_claim": null,
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 3,
+          "last_committed_contract_id": "rc_1e3fe37bac4d"
+        },
+        "turn_counter": 3,
+        "active_scene_id": "bread_stall"
+      },
+      "after": {
+        "gm_inferences": [
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          }
+        ],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": {
+          "id": "claim_5d4455409b",
+          "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "kind": "claim",
+          "scene_id": "bread_stall",
+          "turn_index": 4,
+          "source": "gm_inference",
+          "epistemic_status": "inferred"
+        },
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 4,
+            "source": "resolution_contract"
+          },
+          "active_claim": {
+            "id": "claim_5d4455409b",
+            "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "kind": "claim",
+            "scene_id": "bread_stall",
+            "turn_index": 4,
+            "source": "gm_inference",
+            "epistemic_status": "inferred"
+          },
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 4,
+          "last_committed_contract_id": "rc_d9723da53bd1"
+        },
+        "turn_counter": 4,
+        "active_scene_id": "bread_stall"
+      }
+    }
+  },
+  {
+    "turn": "T4",
+    "player_input": "Thanks. I'll remember your recommendation.",
+    "prior_conversational_context": {
+      "gm_inferences": [
+        {
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "inferred"
+          },
+          "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "authority": "observation",
+          "provenance": "gm_inference",
+          "epistemic_status": "inferred",
+          "relation_kind": "epistemic_status",
+          "scene_id": "bread_stall",
+          "source_turn": 4
+        }
+      ],
+      "player_hypotheses": [],
+      "accepted_incidentals": [
+        {
+          "semantic_identity": {},
+          "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+          "authority": "bounded_incidental",
+          "provenance": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "bread_stall",
+          "source_turn": 2
+        },
+        {
+          "semantic_identity": {},
+          "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+          "authority": "bounded_incidental",
+          "provenance": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "scene_id": "bread_stall",
+          "source_turn": 4
+        }
+      ],
+      "rejected_consequential": [],
+      "active_claim": {
+        "id": "claim_5d4455409b",
+        "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+        "kind": "claim",
+        "scene_id": "bread_stall",
+        "turn_index": 4,
+        "source": "gm_inference",
+        "epistemic_status": "inferred"
+      },
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "bread_stall",
+        "active_interlocutor": {
+          "id": "baker",
+          "label": "Baker",
+          "kind": "interlocutor",
+          "scene_id": "bread_stall",
+          "turn_index": 4,
+          "source": "resolution_contract"
+        },
+        "active_claim": {
+          "id": "claim_5d4455409b",
+          "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "kind": "claim",
+          "scene_id": "bread_stall",
+          "turn_index": 4,
+          "source": "gm_inference",
+          "epistemic_status": "inferred"
+        },
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 4,
+        "last_committed_contract_id": "rc_d9723da53bd1"
+      },
+      "turn_counter": 4,
+      "active_scene_id": "bread_stall"
+    },
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "consequentiality": false,
+    "selected_envelope": "narration_only",
+    "provider_response_contract": [
+      "narration_only"
+    ],
+    "provider_attempts": 1,
+    "retry": false,
+    "retry_reasons": "",
+    "input_tokens": 24763,
+    "output_tokens": 57,
+    "total_tokens": 24820,
+    "declaration_validation": {
+      "accepted_model_authored_declarations": false,
+      "declaration_authorship": false,
+      "normalized_empty_declarations": true,
+      "normalized_declared_claims": []
+    },
+    "narration_validation": {
+      "attempt_1_reasons": [],
+      "attempt_2_reasons": null,
+      "regeneration_feedback": null,
+      "accepted": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+      "sealed": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+      "emitted": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+      "c18_exact_equal": true
+    },
+    "state_changes": {
+      "authority_problems": [],
+      "temporal_after": {
+        "gm_inferences": [
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          },
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 5
+          }
+        ],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 5
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": {
+          "id": "claim_5d4455409b",
+          "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "kind": "claim",
+          "scene_id": "bread_stall",
+          "turn_index": 5,
+          "source": "gm_inference",
+          "epistemic_status": "inferred"
+        },
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 5,
+            "source": "resolution_contract"
+          },
+          "active_claim": {
+            "id": "claim_5d4455409b",
+            "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "kind": "claim",
+            "scene_id": "bread_stall",
+            "turn_index": 5,
+            "source": "gm_inference",
+            "epistemic_status": "inferred"
+          },
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 5,
+          "last_committed_contract_id": "rc_dd7293b4258c"
+        },
+        "turn_counter": 5,
+        "active_scene_id": "bread_stall"
+      }
+    },
+    "provenance_changes": {
+      "before": {
+        "gm_inferences": [
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          }
+        ],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": {
+          "id": "claim_5d4455409b",
+          "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "kind": "claim",
+          "scene_id": "bread_stall",
+          "turn_index": 4,
+          "source": "gm_inference",
+          "epistemic_status": "inferred"
+        },
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 4,
+            "source": "resolution_contract"
+          },
+          "active_claim": {
+            "id": "claim_5d4455409b",
+            "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "kind": "claim",
+            "scene_id": "bread_stall",
+            "turn_index": 4,
+            "source": "gm_inference",
+            "epistemic_status": "inferred"
+          },
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 4,
+          "last_committed_contract_id": "rc_d9723da53bd1"
+        },
+        "turn_counter": 4,
+        "active_scene_id": "bread_stall"
+      },
+      "after": {
+        "gm_inferences": [
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          },
+          {
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "inferred"
+            },
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "authority": "observation",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "scene_id": "bread_stall",
+            "source_turn": 5
+          }
+        ],
+        "player_hypotheses": [],
+        "accepted_incidentals": [
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 2
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 4
+          },
+          {
+            "semantic_identity": {},
+            "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+            "authority": "bounded_incidental",
+            "provenance": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "scene_id": "bread_stall",
+            "source_turn": 5
+          }
+        ],
+        "rejected_consequential": [],
+        "active_claim": {
+          "id": "claim_5d4455409b",
+          "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+          "kind": "claim",
+          "scene_id": "bread_stall",
+          "turn_index": 5,
+          "source": "gm_inference",
+          "epistemic_status": "inferred"
+        },
+        "discourse_focus": {
+          "version": 1,
+          "scene_id": "bread_stall",
+          "active_interlocutor": {
+            "id": "baker",
+            "label": "Baker",
+            "kind": "interlocutor",
+            "scene_id": "bread_stall",
+            "turn_index": 5,
+            "source": "resolution_contract"
+          },
+          "active_claim": {
+            "id": "claim_5d4455409b",
+            "label": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "kind": "claim",
+            "scene_id": "bread_stall",
+            "turn_index": 5,
+            "source": "gm_inference",
+            "epistemic_status": "inferred"
+          },
+          "active_actionable_lead": null,
+          "active_inspected": null,
+          "last_attempted_action": null,
+          "last_committed_turn": 5,
+          "last_committed_contract_id": "rc_dd7293b4258c"
+        },
+        "turn_counter": 5,
+        "active_scene_id": "bread_stall"
+      }
+    }
+  }
+]

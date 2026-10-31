@@ -1,0 +1,168 @@
+{
+  "before": {
+    "old_milestone": {
+      "scene_id": "old_milestone",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    },
+    "market_quarter": {
+      "scene_id": "market_quarter",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    },
+    "frontier_gate": {
+      "scene_id": "frontier_gate",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    }
+  },
+  "after": {
+    "old_milestone": {
+      "scene_id": "old_milestone",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    },
+    "market_quarter": {
+      "scene_id": "market_quarter",
+      "visible_facts_add": [],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {}
+    },
+    "frontier_gate": {
+      "scene_id": "frontier_gate",
+      "visible_facts_add": [
+        "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
+        "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+        "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+        "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+        "a notice board lists new taxes, curfews, and a posted warning about a missing patrol"
+      ],
+      "discovered_clues": [],
+      "state_flags": {},
+      "runtime_entities": [],
+      "mutations": {
+        "discoverable_clues_add": [],
+        "hidden_facts_add": [],
+        "mode": "social"
+      }
+    }
+  },
+  "changed_entries": [
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add/0",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": "rain spatters soot-dark stone; frayed banners hang above cinderwatch's eastern gate",
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.visible_facts_add.0",
+      "provenance": "authored scene.opening_seed_facts.0; captured structured scene_update; native adoption trace",
+      "authorization": "authorized authored fact projection; narration alone is not evidence"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add/1",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": "a well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor",
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.visible_facts_add.1",
+      "provenance": "authored scene.opening_seed_facts.4; captured structured scene_update; native adoption trace",
+      "authorization": "authorized authored fact projection; narration alone is not evidence"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add/2",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": "one figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue",
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.visible_facts_add.2",
+      "provenance": "authored scene.opening_seed_facts.5; captured structured scene_update; native adoption trace",
+      "authorization": "authorized authored fact projection; narration alone is not evidence"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add/3",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": "refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in",
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.visible_facts_add.3",
+      "provenance": "authored scene.opening_seed_facts.1; captured structured scene_update; native adoption trace",
+      "authorization": "authorized authored fact projection; narration alone is not evidence"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/visible_facts_add/4",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": "a notice board lists new taxes, curfews, and a posted warning about a missing patrol",
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.visible_facts_add.4",
+      "provenance": "authored scene.opening_seed_facts.2; captured structured scene_update; native adoption trace",
+      "authorization": "authorized authored fact projection; narration alone is not evidence"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/discoverable_clues_add",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": [],
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.discoverable_clues_add",
+      "provenance": "legacy typed effect empty-list initialization",
+      "authorization": "authorized existing mode / empty layer initialization"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/hidden_facts_add",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": [],
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.hidden_facts_add",
+      "provenance": "legacy typed effect empty-list initialization",
+      "authorization": "authorized existing mode / empty layer initialization"
+    },
+    {
+      "path": "session.json:/runtime_scene_overlays/frontier_gate/mutations/mode",
+      "previous_value": null,
+      "previous_present": false,
+      "new_value": "social",
+      "change_type": "added",
+      "scene_id": "frontier_gate",
+      "overlay_id": "frontier_gate",
+      "related_opening_declaration": "parsed_response.scene_update.mode",
+      "provenance": "legacy typed scene-update effect; authored scene.mode",
+      "authorization": "authorized existing mode / empty layer initialization"
+    }
+  ],
+  "root_existed": true,
+  "root_type_before": "object",
+  "root_type_after": "object",
+  "removed_entries": [],
+  "unrelated_overlays_unchanged": true,
+  "declaration_caution": "scene_update is the structured mutation proposal. declared_claims are realization claims, not a blanket persistence grant."
+}

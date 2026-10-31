@@ -1,0 +1,962 @@
+# NEXT_SESSION
+
+Start here:
+
+```text
+Read docs/DEVELOPMENT_CONSTITUTION.md, then docs/NEXT_SESSION.md and the
+authoritative documents it identifies, before beginning substantive work.
+```
+
+## Project
+
+Ashen Thrones
+
+## Current Era
+
+Product Realization
+
+## Last Completed Cycle
+
+`ATGB-04 — Independent human evaluation preparation`: authoritative 37-turn index,
+complete conversation review document and offline HTML form, blank scoring forms,
+human-judgment aggregation tool, setup qualifications and provenance prepared.
+Original S01–S03; S04 full trial 2; S05–S10 trial 1. Historical partial S04 trial 1
+is separate. S07/S09 opening-dependent criteria require special human review.
+All judgments blank; no gameplay-performance baseline claimed. Ten focused
+offline checks and form roundtrip checks passed. Production, prior evidence,
+corpus/rubric/baseline and canonical data preserved; no provider requests.
+Report: `development/reports/atgb_04_human_evaluation_preparation.md`.
+Start: `artifacts/atgb/atgb_04/README.md` and `review.html` or
+`conversational_review.md`. Standard review: `handoff/CURRENT_REVIEW.zip`.
+Rendered HTML preview was blocked by the browser's local-file URL policy;
+offline structure/JavaScript checks passed. Markdown review is available.
+Stop and await independent human evaluation. No commit; dirty worktree retained.
+The ATGB-03C and earlier entries below are preserved execution history.
+
+`ATGB-03C — Initial live conversational baseline continuation`: all 24 requested
+turns captured through the unchanged production chat API. S04 is full trial 2;
+S05–S10 are trial 1. Combined with original S01–S03: 37/37 unique baseline turns
+captured; original partial S04 remains separate (39 observations including it).
+All human judgments remain pending. S07/S09 authored opening context exists but
+was not delivered before the first player turn by the approved silent-reset
+worker: opening-dependent criteria remain uncertain/not evaluated, not gameplay
+failures. ATGB-03B-1 accounting reconciles 23 admissions/dispatches/completions,
+37,222 input / 4,137 output tokens; no unknown usage, pending requests or live
+infrastructure stop. Limits: 48 admissions / 900 seconds / 120,000 tokens; SDK
+transport retries not independently counted. Seven-path accounting readiness,
+source preservation and all ten final preflights passed. Focused checks: 103/104
+initially passed, Windows reset failure passed targeted bundled-runtime retry.
+Original evidence, corpus, frozen baseline, production/harness and canonical data
+unchanged (552 protected hashes). No gameplay repair or performance score.
+Report: `development/reports/atgb_03c_live_baseline_continuation.md`.
+Evidence and worksheets: `artifacts/atgb/atgb_03c/`.
+Standard review: `handoff/CURRENT_REVIEW.zip`. Stop and await human review.
+
+`ATGB-03B — Provider accounting integrity`: infrastructure repair implemented;
+no live-provider benchmark authorized or executed. `ATGB-03B-1` reserves requests
+atomically, writes durable attempt identity before dispatch, and accounts failures
+and interruptions across seven production owners including preflight. Readiness
+verifies guarded sites and pinned application sources; unsafe/changed coverage
+still refuses. Provider payload ASTs and all conversational functions outside
+dispatch/early-return telemetry are unchanged. Latest lifecycle checks: 59 passed.
+Relevant regression run: 225 passed / 2 pre-existing failures reproduced before
+repair. ATGB checks passed; one isolated Windows reset-write failure passed its
+targeted retry. Original evidence/corpus/baseline/campaign data preserved.
+Report: `development/reports/atgb_03b_provider_accounting_integrity.md`.
+Inventory, test records, source diff and readiness: `artifacts/atgb/atgb_03b/`.
+Standard review: `handoff/CURRENT_REVIEW.zip`. Await review before continuing ATGB.
+
+`ATGB-03A — Provider accounting safety and continuation readiness`: 45 focused
+provider-disabled checks passed. Benchmark-only pre-execution refusal and ledger
+reconciliation added (`ATGB-03A-1`). Universal request accounting remains unresolved:
+one provider adapter bypasses the ledger and two record only successful returns.
+The user's explicit stop condition applies; no live continuation or new trial ran.
+Original ATGB-03 evidence, production sources, corpus, baseline and campaign data
+are preserved. Report: `development/reports/atgb_03a_provider_accounting.md`.
+Evidence/plan: `artifacts/atgb/atgb_03a/`. Standard review: `handoff/CURRENT_REVIEW.zip`.
+
+`ATGB-03 — Initial live conversational baseline`: PARTIAL LIVE EXECUTION.
+After explicit user approval resolved the initial OpenAI export rejection,
+S01 passed live infrastructure acceptance; S02/S03 completed. S04 stopped after
+two turns because performance/provider-call metadata was unavailable. The harness
+refused S04.3 with `provider_call_ceiling_not_observable`; S05–S10 not attempted.
+15/37 turns captured; 12 provider-ledger requests (21,531 input / 2,190 output
+tokens). All human judgments pending; no gameplay score. All ten preparation
+preflights, 31 approved-source checks and 24 focused tests passed.
+Report: `development/reports/atgb_03_initial_live_baseline.md`.
+Transcripts, state, provider ledger and actual scoring worksheets:
+`artifacts/atgb/atgb_03/`. Captured turns pending review; 22 unsubmitted turns
+are not evaluated. S07/S09 opening delivery is not evaluated.
+Standard review: `handoff/CURRENT_REVIEW.md` and `.zip`.
+
+`ATGB-02A — Baseline readiness and reproducibility.` Machine prerequisites verified
+for all ten scenarios using frozen `frontier-gate-v1`; S07/S09 opening delivery
+remains partially verified. Focused checks: 24 passed; adjacent regression: 49 passed.
+No live baseline or gameplay score. Report/matrix:
+`development/reports/atgb_02a_readiness.md`. Review: `handoff/CURRENT_REVIEW.zip`.
+
+`ATGB-02 — Conversational benchmark infrastructure.` Implemented. No live baseline and no gameplay-performance claim. Review: `handoff/CURRENT_REVIEW.md`. Specification: `development/reports/atgb_02_benchmark_specification.md`. Execution: `development/reports/atgb_02_execution.md`.
+
+`ATGB-01 — Conversational benchmark design.` Historical proposal. ATGB-02 adopts it with S07 moved to held-out. The catalog body is not rewritten.
+
+`PR-BL — Unparsed movement must not narrate or commit a spatial transition.` CLOSED. Not checkpointed. Do not commit unless asked.
+
+PR-BK remains closed at `5555a66`. PR-BF remains settled.
+
+## Current Objective
+
+ATGB-04 preparation is complete. Await independent human judgments. Extract
+`handoff/CURRENT_REVIEW.zip`; review `support/artifacts/atgb/atgb_04/review.html`
+or the Markdown document, save each reviewer's separate export, and aggregate
+using the packaged `report_human_review.py` instructions. No live reruns,
+automatic/LLM judging, gameplay repairs, criterion changes or new Product
+Realization campaign. Unsupported criteria remain uncertain/not_evaluated;
+do not presume opening delivery. Historical S04 trial 1 is excluded from the
+37-turn reporting. No performance baseline until human review is supplied.
+The ATGB-03C objective below is retained historical context.
+
+ATGB-03C evidence capture is complete. Await human review of separate
+interpretation, response adequacy and authority judgments, severity,
+clarification, continuity and conversation-level naturalness. Review S07/S09
+opening delivery limitations before assigning criterion eligibility. The original
+S04 partial trial must not be spliced into trial 2 or double-counted in the
+37-turn baseline. Original completion-only usage and new admission-based counts
+remain separate metrics. Do not interpret the baseline as a completed
+gameplay-performance measurement, claim independent held-out generalization,
+repair conversations, rerun scenarios, or start Product Realization work.
+User explicitly approved bounded OpenAI export; the initial automatic review
+rejection was resolved before live execution. Dirty worktree is pre-existing;
+no commit was created. Minimum current evidence: ATGB-03C report,
+`baseline_coverage.json`, `opening_context.json`, `provider_accounting.json`,
+`combined_baseline_worksheet.md` and original S04 trial-1 evidence.
+
+The objective text below is historical and superseded by the ATGB-03C user
+request and execution report.
+
+ATGB-03B is complete as an infrastructure pass and awaits review. No live-provider
+benchmark execution is authorized by this pass. Do not start gameplay repairs or
+a Product Realization campaign. New accounting bounds application admissions;
+SDK transport retries are not separate application requests. Accounting is
+process-local; ATGB workers run serially with remaining allowances and explicit
+deadlines, and never reuse an existing ledger. Historical ATGB-03 ledgers remain
+completion-only observations and are not retroactively certified. S04 would need
+a separate full trial after future authorization; S01–S03 remain preserved.
+All original human judgments remain pending; S07/S09 opening delivery unmeasured.
+
+The ATGB-03A and earlier objective text below is historical, superseded by the
+ATGB-03B report and the user's focused accounting-repair request.
+
+ATGB-03A is stopped pending review. Do not bypass the live accounting refusal,
+start gameplay repairs, or initiate a Product Realization campaign. The ledger
+provides observed subtotals, not a proven request upper bound. All human scoring
+remains pending. After a separately reviewed accounting solution, S04 needs a
+distinct full trial 2 because supported harness resume continuity is not
+established; keep its original partial trial. Do not rerun completed S01–S03.
+S07/S09 opening delivery remains unmeasured. See the ATGB-03A report and plan.
+
+The ATGB-03 and earlier orientation below is historical context superseded by
+the ATGB-03A status above and the user's 2026-10-18 repair/continuation request.
+
+ATGB-03 observation pass stopped at its existing accounting safety guard.
+The user explicitly approved OpenAI benchmark data export and resumption; that
+approval blocker is resolved. The remaining blocker is missing performance
+metadata on S04.2. The independent ledger also captures an S03.2 expression call
+omitted by host turn counters. Keep both telemetry sources; do not infer missing
+counts as zero or bypass the stop. Review a separate benchmark-infrastructure
+correction/readiness pass before another live attempt. No automatic retries or
+gameplay repairs. Limits used: 80 application requests / 1800 seconds overall;
+S01 12 / 300. Unchanged `gpt-4.1-mini` configuration and canonical campaign data.
+All human scoring remains pending. No complete live baseline or gameplay result.
+
+This paragraph is current ATGB orientation; the ATGB-02A and product-era
+instructions below remain historical context with their existing caveats.
+
+ATGB-02A starting-state readiness is validated and waiting for review before ATGB-03.
+The benchmark now uses a pinned authored baseline and preflight before chat.
+Do not run a live-provider benchmark. Do not change production gameplay to chase
+a score. Provider-disabled validation supports no gameplay-performance claim.
+
+PR-BL is closed. Stop. Do not start PR-BM.
+
+The next action is a fresh human playtest. Do not continue session `735ebd1cfb4567c4f97df6dc`.
+
+Invariant: generative narration may decorate an authoritative gameplay result. It may not create one. No successful scene transition means no successful spatial-transition narration and no generative `scene_update` commitment of that transition. The success signal is `resolved_transition is True`, or `state_changes.scene_transition_occurred`, `scene_changed`, or `arrived_at_scene`. Parser coverage is not that signal.
+
+Directional `proceed` reaches the existing travel owner when a compass direction or a route/destination follows. `proceed with` and `proceed to <verb>` do not. A bare compass direction does not select an authored exit. Same-scene movement and same-scene facts remain.
+
+Session `735ebd1cfb4567c4f97df6dc` is the evidence that earned PR-BL. Do not continue it. The journey it narrated is the failure class this slice closed.
+
+PR-BK invariant, unchanged: conversational memory is not structured-fact authority. `generative_reply` is continuity only.
+
+## Established Facts
+
+- PR-BL is closed. Directional `proceed` is in the existing travel-verb family. `I proceed northwest` is unresolved travel. `I proceed toward the bell loft` and `I follow the missing patrol rumor` still transition through the existing exit resolver. `I proceed with the inspection` is not scene travel. Local `I walk a few steps closer` stays `custom`.
+- The narration owner is `apply_stay_leave_narration_agreement_to_gm`. It runs when `resolved_transition` is not success, including when the resolution dict is missing. A transition claim becomes `That destination is not available from here.` Local repositioning is left alone. Engine stock `The new ground shows itself` is still rejected for unresolved travel by the PR-BF kind check, and is not treated as a transition on discover-clue turns.
+- Scene-update policy lives in `omit_unowned_transition_scene_update`, called from `_apply_post_gm_updates` after the structural validator. A transition claim is dropped. Clues, hidden facts, and `exploration` / `travel` mode attached to that claim are dropped. A same-scene visible fact is kept. Nouns are not promoted to interactables.
+- Report: `development/campaigns/product_realization/PR-BL_unparsed_movement_state_narration_integrity.md`. Evidence: `artifacts/pr_bl/`.
+- Post-PR-BK session `735ebd1cfb4567c4f97df6dc`: 9 human turns plus opening, scene `frontier_gate` throughout, no crash. Audit: `development/campaigns/product_realization/post_pr_bk_player_perceived_vs_authoritative_world_causal_audit.md`. Evidence: `artifacts/human_playtests/post_pr_bk_state_narration_audit/`.
+- Four independent causes. (1) Turn 06 `I proceed North-West` parsed as `None`, so PR-BF never ran; generative narration and adopted `scene_update` created a journey, crates, sheds, lanterns, and broken banners. Turns 07–09 depend on that. (2) Notice board advertises curfews and has one reveal, the patrol route; turn 02 bound the board and emitted that clue for an hours question. (3) Turn 03 addressed Tavern Runner correctly and replaced a refusal with the patrol clue. (4) Turn 05 `to the watch` rebound `gate_guard` over the runner.
+- Turn 00 opening and turn 04's quantity refusal are acceptable. Turn 04 is correct / awkward.
+- PR-BK remains closed. No structured-fact emission of generative prose. Turn 07 spoke the clue payload, not the stored banner paragraph.
+- PR-BF remains settled. The human turn was not travel kind, so PR-BF's kind check never ran. PR-BL covers that missing-resolution path. Do not reopen PR-BF.
+- The rumor exit `Follow the missing patrol rumor` → `old_milestone` already binds follow/pursue and "old milestone" phrasing. Bare `northwest` stays unresolved. `proceed` never enters that owner.
+- The session's immediate direction was state ↔ narration integrity when no transition succeeded. PR-BL closed that slice. Out of scope remains: a new travel engine, curfew text, noun promotion, social relevance, interlocutor policy.
+- Extended playtest session `ba70eb525862575033539357` (log entries 0–7, all `frontier_gate`, Day 1) is audited in `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`. Nine player-facing failures, five causes. No production repair in that audit.
+- Turn 0 opening is correct. Turn 1 is the earliest incorrect decision: untargeted inspection appends `visible_facts[0]` (the notice board) to a banner look. Turn 2 repeats that template for a time-of-day question. There is still no diegetic clock.
+- Turn 3 never binds `notice_board` (`kind` absent, label `downtime`). The model states dusk-until-dawn, fines, detainment, unrest, and bandits. Those details are not authored. Narrative authority does not fail.
+- Turn 4 resolves no NPC and the retry catalog emits `The guard says` via the empty `speaker_label` default. No guard id is stored. That PR-BJ latent helper reached the player on this path. PR-BJ is not reopened as a paraphrase cycle.
+- Turn 5 route reason `no_addressable_target` still dialogue-locks `tavern_runner`, the only world NPC. Turns 6 and 7 correctly continue that interlocutor. The runner’s only authored topic (patrol never returned from the old milestone) is never revealed.
+- `topic_pressure.last_answer` stores those model paragraphs. Turn 6 cites the previous paragraph as `topic_pressure:last_answer` and forces a partial answer. Turn 7 emits `structured_fact_candidate_emission` from its own paragraph. `lead_registry` and `clue_knowledge` stay empty. `recent_contextual_leads` keeps prose fragments.
+- The listen repair, deferred compound execution, and deferred question-only sole-NPC collapse remain as in the mixed-action audit. This session did not listen.
+- The 2026-09-23 human turn at `frontier_gate` asked to move, look, listen, and judge the crowd. Segmentation kept eavesdropping and the first question on the declared clause and peeled the region question. Listen was recognized, then discarded because of `?`. `anyone` opened `scene_open_bid` with no target. Dialogue lock filled `tavern_runner` because persisted `data/world.json` has one world NPC there. Guard Captain ranked first among addressables and was not that fill.
+- The model paragraph invented refugee origins and "wilderland strife". Referential clarity replaced it for ambiguous `their`, not for missing authority. `topic_pressure.last_answer` then re-emitted `Best way to find out lies beyond this gate` inside `Word is`. That line was not the root defect. `Word is` remains aesthetic when the fact is actually owned.
+- Repair: a player listen, eavesdrop, or overhear attempt stays existing human-adjacent `observe` when a question shares the utterance. `Does anyone know` and `Anyone listening?` stay social. Explicit asks stay social. The captured turn now resolves as listen and may realize only the authored stew-and-rumor shout. Movement and the region question stay unexecuted. No origin content was added.
+- Frontier Gate does not author refugee origin, regional mix, dialect, heraldry, wounds, or overheard reasons for flight.
+- Compound N-action execution is still deferred. Question-only turns can still collapse to the sole world NPC. `Is anyone talking about why the refugees fled?` can still bind `refugee`.
+- Architecture Reconciliation Era completed; Campaign 6 chassis closed.
+- Repository organization completed. Campaign reports live under
+  `development/campaigns/`. Generated evidence stays in `artifacts/`.
+  Disposable pytest/agent output goes to `development/tmp/`.
+- Validation authority hierarchy is unchanged: structural PASS ≠ semantic
+  playability; semantic calibration is the primary calibrated semantic
+  authority.
+- RC-10 = A and RC-21 = B + C remain implemented.
+- PR-AD through PR-BJ remain as previously established. Do not reopen them
+  without new causal evidence.
+- PR-AQ remains settled: T16 walk+listen is existing `observe`; local walking
+  is existing `custom`; listen is perception, not sound creation.
+- PR-AR remains settled: visual presence ≠ speech; empty listen is valid
+  grounded absence; perception may realize the world, not author it.
+- PR-AS remains settled: authority determines what may be said; relevance
+  determines what should be said now. Immediate untargeted reinspection may
+  remain nothing-new. Existing observe fallback is still the owner.
+- PR-AT remains settled: an `already_searched` outcome must realize a complete
+  authored inspectable sentence. Repeated investigation does not mint a new
+  discovery.
+- PR-AU remains settled: a grounded social absence must survive live-model
+  realization. Price, time, count, identity, and unauthorized-redirect
+  inventions shared one realization failure. Existing authored-knowledge
+  realization fail-closes invented concrete facts into the ownership-terminal
+  catalog.
+- PR-AV remains settled: a contextual refusal hook must refer to a meaningful
+  asked subject. Movement, temporal, speaker, and other incidental leftovers
+  are not topics. Empty/untrustworthy topic degrades to an unhooked refusal.
+- PR-AW remains settled: intervening non-observation turns do not make
+  unchanged visible facts newly relevant. Untargeted visual observe is the
+  only stamp-eligible turn.
+- PR-AX remains settled: off-scene known clues are historical, not
+  present-here spatial authority. Distinctive prior-scene geography asserted
+  as currently present fail-closes through existing perception grounding.
+- PR-AY remains settled: a request to perceive/describe the player's
+  authoritative current surroundings is existing `observe`, even when phrased
+  as a question. Adjudication remains the owner of earshot, who/anyone nearby,
+  distance, rules, and feasibility.
+- PR-AZ remains settled: once an utterance is resolved and executed as
+  observe, interrogative surface form must not transfer it to
+  social/adjudication. Sole-NPC information-seeking bind must not attach
+  untargeted local observation. `question_rule` remains valid and was not
+  globally disabled.
+- PR-BA remains settled: grammatical locality terms do not determine
+  ownership alone. Subject + requested relation matter. Undirected
+  place-existence is current-scene / current-exit adjudication.
+- PR-BB remains settled: the leftover passive standpoint sentence is not a
+  missing observation category. Ordinary look-around already reached observe.
+  The local-observation classifier is converged enough for Product
+  Realization.
+- PR-BC remains settled: directed vocative / `ask X who …` stay social.
+  Undirected `"Who last read the tally slate?"` remains accepted inspect
+  residue. No last-reader fact was added.
+- PR-BD remains settled: ordinary interactable names, aliases, and silent-e
+  plurals resolve. `"posted notices"` remains accepted leading-modifier
+  residue.
+- PR-BE found no authoritative waiting / pass-time owner. Ordinary
+  `"I wait."`, `"I wait a moment."`, and `"I pause for a moment."` resolve
+  `kind=None` because the gameplay capability is absent.
+- Nearby owners are not wait: `explicit_stay` is remain-here → `observe`;
+  `passive_interruption_wait` is wait-out-a-disturbance → `observe`; `custom`
+  is local walking/pacing and does not advance diegetic time; downtime/rest
+  is `downtime_engine_not_wired`.
+- `session.turn_counter` and `session.clocks.time_pressure` increment on
+  every chat, including unparsed wait. `session.current_date` stays
+  `"Day 1"`. Canonical `world.world_state.clocks` is empty. Those are not
+  a wait-owned time system.
+- `"I step back and wait."` fails because both clauses fail independently.
+  `"I step back."` is outside the PR-AQ local-movement regex. Compound
+  N-action execution remains deferred.
+- `"I wait for the guard to leave."` leftover-matches travel on the word
+  `leave`. That is not a wait owner.
+- PR-BF recovered PR-AJ T6: `"I'll go chase that closed western cart road
+  you mentioned."` parsed as unresolved `travel`. State stayed
+  `frontier_gate`. Historical narration implied departure via scene-like
+  stock and `"You set off."`
+- PR-BF's first incorrect decision was realization treating travel *kind*
+  as travel-success eligibility. The success signal is
+  `resolved_transition is True` (or an equivalent scene-transition
+  state-change flag).
+- Destination-arrival and scene-emit integrity may emit scene stock after
+  travel only when that success signal is present. Unresolved travel uses
+  existing fail-closed terminals.
+- PR-BG recovered PR-AI T2 `"What are you doing about the missing patrol?"`
+  after a Thoran / watch-command answer as a topic switch, not lost
+  continuity. The captain has no covering owned topic or landed clue.
+- PR-BG's reproduced defect was recognized empty-subject follow-ups
+  (`"Why is that?"`, `"How come?"`, `"Who is that?"`) losing
+  `topic_pressure` last-answer because cover required leftover tokens and
+  `normalize_topic` minted a new key.
+- PR-BG repair: `is_valid_followup_question` plus empty subject tokens may
+  reuse the current last-answer when speaker and dimension allow.
+  `"Who is he?"` keeps the current topic-pressure key. `they` / `it` do
+  not become last-answer authority.
+- `"Why was it shut down?"`, `"Why did that happen?"`, `"Who did it?"`,
+  and `"Where did they go?"` remain deferred richer discourse / synonym
+  residue. Cause asks against facts that do not encode cause stay
+  fail-closed.
+- PR-BH recovered PR-AI T12 `"I turn to the Gate Serjeant. …"` binding
+  `gate_guard` and voicing `watch_command`. `"Gate Serjeant"` is not an
+  authored identity of `gate_guard`. The fixture authors a distinct
+  `gate_serjeant` with aliases `serjeant` / `gate serjeant` and topic
+  `route_change`.
+- PR-BH's first incorrect decision was directed-prep first-roster short-
+  token match (`gate` inside `to the Gate Serjeant`) without requiring
+  leftover identity words to belong to that NPC. Sole-NPC information-
+  seeking then cooperated for unresolved explicit addressees. Vocative
+  `captain` was hardcoded as `guard`.
+- PR-BH repair: an explicit addressee binds only when authored
+  id/name/alias/role tokens cover the phrase. An unresolved explicit
+  addressee is not the sole present NPC. Ordinary unique roles, aliases,
+  and undirected sole-NPC questions remain.
+- PR-BI recovered the repeated-interruption fixture. Turn 3 spoke the
+  model cutoff as `Tavern Runner mutters, "Word is, the runner begins to respond..."`.
+  The runner was addressed. The cutoff was not an answer.
+- PR-BI's first incorrect decision was `_commit_topic_progress` storing
+  interruption-breakoff narration as `topic_pressure.last_answer`.
+  Realization then treated that last_answer as a structured fact.
+  Overlap on `noise` in `ignore the noise` made the cutoff look relevant.
+- PR-BI repair: a cutoff is not written as `last_answer` and is not
+  selected as a structured fact. The owned patrol sentence stays eligible.
+- Forced progression means the same interruption signature on the same
+  NPC, repeat count at least 2, then a different strict-social line.
+  The fixture never reached that threshold.
+- Opening `I look around the gate.` no longer keeps `Gate Guard mutters`.
+  Perception grounding replaces that speech with visible stock. A real
+  watch-command question may still wrap the owned Thoran sentence in
+  `Word is`. That envelope is aesthetic.
+- PR-BJ recovered PR-AH T11: `"I look for signs of the patrol."` at
+  `old_milestone`, no NPC present, historically
+  `The guard says, "I do not know enough to answer that."`
+- PR-BJ's current reproduction of that turn is `investigate` with no
+  speaker and visible milestone stock. A model line that says
+  `The guard says` is replaced by that stock.
+- `speaker_label` / `npc_display_name_for_emission` in
+  `game/social_exchange_policy.py` prefer authored `npc_name`, then a
+  title-cased id, then the literal `The guard` when both are absent.
+  The fallback catalog interpolates that label. It does not read `role`.
+- Live no-speaker social turns use
+  `neutral_reply_speaker_grounding_bridge_line`. Authorized speakers
+  in the probe kept `Gate Serjeant`, `Guard Captain`, `Gate Guard`,
+  and `Ward Sentry`. `secret_warden` was not shown.
+- `"The guard says"` did not reach the player on the recovered turn or
+  the identity matrix. The empty-identity helper string remains latent
+  compatibility behind those owners.
+- Speaker attribution is sufficiently converged. The PR-AS through
+  PR-BJ sibling-defect sequence is closed.
+
+## Decisions Pending
+
+Pending maintenance, separate from the adopted governance amendment:
+this file's product orientation still describes the 2026-09-26 PR-BL
+closeout and says stop, do not start PR-BM. Later Product Realization
+history, including the PR-EG-R6-R4-R1 review, remains at
+`handoff/history/pr_eg_r6_r4_r1_source_alignment_20261018/`. This
+amendment does not reconcile those records. Session orientation remains
+this file. Reconciling them is its own maintenance task.
+
+ATGB-02 implements the corpus at `data/validation/atgb/`. S07 is held-out.
+Counts are 25 / 4 / 8. Held-out turns were already in the ATGB-01 review
+and are not fully independent unseen data. Frontier Gate is the first
+environment and is not hard-coded in the runner. Human rubric scoring
+remains the judgment. Efficiency stays recorded-only in rubric 01. The
+live trial count and any dollar ceiling are still unset; the runner does
+not invent a dollar budget. No gameplay-performance result may be claimed
+until a live, human-reviewed checkpoint is actually run.
+
+## Decisions Made
+
+- ATGB-02 adopts the ATGB-01 catalog and rubric, moves S07 to held-out, and labels current held-out turns as previously exposed. The harness does not score playability and does not call a provider during this pass.
+- RC-10 = A. Evidence-only raw-token fence.
+- RC-21 = B + C. Authored-scene follow-up plus canonical lead registry.
+- PR-AC through PR-BJ decisions remain as previously recorded.
+- PR-BE: ordinary simple waiting is a missing gameplay capability (C), not
+  a routing defect (A), not a `custom` typing defect (B), and not accepted
+  paraphrase residue around a working family (D).
+- PR-BE: do not repair `kind=None` by recognizing `wait`, aliasing stay /
+  rest / observe / listen / travel, inventing duration, or asking the LLM
+  to narrate that time passed.
+- PR-BE: no production code change. A future wait/time-passage feature
+  needs an explicit unit, state-before-narration, and a quiet no-event
+  contract. Duration, target-time, and conditional waiting are separate
+  later capabilities.
+- PR-BF: narration must not imply a spatial transition that authoritative
+  gameplay state did not perform.
+- PR-BF: travel kind is not a success signal. Scene stock is not eligible
+  for travel narration unless `resolved_transition` (or an equivalent
+  transition flag) is true.
+- PR-BF: do not add a destination, route, travel duration, geography
+  database, or second travel router to make unresolved travel feel
+  successful.
+- PR-BG: a recognized empty-subject immediate follow-up may continue the
+  current last-answer thread. Noun-bearing questions still need overlap.
+- PR-BG: do not add synonyms, embeddings, a discourse model, or a second
+  topic router. Do not treat all pronouns as the last topic.
+- PR-BG: ordinary deterministic follow-up continuity is sufficiently
+  converged. Stop opening paraphrase cycles on this owner.
+- PR-BH: explicit player identity evidence constrains NPC selection.
+  Leftover title/name tokens are not optional.
+- PR-BH: do not add rank synonym lists, embeddings, LLM identity
+  inference, invented NPCs, or a second NPC router.
+- PR-BH: addressed-NPC identity resolution is sufficiently converged.
+  Stop opening NPC-name/title paraphrase cycles on this owner.
+- PR-BI: interruption pressure does not create answer authority. A
+  cutoff is not stored or selected as `last_answer`. Do not reopen
+  PR-AI for the `Word is` envelope.
+- PR-BI: do not delete `Word is`, blacklist `mutters`, or rewrite the
+  strict-social forced-progression catalog in a prose cycle.
+- PR-BJ: `"The guard says"` does not reproduce as a player-facing
+  semantic defect. No production code change.
+- PR-BJ: an authorized speaker is displayed from authored `name` or
+  title-cased id. A turn with no authorized speaker uses the neutral
+  bridge or perception/scene stock. Do not treat the latent helper
+  default as a new cycle.
+- PR-BJ: speaker attribution is sufficiently converged. The PR-AS
+  through PR-BJ sibling-defect sequence is closed. Do not open PR-BK
+  for evaluator wording, dialogue tags, or the latent `The guard`
+  helper.
+- Mixed-action audit: a player listen attempt is not discarded because
+  the same utterance also asks a question. That attempt is not retold
+  as solicitation to the sole NPC. Compound execution, origin content,
+  and question-only sole-NPC collapse stay deferred. That audit did not
+  assign PR-BK.
+- PR-BK is CLOSED. Unauthored reply text stored in `topic_pressure.last_answer` is not selectable as a structured fact unless provenance names an authoritative payload. The empty `The guard` label is not this slice. Narrative-authority validation was not changed. `recent_contextual_leads` was not changed.
+- The generalization principle (content may be specific; systems must be
+  general) lives in `docs/product_realization_validation.md`.
+- 2026-10-18: progress, failure, and benchmark governance amendments are
+  adopted in the Constitution and the specialized documents named by
+  `development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md`.
+  The historical proposal remains at
+  `development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md`.
+  This adoption does not revalidate the product narrative in this file.
+
+## Current Known Defects
+
+No remaining ordinary-play AI Experience semantic integrity defect from
+the PR-AS through PR-BJ sequence is recommended as another sibling
+cycle.
+
+Gameplay residue from the 2026-09-23 playtest, not opened as a cycle:
+
+- Compound turns still execute one owner. Movement beside listen, and a
+  peeled visual question, stay unexecuted with no player-facing
+  unresolved marker.
+- Question-only turns with no listen attempt can still become a
+  directed question to the sole world NPC.
+- `Is anyone talking about why the refugees fled?` and `Do the refugees
+  seem to come from the same place?` can still bind `refugee`.
+- Same-turn and next-turn model prose in `topic_pressure.last_answer` is now
+  the earned PR-BK slice. Do not treat it as a `Word is` wording cycle.
+  The extended playtest showed the selector using that prose as a structured fact.
+
+Validation residue, not game-behavior cycles:
+
+- Evaluator lexical false negatives on quiet listen and nothing-new lines.
+- `test_social_speaker_grounding.py` has two assertions that
+  `resolution.success is True` and receive `None`
+  (`test_transcript_runner_asks_about_aldric_followup_stays_runner`,
+  `test_transcript_where_is_aldric_repeated_followups_stay_runner`).
+  The failure hint still names Tavern Runner. Observed during PR-BJ.
+  Not absorbed. Not a speaker-label failure.
+
+`test_transcript_runner_repeated_interruption_beat_forces_progression`
+passes. Authorized facts may still use the `Word is` / `mutters`
+envelope. That wording is accepted aesthetic residue. The empty-identity
+`speaker_label` default `The guard` remains latent and did not reach the
+player on the PR-BJ chat probe.
+
+A Windows `PermissionError` on shared pytest temp remains environmental.
+
+Unrelated reds observed during PR-AU / PR-AV validation and not absorbed:
+
+- `test_emission_quality_anyone_else_talk_to_manifests_preserves_redirect_not_fragment`
+  still expects source `topic_pressure:last_answer:redirect` and receives
+  `topic_pressure:last_answer`. Documented since PR-AO.
+- `test_final_emission_passive_pressure_restores_recent_suspicious_figure_from_weak_atmosphere`
+  failed on an unrelated social-pressure fixture.
+
+## Authoritative Documents
+
+Governance authorities for the 2026-10-18 amendment. They do not replace the product orientation below:
+
+- `docs/DEVELOPMENT_CONSTITUTION.md`
+- `docs/review_handoff_standard.md`
+- `docs/validation_evidence_standard.md`
+- `development/reports/atgb_02_benchmark_specification.md`
+- `docs/product_realization_validation.md`
+- `development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md`
+
+1. `development/campaigns/product_realization/post_pr_bk_player_perceived_vs_authoritative_world_causal_audit.md` (evidence: `artifacts/human_playtests/post_pr_bk_state_narration_audit/`)
+2. `development/campaigns/product_realization/PR-BK_validation_closeout.md` (causal audit: `development/campaigns/product_realization/extended_human_playtest_whole_session_causal_audit.md`)
+3. `development/campaigns/product_realization/human_playtest_mixed_action_ownership_compound_turn_audit.md`
+4. `development/campaigns/product_realization/PR-BJ_speaker_attribution_integrity_lane_convergence_audit.md`
+5. `development/campaigns/product_realization/PR-BI_interruption_progression_catalog_residue_reaudit.md`
+6. `development/campaigns/product_realization/PR-BH_addressed_npc_identity_resolution_role_title_convergence.md`
+7. `development/campaigns/product_realization/PR-BG_followup_topic_continuity_public_clue_paraphrase_convergence.md`
+8. `development/campaigns/product_realization/PR-BF_unresolved_travel_narration_authority_scene_stock_integrity.md`
+9. `development/campaigns/product_realization/PR-BE_wait_action_ownership_time_passage_capability_audit.md`
+10. `development/campaigns/product_realization/PR-BD_interactable_reference_resolution_alias_convergence.md`
+11. `development/campaigns/product_realization/PR-BC_agent_history_question_ownership_convergence.md`
+12. `development/campaigns/product_realization/PR-BB_local_observation_classifier_boundary_convergence.md`
+13. `development/campaigns/product_realization/PR-BA_nearby_place_existence_knowledge_ownership.md`
+14. `development/campaigns/product_realization/PR-AZ_question_form_observe_realization_retry_ownership.md`
+15. `development/campaigns/product_realization/PR-AY_local_presence_question_adjudication.md`
+16. `development/campaigns/product_realization/PR-AX_post_return_observation_geographic_integrity.md`
+17. `development/campaigns/product_realization/PR-AW_later_turn_untargeted_observation_restacking.md`
+18. `development/campaigns/product_realization/PR-AV_grounded_refusal_topic_hook_integrity.md`
+19. `development/campaigns/product_realization/PR-AU_grounded_social_absence_live_model_non_invention.md`
+20. `development/campaigns/product_realization/PR-AT_already_searched_truncation.md`
+21. `development/campaigns/product_realization/PR-AS_observe_fallback_relevance_stock_repetition.md`
+22. `development/campaigns/product_realization/PR-AR_perception_narration_authority_audible_non_invention.md`
+23. `development/campaigns/product_realization/PR-AQ_physical_action_typing_compound_perception_realization.md`
+24. `docs/product_realization_validation.md`
+25. `development/campaigns/product_realization/PR-AH_grounded_observation_non_invention.md`
+26. `development/campaigns/product_realization/PR-AJ_authoritative_lead_provenance_social_prose_non_ingestion.md`
+27. `development/campaigns/product_realization/PR-AO_investigation_result_provenance_non_invention.md`
+28. `development/campaigns/product_realization/PR-AP_grounded_refusal_realization_grammar.md`
+29. `development/campaigns/product_realization/PR-AN_question_dimension_answer_sufficiency.md`
+30. `development/campaigns/product_realization/PR-AK_referenced_surface_grounding_inspection_resolution.md`
+31. `docs/state_authority_model.md`
+32. `docs/rc10_rc21_policy_implementation.md`
+33. `docs/semantic_validation_calibration.md`
+34. `development/campaigns/reconciliation/AR-AD_target_architecture_doctrine.md`
+35. `docs/review_handoff_standard.md` (review export only; not this handoff)
+36. `development/README.md` (directory taxonomy only)
+
+## Validation Baseline
+
+PR-BL full suite: 7,065 collected, 6,937 passed, 29 failed, 99 skipped. Log: `development/tmp/pr_bl_full_suite_2.txt`. Twelve of those tests are new. The PR-BK 27 failures are still the inventory in `artifacts/pr_bk/validation_failure_inventory.md`. Two extra failures are Windows `PermissionError` on pytest temp `session.json` renames and pass when run alone. They are not PR-BL regressions. Focused: PR-BL 12 passed, PR-BF 14 passed, PR-BK 9 passed. Details: `artifacts/pr_bl/regression_results.md`.
+
+PR-BK focused probes: `python -m pytest tests/test_unauthored_reply_structured_fact_integrity.py -q --tb=line` — 9 collected, 9 passed, 0 failed, 0 skipped. See `artifacts/pr_bk/semantic_probe_results.md`.
+
+PR-BG and PR-BI suites passed with the same run family. Authoritative fixtures that still select `topic_pressure:last_answer` now carry `last_answer_provenance`. Assertions were not dropped.
+
+Known reds unchanged by this slice: the manifests redirect source label (PR-AO), two speaker-grounding `success is None` assertions (PR-BJ), and the rain-sentence question-resolution mutation test, which stays exempt because the resolution kind is adjudication. `game/gm.py` was not edited.
+
+Historical implementation suite, preserved: 7,053 collected, 6,926 passed, 28 failed, 99 skipped. Closeout reruns (`development/tmp/pr_bk_validation_full_suite_initial.txt` and `..._final.txt`): 7,053 collected, 6,927 passed, 27 failed, 99 skipped. The extra pass is the playability smoke assert, now the authored east-lanes clue. The remaining 27 fail on `90fdcc3` and are unrelated. This is not the previous 6,450 / 6,351 / 0 / 99 baseline.
+
+Of those 28, previously recorded reds include BY3/BY4 generators, frontier-gate golden replay, the manifests redirect source label, the passive suspicious-figure emission, and the two speaker-grounding `success is None` assertions. The rain-sentence policy tests fail because adjudication is exempt from the question-resolution rewrite; `game/gm.py` was not edited. Ownership and inventory failures are duplicate test names in older files, not PR-BK modules. The playability smoke location check now expects the authored east-lanes clue instead of the mock sentence `east gate yard`.
+
+Mixed-action audit, focused only, not a new full-suite baseline: 145 passed, 0 failed.
+Suites: `tests/test_listen_question_not_social_capture.py`,
+human-adjacent listen, broad-address solicitation, perception narration,
+local observation, local presence, question-form observe, and PR-AQ
+physical action. Captured turn after repair is `observe` / listen and
+does not address Tavern Runner.
+Probes: `artifacts/human_playtests/mixed_action_ownership_audit/`.
+
+PR-BJ speaker probe:
+`artifacts/prbj_speaker_attribution/probe/20260922T235900Z_probe.md`.
+Recovered `old_milestone` investigate no longer emits `"The guard says"`.
+Authorized names stay `Gate Serjeant`, `Guard Captain`, `Gate Guard`,
+and `Ward Sentry`. No-speaker turns use the neutral bridge or scene stock.
+
+PR-BJ preservation run: 75 passed, 2 failed. Passed:
+`tests/test_addressed_npc_identity_resolution_role_title.py`,
+`tests/test_perception_narration_authority_audible_non_invention.py`,
+`tests/test_grounded_social_absence_live_model_non_invention.py`,
+`tests/test_interruption_progression_catalog_residue.py`,
+`tests/test_transcript_regression.py::test_transcript_runner_repeated_interruption_beat_forces_progression`,
+and the rest of `tests/test_social_speaker_grounding.py`.
+The two failures assert `success is True` and receive `None`. Not absorbed.
+
+PR-BI interruption tests:
+`tests/test_interruption_progression_catalog_residue.py`.
+Fixture:
+`tests/test_transcript_regression.py::test_transcript_runner_repeated_interruption_beat_forces_progression`
+passes. After-repair trace:
+`artifacts/prbi_interruption_progression/fixture_after.json`.
+Opening look-around:
+`artifacts/prbi_interruption_progression/opening_probe.json`.
+The cutoff is not stored as `last_answer`. The owned patrol sentence
+remains. Look-around does not keep Gate Guard speech.
+
+PR-BH identity tests:
+`tests/test_addressed_npc_identity_resolution_role_title.py`.
+After-repair traces:
+`artifacts/prbh_addressed_npc_identity/isolation/20260922T120000Z_after.md`.
+Recovered Gate Serjeant binds `gate_serjeant`; unsupported Captain/Foreman/Clerk/Aldric stay unbound; ordinary guard/porter aliases and undirected sole-NPC questions remain.
+
+PR-BG continuity tests:
+`tests/test_followup_topic_continuity_public_clue_paraphrase.py`.
+After-repair traces:
+`artifacts/prbg_followup_topic_continuity/20260922T110500Z_after.md`.
+Recognized empty-subject follow-ups reuse last-answer; missing-patrol
+after watch still refuses; `shut down` / `who did it` remain unsupported;
+topic switch and unrelated questions do not inherit.
+
+PR-BF travel-authority tests:
+`tests/test_unresolved_travel_narration_authority.py`. After-repair
+traces: `artifacts/prbf_unresolved_travel/probe/20260922T103000Z_after.md`.
+T6 / unknown dest stay unresolved; mossy pine-trail transitions; local
+`step closer` remains `custom`; arrival stock requires a success signal.
+
+PR-BE ownership probe: `artifacts/prbe_wait_action_ownership/probe_matrix.md`.
+Ordinary simple wait → `None`. Stay → `observe`. Listen / look-around
+preserved. Local `pace` / `step closer` remain `custom`.
+
+PR-BD ownership tests remain passed
+(`tests/test_interactable_reference_resolution_alias_convergence.py`).
+
+After-repair matrix
+`artifacts/prbd_interactable_reference/probe/20260922T084500Z_after.md`:
+canonical / alias / `"the notices"` bind `notice_board`; silent-e plurals
+bind hopper/slate/milestone; `"posted notices"` remains visible-feature
+residue; incidental, unauthored, and off-scene objects stay unbound.
+
+PR-BF re-ran destination-binding, scene-transition, arrival-realization,
+PR-AQ physical-action, PR-AX geographic-integrity, and scene-emit
+integrity suites. Those baselines were not weakened. One unresolved
+named-place integrity contrast was tightened so it can no longer use
+global scene-stock fallback. Do not treat a structural result as
+semantic playability.
+
+Authoritative full suite last recorded before later Product Realization
+cycles: 6,450 collected, 6,351 passed, 0 failed, 99 skipped
+(`artifacts/policy_implementation/post_implementation_suite.xml`).
+
+Remaining known reds are BY3/BY4/BZ mutation-attribution generators,
+frontier-gate long-session golden replay from intended player-facing
+realization changes, and the unrelated social reds listed above.
+
+## Deliberately Deferred Residue
+
+Leave these deferred unless later evidence elevates them:
+
+- Comprehensive compound-intent / N-action execution. The listen-question
+  repair executes the listen attempt and leaves movement and a peeled
+  visual question unresolved. It does not add an action queue.
+- Question-only turns collapsing to the sole world NPC, and role-substring
+  binds such as `refugee` on `Is anyone talking about why the refugees fled?`.
+- Untargeted inspection appending the first visible fact. Evidenced. Not PR-BK.
+- Notice-board content questions that miss `investigate` and are narrated freely.
+- Empty `speaker_label` default `The guard` on a no-target social fallback.
+  It reached the player in the extended playtest. Do not reopen PR-BJ to rename it.
+- Question-only sole-world-NPC dialogue lock. Reproduced on a bare "you". Still not a crowd simulation.
+- A model may still say an unsupported sentence once. Narrative-authority validation was not changed. PR-BK stops that sentence from becoming a reusable structured fact. Do not treat `Word is` as the fix.
+- Authored refugee origins, ambient crowd speech, or a sensory simulation.
+- Richer unknown-destination gameplay (routes, durations, NPC guidance).
+  Safe unresolved-travel failure is now the correct terminal.
+- Intentional waiting / in-place time passage as a future gameplay
+  capability. Ordinary `"I wait."` remaining `kind=None` is fail-closed,
+  not a recommended parser cycle.
+- Duration wait, target-time wait, and conditional / event-driven wait.
+- `"I step back."` remaining outside the PR-AQ local-movement regex.
+- Comprehensive compound-intent / N-action execution
+  (`"I step back and wait."`).
+- Rest / camp / downtime engine (`downtime_engine_not_wired`).
+- A diegetic world clock / date-time owner. `current_date` is static.
+- Accepted `"posted notices"` / `"posted notice"` leading-modifier residue.
+  `"I read the notices."` is the working ordinary plural.
+- Leading-modifier leftovers (`wooden board`, `public notices`,
+  `wooden hopper`, `muddy milestone`).
+- `"What do the notices say?"` remaining untargeted; content-question
+  recovery still keys on `what does`.
+- Accepted undirected who-last-read inspect residue
+  (`"Who last read the tally slate?"`, `"Who read the tally slate?"`,
+  `"Has anyone read this?"`). Directed equivalents now reach social.
+- Object last-reader / last-toucher / provenance / NPC activity history.
+  Affirmative answers would need a future gameplay/world-state capability.
+- Accepted local-observation residue: actorless passives
+  (`"What can be perceived from where I stand?"`, `"What can be seen from
+  here?"`), `"What is visible from here?"`, and `"Describe my
+  surroundings."`. Working equivalents already reach observe.
+- The empty-identity `speaker_label` default `The guard`. It did not
+  reach the player on the PR-BJ probe. Do not open a cycle to rename it.
+- Sole-runner dialogue where a beat sentence drops and the quote remains.
+- `compat_pending_lead_needed` still keys off a scene target only.
+- Intent parsing still reads `pending_leads` as the pursuit surface.
+- Broader lead/clue overlap reduction (`docs/current_focus.md`).
+- `_TEXT_LEAD_SPECS` compatibility text-hook library.
+- House Verevin / rooftop invention.
+- Remaining scene-transition Unicode / operator-encoding.
+- PR-AB tooling / product-integrity concern.
+- General prompt rewrite or NPC dialogue redesign.
+- `"Word is,"` / `mutters` wording on an already authorized fact.
+  That envelope is aesthetic. The repeated-interruption fixture now
+  restates the owned fact instead of the cutoff.
+- Strict-social forced-progression stock that can mention a ward clerk
+  or the main gate when the interruption repeat guard actually fires.
+  The repaired fixture never reached that threshold.
+- New authoritative knowledge store.
+- Project-wide State ↔ Narration campaign.
+- Protected-replay baseline refresh.
+- Filling other stub scenes (`eastern_square`, `wild_moors`, `alley`, …).
+- Broad observation-variety work. Immediate restacking, later-turn restacking,
+  post-return geographic bleed, local-presence classification,
+  question-form observe retry ownership, nearby place-existence ownership,
+  local-observation classifier convergence, agent-history question
+  ownership, interactable-reference alias convergence, unresolved
+  travel scene-stock integrity, ordinary follow-up topic continuity, and
+  addressed-NPC identity resolution are closed. Do not start a seen-facts
+  / salience / geography / object-history campaign, another who-read
+  paraphrase cycle, another interactable-synonym cycle, a second travel
+  router, another follow-up-paraphrase cycle, or another NPC-name/title
+  paraphrase cycle.
+- Automatically turning mentioned nouns into interactables.
+- Adding a roster-board interactable that existing content does not justify.
+- Adding a stew price or menu/economy simulation.
+- Adding last-reader / board-history facts merely to answer T14.
+- Adding patrol timing or personnel merely to answer T15.
+- Adding canonical Frontier Gate sounds merely to make listen interesting.
+- New conversation-state stack or second global router.
+- Coordinate-level local movement or five-senses simulation.
+- Deleting `remember_recent_contextual_leads`.
+- Flattening all refusals to `"I don't know."`
+- Universal grammar checker / prose-rewriting layer.
+- New NLP / topic-model subsystem for refusal hooks.
+- Fuzzy / embedding / LLM interactable selection.
+- Fuzzy / embedding / LLM NPC identity inference or a rank/title ontology.
+- Richer follow-up discourse (`Why did that happen?`, `Who did it?`,
+  `Where did they go?`) and predicate synonymy (`shut down` vs
+  `closed` / `barred`). Ordinary recognized ellipsis is closed.
+
+Do not treat residual lead-system items as open RC-10/RC-21 questions.
+
+## Do Not Reopen Without Evidence
+
+- Validation-authority hierarchy
+- RC-11 / RC-13 expectation maintenance
+- GD-01 CO99 governance-context advance
+- Confirmed baseline repair and validation cleanup
+- Semantic calibration as semantic authority
+- Protected replay as structural/runtime authority
+- Architecture Reconciliation chassis doctrine
+- RC-10 = A
+- RC-21 = B + C
+- Existing state/domain owners
+- PR-AD through PR-BJ settled decisions listed in the prior handoff
+- PR-AR's visual-presence ≠ speech-authority boundary
+- PR-AR's treatment of empty listen as valid grounded absence
+- PR-AR's decision not to add a new sound system, perception owner, or
+  world-authority owner
+- PR-AQ's local-movement ≠ scene-travel boundary
+- PR-AQ's treatment of listen as perception attempt, not sound creation
+- PR-AS's decision not to add a new observation system, salience engine,
+  embeddings, or player-memory / seen-facts subsystem
+- PR-AS's refusal to rotate leftover unused stock for variety
+- PR-AS's treatment of nothing-new as a valid observation result
+- PR-AT's decision not to add a seen-facts store, second router, or model
+  padding layer
+- PR-AT's treatment of `already_searched` as investigation realization owned
+  by referenced-surface / perception fail-closed
+- PR-AU's decision not to add a knowledge store, economy, or second social
+  router
+- PR-AU's treatment of grounded social absence as authored-knowledge
+  realization's dual, using the existing ownership-terminal catalog
+- PR-AV's decision not to add an NLP/topic-model, embeddings, or a second
+  social router
+- PR-AV's refusal to hardcode `step`/`night` or grow a replay-word blacklist
+- PR-AV's treatment of empty/untrustworthy hooks as unhooked refusals rather
+  than flattening all refusals
+- PR-AW's decision not to add a seen-facts / salience / embeddings subsystem
+- PR-AW's refusal to treat the visible-fact snapshot as consumed-memory
+- PR-AW's treatment of social, investigate, and listen as one stamp-overwrite
+  owner rather than separate observation systems
+- PR-AX's decision not to add a second location/geography system
+- PR-AX's refusal to globally clear conversation/history on scene transition
+- PR-AX's treatment of off-scene known clues as historical, not present-here
+  spatial authority
+- PR-AY's decision not to add a nearby/locality subsystem or second
+  observation router
+- PR-AY's refusal to hardcode `"What's nearby?"` or enumerate paraphrases
+- PR-AY's treatment of question-form local presence as existing observe
+- PR-AY's refusal to convert all adjudication questions into observe
+- PR-AZ's decision not to disable `question_rule` or scene-stall globally
+- PR-AZ's refusal to add a conversation-state stack or second router
+- PR-AZ's treatment of executed observe as semantically complete
+- PR-BA's decision not to add a geography database, building list, or
+  place-knowledge subsystem
+- PR-BA's refusal to convert every `nearby` question into observe or
+  earshot
+- PR-BA's treatment of undirected place-existence as current-scene /
+  current-exit adjudication
+- PR-BA's treatment of executed adjudication as semantically complete
+- PR-BB's decision not to support actorless passive perception questions
+- PR-BB's refusal to hardcode the leftover standpoint sentence or enumerate
+  observation paraphrases
+- PR-BB's treatment of `can` + already-known visual perception verbs as
+  existing observe
+- PR-BB's judgment that the local-observation classifier is sufficiently
+  converged
+- PR-BC's decision not to add object-history / last-reader tracking
+- PR-BC's refusal to hardcode `tally slate`, `read`, or `"who last read"`
+- PR-BC's treatment of directed addressee + WH/ask as existing social
+- PR-BC's treatment of undirected who-last-read inspect as accepted residue
+- PR-BC's judgment that this family is sufficiently converged
+- PR-BD's decision not to add a synonym dictionary, embeddings, or
+  noun-to-interactable promotion
+- PR-BD's refusal to hardcode `posted notices` or special-case `notice_board`
+- PR-BD's treatment of authored aliases as the content extension point
+- PR-BD's treatment of leading-modifier paraphrases as accepted residue
+- PR-BD's judgment that interactable reference resolution is sufficiently
+  converged
+- PR-BE's decision not to add a wait / pass-time action, world clock,
+  duration table, or parser recognition of `wait`
+- PR-BE's refusal to alias wait to stay, rest, observe, listen, travel, or
+  `custom`
+- PR-BE's treatment of ordinary simple wait `kind=None` as missing-capability
+  fail-closed, not a recommended Product Realization parser cycle
+- PR-BE's refusal to reopen PR-AQ for `"I step back."` or to start
+  comprehensive compound-intent execution from `"I step back and wait."`
+- PR-BF's decision not to add a travel system, geography database, route
+  planner, or destination synonym list
+- PR-BF's refusal to treat travel kind as a success signal
+- PR-BF's treatment of unresolved travel as ineligible for arrival /
+  current-scene stock
+- PR-BF's judgment that successful and unsuccessful spatial outcomes are
+  now distinct enough for Product Realization
+- PR-BG's decision not to add synonyms, embeddings, a discourse model, or
+  a second topic router
+- PR-BG's refusal to treat all pronouns as the last topic
+- PR-BG's treatment of recognized empty-subject follow-ups as current
+  last-answer continuation
+- PR-BG's treatment of synonym / richer-discourse follow-ups as deferred
+- PR-BG's judgment that ordinary deterministic follow-up continuity is
+  sufficiently converged
+- PR-BH's decision not to add rank synonym lists, embeddings, LLM
+  identity inference, invented NPCs, or a second NPC router
+- PR-BH's refusal to treat guard/serjeant/captain as interchangeable
+- PR-BH's treatment of leftover identity tokens as a bind constraint
+- PR-BH's treatment of unresolved explicit addressees as ineligible for
+  sole-NPC substitution
+- PR-BH's judgment that addressed-NPC identity resolution is
+  sufficiently converged
+- PR-BI's decision not to reopen PR-AI for the `Word is` envelope
+- PR-BI's refusal to delete `Word is`, blacklist `mutters`, or rewrite
+  the strict-social forced-progression catalog as a prose cycle
+- PR-BI's treatment of an interruption cutoff as ineligible for
+  `topic_pressure.last_answer`
+- PR-BI's judgment that remaining `Word is` / `mutters` wording on an
+  authorized fact is aesthetic
+- PR-BJ's decision not to change production code for the latent
+  `The guard` helper default
+- PR-BJ's refusal to add names, a role synonym table, an
+  identity-knowledge store, or LLM speaker inference
+- PR-BJ's judgment that speaker attribution is sufficiently converged
+- PR-BJ's judgment that the PR-AS through PR-BJ sibling-defect sequence
+  is closed
+- PR-BK's decision that `last_answer` continuity is not structured-fact authority
+- PR-BK's refusal to add a knowledge graph, truth checker, or second social memory
+- PR-BK's refusal to delete conversational memory or to blacklist transcript wording
+- PR-BL's decision that narration may decorate an authoritative transition and may not create one
+- PR-BL's refusal to add a travel router, geography database, route planner, or noun-to-interactable promotion
+- PR-BL's refusal to bind a bare compass direction to an authored exit
+- PR-BL's refusal to discard every `scene_update` when no transition occurred
+- The mixed-action audit's refusal to add refugee origins, ambient crowd
+  speech, or N-action execution in order to answer the captured turn
+- The mixed-action audit's treatment of `Does anyone know` and
+  `Anyone listening?` as social, and of a player listen attempt that
+  shares a question as existing perception
+- Repository file-placement taxonomy in the Constitution
+
+## Recommended Next Action
+
+For ATGB-03: review the partial execution report, S04.2 missing performance
+metadata, independent provider ledger and combined actual worksheets. Human-score
+only captured turns with sufficient evidence. S04.3 onward is not evaluated.
+Review benchmark accounting/readiness separately before another live attempt;
+do not rerun or overwrite existing attempts, weaken safety guards, or repair
+gameplay during evaluation. The original OpenAI data-export approval blocker is
+resolved. Older ATGB-02A wait-for-request language is historical.
+
+Review `handoff/CURRENT_REVIEW.md` and the ATGB-02 infrastructure. Do not
+run a live-provider benchmark until that review accepts the corpus. Do not
+report a gameplay-performance result from the provider-disabled validation.
+Do not modify production gameplay to improve benchmark results.
+
+ATGB-02A is the current readiness review. Inspect its readiness matrix and baseline
+manifest, then await review before ATGB-03. S07 and S09 have authored opening
+context but delivery is unverified. No scenario is blocked by missing machine
+prerequisites in the intact selected baseline. Do not initiate the live baseline.
+
+The 2026-10-18 governance amendments are adopted. ATGB-02 is the benchmark
+implementation that followed them. It is not a product cycle.
+
+The product note below was not reconciled with later Product Realization
+cycles. That discrepancy is pending maintenance, not a product cycle.
+
+Stop. Do not start PR-BM.
+
+Run a fresh human playtest. Do not continue session `735ebd1cfb4567c4f97df6dc`. The point of that playtest is to see which remaining limitation is dominant after the movement state/narration failure is gone.
+
+Deferred candidates, not preselected: notice-board subject versus payload; social relevance preferring a known fact over a grounded refusal; `to the watch` interlocutor rebind; empty `The guard` fallback; compound action execution; world time; missing authored content.
+
+PR-BL report: `development/campaigns/product_realization/PR-BL_unparsed_movement_state_narration_integrity.md`.
+
+PR-BK's invariant still stands: conversational memory is not structured-fact authority. Do not reopen PR-BK, PR-BF, or PR-BL without new causal evidence.
+
+## Minimum Files for the Next Agent
+
+- `development/reports/atgb_03_initial_live_baseline.md`
+- `artifacts/atgb/atgb_03/execution_blocker.json`
+- `artifacts/atgb/atgb_03/configuration_and_provenance.json`
+- `artifacts/atgb/atgb_03/scenario_status.json`
+- `artifacts/atgb/atgb_03/worksheet.md`
+- `artifacts/atgb/atgb_03/provider_telemetry.json`
+- `artifacts/atgb/atgb_03/S04/result.json`
+
+- `development/reports/atgb_02a_readiness.md`
+- `data/validation/atgb/baselines/frontier-gate-v1/manifest.json`
+- `artifacts/atgb/atgb_02a/validation_results.json`
+
+- `docs/DEVELOPMENT_CONSTITUTION.md`
+- `docs/NEXT_SESSION.md`
+- `handoff/CURRENT_REVIEW.md`
+- `development/reports/atgb_02_benchmark_specification.md`
+- `development/reports/atgb_02_execution.md`
+- `development/reports/atgb_02_implementation.md`
+- `data/validation/atgb/corpus.json`
+- `development/reports/atgb_01_conversational_benchmark_design.md`
+- `development/reports/atgb_01_scenario_catalog.md`
+- `development/reports/atgb_01_implementation_feasibility.md`
+- `development/reports/constitution_amendment_adoption_progress_and_benchmark_governance.md`
+- `development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md`
+- `development/campaigns/product_realization/PR-BL_unparsed_movement_state_narration_integrity.md`
+- `artifacts/pr_bl/`
+- `development/campaigns/product_realization/post_pr_bk_player_perceived_vs_authoritative_world_causal_audit.md`
+
+## Git / Worktree Caveats
+
+This remains one Git repository. No second repository was created.
+
+The Product Realization checkpoint through PR-BK is `5555a66`.
+PR-BL is implemented and not committed.
+
+Canonical `data/session.json`, `data/session_log.jsonl`, `data/world.json`, and `data/combat.json` were already dirty from human play. Golden-replay artifacts were already dirty. Do not revert them. Do not commit or push unless explicitly asked. Do not modify `artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest/`.
+
+## Last Updated
+
+2026-10-18 / ATGB-03C: 24/24 continuation turns captured; 37/37 unique baseline
+turns available plus separate original partial S04. All human judgments pending;
+S07/S09 opening delivery limited. 23 reconciled admissions, no unknown usage.
+No gameplay/source/fixture change; stop and await review.
+
+2026-10-18 / ATGB-03 resumed with explicit OpenAI export approval. S01–S03
+complete; S04 stopped on unavailable provider-call accounting after turn 2.
+15 captured turns, 12 ledger requests; 22 turns not evaluated. Actual worksheets
+prepared; all human judgments pending. No production/harness repair or score.
+
+2026-10-18 / ATGB-02A readiness: pinned baseline, preflight, readiness matrix,
+24 focused and 49 adjacent checks passed. No live provider or gameplay change.
+Await review before ATGB-03. Prior product orientation caveat remains below.
+
+2026-10-18 / ATGB-02 conversational benchmark infrastructure implemented. No live baseline and no gameplay-performance claim. Product orientation remains the 2026-09-26 PR-BL closeout: unparsed movement no longer narrates or commits a spatial transition. Fresh human playtest remains the recorded product step and is not replaced by this harness. PR-BK and PR-BF remain settled in that narrative. Later product cycles, including PR-EG, were not reconciled here. That discrepancy is a pending maintenance item.
+
+2026-10-18 / ATGB-04: independent review package prepared; await human evaluation.

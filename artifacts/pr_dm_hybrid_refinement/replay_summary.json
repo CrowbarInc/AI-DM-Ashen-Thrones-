@@ -1,0 +1,66 @@
+{
+  "decision": "A",
+  "live_provider_calls": 0,
+  "baseline": {
+    "A": 11,
+    "B": 16,
+    "C": 17
+  },
+  "refined_full": [
+    "S1",
+    "C1",
+    "compound",
+    "ambiguous",
+    "control_movement",
+    "control_combat",
+    "control_observation",
+    "control_authored_fact",
+    "control_followup",
+    "var_compound_subtle",
+    "var_compound_control",
+    "var_ambiguous_subtle",
+    "var_pronoun_control",
+    "var_conseq_social",
+    "var_social_control",
+    "var_quote_control",
+    "var_negated_control",
+    "var_hypothetical_control"
+  ],
+  "refined_rejected": [
+    "declared_canon",
+    "mechanical_dump",
+    "var_unsupported_mechanic"
+  ],
+  "usage": {
+    "A": {
+      "provider_requests": 0,
+      "actual_input_tokens": 0,
+      "actual_output_tokens": 0,
+      "actual_total_tokens": 0
+    },
+    "B": {
+      "provider_requests": 10,
+      "actual_input_tokens": 7610,
+      "actual_output_tokens": 1439,
+      "actual_total_tokens": 9049
+    },
+    "C": {
+      "provider_requests": 21,
+      "actual_input_tokens": 15943,
+      "actual_output_tokens": 2811,
+      "actual_total_tokens": 18754
+    },
+    "D": {
+      "provider_requests": 12,
+      "actual_input_tokens": 9132,
+      "actual_output_tokens": 1725,
+      "actual_total_tokens": 10857
+    }
+  },
+  "holdout_false_escalations": [],
+  "holdout_detection_failures": [],
+  "holdout_misses": [
+    "holdout_and_novel_verbs"
+  ],
+  "source_sha256": "da8bbabe849d538376438505cfb61b33c1cd8e4b70c33658873702053ca5be93"
+}

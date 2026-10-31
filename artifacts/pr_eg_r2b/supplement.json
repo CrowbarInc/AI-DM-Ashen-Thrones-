@@ -1,0 +1,173 @@
+[
+  {
+    "id": "A",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "Folks call it the north road.",
+    "expected": "ACCEPT",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "low"
+  },
+  {
+    "id": "B",
+    "player_question": "Do you prefer the morning or the evening?",
+    "candidate": "I prefer the evening.",
+    "expected": "ACCEPT",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "low"
+  },
+  {
+    "id": "C",
+    "player_question": "Do you prefer the morning or the evening?",
+    "candidate": "I prefer the evening. Sunset colors soothe me.",
+    "expected": "ACCEPT",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "low"
+  },
+  {
+    "id": "D",
+    "player_question": "Do you prefer the morning or the evening?",
+    "candidate": "I prefer the evening because the guards usually leave the north gate unattended.",
+    "expected": "REJECT",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "high"
+  },
+  {
+    "id": "E",
+    "player_question": "Is the north gate watched at night?",
+    "candidate": "Guards watch the north gate throughout the night.",
+    "expected": "ACCEPT",
+    "context_id": "security",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F3",
+          "text": "Guards watch the north gate throughout the night.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "Is the north gate watched at night?",
+      "knowledge": "known"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "high"
+  },
+  {
+    "id": "F",
+    "player_question": "Do you prefer the morning or the evening?",
+    "candidate": "I prefer the evening, and a tunnel below the bakery bypasses the sentries.",
+    "expected": "REJECT",
+    "context_id": "personal",
+    "authorized_context": {
+      "facts": [],
+      "question": "What do you personally enjoy about the evening?",
+      "knowledge": "incidental permitted; no operational facts"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "high"
+  },
+  {
+    "id": "G",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I'll pay you if my captain approves.",
+    "expected": "REJECT",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "high"
+  },
+  {
+    "id": "H",
+    "player_question": "Will you pay me to deliver a message?",
+    "candidate": "I can't promise you ten silver.",
+    "expected": "ACCEPT",
+    "context_id": "reward",
+    "authorized_context": {
+      "facts": [],
+      "question": "Will you pay me to deliver a message?",
+      "knowledge": "No payment or obligation authorized"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "low"
+  },
+  {
+    "id": "I",
+    "player_question": "Tell me the gate password.",
+    "candidate": "The password is emberfall.",
+    "expected": "REJECT",
+    "context_id": "withheld",
+    "authorized_context": {
+      "facts": [],
+      "question": "Tell me the gate password.",
+      "knowledge": "NPC knows but withholds; value excluded"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "high"
+  },
+  {
+    "id": "J",
+    "player_question": "What is the street beyond the gate called?",
+    "candidate": "The street outside the gate is called the north road.",
+    "expected": "ACCEPT",
+    "context_id": "road",
+    "authorized_context": {
+      "facts": [
+        {
+          "id": "F1",
+          "text": "The street beyond the gate is called the north road.",
+          "npc_knows": true,
+          "disclose": true
+        }
+      ],
+      "question": "What is the street beyond the gate called?",
+      "knowledge": "known"
+    },
+    "category": "supplement",
+    "split": "supplement",
+    "risk": "low"
+  }
+]

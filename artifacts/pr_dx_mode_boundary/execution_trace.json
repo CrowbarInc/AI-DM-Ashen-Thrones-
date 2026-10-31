@@ -1,0 +1,43 @@
+{
+  "pr": "PR-DX",
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "mode": "PRODUCTION IC/OOC BOUNDARY REPAIR",
+  "live_provider_calls": 0,
+  "data_dir": "artifacts/pr_dx_mode_boundary/disposable_data",
+  "provider_env": {
+    "OPENAI_API_KEY": "",
+    "ASHEN_DISABLE_PROVIDER_CALLS": "1",
+    "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT": "1",
+    "ASHEN_DISABLE_LIVE_INTERPRETATION": "1"
+  },
+  "original_failure": {
+    "baseline_loss_point": "chat() advanced turn_counter/time_pressure before general communication-mode gate; only phrase-specific _is_nonmutating_ooc_correction existed",
+    "input": "OOC: I am checking whether the interface is alive; do not change game state.",
+    "repaired_http": {
+      "provider_calls": {
+        "ooc_assistance_requests": 0,
+        "retries": 0,
+        "narration_requests": 0,
+        "interpretation_requests": 0
+      },
+      "time_pressure_before": 0,
+      "turn_before": 0,
+      "kind": "ooc_message",
+      "time_pressure_after": 0,
+      "turn_after": 0
+    }
+  },
+  "browser": {
+    "ooc_visible": true,
+    "ooc_state_after": {
+      "turn": 1,
+      "time_pressure": 1
+    },
+    "ic_after": {
+      "turn": 2,
+      "time_pressure": 2
+    }
+  },
+  "decision": "A - EXPLICIT MODE BOUNDARY REPAIRED",
+  "inherited_failures": "Broad shared run still has 29 failures in pre-existing/shared pipeline areas; PR-DX focused and compatibility checks pass."
+}

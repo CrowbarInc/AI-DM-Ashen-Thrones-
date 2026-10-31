@@ -1,0 +1,37 @@
+{
+  "contract": {
+    "contract_id": "rc_9fa58b4947c6",
+    "turn_index": 4,
+    "request_kind": "inquiry",
+    "operation": "perceive",
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "iron latch",
+      "source": "inherited_discourse"
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "iron latch",
+    "dimension": "smell",
+    "dimensions": ["smell"],
+    "expected_resolution": "answer",
+    "epistemic_mode": "bounded_incidental",
+    "discourse_ref": {
+      "type": "object",
+      "id": "obj-4",
+      "label": "iron latch",
+      "source_turn": 3
+    },
+    "referent_provenance": "inherited_discourse",
+    "ambiguous": false,
+    "raw_input": "What does it smell like?"
+  },
+  "discourse_focus_owner": "session.discourse_focus",
+  "slots": [
+    "active_interlocutor",
+    "active_claim",
+    "active_actionable_lead",
+    "active_inspected",
+    "last_attempted_action"
+  ],
+  "note": "Sample produced by construct_resolution_contract from raw text plus a pre-existing inspected slot. The contract object was not hand-authored."
+}

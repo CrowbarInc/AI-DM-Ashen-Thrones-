@@ -1,0 +1,20 @@
+{
+  "case_id": "case_004_observation_not_fulfilled",
+  "category": "known_bad.observation_not_fulfilled",
+  "player_input": "I glance at the notice.",
+  "prior_context": "",
+  "gm_response": "The pause snaps when a nearby guard points with his spear-butt instead of waiting for you to choose. \"Board, runner, or road,\" he says. \"Pick one before the gate swallows the trail.\".",
+  "expected_semantic_result": "FAIL",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "FAIL"
+  },
+  "rationale": "The player clearly observes the notice, but the response redirects to choices without fulfilling the observation.",
+  "provenance": {
+    "kind": "real_runtime_failure",
+    "artifact": "artifacts/simulated_playtest_observability/20260917T221002Z_p4_immersion/evaluation.json",
+    "turn_index": 0
+  },
+  "synthetic": false,
+  "action_type": "observation"
+}

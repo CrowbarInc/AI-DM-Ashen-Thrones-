@@ -1,0 +1,36 @@
+{
+  "scene": {
+    "id": "waystation_courtyard",
+    "location": "Waystation public courtyard",
+    "summary": "A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.",
+    "visible_facts": [
+      "A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate."
+    ],
+    "interactables": [
+      {
+        "id": "courtyard_lantern",
+        "label": "courtyard lantern",
+        "type": "examine",
+        "description": "A soot-streaked lantern burns beside the courtyard gate.",
+        "reveals_clue": "lantern_mark"
+      }
+    ],
+    "exits": [
+      {
+        "id": "courtyard_gate",
+        "label": "Courtyard gate",
+        "target_scene_id": "waystation_street",
+        "aliases": [
+          "gate",
+          "courtyard gate"
+        ]
+      }
+    ],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "actions": [],
+    "objects": [],
+    "discovered_clues": [],
+    "runtime_entities": []
+  }
+}

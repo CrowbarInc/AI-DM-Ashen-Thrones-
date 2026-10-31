@@ -1,0 +1,398 @@
+{
+  "schema_version": 1,
+  "run_id": "20261030T185217Z-3561a332fc9b",
+  "timestamp": "2026-10-30T18:52:17.526856+00:00",
+  "mode": "Deterministic",
+  "scenario": {
+    "id": "CampaignOpening",
+    "version": 1,
+    "description": "One structured opening through production HTTP and acceptance owners",
+    "fixture": "frontier-gate-v1",
+    "execution_modes": [
+      "Deterministic",
+      "Live",
+      "ScriptedGameplay"
+    ],
+    "actions": [
+      {
+        "kind": "initialize_campaign"
+      },
+      {
+        "kind": "capture_baseline"
+      },
+      {
+        "kind": "start_campaign"
+      },
+      {
+        "kind": "capture_final_state"
+      }
+    ],
+    "expected_invariants": {
+      "campaign_started": true,
+      "opening_commits": 1,
+      "turn_delta": 1,
+      "log_delta": 1
+    },
+    "maximum_action_count": 4,
+    "provider_request_ceiling": 1,
+    "token_budgets": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "timeouts": {
+      "preflight": 30,
+      "startup": 30,
+      "request": 90,
+      "scenario": 180,
+      "evidence": 30,
+      "shutdown": 5
+    },
+    "evidence_requirements": [
+      "provider_usage.jsonl",
+      "baseline",
+      "after",
+      "result.json",
+      "SUMMARY.md"
+    ],
+    "stop_conditions": [
+      "first_failed_step",
+      "budget_exhaustion",
+      "timeout",
+      "interruption"
+    ]
+  },
+  "repository": {
+    "revision": "b012c3d7e5887fdfb09d10bb9cc0f0220de09df9",
+    "worktree_dirty": true,
+    "note": "HEAD identifies the commit. A dirty worktree means the running files can differ from that commit."
+  },
+  "environment_verification": {
+    "repository_root": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm",
+    "python": "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "python_version": "3.12.0",
+    "fixture_hash_verified": true,
+    "provider_request_ceiling": 1,
+    "token_allowances": {
+      "input": 1,
+      "output": 20000,
+      "total": 220000
+    },
+    "live_authorization": false,
+    "retry_configuration": "SDK=0, host=0",
+    "response_capture_opt_in": true,
+    "application": {
+      "pid": 488,
+      "port": 52648,
+      "data_dir": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T185217Z-3561a332fc9b\\data",
+      "isolation_verified": true,
+      "model": "gpt-4.1-mini",
+      "opening_output_allowance": 3000,
+      "limits": [
+        1,
+        1,
+        20000,
+        220000
+      ],
+      "sdk_retries": 0,
+      "host_retries": 0,
+      "diagnostics_enabled": true,
+      "credentials_present": false,
+      "connectivity_diagnostics": false
+    }
+  },
+  "provider_usage": {
+    "version": "ATGB-03B-1",
+    "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+    "requests": 0,
+    "request_upper_bound": 0,
+    "dispatched_requests": 0,
+    "pending_requests": 0,
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "total_tokens": 0,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [],
+    "events": [
+      {
+        "event": "initialized",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "time": "2026-10-30T18:52:19.026885+00:00"
+      },
+      {
+        "event": "rejected",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "attempt_id": "3eb68fda6d79453ab34b7d492f468b52",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": null,
+        "time": "2026-10-30T18:52:19.319056+00:00",
+        "sequence": null,
+        "admission": "rejected",
+        "budget_remaining": 1,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "refusal": "input-token ceiling",
+        "sent": false,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "time": "2026-10-30T18:52:19.329650+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "9373022471e64ae19046b61374bae0e0",
+        "stage": "opening_semantics",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "semantic_classification": "candidate_rejected",
+        "classification_source": "game.immutable_valid_response.run_preserve_if_valid._check",
+        "classification_reason": "hard_validation_failed",
+        "semantic_reasons": [
+          "unauthorized_resolution_decision_fact"
+        ],
+        "narration_present": true,
+        "narration_length": 125,
+        "declarations_present": false,
+        "declaration_count": null
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "time": "2026-10-30T18:52:19.349167+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "9373022471e64ae19046b61374bae0e0",
+        "stage": "opening_semantics",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "semantic_classification": "initial_generation",
+        "classification_source": "game.immutable_valid_response.run_preserve_if_valid._finish",
+        "classification_reason": "bounded_sentence_preservation",
+        "nonresolution_origin": null
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "time": "2026-10-30T18:52:19.354206+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "9373022471e64ae19046b61374bae0e0",
+        "stage": "opening_validation",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "classification_source": "game.api._opening_response_rejection",
+        "classification_reason": "provider_budget_refused",
+        "opening_accepted": false,
+        "semantic_classification": "rejected"
+      },
+      {
+        "event": "generation_diagnostic",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "time": "2026-10-30T18:52:19.360309+00:00",
+        "attempt_id": null,
+        "opening_attempt_id": "9373022471e64ae19046b61374bae0e0",
+        "stage": "opening_outcome",
+        "logical_operation": "scene_opening",
+        "requested_response_type": "scene_opening",
+        "opening_accepted": false,
+        "gameplay_committed": false,
+        "classification": "opening_rejected",
+        "provider_attempt_id": null,
+        "provider_status": null,
+        "structured_validation_result": null,
+        "semantic_classification": "initial_generation",
+        "classification_source": "game.immutable_valid_response.run_preserve_if_valid._finish",
+        "classification_reason": "bounded_sentence_preservation",
+        "semantic_reasons": [
+          "unauthorized_resolution_decision_fact"
+        ],
+        "narration_present": true,
+        "narration_length": 125,
+        "player_facing_text_present": null,
+        "player_facing_text_length": null,
+        "declarations_present": false,
+        "declaration_count": null,
+        "final_validation_passed": false,
+        "rejection_stage": "game.api._opening_response_rejection",
+        "nonresolution_origin": null,
+        "rejection_reason": "provider_budget_refused",
+        "recovery_classification": "initial_generation"
+      }
+    ],
+    "allowances": {
+      "input": 1,
+      "output": 20000,
+      "total": 220000
+    },
+    "remaining_budget": {
+      "input": 1,
+      "output": 20000,
+      "total": 220000
+    },
+    "budget_rejections": [
+      {
+        "event": "rejected",
+        "version": "ATGB-03B-1",
+        "run_id": "3382780dfd404ef7a59531d39e8a71e2",
+        "attempt_id": "3eb68fda6d79453ab34b7d492f468b52",
+        "purpose": "primary_turn",
+        "owner": "gm.call_gpt",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": null,
+        "time": "2026-10-30T18:52:19.319056+00:00",
+        "sequence": null,
+        "admission": "rejected",
+        "budget_remaining": 1,
+        "sdk_retries": 0,
+        "host_retries": "disabled",
+        "refusal": "input-token ceiling",
+        "sent": false,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null
+      }
+    ]
+  },
+  "state_comparison": {
+    "gameplay_mutations": [],
+    "bookkeeping_mutations": [
+      "combat.json",
+      "session.json"
+    ],
+    "unexpected_mutations": [],
+    "integrity": true,
+    "changed_fields": {},
+    "turn_delta": 0,
+    "log_delta": 0,
+    "campaign_started": false,
+    "scene_identity": "frontier_gate",
+    "contract": "docs/state_authority_model.md; game.api.start_campaign; PR-PLAY-04 rollback"
+  },
+  "structural_validation": null,
+  "semantic_validation": "initial_generation",
+  "opening_acceptance": false,
+  "ui": {
+    "status": "NOT_TESTED",
+    "reason": "No repository browser runner/dependency; API evidence does not establish rendered UI behavior."
+  },
+  "steps": [
+    {
+      "action": "initialize_campaign",
+      "ok": true,
+      "http_status": 200,
+      "response": {
+        "status": "ok",
+        "ok": true,
+        "ui_mode": "player",
+        "upstream_dependent_run_gate": {
+          "upstream_runtime_healthy": null,
+          "preflight_available": false,
+          "startup_run_valid": false,
+          "manual_testing_blocked": false,
+          "block_reason": "preflight_skipped_by_env",
+          "preflight_health_class": null,
+          "preflight_checked_at": null
+        },
+        "upstream_dependent_run_gate_operator": {
+          "upstream_gate_disposition": "preflight_skipped_by_env",
+          "startup_run_valid": false,
+          "manual_testing_blocked": false,
+          "upstream_runtime_healthy": null,
+          "preflight_available": false,
+          "preflight_health_class": null,
+          "preflight_checked_at": null,
+          "block_reason": "preflight_skipped_by_env",
+          "gameplay_conclusions_valid": false,
+          "action_hint": "Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.",
+          "compact_banner": "UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established"
+        },
+        "campaign_run_id": "a3842ba7c14ce0c2f229d38e",
+        "session_id": "a3842ba7c14ce0c2f229d38e",
+        "transcript_entry_count_after_reset": 0,
+        "silent_reset_no_implicit_transcript": true
+      }
+    },
+    {
+      "action": "capture_baseline",
+      "ok": true
+    },
+    {
+      "action": "start_campaign",
+      "ok": false,
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "status": "blocked",
+        "error": "The controlled playtest request limit has been reached. Stop and export diagnostics; do not restart to continue this session.",
+        "opening_failure_reason": "provider_budget_refused",
+        "campaign_started": false,
+        "gameplay_committed": false
+      },
+      "narration_present": false
+    }
+  ],
+  "uncertainties": [
+    "Bounded provider response unavailable (disabled, capture failed, or response unparsed)",
+    "Required provider/acceptance diagnostic artifact unavailable",
+    "Rendered UI, live adequacy, and gameplay quality not established by deterministic API execution"
+  ],
+  "verdict": "FAIL",
+  "evidence_zip": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T185217Z-3561a332fc9b\\evidence\\evidence.zip",
+  "process_cleanup": {
+    "owned": true,
+    "pid": 488,
+    "stopped": true,
+    "exit_code": 1
+  },
+  "accounting_reconciliation": {
+    "version": "ATGB-03B-1",
+    "status": "recorded",
+    "request_upper_bound": 0,
+    "observed_sent_requests": 0,
+    "pending_requests": 0,
+    "reason": "durable_admissions_bound_dispatches",
+    "usage_status": "recorded"
+  },
+  "correlation": {
+    "harness_run_id": "20261030T185217Z-3561a332fc9b",
+    "scenario_id": "CampaignOpening",
+    "provider_run_ids": [
+      "3382780dfd404ef7a59531d39e8a71e2"
+    ],
+    "opening_attempt_ids": [
+      "9373022471e64ae19046b61374bae0e0"
+    ],
+    "provider_attempt_ids": [
+      "3eb68fda6d79453ab34b7d492f468b52"
+    ],
+    "limitation": "Missing native identifiers remain unavailable; harness run ID maps to isolated journal, not fabricated provider IDs."
+  },
+  "provider_completion": null,
+  "provider_response_evidence": [],
+  "opening_commits_observed": 0,
+  "provider_exposure": {
+    "live_calls": 0,
+    "transport": "synthetic_sdk_with_external_socket_denial"
+  },
+  "failure_classification": {
+    "category": "provider_admission_rejection",
+    "stage": "admission",
+    "evidence_record": "diagnostics/provider_usage.jsonl",
+    "record_index": 1,
+    "field": "refusal",
+    "observed_value": "input-token ceiling",
+    "source": "game/provider_budget.py",
+    "root_cause": "Not established",
+    "inferred": false
+  },
+  "elapsed_seconds": 1.75
+}

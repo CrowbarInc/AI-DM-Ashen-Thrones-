@@ -1,0 +1,44 @@
+[
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "output_form": "structured",
+    "model_player_facing_text": "Rain spatters against the soot-dark stone at Cinderwatch's eastern gate, where frayed banners flutter in the damp wind. Refugees, wagons, and travelers clog the muddy approach, pressing against one another as guards hold firm at the narrow chokepoint. Near the gate stands a threadbare watcher, his gaze unnervingly still yet flickering toward packs and faces more than the queue itself. A notice board nearby lists new taxes, curfews, and a stark warning about a patrol that has gone missing somewhere beyond the gates. A well-appointed townhouse overlooking the square quietly contrasts with the muddy clamor below, while a tavern runner shouts, hawking hot stew and paid rumors to the crowd tightening around the gate."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "output_form": "structured",
+    "model_player_facing_text": "\"I can't speak to the patrol's whereabouts or the conditions beyond the gate in this weather,\" the threadbare watcher says cautiously, voice low and eyes flickering to the crowd. \"That sort of news isn’t mine to share right now.\""
+  },
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "output_form": "structured",
+    "model_player_facing_text": "The notice board, patched with torn paper and worn edges, reveals a terse list of new taxes levied on goods passing through the gate, rules enforcing a strict curfew after dusk, and a stark warning about a patrol of guards recently gone missing. The missing patrol was last spotted taking the northwest mud track past the stacked crates outside the gate. Crowds nearby pass uneasy glances toward that direction, muttering worries under their breath."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "output_form": "structured",
+    "model_player_facing_text": "\"Trouble out past the northwest mud track?\" The tavern runner squints toward the gray horizon beyond the stacked crates, voice low as rain drips from his soaked cloak. \"Rumors swirled before the last patrol vanished—ghosts in the mist, bandits who don't leave tracks. No one’s come back with answers, only whispers. Beyond the gate, the road’s worse than usual—mud sucking wheels and boots alike. A good few have turned tail, fearing what lurks in the weather and shadows. If you're heading that way, you’ll want to be ready for more than just the rain.\" He offers a tight smile, then glances toward the gate serjeant’s watchful gaze, as if weighing what else can safely be said."
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "output_form": "structured",
+    "model_player_facing_text": "\"Can't say I've seen anything unusual on the northwest mud track beyond the crates,\" the tavern runner replies, wiping his hands on a rag as he leans slightly closer. \"Most folks avoid that path in this weather—it's thick with mud and trouble. As for the missing patrol, the rumors I've heard are as muddy as the track itself—some say bandits, others whisper about something worse lurking out there.\" He glances around briefly before adding, \"If you're looking for more reliable news, you might try speaking with the guard captain near the gate; he's the one keeping the official roster.\""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "output_form": "structured",
+    "model_player_facing_text": "\"From what I heard, the patrol vanished near some muddy footprints northwest of the stacked crates,\" the tavern runner says quietly, glancing around as if wary of prying ears. \"That's about all the word that's come my way so far. Beyond that, the road's grim with the rain, and folks aren't keen to venture far off the beaten path these days.\""
+  }
+]

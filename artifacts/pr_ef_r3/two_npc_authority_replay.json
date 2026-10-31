@@ -1,0 +1,80 @@
+{
+  "available": true,
+  "scene_id": "waystation_courtyard",
+  "original_visible_npcs": [
+    {
+      "id": "sergeant_mara",
+      "name": "Sergeant Mara",
+      "location": "waystation_courtyard"
+    }
+  ],
+  "augmented_visible_npcs": [
+    {
+      "id": "sergeant_mara",
+      "name": "Sergeant Mara",
+      "location": "waystation_courtyard"
+    },
+    {
+      "id": "corporal_bren",
+      "name": "Corporal Bren",
+      "location": "waystation_courtyard"
+    }
+  ],
+  "catalog_npc_ids": [
+    "corporal_bren",
+    "sergeant_mara"
+  ],
+  "bridge_with_provider_target": {
+    "source": "stored_interpretation",
+    "accepted": true,
+    "operation": "ASK",
+    "target_ref": "sergeant_mara",
+    "engine_type": "question",
+    "visible_surface_inspection": false
+  },
+  "bridge_when_plural_marked_unresolved": {
+    "source": "stored_interpretation",
+    "accepted": false,
+    "reason": "unresolved_references",
+    "unresolved_references": [
+      "one of them"
+    ]
+  },
+  "contract_when_interpretation_not_yet_consumed": {
+    "operation": "ask",
+    "interlocutor_id": null,
+    "ambiguous": false,
+    "expected_resolution": "clarification",
+    "binding_status": "unresolved",
+    "proposed_interlocutor": "one of them",
+    "bound_interlocutor_id": null,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "explicit_new_interlocutor": true,
+    "authority_conflict": null,
+    "pre_bridge_status": null,
+    "pre_bridge_reasons": null,
+    "validation_status": "abstained"
+  },
+  "contract_after_bridge_override": {
+    "operation": "ask",
+    "interlocutor_id": "sergeant_mara",
+    "ambiguous": false,
+    "expected_resolution": "answer",
+    "binding_status": "bound_canonical",
+    "proposed_interlocutor": "one of them",
+    "bound_interlocutor_id": "sergeant_mara",
+    "authority_reasons": [
+      "identity:validated_interpretation_bridge"
+    ],
+    "explicit_new_interlocutor": true,
+    "authority_conflict": null,
+    "pre_bridge_status": "unresolved",
+    "pre_bridge_reasons": [
+      "proposal:not_a_person"
+    ],
+    "validation_status": "abstained"
+  },
+  "normalized_target": "sergeant_mara"
+}

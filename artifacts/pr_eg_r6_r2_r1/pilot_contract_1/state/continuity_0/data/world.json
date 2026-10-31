@@ -1,0 +1,149 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_tavi_roster",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "tavi",
+      "topic_id": "roster"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "tavi",
+      "name": "Tavi",
+      "role": "warden",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [
+        "warden"
+      ],
+      "affiliation": "",
+      "topics": [
+        {
+          "id": "copper",
+          "text": "The miller keeps the copper reliquary."
+        },
+        {
+          "id": "road",
+          "text": "Oren says the north road is flooded."
+        },
+        {
+          "id": "ferry",
+          "text": "The ferry leaves at dawn."
+        },
+        {
+          "id": "quay",
+          "text": "Mara guards the east quay."
+        },
+        {
+          "id": "jade",
+          "text": "The artisan maintains the jade compass."
+        },
+        {
+          "id": "ivory",
+          "text": "The miller keeps the ivory compass."
+        },
+        {
+          "id": "roster",
+          "text": "Someone keeps the roster."
+        },
+        {
+          "id": "secret",
+          "text": "The sealed countersign is sword.",
+          "disclosure": "secret"
+        }
+      ],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "mara",
+      "name": "Mara",
+      "role": "warden",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [
+        "warden"
+      ],
+      "affiliation": "",
+      "topics": [
+        {
+          "id": "road",
+          "text": "Oren says the north road is flooded."
+        }
+      ],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "oren",
+      "name": "Oren",
+      "role": "clerk",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [],
+      "affiliation": "",
+      "topics": [
+        {
+          "id": "road",
+          "text": "The north road is called the Crown Way."
+        }
+      ],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

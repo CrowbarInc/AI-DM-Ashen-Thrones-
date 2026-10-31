@@ -1,0 +1,32 @@
+{
+  "review_id": "PR-ED",
+  "mode": "IMPLEMENTATION - PROVIDER EFFICIENCY AND RESPONSIVENESS",
+  "live_provider_calls": 4,
+  "live_provider_note": "Two clean scenarios before edits (movement, dialogue) and the same two after. Movement after the change made zero provider calls. A contaminated 10-turn live run is archived and excluded from the comparison.",
+  "production_code_changes": 3,
+  "artifact_dir": "artifacts/pr_ed_provider_efficiency",
+  "decision": "B - PR-ED ACCEPTED WITH LIMITATIONS",
+  "confidence": "medium",
+  "primary_artifacts": [
+    "handoff/CURRENT_REVIEW.md",
+    "artifacts/pr_ed_provider_efficiency/REVIEW.md",
+    "PR-ED_preimplementation_baseline.md",
+    "game/api.py",
+    "game/gm.py",
+    "game/live_chat_interpretation.py",
+    "tests/test_pr_ed_provider_efficiency.py",
+    "tests/test_exploration_resolution.py",
+    "tools/measure_pr_ed_turn_profile.py"
+  ],
+  "validation_commands": [
+    ".\\\\.venv\\\\Scripts\\\\python.exe -m pytest tests\\\\test_exploration_resolution.py::test_scene_transition_with_known_target_activates_before_narration tests\\\\test_pr_ed_provider_efficiency.py --tb=short -q --override-ini=addopts=",
+    ".\\\\.venv\\\\Scripts\\\\python.exe -m pytest tests\\\\test_pr_ea_conversational_orchestration.py tests\\\\test_pr_eb_conversational_continuity.py tests\\\\test_turn_pipeline_shared.py tests\\\\test_pr_du_player_pipeline.py tests\\\\test_pr_dq_ic_ooc_messages.py tests\\\\test_social.py tests\\\\test_pr_br_qualifier_movement_mixed_intent.py tests\\\\test_exploration_resolution.py tests\\\\test_exploration_skill_checks.py tests\\\\test_unparsed_movement_state_narration_integrity.py tests\\\\test_save_load.py tests\\\\test_runtime_persistence_regression_suite_obj14.py tests\\\\test_final_emission_gate.py tests\\\\test_final_emission_response_type.py tests\\\\test_pr_ec_movement_partial_intent.py tests\\\\test_pr_ed_provider_efficiency.py --tb=no -q --basetemp=codex_pytest_tmp_pr_ed_after2 --junitxml=artifacts/pr_ed_provider_efficiency/after_junit.xml --override-ini=addopts="
+  ],
+  "known_failures": [
+    "Baseline before edits: 249 passed, 30 failed.",
+    "Final comparison: 256 passed, 30 failed. The extra passes are the seven PR-ED tests. The 30 failure names match the baseline.",
+    "Intermediate scene-transition assertion failed because call_gpt was skipped. The test was updated to require the destination scene and the arrival sentence, then passed.",
+    "One save/load WinError 5 failed in an intermediate suite, passed in isolation, and passed in the final suite.",
+    "Live comparison covers movement and dialogue only. Dialogue latency delta is a single sample."
+  ]
+}

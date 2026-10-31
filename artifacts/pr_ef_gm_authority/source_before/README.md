@@ -1,0 +1,1 @@
+api.py, conversational_orchestration.py, live_chat_interpretation.py were copied before production modifications. social.py and player_interpretation_bridge.py were reconstructed by removing only PR-EF insertion blocks; no independently captured initial hash is claimed for those two. Prior worktree edits remain present.

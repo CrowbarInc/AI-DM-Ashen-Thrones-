@@ -1,0 +1,14 @@
+Command: python -m pytest tests/test_pr_dl_interpretation_comparison.py tests/test_pr_dk_escalation_routing.py tests/test_pr_dj_selective_interpretation.py tests/test_pr_dg_architecture_preflight.py tests/test_model_routing_escalation.py tests/test_model_routing_runtime.py tests/test_pr_cx_authority_assurance.py --tb=no
+plugins: anyio-4.13.0
+collected 47 items
+
+tests\test_pr_dl_interpretation_comparison.py ........                   [ 17%]
+tests\test_pr_dk_escalation_routing.py ..                                [ 21%]
+tests\test_pr_dj_selective_interpretation.py .........                   [ 40%]
+tests\test_pr_dg_architecture_preflight.py ..                            [ 44%]
+tests\test_model_routing_escalation.py ..........                        [ 65%]
+tests\test_model_routing_runtime.py .......                              [ 80%]
+tests\test_pr_cx_authority_assurance.py .........                        [100%]
+
+============================= 47 passed in 2.42s ==============================
+Shared pipeline progress marks: 41 passed, 24 failed, 65 collected. Exit code 1. Timeout 180 seconds was not reached.

@@ -1,0 +1,556 @@
+{
+  "campaign_id": "atgb_r1_04_validation_readiness_recovery",
+  "campaign_name": "ATGB-R1-04 Validation Readiness Recovery",
+  "campaign_date": "2026-10-19",
+  "purpose": "Validation infrastructure only; no live provider authority.",
+  "objective_status": "B — CONDITIONALLY READY; EXTERNAL REVIEW REQUIRED",
+  "executive_summary": "Import-safe replacement control and fail-closed gate demonstrated. 167 deterministic tests pass. HTTP slice incomplete; provider root causes unresolved. No production edits or live calls; all 3,996 protected entry files unchanged.",
+  "changes": {
+    "production": [
+      "None."
+    ],
+    "validation": [
+      "36 new readiness tests; frozen mechanical correction inputs exercised through direct chat."
+    ],
+    "tooling": [
+      "tools/atgb/readiness.py: scoped execution mode, checked imports, preflight, guarded callback, isolated control seed."
+    ],
+    "documentation": [
+      "Eight reports, index, canonical NEXT_SESSION."
+    ],
+    "generated_artifacts": [
+      "Test, preflight, control state, provider assessment, preservation and selected-source export."
+    ]
+  },
+  "testing": {
+    "focused": "167 passed; 36 new + 105 R1-02 + 26 state authority; exit 0; zero failed/skipped.",
+    "broader": "HTTP authorization slice interrupted at TestClient boundary; incomplete.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Direct production chat with stubbed interpretation; no live endpoint calls.",
+    "model_runtime_boundary": "No model execution; gpt-4.1-mini configuration inspected only.",
+    "new_regressions": "None in completed slice.",
+    "pre_existing_failures": "HTTP environment limitation; global source manifest stale."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Future live runner must use new gate/control; old runner remains historical and unsafe.",
+      "Provider reachability and L1/L2 causes unresolved."
+    ],
+    "pre_existing": [
+      "HTTP TestClient incomplete; source manifest stale; human assessment unattested; dirty worktree."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review conditional readiness and whether to authorize bounded ATGB-R1-05 live continuation. No execution follows automatically."
+  ],
+  "missing_concepts": [
+    "No new gameplay owner proposed."
+  ],
+  "does_not_prove": [
+    "Provider health, live original/control success, model response adequacy, full-suite green, independent generalization or benchmark performance."
+  ],
+  "recommended_next_step": "External review; separately authorize bounded ATGB-R1-05 using the new gate/control. Stop now; no live calls.",
+  "primary_report": "development/reports/atgb_r1_04_validation_readiness_recovery.md",
+  "evidence_packets": [],
+  "self_contained_review_test": "Eight reports, selected source/diffs, final JUnit/logs, preflight failures/success, state evidence, provider diagnosis and source hashes; CRC and secret scan.",
+  "configuration_source": "data/validation/review_handoffs/atgb_r1_04_validation_readiness_recovery.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/accounting.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/provider_usage.jsonl",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/response.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L1/trace.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/accounting.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/provider_usage.jsonl",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/response.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L2/trace.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/execute_trial.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/NEXT_SESSION_before.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/baseline_comparison.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/commands.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/entry_hashes.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/final.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/final.xml",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/final_exit.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/integrity.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/package_review.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/pending_control.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_actor.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_executed.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_import.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_ledger.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_limit.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_mode.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_model.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_pending.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_provider.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_provider_disabled.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_retries.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_scene.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_stale.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_startup.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_store.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_target.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_tokens.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_failure_used_budget.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/preflight_valid.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/provider_assessment.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/regression.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/repository_status_after.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/repository_status_before.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/scoped_changes.patch",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/targeted.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/targeted.xml",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_04/targeted_exit.txt",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/05_failure_localization.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/01_baseline_and_scope.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/02_environment_leakage_root_cause.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/03_harness_repair.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/04_preflight_verification.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/05_pending_action_control.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/06_provider_failure_assessment.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/07_regression_evidence.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/08_final_verdict.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "experiments/pr_dq/__init__.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/fixtures/pr_ef_r4_holdouts.json",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_02_revision_boundary.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_04_readiness.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_du_player_pipeline.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_ef_gm_authority.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_ef_r4_authorization.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/readiness.py",
+      "role": "review_verification",
+      "why": "R1-04 scoped recovery, failure provenance or deterministic evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

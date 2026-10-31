@@ -1,0 +1,47 @@
+{
+  "review": "PR-CH",
+  "live_calls": 0,
+  "target_file_result": "20 passed, 4 failed",
+  "failures": [
+    {
+      "test": "test_general_http_ask_a_not_b",
+      "expected": "morning bell or kiln three; no copper chit",
+      "actual": "generic settled-here refusal",
+      "first_failing_boundary": "validation/fallback/immutable emission",
+      "shares_target_root_cause": true,
+      "confidence": "CONFIRMED"
+    },
+    {
+      "test": "test_general_http_relevant_hook_still_lands",
+      "expected": "weigh-stone or copper chit; provider ignorance overridden",
+      "actual": "provider ignorance remains",
+      "first_failing_boundary": "validation/fallback/immutable emission",
+      "shares_target_root_cause": true,
+      "confidence": "CONFIRMED"
+    },
+    {
+      "test": "test_general_http_unauthorized_no_leak",
+      "expected": "second horn not leaked by Kiln Tender",
+      "actual": "provider unauthorized second horn remains",
+      "first_failing_boundary": "validation/fallback/immutable emission",
+      "shares_target_root_cause": true,
+      "confidence": "CONFIRMED"
+    },
+    {
+      "test": "test_general_http_first_ask",
+      "expected": "provider ignorance overridden by authored kiln answer",
+      "actual": "provider ignorance remains",
+      "first_failing_boundary": "validation/fallback/immutable emission",
+      "shares_target_root_cause": true,
+      "confidence": "CONFIRMED"
+    }
+  ],
+  "passing_representatives": [
+    "test_general_ask_about_a_does_not_emit_b",
+    "test_general_ask_about_b_does_not_emit_a",
+    "test_general_unsupported_question_does_not_substitute_or_invent",
+    "test_general_relevant_but_unauthorized_does_not_leak",
+    "test_calibration_stew_question_does_not_select_patrol_rumor"
+  ]
+}
+

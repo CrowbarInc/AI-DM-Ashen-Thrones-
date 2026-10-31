@@ -1,0 +1,121 @@
+{
+  "campaign_id": "pr-br-continuation-9",
+  "campaign_name": "PR-BR Continuation 9 — Resolution-Contract Construction Architecture Discovery",
+  "campaign_date": "2026-09-29",
+  "purpose": "Architecture discovery of Resolution Contract construction after Continuation 8. No production semantic change. No live model use. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Continuation 8 manual 3/10 versus Continuation 7 manual 5/5 is an input-boundary failure. Deterministic parsing confidently built inspect/object duty and a sentence-sized examine target, committed both into active_inspected, and later gates discarded model answers that had already understood the player. Recommended architecture is Option C: a typed interpretation proposal, deterministic validation and canonicalization, and an abstaining fast path. No extra model call on turns whose target already canonicalizes. One short structured call before narration only when the fast path abstains. Resolution Contract, obligations, PR-BN authority, discourse slots, satisfaction, precedence, and the evaluator stay. Live gameplay turns 0. Live model calls 0. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "None. Discovery only. No parser patch, no schema change, no evaluator change."
+    ],
+    "validation": [
+      "Local deterministic replay of construct_resolution_contract and classify_referenced_surface. No test-suite rerun and no live smoke."
+    ],
+    "tooling": [
+      "None."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 9 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation9 static replay, code references, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Not re-run. Continuation 8 preflight remains the last band result: 198 passed, 0 failed.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "None. 0 gameplay turns. 0 model calls.",
+    "model_runtime_boundary": "No call_gpt invocation in this continuation.",
+    "new_regressions": "None added.",
+    "pre_existing_failures": "Continuation 8 manual 3/10 is the evidence under analysis, not a new run."
+  },
+  "decisions_requiring_human_review": [
+    "Adopt Option C as the next implementation boundary: structured proposal, deterministic validation, abstaining fast path.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4×10 gate from this packet."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Lexical explicit-target extraction commits non-entities such as duty and clause-sized spans with ambiguous=false.",
+      "Those spans persist in active_inspected and bind later pronouns.",
+      "Downstream gates trust the contract and replace useful model prose.",
+      "The Continuation 8 runner does not reset session.json between personas."
+    ],
+    "pre_existing": [
+      "The deterministic PR-BR suite is built around the Continuation 7 lexicon.",
+      "Evaluator PASS can mean the malformed contract was satisfied by a stock line."
+    ]
+  },
+  "missing_concepts": [
+    "A typed interpretation proposal with confidence and clarification_required.",
+    "Canonical-or-abstain validation before discourse commit.",
+    "Primary plus one supporting operation for ordinary compounds."
+  ],
+  "does_not_prove": [
+    "Does not prove a live structured-interpretation call would emit the right JSON.",
+    "Does not prove 4×10 synthetic-gate health.",
+    "Does not authorize a human playtest."
+  ],
+  "recommended_next_step": "PR-BR Continuation 10: proposal schema, deterministic validator, abstention when a lexical target does not canonicalize, and recorded fixtures for the Continuation 8 lines. No live model. No phrase patches. No gate.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_br_continuation9/static_construction_replay.json",
+      "role": "architecture_replay",
+      "why": "Deterministic replay of the ten Continuation 8 lines: operations, targets, surface authority, and contract ids.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation9/code_references.md",
+      "role": "code_reference",
+      "why": "Parser, contract, discourse, and test-suite locations cited by the discovery.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation9/provenance.json",
+      "role": "provenance",
+      "why": "HEAD, zero live-model calls, and the recommended next continuation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/MANUAL_ASSESSMENT.md",
+      "role": "manual_assessment",
+      "why": "Continuation 8 human-DM versus evaluator table.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/evidence_summary.md",
+      "role": "behavioral_evidence_summary",
+      "why": "Continuation 8 result counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/transcript.md",
+      "role": "live_transcript",
+      "why": "Player-visible Continuation 8 transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/turns.json",
+      "role": "model_contract_disagreement",
+      "why": "Side-by-side contract targets and model excerpts for the ten turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation8/20260929T102429Z/provenance.json",
+      "role": "prior_provenance",
+      "why": "Continuation 8 HEAD and smoke accounting.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

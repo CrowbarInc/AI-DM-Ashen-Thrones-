@@ -1,0 +1,3 @@
+# 24 — Experimental Fairness
+
+Identical source eligibility, NPC/context, model, temperature, output cap, no retries and raw questions across arms. A receives prose each time; B/C receive their own immutable extracted representation. Extraction overhead is counted. Each arm sees identical inert history per case. Long versus short strata are deliberately reported but confounded with question type, not randomized history treatments. A prompt/schema/coverage remain current production; B/C have a richer multi-fact/multi-value answer contract. B/C separate extraction samples and C validator differences both affect outcomes. No gold hints in primary; no post-exposure rescoring, ambiguity exclusions, holdout modifications or best-of sampling.

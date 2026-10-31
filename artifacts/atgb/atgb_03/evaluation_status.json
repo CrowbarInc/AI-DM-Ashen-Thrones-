@@ -1,0 +1,57 @@
+{
+  "captured_turns_pending_human_review": 15,
+  "uncaptured_turns_not_evaluated": 22,
+  "evaluated_successes": null,
+  "evaluated_failures": null,
+  "uncertain_judgments": null,
+  "gameplay_performance_claim": false,
+  "states": {
+    "evaluated_success": "Only an authorized human pass is success.",
+    "evaluated_failure": "Only an authorized human fail is conversational failure.",
+    "uncertain": "Available to reviewers when evidence is insufficient.",
+    "not_evaluated": "All judgments here; no human scores supplied.",
+    "infrastructure_setup_failure": "S04 accounting stop; unsubmitted turns and unattempted scenarios are not conversational failures."
+  },
+  "capability_status": {
+    "ambiguity_handling": {
+      "pending_captured_turns": 0,
+      "planned_turns": 4,
+      "evaluated_failures": null
+    },
+    "conversational_continuity": {
+      "pending_captured_turns": 2,
+      "planned_turns": 5,
+      "evaluated_failures": null
+    },
+    "corrections_and_clarifications": {
+      "pending_captured_turns": 3,
+      "planned_turns": 5,
+      "evaluated_failures": null
+    },
+    "ic_ooc_boundaries": {
+      "pending_captured_turns": 0,
+      "planned_turns": 4,
+      "evaluated_failures": null
+    },
+    "initiative_and_naturalness": {
+      "pending_captured_turns": 1,
+      "planned_turns": 4,
+      "evaluated_failures": null
+    },
+    "intent_recognition": {
+      "pending_captured_turns": 4,
+      "planned_turns": 5,
+      "evaluated_failures": null
+    },
+    "npc_dialogue_coherence": {
+      "pending_captured_turns": 3,
+      "planned_turns": 5,
+      "evaluated_failures": null
+    },
+    "response_relevance": {
+      "pending_captured_turns": 2,
+      "planned_turns": 5,
+      "evaluated_failures": null
+    }
+  }
+}

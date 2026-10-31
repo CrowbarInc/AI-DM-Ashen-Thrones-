@@ -1,0 +1,160 @@
+[
+  {
+    "id": "A",
+    "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+    "pass_": false,
+    "authority": {
+      "requested_information": "general",
+      "subject": "can repeat",
+      "knowledge_posture": "unknown",
+      "answer_relation": "none",
+      "improvisation_permitted": false,
+      "improvisation_scope": "none",
+      "narration_determined": false,
+      "player_line": "",
+      "canonical": false,
+      "npc_id": "sergeant_mara",
+      "npc_name": "Sergeant Mara",
+      "npc_role": "",
+      "npc_disposition": "",
+      "prohibited_claims": [
+        "consequential_world_fact",
+        "hidden_disclosure",
+        "mechanical_change",
+        "new_obligation",
+        "invented_answer"
+      ],
+      "prior_commitments": [],
+      "reconciled_plan": "",
+      "reuse_prior_speech": false
+    }
+  },
+  {
+    "id": "B",
+    "text": "Sergeant Mara says, \"I couldn't tell you.\"",
+    "pass_": false,
+    "authority": {
+      "requested_information": "general",
+      "subject": "can repeat simpler",
+      "knowledge_posture": "unknown",
+      "answer_relation": "none",
+      "improvisation_permitted": false,
+      "improvisation_scope": "none",
+      "narration_determined": false,
+      "player_line": "",
+      "canonical": false,
+      "npc_id": "sergeant_mara",
+      "npc_name": "Sergeant Mara",
+      "npc_role": "",
+      "npc_disposition": "",
+      "prohibited_claims": [
+        "consequential_world_fact",
+        "hidden_disclosure",
+        "mechanical_change",
+        "new_obligation",
+        "invented_answer"
+      ],
+      "prior_commitments": [],
+      "reconciled_plan": "",
+      "reuse_prior_speech": false
+    }
+  },
+  {
+    "id": "C",
+    "selected": {
+      "id": "watch",
+      "text": "Guards watch the north gate throughout the night.",
+      "clue_id": null,
+      "clue_text": null
+    },
+    "pass_": false
+  },
+  {
+    "id": "D",
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "sergeant_mara",
+      "npc_name": "Sergeant Mara",
+      "line": "Sergeant Mara said: \"The street beyond the gate is the north road.\"",
+      "reason": "gm_recall_of_npc_statement"
+    },
+    "pass_": true
+  },
+  {
+    "id": "F",
+    "directive": {
+      "action": "answer",
+      "owner": "gm",
+      "npc_id": "sergeant_mara",
+      "npc_name": "Sergeant Mara",
+      "line": "Sergeant Mara said: \"The street beyond the gate is the north road.\"",
+      "reason": "gm_recall_of_npc_statement"
+    },
+    "pass_": true
+  },
+  {
+    "id": "E",
+    "selected": {
+      "id": "road",
+      "text": "The street beyond the gate is the north road.",
+      "clue_id": null,
+      "clue_text": null
+    },
+    "pass_": false
+  },
+  {
+    "id": "G",
+    "selected": {
+      "id": "road",
+      "text": "The street beyond the gate is the north road.",
+      "clue_id": null,
+      "clue_text": null
+    },
+    "pass_": false
+  },
+  {
+    "id": "H",
+    "text": "Sergeant Mara says, \"I prefer the evening.\"",
+    "pass_": true,
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara says, \"I prefer the evening.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "What do you personally enjoy about the evening?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "conversational_continuity.bounded_personal_line"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "conversational_continuity.bounded_personal_line",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    }
+  }
+]

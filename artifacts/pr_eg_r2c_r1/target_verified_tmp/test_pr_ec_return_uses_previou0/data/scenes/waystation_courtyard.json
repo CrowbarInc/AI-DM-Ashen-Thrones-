@@ -1,0 +1,43 @@
+{
+  "scene": {
+    "id": "waystation_courtyard",
+    "location": "Waystation courtyard",
+    "summary": "A walled courtyard. A lit lantern hangs beside the gate.",
+    "visible_facts": [
+      "A soot-streaked lantern burns beside the courtyard gate."
+    ],
+    "interactables": [
+      {
+        "id": "courtyard_lantern",
+        "label": "courtyard lantern",
+        "type": "examine",
+        "description": "A soot-streaked lantern burns beside the courtyard gate."
+      },
+      {
+        "id": "iron_lock",
+        "label": "iron lock",
+        "aliases": [
+          "lock",
+          "the lock"
+        ],
+        "reveals_clue": "The lock is rusted."
+      }
+    ],
+    "exits": [
+      {
+        "id": "exit_tavern",
+        "label": "the tavern",
+        "aliases": [
+          "tavern"
+        ],
+        "target_scene_id": "waystation_street"
+      }
+    ],
+    "discoverable_clues": [],
+    "hidden_facts": [],
+    "actions": [],
+    "objects": [],
+    "discovered_clues": [],
+    "runtime_entities": []
+  }
+}

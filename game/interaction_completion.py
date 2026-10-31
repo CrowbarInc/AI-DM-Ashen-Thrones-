@@ -116,6 +116,20 @@ _PURPOSE_PERSON_RE = re.compile(
 )
 _COMPLEMENT_RE = re.compile(r",|\b(?:and|whether|if|about)\b", re.IGNORECASE)
 _PRONOUN_NOMINAL_RE = re.compile(r"^(?:him|her|them|you|me)$", re.IGNORECASE)
+# Speech-role words name the speaker or the person already being spoken to.
+# They are not NPC identities. Adjuncts are continuation, degree, or politeness
+# words that may sit beside those roles; they are not part of a name.
+_SPEECH_ROLE_SECOND = frozenset({"you", "your", "yours", "yourself", "yourselves"})
+_SPEECH_ROLE_FIRST = frozenset({
+    "i", "me", "my", "mine", "myself", "we", "us", "our", "ours", "ourselves",
+})
+_SPEECH_GRAMMAR = frozenset({
+    "again", "later", "now", "then", "more", "else", "something", "anything",
+    "please", "still", "just", "also", "too", "soon", "once", "sometime",
+    "sometimes", "further", "anymore", "already", "maybe", "perhaps", "really",
+    "quite",
+})
+_NOMINAL_DETERMINERS = frozenset({"the", "a", "an", "that", "this"})
 _ROLE_LABEL_SKIP = frozenset(
     {"the", "a", "an", "that", "this", "one", "of", "passing", "nearby", "nearest", "some"}
 )
@@ -624,12 +638,56 @@ def terminal_resolution_operation(text: str | None) -> str | None:
     return None
 
 
+def _word_key(word: str) -> str:
+    return re.sub(r"[^a-z0-9']+", "", word.casefold())
+
+
+def speech_participant_head(nominal: str | None) -> str:
+    """Person head of an address span.
+
+    A name or role is preserved, including a determiner attached to it.
+    A first- or second-person pronoun plus continuation words collapses to
+    that pronoun. The pronoun is a speech role, not an NPC name.
+    """
+    raw = _clean(nominal)
+    if not raw:
+        return ""
+    words = raw.split()
+    keys = [_word_key(word) for word in words]
+
+    def is_role(key: str) -> bool:
+        return key in _SPEECH_ROLE_FIRST or key in _SPEECH_ROLE_SECOND
+
+    def is_identity(key: str) -> bool:
+        return bool(key) and not is_role(key) and key not in _SPEECH_GRAMMAR and key not in _NOMINAL_DETERMINERS
+
+    if not any(is_identity(key) for key in keys):
+        for word, key in zip(words, keys):
+            if key in _SPEECH_ROLE_SECOND:
+                return _clean(word.strip("\"'"))
+        for word, key in zip(words, keys):
+            if key in _SPEECH_ROLE_FIRST:
+                return _clean(word.strip("\"'"))
+        return raw
+    end = len(words)
+    while end > 0 and keys[end - 1] in _SPEECH_GRAMMAR:
+        end -= 1
+    start = 0
+    while start < end and is_role(keys[start]):
+        start += 1
+    kept = words[start:end]
+    if not any(is_identity(keys[index]) for index in range(start, end)):
+        return raw
+    return _clean(" ".join(kept).strip("\"'"))
+
+
 def addressed_person_nominal(text: str | None) -> str:
     """Nominal of a direct address, or empty when the utterance does not address anyone.
 
     Question complements are cut off. A mention of a person inside a GM question
     is not an address. ``tell`` and ``warn`` are included here because the
-    existing address pattern does not own those verbs.
+    existing address pattern does not own those verbs. Continuation words beside
+    a speech-role pronoun are not returned as part of a person name.
     """
     raw = _clean(text)
     if not raw:
@@ -637,7 +695,7 @@ def addressed_person_nominal(text: str | None) -> str:
     for pattern in (_VOCATIVE_RE, _SPEECH_ADDRESS_RE, _TELL_RE):
         for match in pattern.finditer(raw):
             span = _complement_cut(match.group("nominal") or "")
-            nominal = _nominal_chunk(span)
+            nominal = speech_participant_head(_nominal_chunk(span))
             if not nominal or _QUESTION_NOMINAL_RE.match(nominal) or _INTERJECTION_RE.match(nominal):
                 continue
             if pattern is _VOCATIVE_RE and nominal.casefold() in _NOT_A_VOCATIVE:

@@ -1,0 +1,154 @@
+{
+  "source_trial": "ATGB-03/trial-1",
+  "scenarios": [
+    {
+      "scenario_id": "S01",
+      "host_known_call_subtotal": 4,
+      "host_unavailable_turn_counts": 0,
+      "ledger_observed_sent_subtotal": 4,
+      "request_upper_bound": null,
+      "per_turn_ledger_attribution": "unavailable_original_ledger_has_no_turn_ids"
+    },
+    {
+      "scenario_id": "S02",
+      "host_known_call_subtotal": 4,
+      "host_unavailable_turn_counts": 0,
+      "ledger_observed_sent_subtotal": 4,
+      "request_upper_bound": null,
+      "per_turn_ledger_attribution": "unavailable_original_ledger_has_no_turn_ids"
+    },
+    {
+      "scenario_id": "S03",
+      "host_known_call_subtotal": 2,
+      "host_unavailable_turn_counts": 0,
+      "ledger_observed_sent_subtotal": 3,
+      "request_upper_bound": null,
+      "per_turn_ledger_attribution": "unavailable_original_ledger_has_no_turn_ids"
+    },
+    {
+      "scenario_id": "S04",
+      "host_known_call_subtotal": 1,
+      "host_unavailable_turn_counts": 1,
+      "ledger_observed_sent_subtotal": 1,
+      "request_upper_bound": null,
+      "per_turn_ledger_attribution": "unavailable_original_ledger_has_no_turn_ids"
+    }
+  ],
+  "observed_sent_requests": 12,
+  "purpose_counts": {
+    "interpretation": 11,
+    "expression": 1
+  },
+  "request_upper_bound": null,
+  "S04_2_raw_resolution": {
+    "kind": "interpretation_rejected",
+    "action_id": "interpretation_rejected",
+    "label": "I said the Gate Serjeant, not the captain and not the guard.",
+    "prompt": "I said the Gate Serjeant, not the captain and not the guard.",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "context_leak",
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "context_leak",
+        "raw_interpretation": "",
+        "provider_requests": [],
+        "record": null
+      },
+      "provider_calls": {
+        "interpretation_requests": 0,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      }
+    }
+  },
+  "S04_2_worker_capture": {
+    "response_text": "I can't interpret that from the current scene without using information you have not been shown.",
+    "response_origin": "live_provider",
+    "simulated": false,
+    "telemetry": {
+      "elapsed_ms": {
+        "status": "unavailable",
+        "value": null
+      },
+      "provider_call_count": {
+        "status": "unavailable",
+        "value": null
+      },
+      "input_tokens": {
+        "status": "unavailable",
+        "value": null
+      },
+      "output_tokens": {
+        "status": "unavailable",
+        "value": null
+      },
+      "retry_count": {
+        "status": "unavailable",
+        "value": null
+      },
+      "estimated_cost": {
+        "status": "unavailable",
+        "value": null
+      },
+      "provider_call_detail": {
+        "interpretation_requests": 0,
+        "narration_requests": 0,
+        "retries": 0
+      }
+    },
+    "provider_calls_disabled": false,
+    "provider_request_sent": false,
+    "resolution_kind": "interpretation_rejected",
+    "communication_mode": "AUTO",
+    "conversational_decision": "context_leak",
+    "addressee": "unavailable",
+    "authoritative_mutation": false,
+    "capture_status": "captured",
+    "error": null,
+    "turn_id": "S04.2",
+    "request": {
+      "text": "I said the Gate Serjeant, not the captain and not the guard.",
+      "ui_mode": "player"
+    },
+    "http_status": 200,
+    "state_evidence": {
+      "before": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [
+          "The patrol route changed after the Ash Compact census choke worsened.",
+          "Follow the missing patrol rumor"
+        ],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": "gate_serjeant",
+        "transcript_entries": 1
+      },
+      "after": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [
+          "The patrol route changed after the Ash Compact census choke worsened.",
+          "Follow the missing patrol rumor"
+        ],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": "gate_serjeant",
+        "transcript_entries": 2
+      }
+    }
+  },
+  "live_additional_requests_in_ATGB_03A": 0,
+  "note": "Ledger subtotal is an observation. No missing performance field is filled from detail counters or inferred as zero. Original ledger lacks dispatch-start records and a runtime snapshot."
+}

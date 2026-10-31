@@ -1,0 +1,44 @@
+{
+  "campaign_id": "validation_cleanup_governance_repair_20260919",
+  "campaign_name": "Validation Cleanup & Governance Repair",
+  "campaign_date": "2026-09-19",
+  "purpose": "Repair the 17 authorized validation, fixture, expectation, governance, and test-only architecture failures while preserving six policy/unresolved reds.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "The suite moved from 23 to 6 failures. All 17 authorized failures were cleaned with no contradictions, unexpected greens, or new reds. RC-04 test-only residue is gone without exemptions. The remaining six failures are exactly RC-10, RC-11, RC-13, and RC-21. Production behavior and validation authority did not change; no test was skipped, xfailed, deleted, or weakened for appearance.",
+  "changes": {
+    "production": ["Added read-facade exports and routed narrative-authenticity telemetry through the declared observability facade; no gameplay semantics changed."],
+    "validation": ["Modernized eight stale expectations, one fixture, three validator failures, four governance failures, and the RC-04 aggregate residue."],
+    "tooling": ["Added JUnit-backed cleanup ledger and summary generation with three accounting locks."],
+    "documentation": ["Added the canonical cleanup report and reconciled BQC4, BU4, and protected replay governance."],
+    "generated_artifacts": ["Added pre/post JUnit, cleanup ledger, cleanup summary, test-order observations, and review handoff."]
+  },
+  "testing": {
+    "focused": "All actionable cleanup tests and their consumers passed. BV2C/BV10/BV14 synthetic invalid-import controls still detect violations.",
+    "broader": "Final-emission, replay projection, ownership registry, failure-classification, playability, social lead, and validation-layer suites passed outside the frozen cases.",
+    "full_suite": "Pre: 6,445 collected, 6,323 passed, 23 failed, 99 skipped. Post: 6,448 collected, 6,343 passed, 6 failed, 99 skipped; three new passing accounting tests explain collection growth.",
+    "runtime_validation": "No product runtime behavior was intentionally changed.",
+    "model_runtime_boundary": "No model invocation occurred.",
+    "new_regressions": "None.",
+    "pre_existing_failures": "Six remain deliberately red: RC-10 and RC-21 policy cases; RC-11 and RC-13 unresolved investigations."
+  },
+  "decisions_requiring_human_review": ["RC-10 local raw-token policy.", "RC-21 destination redirect lead authority."],
+  "known_problems": {
+    "campaign_specific": [],
+    "pre_existing": ["RC-11 opening acceptance sequence remains unresolved.", "RC-13 long-session diagnostic threshold remains unresolved."]
+  },
+  "missing_concepts": ["Policy resolution, unresolved-root-cause investigation, dedicated test-isolation investigation, Calibration Round 2, and State-to-Narration Consistency remain out of scope."],
+  "does_not_prove": ["Which policy choice RC-10 or RC-21 should adopt.", "The root cause of RC-11 or RC-13.", "That the earlier non-repeating combat transcript symptom is systemic."],
+  "recommended_next_step": "Review the trustworthy six-red baseline, then authorize one separate policy or unresolved-root-cause campaign.",
+  "primary_report": "docs/validation_cleanup_and_governance_repair.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "artifacts/validation_cleanup/cleanup_ledger.json", "role": "cleanup_ledger", "why": "Accounts for all 17 actionable failures and their authority.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/validation_cleanup/cleanup_summary.json", "role": "cleanup_summary", "why": "Reconciles exact pre/post counts and remaining reds.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/validation_cleanup/pre_cleanup_suite.xml", "role": "pre_junit", "why": "Authoritative starting baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/validation_cleanup/post_cleanup_suite.xml", "role": "post_junit", "why": "Authoritative ending baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/validation_cleanup/test_order_observations.md", "role": "test_order_observations", "why": "Preserves the bounded mutable-state observation.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/validation_cleanup_queue.json", "role": "source_cleanup_queue", "why": "Preserves the authorized cleanup inventory.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/baseline_triage/policy_decisions.md", "role": "frozen_policy", "why": "Preserves the policy decisions left open.", "behavioral_evidence": false, "human_review_required": true}
+  ],
+  "self_contained_review_test": "PASS: the bundle contains the canonical report, exact JUnit baselines, complete ledger and summary, test-order observation, source cleanup queue, and frozen policy record."
+}

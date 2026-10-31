@@ -1,0 +1,53 @@
+--- baseline/game/conversational_continuity.py
++++ final/game/conversational_continuity.py
+@@ -86,7 +86,8 @@
+     re.IGNORECASE,
+ )
+ _PERSONAL = re.compile(
+-    r"\b(?:prefer|rather|what troubles|how do you feel|do you like)\b",
++    r"\b(?:prefer|rather|what troubles|how do you feel|"
++    r"(?:do you|what do you)\s+(?:personally\s+)?(?:like|enjoy))\b",
+     re.IGNORECASE,
+ )
+ _UNCERTAIN = re.compile(
+@@ -175,6 +176,7 @@
+     turn: int = 0,
+     social: Mapping[str, Any] | None = None,
+     ownership: str = "",
++    adoption: Mapping[str, Any] | None = None,
+ ) -> dict[str, Any] | None:
+     """Store the line the player was given. Rejected candidates are not accepted here."""
+     if not isinstance(session, dict):
+@@ -182,6 +184,11 @@
+     delivered = " ".join(str(delivered_text or "").split())
+     if not delivered:
+         return None
++    if adoption is not None:
++        from game.immutable_valid_response import semantic_equal
++
++        if not adoption.get("immutable") or not semantic_equal(delivered, str(adoption.get("text") or "")):
++            raise ValueError("Delivered speech does not match the accepted response")
+     payload = social if isinstance(social, Mapping) else {}
+     authority = payload.get("dialogue_authority") if isinstance(payload.get("dialogue_authority"), Mapping) else {}
+     speaker_id = str((authority or {}).get("npc_id") or payload.get("npc_id") or "")
+@@ -196,7 +203,7 @@
+         "addressee": "player",
+         "ownership": own,
+         "player_text": str(player_text or "")[:400],
+-        "delivered_text": delivered[:500],
++        "delivered_text": delivered,
+         "subject": str((authority or {}).get("subject") or "")[:80],
+         "requested_information": str((authority or {}).get("requested_information") or ""),
+         "supplied_text": supplied[:240],
+@@ -206,6 +213,11 @@
+         "turn": int(turn or 0),
+         "active": True,
+     }
++    if adoption is not None:
++        row["authorization_source"] = str(adoption.get("authorization_source") or adoption.get("provenance") or "")
++        row["adoption_turn_identity"] = str(adoption.get("turn_identity") or "")
++        if adoption.get("speaker_id") and str(adoption["speaker_id"]) != speaker_id:
++            raise ValueError("Delivered speech speaker does not match adoption")
+     ctx = session.setdefault("conversational_context", {})
+     if not isinstance(ctx, dict):
+         return None

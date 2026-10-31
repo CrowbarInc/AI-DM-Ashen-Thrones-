@@ -1,0 +1,57 @@
+..F.....F.FF.......F.................F..................                 [100%]
+================================== FAILURES ===================================
+____ test_behavioral_disagreements_and_review_decisions_are_on_front_page _____
+tests\test_review_handoff.py:66: in test_behavioral_disagreements_and_review_decisions_are_on_front_page
+    assert 'GM: Tavern Runner grimaces. "Not something I can say here."' in text
+E   assert 'GM: Tavern Runner grimaces. "Not something I can say here."' in '# Campaign\n\nCampaign: Review Handoff Automation\nIdentifier: `review_handoff_automation_20260918`\nDate: 2026-09-18...nonical repository files remain authoritative; packaged copies are review conveniences with hashes and source paths.\n'
+______________ test_generation_does_not_modify_canonical_sources ______________
+tests\test_review_handoff.py:154: in test_generation_does_not_modify_canonical_sources
+    before = {path: _digest(path) for path in sources}
+                    ^^^^^^^^^^^^^
+tests\test_review_handoff.py:26: in _digest
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1020: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\validation_evidence\\reactive_adversarial\\evidence_manifest.json'
+______ test_bundle_only_self_contained_review_answers_required_questions ______
+tests\test_review_handoff.py:195: in test_bundle_only_self_contained_review_answers_required_questions
+    assert all(answer in summary for answer in required_answers)
+E   assert False
+E    +  where False = all(<generator object test_bundle_only_self_contained_review_answers_required_questions.<locals>.<genexpr> at 0x000001F87D64FAC0>)
+________ test_catalog_lines_and_partitions_match_the_adopted_fixtures _________
+tests\test_atgb_infrastructure.py:71: in test_catalog_lines_and_partitions_match_the_adopted_fixtures
+    assert lines == _catalog_player_lines()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_atgb_infrastructure.py:54: in _catalog_player_lines
+    return re.findall(r"^Player: `(.+)`\s*$", CATALOG.read_text(encoding="utf-8"), re.MULTILINE)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\development\\reports\\atgb_01_scenario_catalog.md'
+__________ test_provider_disabled_host_uses_chat_and_isolates_state ___________
+tests\test_atgb_infrastructure.py:263: in test_provider_disabled_host_uses_chat_and_isolates_state
+    assert fallback["response_text"] == "Provider calls are disabled for this run, so no live narration was generated."
+E   AssertionError: assert 'The controll...this session.' == 'Provider cal...as generated.'
+E     
+E     - Provider calls are disabled for this run, so no live narration was generated.
+E     + The controlled playtest request limit has been reached. Stop and export diagnostics; do not restart to continue this session.
+_____________ test_readiness_verifies_repaired_dispatch_coverage ______________
+tests\test_atgb_accounting.py:134: in test_readiness_verifies_repaired_dispatch_coverage
+    assert audit["ok"]
+E   assert False
+=========================== short test summary info ===========================
+FAILED tests/test_review_handoff.py::test_behavioral_disagreements_and_review_decisions_are_on_front_page
+FAILED tests/test_review_handoff.py::test_generation_does_not_modify_canonical_sources
+FAILED tests/test_review_handoff.py::test_bundle_only_self_contained_review_answers_required_questions
+FAILED tests/test_atgb_infrastructure.py::test_catalog_lines_and_partitions_match_the_adopted_fixtures
+FAILED tests/test_atgb_infrastructure.py::test_provider_disabled_host_uses_chat_and_isolates_state
+FAILED tests/test_atgb_accounting.py::test_readiness_verifies_repaired_dispatch_coverage

@@ -1,0 +1,51 @@
+--- cycle_baseline/game/live_chat_interpretation.py
++++ final/game/live_chat_interpretation.py
+@@ -118,14 +118,6 @@
+         else:
+             kept.append(component)
+     result["action_components"] = kept
+-    if len(kept) == 1 and kept[0].get("operation_class") == "ASK":
+-        refs = result.get("references") or {}
+-        subject = str(communication.get("subject") or "").casefold().strip()
+-        # Only a declared subject is eligible; unresolved persons and missing
+-        # action targets are never cleared by the topic rule.
+-        refs["unresolved_references"] = [r for r in refs.get("unresolved_references", [])
+-                                         if not (str(r).strip() and re.search(
+-                                             r"\b" + re.escape(str(r).casefold().strip()) + r"\b", subject))]
+     return result, incidental
+ 
+ 
+@@ -457,16 +449,33 @@
+             communication["recipient"] = "MIXED"
+     payload, incidental = normalize_social_scope(payload, communication)
+     adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
++    reconciliation = None
++    if adapted.get("structurally_valid"):
++        from game.player_interpretation_bridge import reconcile_reference_annotations
++        payload, reconciliation = reconcile_reference_annotations(
++            payload, player_text=player_text, scene=scene, world=world, session=session)
++        if communication:
++            # Reuse the established ownership correction before eligibility can
++            # reject a grounded direct address on a stale GM/clarification label.
++            from game.conversational_orchestration import _reclassify_direct_npc_address
++            prepared = _reclassify_direct_npc_address(
++                {**payload, "communication": communication}, player_text,
++                scene=scene, world=world, session=session)
++            communication = prepared.get("communication", communication)
++            payload = {key: prepared[key] for key in payload}
++        adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+     record = adapted.get("record") if isinstance(adapted.get("record"), dict) else None
+     if record is not None and communication is not None:
+         record["communication"] = communication
+         record["incidental_context"] = incidental
++        record["reference_reconciliation"] = reconciliation
+         # Only passages selected from the engine's public projection can reach emission.
+         record["public_evidence"] = {ref: evidence[ref] for ref in communication["evidence_refs"]}
+     eligibility = adapted.get("eligibility") if isinstance(adapted.get("eligibility"), dict) else {}
+     disposition = str(eligibility.get("disposition") or "")
+     common = {
+         "raw_interpretation": raw,
++        "reference_reconciliation": reconciliation,
+         "provider_requests": provider_requests,
+         "eligibility_disposition": disposition,
+         "model_communication_mode": parsed.get("communication_mode"),

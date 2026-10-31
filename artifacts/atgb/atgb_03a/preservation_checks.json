@@ -1,0 +1,19 @@
+{
+  "original_evidence_unchanged": true,
+  "production_corpus_baseline_and_canonical_data_unchanged": true,
+  "changed_preexisting_snapshot_files": [
+    "tools/atgb/chat_worker.py",
+    "tools/atgb/driver.py"
+  ],
+  "unexpected_changes": [],
+  "drift_from_original_execution_except_declared_benchmark_changes": {
+    "source_sha256": [],
+    "canonical_data_sha256": []
+  },
+  "new_infrastructure_sources": {
+    "tools/atgb/chat_worker.py": "b43d71762cded80206a4172c516c425c7783447a12dd568d7c02fae36fa93861",
+    "tools/atgb/driver.py": "4c0c65aa3a3e3488a943a9a62c837b25b5998bb5b560607913eefa72020cd079",
+    "tools/atgb/accounting.py": "d4330641e02232908eb110c25f8a33bc6f9f7a8055c1bb1bb84f55ee05890033",
+    "tests/test_atgb_accounting.py": "a0c427b8d882d0e9996a631edf897c05b3184fe26bbe833f46c6ba302176e4df"
+  }
+}

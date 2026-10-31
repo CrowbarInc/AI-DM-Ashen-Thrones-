@@ -1,0 +1,12 @@
+{
+  "id": "ScriptedObservation", "version": 1,
+  "description": "Deterministic opening, scene observation, and explicit state verification",
+  "fixture": "frontier-gate-v1", "execution_modes": ["ScriptedGameplay", "Deterministic"],
+  "actions": [{"kind": "initialize_campaign"}, {"kind": "capture_baseline"}, {"kind": "start_campaign"}, {"kind": "observe_scene"}, {"kind": "verify_state", "expect": {"campaign_started": true}}, {"kind": "capture_final_state"}],
+  "expected_invariants": {"campaign_started": true, "opening_commits": 1, "turn_delta": 1, "log_delta": 1},
+  "maximum_action_count": 6, "provider_request_ceiling": 1,
+  "token_budgets": {"input": 200000, "output": 20000, "total": 220000},
+  "timeouts": {"preflight": 30, "startup": 30, "request": 90, "scenario": 180, "evidence": 30, "shutdown": 5},
+  "evidence_requirements": ["provider_usage.jsonl", "baseline", "after", "result.json", "SUMMARY.md"],
+  "stop_conditions": ["first_failed_step", "budget_exhaustion", "timeout", "interruption"]
+}

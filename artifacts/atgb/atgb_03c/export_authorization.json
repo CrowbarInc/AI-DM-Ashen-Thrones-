@@ -1,0 +1,11 @@
+{
+  "initial_command_started": false,
+  "initial_auto_review_result": "rejected_before_process_creation",
+  "reason": "Explicit payload and destination authorization required for OpenAI benchmark egress",
+  "question": "Do you approve sending the Ashen Thrones S04-S10 benchmark player lines and required game context to OpenAI (api.openai.com) for this live evaluation, bounded to 48 application requests, 900 seconds, and 120,000 tokens?",
+  "human_answer": "Approve this bounded OpenAI evaluation",
+  "destination": "https://api.openai.com/v1",
+  "payload": "S04-S10 benchmark player lines and required game context; generated conversation context as supplied by the existing production chat path",
+  "limits": {"application_requests": 48, "elapsed_seconds": 900, "total_tokens": 120000},
+  "credential_values_recorded": false
+}

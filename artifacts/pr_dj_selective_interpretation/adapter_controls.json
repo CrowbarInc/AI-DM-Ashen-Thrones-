@@ -1,0 +1,165 @@
+{
+  "passed": true,
+  "rows": [
+    {
+      "accepted": true,
+      "errors": [],
+      "executed": false,
+      "expected_accept": true,
+      "mutated_state": false,
+      "name": "positive_simple_social_intent",
+      "passed": true,
+      "status": "INTERPRETED"
+    },
+    {
+      "accepted": true,
+      "errors": [],
+      "executed": false,
+      "expected_accept": true,
+      "mutated_state": false,
+      "name": "positive_unresolved_pronouns",
+      "passed": true,
+      "status": "CLARIFICATION_REQUIRED"
+    },
+    {
+      "accepted": true,
+      "errors": [],
+      "executed": false,
+      "expected_accept": true,
+      "mutated_state": false,
+      "name": "positive_multi_action",
+      "passed": true,
+      "status": "MULTI_ACTION"
+    },
+    {
+      "accepted": true,
+      "errors": [],
+      "executed": false,
+      "expected_accept": true,
+      "mutated_state": false,
+      "name": "positive_unsupported_mechanic",
+      "passed": true,
+      "status": "UNSUPPORTED_REQUEST"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: hit_points"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_direct_hp_assignment",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: world_flags"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_world_flags",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: npc_commitments"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_unauthorized_npc_commitment",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: hidden_facts"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_hidden_information",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: dice_result"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_fabricated_dice",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "referenced_entities[0].id is not canonical: invented_guard"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_invented_entity_id",
+      "passed": true,
+      "status": "INTERPRETED"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: resolver"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_unsupported_resolver",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "unknown fields are not allowed: execute_action"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_execution_request",
+      "passed": true,
+      "status": "ABSTAIN"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "ambiguous references may not be silently resolved"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_silent_ambiguous_guess",
+      "passed": true,
+      "status": "INTERPRETED"
+    },
+    {
+      "accepted": false,
+      "errors": [
+        "payload must be an object"
+      ],
+      "executed": false,
+      "expected_accept": false,
+      "mutated_state": false,
+      "name": "negative_malformed_output",
+      "passed": true,
+      "status": "ABSTAIN"
+    }
+  ]
+}

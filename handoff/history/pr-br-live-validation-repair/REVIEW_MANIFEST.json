@@ -1,0 +1,153 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "pr-br-live-validation-repair",
+  "campaign_name": "PR-BR Live-Validation Repair",
+  "generated_at": "2026-10-03T18:46:26.933035+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 7825,
+      "sha256": "4fff97ab536b0c233eb5be1bdf5f20ce421e54235cd9946d605d1980365f1b74"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "artifacts/pr_br_live_validation_repair/implementation_report.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/pr_br_live_validation_repair/implementation_report.md",
+      "bundle_path": "support/artifacts/pr_br_live_validation_repair/implementation_report.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 16324,
+      "sha256": "46c0b3ca52e22ef61c108f6df82c1cd491072417c2b7a4ca5a40c3d661b90756"
+    },
+    {
+      "path": "game/live_resolution.py",
+      "role": "production_code",
+      "why": "Existing-contract return now attaches or keeps the matching GMResolutionDecision.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/live_resolution.py",
+      "bundle_path": "support/game/live_resolution.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 37684,
+      "sha256": "941b818a516a3c64d5de9411d2bda3dcc18e719fecc55d1a2b5b4b9c3101496f"
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Predicate-scoped negation, multi-sentence fidelity, unknown qualifiers, derived denial, retry context, and observation fallback.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/gm_resolution_decision.py",
+      "bundle_path": "support/game/gm_resolution_decision.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 63896,
+      "sha256": "fd4118a0f72a86807e7555eb85d0390647e458be3749ea2db591baf2781e7d82"
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "production_code",
+      "why": "Retry feedback, bounded sentence preservation, decision review, and C18 seal.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/immutable_valid_response.py",
+      "bundle_path": "support/game/immutable_valid_response.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 58134,
+      "sha256": "a77d104f8541c55e47d7d888bfa952652d7bb6b378770137ed792638f9be85a2"
+    },
+    {
+      "path": "game/ordinary_semantic_ownership.py",
+      "role": "production_code",
+      "why": "Carried resolutions keep the matching decision, and a discarded contract drops its decision.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/ordinary_semantic_ownership.py",
+      "bundle_path": "support/game/ordinary_semantic_ownership.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 14164,
+      "sha256": "4d9200d81634ab99c6df280cda26e09e5ad88bc2f1941fe1c75c5dd66cb21900"
+    },
+    {
+      "path": "game/prompt_context.py",
+      "role": "production_code",
+      "why": "Narration payload includes the contract and the decision.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/prompt_context.py",
+      "bundle_path": "support/game/prompt_context.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 170485,
+      "sha256": "89553b2562c73a6296af7da96e38fd2fbb9b5152e67cace5f6dab0618b2438d8"
+    },
+    {
+      "path": "game/api.py",
+      "role": "production_code",
+      "why": "Procedural interpretation rebuild drops a stale decision with the discarded contract.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/api.py",
+      "bundle_path": "support/game/api.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 271960,
+      "sha256": "a9b89db849c423fa72ce9cd4ffbf95c8f1a232b9b93ed17295b7ef230ca22bc3"
+    },
+    {
+      "path": "tests/test_pr_br_live_validation_attachment_repair.py",
+      "role": "focused_tests",
+      "why": "Deterministic coverage of the four live failures, four live passes, attachment, retry, and bounded repair.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "tests/test_pr_br_live_validation_attachment_repair.py",
+      "bundle_path": "support/tests/test_pr_br_live_validation_attachment_repair.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 22110,
+      "sha256": "61d1b80e56247737fecc965e449f399a0fc06f1c5a608b1a045de2c01649931d"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 10,
+    "zip_size_bytes": "000000156133",
+    "uncompressed_payload_bytes": 662582,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "artifacts/pr_br_live_validation_repair/handoff_config.json",
+    "canonical_repository_root": "."
+  }
+}

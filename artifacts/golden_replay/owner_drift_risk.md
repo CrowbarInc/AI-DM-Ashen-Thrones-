@@ -2,8 +2,8 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-06-06T00:00:00Z`
-- Total risk signals: `2`
+- Command: `C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pytest\__main__.py -m golden_replay -q --tb=short -o addopts=--basetemp=development/tmp/maintenance_golden --junitxml=development/tmp/github_checkpoint/golden_after.xml`
+- Total risk signals: `3`
 
 ## High Risk Drift
 
@@ -11,34 +11,36 @@ No drift risk signals in this band.
 
 ## Medium Risk Drift
 
-- `selected_speaker_id` (source=`protected`, frequency=`1`, trend=`up`)
-- `speaker_drift` (source=`protected`, frequency=`1`, trend=`up`)
+- `game/output_sanitizer.py` (source=`protected`, frequency=`1`, trend=`stable`)
+- `scaffold_leakage` (source=`protected`, frequency=`1`, trend=`stable`)
 
 ## Low Risk Drift
 
-No drift risk signals in this band.
+- `semantic_drift` (source=`supporting`, frequency=`1`, trend=`stable`)
 
 ## Top Risk Fields
 
 | Rank | Item | Risk |
 |---:|---|---|
-| 1 | `selected_speaker_id` | `medium` |
+| 1 | `scaffold_leakage` | `medium` |
 
 ## Top Risk Owners
 
 | Rank | Item | Risk |
 |---:|---|---|
-| 1 | `speaker_drift` | `medium` |
+| 1 | `semantic_drift` | `low` |
 
 ## Top Risk Investigation Targets
 
-No drift risk signals recorded.
+| Rank | Item | Risk |
+|---:|---|---|
+| 1 | `game/output_sanitizer.py` | `medium` |
 
 ## Recommended Investigation Order
 
 | Rank | Item | Risk |
 |---:|---|---|
-| 1 | `selected_speaker_id` | `medium` |
+| 1 | `game/output_sanitizer.py` | `medium` |
 
 ## Stability Ownership
 

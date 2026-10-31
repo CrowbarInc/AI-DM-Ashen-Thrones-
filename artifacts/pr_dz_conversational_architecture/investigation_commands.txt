@@ -1,0 +1,26 @@
+Get-Content -LiteralPath 'C:\Users\Master Mandalcio\.codex\attachments\5f07fff4-2204-469c-bef1-d429f6e3706a\Pasted text.txt'
+Get-ChildItem -Force
+git status --short
+rg --files
+rg -n "@app\.|def (start|chat|turn|api|handle|submit|new|reset)|Flask|FastAPI|route\(" game run.py static tests -g "*.py" -g "*.js" -g "*.html"
+rg -n "Interpret|interpret|Intent|intent|operation|Action|action|target|clarif|question|ask|social|dialogue|conversation|mode|OOC|IC" game tests -g "*.py"
+rg -n "provider|OpenAI|chat\.completions|responses|model|retry|repair|validate|narrat|prompt|token|budget" game tests tools artifacts/pr_dy_live_gameplay artifacts/pr_dw_interactive_playtest artifacts/pr_dx_mode_boundary artifacts/pr_du_player_pipeline -g "*.py" -g "*.md" -g "*.json"
+Get-Content -LiteralPath 'static\app.js' | Select-Object -Skip 560 -First 80
+Get-Content -LiteralPath 'game\api.py' | Select-Object -Skip 5800 -First 380
+Get-Content -LiteralPath 'game\api.py' | Select-Object -Skip 6160 -First 470
+Get-Content -LiteralPath 'game\live_chat_interpretation.py' | Select-Object -Skip 0 -First 410
+Get-Content -LiteralPath 'game\player_interpretation_bridge.py' | Select-Object -Skip 0 -First 320
+Get-Content -LiteralPath 'game\ordinary_semantic_ownership.py' | Select-Object -Skip 0 -First 360
+Get-Content -LiteralPath 'game\interaction_routing.py' | Select-Object -Skip 340 -First 360
+Get-Content -LiteralPath 'game\prompt_context.py' | Select-Object -Skip 0 -First 360
+Get-Content -LiteralPath 'game\conversational_memory_window.py' | Select-Object -Skip 0 -First 240
+Get-Content -LiteralPath 'game\api.py' | Select-Object -Skip 2750 -First 250
+Get-Content -LiteralPath 'game\api.py' | Select-Object -Skip 3240 -First 330
+Get-Content -LiteralPath 'game\gm.py' | Select-Object -Skip 4990 -First 250
+Get-Content -LiteralPath 'game\provider_budget.py' | Select-Object -Skip 0 -First 260
+Get-Content -LiteralPath 'artifacts\pr_dy_live_gameplay\PR-DY_regression_results.md'
+Get-Content -LiteralPath 'artifacts\pr_dy_live_gameplay\raw_live_responses.json' | Select-Object -Skip 0 -First 260
+Get-Content -LiteralPath 'data\session_log.jsonl' -Tail 80
+Get-Content -LiteralPath 'data\session.json' | Select-Object -Skip 0 -First 220
+Get-Content -LiteralPath 'data\scenes\frontier_gate.json' | Select-Object -Skip 0 -First 220
+Get-Content -LiteralPath 'data\world.json' | Select-Object -Skip 0 -First 220

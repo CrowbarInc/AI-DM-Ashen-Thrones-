@@ -1,0 +1,28 @@
+game\api_upstream_preflight.py:1:"""Tiny upstream OpenAI health probe using the same Responses API path as ``call_gpt``.
+game\api_upstream_preflight.py:37:# OpenAI Responses API requires max_output_tokens >= 16; lower values fail validation locally.
+game\api_upstream_preflight.py:210:    from openai import OpenAI
+game\api_upstream_preflight.py:213:    return OpenAI(api_key=api_key, **sdk_retry_options())
+game\api_upstream_preflight.py:223:    """Perform a minimal ``responses.create`` probe; store and return canonical status.
+game\api_upstream_preflight.py:248:        attempt.dispatch(client.responses.create,
+game\api.py:2674:# Hard ceiling on OpenAI calls for one manual-play narration turn (initial + upstream retry + content retries).
+game\config.py:53:    """Return the OpenAI API key, requiring it only at upstream-call time."""
+game\expressive_dialogue.py:811:    from openai import OpenAI
+game\expressive_dialogue.py:818:        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+game\expressive_dialogue.py:819:        response = attempt.dispatch(client.responses.create,
+game\gm.py:5066:    # Wrap the OpenAI call so network/API/model errors do not crash gameplay.
+game\gm.py:5197:        from openai import OpenAI
+game\gm.py:5199:        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+game\gm.py:5217:        resp = attempt.dispatch(client.responses.create, **create_kwargs)
+game\host_constrained_candidates.py:692:    from openai import OpenAI
+game\host_constrained_candidates.py:727:    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+game\host_constrained_candidates.py:728:    response = attempt.dispatch(client.responses.create,
+game\live_chat_interpretation.py:235:    from openai import OpenAI
+game\live_chat_interpretation.py:244:        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+game\live_chat_interpretation.py:245:        response = attempt.dispatch(client.responses.create,
+game\provider_budget.py:56:    return {"max_retries": 0} if _truthy("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES") else {}
+game\semantic_interpreter.py:218:    from openai import OpenAI
+game\semantic_interpreter.py:227:    client = OpenAI(api_key=get_openai_api_key(), **sdk_retry_options())
+game\semantic_interpreter.py:228:    response = attempt.dispatch(client.responses.create,
+game\unified_semantic_planning.py:461:    from openai import OpenAI
+game\unified_semantic_planning.py:488:    client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds(), **sdk_retry_options())
+game\unified_semantic_planning.py:489:    response = attempt.dispatch(client.responses.create,

@@ -1,0 +1,44 @@
+[
+  {
+    "purpose": "primary_turn",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_text": "Rain spatters against soot-dark stone beneath frayed banners fluttering above Cinderwatch's eastern gate. The muddy approach is clogged with refugees, wagons, and travelers, shuffling forward under the watchful eyes of guards holding a tight choke. A ragged figure in threadbare clothes stands motionless at the edge of the crowd, their gaze flicking from packs to faces more keenly than the line itself. Nearby, a tavern runner calls out above the murmur, hawking hot stew and whispered rumors for coin. Against the backdrop of damp grit and restless movement, a notice board displays fresh postings: new taxes, curfew rules, and a stark warning about a missing patrol. The scene is thick with guarded tension, authority's quiet pressure pressing upon the gathered masses at the gate."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_text": "The ragged stranger's gaze flickers up from the muddy crowd, eyes wary but attentive. They reply in a low voice, \"I’ve come from the eastern roads, where the ash clouds choke the sky and caravans are delayed by constant patrols and census checks. Few bring good news—there’s talk of missing patrols and tighter controls. As for this gate, it’s swollen with anxious travelers and refugees all trying to slip through before the curfew tightens.\" Their expression tightens at the mention of the missing patrol, but they do not elaborate further. You catch a glimpse of unease beneath their cautious words."
+  },
+  {
+    "purpose": "retry_escalation",
+    "retry_attempt": 1,
+    "retry_reason": "hard_invalid",
+    "model_player_facing_text": "The ragged stranger glances up briefly beneath a tangled mess of damp hair, eyes wary but tired. They say in a low, gravelly voice, \"This gate brings all manners of folk these days—refugees fleeing ash and war, merchants squeezed tight by taxes, and soldiers stretched thin. Foul weather or no, needs must we move. As for news, the talk’s all about the missing patrol they posted on the board; folks are uneasy, wondering what dark trouble lurks beyond the mud tracks.\" \n\nNearby, the crowd stirs with nervous murmurs, eyes flicking toward the notice board where the missing patrol’s warning hangs stark against the damp wood. \n\n{\n  \"player_facing_text\": \"The ragged stranger glances up briefly beneath a tangled mess of damp hair, eyes wary but tired. They say in a low, gravelly voice, \\\"This gate brings all manners of folk these days—refugees fleeing ash and war, merchants squeezed tight by taxes, and soldiers stretched thin. Foul weather or no, needs must we move. As for news, the talk’s all about the missing patrol they posted on the board; folks are uneasy, wondering what dark trouble lurks beyond the mud tracks.\\\" Nearby, the crowd stirs with nervous murmurs, eyes flicking toward the notice board where the missing patrol’s warning hangs stark against the damp wood.\",\n  \"tags\": [\"scene_momentum:new_information\"],\n  \"improvisation_proposals\": [\n    {\n      \"kind\": \"incidental_fact\",\n      \"category\": \"mannerism\",\n      \"content\": \"The ragged stranger speaks in a voice roughened by cold and hardship, their eyes darting anxiously to the notice board now and then.\",\n      \"scope\": \"turn\",\n      \"consequence_level\": \"incidental\",\n      \"source\": \"observation\",\n      \"speaker_id\": \"refugee\",\n      \"epistemic_status\": \"known\"\n    }\n  ],\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Response aligns with resolution contract and avoids inventing posted facts or changing interlocutor.\"\n}"
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_text": "\"From what I've heard,\" the tavern runner says, glancing toward the muddy crates nearby, \"the patrol vanished somewhere near those muddy footprints to the northwest, just past the crates. No one’s seen them since.\" They lower their voice slightly. \"Places like that aren’t safe for travelers, but you might find shelter further into the city or perhaps ask the guards at the old milestone. Food and a roof over your head come with a price, though.\""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_text": "\"I can't say for sure whether the guards at the old milestone expect payment or are helpful,\" the tavern runner replies cautiously, wiping rain from their brow. \"Rumor has it that place is less welcoming these days, so it might be best to proceed carefully if you head that way. As for the city harbor, it's said to be busier and better guarded during storms, which could make it safer for shelter, but that also means crowds and trouble can gather there. You might want to check with the guard captain inside the city for more detailed advice.\""
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_text": "You ask one of the guards at the gate, addressing them as Captain, for directions to shelter and food within the city, citing the brewing storm and concerns about the missing patrol. The guard, a sturdy figure clad in rain-dampened armor, glances over the crowded gate area before responding in a cautious tone. \"Shelter and food are scarce near the gate itself, but you might find what you're looking for deeper inside Cinderwatch—try the Market Quarter. The taverns and inns there offer refuge from the storm, though the crowds can be thick during weather like this. As for the missing patrol, keep your wits about you.\" Their cautious expression suggests unease beyond the usual gate duties, but they offer no more details. You now have a clear direction to seek shelter and sustenance in the city's Market Quarter, though the journey inward may hold its own challenges."
+  },
+  {
+    "purpose": "strict_social",
+    "retry_attempt": 0,
+    "retry_reason": null,
+    "model_player_facing_text": "You nod politely to the guard captain and begin maneuvering through the bustling, rain-slicked crowd pressing inward from the muddy outskirts of the Cinderwatch Gate District. Brightly colored awnings and the distant clatter of merchant carts mark your path as you strive toward the Market Quarter. Your gaze sweeps the crowd—seeking any familiar face or hint of trouble among the throng of travelers, refugees, and watchful city folk gathered under the drumming rain."
+  }
+]

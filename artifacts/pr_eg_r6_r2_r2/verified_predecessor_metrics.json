@@ -1,0 +1,204 @@
+{
+  "method": "Implementing-agent local audit after final-code freeze. Explicit index annotations and structural checks; not independent human assessment. No scoring calls and no production tuning after holdouts.",
+  "primary": {
+    "correction": {
+      "count": 7,
+      "denominator": 13,
+      "rate": 0.5384615384615384
+    },
+    "follow_up": {
+      "count": 18,
+      "denominator": 28,
+      "rate": 0.6428571428571429
+    },
+    "referent_binding": {
+      "count": 25,
+      "denominator": 41,
+      "rate": 0.6097560975609756
+    },
+    "active_focus": {
+      "count": 111,
+      "denominator": 120,
+      "rate": 0.925
+    },
+    "entity_roles": {
+      "count": 92,
+      "denominator": 120,
+      "rate": 0.7666666666666667
+    },
+    "false_clarification": {
+      "count": 22,
+      "denominator": 120,
+      "rate": 0.18333333333333332
+    },
+    "genuine_clarification": {
+      "count": 4,
+      "denominator": 6,
+      "rate": 0.6666666666666666
+    },
+    "relevance": {
+      "count": 95,
+      "denominator": 120,
+      "rate": 0.7916666666666666
+    },
+    "sufficiency": {
+      "count": 92,
+      "denominator": 120,
+      "rate": 0.7666666666666667
+    },
+    "quality_mean": 1.575,
+    "playability_mean": 1.575,
+    "turns": 120
+  },
+  "excluding_repeated_original_padding": {
+    "correction": {
+      "count": 7,
+      "denominator": 13,
+      "rate": 0.5384615384615384
+    },
+    "follow_up": {
+      "count": 18,
+      "denominator": 28,
+      "rate": 0.6428571428571429
+    },
+    "referent_binding": {
+      "count": 25,
+      "denominator": 41,
+      "rate": 0.6097560975609756
+    },
+    "active_focus": {
+      "count": 93,
+      "denominator": 102,
+      "rate": 0.9117647058823529
+    },
+    "entity_roles": {
+      "count": 77,
+      "denominator": 102,
+      "rate": 0.7549019607843137
+    },
+    "false_clarification": {
+      "count": 11,
+      "denominator": 102,
+      "rate": 0.10784313725490197
+    },
+    "genuine_clarification": {
+      "count": 4,
+      "denominator": 6,
+      "rate": 0.6666666666666666
+    },
+    "relevance": {
+      "count": 88,
+      "denominator": 102,
+      "rate": 0.8627450980392157
+    },
+    "sufficiency": {
+      "count": 85,
+      "denominator": 102,
+      "rate": 0.8333333333333334
+    },
+    "quality_mean": 1.7156862745098038,
+    "playability_mean": 1.7156862745098038,
+    "turns": 102
+  },
+  "matched_baseline": {
+    "correction": {
+      "count": 0,
+      "denominator": 4,
+      "rate": 0.0
+    },
+    "follow_up": {
+      "count": 0,
+      "denominator": 10,
+      "rate": 0.0
+    },
+    "referent_binding": {
+      "count": 0,
+      "denominator": 14,
+      "rate": 0.0
+    },
+    "active_focus": {
+      "count": 0,
+      "denominator": 0,
+      "rate": null
+    },
+    "entity_roles": {
+      "count": 13,
+      "denominator": 30,
+      "rate": 0.43333333333333335
+    },
+    "false_clarification": {
+      "count": 16,
+      "denominator": 30,
+      "rate": 0.5333333333333333
+    },
+    "genuine_clarification": {
+      "count": 1,
+      "denominator": 1,
+      "rate": 1.0
+    },
+    "relevance": {
+      "count": 14,
+      "denominator": 30,
+      "rate": 0.4666666666666667
+    },
+    "sufficiency": {
+      "count": 14,
+      "denominator": 30,
+      "rate": 0.4666666666666667
+    },
+    "quality_mean": 0.9333333333333333,
+    "playability_mean": 0.9333333333333333,
+    "turns": 30
+  },
+  "matched_final": {
+    "correction": {
+      "count": 2,
+      "denominator": 4,
+      "rate": 0.5
+    },
+    "follow_up": {
+      "count": 7,
+      "denominator": 10,
+      "rate": 0.7
+    },
+    "referent_binding": {
+      "count": 9,
+      "denominator": 14,
+      "rate": 0.6428571428571429
+    },
+    "active_focus": {
+      "count": 28,
+      "denominator": 30,
+      "rate": 0.9333333333333333
+    },
+    "entity_roles": {
+      "count": 24,
+      "denominator": 30,
+      "rate": 0.8
+    },
+    "false_clarification": {
+      "count": 4,
+      "denominator": 30,
+      "rate": 0.13333333333333333
+    },
+    "genuine_clarification": {
+      "count": 1,
+      "denominator": 1,
+      "rate": 1.0
+    },
+    "relevance": {
+      "count": 25,
+      "denominator": 30,
+      "rate": 0.8333333333333334
+    },
+    "sufficiency": {
+      "count": 23,
+      "denominator": 30,
+      "rate": 0.7666666666666667
+    },
+    "quality_mean": 1.6333333333333333,
+    "playability_mean": 1.6333333333333333,
+    "turns": 30
+  },
+  "limits": "Entity-role score checks recorded binary proposition slots and named roles, not unrestricted semantic correctness. Binding scores include semantic operation correctness and answer suitability. Focus score includes failed correction/new-question acquisition; safe rejection can retain old focus while failing intent. Source sufficiency/expected frozen labels remain independently inspectable."
+}

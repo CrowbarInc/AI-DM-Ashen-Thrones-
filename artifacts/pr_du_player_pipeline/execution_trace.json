@@ -1,0 +1,23 @@
+{
+  "pr": "PR-DU",
+  "mode": "PRODUCTION-PATH INTEGRATION",
+  "live_provider_calls": 0,
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "entry_point": "game.api.chat behind POST /api/chat",
+  "decision": "A - PRODUCTION-PATH SLICE COMPLETE",
+  "tests": [
+    {"name": "focused_pr_du", "result": "3 passed"},
+    {"name": "pr_du_plus_pr_dq_dr_ds", "result": "45 passed"},
+    {"name": "broader_authority_conversation_batch", "result": "inconclusive_interrupted_no_output"},
+    {"name": "fastapi_testclient_transport", "result": "inconclusive_socketpair_portal_hang_before_route"}
+  ],
+  "turns": [
+    {"input": "Let me get a better look at the lantern beside the gate.", "kind": "gameplay", "executed": true, "resolver": "exploration"},
+    {"input": "OOC: I was only asking about the lantern's appearance.", "kind": "ooc", "executed": false, "resolver": null},
+    {"input": "Sergeant Mara, is the road on the other side of this gate?", "kind": "gameplay", "executed": true, "resolver": "social"},
+    {"input": "I'll head out through the gate.", "kind": "gameplay", "executed": true, "resolver": "exploration_scene_transition"},
+    {"input": "Let me read the notice board.", "kind": "gameplay", "executed": true, "resolver": "exploration"}
+  ],
+  "final_state": {"active_scene_id": "waystation_street", "turn_counter": 4, "time_pressure": 4, "notice_board_resolved": true},
+  "production_saves_used": false
+}

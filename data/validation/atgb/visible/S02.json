@@ -1,0 +1,114 @@
+{
+  "scenario_id": "S02",
+  "title": "The notices",
+  "catalog_heading": "S02 — The notices",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "development_visible",
+  "catalog_partition": "development-visible",
+  "evidence_status": "development_visible",
+  "evidence_status_note": "Developers may open this conversation while diagnosing a failure.",
+  "primary_capability": "response_relevance",
+  "secondary_capabilities": ["intent_recognition", "corrections_and_clarifications", "conversational_continuity", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. The board has not been read.",
+  "authoritative_facts": [
+    "The board lists taxes, curfew rules, and a missing-patrol warning. Hours are not authored.",
+    "Investigating the notice board may reveal notice_patrol_route.",
+    "S02.2 is the distinction between a true nearby fact and an answer."
+  ],
+  "npc_knowledge": [
+    "The board is an object. An NPC who has not been given the clue does not gain it by standing nearby.",
+    "The runner's rumor is a different sentence and is not a substitute for the posted warning."
+  ],
+  "expected_outcomes": [
+    "The read reports the posted categories.",
+    "The hour question does not become the patrol answer.",
+    "The correction keeps the hour question.",
+    "The later question recalls the posted last-seen line."
+  ],
+  "acceptable_variations": [
+    "If the investigation reveals the northwest track, the read may include it.",
+    "If the read only lists the three posted categories, that is also a successful read.",
+    "The hour question is successful only as uncertainty or as a statement that the hours are not posted."
+  ],
+  "unacceptable_behaviors": [
+    "Dusk-until-dawn, a fine, bandits, a statute number, or answering S02.2 or S02.3 with the crate track."
+  ],
+  "required_evidence": [
+    "Shared packet, plus whether notice_patrol_route entered discovered clues, and on which turn."
+  ],
+  "setup_dependencies": [
+    "Content questions about the board have historically missed investigation and been narrated freely. The benchmark records that outcome. It does not require a new board owner in order to score."
+  ],
+  "determinism": "mixed",
+  "turns": [
+    {
+      "turn_id": "S02.1",
+      "catalog_heading": "S02.1 — primary: intent recognition",
+      "primary_capability": "intent_recognition",
+      "player_input": "I read the notices.",
+      "communicative_act": "Investigate or read the notice board, not a social question to the runner.",
+      "interpretation_pass": "Investigate or read the notice board, not a social question to the runner.",
+      "response_pass": "Taxes, curfew rules, and a missing-patrol warning, or the revealed route clue plus those categories.",
+      "authority_pass": "No hours, fines, or causes that are not in the clue text. Revealing notice_patrol_route on this investigation is authorized. Revealing a hidden fact is not.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Whether notice_patrol_route entered discovered clues on this turn."]
+    },
+    {
+      "turn_id": "S02.2",
+      "catalog_heading": "S02.2 — primary: response relevance",
+      "primary_capability": "response_relevance",
+      "player_input": "When does the curfew start?",
+      "communicative_act": "A time question about the curfew.",
+      "interpretation_pass": "A time question about the curfew.",
+      "response_pass": "The start time is not known or not posted. The player is not handed a different fact in its place. An accurate patrol sentence on this turn fails response, and if it is presented as the curfew answer it stays a response failure even when the sentence itself is owned.",
+      "authority_pass": "No clock hour and no penalty.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Dusk-until-dawn, a fine, or the crate track as the curfew answer."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the reply still knows the player is asking about the board they just read. lost if it switches speaker and topic without reason.",
+      "required_evidence": ["Shared packet."]
+    },
+    {
+      "turn_id": "S02.3",
+      "catalog_heading": "S02.3 — primary: corrections and clarifications",
+      "primary_capability": "corrections_and_clarifications",
+      "player_input": "I wasn't asking where the patrol went. I asked when it starts.",
+      "communicative_act": "Correction of S02.2.",
+      "interpretation_pass": "Correction of S02.2.",
+      "response_pass": "Returns to the start time and keeps the uncertainty. It does not repeat the route as the answer.",
+      "authority_pass": "Still no invented hour.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Repeating the route as the answer."],
+      "clarification_expected": "none",
+      "clarification_notes": "The player has already clarified.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved when the hour question survives. lost when the route replaces it again.",
+      "required_evidence": ["Shared packet."]
+    },
+    {
+      "turn_id": "S02.4",
+      "catalog_heading": "S02.4 — primary: conversational continuity",
+      "primary_capability": "conversational_continuity",
+      "player_input": "All right. What did the warning say about where they were last seen?",
+      "communicative_act": "Recall of the posted warning from S02.1, after the curfew detour, not a new rumor request.",
+      "interpretation_pass": "Recall of the posted warning, not a new rumor request.",
+      "response_pass": "The northwest mud track past the crates, if that clue was revealed in S02.1. If S02.1 never revealed it, the reply says the warning names a missing patrol and does not add a place, or it investigates now and then reports the clue.",
+      "authority_pass": "The place comes from notice_patrol_route or is withheld. The runner's footprint sentence is not quoted as the notice.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Quoting the runner's footprint sentence as the notice."],
+      "clarification_expected": "none",
+      "clarification_notes": "none, unless S02.1 produced no warning at all, in which case one question naming the notice or someone in the crowd is necessary_pass.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved only if the notice from S02.1 is the referent. lost if the referent becomes the runner or an empty denial after the clue was already delivered. This turn must remember the notice read, which is earlier than the previous sentence.",
+      "required_evidence": ["Shared packet and whether the clue was already discovered."]
+    }
+  ]
+}

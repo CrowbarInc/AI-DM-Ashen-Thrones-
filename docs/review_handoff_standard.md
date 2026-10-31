@@ -56,6 +56,26 @@ broader, full-suite, and runtime/model evidence are not collapsed into one PASS 
 and pre-existing failures remain distinct. The decision section always exists and states explicitly
 when no human decision is required.
 
+When the campaign investigated a significant failure or claims a repair, the summary keeps these facts
+distinct, using the sections already defined above. Do not add a report, and do not add generator
+fields, for distinctions those sections can already carry:
+
+- implementation outcome;
+- the original reproduction;
+- related generalization;
+- independent generalization, when it was evaluated;
+- regression scope and result;
+- Ashen Thrones Gameplay Benchmark results, when a benchmark was run;
+- known limitations;
+- remaining uncertainty;
+- failure class, when Failure Investigation in `docs/DEVELOPMENT_CONSTITUTION.md` applies.
+
+A reproduced repair is not described as a generalized solution. Related variations authored alongside
+the implementation are not described as independent held-out evidence. A green implementation test is
+not described as improved gameplay. No Ashen Thrones Gameplay Benchmark result is reported unless the
+Ashen Thrones Gameplay Benchmark section of `docs/validation_evidence_standard.md` was actually used.
+A routine repair that does not claim those distinctions does not need placeholder lines for them.
+
 ## Bundle and manifest
 
 `CURRENT_REVIEW.zip` contains the summary, `REVIEW_MANIFEST.json`, and selected support files under

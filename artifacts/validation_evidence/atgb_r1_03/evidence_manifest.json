@@ -1,0 +1,606 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "controlled_live_attempts",
+  "campaign": {
+    "campaign_id": "atgb_r1_03",
+    "what_was_tested": "Original S08.2, independent repeat, specified paraphrase and pending-action control attempt.",
+    "runtime_path": "game.api.chat(ChatRequest); production live interpretation and emission; direct callable, not HTTP.",
+    "gm_boundary": "Actual provider calls for L1-L3; L4 invalid disabled interpretation.",
+    "player_input_mode": "Fixed authorized existing inputs; no exploratory scenarios.",
+    "run_count": 4,
+    "turn_count": 4,
+    "automated_conclusion": "D inconclusive: two provider failures, one inadequate live paraphrase, one invalid mutated control."
+  },
+  "claim_types": [
+    "runtime_evidence",
+    "semantic_behavioral_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "L1",
+      "scenario_run_id": "L1",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Exact authorized controlled correction or existing frozen pending-ASK control; no simulated model response.",
+      "prior_player_context": "What's in front of me right now?",
+      "prior_gm_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "historical_result": "Original S08.2 mechanical misrouting; provisional AI-assisted FAIL, not authenticated human review.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "routing": {
+          "status": "INDETERMINATE"
+        },
+        "interpretation": {
+          "status": "INDETERMINATE"
+        },
+        "evidence_selection": {
+          "status": "INDETERMINATE"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "trial": "L1",
+        "player_input": "I meant the people, not the weather.",
+        "final_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "application_admissions": 1,
+        "dispatched": 1,
+        "completed_provider_responses": 0,
+        "failed_dispatches": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "end_to_end_ms": 1781.25,
+        "estimated_cost": null,
+        "routing": "INDETERMINATE",
+        "interpretation": "INDETERMINATE",
+        "evidence_selection": "INDETERMINATE",
+        "response_adequacy": "FAIL",
+        "authority": "PASS",
+        "authority_scope": "Exact attempted isolated execution only; not broad assurance.",
+        "changed_domains": [
+          "log"
+        ],
+        "session_changed_keys": [],
+        "world_changed_keys": [],
+        "pending_intentions": {
+          "pending_intention": {
+            "before": null,
+            "after": null
+          },
+          "pending_clarification": {
+            "before": null,
+            "after": null
+          },
+          "last_executed_intention": {
+            "before": null,
+            "after": null
+          }
+        },
+        "turn_counter_before": 0,
+        "turn_counter_after": 0,
+        "clocks_before": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "clocks_after": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "trace_functions": [
+          "public_conversation_evidence",
+          "request_interpretation",
+          "interpret_production_turn"
+        ],
+        "note": "Provider failure before model interpretation: APIConnectionError. Host fallback inadequate for the request; not evidence of a conversational model defect."
+      },
+      "automated_evaluation": {
+        "method": "AI-assisted independent six-dimension assessment over retained traces; no gameplay scorer."
+      },
+      "runtime_validity": "INCOMPLETE provider failure",
+      "final_emission_metadata": {
+        "source": "artifacts/atgb/atgb_r1_03/L1/response.json"
+      },
+      "continuation_action": "Stop; no retry or next pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_03/L1/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; AI-assisted assessment only."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null
+    },
+    {
+      "example_id": "L2",
+      "scenario_run_id": "L2",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Exact authorized controlled correction or existing frozen pending-ASK control; no simulated model response.",
+      "prior_player_context": "What's in front of me right now?",
+      "prior_gm_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "I couldn't interpret that just now, so no gameplay action was taken.",
+      "historical_result": "Original S08.2 mechanical misrouting; provisional AI-assisted FAIL, not authenticated human review.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "routing": {
+          "status": "INDETERMINATE"
+        },
+        "interpretation": {
+          "status": "INDETERMINATE"
+        },
+        "evidence_selection": {
+          "status": "INDETERMINATE"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "trial": "L2",
+        "player_input": "I meant the people, not the weather.",
+        "final_response": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "application_admissions": 1,
+        "dispatched": 1,
+        "completed_provider_responses": 0,
+        "failed_dispatches": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "end_to_end_ms": 7471.197,
+        "estimated_cost": null,
+        "routing": "INDETERMINATE",
+        "interpretation": "INDETERMINATE",
+        "evidence_selection": "INDETERMINATE",
+        "response_adequacy": "FAIL",
+        "authority": "PASS",
+        "authority_scope": "Exact attempted isolated execution only; not broad assurance.",
+        "changed_domains": [
+          "log"
+        ],
+        "session_changed_keys": [],
+        "world_changed_keys": [],
+        "pending_intentions": {
+          "pending_intention": {
+            "before": null,
+            "after": null
+          },
+          "pending_clarification": {
+            "before": null,
+            "after": null
+          },
+          "last_executed_intention": {
+            "before": null,
+            "after": null
+          }
+        },
+        "turn_counter_before": 0,
+        "turn_counter_after": 0,
+        "clocks_before": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "clocks_after": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "trace_functions": [
+          "public_conversation_evidence",
+          "request_interpretation",
+          "interpret_production_turn"
+        ],
+        "note": "Provider failure before model interpretation: InternalServerError. Host fallback inadequate for the request; not evidence of a conversational model defect."
+      },
+      "automated_evaluation": {
+        "method": "AI-assisted independent six-dimension assessment over retained traces; no gameplay scorer."
+      },
+      "runtime_validity": "INCOMPLETE provider failure",
+      "final_emission_metadata": {
+        "source": "artifacts/atgb/atgb_r1_03/L2/response.json"
+      },
+      "continuation_action": "Stop; no retry or next pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_03/L2/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; AI-assisted assessment only."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null
+    },
+    {
+      "example_id": "L3",
+      "scenario_run_id": "L3",
+      "turn_index": 2,
+      "player_input": "No, I was asking about the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Exact authorized controlled correction or existing frozen pending-ASK control; no simulated model response.",
+      "prior_player_context": "What's in front of me right now?",
+      "prior_gm_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Do you want a description of the people present at the gate district instead of the weather?",
+      "historical_result": "Original S08.2 mechanical misrouting; provisional AI-assisted FAIL, not authenticated human review.",
+      "semantic_result": "FAIL",
+      "mandatory_gates": {
+        "routing": {
+          "status": "INDETERMINATE"
+        },
+        "interpretation": {
+          "status": "PASS (correct subject; unnecessary clarification posture)"
+        },
+        "evidence_selection": {
+          "status": "FAIL"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "trial": "L3",
+        "player_input": "No, I was asking about the people, not the weather.",
+        "final_response": "Do you want a description of the people present at the gate district instead of the weather?",
+        "application_admissions": 1,
+        "dispatched": 1,
+        "completed_provider_responses": 1,
+        "failed_dispatches": 0,
+        "input_tokens": 2008,
+        "output_tokens": 212,
+        "total_tokens": 2220,
+        "end_to_end_ms": 3459.428,
+        "estimated_cost": null,
+        "routing": "INDETERMINATE",
+        "interpretation": "PASS (correct subject; unnecessary clarification posture)",
+        "evidence_selection": "FAIL",
+        "response_adequacy": "FAIL",
+        "authority": "PASS",
+        "authority_scope": "Exact attempted isolated execution only; not broad assurance.",
+        "changed_domains": [
+          "session",
+          "log"
+        ],
+        "session_changed_keys": [
+          "conversational_context",
+          "last_saved_at"
+        ],
+        "world_changed_keys": [],
+        "pending_intentions": {
+          "pending_intention": {
+            "before": null,
+            "after": null
+          },
+          "pending_clarification": {
+            "before": null,
+            "after": null
+          },
+          "last_executed_intention": {
+            "before": null,
+            "after": null
+          }
+        },
+        "turn_counter_before": 0,
+        "turn_counter_after": 0,
+        "clocks_before": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "clocks_after": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "trace_functions": [
+          "public_conversation_evidence",
+          "request_interpretation",
+          "interpret_production_turn",
+          "_pending_revision_decision",
+          "_communication_decision",
+          "decision_from_interpretation_record",
+          "_nonmutating_conversational_decision_response"
+        ],
+        "note": "GM/CLARIFICATION, evidence_refs=[], no unresolved references. Bridge NEEDS_CLARIFICATION stops before revision gate. No mechanical misrouting observed, but repaired seam not exercised."
+      },
+      "automated_evaluation": {
+        "method": "AI-assisted independent six-dimension assessment over retained traces; no gameplay scorer."
+      },
+      "runtime_validity": "VALID live completed paraphrase",
+      "final_emission_metadata": {
+        "source": "artifacts/atgb/atgb_r1_03/L3/response.json"
+      },
+      "continuation_action": "Stop; no retry or next pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_03/L3/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; AI-assisted assessment only."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null
+    },
+    {
+      "example_id": "L4",
+      "scenario_run_id": "L4",
+      "turn_index": 1,
+      "player_input": "Instead, make that a question about the lamp.",
+      "player_input_classification": [
+        "synthetic_positive_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Exact authorized controlled correction or existing frozen pending-ASK control; no simulated model response.",
+      "prior_player_context": "Frozen pending ambiguous ASK fixture.",
+      "prior_gm_context": "No historical spoken exchange supplied by fixture.",
+      "exact_gm_output": "The action was resolved, but live narration was not requested because it would exceed the provider budget.",
+      "historical_result": "Frozen correction_pending expects revision without execution; this live control setup was invalid.",
+      "semantic_result": "INVALID_RUN",
+      "mandatory_gates": {
+        "routing": {
+          "status": "FAIL in disabled-interpretation fallback; live control INDETERMINATE"
+        },
+        "interpretation": {
+          "status": "INDETERMINATE (no model interpretation)"
+        },
+        "evidence_selection": {
+          "status": "INDETERMINATE (no live selection)"
+        },
+        "response_adequacy": {
+          "status": "FAIL"
+        },
+        "authority": {
+          "status": "FAIL (invalid live-control setup)"
+        }
+      },
+      "diagnostic_result": {
+        "trial": "L4",
+        "player_input": "Instead, make that a question about the lamp.",
+        "final_response": "The action was resolved, but live narration was not requested because it would exceed the provider budget.",
+        "application_admissions": 0,
+        "dispatched": 0,
+        "completed_provider_responses": 0,
+        "failed_dispatches": 0,
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "total_tokens": 0,
+        "end_to_end_ms": 406.866,
+        "estimated_cost": null,
+        "routing": "FAIL in disabled-interpretation fallback; live control INDETERMINATE",
+        "interpretation": "INDETERMINATE (no model interpretation)",
+        "evidence_selection": "INDETERMINATE (no live selection)",
+        "response_adequacy": "FAIL",
+        "authority": "FAIL (invalid live-control setup)",
+        "authority_scope": "Exact attempted isolated execution only; not broad assurance.",
+        "changed_domains": [
+          "session",
+          "world",
+          "log"
+        ],
+        "session_changed_keys": [
+          "_runtime_canonical_ctir_stamp_v1",
+          "_runtime_canonical_ctir_v1",
+          "_runtime_narration_plan_bundle_stamp_v1",
+          "_runtime_narration_plan_bundle_v1",
+          "_runtime_progression_nodes_fingerprint_v1",
+          "bounded_improvisation",
+          "character_name",
+          "clocks",
+          "conversational_context",
+          "debug_traces",
+          "discourse_focus",
+          "emergent_actor_debug",
+          "interaction_context",
+          "interpretation_telemetry",
+          "last_action_debug",
+          "last_bounded_improvisation_promotion",
+          "last_saved_at",
+          "last_turn_response_policy",
+          "lead_registry",
+          "narration_temporal_provenance",
+          "npc_runtime",
+          "runtime_scene_overlays",
+          "scene_runtime",
+          "scene_state",
+          "turn_counter"
+        ],
+        "world_changed_keys": [
+          "event_log",
+          "factions"
+        ],
+        "pending_intentions": {
+          "pending_intention": {
+            "before": {
+              "kind": "ambiguous_addressee",
+              "operation": "ASK",
+              "status": "pending",
+              "scene_id": "waystation_courtyard",
+              "original_text": "I ask one of them what happened.",
+              "choices": [
+                {
+                  "entity_id": "sergeant_mara",
+                  "label": "Sergeant Mara"
+                },
+                {
+                  "entity_id": "corporal_bren",
+                  "label": "Corporal Bren"
+                }
+              ],
+              "clarification": "Which person do you mean?",
+              "target_resolution": "ambiguous"
+            },
+            "after": null
+          },
+          "pending_clarification": {
+            "before": {
+              "kind": "ambiguous_addressee",
+              "operation": "ASK",
+              "status": "pending",
+              "scene_id": "waystation_courtyard",
+              "original_text": "I ask one of them what happened.",
+              "choices": [
+                {
+                  "entity_id": "sergeant_mara",
+                  "label": "Sergeant Mara"
+                },
+                {
+                  "entity_id": "corporal_bren",
+                  "label": "Corporal Bren"
+                }
+              ],
+              "clarification": "Which person do you mean?",
+              "target_resolution": "ambiguous"
+            },
+            "after": {
+              "kind": "ambiguous_addressee",
+              "operation": "ASK",
+              "status": "pending",
+              "scene_id": "waystation_courtyard",
+              "original_text": "I ask one of them what happened.",
+              "choices": [
+                {
+                  "entity_id": "sergeant_mara",
+                  "label": "Sergeant Mara"
+                },
+                {
+                  "entity_id": "corporal_bren",
+                  "label": "Corporal Bren"
+                }
+              ],
+              "clarification": "Which person do you mean?",
+              "target_resolution": "ambiguous"
+            }
+          },
+          "last_executed_intention": {
+            "before": null,
+            "after": {
+              "status": "executed",
+              "text": "Instead, make that a question about the lamp.",
+              "operation": null,
+              "target": null,
+              "scene_id": "waystation_courtyard"
+            }
+          }
+        },
+        "turn_counter_before": 0,
+        "turn_counter_after": 1,
+        "clocks_before": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "clocks_after": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "trace_functions": [
+          "interpret_production_turn"
+        ],
+        "note": "INVALID LIVE CONTROL: fixture import activated experiments/pr_dq/__init__.py environment defaults. Live interpretation skipped; generic resolution consumed a turn, cleared pending intention and updated factions. Narration refused before admission by existing input-token ceiling."
+      },
+      "automated_evaluation": {
+        "method": "AI-assisted independent six-dimension assessment over retained traces; no gameplay scorer."
+      },
+      "runtime_validity": "INVALID live control; test environment leakage",
+      "final_emission_metadata": {
+        "source": "artifacts/atgb/atgb_r1_03/L4/response.json"
+      },
+      "continuation_action": "Stop; no retry or next pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_03/L4/response.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "External review pending; AI-assisted assessment only."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "unexpected_behavior": true
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "SELECTED",
+      "example_id": "L1",
+      "statement": null
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "SELECTED",
+      "example_id": "L4",
+      "statement": null
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "SELECTED",
+      "example_id": "L4",
+      "statement": null
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [],
+  "limitations_and_unproven_claims": [
+    "No successful original-wording live reproduction.",
+    "No valid live mechanical control.",
+    "One related paraphrase is not independent generalization.",
+    "L4 mutation prevents unconditional authority claim.",
+    "Human review pending."
+  ]
+}

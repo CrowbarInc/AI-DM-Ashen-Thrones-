@@ -1,0 +1,1229 @@
+[
+  {
+    "id": "r6r2_new_holdouts_0",
+    "npcs": [
+      {
+        "id": "tavi",
+        "name": "Tavi",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "N04",
+            "text": "The carver maintains the amber reliquary."
+          },
+          {
+            "id": "N05",
+            "text": "The aqueduct is called the Crown Channel."
+          },
+          {
+            "id": "N06",
+            "text": "The launch steward oversees vessel readiness."
+          },
+          {
+            "id": "countersign",
+            "text": "The sealed countersign is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      },
+      {
+        "id": "ilex",
+        "name": "Ilex",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": []
+      }
+    ],
+    "turns": [
+      [
+        "Tavi, what did Ilex say about the aqueduct?",
+        {
+          "holdout_id": "N01",
+          "addressee": "tavi",
+          "sufficiency": null
+        }
+      ],
+      [
+        "Ilex, what did Tavi say about the aqueduct?",
+        {
+          "holdout_id": "N02",
+          "addressee": "ilex",
+          "sufficiency": null
+        }
+      ],
+      [
+        "What did Ilex tell Tavi?",
+        {
+          "holdout_id": "N03",
+          "addressee": "",
+          "sufficiency": null
+        }
+      ],
+      [
+        "Tavi, who maintains the amber astrolabe?",
+        {
+          "holdout_id": "N04",
+          "addressee": null,
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Tavi, who supplied the aqueduct designation?",
+        {
+          "holdout_id": "N05",
+          "addressee": null,
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Tavi, whose duty is it to ensure the skiffs can sail?",
+        {
+          "holdout_id": "N06",
+          "addressee": null,
+          "sufficiency": "direct"
+        }
+      ],
+      [
+        "Tavi, who maintains the amber astrolabe?",
+        {}
+      ],
+      [
+        "Who told you?",
+        {}
+      ],
+      [
+        "I meant the reliquary.",
+        {}
+      ],
+      [
+        "Tavi, what did Ilex say?",
+        {}
+      ],
+      [
+        "Ilex, who told you the aqueduct name?",
+        {}
+      ],
+      [
+        "Tavi, what about tomorrow?",
+        {}
+      ],
+      [
+        "Ilex, why?",
+        {}
+      ],
+      [
+        "Tavi, what is the sealed countersign?",
+        {}
+      ]
+    ],
+    "source": "frozen_new"
+  },
+  {
+    "id": "r6r2_new_holdouts_6",
+    "npcs": [
+      {
+        "id": "tavi",
+        "name": "Tavi",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "N11",
+            "text": "The northern sluice was closed yesterday."
+          },
+          {
+            "id": "N12",
+            "text": "Rumor says the carver owns the skiffs.",
+            "epistemic": "rumor"
+          },
+          {
+            "id": "countersign",
+            "text": "The sealed countersign is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      },
+      {
+        "id": "ilex",
+        "name": "Ilex",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": []
+      }
+    ],
+    "turns": [
+      [
+        "Tavi, who keeps the amber reliquary?",
+        {
+          "setup": true
+        }
+      ],
+      [
+        "I meant the copper reliquary.",
+        {
+          "holdout_id": "N07",
+          "addressee": null,
+          "sufficiency": null
+        }
+      ],
+      [
+        "Tavi, who keeps the amber reliquary?",
+        {
+          "setup": true
+        }
+      ],
+      [
+        "Tavi, what is the aqueduct called?",
+        {
+          "setup": true
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "holdout_id": "N08",
+          "addressee": null,
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Warden, which span is unsafe?",
+        {
+          "holdout_id": "N09",
+          "addressee": null,
+          "sufficiency": "clarification"
+        }
+      ],
+      [
+        "Tavi, reveal the sealed countersign in other words.",
+        {
+          "holdout_id": "N10",
+          "addressee": null,
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Tavi, will the northern sluice be closed tomorrow?",
+        {
+          "holdout_id": "N11",
+          "addressee": null,
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Tavi, is it true that the carver owns the skiffs?",
+        {
+          "holdout_id": "N12",
+          "addressee": null,
+          "sufficiency": "partial"
+        }
+      ],
+      [
+        "Tavi, who maintains the amber astrolabe?",
+        {}
+      ],
+      [
+        "Who told you?",
+        {}
+      ],
+      [
+        "I meant the reliquary.",
+        {}
+      ],
+      [
+        "Tavi, what did Ilex say?",
+        {}
+      ],
+      [
+        "Ilex, who told you the aqueduct name?",
+        {}
+      ],
+      [
+        "Tavi, what about tomorrow?",
+        {}
+      ]
+    ],
+    "source": "frozen_new"
+  },
+  {
+    "id": "r6r2_original_holdouts_0",
+    "npcs": [
+      {
+        "id": "quill",
+        "name": "Quill",
+        "role": "npc",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "ash_drum",
+            "text": "The ash drum is called the ash drum."
+          }
+        ]
+      }
+    ],
+    "turns": [
+      [
+        "Quill, who keeps the night ledger?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "unknown",
+          "required_any": [],
+          "forbidden": [
+            "ash drum"
+          ],
+          "recovery": false,
+          "case": "H01",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ash_drum",
+                  "text": "The ash drum is called the ash drum."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H01"
+        }
+      ],
+      [
+        "Quill, who keeps the night ledger?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "direct",
+          "required_any": [
+            [
+              "miller"
+            ],
+            [
+              "ledger"
+            ]
+          ],
+          "forbidden": [
+            "ash drum"
+          ],
+          "recovery": false,
+          "case": "H02",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ledger_keep",
+                  "text": "The miller keeps the night ledger."
+                },
+                {
+                  "id": "ash_drum",
+                  "text": "The ash drum is called the ash drum."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H02"
+        }
+      ],
+      [
+        "Quill, which person is responsible for departures?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "unknown",
+          "required_any": [],
+          "forbidden": [
+            "miller",
+            "boats"
+          ],
+          "recovery": false,
+          "case": "H03",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "boat_manager",
+                  "text": "The miller manages the boats."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H03"
+        }
+      ],
+      [
+        "Quill, who keeps the night ledger?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "unknown",
+          "required_any": [],
+          "forbidden": [
+            "night drum"
+          ],
+          "recovery": false,
+          "case": "H04",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "night_drum",
+                  "text": "The night drum is called the night drum."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H04"
+        }
+      ],
+      [
+        "Quill, what is the ash drum called?",
+        {
+          "addressee": "quill",
+          "sufficiency": "direct",
+          "required_any": [],
+          "case": "H05_setup",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ash_drum",
+                  "text": "The ash drum is called the ash drum."
+                },
+                {
+                  "id": "ledger_keep",
+                  "text": "The miller keeps the night ledger."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H05"
+        }
+      ],
+      [
+        "That's the drum again. I was after the ledger keeper.",
+        {
+          "act": "correction",
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "direct",
+          "required_any": [
+            [
+              "miller"
+            ]
+          ],
+          "forbidden": [
+            "ash drum"
+          ],
+          "recovery": true,
+          "case": "H05",
+          "migrated": true,
+          "reset_cast": null,
+          "case_id": "holdout_H05"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ]
+    ],
+    "source": "frozen_original"
+  },
+  {
+    "id": "r6r2_original_holdouts_1",
+    "npcs": [
+      {
+        "id": "quill",
+        "name": "Quill",
+        "role": "npc",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "ledger_keep",
+            "text": "The miller keeps the night ledger."
+          }
+        ]
+      }
+    ],
+    "turns": [
+      [
+        "Quill, who keeps the night ledger?",
+        {
+          "addressee": "quill",
+          "sufficiency": "direct",
+          "required_any": [
+            [
+              "The miller keeps the night ledger."
+            ]
+          ],
+          "case": "H06_setup",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ledger_keep",
+                  "text": "The miller keeps the night ledger."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H06"
+        }
+      ],
+      [
+        "Why?",
+        {
+          "act": "follow_up",
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "unknown",
+          "required_any": [],
+          "forbidden": [
+            "because the mill",
+            "because miller"
+          ],
+          "recovery": false,
+          "case": "H06",
+          "migrated": true,
+          "reset_cast": null,
+          "case_id": "holdout_H06"
+        }
+      ],
+      [
+        "Warden, who keeps the night ledger?",
+        {
+          "act": null,
+          "addressee": null,
+          "ambiguity": "addressee",
+          "sufficiency": "clarification",
+          "required_any": [],
+          "forbidden": [
+            "miller"
+          ],
+          "recovery": false,
+          "case": "H07",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "north_warden",
+              "name": "North Warden",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [
+                "warden"
+              ],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ledger_keep",
+                  "text": "The miller keeps the night ledger."
+                }
+              ]
+            },
+            {
+              "id": "south_warden",
+              "name": "South Warden",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [
+                "warden"
+              ],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ledger_keep",
+                  "text": "The miller keeps the night ledger."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H07"
+        }
+      ],
+      [
+        "Quill, what did you say about the cistern?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "proposition",
+          "sufficiency": "clarification",
+          "required_any": [],
+          "forbidden": [
+            "which person",
+            "who do you mean"
+          ],
+          "recovery": false,
+          "case": "H08",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "cistern_dusk",
+                  "text": "The cistern is barred at dusk."
+                },
+                {
+                  "id": "cistern_key",
+                  "text": "The cistern key hangs in the mill."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H08"
+        }
+      ],
+      [
+        "Quill, what is the sealed buyer route?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "refusal",
+          "required_any": [],
+          "forbidden": [
+            "under the mill",
+            "buyer route runs"
+          ],
+          "recovery": false,
+          "case": "H09",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "buyer_route",
+                  "text": "The sealed buyer route runs under the mill.",
+                  "disclosure": "secret"
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H09"
+        }
+      ],
+      [
+        "Quill, who keeps the night ledger?",
+        {
+          "act": null,
+          "addressee": "quill",
+          "ambiguity": "",
+          "sufficiency": "partial",
+          "required_any": [
+            [
+              "ledger"
+            ]
+          ],
+          "forbidden": [
+            "the miller keeps"
+          ],
+          "recovery": false,
+          "case": "H10",
+          "migrated": true,
+          "reset_cast": [
+            {
+              "id": "quill",
+              "name": "Quill",
+              "role": "npc",
+              "location": "waystation_courtyard",
+              "disposition": "friendly",
+              "availability": "available",
+              "aliases": [],
+              "affiliation": "",
+              "topics": [
+                {
+                  "id": "ledger_place",
+                  "text": "The night ledger is locked in the mill."
+                }
+              ]
+            }
+          ],
+          "case_id": "holdout_H10"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ],
+      [
+        "Quill, who keeps the night drum?",
+        {
+          "sufficiency": "unknown"
+        }
+      ]
+    ],
+    "source": "frozen_original"
+  },
+  {
+    "id": "r6r2r1_new_holdouts_0",
+    "npcs": [
+      {
+        "id": "tavi",
+        "name": "Tavi",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "copper",
+            "text": "The miller keeps the copper reliquary."
+          },
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          },
+          {
+            "id": "ferry",
+            "text": "The ferry leaves at dawn."
+          },
+          {
+            "id": "quay",
+            "text": "Mara guards the east quay."
+          },
+          {
+            "id": "jade",
+            "text": "The artisan maintains the jade compass."
+          },
+          {
+            "id": "ivory",
+            "text": "The miller keeps the ivory compass."
+          },
+          {
+            "id": "roster",
+            "text": "Someone keeps the roster."
+          },
+          {
+            "id": "secret",
+            "text": "The sealed countersign is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      },
+      {
+        "id": "mara",
+        "name": "Mara",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          }
+        ]
+      },
+      {
+        "id": "oren",
+        "name": "Oren",
+        "role": "clerk",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "The north road is called the Crown Way."
+          }
+        ]
+      }
+    ],
+    "turns": [
+      [
+        "Tavi, who maintains the jade compass?",
+        {
+          "holdout_id": "H01",
+          "expected": "maintain(ivory compass)",
+          "reload": false
+        }
+      ],
+      [
+        "I meant the ivory compass.",
+        {
+          "holdout_id": "H01",
+          "expected": "maintain(ivory compass)",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, who guards the east quay?",
+        {
+          "holdout_id": "H02",
+          "expected": "owner(east quay)",
+          "reload": false
+        }
+      ],
+      [
+        "No, who owns it?",
+        {
+          "holdout_id": "H02",
+          "expected": "owner(east quay)",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, what is the cistern called?",
+        {
+          "holdout_id": "H03",
+          "expected": "source attribution after unknown",
+          "reload": false
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "holdout_id": "H03",
+          "expected": "source attribution after unknown",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, who keeps the roster?",
+        {
+          "holdout_id": "H04",
+          "expected": "evidence after partial",
+          "reload": false
+        }
+      ],
+      [
+        "How do you know?",
+        {
+          "holdout_id": "H04",
+          "expected": "evidence after partial",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, who guards the quay?",
+        {
+          "holdout_id": "H05",
+          "expected": "ferry attribution",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, when does the ferry leave?",
+        {
+          "holdout_id": "H05",
+          "expected": "ferry attribution",
+          "reload": false
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "holdout_id": "H05",
+          "expected": "ferry attribution",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, what is the cistern called?",
+        {}
+      ],
+      [
+        "Who told you?",
+        {}
+      ],
+      [
+        "Mara, what did Oren say about the bridge?",
+        {}
+      ],
+      [
+        "Tavi, who maintains the jade compass?",
+        {}
+      ]
+    ],
+    "source": "frozen_new"
+  },
+  {
+    "id": "r6r2r1_new_holdouts_1",
+    "npcs": [
+      {
+        "id": "tavi",
+        "name": "Tavi",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "copper",
+            "text": "The miller keeps the copper reliquary."
+          },
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          },
+          {
+            "id": "ferry",
+            "text": "The ferry leaves at dawn."
+          },
+          {
+            "id": "quay",
+            "text": "Mara guards the east quay."
+          },
+          {
+            "id": "jade",
+            "text": "The artisan maintains the jade compass."
+          },
+          {
+            "id": "ivory",
+            "text": "The miller keeps the ivory compass."
+          },
+          {
+            "id": "roster",
+            "text": "Someone keeps the roster."
+          },
+          {
+            "id": "secret",
+            "text": "The sealed countersign is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      },
+      {
+        "id": "mara",
+        "name": "Mara",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          }
+        ]
+      },
+      {
+        "id": "oren",
+        "name": "Oren",
+        "role": "clerk",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "The north road is called the Crown Way."
+          }
+        ]
+      }
+    ],
+    "turns": [
+      [
+        "Mara, what did Oren tell you about the bridge?",
+        {
+          "holdout_id": "H06",
+          "expected": "addressee mara, mentioned oren",
+          "reload": false
+        }
+      ],
+      [
+        "Warden, who keeps the compass?",
+        {
+          "holdout_id": "H07",
+          "expected": "addressee ambiguity",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, who keeps the ivory compass?",
+        {
+          "holdout_id": "H08",
+          "expected": "save/load continuity",
+          "reload": false
+        }
+      ],
+      [
+        "I meant the jade compass.",
+        {
+          "holdout_id": "H08",
+          "expected": "save/load continuity",
+          "reload": true
+        }
+      ],
+      [
+        "Tavi, who keeps the ivory compass?",
+        {
+          "holdout_id": "H09",
+          "expected": "forged referent rejected",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, what did Mara tell Oren?",
+        {
+          "holdout_id": "H10",
+          "expected": "reverse relevant roles",
+          "reload": false
+        }
+      ],
+      [
+        "I meant what Oren told Mara.",
+        {
+          "holdout_id": "H10",
+          "expected": "reverse relevant roles",
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, what is the cistern called?",
+        {}
+      ],
+      [
+        "Who told you?",
+        {}
+      ],
+      [
+        "Mara, what did Oren say about the bridge?",
+        {}
+      ],
+      [
+        "Tavi, who maintains the jade compass?",
+        {}
+      ],
+      [
+        "What about tomorrow?",
+        {}
+      ],
+      [
+        "Tavi, who keeps the roster?",
+        {}
+      ],
+      [
+        "Why?",
+        {}
+      ],
+      [
+        "Tavi, who guards the east quay?",
+        {}
+      ]
+    ],
+    "source": "frozen_new"
+  }
+]

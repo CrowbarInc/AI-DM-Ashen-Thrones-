@@ -1,0 +1,13 @@
+PR-PLAY-05 · 2026-10-27 (America/New_York) · evidence_scope: structural_only. Synthetic provider controls; no live generation or gameplay-quality claim.
+
+# 07 — Live-Test Readiness
+
+Deterministic evidence is sufficient for a bounded, diagnostic operator trial after external review, with the exclusions in reports 03/06. It is not evidence that the existing live model generates acceptable openings or is statistically reliable. Original provider failure remains unexplained; prompt size/output adequacy, actual finish status, generated syntax and external connectivity are live uncertainties. Raw content is deliberately not captured, so some content-specific ambiguity may remain even after the next trial.
+
+The exact executable PowerShell procedure is `PR_PLAY_05_LIVE_OPENING_TEST.txt` in this report directory. It supersedes PR-PLAY-02 for this next operation. It contains fresh disposable data setup, existing zero SDK/host retries and six-admission ceiling, opt-in diagnostics/ledger activation, offline startup configuration verification, single-worker launch on 8765, New Campaign, before snapshot, exactly one Start, success/failure expectations, all stop conditions, exact evidence extraction/ZIP commands and normal-environment restoration. It must not be executed during this pass.
+
+One Start is a user operation, not a promise of one provider request. Count admitted/dispatch_attempted/completed events, and sum usage only once from completed records; missing values are unavailable. All supported callers retain the existing budget guard. Do not restart a process or change ledger/limits to continue. No normal campaign file is reset or overwritten.
+
+Provider-response rows answer whether content/extraction/JSON/envelope/parsing succeeded and retain provider status/finish evidence separately from the host accounting completion. Opening-outcome rows answer final validation/recovery/acceptance and commit disposition, even when a failed opening leaves no gameplay log. Before/after state and campaign directories permit independent turn/time/faction/latch verification. A missing outcome after interruption is explicitly unknown. The export retains ledger originals, diagnostic/completion extracts, notes and screenshots, plus before/after data and local state JSON where responsive.
+
+Stop and export after success or failure, generic answer fallback, budget exhaustion, unexpected retry, unresponsiveness or progression after failure. No NPC conversation or gameplay action follows success. The procedure's error UI may offer retry; the operator must not use it. A single success demonstrates one sample, not broad reliability. Request no raw response capture or general prompt compression in this pass.

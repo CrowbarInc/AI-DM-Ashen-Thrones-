@@ -1,0 +1,77 @@
+{
+  "status": "accepted",
+  "reason": "eligible_for_bridge",
+  "record": {
+    "communication_mode": "IN_WORLD_ACTION",
+    "interpretation_status": "INTERPRETED",
+    "player_intent": {
+      "summary": "Ask GM what Sergeant Mara's worried expression indicates"
+    },
+    "asserted_premises": [
+      {
+        "text": "Sergeant Mara looks concerned as she watches the road.",
+        "canon_status": "PLAYER_CLAIM"
+      }
+    ],
+    "requested_outcomes": [
+      {
+        "text": "Explanation of what Sergeant Mara's worried expression tells the character",
+        "adjudication_status": "UNADJUDICATED"
+      }
+    ],
+    "action_components": [
+      {
+        "order": 1,
+        "description": "Ask GM what Sergeant Mara's worried expression indicates",
+        "target_ref": "sergeant_mara",
+        "operation_class": "ASK"
+      }
+    ],
+    "references": {
+      "permitted_entity_ids": [
+        "sergeant_mara"
+      ],
+      "unresolved_references": []
+    },
+    "clarification_question": "",
+    "correction": {
+      "subject": "NONE",
+      "note": ""
+    },
+    "communication": {
+      "recipient": "GM",
+      "purpose": "EXPLANATION",
+      "subject": "Meaning of Sergeant Mara's worried expression",
+      "evidence_refs": [
+        "visible:2"
+      ]
+    },
+    "public_evidence": {
+      "visible:2": "Sergeant Mara looks concerned as she watches the road."
+    }
+  },
+  "player_facing_text": "",
+  "tags": [
+    "live_interpretation"
+  ],
+  "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"EXPLANATION\",\"subject\":\"Meaning of Sergeant Mara's worried expression\",\"evidence_refs\":[\"visible:2\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Ask GM what Sergeant Mara's worried expression indicates\"},\"asserted_premises\":[{\"text\":\"Sergeant Mara looks concerned as she watches the road.\"}],\"requested_outcomes\":[{\"text\":\"Explanation of what Sergeant Mara's worried expression tells the character\"}],\"action_components\":[{\"order\":1,\"description\":\"Ask GM what Sergeant Mara's worried expression indicates\",\"target_ref\":\"sergeant_mara\",\"operation_class\":\"ASK\"}],\"references\":{\"permitted_entity_ids\":[\"sergeant_mara\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+  "provider_requests": [
+    {
+      "purpose": "interpretation",
+      "sent": true,
+      "configured_model": "gpt-4.1-mini",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "request_id": "resp_08bcb0552c03571c006ad29bddd69c87d2b29f44f4569b2a9f",
+      "input_tokens": 1672,
+      "output_tokens": 175,
+      "total_tokens": 1847,
+      "latency_ms": 2372.056,
+      "estimated_input_tokens": 2903,
+      "max_output_tokens": 320,
+      "usage_consistent": true
+    }
+  ],
+  "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+  "model_communication_mode": "IN_WORLD_ACTION",
+  "interpretation_status": "INTERPRETED"
+}

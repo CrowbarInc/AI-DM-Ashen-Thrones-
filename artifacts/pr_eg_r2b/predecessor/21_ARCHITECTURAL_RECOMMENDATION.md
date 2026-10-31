@@ -1,0 +1,13 @@
+# 21 — Architectural Recommendation
+
+Do not deploy any tested broad semantic strategy. Preserve existing R4 target authorization, social resolver, canonical knowledge/mutation owner and continuity/storage infrastructure. No independent dialogue agent or world authority is needed.
+
+Smallest coherent boundary for a separately authorized future study: before generation, project only resolver-owned allowed evidence and disclosure/epistemic flags; during optional structured generation, collect untrusted claim references for diagnostics; after generation, check every explicit/implied material claim, using deterministic identity/owner checks and abstention for unresolved evidence; at final adoption, bind the approved wording, task, speaker and evidence revision, then recheck any replacement before delivery/persistence. These are complementary stages, not competing authorities.
+
+Limit initial scope to restatements of already-disclosed facts and explicitly permitted nonbinding preference expression. Exclude new consequential offers, rumors, tactical/security claims, hidden information and durable relationships unless resolver-owned claims are explicitly granted. Authorized high-risk information must remain possible through existing resolver output; high-risk vocabulary alone cannot authorize or forbid speech. Reject/abstain mixed unsafe response as a whole; do not silently prune clauses with unverified meaning.
+
+The tested A is safe-by-abstention but too rigid; selected A is a negative-control boundary, not an implementation plan. B does not solve entailment. C's three failures rule out trusting its ACCEPT as a gate, and D inherits them. Semantic output may assist human debugging but cannot certify claims. A new narrower strategy requires frozen development cases and an untouched independent holdout, not further tuning on this holdout.
+
+Required interfaces would be scoped evidence packet, claim support/disclosure report, adoption identity/invalidation reason, final delivered-text persistence binding and existing provider-budget instrumentation. No generated text may mutate facts, quests, rewards, disposition or mechanical results. World ticks remain existing authorization behavior. Delivery repair cannot be used to imply semantic enforcement is solved.
+
+Evidence: STATIC = current source inspection; LOCAL = executed existing host functions with disposable fixtures; FRESH = new Responses API call; REPLAY = reuse of retained provider result; INFERENCE = recommendation beyond observed sample. No experiment changes production code. ABSTAIN prohibits delivery; it is not a safe acceptance.

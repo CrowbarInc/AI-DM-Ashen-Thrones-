@@ -1,0 +1,115 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-18T22:33:14.247062Z",
+  "payload": {
+    "active_scene_id": "frontier_gate",
+    "visited_scene_ids": [
+      "frontier_gate"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "63f3829c353ce3015de9ed92",
+    "session_id": "63f3829c353ce3015de9ed92",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-18T22:33:14.247062Z",
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Handle the thing by the barrel.",
+          "delivered_text": "What exactly is 'the thing by the barrel' that I am supposed to handle?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "3ff48b42e6e8d39988e3e58133f18974430f073dd8924d0e16068f2902379f77",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Not the barrel. What the runner said he'd sell, the one that isn't food.",
+          "delivered_text": "What exactly is the item the runner said he'd sell that isn't food, distinct from the barrel?",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "5bd6c418f3c6974d16e1c4988fa565b769d4d9cd4f813954136ac2a7d5bd353f",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Not the barrel. What the runner said he'd sell, the one that isn't food.",
+        "response": "What exactly is the item the runner said he'd sell that isn't food, distinct from the barrel?",
+        "refusal_reason": null,
+        "scene_id": "frontier_gate"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "e1e1de54c510d2f4cdae3422195545a028774f245bd53f8b94dd947c8ebd5aca",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

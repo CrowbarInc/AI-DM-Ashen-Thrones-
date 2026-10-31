@@ -1,0 +1,100 @@
+{
+  "family": "s01",
+  "architecture": "B",
+  "source_ids": [
+    "s01"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f1",
+        "source_id": "s01",
+        "relationship": "told",
+        "roles": [
+          {
+            "name": "speaker",
+            "value": "Cala",
+            "evidence": "Cala told Brin"
+          },
+          {
+            "name": "listener",
+            "value": "Brin",
+            "evidence": "Cala told Brin"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Cala told Brin"
+      },
+      "validation": {
+        "level": "STRUCTURALLY_VALID",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    },
+    {
+      "fact": {
+        "fact_id": "f2",
+        "source_id": "s01",
+        "relationship": "was cracked",
+        "roles": [
+          {
+            "name": "entity",
+            "value": "the cistern",
+            "evidence": "the cistern was cracked"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [
+          "before sunrise"
+        ],
+        "negated": false,
+        "temporal": "before sunrise",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "the cistern was cracked before sunrise"
+      },
+      "validation": {
+        "level": "STRUCTURALLY_VALID",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    },
+    {
+      "fact": {
+        "fact_id": "f3",
+        "source_id": "s01",
+        "relationship": "inspected",
+        "roles": [
+          {
+            "name": "entity",
+            "value": "the cistern",
+            "evidence": "the cistern"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [],
+        "negated": true,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Nobody inspected the cistern"
+      },
+      "validation": {
+        "level": "STRUCTURALLY_VALID",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

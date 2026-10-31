@@ -1,0 +1,2305 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "behavioral",
+  "campaign": {
+    "campaign_id": "atgb_03c_live_baseline_continuation",
+    "what_was_tested": "S04 full trial 2 and S05-S10 trial 1; 24 fixture turns; all conversational outcomes unscored",
+    "runtime_path": "Production POST /api/chat through approved TestClient worker in fresh isolated frozen-baseline stores",
+    "gm_boundary": "Live-enabled OpenAI gpt-4.1-mini with existing host-owned replies and model roles; no browser UI validation",
+    "player_input_mode": "Approved fixed benchmark lines; previously exposed held-out scenarios remain labeled",
+    "run_count": 7,
+    "turn_count": 24,
+    "automated_conclusion": "Runtime capture only. No evaluator or human success/failure classifications were made. Empty selected outcome categories mean unmeasured, not zero gameplay failures."
+  },
+  "claim_types": [
+    "runtime_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "ATGB-03C-S04.1",
+      "scenario_run_id": "91ace9ce13cf4d60b3f1d77a028ee940",
+      "turn_index": 0,
+      "player_input": "Serjeant, did the patrol's route change?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Gate Serjeant mutters, \"Word is, the patrol route changed after the Ash Compact census choke worsened.\"",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 4565
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1796
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 199
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S04.2",
+      "scenario_run_id": "91ace9ce13cf4d60b3f1d77a028ee940",
+      "turn_index": 1,
+      "player_input": "I said the Gate Serjeant, not the captain and not the guard.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I can't interpret that from the current scene without using information you have not been shown.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 15
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S04.3",
+      "scenario_run_id": "91ace9ce13cf4d60b3f1d77a028ee940",
+      "turn_index": 2,
+      "player_input": "Is that why the eastern wagons are stuck?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Gate Serjeant says, \"I couldn't tell you.\"",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 3
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2699
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S04.4",
+      "scenario_run_id": "91ace9ce13cf4d60b3f1d77a028ee940",
+      "turn_index": 3,
+      "player_input": "Say that again, but only what you actually know.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I can't interpret that from the current scene without using information you have not been shown.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The patrol route changed after the Ash Compact census choke worsened.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "gate_serjeant",
+          "transcript_entries": 4
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 17
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S05.1",
+      "scenario_run_id": "15950abe49264ea886ee3c0183009096",
+      "turn_index": 0,
+      "player_input": "Runner, what did you hear about the patrol?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3368
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1795
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 181
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S05.2",
+      "scenario_run_id": "15950abe49264ea886ee3c0183009096",
+      "turn_index": 1,
+      "player_input": "And the board, what does it say about the same patrol?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I cannot provide a validated response to that request.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1554
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S05.3",
+      "scenario_run_id": "15950abe49264ea886ee3c0183009096",
+      "turn_index": 2,
+      "player_input": "Tell me more about that.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 3
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2166
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1948
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 198
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S05.4",
+      "scenario_run_id": "15950abe49264ea886ee3c0183009096",
+      "turn_index": 3,
+      "player_input": "The runner's version, not the notice.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Tavern Runner says, \"I couldn't tell you.\"",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [
+            "faction_house_verevin_agenda_advanced",
+            "faction_ash_cowl_agenda_advanced",
+            "faction_ordo_pyric_agenda_advanced"
+          ],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 4
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 4517
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2050
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 232
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S06.1",
+      "scenario_run_id": "9af9c691ff5c458bb5feb1a215aa27c9",
+      "turn_index": 0,
+      "player_input": "OOC: if I talk to people here, does that spend game time or change the scene?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Understood. I will treat that as out-of-character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_count": {
+          "status": "unavailable",
+          "value": null
+        },
+        "input_tokens": {
+          "status": "unavailable",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "unavailable",
+          "value": null
+        },
+        "retry_count": {
+          "status": "unavailable",
+          "value": null
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S06.2",
+      "scenario_run_id": "9af9c691ff5c458bb5feb1a215aa27c9",
+      "turn_index": 1,
+      "player_input": "IC: I ask the runner whether the stew is hot.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Tavern Runner says, \"I couldn't tell you.\"",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 4147
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1892
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 180
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S06.3",
+      "scenario_run_id": "9af9c691ff5c458bb5feb1a215aa27c9",
+      "turn_index": 2,
+      "player_input": "OOC: that was only a question. I am not buying anything.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Understood. I will treat that as out-of-character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 3
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_count": {
+          "status": "unavailable",
+          "value": null
+        },
+        "input_tokens": {
+          "status": "unavailable",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "unavailable",
+          "value": null
+        },
+        "retry_count": {
+          "status": "unavailable",
+          "value": null
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 0,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S06.4",
+      "scenario_run_id": "9af9c691ff5c458bb5feb1a215aa27c9",
+      "turn_index": 3,
+      "player_input": "Back in character. Runner, I'll hear the rumor, not buy the stew.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I've set aside the unexecuted intention. Anything already resolved still stands.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 4
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1916
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2004
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 214
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S07.1",
+      "scenario_run_id": "c8d596f66dcb435181e4f616042b853a",
+      "turn_index": 0,
+      "player_input": "Miserable rain for a queue this long.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3283
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1794
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 215
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S07.2",
+      "scenario_run_id": "c8d596f66dcb435181e4f616042b853a",
+      "turn_index": 1,
+      "player_input": "The banners look about finished.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I don't have an established ruling for that question. No action or roll has been made.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1957
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1931
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 202
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S07.3",
+      "scenario_run_id": "c8d596f66dcb435181e4f616042b853a",
+      "turn_index": 2,
+      "player_input": "The one shouting — what's he offering?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "That has not been established in the information available to you.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 3
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2149
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1986
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 196
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S07.4",
+      "scenario_run_id": "c8d596f66dcb435181e4f616042b853a",
+      "turn_index": 3,
+      "player_input": "Leave the rumor. I only wanted to know what he's selling.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "That has not been established in the information available to you.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 4
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2080
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1971
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 257
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S08.1",
+      "scenario_run_id": "5870f37ef90640278a8da7ce47c44b7d",
+      "turn_index": 0,
+      "player_input": "What's in front of me right now?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "related_variation",
+      "evidence_status": "related_variation",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3254
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1793
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 234
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S08.2",
+      "scenario_run_id": "5870f37ef90640278a8da7ce47c44b7d",
+      "turn_index": 1,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I don't have an unexecuted intention to revise. What do you want to change?",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "related_variation",
+      "evidence_status": "related_variation",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1850
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2004
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 210
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S08.3",
+      "scenario_run_id": "5870f37ef90640278a8da7ce47c44b7d",
+      "turn_index": 2,
+      "player_input": "Which person looks like they handle the crowd?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "related_variation",
+      "evidence_status": "related_variation",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 3
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2243
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2067
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 195
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S08.4",
+      "scenario_run_id": "5870f37ef90640278a8da7ce47c44b7d",
+      "turn_index": 3,
+      "player_input": "You just said the route changed because the choke got worse. Who changed it?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "related_variation",
+      "evidence_status": "related_variation",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 4
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1844
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2062
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 195
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S09.1",
+      "scenario_run_id": "2230ebc4d6f74f10b70d9eb5611d0dbe",
+      "turn_index": 0,
+      "player_input": "I ask either the ragged stranger or the threadbare watcher who they are.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "I couldn't read that as a gameplay action. Please say it again in plain words.",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S09/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3828
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1801
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 255
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S09.2",
+      "scenario_run_id": "2230ebc4d6f74f10b70d9eb5611d0dbe",
+      "turn_index": 1,
+      "player_input": "The threadbare watcher.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "Do you intend to speak to or about the 'threadbare watcher' NPC, or is this a description or question about them?",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": true
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S09/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1994
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1859
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 209
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S10.1",
+      "scenario_run_id": "64bb8504f14940768e75900740c19070",
+      "turn_index": 0,
+      "player_input": "Handle the thing by the barrel.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "What exactly is 'the thing by the barrel' that I am supposed to handle?",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S10/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 3419
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1792
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 198
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    },
+    {
+      "example_id": "ATGB-03C-S10.2",
+      "scenario_run_id": "64bb8504f14940768e75900740c19070",
+      "turn_index": 1,
+      "player_input": "Not the barrel. What the runner said he'd sell, the one that isn't food.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "exact_gm_output": "What exactly is the item the runner said he'd sell that isn't food, distinct from the barrel?",
+      "runtime_validity": {
+        "capture": "captured",
+        "setup_delivery_limitation": false
+      },
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S10/result.json",
+      "semantic_result": null,
+      "automated_evaluation": null,
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await authorized human judgments; no automated gameplay scorer.",
+        "review_date": null,
+        "semantic_policy_changed": false,
+        "calibration_case_id": null
+      },
+      "evaluator_disagreement": {
+        "present": false,
+        "status": "not_evaluated"
+      },
+      "judgments": {
+        "interpretation": "unchecked",
+        "response": "unchecked",
+        "authority": "unchecked",
+        "acceptable": "not_established",
+        "severity": "unscored",
+        "clarification": "unscored",
+        "continuity": "unscored",
+        "human_review_status": "not_reviewed",
+        "reviewer_notes": ""
+      },
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 2
+        }
+      },
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2617
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1872
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 265
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null,
+          "reason": "no_price_table"
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      }
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [
+    {
+      "name": "Opening context delivery",
+      "evidence": "Approved silent-reset worker does not deliver authored opening before fixture turns; S07/S09 carry setup limitations.",
+      "status": "Recorded; no behavioral change"
+    }
+  ],
+  "limitations_and_unproven_claims": [
+    "All human judgments pending; no gameplay score or measured success/failure counts.",
+    "Opening-dependent criteria require uncertain/not evaluated when unsupported.",
+    "No independent generalization, conversational improvement, rendered UI or SDK transport retry claim."
+  ]
+}

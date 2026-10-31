@@ -1,0 +1,894 @@
+"""Read-side FEM replay/runtime-lineage projection helpers.
+
+**Authority (CG-5):** runtime-owned **emission** of diagnostic lineage vocabulary
+from finalized FEM (``repair_kind``, ``mutation_kind``, ``fallback_kind``,
+split-owner fields on events). Projection maps **derive** mutation/source labels;
+attribution contract **validates** emitted core tokens against its union.
+
+**Does not own:** protected golden-replay acceptance schema
+(``tests.helpers.golden_replay_projection``), attribution unions/aliases, or
+failure-classification categories.
+
+Registries:
+``docs/audits/CG_attribution_contract_registry.md``,
+``docs/audits/CG_failure_classification_authority_registry.md``
+
+This module must not select fallbacks, mutate output, or stamp write-time FEM.
+
+**Cycle AO5 boundary — runtime lineage only (do not merge with acceptance projection):**
+
+This **runtime** module owns read-side ``fem_runtime_lineage_events`` derivation from
+finalized FEM. Output is diagnostic/read-side telemetry stamped on or derived from FEM;
+it is not the protected golden replay acceptance schema.
+
+Acceptance-side protected observation (41 paths, drift buckets,
+``project_turn_observation``) is owned by :mod:`tests.helpers.golden_replay_projection`
+(test-only, CI acceptance authority). That module may **consume**
+:func:`build_fem_runtime_lineage_events` but must not merge with or re-home this runtime
+module.
+
+Owner semantics for projected runtime-lineage events:
+- ``projection_owner`` is this module: it derives lineage from already-finalized FEM.
+- Projected event ``owner`` preserves the current event-owner meaning: selector or
+  application owner for fallback paths, not necessarily fallback content owner.
+- Opening fallback can therefore project ``owner="game.final_emission_gate"`` while
+  carrying ``fallback_owner_bucket="upstream-prepared"`` and
+  ``fallback_authorship_source="upstream_prepared_opening_fallback"``.
+- Runtime FEM may carry both ``fallback_family_used`` (diegetic) and
+  ``realization_fallback_family`` (governed provenance). Lineage ``fallback_kind``
+  for opening uses diegetic ``scene_opening`` and does not collapse the two FEM fields.
+  Golden replay observed ``fallback_family`` uses diegetic-first precedence via
+  ``tests.helpers.golden_replay_projection.project_replay_fallback_family_from_fem``
+  (read-side only; not applied here).
+- Successful opening fallback and gate-selected strict-social fallback carry
+  explicit ``fallback_selection_owner`` and ``fallback_content_owner`` fields.
+  Sanitizer and sealed terminal replacement paths project the same split fields
+  when content ownership is knowable from finalized FEM / sanitizer trace evidence.
+  Upstream API fast fallback projects ``fallback_selection_owner="game.api"`` and
+  ``fallback_content_owner="game.gm_retry"`` when ``fallback_provenance_trace``
+  survives to FEM; ``owner`` remains ``game.api`` for event identity continuity.
+  Provenance packaging is owned by ``game.fallback_provenance_debug``.
+  Fail-closed opening keeps gate/sealed ownership and is not treated as
+  upstream-authored content.
+- ``fallback_owner_bucket`` for opening paths delegates to
+  :func:`game.final_emission_owner_bucket_views.opening_fallback_owner_bucket_from_meta`; this module
+  does not re-derive bucket rules from scratch.
+"""
+from __future__ import annotations
+
+from typing import Any, Mapping
+
+from game.ownership_projection_views import (
+    OPENING_FAIL_CLOSED_CONTENT_OWNER,
+    OPENING_FALLBACK_CONTENT_OWNER,
+    OPENING_FALLBACK_SELECTION_OWNER,
+    SANITIZER_FALLBACK_SELECTION_OWNER,
+    SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+    SANITIZER_TRACE_OWNER_TO_LINEAGE_OWNER,
+    SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_FALLBACK_SELECTION_OWNER,
+    SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+    SPEAKER_CONTRACT_ENFORCEMENT_LINEAGE_OWNER,
+    STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
+    UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+    UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+    UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+    VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET,
+    VISIBILITY_FALLBACK_DEFAULT_CONTENT_OWNER,
+    VISIBILITY_FALLBACK_OWNER_OPENING_VISIBILITY,
+    VISIBILITY_FALLBACK_OWNER_SEALED_GATE,
+    VISIBILITY_FALLBACK_OWNER_STRICT_SOCIAL_VISIBILITY,
+    VISIBILITY_FALLBACK_SELECTION_OWNER,
+    normalize_sanitizer_trace_owner_to_lineage_owner,
+)
+from game.runtime_lineage_telemetry import (
+    RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED,
+    RUNTIME_LINEAGE_EVENT_GATE_OUTCOME,
+    RUNTIME_LINEAGE_EVENT_MUTATION,
+    RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR,
+    make_runtime_lineage_event,
+)
+from game.telemetry_vocab import normalize_owner, normalize_reason_list
+
+FINAL_EMISSION_MUTATION_LINEAGE_KEY: str = "final_emission_mutation_lineage"
+
+# Short names stamped on sanitizer FEM/trace surfaces → canonical lineage module owners.
+_SANITIZER_TRACE_OWNER_TO_LINEAGE: dict[str, str] = dict(SANITIZER_TRACE_OWNER_TO_LINEAGE_OWNER)
+
+# Read-side sealed replacement sub-kinds (Cycle AB6). Runtime FEM keeps
+# ``final_emitted_source`` / ``final_route`` unchanged; lineage projection refines
+# the former catch-all ``sealed_or_global_replacement`` bucket.
+SEALED_REPLACEMENT_SUBKIND_OPENING: str = "sealed_opening_fallback"
+SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: str = "sealed_social_interlocutor_fallback"
+SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE: str = "sealed_passive_scene_pressure_fallback"
+SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL: str = "sealed_npc_pursuit_neutral_fallback"
+SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION: str = "sealed_anti_reset_continuation_fallback"
+SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: str = "sealed_global_scene_fallback"
+SEALED_REPLACEMENT_SUBKIND_UNKNOWN: str = "sealed_unknown_replacement"
+SEALED_REPLACEMENT_SUBKINDS: frozenset[str] = frozenset(
+    {
+        SEALED_REPLACEMENT_SUBKIND_OPENING,
+        SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR,
+        SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE,
+        SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL,
+        SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION,
+        SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE,
+        SEALED_REPLACEMENT_SUBKIND_UNKNOWN,
+    }
+)
+SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND: dict[str, str] = {
+    SEALED_REPLACEMENT_SUBKIND_OPENING: OPENING_FALLBACK_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: SEALED_FALLBACK_MODULE_CONTENT_OWNER,
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN: SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+}
+_LEGACY_SEALED_OR_GLOBAL_REPLACEMENT: str = "sealed_or_global_replacement"
+
+# BS5: path-specific visibility-scene fallback kinds (replaces collapsed bucket).
+VISIBILITY_HARD_REPLACEMENT: str = "visibility_hard_replacement"
+FIRST_MENTION_HARD_REPLACEMENT: str = "first_mention_hard_replacement"
+REFERENTIAL_CLARITY_HARD_REPLACEMENT: str = "referential_clarity_hard_replacement"
+_LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT: str = "visibility_or_scene_replacement"
+
+VISIBILITY_SCENE_FALLBACK_KINDS: frozenset[str] = frozenset(
+    {
+        VISIBILITY_HARD_REPLACEMENT,
+        FIRST_MENTION_HARD_REPLACEMENT,
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+        _LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT,
+    }
+)
+
+# Deterministic fallback_kind → source_family (read-side projection only).
+FALLBACK_KIND_SOURCE_FAMILY_MAP: dict[str, str] = {
+    "scene_opening": "opening_fallback",
+    "opening_failed_closed": "opening_fallback",
+    VISIBILITY_HARD_REPLACEMENT: "final_emission_gate",
+    FIRST_MENTION_HARD_REPLACEMENT: "final_emission_gate",
+    REFERENTIAL_CLARITY_HARD_REPLACEMENT: "final_emission_gate",
+    _LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT: "final_emission_gate",
+    "response_type_prepared_emission": "upstream_prepared_emission",
+    "strict_social_fallback": "strict_social_emission",
+    "minimal_social_emergency_fallback": "strict_social_emission",
+    "sanitizer_strict_social": "output_sanitizer",
+    "sanitizer_empty_output": "output_sanitizer",
+    "upstream_fast_fallback": "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_OPENING: "opening_fallback",
+    SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR: "strict_social_emission",
+    SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE: "final_emission_gate",
+    SEALED_REPLACEMENT_SUBKIND_UNKNOWN: "final_emission_gate",
+}
+
+FALLBACK_KIND_MUTATION_CLASSIFICATION_MAP: dict[str, str] = {
+    "scene_opening": "fallback_mutation",
+    "opening_failed_closed": "fallback_mutation",
+    VISIBILITY_HARD_REPLACEMENT: "visibility_replacement_mutation",
+    FIRST_MENTION_HARD_REPLACEMENT: "first_mention_replacement_mutation",
+    REFERENTIAL_CLARITY_HARD_REPLACEMENT: "referential_clarity_replacement_mutation",
+    _LEGACY_VISIBILITY_OR_SCENE_REPLACEMENT: "visibility_replacement_mutation",
+    "response_type_prepared_emission": "response_type_repair_mutation",
+    "strict_social_fallback": "response_type_repair_mutation",
+    "minimal_social_emergency_fallback": "response_type_repair_mutation",
+    "sanitizer_strict_social": "sanitizer_mutation",
+    "sanitizer_empty_output": "sanitizer_mutation",
+}
+
+REPAIR_FLAG_MUTATION_CLASSIFICATION_MAP: dict[str, str] = {
+    "answer_completeness_repaired": "answer_completeness_repair_mutation",
+    "response_delta_repaired": "response_delta_repair_mutation",
+    "social_response_structure_repair_applied": "social_response_structure_repair_mutation",
+    "narrative_authenticity_repaired": "narrative_authenticity_repair_mutation",
+    "tone_escalation_repaired": "tone_escalation_repair_mutation",
+    "anti_railroading_repaired": "anti_railroading_repair_mutation",
+    "context_separation_repaired": "context_separation_repair_mutation",
+    "player_facing_narration_purity_repaired": "player_facing_narration_purity_repair_mutation",
+    "answer_shape_primacy_repaired": "answer_shape_primacy_repair_mutation",
+    "fallback_behavior_repaired": "fallback_behavior_repair_mutation",
+    "narrative_authority_repaired": "narrative_authority_repair_mutation",
+}
+
+
+def read_side_lineage_projection_surface() -> dict[str, object]:
+    """Summarize stable read-side projection-owned surfaces (diagnostic only).
+
+    Does not inspect live runtime state, select fallbacks, or mutate output.
+    """
+    return {
+        "sealed_replacement_subkind_count": len(SEALED_REPLACEMENT_SUBKINDS),
+        "sealed_replacement_subkind_tokens": sorted(SEALED_REPLACEMENT_SUBKINDS),
+        "opening_fallback_selection_owner": OPENING_FALLBACK_SELECTION_OWNER,
+        "opening_fallback_content_owner": OPENING_FALLBACK_CONTENT_OWNER,
+        "strict_social_fallback_selection_owner": STRICT_SOCIAL_FALLBACK_SELECTION_OWNER,
+        "strict_social_fallback_content_owner": STRICT_SOCIAL_FALLBACK_CONTENT_OWNER,
+        "sanitizer_fallback_selection_owner": SANITIZER_FALLBACK_SELECTION_OWNER,
+        "sanitizer_strict_social_content_owner": SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+        "sealed_fallback_selection_owner": SEALED_FALLBACK_SELECTION_OWNER,
+        "sealed_replacement_content_owner_by_subkind": dict(
+            sorted(SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND.items())
+        ),
+        "upstream_fast_fallback_selection_owner": UPSTREAM_FAST_FALLBACK_SELECTION_OWNER,
+        "upstream_fast_fallback_content_owner": UPSTREAM_FAST_FALLBACK_CONTENT_OWNER,
+        "upstream_fast_fallback_provenance_packager": UPSTREAM_FAST_FALLBACK_PROVENANCE_PACKAGER,
+        "visibility_fallback_selection_owner": VISIBILITY_FALLBACK_SELECTION_OWNER,
+        "visibility_fallback_content_owner_by_bucket": dict(
+            sorted(VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET.items())
+        ),
+        "mutation_lineage_key": FINAL_EMISSION_MUTATION_LINEAGE_KEY,
+        "legacy_sealed_or_global_replacement_token": _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT,
+        "visibility_scene_fallback_kinds": sorted(VISIBILITY_SCENE_FALLBACK_KINDS),
+    }
+
+
+def project_source_family_from_fallback_kind(fallback_kind: Any) -> str | None:
+    """Deterministically map a projected fallback kind to a source family tag."""
+    token = _norm_projection_token(fallback_kind)
+    if not token:
+        return None
+    if token in FALLBACK_KIND_SOURCE_FAMILY_MAP:
+        return FALLBACK_KIND_SOURCE_FAMILY_MAP[token]
+    if token.startswith("sealed_"):
+        return "final_emission_gate"
+    if token.startswith("sanitizer"):
+        return "output_sanitizer"
+    return None
+
+
+def project_mutation_classification_from_fallback_kind(fallback_kind: Any) -> str | None:
+    """Map a projected fallback kind to a path-specific mutation classification."""
+    token = _norm_projection_token(fallback_kind)
+    if not token:
+        return None
+    if token in FALLBACK_KIND_MUTATION_CLASSIFICATION_MAP:
+        return FALLBACK_KIND_MUTATION_CLASSIFICATION_MAP[token]
+    if is_sealed_replacement_lineage_kind(token):
+        return "sealed_replacement_mutation"
+    return None
+
+
+def _fem_preserved_fallback_owner_bucket(fem: Mapping[str, Any], fallback_kind: str) -> str | None:
+    """Preserve owner buckets already stamped on finalized FEM — do not synthesize new values."""
+    if fallback_kind == "upstream_fast_fallback":
+        return "retry"
+    if fallback_kind in {"scene_opening", "opening_failed_closed"}:
+        bucket = _opening_fallback_owner_bucket_from_meta(fem)
+        return bucket if bucket else None
+    visibility_bucket = _fem_lineage_source(fem, "visibility_fallback_owner_bucket")
+    if visibility_bucket and (
+        fallback_kind in VISIBILITY_SCENE_FALLBACK_KINDS or fallback_kind == VISIBILITY_HARD_REPLACEMENT
+    ):
+        return visibility_bucket
+    sealed_bucket = _fem_lineage_source(fem, "sealed_fallback_owner_bucket")
+    if sealed_bucket and (
+        is_sealed_replacement_lineage_kind(fallback_kind) or fallback_kind in VISIBILITY_SCENE_FALLBACK_KINDS
+    ):
+        return sealed_bucket
+    if visibility_bucket and fallback_kind in {
+        FIRST_MENTION_HARD_REPLACEMENT,
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+    }:
+        return visibility_bucket
+    return None
+
+
+def _fem_preserved_repair_kind(fem: Mapping[str, Any]) -> str | None:
+    """Preserve repair kind when already present on finalized FEM."""
+    return _fem_lineage_source(
+        fem,
+        "producer_repair_kind",
+        "response_type_repair_kind",
+        "fallback_behavior_repair_kind",
+    )
+
+
+def _norm_projection_token(value: Any) -> str:
+    return str(value or "").strip().lower()
+
+
+def is_sealed_replacement_lineage_kind(fallback_kind: Any) -> bool:
+    """True when *fallback_kind* is a sealed replacement read-side projection bucket."""
+    token = _norm_projection_token(fallback_kind)
+    if not token:
+        return False
+    if token == _LEGACY_SEALED_OR_GLOBAL_REPLACEMENT:
+        return True
+    return token in SEALED_REPLACEMENT_SUBKINDS
+
+
+def project_sealed_replacement_subkind_from_fem(fem: Mapping[str, Any]) -> str | None:
+    """Map finalized sealed/gate-terminal replace FEM evidence to a stable read-side sub-kind.
+
+    Returns ``None`` when *fem* is not a ``final_route == replaced`` terminal replace turn.
+    Does not mutate *fem* or alter runtime selection metadata.
+    """
+    if _norm_projection_token(fem.get("final_route")) != "replaced":
+        return None
+
+    final_source = _norm_projection_token(fem.get("final_emitted_source"))
+    fallback_kind = _norm_projection_token(
+        fem.get("fallback_kind") or fem.get("visibility_fallback_kind")
+    )
+
+    if final_source == "opening_deterministic_fallback":
+        return SEALED_REPLACEMENT_SUBKIND_OPENING
+    if final_source == "social_interlocutor_minimal_fallback":
+        return SEALED_REPLACEMENT_SUBKIND_SOCIAL_INTERLOCUTOR
+    if (
+        final_source == "passive_scene_pressure_fallback"
+        or fallback_kind.startswith("passive_scene_pressure")
+    ):
+        return SEALED_REPLACEMENT_SUBKIND_PASSIVE_SCENE_PRESSURE
+    if (
+        final_source == "npc_pursuit_neutral_fallback"
+        or fallback_kind == "npc_pursuit_neutral_nonprogress"
+    ):
+        return SEALED_REPLACEMENT_SUBKIND_NPC_PURSUIT_NEUTRAL
+    if (
+        final_source == "anti_reset_local_continuation_fallback"
+        or fallback_kind == "anti_reset_continuation_fallback"
+    ):
+        return SEALED_REPLACEMENT_SUBKIND_ANTI_RESET_CONTINUATION
+    if final_source in {
+        "global_scene_fallback",
+        "scene_emit_integrity_safe_fallback",
+        "narrative_safe_fallback",
+        "acceptance_quality_global_scene_fallback",
+    } or fallback_kind in {
+        "narrative_safe_fallback",
+        "scene_emit_integrity_safe_fallback",
+    }:
+        return SEALED_REPLACEMENT_SUBKIND_GLOBAL_SCENE
+    return SEALED_REPLACEMENT_SUBKIND_UNKNOWN
+
+
+def _lineage_module_owner_from_trace(value: str | None, *, default: str) -> str:
+    """Map sanitizer trace owner names to canonical ``game.*`` lineage owners."""
+    if not value:
+        return default
+    raw = str(value).strip()
+    if raw in _SANITIZER_TRACE_OWNER_TO_LINEAGE or raw.startswith("game."):
+        return normalize_sanitizer_trace_owner_to_lineage_owner(raw, default=default)
+    normalized = normalize_owner(value)
+    if normalized and normalized.startswith("game."):
+        return normalized
+    if normalized:
+        return f"game.{normalized}"
+    return default
+
+
+def _visibility_fallback_content_owner_from_fem(fem: Mapping[str, Any]) -> str:
+    bucket = _fem_lineage_source(fem, "visibility_fallback_owner_bucket")
+    if bucket in VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET:
+        return VISIBILITY_FALLBACK_CONTENT_OWNER_BY_BUCKET[bucket]
+    return VISIBILITY_FALLBACK_DEFAULT_CONTENT_OWNER
+
+
+def _visibility_fallback_split_owners(
+    fem: Mapping[str, Any],
+) -> tuple[str, str]:
+    return VISIBILITY_FALLBACK_SELECTION_OWNER, _visibility_fallback_content_owner_from_fem(fem)
+
+
+def _fallback_split_owners_for_kind(
+    fem: Mapping[str, Any],
+    fallback_kind: str,
+) -> tuple[str | None, str | None]:
+    """Return ``(fallback_selection_owner, fallback_content_owner)`` for a projected kind."""
+    if fallback_kind in VISIBILITY_SCENE_FALLBACK_KINDS or fallback_kind in {
+        FIRST_MENTION_HARD_REPLACEMENT,
+        REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+    }:
+        return _visibility_fallback_split_owners(fem)
+    if fallback_kind == "scene_opening":
+        return OPENING_FALLBACK_SELECTION_OWNER, OPENING_FALLBACK_CONTENT_OWNER
+    if fallback_kind == "opening_failed_closed":
+        return OPENING_FALLBACK_SELECTION_OWNER, OPENING_FAIL_CLOSED_CONTENT_OWNER
+    if fallback_kind in {"strict_social_fallback", "minimal_social_emergency_fallback"}:
+        return STRICT_SOCIAL_FALLBACK_SELECTION_OWNER, STRICT_SOCIAL_FALLBACK_CONTENT_OWNER
+    if fallback_kind == "sanitizer_strict_social":
+        return (
+            _lineage_module_owner_from_trace(
+                _fem_lineage_source(fem, "sanitizer_strict_social_selection_owner"),
+                default=SANITIZER_FALLBACK_SELECTION_OWNER,
+            ),
+            _lineage_module_owner_from_trace(
+                _fem_lineage_source(fem, "sanitizer_strict_social_prose_owner"),
+                default=SANITIZER_STRICT_SOCIAL_CONTENT_OWNER,
+            ),
+        )
+    if fallback_kind == "sanitizer_empty_output":
+        owner = _lineage_module_owner_from_trace(
+            _fem_lineage_source(fem, "sanitizer_empty_fallback_owner"),
+            default=SANITIZER_FALLBACK_SELECTION_OWNER,
+        )
+        return owner, owner
+    if fallback_kind == "upstream_fast_fallback":
+        return UPSTREAM_FAST_FALLBACK_SELECTION_OWNER, UPSTREAM_FAST_FALLBACK_CONTENT_OWNER
+    if is_sealed_replacement_lineage_kind(fallback_kind):
+        content_owner = SEALED_REPLACEMENT_CONTENT_OWNER_BY_SUBKIND.get(
+            fallback_kind,
+            SEALED_FALLBACK_UNKNOWN_CONTENT_OWNER,
+        )
+        return SEALED_FALLBACK_SELECTION_OWNER, content_owner
+    return None, None
+
+
+def _opening_fallback_owner_bucket_from_meta(meta: Mapping[str, Any] | None) -> str:
+    from game.attribution_read_views import opening_fallback_owner_bucket_from_meta
+
+    return opening_fallback_owner_bucket_from_meta(meta)
+
+
+def _fem_lineage_source(fem: Mapping[str, Any], *keys: str) -> str | None:
+    for key in keys:
+        value = fem.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()
+    return None
+
+
+def _fem_selected_fallback_projection(fem: Mapping[str, Any]) -> tuple[str, str, str, str, str | None] | None:
+    """Return ``(fallback_kind, gate_path, stage, owner, source)`` only for proven selection.
+
+    The returned ``owner`` is selection/application ownership for the projected
+    event. Content authorship, when known, is attached later via fallback-specific
+    attribution fields without changing replay event identity.
+    """
+    final_route = str(fem.get("final_route") or "").strip().lower()
+    final_source = _fem_lineage_source(fem, "final_emitted_source")
+    source_token = str(final_source or "").strip().lower()
+    repair_kind = str(fem.get("response_type_repair_kind") or "").strip().lower()
+
+    # Sanitizer fallback projection keeps sanitizer stage/owner even when surfaced through final-emission telemetry.
+    if fem.get("sanitizer_strict_social_fallback_used") is True:
+        return (
+            "sanitizer_strict_social",
+            "sanitizer_fallback",
+            "sanitizer",
+            "game.output_sanitizer",
+            _fem_lineage_source(fem, "sanitizer_strict_social_source"),
+        )
+    if fem.get("sanitizer_empty_fallback_used") is True or fem.get("sanitizer_lineage_empty_fallback_used") is True:
+        return (
+            "sanitizer_empty_output",
+            "sanitizer_fallback",
+            "sanitizer",
+            "game.output_sanitizer",
+            _fem_lineage_source(fem, "sanitizer_empty_fallback_source"),
+        )
+
+    # Opening projection separates gate selection ownership from upstream-prepared prose authorship.
+    # Preserve ``owner`` as gate selection for P1; P2 may add or consume split-owner fields.
+    if (
+        fem.get("opening_fallback_failed_closed") is True
+        or repair_kind == "opening_deterministic_fallback_failed_closed"
+        or "opening_fallback_failed_closed" in source_token
+    ):
+        return (
+            "opening_failed_closed",
+            "opening_failed_closed",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+    if fem.get("opening_recovered_via_fallback") is True or source_token == "opening_deterministic_fallback":
+        return ("scene_opening", "opening_fallback", "gate", "game.final_emission_gate", final_source)
+
+    # Projection only: infer fallback selection from finalized FEM evidence, never from prepared payload availability alone.
+    if fem.get("upstream_prepared_emission_used") is True and repair_kind in {
+        "answer_upstream_prepared_repair",
+        "action_outcome_upstream_prepared_repair",
+    }:
+        return (
+            "response_type_prepared_emission",
+            "prepared_repair",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+
+    if source_token == "minimal_social_emergency_fallback":
+        return (
+            "minimal_social_emergency_fallback",
+            "strict_social_emergency",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+    if (
+        source_token
+        in {
+            "deterministic_social_fallback",
+            "social_emission_integrity_fallback",
+            "strict_social_deterministic_fallback",
+            "strict_social_replacement",
+        }
+        or (fem.get("response_type_repair_used") is True and repair_kind == "strict_social_dialogue_repair")
+    ):
+        return ("strict_social_fallback", "strict_social_fallback", "gate", "game.final_emission_gate", final_source)
+
+    if fem.get("visibility_replacement_applied") is True:
+        return (
+            VISIBILITY_HARD_REPLACEMENT,
+            "visibility_hard_replaced",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+    if fem.get("first_mention_replacement_applied") is True:
+        return (
+            FIRST_MENTION_HARD_REPLACEMENT,
+            "first_mention_hard_replaced",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+    if fem.get("referential_clarity_replacement_applied") is True:
+        return (
+            REFERENTIAL_CLARITY_HARD_REPLACEMENT,
+            "referential_clarity_hard_replaced",
+            "gate",
+            "game.final_emission_gate",
+            final_source,
+        )
+
+    provenance = fem.get("fallback_provenance_trace")
+    if isinstance(provenance, Mapping) and str(provenance.get("source") or "").strip().lower() == "fallback":
+        return ("upstream_fast_fallback", "unknown", "retry", "game.api", "fallback_provenance_trace")
+
+    if final_route == "replaced":
+        sealed_subkind = project_sealed_replacement_subkind_from_fem(fem)
+        if sealed_subkind is not None:
+            return (
+                sealed_subkind,
+                "replaced_or_sealed",
+                "gate",
+                "game.final_emission_gate",
+                final_source,
+            )
+    return None
+
+
+def _append_fem_lineage_event(events: list[dict[str, Any]], event: dict[str, Any]) -> None:
+    recurrence_key = event.get("recurrence_key")
+    if any(existing.get("recurrence_key") == recurrence_key for existing in events):
+        return
+    events.append(event)
+
+
+def _fem_speaker_repair_projections(fem: Mapping[str, Any]) -> list[tuple[str, str, str | None, list[str]]]:
+    """Return explicit ``(repair_kind, owner, source, notes)`` speaker repair evidence."""
+    projections: list[tuple[str, str, str | None, list[str]]] = []
+    reason = str(fem.get("speaker_contract_enforcement_reason") or "").strip().lower()
+    reason_to_kind = {
+        "continuity_locked_speaker_repair": "local_rebind",
+        "canonical_speaker_rewrite": "canonical_rewrite",
+        "narrator_neutral_no_allowed_speaker": "narrator_neutral",
+    }
+    repair_kind = reason_to_kind.get(reason)
+    if repair_kind:
+        projections.append((repair_kind, SPEAKER_CONTRACT_ENFORCEMENT_LINEAGE_OWNER, reason, [reason]))
+
+    continuity = fem.get("interaction_continuity_repair")
+    if isinstance(continuity, Mapping) and continuity.get("applied") is True:
+        raw_type = str(continuity.get("repair_type") or "").strip().lower()
+        continuity_kind = {
+            "repair_malformed_speaker_attribution": "continuity_malformed_attribution",
+            "strip_uncued_interruption": "continuity_strip_uncued_interruption",
+            "insert_explicit_bridge": "continuity_insert_bridge",
+            "narration_to_dialogue": "continuity_wrap_dialogue",
+        }.get(raw_type, "unknown_speaker_repair")
+        projections.append(
+            (
+                continuity_kind,
+                "game.interaction_continuity",
+                raw_type or "interaction_continuity_repair",
+                normalize_reason_list(continuity.get("violations"))[:8],
+            )
+        )
+    return projections
+
+
+def _fem_mutation_lineage_tokens(fem: Mapping[str, Any]) -> list[str]:
+    raw = fem.get(FINAL_EMISSION_MUTATION_LINEAGE_KEY)
+    if not isinstance(raw, list):
+        return []
+    out: list[str] = []
+    for item in raw[:16]:
+        if not isinstance(item, str):
+            continue
+        token = item.strip().lower()
+        if token and token not in out:
+            out.append(token)
+    return out
+
+
+def _append_fem_mutation_event(
+    events: list[dict[str, Any]],
+    *,
+    mutation_kind: str,
+    stage: str = "gate",
+    owner: str = "game.final_emission_gate",
+    source: str | None = None,
+    notes: Any = None,
+) -> None:
+    _append_fem_lineage_event(
+        events,
+        make_runtime_lineage_event(
+            event_kind=RUNTIME_LINEAGE_EVENT_MUTATION,
+            stage=stage,
+            owner=owner,
+            source=source,
+            mutation_kind=mutation_kind,
+            notes=notes,
+        ),
+    )
+
+
+def _append_fem_mutation_projections(
+    events: list[dict[str, Any]],
+    fem: Mapping[str, Any],
+    *,
+    fallback: tuple[str, str, str, str, str | None] | None,
+    speaker_projections: list[tuple[str, str, str | None, list[str]]],
+) -> None:
+    """Append bounded mutation projections for explicit finalized evidence only."""
+    if fallback is not None:
+        fallback_kind, _gate_path, stage, owner, source = fallback
+        mutation_kind = project_mutation_classification_from_fallback_kind(fallback_kind) or "fallback_mutation"
+        _append_fem_mutation_event(
+            events,
+            mutation_kind=mutation_kind,
+            stage=stage,
+            owner=owner,
+            source=source,
+            notes=[fallback_kind],
+        )
+
+    for repair_kind, owner, source, notes in speaker_projections:
+        mutation_kind = "continuity_repair_mutation" if owner == "game.interaction_continuity" else "speaker_repair_mutation"
+        _append_fem_mutation_event(
+            events,
+            mutation_kind=mutation_kind,
+            owner=owner,
+            source=source,
+            notes=[repair_kind, *notes],
+        )
+
+    if fem.get("response_type_repair_used") is True:
+        _append_fem_mutation_event(
+            events,
+            mutation_kind="response_type_repair_mutation",
+            source=_fem_lineage_source(fem, "response_type_repair_kind", "final_emitted_source"),
+            notes=[fem.get("response_type_repair_kind")] if isinstance(fem.get("response_type_repair_kind"), str) else [],
+        )
+
+    sanitizer_changed = fem.get("sanitizer_lineage_changed_count")
+    has_sanitizer_mutation = (
+        isinstance(sanitizer_changed, (int, float))
+        and not isinstance(sanitizer_changed, bool)
+        and sanitizer_changed > 0
+    ) or fem.get("sanitizer_empty_fallback_used") is True or fem.get("sanitizer_strict_social_fallback_used") is True
+    if has_sanitizer_mutation:
+        _append_fem_mutation_event(
+            events,
+            mutation_kind="sanitizer_mutation",
+            stage="sanitizer",
+            owner="game.output_sanitizer",
+            source=_fem_lineage_source(fem, "sanitizer_empty_fallback_source", "sanitizer_strict_social_source"),
+        )
+
+    if fem.get("output_sanitization_applied") is True or fem.get("finalize_route_illegal_strip_applied") is True:
+        _append_fem_mutation_event(
+            events,
+            mutation_kind="final_emission_mutation",
+            source=(
+                "finalize_route_illegal_strip"
+                if fem.get("finalize_route_illegal_strip_applied") is True
+                else "finalize_html_strip"
+            ),
+        )
+
+    repair_flag_keys = (
+        "answer_completeness_repaired",
+        "response_delta_repaired",
+        "social_response_structure_repair_applied",
+        "narrative_authenticity_repaired",
+        "tone_escalation_repaired",
+        "anti_railroading_repaired",
+        "context_separation_repaired",
+        "player_facing_narration_purity_repaired",
+        "answer_shape_primacy_repaired",
+        "fallback_behavior_repaired",
+        "narrative_authority_repaired",
+    )
+    active_repair_flags = [key for key in repair_flag_keys if fem.get(key) is True]
+    for flag in active_repair_flags:
+        mutation_kind = REPAIR_FLAG_MUTATION_CLASSIFICATION_MAP.get(flag, "repair_only_mutation")
+        _append_fem_mutation_event(
+            events,
+            mutation_kind=mutation_kind,
+            owner="game.final_emission_gate",
+            source=flag,
+            notes=[flag],
+        )
+
+    if fem.get("referential_clarity_local_substitution_applied") is True:
+        _append_fem_mutation_event(
+            events,
+            mutation_kind="referential_clarity_local_substitution_mutation",
+            owner="game.final_emission_gate",
+            source=_fem_lineage_source(fem, "referential_clarity_local_substitution_token"),
+            notes=[
+                value
+                for value in (
+                    fem.get("referential_clarity_local_substitution_token"),
+                    fem.get("referential_clarity_local_substitution_replacement"),
+                )
+                if isinstance(value, str) and value.strip()
+            ],
+        )
+
+    tokens = _fem_mutation_lineage_tokens(fem)
+    token_kind_map = {
+        "response_type_repair": ("response_type_repair_mutation", "gate", "game.final_emission_gate"),
+        "prepared_emission_selection": ("fallback_mutation", "gate", "game.final_emission_gate"),
+        "opening_fallback_selection": ("fallback_mutation", "gate", "game.final_emission_gate"),
+        "sealed_fallback_replacement": ("fallback_mutation", "gate", "game.final_emission_gate"),
+        "sanitizer_empty_fallback": ("fallback_mutation", "sanitizer", "game.output_sanitizer"),
+        "fallback_behavior_repair": ("fallback_behavior_repair_mutation", "gate", "game.final_emission_gate"),
+        "finalize_html_strip": ("final_emission_mutation", "gate", "game.final_emission_gate"),
+        "finalize_route_illegal_strip": ("final_emission_mutation", "gate", "game.final_emission_gate"),
+    }
+    for token in tokens:
+        classification = token_kind_map.get(token)
+        if classification is None:
+            continue
+        kind, stage, owner = classification
+        _append_fem_mutation_event(
+            events,
+            mutation_kind=kind,
+            stage=stage,
+            owner=owner,
+            source=token,
+            notes=[token],
+        )
+
+    if fem.get("post_gate_mutation_detected") is True and not any(
+        event.get("event_kind") == RUNTIME_LINEAGE_EVENT_MUTATION for event in events
+    ):
+        _append_fem_mutation_event(
+            events,
+            mutation_kind="final_emission_mutation",
+            source="post_gate_mutation_detected",
+            notes=["post_gate_mutation_detected"],
+        )
+
+
+def build_fem_runtime_lineage_events(fem: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    """Project finalized FEM lineage evidence into H1 runtime lineage events.
+
+    Read-side only: prepared payload presence alone is not selection evidence, and no
+    output/gate/evaluator behavior is consulted or changed here.
+    """
+    if not isinstance(fem, Mapping):
+        return []
+
+    events: list[dict[str, Any]] = []
+    fallback = _fem_selected_fallback_projection(fem)
+    if fallback is not None:
+        fallback_kind, gate_path, stage, owner, source = fallback
+        fallback_authorship_source: str | None = None
+        fallback_owner_bucket = _fem_preserved_fallback_owner_bucket(fem, fallback_kind)
+        preserved_repair_kind = _fem_preserved_repair_kind(fem)
+        fallback_selection_owner, fallback_content_owner = _fallback_split_owners_for_kind(
+            fem,
+            fallback_kind,
+        )
+        if fallback_kind == "scene_opening":
+            fallback_authorship_source = _fem_lineage_source(fem, "opening_fallback_authorship_source")
+        _append_fem_lineage_event(
+            events,
+            make_runtime_lineage_event(
+                event_kind=RUNTIME_LINEAGE_EVENT_FALLBACK_SELECTED,
+                stage=stage,
+                owner=owner,
+                source=source,
+                fallback_kind=fallback_kind,
+                fallback_authorship_source=fallback_authorship_source,
+                fallback_owner_bucket=fallback_owner_bucket,
+                fallback_selection_owner=fallback_selection_owner,
+                fallback_content_owner=fallback_content_owner,
+                repair_kind=preserved_repair_kind,
+            ),
+        )
+        if gate_path != "unknown":
+            _append_fem_lineage_event(
+                events,
+                make_runtime_lineage_event(
+                    event_kind=RUNTIME_LINEAGE_EVENT_GATE_OUTCOME,
+                    stage=stage,
+                    owner=owner,
+                    source=source,
+                    gate_path=gate_path,
+                ),
+            )
+
+    final_route = str(fem.get("final_route") or "").strip().lower()
+    final_source = _fem_lineage_source(fem, "final_emitted_source")
+    gate_path: str | None = None
+    if fem.get("referential_clarity_local_substitution_applied") is True:
+        gate_path = "visibility_local_repair"
+    elif final_route == "accept_candidate" and fem.get("strict_social_active") is True:
+        gate_path = "strict_social_accept"
+    elif final_route == "accept_candidate" and (
+        fem.get("post_gate_mutation_detected") is True or fem.get("response_type_repair_used") is True
+    ):
+        gate_path = "accept_repaired"
+    elif final_route == "accept_candidate" and fem.get("post_gate_mutation_detected") is False:
+        gate_path = "accept_unchanged"
+
+    if gate_path is not None and not any(event.get("event_kind") == RUNTIME_LINEAGE_EVENT_GATE_OUTCOME for event in events):
+        _append_fem_lineage_event(
+            events,
+            make_runtime_lineage_event(
+                event_kind=RUNTIME_LINEAGE_EVENT_GATE_OUTCOME,
+                stage="gate",
+                owner="game.final_emission_gate",
+                source=final_source,
+                gate_path=gate_path,
+            ),
+        )
+
+    speaker_projections = _fem_speaker_repair_projections(fem)
+    for repair_kind, owner, source, notes in speaker_projections:
+        _append_fem_lineage_event(
+            events,
+            make_runtime_lineage_event(
+                event_kind=RUNTIME_LINEAGE_EVENT_SPEAKER_REPAIR,
+                stage="gate",
+                owner=owner,
+                source=source,
+                repair_kind=repair_kind,
+                notes=notes,
+            ),
+        )
+    _append_fem_mutation_projections(events, fem, fallback=fallback, speaker_projections=speaker_projections)
+    return events[:16]
+
+
+# --- BV2B replay acceptance adapters (read-side; no meta imports for consumers) ---
+
+
+def normalize_fem_for_replay_acceptance(fem: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Normalize FEM for golden-replay protected observation (read-side only)."""
+    from game.observability_attribution_read import normalize_final_emission_meta_for_observability
+
+    return normalize_final_emission_meta_for_observability(fem)
+
+
+def read_fem_from_turn_for_replay(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read FEM sidecar from a turn payload for golden replay acceptance."""
+    from game.observability_attribution_read import read_final_emission_meta_from_turn_payload
+
+    return read_final_emission_meta_from_turn_payload(payload)
+
+
+def read_emission_debug_lane_for_replay(payload: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Read emission debug lane from a turn payload for golden replay acceptance."""
+    from game.observability_attribution_read import read_emission_debug_lane_from_turn_payload
+
+    return read_emission_debug_lane_from_turn_payload(payload)
+
+
+def read_opening_fallback_owner_bucket_for_replay(meta: Mapping[str, Any] | None) -> str:
+    """Project opening fallback owner bucket from FEM for replay acceptance."""
+    from game.attribution_read_views import opening_fallback_owner_bucket_from_meta
+
+    return opening_fallback_owner_bucket_from_meta(meta)

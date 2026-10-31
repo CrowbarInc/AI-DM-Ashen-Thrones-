@@ -1,0 +1,114 @@
+--- baseline/game/social.py
++++ final/game/social.py
+@@ -1613,6 +1613,7 @@
+     runtime: Dict[str, Any],
+     topic_hint: Optional[str] = None,
+     player_text: Optional[str] = None,
++    *, allow_revealed: bool = False, selection: dict | None = None,
+ ) -> Optional[Dict[str, Any]]:
+     """Return next unrevealed topic that matches hint, relevance, and sufficiency.
+ 
+@@ -1627,6 +1628,7 @@
+     hint_slug = slugify(topic_hint) if topic_hint else None
+     text_in = str(player_text or "").strip()
+ 
++    candidates = []
+     for t in topics:
+         if not isinstance(t, dict):
+             rec = {"id": str(t)[:40], "text": str(t)} if t else None
+@@ -1637,7 +1639,7 @@
+         tid = str(rec.get("id") or "").strip()
+         if not tid:
+             tid = slugify(rec.get("text", ""))[:40] or "topic"
+-        if tid in revealed:
++        if tid in revealed and not (text_in and allow_revealed):
+             continue
+         if hint_slug and hint_slug not in slugify(tid) and hint_slug not in slugify(rec.get("text", "")):
+             continue
+@@ -1661,8 +1663,24 @@
+             v = rec.get(key)
+             if isinstance(v, str) and v.strip():
+                 out[key] = v.strip()
+-        return out
+-    return None
++        from game.conversational_continuity import reference_subject_tokens
++        words = reference_subject_tokens(text_in, str(npc.get("name") or ""))
++        score = len(words & reference_subject_tokens(_authored_topic_hay(rec)))
++        candidates.append((score, out))
++    if selection is not None:
++        selection.update(candidate_sources=["npc:" + str(npc.get("id") or "") + ":" + row["id"] for _, row in candidates],
++                         selected_source="", ambiguous=False)
++    if not candidates:
++        return None
++    best = max(score for score, _ in candidates)
++    winners = [row for score, row in candidates if score == best]
++    if text_in and best > 0 and len(winners) > 1:
++        if selection is not None:
++            selection["ambiguous"] = True
++        return None
++    if selection is not None:
++        selection["selected_source"] = "npc:" + str(npc.get("id") or "") + ":" + winners[0]["id"]
++    return winners[0]
+ 
+ 
+ def npc_social_knowledge_exhausted(
+@@ -4217,26 +4235,40 @@
+     if action_type in ("question", "social_probe"):
+         # Only use topic hint when explicitly provided; otherwise reveal first available topic
+         topic_hint = normalized_action.get("topic") if normalized_action.get("topic") else None
++        topic_selection = {}
+         topic_rec = _next_topic_to_reveal(
+             npc,
+             runtime,
+             topic_hint,
+             player_text=str(raw_player_text or prompt or ""),
++            allow_revealed=bool(raw_player_text), selection=topic_selection,
+         )
+-        recalled_topic = False
++        recalled_topic = bool(topic_rec and topic_rec["id"] in runtime.get("revealed_topics", []))
++
++        # Historical restatement is speech authority, not a new topic reveal.
++        from game.conversational_continuity import supplied_clarification
++        speech_reference = supplied_clarification(str(raw_player_text or prompt or ""), session, npc_id, npc_name)
++        if speech_reference:
++            topic_rec = None
++            topic_selection = {"candidate_sources": [], "selected_source": "", "ambiguous": False}
++            recalled_topic = False
+ 
+         # Communication ownership may resolve an anaphoric clarification to an
+         # already revealed topic. The social owner rechecks speaker, authored
+         # payload and disclosure state; provider text cannot grant knowledge.
+         communication = incoming_action_meta.get("communication") or {}
+         evidence = incoming_action_meta.get("public_conversation_evidence") or {}
+-        if not topic_rec and communication.get("recipient") == "NPC" and communication.get("purpose") in {"QUESTION", "CLARIFICATION", "RECALL"}:
++        if not speech_reference and not topic_rec and communication.get("recipient") == "NPC" and communication.get("purpose") in {"QUESTION", "CLARIFICATION", "RECALL"}:
+             for topic in npc.get("topics") or npc.get("knowledge") or []:
+                 if not isinstance(topic, dict):
+                     continue
+                 topic_id = str(topic.get("id") or "")
+                 ref = f"npc:{npc_id}:{topic_id}"
+-                if topic_id in runtime.get("revealed_topics", []) and evidence.get(ref) == topic.get("text") and ref in communication.get("evidence_refs", []):
++                if (topic_id in runtime.get("revealed_topics", [])
++                        and evidence.get(ref) == topic.get("text")
++                        and ref in communication.get("evidence_refs", [])
++                        and authored_topic_relevant_to_question(str(raw_player_text or prompt or ""), topic, npc=npc)
++                        and authored_answer_sufficient_for_question(str(raw_player_text or prompt or ""), topic)):
+                     topic_rec = dict(topic)
+                     recalled_topic = True
+                     break
+@@ -4260,6 +4292,7 @@
+                     "target_resolved": True,
+                     "topic_revealed": topic_rec,
+                     "recalled_topic": recalled_topic,
++                    "topic_selection": topic_selection,
+                     "skill_check": None,
+                 },
+                 action_type=action_type,
+@@ -4374,6 +4407,7 @@
+                 "target_resolved": True,
+                 "topic_revealed": None,
+                 "skill_check": None,
++                "topic_selection": topic_selection,
+             },
+             action_type=action_type,
+             prompt=prompt,

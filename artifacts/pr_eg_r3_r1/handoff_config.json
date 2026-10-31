@@ -1,0 +1,485 @@
+{
+  "campaign_id": "pr_eg_r3_r1_expression_contract_semantics_20261017",
+  "campaign_name": "PR-EG-R3-R1 \u2014 Expression Contract Semantics and Conversational Relevance",
+  "campaign_date": "2026-10-17",
+  "purpose": "Authorize conversational meaning before expression, preserve proposition identity, and keep partial facts from closing stronger questions. Stop after R3-R1.",
+  "objective_status": "B \u2014 REPAIR QUALIFIED WITH LIMITATIONS",
+  "executive_summary": "**B \u2014 REPAIR QUALIFIED WITH LIMITATIONS.**\n\nHost-authorized meaning is built before the provider writes a sentence. The provider may word that meaning. Delivery still goes through the existing host speech seal. A rejected sentence is not adopted.\n\nThe final production qualification is two fresh `/api/chat` conversations, 15 turns and 12 turns, on `gpt-4.1-mini-2025-04-14`. Generated personal characterization reached the player in both. Primary turn 2 and secondary turn 6 delivered: \"I prefer the evening because it feels calmer and more peaceful to me.\"\n\nSafe paraphrases, an authorized night-watch disclosure, uncertainty, and a nonbinding refusal were also adopted. Exact recall listed every distinct delivered sentence for one proposition and made no provider call. The unattended-gate question kept the watch fact and withheld a yes or no.\n\nThe first qualification is preserved. It rejected that same characterization because the degree word \"more\" was outside the closed grammar class, and it failed to bind \"Put that another way.\" Those two defects were repaired, a new plan was frozen, and the final sample was run against that plan. Frozen holdouts were not edited.\n\nRaw scorer mean on the final 27 turns is 2.444. Distribution: {2: 7, 3: 17, 1: 1, 0: 2}. Two raw scores of 0 are the scorer matching a rejected verbatim repeat to speech that had already been adopted. The audit records `delivered_generated: false` and `HOST_FALLBACK`. Confirming regression: {'failed': 25, 'passed': 692} of 717. New product failures against PR-EG-R3: 0. Inherited failures: 25.",
+  "changes": {
+    "production": [
+      "Host-authorized expression meaning, characterization premises, proposition identity, and answer sufficiency, sealed through existing speech adoption."
+    ],
+    "validation": [
+      "R3-R1 matrix and holdouts, plus final 15-turn and 12-turn fresh /api/chat conversations."
+    ],
+    "tooling": [
+      "Fresh-provider qualification runner with a preserved first plan and a frozen final plan."
+    ],
+    "documentation": [
+      "27 review artifacts, both final transcripts, and the preserved first qualification."
+    ],
+    "generated_artifacts": [
+      "Regression comparison, quality scores, usage totals, state audit, integrity checks, and acceptance gates."
+    ]
+  },
+  "testing": {
+    "focused": "R3-R1 expression semantics, R3 expression, continuity, speech adoption, and reference eligibility passed.",
+    "broader": "Predecessor {'failed': 25, 'passed': 605}; confirming {'failed': 25, 'passed': 692}.",
+    "full_suite": "Relevant historical family plus R3 and R3-R1 tests. Full repository suite not run.",
+    "runtime_validation": "Two final fresh HTTP conversations, 15 and 12 turns, through /api/chat. Characterization was delivered in both.",
+    "model_runtime_boundary": "Configured gpt-4.1-mini; response model gpt-4.1-mini-2025-04-14; real interpretation and expression; zero narration and zero retries in the final sample.",
+    "new_regressions": "None against PR-EG-R3 in the confirming run. Two Windows file-lock errors in the first post-repair run did not reproduce.",
+    "pre_existing_failures": "25 inherited failing identities retained in report 18."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "The first live qualification did not adopt characterization and is preserved.",
+      "Two raw scores of 0 are verbatim reuses of already adopted speech.",
+      "Characterization is limited to one host-authorized preference theme."
+    ],
+    "pre_existing": [
+      "25 relevant-suite failures.",
+      "Ambiguous clarification does not name the competing sentences."
+    ]
+  },
+  "missing_concepts": [
+    "Additional host-authorized subjective themes.",
+    "A second wording of an explanation that was already delivered."
+  ],
+  "decisions_requiring_human_review": [
+    "Review the B verdict, the preserved first qualification, and the single characterization theme before any later cycle."
+  ],
+  "does_not_prove": [
+    "Unrestricted improvisation is safe.",
+    "Every NPC preference can be explained.",
+    "The full repository suite passes.",
+    "The isolated historical harness groups paraphrases without a proposition id."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R3-R1. Await external review. Do not begin PR-EH.",
+  "primary_report": "artifacts/pr_eg_r3_r1/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 20971520,
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_r1_expression_semantics.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/validate_pr_eg_r3_r1.py",
+      "role": "source",
+      "why": "Cycle source that authorizes meaning, validates expression, or records proposition identity.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/03_HISTORICAL_FAILURE_REPRODUCTION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/04_SOURCE_LEVEL_ROOT_CAUSE.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/05_STRUCTURED_EXPRESSION_CONTRACT.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/06_CHARACTERIZATION_AUTHORITY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/07_CANDIDATE_VALIDATION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/08_ENTITY_IDENTITY_PROTECTION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/09_PROPOSITION_IDENTITY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/10_CONVERSATIONAL_CONTINUITY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/11_EXACT_RECALL_VS_RESTATEMENT.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/12_ANSWER_SUFFICIENCY_CONTRACT.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/13_HOST_OWNED_ADOPTION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/14_ADVERSARIAL_QUALIFICATION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/15_POSITIVE_DIALOGUE_QUALITY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/16_FROZEN_HOLDOUTS.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/17_TARGETED_TEST_MATRIX.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/18_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/19_PRIMARY_FRESH_PROVIDER_CONVERSATION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/20_SECONDARY_FRESH_PROVIDER_CONVERSATION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/21_PROVIDER_COST_AND_LATENCY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/22_PERSISTENCE_AND_STATE_INTEGRITY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/23_SOURCE_CHANGE_INVENTORY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/24_REMAINING_LIMITATIONS.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/25_NEXT_CYCLE_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/26_FINAL_VERDICT.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/27_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/acceptance_gates.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/artifact_inventory.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/build_review.py",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/final_relevant_junit.xml",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/final_relevant_junit_before_degree_repair.xml",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/final_relevant_junit_confirm.xml",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/freeze.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/frozen_holdouts.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/historical_reproduction.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/historical_reproduction_before.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/integrity_checks.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_freeze.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_plan.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_plan_before_degree_repair.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_qualification.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_status.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_status_before_degree_repair.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_usage.jsonl",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/live_usage_before_degree_repair.jsonl",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/performance.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/qualification_before_degree_repair.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/quality.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/regression_comparison.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/reproduce_historical.py",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/state_audit.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r3_r1/usage_totals.json",
+      "role": "evidence",
+      "why": "R3-R1 transcript, frozen input, regression result, or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "27 reports, both final transcripts, the preserved first qualification, frozen inputs, regression identities, and the expression source. No credentials or disposable saves."
+}

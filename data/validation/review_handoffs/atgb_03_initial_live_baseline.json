@@ -1,0 +1,1158 @@
+{
+  "changes": {
+    "production": [
+      "None; canonical campaign and all recorded execution sources unchanged."
+    ],
+    "validation": [
+      "Existing 24 focused provider-disabled tests passed; four live starting preflights passed."
+    ],
+    "tooling": [
+      "Campaign wrapper only; approved harness unchanged."
+    ],
+    "documentation": [
+      "Partial execution report and current NEXT_SESSION orientation."
+    ],
+    "generated_artifacts": [
+      "15 raw captured exchanges, independent provider ledger, state/log evidence, existing human worksheets and explicit pending/not-evaluated reporting."
+    ]
+  },
+  "testing": {
+    "focused": "24 passed in preparation.",
+    "broader": "Separate existing provider-disabled production chat test passed.",
+    "full_suite": "Not run.",
+    "runtime_validation": "S01 passed live infrastructure acceptance; S02/S03 complete; S04 stopped before third turn.",
+    "model_runtime_boundary": "OpenAI gpt-4.1-mini; 12 recorded requests, no narration requests; host-owned replies preserved.",
+    "new_regressions": "No code change; missing runtime accounting is an observed infrastructure limitation.",
+    "pre_existing_failures": "Sandbox startup limitations and initial pytest-directory setup attempt preserved separately."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "S04.2 lacks performance metadata; approved harness stopped before S04.3.",
+      "Provider ledger includes S03.2 expression request missing from host turn counter.",
+      "22 turns unsubmitted; S07/S09 opening delivery not evaluated."
+    ],
+    "pre_existing": [
+      "Previously exposed held-out corpus.",
+      "Dirty worktree means HEAD alone is insufficient provenance.",
+      "No browser-rendered UI validation."
+    ]
+  },
+  "campaign_id": "atgb_03_initial_live_baseline",
+  "campaign_name": "ATGB-03 Initial Live Conversational Baseline",
+  "campaign_date": "2026-10-18",
+  "purpose": "Observe existing player–AI-DM behavior through the approved benchmark and preserve a partial run after its accounting guard stopped execution.",
+  "objective_status": "PARTIAL LIVE BASELINE; INFRASTRUCTURE STOP AT S04; HUMAN REVIEW PENDING",
+  "executive_summary": "S01–S03 completed; S04 stopped after two turns because its provider-call counter became unavailable. Captured 15/37 turns, 12 provider requests. S05–S10 not attempted. All human judgments pending; no gameplay score or production change. Explicit OpenAI approval was supplied after the initial rejected command.",
+  "decisions_requiring_human_review": [
+    "Review partial transcripts using separate interpretation, response adequacy and authority judgments; no scores supplied.",
+    "Review missing performance accounting and expression-call underreporting before a separately reviewed readiness correction/new live baseline. Do not repair gameplay during evaluation."
+  ],
+  "missing_concepts": [
+    "Complete live execution and authorized human scoring.",
+    "Reliable benchmark accounting across all existing response paths."
+  ],
+  "does_not_prove": [
+    "Full baseline completion, gameplay improvement or any aggregate gameplay score.",
+    "Unscored semantic adequacy or authority compliance.",
+    "S07/S09 opening delivery or held-out/independent generalization.",
+    "Complete cost telemetry or SDK-internal retry counts."
+  ],
+  "recommended_next_step": "Review the partial evidence and accounting blocker. Require separately reviewed infrastructure readiness before another live attempt. Human-score only captured turns with sufficient evidence; leave others not evaluated. No gameplay repair.",
+  "primary_report": "development/reports/atgb_03_initial_live_baseline.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_02a/validation_results.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/campaign_clock.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/campaign_stop.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/configuration_and_provenance.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/evaluation_status.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execute.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execution_blocker.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execution_summary.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/finalize_live.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused.xml",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_host.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_host.xml",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_retry.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/host_check.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/host_check.xml",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/initial_git_status.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/report.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/result.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/worksheet.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/worksheet.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/prepare.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preservation_checks.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/provider_telemetry.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/resume_checks.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/provider_usage.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/report.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/result.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/review_status.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/atgb-job.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/atgb-worker.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/campaign.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/character.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/combat.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/conditions.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/scenes/frontier_gate.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/scenes/market_quarter.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/scenes/old_milestone.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/session.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/session_log.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/world.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/transcript.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/wall_clock.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/execution_status.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/provider_usage.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/report.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/result.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/review_status.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/atgb-job.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/atgb-worker.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/campaign.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/character.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/combat.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/conditions.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/scenes/frontier_gate.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/scenes/market_quarter.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/scenes/old_milestone.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/world.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/transcript.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/wall_clock.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/execution_status.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/provider_usage.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/report.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/result.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/review_status.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/atgb-job.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/atgb-worker.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/campaign.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/character.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/combat.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/conditions.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/scenes/frontier_gate.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/scenes/market_quarter.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/scenes/old_milestone.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/world.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/transcript.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/wall_clock.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/execution_status.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/provider_usage.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/report.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/result.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/review_status.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/atgb-job.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/atgb-worker.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/campaign.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/character.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/combat.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/conditions.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/scenes/frontier_gate.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/scenes/market_quarter.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/scenes/old_milestone.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/session.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/session_log.jsonl",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/stores/S04-e95de1cdbcfa4c4d8812b9a801af39d7/world.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/transcript.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/wall_clock.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/scenario_status.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_a_acceptance.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_a_console.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_b_console.txt",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/turn_telemetry.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/validation_results.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/verify_bundle.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/worksheet.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/worksheet.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/campaign.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/character.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/conditions.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/market_quarter.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/old_milestone.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/world.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_execution.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02a_readiness.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/__init__.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/baseline.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/budget.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/fixtures.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/preflight.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/results.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/worksheet.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/run_atgb.py",
+      "role": "partial_live_evaluation_evidence",
+      "why": "Review actual exchanges, state and telemetry independently; distinguish execution from pending judgments.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "ZIP includes exact captured conversations, per-turn context/rubric worksheets, isolated state/logs, provider ledger, missing-counter evidence, status roster, hashes and the pending-human-review boundary."
+}

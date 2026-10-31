@@ -1,0 +1,66 @@
+{
+  "version": "ATGB-03B-1",
+  "ok": false,
+  "stop_reason": "provider_call_ceiling_not_observable",
+  "dispatch_sites": [
+    {
+      "path": "game/api_upstream_preflight.py",
+      "function": "run_upstream_api_preflight",
+      "line": 247,
+      "guarded": true,
+      "owner_key": "game/api_upstream_preflight.py:run_upstream_api_preflight"
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "function": "request_expression",
+      "line": 818,
+      "guarded": true,
+      "owner_key": "game/expressive_dialogue.py:request_expression"
+    },
+    {
+      "path": "game/gm.py",
+      "function": "call_gpt",
+      "line": 5215,
+      "guarded": true,
+      "owner_key": "game/gm.py:call_gpt"
+    },
+    {
+      "path": "game/host_constrained_candidates.py",
+      "function": "invoke_candidate_provider",
+      "line": 727,
+      "guarded": true,
+      "owner_key": "game/host_constrained_candidates.py:invoke_candidate_provider"
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "function": "request_interpretation",
+      "line": 241,
+      "guarded": true,
+      "owner_key": "game/live_chat_interpretation.py:request_interpretation"
+    },
+    {
+      "path": "game/semantic_interpreter.py",
+      "function": "_invoke_interpretation_model",
+      "line": 227,
+      "guarded": true,
+      "owner_key": "game/semantic_interpreter.py:_invoke_interpretation_model"
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "function": "_invoke_provider",
+      "line": 488,
+      "guarded": true,
+      "owner_key": "game/unified_semantic_planning.py:_invoke_provider"
+    }
+  ],
+  "established_gaps": [
+    {
+      "reason": "reviewed_application_surface_changed"
+    }
+  ],
+  "reason": "provider_lifecycle_coverage_unverified",
+  "note": "Static scope is current application game package; deterministic dispatch-owner tests supplement fingerprints. No live execution implied.",
+  "changed_sources": [
+    "game/conversational_orchestration.py"
+  ]
+}

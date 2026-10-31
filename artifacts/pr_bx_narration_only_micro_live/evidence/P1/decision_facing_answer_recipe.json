@@ -1,0 +1,79 @@
+{
+  "schema": "decision_facing_answer_recipe_v1",
+  "projection_only": true,
+  "authority_owner": "gm_resolution_decision",
+  "turn_operation": {
+    "projection_only": true,
+    "authority_owner": "gm_resolution_decision",
+    "response_operation": "bounded_interpretation",
+    "declaration_expectation": "optional_bounded_inference",
+    "semantic_ceiling": "interpret_observations_not_unauthorized_cause",
+    "instruction": "Interpret what the listed observations may indicate. Do not explain an unauthorized cause, actor, time, or history. A bounded inference may be proposed as gm_inference, inferred, possible, or left in narration. Do not declare a new world fact merely to answer."
+  },
+  "requested_answer": "Answer the interpretation request about chapel bell. Player asked: I examine the split wooden yoke and the torn leather hanger closely. What does this damage suggest?",
+  "required_content": [
+    {
+      "claim_id": "rc_db5ec0aa65c3",
+      "role": "MUST_STATE",
+      "text": "The bell's wooden yoke is split.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    },
+    {
+      "claim_id": "rc_b31ecb1fd1c7",
+      "role": "MUST_STATE",
+      "text": "The bell's leather hanger is torn.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    }
+  ],
+  "permitted_content": [],
+  "permitted_inference": {
+    "allowed": true,
+    "qualified_observations": [
+      {
+        "act": "infer",
+        "authority": "observation",
+        "epistemic_status": "inferred",
+        "scope": "qualified_possibilities_only",
+        "subject": "chapel bell",
+        "relation_kind": "epistemic_status"
+      }
+    ],
+    "may_infer_claims": []
+  },
+  "inference_modality": "possible",
+  "unresolved_content": [
+    "cause",
+    "actor",
+    "time",
+    "history"
+  ],
+  "forbidden_upgrades": [
+    "unauthorized_consequential_fact",
+    "generated_content_as_authored_world_fact",
+    "exact_cause",
+    "actor",
+    "time",
+    "history",
+    "neglect",
+    "harsh_conditions",
+    "safety_status",
+    "unseen_damage",
+    "gameplay_lead",
+    "evidential_establishment",
+    "certainty_upgrade_to_established",
+    "inference_as_authored_world_fact"
+  ],
+  "declaration_guidance": {
+    "consequential_authorized_claim": "realize with source_claim_id and the claim provenance",
+    "bounded_inference": "propose only; provenance gm_inference; epistemic_status inferred; modality possible; relation_kind epistemic_status. Not authored_world_fact.",
+    "epistemic_premise": "No player hypothesis, NPC claim, or unresolved premise is authorized on this turn.",
+    "epistemic_claims": [],
+    "ordinary_incidental_expression": "Harmless sensory detail and mannerism may stay plain narration. They are not consequential claims."
+  },
+  "incidental_improvisation_guidance": "Harmless sensory detail and mannerism may stay plain narration. They are not consequential claims.",
+  "answer_strategy": "Answer the interpretation with one qualified possibility grounded in the required observations. Use could, may, or might, and keep the wording tied to those observations. Do not explain an unauthorized cause, actor, time, or history."
+}

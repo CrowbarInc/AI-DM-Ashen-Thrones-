@@ -1,0 +1,63 @@
+--- before/game/api.py
++++ after/game/api.py
+@@ -884,7 +884,10 @@
+             },
+         }
+     )
+-    return {"ok": True, "gm_output": gm, "resolution": resolution}
++    from game.immutable_valid_response import restore_accepted_text
++
++    restore_accepted_text(gm)
++    return {"ok": True, "gm_output": _strip_internal_gm_keys(gm), "resolution": resolution}
+ 
+ 
+ def _apply_conversational_context_update(session: dict, decision: ConversationalDecision) -> bool:
+@@ -5591,6 +5594,23 @@
+     trace['latency_ms'] = _finalize_latency_breakdown(latency_ms)
+     _finalize_and_append_trace(session, trace, True, None)
+ 
++    from game.immutable_valid_response import accepted_record, restore_accepted_text
++    from game.conversational_continuity import record_delivered_exchange
++
++    restore_accepted_text(gm)
++    action_adoption = accepted_record(gm)
++    record_delivered_exchange(session, player_text=str(_player_input or ""),
++        delivered_text=str(gm.get("player_facing_text") or ""),
++        social=resolution.get("social") if isinstance(resolution, dict) else None,
++        scene_id=str(scene["scene"].get("id") or ""),
++        turn=int(session.get("turn_counter") or 0), adoption=action_adoption)
++    if (isinstance(resolution, dict) and isinstance(resolution.get("social"), dict)
++            and (action_adoption or {}).get("authorization_source") != "host_terminal_safety"):
++        from game.dialogue_authority import remember_dialogue_commitment
++
++        remember_dialogue_commitment(session, social=resolution["social"], player_text=str(_player_input or ""),
++            line=str(gm.get("player_facing_text") or ""), turn=int(session.get("turn_counter") or 0))
++
+     save_character(character)
+     save_world(world)
+     save_combat(combat)
+@@ -5963,7 +5983,11 @@
+     # First successful opening only (structured start or chat scene_opening); never set on failed turns.
+     if mark_campaign_started:
+         session["campaign_started"] = True
+-    if isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) and isinstance(gm, dict):
++    from game.immutable_valid_response import restore_accepted_text
++
++    restore_accepted_text(gm)
++    if (isinstance(resolution, dict) and isinstance(resolution.get("social"), dict) and isinstance(gm, dict)
++            and ((gm.get("metadata") or {}).get("accepted_response") or {}).get("authorization_source") != "host_terminal_safety"):
+         from game.dialogue_authority import remember_dialogue_commitment
+         from game.immutable_valid_response import restore_accepted_text
+ 
+@@ -5978,10 +6002,7 @@
+     from game.conversational_continuity import record_delivered_exchange
+ 
+     speech_adoption = (gm.get("metadata") or {}).get("accepted_response") or {}
+-    # This cycle binds host-owned dialogue. Legacy non-social mechanical
+-    # finalization retains its separate resolver presentation behavior.
+-    if speech_adoption.get("speech_adoption") != "AUTHORIZED_HOST_SPEECH":
+-        speech_adoption = None
++    speech_adoption = speech_adoption or None
+     record_delivered_exchange(
+         session,
+         player_text=str(player_text_for_eval or ""),

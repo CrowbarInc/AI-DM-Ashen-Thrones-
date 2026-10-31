@@ -1,0 +1,9 @@
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+[MODEL ROUTE] purpose=retry_escalation selected=gpt-4.1-mini family=retry_escalation retry=1 escalated=true
+{"turn": 1, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"", "calls": 3}
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+[MODEL ROUTE] purpose=retry_escalation selected=gpt-4.1-mini family=retry_escalation retry=1 escalated=true
+{"turn": 2, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara says, \"I cannot answer that from what is settled here.\"", "calls": 3}
+[CLUE DISCOVERED] north_road
+[MODEL ROUTE] purpose=strict_social selected=gpt-4.1-mini family=high_precision retry=0 escalated=true
+{"turn": 3, "strict": null, "pass": true, "critical": false, "response": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"", "calls": 2}

@@ -1,0 +1,24 @@
+pytest tests/test_pr_dc_subjective_followups.py
+52 passed / 0 failed / 0 skipped
+
+test_pr_dc_experiential_frames_are_claim_only[Does the rain make it harder to keep watch?]
+test_pr_dc_experiential_frames_are_claim_only[Does it get any easier after a while?]
+test_pr_dc_experiential_frames_are_claim_only[Is standing in the cold uncomfortable?]
+test_pr_dc_experiential_frames_are_claim_only[Do long shifts leave you tired?]
+test_pr_dc_experiential_frames_are_claim_only[Do you enjoy working at the gate?]
+test_pr_dc_experiential_frames_are_claim_only[Does the noise bother you?]
+test_pr_dc_experiential_frames_are_claim_only[Is the work stressful?]
+test_pr_dc_experiential_frames_are_claim_only[Why do you prefer somewhere dry?]
+test_pr_dc_third_person_experience_stays_uncertain[Does the baker find early mornings tiring?]
+test_pr_dc_third_person_experience_stays_uncertain[Does the innkeeper enjoy busy evenings?]
+test_pr_dc_negative_controls_are_not_harmless (15 prompts)
+test_pr_dc_existing_limits_still_outrank_experiential_wording
+test_pr_dc_three_turn_followups_keep_guard_and_claim_only_plan
+test_pr_dc_long_shift_fatigue_is_travel_before_the_classifier
+test_pr_dc_named_other_roles_do_not_become_harmless_captain_speech
+test_pr_dc_followup_projection_does_not_weaken_hard_validation (11 candidates x turn 2 and turn 3)
+test_pr_dc_rain_followup_uses_existing_reduced_context_predicate
+
+Combined focused regression including PR-DB, PR-CZ, PR-CX, PR-CW, PR-CV, PR-CT, PR-CP, PR-CR, PR-CE, PR-CK, PR-CN, immutable C18, C19, consequential claims, authored knowledge, and watch-break:
+284 passed / 3 failed / 0 skipped
+The 3 failures are inherited authored-knowledge patrol tests.

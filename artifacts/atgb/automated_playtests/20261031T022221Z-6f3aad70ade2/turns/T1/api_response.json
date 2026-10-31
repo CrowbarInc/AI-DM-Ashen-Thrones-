@@ -1,0 +1,236 @@
+{
+  "ok": true,
+  "gm_output": {
+    "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+    "tags": [
+      "conversational_orchestration",
+      "answer",
+      "non_mutating"
+    ],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null,
+    "debug_notes": "conversational_orchestration:communication_before_execution",
+    "metadata": {
+      "accepted_response": {
+        "addressee": "player",
+        "adoption_status": "candidate_accepted",
+        "attempt": 0,
+        "authority_result": "accepted",
+        "authorization_provenance": {
+          "addressee": "player",
+          "authority_category": "host_operation",
+          "authorized_proposition": "",
+          "epistemic_status": "none",
+          "operation": "ask",
+          "policy_version": "pr-eg-r6-r1-r1",
+          "provenance_id": "2608602d877553f8",
+          "source_id": "",
+          "speaker_id": "",
+          "validation": "host_operation"
+        },
+        "authorization_source": "conversational_decision:communication_before_execution",
+        "candidate_disposition": "host_selected",
+        "canonical": false,
+        "contract": {
+          "contract_id": "",
+          "expected_resolution": "",
+          "interlocutor_id": "",
+          "operation": ""
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 0,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            "conversational_decision:communication_before_execution"
+          ],
+          "gm_resolution_decision_audit": null,
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "ask",
+        "player_input": "I take a moment to look around the gate district. What do I notice?",
+        "provenance": "authorized_host_speech",
+        "resolution_kind": "conversational_answer",
+        "speaker": "GM",
+        "speaker_id": "",
+        "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+        "subject": "",
+        "target": "",
+        "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "turn_identity": "",
+        "integrity_digest": "1fb5b9da538c7e273c33ce1cfbcd66ea1e07e43e5831d57f282b71b6500dd25d"
+      },
+      "emission_debug": {
+        "accepted_response_provenance": "authorized_host_speech",
+        "generation_attempts": 0,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "satisfied",
+          "reasons": [],
+          "preserved": true
+        },
+        "accepted_emitted_equality": {
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": false,
+          "attempted_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board."
+        }
+      }
+    }
+  },
+  "resolution": {
+    "kind": "conversational_answer",
+    "action_id": "conversational_answer",
+    "label": "I take a moment to look around the gate district. What do I notice?",
+    "prompt": "I take a moment to look around the gate district. What do I notice?",
+    "success": null,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "conversational_answer",
+      "conversational_decision": {
+        "category": "ANSWER",
+        "primary_intention": "I take a moment to look around the gate district. What do I notice?",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "visible:0",
+          "visible:1"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "DESCRIPTION",
+        "authorization": null
+      },
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "clarification_required",
+        "eligibility_disposition": "SAFE_ABSTENTION",
+        "model_communication_mode": "OTHER",
+        "interpretation_status": "INTERPRETED",
+        "raw_interpretation": "{\"communication_mode\": \"OTHER\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Look around the gate district\"}, \"asserted_premises\": [], \"requested_outcomes\": [], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"NONE\", \"note\": \"\"}, \"communication\": {\"recipient\": \"GM\", \"purpose\": \"DESCRIPTION\", \"subject\": \"surroundings\", \"evidence_refs\": [\"visible:0\", \"visible:1\"]}}",
+        "provider_requests": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "b4fbb6b8a4f3421589111b8d4adba486",
+            "attempt_id": "0b8257e591044592960a5085f0a87cdc",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-31T02:22:24.932404+00:00",
+            "time": "2026-10-31T02:22:24.954405+00:00",
+            "sequence": 2,
+            "admission": "admitted",
+            "budget_remaining": 4,
+            "sdk_retries": 0,
+            "host_retries": "disabled",
+            "sent": true,
+            "request_id": "synthetic-response",
+            "model": "gpt-4.1-mini",
+            "input_tokens": 20,
+            "output_tokens": 10,
+            "total_tokens": 30,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 0.071
+          }
+        ],
+        "record": {
+          "communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED",
+          "player_intent": {
+            "summary": "Look around the gate district"
+          },
+          "asserted_premises": [],
+          "requested_outcomes": [],
+          "action_components": [],
+          "references": {
+            "permitted_entity_ids": [],
+            "unresolved_references": []
+          },
+          "clarification_question": "",
+          "correction": {
+            "subject": "NONE",
+            "note": ""
+          },
+          "communication": {
+            "recipient": "GM",
+            "purpose": "DESCRIPTION",
+            "subject": "surroundings",
+            "evidence_refs": [
+              "visible:0",
+              "visible:1"
+            ]
+          },
+          "incidental_context": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "public_evidence": {
+            "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+            "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board."
+          }
+        }
+      },
+      "stored_interpretation_bridge": null,
+      "provider_calls": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      },
+      "performance": {
+        "elapsed_ms": 41,
+        "interpretation_ms": null,
+        "resolution_ms": null,
+        "narration_ms": null,
+        "validation_ms": null,
+        "retry_ms": null,
+        "provider_call_count": 1,
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "retry_count": 0,
+        "retry_reason": null,
+        "disposition": "conversational_answer",
+        "successful": true,
+        "provider_narration_skipped": false
+      }
+    }
+  }
+}

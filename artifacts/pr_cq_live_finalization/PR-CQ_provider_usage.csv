@@ -1,0 +1,9 @@
+row_type,turn,request_index,kind,retry_attempt,retry_reason,model,input_tokens,output_tokens,cached_input_tokens,total_tokens,latency_seconds,usable_provider_output,validation_or_use,tokens_note
+request,startup,1,preflight,0,,gpt-4.1-mini-2025-04-14,24,2,0,26,1.775,true,preflight_healthy,measured
+request,T1,2,generation,0,,gpt-4.1-mini-2025-04-14,30877,66,0,30943,1.994,true,initial_hard_valid,measured
+request,T2,3,generation,0,,gpt-4.1-mini-2025-04-14,34561,117,0,34678,2.007,true,hard_invalid,measured
+request,T2,4,generation,1,hard_invalid,gpt-4.1-mini-2025-04-14,42960,83,0,43043,2.312,true,hard_invalid_then_authored_projection,measured
+turn_aggregate,T1,,generation_only,,none,gpt-4.1-mini-2025-04-14,30877,66,0,30943,1.994,true,sealed_on_first_generation,retry_tokens=0
+turn_aggregate,T2,,generation_plus_retry,,hard_invalid,gpt-4.1-mini-2025-04-14,77521,200,0,77721,4.319,true,both_generations_rejected_projection_emitted,retry_tokens=43043
+probe_total,startup-T2,4,all,,,gpt-4.1-mini-2025-04-14,108422,268,0,108690,8.088,true,see_report,retry_tokens=43043
+comparable_pr_co_T1_plus_T3,T1+T3,4,generation,,,gpt-4.1-mini-2025-04-14,147966,358,0,148324,11.469,true,both_turns_double_rejected,retry_tokens=81804

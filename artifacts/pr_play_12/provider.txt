@@ -1,0 +1,114 @@
+.F......F......FF....F.F...F..............................F......F...... [ 80%]
+F..........FFFFFF                                                        [100%]
+================================== FAILURES ===================================
+__________ test_effective_constructor_and_dispatch[False-narration] ___________
+tests\test_pr_play_02_controls.py:71: in test_effective_constructor_and_dispatch
+    assert len(constructors) == len(calls) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+___________ test_effective_constructor_and_dispatch[True-narration] ___________
+tests\test_pr_play_02_controls.py:71: in test_effective_constructor_and_dispatch
+    assert len(constructors) == len(calls) == 1
+E   assert 0 == 1
+E    +  where 0 = len([])
+_______ test_each_production_path_rejects_seventh_before_sdk[narration] _______
+tests\test_pr_play_02_controls.py:91: in test_each_production_path_rejects_seventh_before_sdk
+    assert len(calls) == snap["requests"] == snap["dispatched_requests"] == 6
+E   assert 0 == 6
+E    +  where 0 = len([])
+______ test_each_production_path_rejects_seventh_before_sdk[expression] _______
+tests\test_pr_play_02_controls.py:91: in test_each_production_path_rejects_seventh_before_sdk
+    assert len(calls) == snap["requests"] == snap["dispatched_requests"] == 6
+E   assert 1 == 6
+___________ test_shared_budget_multiple_operations_and_submissions ____________
+tests\test_pr_play_02_controls.py:108: in test_shared_budget_multiple_operations_and_submissions
+    assert len(calls) == snap["dispatched_requests"] == 6
+E   assert 3 == 6
+_________ test_concurrent_production_operations_share_six_admissions __________
+tests\test_pr_play_02_controls.py:145: in test_concurrent_production_operations_share_six_admissions
+    assert len(calls) == snap["requests"] == snap["dispatched_requests"] == 6
+E   AssertionError: assert 3 == 6
+E    +  where 3 = len([{'input': [], 'max_output_tokens': 320, 'model': 'gpt-4.1-mini', 'temperature': 0, ...}, {'input': [], 'max_output_to...mini', 'temperature': 0, ...}, {'input': [], 'max_output_tokens': 320, 'model': 'gpt-4.1-mini', 'temperature': 0, ...}])
+_______________ test_real_chat_submissions_do_not_reset_budget ________________
+tests\test_pr_play_02_controls.py:203: in test_real_chat_submissions_do_not_reset_budget
+    from tests.test_pr_ef_gm_authority import seed_scene
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_ef_gm_authority.py:15: in <module>
+    from tests.test_pr_du_player_pipeline import _seed_pr_du_world, _fake_gm_for_resolution
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_pr_du_player_pipeline.py:8: in <module>
+    from experiments.pr_dq.world import (
+E   ModuleNotFoundError: No module named 'experiments'
+_ test_each_dispatch_owner_accounts_success_or_provider_exception[False-narration] _
+tests\test_provider_accounting_integrity.py:242: in test_each_dispatch_owner_accounts_success_or_provider_exception
+    assert len(calls) == (0 if fail == "refused" else 1)
+E   assert 0 == 1
+E    +  where 0 = len([])
+_ test_each_dispatch_owner_accounts_success_or_provider_exception[exception-narration] _
+tests\test_provider_accounting_integrity.py:242: in test_each_dispatch_owner_accounts_success_or_provider_exception
+    assert len(calls) == (0 if fail == "refused" else 1)
+E   assert 0 == 1
+E    +  where 0 = len([])
+_ test_each_dispatch_owner_accounts_success_or_provider_exception[interruption-narration] _
+tests\test_provider_accounting_integrity.py:242: in test_each_dispatch_owner_accounts_success_or_provider_exception
+    assert len(calls) == (0 if fail == "refused" else 1)
+E   assert 0 == 1
+E    +  where 0 = len([])
+_______________ test_readiness_acceptance_is_not_live_execution _______________
+tests\test_provider_accounting_integrity.py:308: in test_readiness_acceptance_is_not_live_execution
+    assert live_accounting_readiness(ROOT)["ok"]
+E   assert False
+_______ test_readiness_refuses_unsafe_or_unreviewed_sources[unwrapped] ________
+tests\test_provider_accounting_integrity.py:320: in test_readiness_refuses_unsafe_or_unreviewed_sources
+    shutil.copyfile(ROOT / rel, fake / rel)
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\shutil.py:260: in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\run.py'
+________ test_readiness_refuses_unsafe_or_unreviewed_sources[new_site] ________
+tests\test_provider_accounting_integrity.py:320: in test_readiness_refuses_unsafe_or_unreviewed_sources
+    shutil.copyfile(ROOT / rel, fake / rel)
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\shutil.py:260: in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\run.py'
+________ test_readiness_refuses_unsafe_or_unreviewed_sources[new_http] ________
+tests\test_provider_accounting_integrity.py:320: in test_readiness_refuses_unsafe_or_unreviewed_sources
+    shutil.copyfile(ROOT / rel, fake / rel)
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\shutil.py:260: in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\run.py'
+__________ test_readiness_refuses_unsafe_or_unreviewed_sources[core] __________
+tests\test_provider_accounting_integrity.py:320: in test_readiness_refuses_unsafe_or_unreviewed_sources
+    shutil.copyfile(ROOT / rel, fake / rel)
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\shutil.py:260: in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\run.py'
+________ test_readiness_refuses_unsafe_or_unreviewed_sources[manifest] ________
+tests\test_provider_accounting_integrity.py:320: in test_readiness_refuses_unsafe_or_unreviewed_sources
+    shutil.copyfile(ROOT / rel, fake / rel)
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\shutil.py:260: in copyfile
+    with open(src, 'rb') as fsrc:
+         ^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\run.py'
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_02_controls.py::test_effective_constructor_and_dispatch[False-narration]
+FAILED tests/test_pr_play_02_controls.py::test_effective_constructor_and_dispatch[True-narration]
+FAILED tests/test_pr_play_02_controls.py::test_each_production_path_rejects_seventh_before_sdk[narration]
+FAILED tests/test_pr_play_02_controls.py::test_each_production_path_rejects_seventh_before_sdk[expression]
+FAILED tests/test_pr_play_02_controls.py::test_shared_budget_multiple_operations_and_submissions
+FAILED tests/test_pr_play_02_controls.py::test_concurrent_production_operations_share_six_admissions
+FAILED tests/test_pr_play_02_controls.py::test_real_chat_submissions_do_not_reset_budget
+FAILED tests/test_provider_accounting_integrity.py::test_each_dispatch_owner_accounts_success_or_provider_exception[False-narration]
+FAILED tests/test_provider_accounting_integrity.py::test_each_dispatch_owner_accounts_success_or_provider_exception[exception-narration]
+FAILED tests/test_provider_accounting_integrity.py::test_each_dispatch_owner_accounts_success_or_provider_exception[interruption-narration]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_refuses_unsafe_or_unreviewed_sources[unwrapped]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_refuses_unsafe_or_unreviewed_sources[new_site]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_refuses_unsafe_or_unreviewed_sources[new_http]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_refuses_unsafe_or_unreviewed_sources[core]
+FAILED tests/test_provider_accounting_integrity.py::test_readiness_refuses_unsafe_or_unreviewed_sources[manifest]

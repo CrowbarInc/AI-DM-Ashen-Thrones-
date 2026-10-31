@@ -1,0 +1,1024 @@
+[
+  {
+    "turn_number": 1,
+    "shape": "procedure question",
+    "intended_meaning": "Ask what is required before the guard will let the player through.",
+    "player_text": "I ask the gate guard what's required before they'll let me through tonight.",
+    "generated_candidate": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board. Any special permissions will have to come from him.\" The guard’s gaze flicks toward the notice board, where taxes, curfews, and warnings about a missing patrol crowd the posted sheets.",
+    "gm_text": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board. Any special permissions will have to come from him.\" The guard’s gaze flicks toward the notice board, where taxes, curfews, and warnings about a missing patrol crowd the posted sheets.",
+    "best_safe_candidate": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board. Any special permissions will have to come from him.\" The guard’s gaze flicks toward the notice board, where taxes, curfews, and warnings about a missing patrol crowd the posted sheets.",
+    "final_selected_candidate": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board. Any special permissions will have to come from him.\" The guard’s gaze flicks toward the notice board, where taxes, curfews, and warnings about a missing patrol crowd the posted sheets.",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board. Any special permissions will have to come from him.\" The guard’s gaze flicks toward the notice board, where taxes, curfews, and warnings about a missing patrol crowd the posted sheets.",
+    "candidate_transitions": [
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_675690035f11",
+        "operation": "ask",
+        "target": "gate_guard",
+        "interlocutor": "gate_guard",
+        "dimension": "next_step",
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [
+          "next_step"
+        ],
+        "coverage_after": [
+          "next_step"
+        ],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board.",
+        "selected_preview": "\"Captain Thoran commands the gate watch tonight,\" the gate guard replies crisply. \"You'll need to have your papers in order, and follow the curfew rules posted on the notice board.",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "replacement_reason": "resolution_content_preserved",
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "covered:next_step"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "covered:next_step"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [
+        "next_step"
+      ],
+      "covered_dimensions": [
+        "next_step"
+      ],
+      "complete": true,
+      "dimension": "next_step",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [
+        "next_step"
+      ],
+      "covered_dimensions": [
+        "next_step"
+      ],
+      "complete": true,
+      "dimension": "next_step",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "semantic_degradation": false,
+    "fast_path_used": true,
+    "semantic_completeness": "sufficient",
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "discourse_inheritance",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": "next_step",
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "gate_guard",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_guard",
+      "label": "gate_guard",
+      "source_turn": null
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "gate_guard",
+    "dimension": "next_step",
+    "dimensions": [
+      "next_step"
+    ],
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "contract_id": "rc_675690035f11",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_675690035f11"
+    }
+  },
+  {
+    "turn_number": 2,
+    "shape": "temporal follow-up",
+    "intended_meaning": "Ask when the thing just said began.",
+    "player_text": "When did that start?",
+    "generated_candidate": "\"Could you clarify what you mean by 'that' exactly? Are you asking about the new curfew, the missing patrol, or something else posted on the notice board?\" the gate guard asks, eyeing you with patient but guarded attention.",
+    "gm_text": "Gate Guard says, \"I cannot say how recently that was.\"",
+    "best_safe_candidate": "Gate Guard says, \"I cannot say how recently that was.\"",
+    "final_selected_candidate": "Gate Guard says, \"I cannot say how recently that was.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_a531c1b408e4",
+        "operation": "ask",
+        "target": null,
+        "interlocutor": "gate_guard",
+        "dimension": "time",
+        "expected_resolution": "answer",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "Gate Guard says, \"I cannot say how recently that was.\"",
+        "selected_preview": "Gate Guard says, \"I cannot say how recently that was.\"",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "inability",
+      "final_satisfaction": "legitimate_nonresolution",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "replacement_reason": "resolution_content_preserved",
+    "initial_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "valid_inability"
+      ],
+      "resolution_kind": "inability",
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "valid_inability"
+      ],
+      "resolution_kind": "inability",
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [
+        "time"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "time",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [
+        "time"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "time",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "semantic_degradation": false,
+    "fast_path_used": false,
+    "semantic_completeness": "not_applied",
+    "fast_path_abstained": true,
+    "abstention_reason": "insufficient_discourse_context",
+    "interpreter_invoked": true,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": "time",
+    "validator_status": "abstained",
+    "validator_reason": "insufficient_discourse_context",
+    "operation": "ask",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": null,
+    "dimension": "time",
+    "dimensions": [
+      "time"
+    ],
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "contract_id": "rc_a531c1b408e4",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "FAIL",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_a531c1b408e4"
+    }
+  },
+  {
+    "turn_number": 3,
+    "shape": "confidence follow-up",
+    "intended_meaning": "Ask how sure he is about that claim.",
+    "player_text": "How sure is he about that?",
+    "generated_candidate": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing isn’t clear to me. You might find more precise information posted on the notice board, or by asking the guard captain directly.\"",
+    "gm_text": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing isn’t clear to me. You might find more precise information posted on the notice board, or by asking the guard captain directly.\"",
+    "best_safe_candidate": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing isn’t clear to me. You might find more precise information posted on the notice board, or by asking the guard captain directly.\"",
+    "final_selected_candidate": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing isn’t clear to me. You might find more precise information posted on the notice board, or by asking the guard captain directly.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "lower_satisfaction_rank",
+        "contract_id": "rc_24d1cb3aeb14",
+        "operation": "ask",
+        "target": null,
+        "interlocutor": "gate_guard",
+        "dimension": "confidence",
+        "expected_resolution": "answer",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing i",
+        "selected_preview": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing i",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_24d1cb3aeb14",
+        "operation": "ask",
+        "target": null,
+        "interlocutor": "gate_guard",
+        "dimension": "confidence",
+        "expected_resolution": "answer",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing i",
+        "selected_preview": "\"I can't say for certain,\" the gate guard admits with a guarded glance. \"Captain Thoran's been in command since at least the last roster update, but beyond that, the exact timing i",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "inability",
+      "final_satisfaction": "legitimate_nonresolution",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "replacement_reason": "resolution_content_preserved",
+    "initial_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "valid_inability"
+      ],
+      "resolution_kind": "inability",
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "valid_inability"
+      ],
+      "resolution_kind": "inability",
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [
+        "confidence"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "confidence",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [
+        "confidence"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "confidence",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "semantic_degradation": false,
+    "fast_path_used": false,
+    "semantic_completeness": "not_applied",
+    "fast_path_abstained": true,
+    "abstention_reason": "insufficient_discourse_context",
+    "interpreter_invoked": true,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": "confidence",
+    "validator_status": "abstained",
+    "validator_reason": "insufficient_discourse_context",
+    "operation": "ask",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": null,
+    "dimension": "confidence",
+    "dimensions": [
+      "confidence"
+    ],
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "contract_id": "rc_24d1cb3aeb14",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_24d1cb3aeb14"
+    }
+  },
+  {
+    "turn_number": 4,
+    "shape": "use or purpose",
+    "intended_meaning": "Ask what the notice board is used for.",
+    "player_text": "What's that notice board used for?",
+    "generated_candidate": "\"The notice board has a few important postings,\" the gate guard says, nodding toward it. \"It lists the current taxes and curfew rules everyone must follow. There's also a warning about a patrol that's gone missing recently. It's where travelers and locals alike find crucial updates before entering the city.\"",
+    "gm_text": "\"The notice board has a few important postings,\" the gate guard says, nodding toward it. \"It lists the current taxes and curfew rules everyone must follow. There's also a warning about a patrol that's gone missing recently. It's where travelers and locals alike find crucial updates before entering the city.\"",
+    "best_safe_candidate": "",
+    "final_selected_candidate": "\"The notice board has a few important postings,\" the gate guard says, nodding toward it. \"It lists the current taxes and curfew rules everyone must follow. There's also a warning about a patrol that's gone missing recently. It's where travelers and locals alike find crucial updates before entering the city.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "clue_frame_would_reduce_contract",
+        "contract_id": "rc_0f089b6c6143",
+        "operation": "ask",
+        "target": "Notice board",
+        "interlocutor": "gate_guard",
+        "dimension": "use",
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "rejected",
+        "replacement_reason": "different_proposition",
+        "best_safe_candidate_before": "",
+        "selected_preview": "\"The notice board has a few important postings,\" the gate guard says, nodding toward it. \"It lists the current taxes and curfew rules everyone must follow. There's also a warning a",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "clue_frame",
+        "reason": "clue_frame_would_reduce_contract",
+        "contract_id": "rc_0f089b6c6143",
+        "operation": "ask",
+        "target": "Notice board",
+        "interlocutor": "gate_guard",
+        "dimension": "use",
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "rejected",
+        "replacement_reason": "different_proposition",
+        "best_safe_candidate_before": "",
+        "selected_preview": "\"The notice board has a few important postings,\" the gate guard says, nodding toward it. \"It lists the current taxes and curfew rules everyone must follow. There's also a warning a",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_0f089b6c6143",
+        "operation": "ask",
+        "target": "Notice board",
+        "interlocutor": "gate_guard",
+        "dimension": "use",
+        "expected_resolution": "answer",
+        "satisfaction_before": "unsatisfied",
+        "satisfaction_after": "unsatisfied",
+        "rank_before": 0,
+        "rank_after": 0,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "rejected",
+        "replacement_reason": "different_proposition",
+        "best_safe_candidate_before": "",
+        "selected_preview": "\"The notice board has a few important postings,\" the gate guard says, nodding toward it. \"It lists the current taxes and curfew rules everyone must follow. There's also a warning a",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "unrelated",
+      "final_satisfaction": "unsatisfied",
+      "replacement_reason": "different_proposition"
+    },
+    "replacement_reason": "different_proposition",
+    "initial_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "dimension_substituted",
+        "dimension_not_addressed"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": false,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "dimension_substituted",
+        "dimension_not_addressed"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": false,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [
+        "use"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "use",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [
+        "use"
+      ],
+      "covered_dimensions": [],
+      "complete": false,
+      "dimension": "use",
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "semantic_degradation": false,
+    "fast_path_used": false,
+    "semantic_completeness": "not_applied",
+    "fast_path_abstained": true,
+    "abstention_reason": "ambiguous_referent",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "proposed_operation": "ask",
+    "proposed_target": "notice_board",
+    "proposed_subject": "notice board",
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "notice board",
+    "dimension": "use",
+    "dimensions": [
+      "use"
+    ],
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "contract_id": "rc_0f089b6c6143",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "FAIL",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 4,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_0f089b6c6143"
+    }
+  },
+  {
+    "turn_number": 5,
+    "shape": "social inquiry",
+    "intended_meaning": "Ask the guard what travelers have been saying.",
+    "player_text": "I ask him what travelers have been saying as they come through.",
+    "generated_candidate": "\"I've not heard many tales from the travelers themselves,\" the gate guard admits with a measured tone. \"Most arrive worn and wary, speaking little beyond urgent concerns about the tightened census at the eastern caravan choke point. If you want details, the notice board might have some posted reports, or perhaps the tavern runner could share fresh whispers.\"",
+    "gm_text": "Gate Guard says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "best_safe_candidate": "Gate Guard says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "final_selected_candidate": "Gate Guard says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "\"I've not heard many tales from the travelers themselves,\" the gate guard admits with a measured tone. \"Most arrive worn and wary, speaking little beyond urgent concerns about the tightened census at the eastern caravan choke point. If you want details, the notice board might have some posted reports, or perhaps the tavern runner could share fresh whispers.\"",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "topic_pressure:last_answer",
+        "contract_id": "rc_d8f371f59728",
+        "operation": "ask",
+        "target": "Gate Guard",
+        "interlocutor": "gate_guard",
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "\"I've not heard many tales from the travelers themselves,\" the gate guard admits with a measured tone. \"Most arrive worn and wary, speaking little beyond urgent concerns about the ",
+        "selected_preview": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_d8f371f59728",
+        "operation": "ask",
+        "target": "Gate Guard",
+        "interlocutor": "gate_guard",
+        "dimension": null,
+        "expected_resolution": "answer",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "Gate Guard says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "selected_preview": "Gate Guard says, \"Word is, captain Thoran commands the gate watch tonight.\"",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "replacement_reason": "resolution_content_preserved",
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "final_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "ask",
+      "expected_resolution": "answer"
+    },
+    "semantic_degradation": false,
+    "fast_path_used": true,
+    "semantic_completeness": "sufficient",
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "discourse_inheritance",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Gate Guard",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "source_turn": 4
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "Gate Guard",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "ambiguous": false,
+    "contract_id": "rc_d8f371f59728",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 5,
+      "last_committed_contract_id": "rc_d8f371f59728"
+    }
+  },
+  {
+    "turn_number": 6,
+    "shape": "referential clarification",
+    "intended_meaning": "Try to do whatever he just said, which may be unbound.",
+    "player_text": "I'll do whatever he just told me to do.",
+    "generated_candidate": "The gate guard's expression tightens slightly, but they give no further orders or directions. \"I don’t have anything new to add beyond what was posted and said,\" they reply evenly, staring down the line of waiting travelers. \"If you want to get through, having your papers ready and following the curfew posted on the notice board is your best course. Beyond that, you’ll need to wait for the guard captain’s instructions.\"",
+    "gm_text": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+    "best_safe_candidate": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+    "final_selected_candidate": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+    "best_candidate_emitted": true,
+    "best_safe_invalidation": null,
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "lower_satisfaction_rank",
+        "contract_id": "rc_a0e11ece79bc",
+        "operation": "act",
+        "target": null,
+        "interlocutor": "gate_guard",
+        "dimension": null,
+        "expected_resolution": "action_outcome",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+        "selected_preview": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+        "invalidation_reason": null
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "contract_id": "rc_a0e11ece79bc",
+        "operation": "act",
+        "target": null,
+        "interlocutor": "gate_guard",
+        "dimension": null,
+        "expected_resolution": "action_outcome",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "coverage_before": [],
+        "coverage_after": [],
+        "replacement_decision": "accepted",
+        "replacement_reason": "resolution_content_preserved",
+        "best_safe_candidate_before": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+        "selected_preview": "Gate Guard says, \"I will not carry out that request; you will need another route.\"",
+        "invalidation_reason": null
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": null,
+      "final_satisfaction": "legitimate_nonresolution",
+      "replacement_reason": "resolution_content_preserved"
+    },
+    "replacement_reason": "resolution_content_preserved",
+    "initial_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "action_outcome_missing",
+        "generic_scene_replaced_action"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "final_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "action_nonresolution"
+      ],
+      "resolution_kind": null,
+      "dimension_compatible": null,
+      "keeps_answer": false,
+      "rank": null
+    },
+    "initial_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "act",
+      "expected_resolution": "action_outcome"
+    },
+    "final_coverage": {
+      "required_dimensions": [],
+      "covered_dimensions": [],
+      "complete": true,
+      "dimension": null,
+      "operation": "act",
+      "expected_resolution": "action_outcome"
+    },
+    "semantic_degradation": false,
+    "fast_path_used": true,
+    "semantic_completeness": "sufficient",
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "act",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "act",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "I'll do whatever he just told me to do.",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "action_outcome",
+    "ambiguous": false,
+    "contract_id": "rc_a0e11ece79bc",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": {
+      "id": "rc_a0e11ece79bc",
+      "label": "I'll do whatever he just told me to do.",
+      "kind": "act"
+    },
+    "semantic_result": "PASS",
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": {
+        "id": "rc_a0e11ece79bc",
+        "label": "I'll do whatever he just told me to do.",
+        "kind": "act",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 6,
+      "last_committed_contract_id": "rc_a0e11ece79bc"
+    }
+  }
+]

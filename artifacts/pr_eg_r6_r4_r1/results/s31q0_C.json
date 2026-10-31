@@ -1,0 +1,51 @@
+{
+  "case_id": "s31q0",
+  "family": "s31",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "b9c4893abdecdc6d7219fdb6fd732ed7cdb36e0178e0e33c47519c15ee8c1ac2",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "in the upper loft"
+    ],
+    "qualifiers": [
+      "winter",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s31"
+    ],
+    "answered_arguments": [
+      "location"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 directly states that the miller stores winter flour in the upper loft, which answers the question about where the winter flour is stored."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

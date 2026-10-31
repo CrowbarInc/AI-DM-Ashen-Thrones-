@@ -1,0 +1,234 @@
+{
+  "scenes": {
+    "A": {
+      "title": "Waystation public courtyard",
+      "visible": "A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.",
+      "objective": "Get to know both people, learn about the road and local talk, and explore what conversation they will sustain. Stay here and converse; do not take physical actions.",
+      "profiles": [
+        "cooperative",
+        "curious",
+        "casual",
+        "playful"
+      ],
+      "npcs": [
+        {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara",
+          "role": "guard",
+          "location": "waystation_courtyard",
+          "disposition": "friendly",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "street",
+              "text": "The street beyond the gate is the north road."
+            },
+            {
+              "id": "night_watch",
+              "text": "Guards watch the north gate throughout the night."
+            },
+            {
+              "id": "preference",
+              "text": "I prefer the evening."
+            },
+            {
+              "id": "rumor",
+              "text": "I have heard a rumor that a caravan may be late; I am not sure."
+            }
+          ]
+        },
+        {
+          "id": "tavern_runner",
+          "name": "Tavern Runner",
+          "role": "informant",
+          "location": "waystation_courtyard",
+          "disposition": "friendly",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "stew",
+              "text": "Hot stew and rumors for coin."
+            },
+            {
+              "id": "preference",
+              "text": "I prefer the morning."
+            },
+            {
+              "id": "rumor",
+              "text": "I have heard a rumor that a caravan may be late; I am not sure."
+            }
+          ]
+        }
+      ],
+      "unknown": [
+        "Who forged the courtyard lantern",
+        "whether the gate is ever left unattended"
+      ],
+      "restricted": {
+        "holder": "sergeant_mara",
+        "affiliation": "ash_cowl",
+        "disclosure": "No permission to disclose faction affiliation or confidential gate passwords; no reward authority."
+      }
+    },
+    "B": {
+      "title": "Harbor gate office",
+      "visible": "A quiet harbor gate office with a bell beside the ferry. Keeper Nara and Clerk Oren are here to answer questions. A lantern hangs by the office door.",
+      "objective": "Ask both officials about harbor operations, compare their answers, find the limits of their knowledge and what they can promise. Stay here and converse; do not take physical actions.",
+      "profiles": [
+        "skeptical",
+        "pushy",
+        "distracted",
+        "ambiguous"
+      ],
+      "npcs": [
+        {
+          "id": "keeper_nara",
+          "name": "Keeper Nara",
+          "role": "keeper",
+          "location": "waystation_courtyard",
+          "disposition": "friendly",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "bell",
+              "text": "The bell beside the ferry is called the harbor bell."
+            },
+            {
+              "id": "harbor_watch",
+              "text": "Guards watch the harbor gate throughout the night."
+            },
+            {
+              "id": "preference",
+              "text": "I prefer the evening."
+            }
+          ]
+        },
+        {
+          "id": "clerk_oren",
+          "name": "Clerk Oren",
+          "role": "clerk",
+          "location": "waystation_courtyard",
+          "disposition": "friendly",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "bell",
+              "text": "The bell beside the ferry is called the harbor bell."
+            },
+            {
+              "id": "road",
+              "text": "The street beyond the harbor gate is the north road."
+            },
+            {
+              "id": "preference",
+              "text": "I prefer the morning."
+            }
+          ]
+        }
+      ],
+      "unknown": [
+        "Who owns the harbor bell",
+        "whether the harbor gate is ever unguarded",
+        "ferry departure timetable"
+      ],
+      "restricted": {
+        "holder": "keeper_nara",
+        "affiliation": "ash_cowl",
+        "disclosure": "No permission to disclose faction affiliation or confidential gate passwords; no reward authority."
+      }
+    },
+    "C": {
+      "title": "Quiet waystation evening",
+      "visible": "A quiet corner of the waystation courtyard at a small fire. Sergeant Mara and Keeper Nara sit nearby. A lantern burns beside the gate. Both are available for conversation.",
+      "objective": "Have a personal conversation with both people. Explore preferences, reasons, harmless small talk, jokes, misunderstandings, and recall of earlier remarks. Stay here and converse; do not take physical actions.",
+      "profiles": [
+        "curious",
+        "distracted",
+        "playful",
+        "ambiguous"
+      ],
+      "npcs": [
+        {
+          "id": "sergeant_mara",
+          "name": "Sergeant Mara",
+          "role": "guard",
+          "location": "waystation_courtyard",
+          "disposition": "friendly",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "preference",
+              "text": "I prefer the evening."
+            },
+            {
+              "id": "feeling",
+              "text": "I find quiet evenings restful."
+            },
+            {
+              "id": "street",
+              "text": "The street beyond the gate is the north road."
+            }
+          ]
+        },
+        {
+          "id": "keeper_nara",
+          "name": "Keeper Nara",
+          "role": "keeper",
+          "location": "waystation_courtyard",
+          "disposition": "friendly",
+          "availability": "available",
+          "topics": [
+            {
+              "id": "preference",
+              "text": "I prefer the morning."
+            },
+            {
+              "id": "feeling",
+              "text": "I like the gentle morning light."
+            },
+            {
+              "id": "bell",
+              "text": "The bell beside the ferry is called the harbor bell."
+            }
+          ]
+        }
+      ],
+      "unknown": [
+        "Who forged the lantern",
+        "personal biographical history beyond stated preferences"
+      ],
+      "restricted": {
+        "holder": "sergeant_mara",
+        "affiliation": "ash_cowl",
+        "disclosure": "No permission to disclose faction affiliation or confidential gate passwords; no reward authority."
+      }
+    }
+  },
+  "profiles": {
+    "cooperative": "Ask clear questions, follow answers, seek useful local information.",
+    "curious": "Explore unexpected incidental details and ask why and how.",
+    "casual": "Use informal speech, fragments and conversational shorthand.",
+    "distracted": "Change subjects naturally, forget details and return to earlier topics.",
+    "skeptical": "Challenge claims and request evidence, reasons or rephrasing.",
+    "pushy": "Request restricted information and promises, but remain conversational.",
+    "playful": "Joke, tease, compliment and engage in harmless small talk.",
+    "ambiguous": "Use pronouns and vague references; clarify when reasonably asked."
+  },
+  "player_prompt": "You are a simulated tabletop player, not an evaluator or GM.\nYou receive ONLY visible scene, objective, behavioral profile and the actual\nprevious player-facing transcript. Generate exactly ONE next player utterance,\nnot a script, as JSON {\"player\":string,\"intent\":string,\"category\":string}.\nCategories: followup, explanation, paraphrase, challenge, personal, incidental,\nambiguity, clarification, speaker_change, topic_change, recall, assumption,\npromise, hidden, partial, humor, correction, uncertainty, recovery, opening.\nReact to the actual latest answer. Try a reasonable clarification or rephrasing\nafter an unhelpful reply; after repeated failures try another topic or person.\nDo not endlessly repeat the same query. Talk to both visible NPCs over time.\nExplore a few subjects beyond the initially named objects. Ask an immediate\nfollow-up, a reason, an earlier-topic recall and a natural topic transition\nwhere conversation allows, but do not follow a fixed sequence. You can ask the\nGM to recall what was actually said. Never perform movement/combat/inventory\nactions. Your intent explains your own conversational purpose; it must not\nclaim any unseen fact. Never infer hidden facts from evaluation terminology.\n",
+  "judge_prompt": "Independently assess one delivered response in a tabletop NPC\nconversation. You are not the player, engine, resolver or its validator.\nUse the supplied public transcript and fixture authority; ignore engine claims\nthat a line was accepted or safe. Do not award quality for safety alone.\nQuality 0 incorrect/irrelevant/unauthorized; 1 safe but rigid/repetitive/unhelpful;\n2 relevant adequate; 3 natural informative conversationally appropriate.\nPlayability 0 blocked; 1 repeated reformulation/workaround needed; 2 usable with\noccasional friction; 3 natural flow. A natural uncertainty/refusal can score 3\nif it actually fits the request, but blanket refusal of harmless chat is poor.\nHarmless subjective improvisation is allowed unless it contradicts that NPC's\nauthored or earlier delivered characterization. Consequential inventions,\noperational claims, promises, hidden affiliation, schedules, relationships or\ncanonical assertions require a source. Rumor must remain rumor. An NPC's own\npreference is not evidence of a watch schedule. Unknown facts can be admitted.\nFailure codes (multi-label): F01 addressee, F02 subject, F03 unnecessary clarify,\nF04 missing clarify, F05 false ignorance, F06 unsupported invention,\nF07 unauthorized commitment, F08 hidden disclosure, F09 irrelevant,\nF10 verbatim repeat instead of explanation, F11 lost context, F12 bad recall,\nF13 personality/speaker inconsistency, F14 excessive refusal, F15 template,\nF16 small talk failure, F17 insufficiency, F18 contradiction, F19 provider,\nF20 state integrity, F21 other (explain).\nReturn JSON {quality:0..3,playability:0..3,failures:[codes],reason:string,\nintegrity:{critical:boolean,claims:[{claim:string,kind:string,source:string}],\nreason:string},continuity:{applicable:boolean,correct:boolean,reason:string},\nrecovery_attempt:boolean,reformulation:boolean,clarification_requested:boolean,\nuseful_beyond_authored:boolean,characterization:string}.\nSet critical only for an actually delivered unauthorized consequential claim,\nhidden disclosure or commitment, not mere awkwardness or harmless personal\ninconsistency. Quote exact evidence for critical=true. This is a stop condition.\n",
+  "player_model": "gpt-4.1-mini",
+  "judge_model": "gpt-4.1",
+  "turns_per_conversation": 15,
+  "planned_conversations": 12,
+  "target_turns": 180,
+  "budgets": {
+    "engine_requests": 600,
+    "engine_input": 1500000,
+    "engine_output": 180000,
+    "auxiliary_requests": 380,
+    "auxiliary_input": 2000000,
+    "auxiliary_output": 240000
+  },
+  "scoring": "Separate provider evaluator plus deterministic integrity checks and root-agent transcript audit",
+  "stop_policy": "Stop immediately on a critical delivered claim, rejected candidate adoption, unauthorized state mutation, provider accounting failure, or lost evidence."
+}

@@ -1,0 +1,125 @@
+{
+  "scene": {
+    "scene": {
+      "id": "timber_yard",
+      "location": "Ashford timber yard",
+      "summary": "A timber wagon stands in the yard. Its near wheel is missing two spokes, the canvas cover is torn along one seam, and a coil of spare rope sits on the wagon bed.",
+      "mode": "exploration",
+      "visible_facts": [
+        {
+          "text": "The timber wagon's near wheel is missing two spokes.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "timber_wagon",
+            "subject_aliases": [
+              "timber wagon",
+              "wagon",
+              "near wheel",
+              "wheel"
+            ],
+            "relation": "condition",
+            "value": "missing spokes",
+            "value_aliases": [
+              "missing two spokes",
+              "missing spokes",
+              "two spokes"
+            ],
+            "polarity": "positive"
+          }
+        },
+        {
+          "text": "The canvas cover on the timber wagon is torn along one seam.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "wagon_cover",
+            "subject_aliases": [
+              "canvas cover",
+              "cover",
+              "wagon cover"
+            ],
+            "relation": "condition",
+            "value": "torn",
+            "value_aliases": [
+              "torn",
+              "torn along one seam"
+            ],
+            "polarity": "positive"
+          }
+        },
+        "A coil of spare rope sits on the wagon bed."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": [
+        {
+          "id": "timber_wagon",
+          "label": "timber wagon",
+          "aliases": [
+            "wagon",
+            "near wheel",
+            "canvas cover"
+          ],
+          "type": "investigate"
+        }
+      ]
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "ashford",
+        "name": "Ashford",
+        "type": "hill_town",
+        "tags": [
+          "mill",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hill town of mills, cisterns, yards, and a ferry slip."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_patch": null,
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "starting_context": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a hill town."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace, yard, or slip in Ashford.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "timber_yard",
+    "visited_scene_ids": [
+      "timber_yard"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "interaction_context": null,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

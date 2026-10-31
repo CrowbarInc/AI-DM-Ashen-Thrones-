@@ -1,0 +1,40 @@
+{
+  "review_id": "PR-EE",
+  "mode": "INVESTIGATION ONLY",
+  "production_code_changes": 0,
+  "artifact_dir": "artifacts/pr_ee_live_play_failure",
+  "decision": "OPTION B — CONVERSATIONAL ROUTING REWORK RECOMMENDED",
+  "confidence": "high for observed chain; limited deployment identity and fresh-provider generalization",
+  "original_live_provider_calls": 5,
+  "new_live_provider_calls": 0,
+  "original_response_http_replay_matches": 6,
+  "fresh_live_probes": "blocked by automatic approval review; deterministic alternatives only",
+  "primary_artifacts": [
+    "handoff/CURRENT_REVIEW.md",
+    "artifacts/pr_ee_live_play_failure/REVIEW.md",
+    "artifacts/pr_ee_live_play_failure/01_EXECUTIVE_SUMMARY.md",
+    "artifacts/pr_ee_live_play_failure/02_SIX_TURN_RECONSTRUCTION.md",
+    "artifacts/pr_ee_live_play_failure/03_CAMPAIGN_LIFECYCLE.md",
+    "artifacts/pr_ee_live_play_failure/04_CONVERSATIONAL_AUTHORITY.md",
+    "artifacts/pr_ee_live_play_failure/05_MULTI_ACTION_CONFIRMATION.md",
+    "artifacts/pr_ee_live_play_failure/06_PRIOR_CYCLE_AUDIT.md",
+    "artifacts/pr_ee_live_play_failure/07_FINAL_EMISSION_FALLBACK.md",
+    "artifacts/pr_ee_live_play_failure/08_REPRODUCTION_EVIDENCE.md",
+    "artifacts/pr_ee_live_play_failure/09_ROOT_CAUSE_REGISTER.md",
+    "artifacts/pr_ee_live_play_failure/10_ARCHITECTURAL_RECOMMENDATION.md",
+    "artifacts/pr_ee_live_play_failure/11_CHANGED_FILE_INVENTORY.md"
+  ],
+  "inventory": "artifacts/pr_ee_live_play_failure/package_inventory.json",
+  "inventory_sha256": "e294202bdc31236a3cf7186e01d1121436a37ad42739980a60ce95df15818242",
+  "validation_commands": [
+    ".venv/Scripts/python.exe artifacts/pr_ee_live_play_failure/investigate.py",
+    ".venv/Scripts/python.exe artifacts/pr_ee_live_play_failure/build_review.py"
+  ],
+  "limitations": [
+    "No original preturn snapshots or archived original request prompts",
+    "Recorded-output replay does not measure current provider semantic competence",
+    "No production process source fingerprint; dirty checkout HEAD is not sufficient version identity",
+    "No fresh provider run authorized by automatic review",
+    "No repair or next implementation cycle begun"
+  ]
+}

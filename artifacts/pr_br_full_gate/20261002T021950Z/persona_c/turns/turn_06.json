@@ -1,0 +1,908 @@
+{
+  "turn_number": 6,
+  "player_text": "The road shows me nothing, so I turn back toward the crowd and study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate.",
+  "visible_motivation": "That figure stands out of the line and watches people instead of the gate, while the road the guard fears is empty.",
+  "intended_meaning": "I want to see who they are looking for before I decide whether to speak to them.",
+  "generation_attempt_1": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area. Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself. Now and then, their glance flicks briefly toward the gate as if waiting or searching for a signal or a presence yet to arrive. They move with an air of cautious patience, blending into the crowd just enough to avoid direct notice but showing a subtle alertness that sets them apart.",
+  "generation_attempt_2": null,
+  "attempt_1_hard_valid": true,
+  "attempt_1_reasons": [],
+  "attempt_2_hard_valid": null,
+  "attempt_2_reasons": [],
+  "regeneration_invoked": false,
+  "regeneration_feedback": null,
+  "rejected_attempt_2_reasons": null,
+  "generation_attempt_count": 1,
+  "accepted_provenance": "initial_generation",
+  "accepted_response_text": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area. Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself. Now and then, their glance flicks briefly toward the gate as if waiting or searching for a signal or a presence yet to arrive. They move with an air of cautious patience, blending into the crowd just enough to avoid direct notice but showing a subtle alertness that sets them apart.",
+  "accepted_immutable": true,
+  "final_emitted_response": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area. Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself. Now and then, their glance flicks briefly toward the gate as if waiting or searching for a signal or a presence yet to arrive. They move with an air of cautious patience, blending into the crowd just enough to avoid direct notice but showing a subtle alertness that sets them apart.",
+  "gm_text": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area. Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself. Now and then, their glance flicks briefly toward the gate as if waiting or searching for a signal or a presence yet to arrive. They move with an air of cautious patience, blending into the crowd just enough to avoid direct notice but showing a subtle alertness that sets them apart.",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "scene_momentum:new_information",
+    "resolution_contract_semantic_preserved"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": false,
+  "fast_path_abstained": true,
+  "abstention_reason": "target_not_canonical",
+  "interpreter_invoked": true,
+  "proposal_source": "model_assisted",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "The road shows me nothing, so I turn back toward the crowd and study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate.",
+    "source": "model_assisted",
+    "primary_operation": "inspect",
+    "supporting_operations": [
+      "perceive"
+    ],
+    "raw_target_text": "study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate",
+    "proposed_target_id": "threadbare_watcher",
+    "target_capture": "model",
+    "has_determiner": false,
+    "interlocutor_id": null,
+    "conversational_subject": "threadbare watcher",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "Determine which faces the threadbare watcher follows and if they look at the gate",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": "high",
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "inspect",
+  "canonical_target": "Threadbare watcher",
+  "target_ref": {
+    "type": "interlocutor",
+    "id_or_text": "Threadbare watcher",
+    "source": "explicit_player"
+  },
+  "discourse_ref": {
+    "type": "interlocutor",
+    "id": "threadbare_watcher",
+    "label": "Threadbare watcher",
+    "source_turn": null
+  },
+  "interlocutor_id": null,
+  "dimension": "content",
+  "dimensions": [
+    "content"
+  ],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "binding_status": "unresolved",
+  "entity_class": "ambiguous_unresolved",
+  "proposed_interlocutor": "crowd",
+  "bound_interlocutor": null,
+  "entity_id": null,
+  "authority_reasons": [
+    "proposal:not_a_person"
+  ],
+  "entity_binding": {
+    "status": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed_interlocutor": "crowd",
+    "proposed_span": "the crowd",
+    "bound_interlocutor_id": null,
+    "entity_id": null,
+    "label": null,
+    "explicit_new_interlocutor": true,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_0e43da8ebcde",
+    "turn_index": 7,
+    "request_kind": "inquiry",
+    "operation": "inspect",
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Threadbare watcher",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Threadbare watcher",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "answer",
+    "epistemic_mode": "bounded_incidental",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "source_turn": null
+    },
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "The road shows me nothing, so I turn back toward the crowd and study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate.",
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": "explicit_target",
+      "referent_reason": "incidental_entity_unresolved",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": false,
+      "fast_path_abstained": true,
+      "fast_path_abstention_reason": "target_not_canonical",
+      "model_interpreter_invoked": true,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 1,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "inc_bc59100d55",
+          "type": "object",
+          "label": "for crate yards"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "for crate yards"
+        },
+        {
+          "id": "gate_guard",
+          "type": "lead",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "rc_ce8e9fa4c78a",
+          "type": "action",
+          "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards."
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        },
+        {
+          "id": "inc_bc59100d55",
+          "type": "interlocutor",
+          "label": "for crate yards"
+        },
+        {
+          "id": "inc_bc59100d55",
+          "type": "interlocutor",
+          "label": "for crate yards"
+        }
+      ],
+      "proposal_source": "model_assisted",
+      "proposed_operation": "inspect",
+      "proposed_supporting_operations": [
+        "perceive"
+      ],
+      "proposed_raw_target": "study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "threadbare_watcher",
+        "canonical_target_label": "Threadbare watcher",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "scene",
+        "authoritative_operation": "inspect",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": true,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": "crowd",
+        "proposed_span": "the crowd",
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": true,
+        "authority_reasons": [
+          "proposal:not_a_person"
+        ],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "not_applied",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "The road shows me nothing, so I turn back toward the crowd and study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate.",
+        "source": "model_assisted",
+        "primary_operation": "inspect",
+        "supporting_operations": [
+          "perceive"
+        ],
+        "raw_target_text": "study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate",
+        "proposed_target_id": "threadbare_watcher",
+        "target_capture": "model",
+        "has_determiner": false,
+        "interlocutor_id": null,
+        "conversational_subject": "threadbare watcher",
+        "dimension": "content",
+        "dimensions": [
+          "content"
+        ],
+        "expected_resolution": "Determine which faces the threadbare watcher follows and if they look at the gate",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": "high",
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": null,
+  "active_claim": null,
+  "active_inspected": {
+    "id": "threadbare_watcher",
+    "label": "Threadbare watcher",
+    "kind": "interlocutor",
+    "epistemic_status": null,
+    "turn_index": 7,
+    "source": "resolution_contract"
+  },
+  "actionable_lead": {
+    "id": "gate_guard",
+    "label": "Gate Guard",
+    "kind": "lead",
+    "epistemic_status": null,
+    "turn_index": 6,
+    "source": "resolution_contract"
+  },
+  "previous_action": {
+    "id": "rc_ce8e9fa4c78a",
+    "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+    "kind": "follow",
+    "epistemic_status": null,
+    "turn_index": 6,
+    "source": "resolution_contract"
+  },
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "lead",
+      "scene_id": "frontier_gate",
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "threadbare_watcher",
+      "label": "Threadbare watcher",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": {
+      "id": "rc_ce8e9fa4c78a",
+      "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+      "kind": "follow",
+      "scene_id": "frontier_gate",
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "last_committed_turn": 7,
+    "last_committed_contract_id": "rc_0e43da8ebcde"
+  },
+  "authority_generated": [
+    {
+      "proposition": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "authority_retry": [],
+  "authority_emitted": [
+    {
+      "proposition": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself.",
+      "authority_class": "npc_claim",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "none"
+    }
+  ],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "FAIL",
+  "failing_gates": [
+    "player_intent_addressed"
+  ],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 88,
+      "rating": "strong",
+      "passed": false,
+      "semantic_result": "FAIL",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "FAIL",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 92,
+          "text_preview": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area. Their eyes dart with qui"
+        }
+      },
+      "player_intent_addressed": {
+        "status": "FAIL",
+        "passed": false,
+        "reason_codes": [
+          "intent_addressed:resolution_contract_unsatisfied"
+        ],
+        "evidence": {
+          "request_kind": "observation",
+          "player_terms": [
+            "apart",
+            "back",
+            "crowd",
+            "ever",
+            "faces",
+            "figure",
+            "follow",
+            "gate",
+            "look",
+            "nothing",
+            "road",
+            "shows",
+            "standing",
+            "study",
+            "they",
+            "threadbare",
+            "toward",
+            "turn",
+            "watching",
+            "whether",
+            "which"
+          ],
+          "gm_terms": [
+            "air",
+            "alertness",
+            "apart",
+            "area",
+            "around",
+            "arrive",
+            "avoid",
+            "blending",
+            "briefly",
+            "calculation",
+            "cautious",
+            "clustered",
+            "crowd",
+            "dart",
+            "direct",
+            "enough",
+            "eyes",
+            "faces",
+            "figure",
+            "flicks"
+          ],
+          "direct_answer_score": 23,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_0e43da8ebcde",
+            "dimension": "content",
+            "dimensions": [
+              "content"
+            ],
+            "operation": "inspect",
+            "referent_provenance": "explicit_player",
+            "assessment_status": "unsatisfied",
+            "assessment_reasons": [
+              "inspection_not_resolved"
+            ],
+            "target": "Threadbare watcher",
+            "candidate_answer_target": "Threadbare watcher",
+            "target_compatible": true,
+            "operation_compatible": false,
+            "dimension_compatible": false,
+            "resolution_kind": "unrelated",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": "explicit_target",
+              "referent_reason": "incidental_entity_unresolved",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": false,
+              "fast_path_abstained": true,
+              "fast_path_abstention_reason": "target_not_canonical",
+              "model_interpreter_invoked": true,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 1,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "inc_bc59100d55",
+                  "type": "object",
+                  "label": "for crate yards"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "for crate yards"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "lead",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "rc_ce8e9fa4c78a",
+                  "type": "action",
+                  "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards."
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "id": "inc_bc59100d55",
+                  "type": "interlocutor",
+                  "label": "for crate yards"
+                },
+                {
+                  "id": "inc_bc59100d55",
+                  "type": "interlocutor",
+                  "label": "for crate yards"
+                }
+              ],
+              "proposal_source": "model_assisted",
+              "proposed_operation": "inspect",
+              "proposed_supporting_operations": [
+                "perceive"
+              ],
+              "proposed_raw_target": "study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "threadbare_watcher",
+                "canonical_target_label": "Threadbare watcher",
+                "canonical_target_type": "interlocutor",
+                "canonical_basis": "scene",
+                "authoritative_operation": "inspect",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": true,
+              "entity_binding": {
+                "status": "unresolved",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": "crowd",
+                "proposed_span": "the crowd",
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": true,
+                "authority_reasons": [
+                  "proposal:not_a_person"
+                ],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "not_applied",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "The road shows me nothing, so I turn back toward the crowd and study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate.",
+                "source": "model_assisted",
+                "primary_operation": "inspect",
+                "supporting_operations": [
+                  "perceive"
+                ],
+                "raw_target_text": "study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate",
+                "proposed_target_id": "threadbare_watcher",
+                "target_capture": "model",
+                "has_determiner": false,
+                "interlocutor_id": null,
+                "conversational_subject": "threadbare watcher",
+                "dimension": "content",
+                "dimensions": [
+                  "content"
+                ],
+                "expected_resolution": "Determine which faces the threadbare watcher follows and if they look at the gate",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": "high",
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_missed_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 88,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 23,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 24
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "No explicit question detected; scored leniently for directness."
+        ],
+        "signals": {
+          "has_question": false,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.141,
+          "gm_word_count": 92,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 0
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 9,
+          "topic_overlap_ratio": 0.429,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.061,
+          "player_presses_thread": false,
+          "gm_word_count": 92,
+          "net_new_terms": 46
+        }
+      },
+      "immersion": {
+        "score": 24,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": false,
+          "scene_anchor_hits": 2
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (23/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (24/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 88,
+        "rating": "strong",
+        "passed": false,
+        "semantic_result": "FAIL",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 1,
+  "turn_generation_calls": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "Your gaze settles on the threadbare figure standing slightly apart from the clustered watchers and refugees lining the muddy gate area. Their eyes dart with quiet calculation, following the shifting faces of those around them more intently than the gate itself. Now and then, their glance flicks briefly toward the gate as if waiting or searching for a signal or a presence yet to arrive. They move with an air of cautious patience, blending into the crowd just enough to avoid direct notice but showing a subtle alertness that sets them apart."
+    }
+  ],
+  "turn_interpretation_calls": [
+    {
+      "event": "attempt",
+      "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"study the threadbare figure standing apart, watching which faces they follow and whether they ever look at the gate\",\"proposed_target_id\":\"threadbare_watcher\",\"interlocutor_id\":null,\"conversational_subject\":\"threadbare watcher\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Determine which faces the threadbare watcher follows and if they look at the gate\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+    }
+  ],
+  "persistence": {
+    "session_id": "cbdc8395077b740060237d56",
+    "campaign_run_id": "cbdc8395077b740060237d56",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "lead",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "active_inspected": {
+        "id": "threadbare_watcher",
+        "label": "Threadbare watcher",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 7,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": {
+        "id": "rc_ce8e9fa4c78a",
+        "label": "I follow the guard's glance past the gate and study the road beyond, looking for whatever keeps pulling their eyes off the yards.",
+        "kind": "follow",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 7,
+      "last_committed_contract_id": "rc_0e43da8ebcde"
+    },
+    "incidental_entities": [
+      {
+        "entity_id": "inc_bc59100d55",
+        "label": "for crate yards",
+        "role": "for crate yards",
+        "scene_id": "frontier_gate",
+        "provenance": "bounded_incidental",
+        "authority": "bounded_improvisation",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "truth_status": "runtime_incidental",
+        "consequence_level": "incidental"
+      }
+    ],
+    "ledger_entries": [
+      {
+        "id": "inc_bc59100d55",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "content": "for crate yards",
+        "scope": "scene",
+        "scene_id": "frontier_gate",
+        "consequence_level": "incidental",
+        "source": "player_proposed_interlocutor",
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental"
+      }
+    ],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 339328
+  },
+  "resolution_kind": "investigate",
+  "api_ok": true
+}

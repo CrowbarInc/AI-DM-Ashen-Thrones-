@@ -1,0 +1,67 @@
+{
+  "campaign_id": "rc10_rc21_policy_implementation_20260919",
+  "campaign_name": "RC-10 / RC-21 Policy Implementation",
+  "campaign_date": "2026-09-19",
+  "purpose": "Implement the settled human decisions RC-10 = A and RC-21 = B + C, reconcile only directly implied residue, and establish the clean post-policy baseline.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "RC-10 = A and RC-21 = B + C are implemented. The retired opening token now has one test-side home. Social redirects follow authored scene evidence into the canonical lead registry; spoken Lirael no longer instantiates emergent_town_crier. Directly implied residue in clues.py and defaults.py was cleaned. Intent-parser pursuit and compat_pending_lead_needed were deferred. Player-facing opening and destination-extractor behavior did not change. The four former policy reds are green. Full suite: 6,450 collected, 6,351 passed, 0 failed, 99 skipped.",
+  "changes": {
+    "production": [
+      "Corrected the stale game/clues.py comment that claimed frontier_gate still authors Lirael.",
+      "Removed leftover Lirael authorship from default_scene('frontier_gate') discoverables."
+    ],
+    "validation": [
+      "Routed the incidence-report fixture through legacy_compatibility_local_opening_authorship_source().",
+      "Updated the three RC-21 tests to lock authored notice-board follow-up, registry ownership, merge, and milestone distinction."
+    ],
+    "tooling": [],
+    "documentation": [
+      "Recorded RC-10 = A and RC-21 = B + C as settled in the dossier, policy summary, NEXT_SESSION, CR-01, state-authority model, and current-focus deferral notes."
+    ],
+    "generated_artifacts": [
+      "Added focused and full-suite JUnit, baseline comparison, residue deferral, and command record."
+    ]
+  },
+  "testing": {
+    "focused": "RC-10/opening family: 216 passed. RC-21/leads family: 118 passed. Replay/ownership/scene-canon family: 30 passed.",
+    "broader": "Incidence-report classification, opening-fallback metadata, social lead landing, lead registry, qualified pursuit, and state-authority suites passed.",
+    "full_suite": "Pre: 6,450 collected, 6,347 passed, 4 failed, 99 skipped. Post: 6,450 collected, 6,351 passed, 0 failed, 99 skipped. Collection unchanged; one RC-21 test was renamed, not deleted.",
+    "runtime_validation": "No live destination-extractor or opening-path change. Protected-replay opening projection and scene-canon hygiene passed.",
+    "model_runtime_boundary": "No external model invocation; deterministic test stubs only.",
+    "new_regressions": "None remaining. First full-suite pass had one Windows PermissionError in BY2 temp combat.json rename; isolated re-run and second full suite passed.",
+    "pre_existing_failures": "None. The four former RC-10/RC-21 policy reds are green."
+  },
+  "decisions_requiring_human_review": [],
+  "known_problems": {
+    "campaign_specific": [],
+    "pre_existing": []
+  },
+  "missing_concepts": [
+    "compat_pending_lead_needed still keys off scene targets only.",
+    "Intent parsing still reads pending_leads as the pursuit surface.",
+    "Broader lead/clue overlap reduction remains deferred.",
+    "Calibration Round 2, State-to-Narration Consistency, and new Product Realization features are out of scope."
+  ],
+  "does_not_prove": [
+    "That Lirael pursuit should be restored as authored content.",
+    "That pending_leads consumers have all migrated to the registry.",
+    "That semantic playability or live-model quality improved."
+  ],
+  "recommended_next_step": "Review this clean post-policy baseline. After review, begin Calibration Round #2 or State ↔ Narration Consistency. Do not start a general lead-system refactor.",
+  "primary_report": "docs/rc10_rc21_policy_implementation.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "docs/NEXT_SESSION.md", "role": "next_session", "why": "Active session brief with settled decisions and exact baseline.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "docs/rc10_rc21_policy_resolution_dossier.md", "role": "policy_dossier", "why": "Preserves the analysis history and now records the made decisions.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/policy_resolution/policy_decision_summary.md", "role": "decision_summary", "why": "Short settled-decision record.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/policy_implementation/residue_deferral.md", "role": "residue_deferral", "why": "Shows what was cleaned versus deliberately deferred.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/policy_implementation/baseline_comparison.json", "role": "baseline_delta", "why": "Reconciles exact pre/post suite counts.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/policy_implementation/commands_executed.md", "role": "command_record", "why": "Preserves exact verification commands.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/policy_resolution/pre_policy_baseline.xml", "role": "pre_junit", "why": "Authoritative four-red starting baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/policy_implementation/post_implementation_suite.xml", "role": "post_junit", "why": "Authoritative clean ending baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/policy_implementation/focused_rc10_opening.xml", "role": "rc10_focused_junit", "why": "Opening fallback, incidence, and RC-10 fence verification.", "behavioral_evidence": true, "human_review_required": false},
+    {"path": "artifacts/policy_implementation/focused_rc21_leads.xml", "role": "rc21_focused_junit", "why": "Social redirect, registry, and projection verification.", "behavioral_evidence": true, "human_review_required": false},
+    {"path": "artifacts/policy_implementation/focused_replay_ownership.xml", "role": "replay_focused_junit", "why": "Opening replay projection, ownership, and scene-canon verification.", "behavioral_evidence": true, "human_review_required": false}
+  ],
+  "self_contained_review_test": "PASS: report, settled decisions, residue deferral, exact baselines, commands, and focused evidence are bundled."
+}

@@ -1,0 +1,717 @@
+{
+  "turn_number": 7,
+  "player_text": "I nod. I do not have local allies to name. What is the proper toll today, and if I pay it, will you let me through?",
+  "visible_motivation": "The captain said passage takes more than coin or papers: a solid reason, connections, or the proper toll. I have no allies here, so I ask for today's toll and whether paying it is enough.",
+  "intended_meaning": "Ask the guard captain today's toll and whether payment alone gets me through.",
+  "generated_candidate": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now.",
+  "gm_text": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now.",
+  "gm_tags": [
+    "scene_momentum:consequence_or_opportunity",
+    "final_emission_gate_replaced",
+    "final_emission_gate:anti_reset_continuation_fallback",
+    "first_mention_enforcement_replaced",
+    "first_mention_violation:first_mention_missing_grounding"
+  ],
+  "best_safe_candidate": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now.",
+  "final_selected_candidate": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now.",
+  "best_candidate_emitted": true,
+  "best_safe_invalidation": null,
+  "satisfied_candidate": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now.",
+  "initial_safe_candidate": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now.",
+  "candidate_transitions": [
+    {
+      "stage": "final_emission",
+      "reason": "compared",
+      "contract_id": "rc_b9f85e31ec80",
+      "operation": "ask",
+      "target": "Tavern Runner",
+      "interlocutor": "gate_guard",
+      "dimension": "content",
+      "expected_resolution": "answer",
+      "satisfaction_before": "satisfied",
+      "satisfaction_after": "satisfied",
+      "rank_before": 4,
+      "rank_after": 4,
+      "coverage_before": [
+        "content"
+      ],
+      "coverage_after": [
+        "content"
+      ],
+      "replacement_decision": "accepted",
+      "replacement_reason": "resolution_content_preserved",
+      "best_safe_candidate_before": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice boar",
+      "selected_preview": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice boar",
+      "invalidation_reason": null
+    }
+  ],
+  "outcome_precedence": {
+    "downgrade_attempted": false,
+    "downgrade_rejected": false,
+    "downgrade_reason": null,
+    "recovery_used": false,
+    "recovery_source": null,
+    "destroyed": false,
+    "replacement_reason": "resolution_content_preserved",
+    "scene_momentum_appended": false,
+    "final_outcome_kind": "answer",
+    "final_satisfaction": "satisfied"
+  },
+  "telemetry_semantic_degradation": false,
+  "telemetry_semantic_degradation_reasons": [],
+  "initial_satisfaction": {
+    "status": "satisfied",
+    "reasons": [
+      "covered:content"
+    ],
+    "resolution_kind": "answer",
+    "dimension_compatible": true,
+    "keeps_answer": true,
+    "rank": null
+  },
+  "final_satisfaction": {
+    "status": "satisfied",
+    "reasons": [
+      "covered:content"
+    ],
+    "resolution_kind": "answer",
+    "dimension_compatible": true,
+    "keeps_answer": true,
+    "rank": null
+  },
+  "initial_coverage": {
+    "required_dimensions": [
+      "content"
+    ],
+    "covered_dimensions": [
+      "content"
+    ],
+    "complete": true,
+    "dimension": "content",
+    "operation": "ask",
+    "expected_resolution": "answer"
+  },
+  "final_coverage": {
+    "required_dimensions": [
+      "content"
+    ],
+    "covered_dimensions": [
+      "content"
+    ],
+    "complete": true,
+    "dimension": "content",
+    "operation": "ask",
+    "expected_resolution": "answer"
+  },
+  "detector_semantic_degradation": false,
+  "detector_semantic_degradation_reasons": [],
+  "fast_path_used": false,
+  "semantic_completeness": "not_applied",
+  "fast_path_abstained": true,
+  "abstention_reason": "ambiguous_referent",
+  "interpreter_invoked": true,
+  "proposal_source": "model_assisted",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I nod. I do not have local allies to name. What is the proper toll today, and if I pay it, will you let me through?",
+    "source": "model_assisted",
+    "primary_operation": "ask",
+    "supporting_operations": [
+      "follow"
+    ],
+    "raw_target_text": "What is the proper toll today, and if I pay it, will you let me through?",
+    "proposed_target_id": "gate_guard",
+    "target_capture": "model",
+    "has_determiner": false,
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "toll and permission to pass the gate",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "To learn the current toll required to pass the gate and whether paying it grants passage",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": "high",
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "ask",
+  "canonical_target": "Tavern Runner",
+  "target_ref": {
+    "type": "interlocutor",
+    "id_or_text": "Tavern Runner",
+    "source": "explicit_player"
+  },
+  "discourse_ref": {
+    "type": "interlocutor",
+    "id": "gate_guard",
+    "label": "Tavern Runner",
+    "source_turn": null
+  },
+  "interlocutor_id": "gate_guard",
+  "conversational_subject": "toll and permission to pass the gate",
+  "dimension": "content",
+  "dimensions": [
+    "content"
+  ],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "contract_id": "rc_b9f85e31ec80",
+  "contract": {
+    "contract_id": "rc_b9f85e31ec80",
+    "turn_index": 8,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Tavern Runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "toll and permission to pass the gate",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_guard",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "referent_provenance": "inherited_discourse",
+    "ambiguous": false,
+    "raw_input": "I nod. I do not have local allies to name. What is the proper toll today, and if I pay it, will you let me through?",
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": null,
+      "referent_reason": "multiple_plausible_referents",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": false,
+      "fast_path_abstained": true,
+      "fast_path_abstention_reason": "ambiguous_referent",
+      "model_interpreter_invoked": true,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 1,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        }
+      ],
+      "proposal_source": "model_assisted",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [
+        "follow"
+      ],
+      "proposed_raw_target": "What is the proper toll today, and if I pay it, will you let me through?",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "gate_guard",
+        "canonical_target_label": "Tavern Runner",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "discourse",
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "authoritative": true,
+      "semantic_completeness": "not_applied",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I nod. I do not have local allies to name. What is the proper toll today, and if I pay it, will you let me through?",
+        "source": "model_assisted",
+        "primary_operation": "ask",
+        "supporting_operations": [
+          "follow"
+        ],
+        "raw_target_text": "What is the proper toll today, and if I pay it, will you let me through?",
+        "proposed_target_id": "gate_guard",
+        "target_capture": "model",
+        "has_determiner": false,
+        "interlocutor_id": "gate_guard",
+        "conversational_subject": "toll and permission to pass the gate",
+        "dimension": "content",
+        "dimensions": [
+          "content"
+        ],
+        "expected_resolution": "To learn the current toll required to pass the gate and whether paying it grants passage",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": "high",
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": {
+    "id": "gate_guard",
+    "label": "gate_guard",
+    "kind": "interlocutor"
+  },
+  "active_claim": null,
+  "active_inspected": null,
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "gate_guard",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 8,
+    "last_committed_contract_id": "rc_b9f85e31ec80"
+  },
+  "authority": null,
+  "bounded_ledger_tail": {
+    "entries": [],
+    "rejected": []
+  },
+  "semantic_result": "PASS",
+  "failing_gates": [],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 87,
+      "rating": "strong",
+      "passed": true,
+      "semantic_result": "PASS",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "PASS",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 108,
+          "text_preview": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage te"
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "question",
+          "player_terms": [
+            "allies",
+            "local",
+            "name",
+            "proper",
+            "through",
+            "today",
+            "toll",
+            "what"
+          ],
+          "gm_terms": [
+            "acknowledging",
+            "answer",
+            "any",
+            "board",
+            "calls",
+            "captain",
+            "certainty",
+            "crowd",
+            "curfew",
+            "directly",
+            "earlier",
+            "find",
+            "fixed",
+            "fluctuate",
+            "forward",
+            "grip",
+            "guarantees",
+            "guard",
+            "guards",
+            "he"
+          ],
+          "direct_answer_score": 22,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_b9f85e31ec80",
+            "dimension": "content",
+            "dimensions": [
+              "content"
+            ],
+            "operation": "ask",
+            "referent_provenance": "inherited_discourse",
+            "assessment_status": "satisfied",
+            "assessment_reasons": [
+              "covered:content"
+            ],
+            "target": "Tavern Runner",
+            "candidate_answer_target": null,
+            "target_compatible": null,
+            "operation_compatible": true,
+            "dimension_compatible": true,
+            "resolution_kind": "answer",
+            "resolution_coverage": [
+              "content"
+            ],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": null,
+              "referent_reason": "multiple_plausible_referents",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": false,
+              "fast_path_abstained": true,
+              "fast_path_abstention_reason": "ambiguous_referent",
+              "model_interpreter_invoked": true,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 1,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                }
+              ],
+              "proposal_source": "model_assisted",
+              "proposed_operation": "ask",
+              "proposed_supporting_operations": [
+                "follow"
+              ],
+              "proposed_raw_target": "What is the proper toll today, and if I pay it, will you let me through?",
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "gate_guard",
+                "canonical_target_label": "Tavern Runner",
+                "canonical_target_type": "interlocutor",
+                "canonical_basis": "discourse",
+                "authoritative_operation": "ask",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "authoritative": true,
+              "semantic_completeness": "not_applied",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I nod. I do not have local allies to name. What is the proper toll today, and if I pay it, will you let me through?",
+                "source": "model_assisted",
+                "primary_operation": "ask",
+                "supporting_operations": [
+                  "follow"
+                ],
+                "raw_target_text": "What is the proper toll today, and if I pay it, will you let me through?",
+                "proposed_target_id": "gate_guard",
+                "target_capture": "model",
+                "has_determiner": false,
+                "interlocutor_id": "gate_guard",
+                "conversational_subject": "toll and permission to pass the gate",
+                "dimension": "content",
+                "dimensions": [
+                  "content"
+                ],
+                "expected_resolution": "To learn the current toll required to pass the gate and whether paying it grants passage",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": "high",
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_met_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 87,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 22,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 24
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 22,
+        "passed": true,
+        "reasons": [
+          "Concrete answer markers present."
+        ],
+        "signals": {
+          "has_question": true,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.061,
+          "gm_word_count": 108,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 3
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 4,
+          "topic_overlap_ratio": 0.5,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.12,
+          "player_presses_thread": false,
+          "gm_word_count": 108,
+          "net_new_terms": 46
+        }
+      },
+      "immersion": {
+        "score": 24,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": false,
+          "scene_anchor_hits": 2
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (22/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (24/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 87,
+        "rating": "strong",
+        "passed": true,
+        "semantic_result": "PASS",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 1,
+  "turn_generation_calls": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "model_player_facing_text": "No one steps forward to directly answer your question here, and the guards maintain a tight grip on the line without acknowledging any posted toll or passage terms. The notice board nearby lists taxes and curfew rules but does not specify a fixed toll for passage today. The tavern runner’s earlier words hinted that prices and requirements fluctuate with rumors and the moods of the guards. If you want certainty on the proper toll and whether payment now guarantees passage, you might need to find the guard captain managing the crowd—he’s the one who makes the calls and can say what’s needed right now."
+    }
+  ],
+  "turn_interpretation_calls": [
+    {
+      "event": "attempt",
+      "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"follow\"],\"raw_target_text\":\"What is the proper toll today, and if I pay it, will you let me through?\",\"proposed_target_id\":\"gate_guard\",\"interlocutor_id\":\"gate_guard\",\"conversational_subject\":\"toll and permission to pass the gate\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"To learn the current toll required to pass the gate and whether paying it grants passage\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+    }
+  ],
+  "resolution_kind": "question",
+  "api_ok": true
+}

@@ -1,0 +1,110 @@
+{
+  "scenario_id": "S05",
+  "title": "Two accounts",
+  "catalog_heading": "S05 — Two accounts",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "development_visible",
+  "catalog_partition": "development-visible",
+  "evidence_status": "development_visible",
+  "evidence_status_note": "Developers may open this conversation while diagnosing a failure.",
+  "primary_capability": "ambiguity_handling",
+  "secondary_capabilities": ["npc_dialogue_coherence", "conversational_continuity", "corrections_and_clarifications"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate.",
+  "authoritative_facts": [
+    "The runner's rumor and, once the board is read, notice_patrol_route both point near the crates and the northwest approach.",
+    "They are different sentences and different sources."
+  ],
+  "npc_knowledge": [
+    "The runner knows the rumor as hearsay. The board holds the posted warning. Neither may absorb the other's wording."
+  ],
+  "expected_outcomes": [
+    "The runner answers first.",
+    "The board is consulted second.",
+    "That is then ambiguous.",
+    "The player's choice of the runner is honored."
+  ],
+  "acceptable_variations": [
+    "S05.3 may pick neither account and ask. It may not pick one and call the choice obvious."
+  ],
+  "unacceptable_behaviors": [
+    "The same paragraph presented as both the notice and the rumor.",
+    "A third story.",
+    "The guard answering S05.4."
+  ],
+  "required_evidence": ["Shared packet, including the clarification text and the player's S05.4 choice."],
+  "setup_dependencies": [
+    "Pronoun follow-up is not last-answer authority for they or it. That after two delivered accounts is supposed to be ambiguous. A host that continues only the latest account has lost the earlier one; score continuity lost and clarification missing_when_needed_fail."
+  ],
+  "determinism": "mixed. The ambiguity decision is host-checkable when both accounts are in the delivered transcript and the reply asks.",
+  "turns": [
+    {
+      "turn_id": "S05.1",
+      "catalog_heading": "S05.1 — primary: NPC dialogue coherence",
+      "primary_capability": "npc_dialogue_coherence",
+      "player_input": "Runner, what did you hear about the patrol?",
+      "communicative_act": "Question to tavern_runner.",
+      "interpretation_pass": "tavern_runner is the addressee.",
+      "response_pass": "The footprint rumor as hearsay.",
+      "authority_pass": "No notice wording presented as what the runner heard.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Speaker id."]
+    },
+    {
+      "turn_id": "S05.2",
+      "catalog_heading": "S05.2 — primary: conversational continuity",
+      "primary_capability": "conversational_continuity",
+      "player_input": "And the board, what does it say about the same patrol?",
+      "communicative_act": "A shift from the runner to the notice board, same patrol topic.",
+      "interpretation_pass": "A shift from the runner to the notice board, same patrol topic.",
+      "response_pass": "The posted warning, including the northwest track once the board is investigated.",
+      "authority_pass": "The runner is not quoted as the board.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the same patrol is the patrol from S05.1. lost if the board answer changes the subject to taxes only, or if the runner's sentence is repeated unchanged and called the notice.",
+      "required_evidence": ["Whether the board was investigated."]
+    },
+    {
+      "turn_id": "S05.3",
+      "catalog_heading": "S05.3 — primary: ambiguity handling",
+      "primary_capability": "ambiguity_handling",
+      "player_input": "Tell me more about that.",
+      "communicative_act": "The referent is unresolved between the rumor and the notice.",
+      "interpretation_pass": "The referent is unresolved between the rumor and the notice.",
+      "response_pass": "One question that names both, or otherwise distinguishes them. No new facts. This is a successful turn when the clarification is necessary and focused. Guessing is a major failure.",
+      "authority_pass": "No additional detail about either account.",
+      "acceptable_variations": ["The clarification may pick neither account and ask."],
+      "unacceptable_behaviors": ["Picking one account and calling the choice obvious."],
+      "clarification_expected": "necessary_pass",
+      "clarification_notes": "Continuing only the latest line without acknowledging the other is missing_when_needed_fail.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if both accounts are still available to name. lost if one has vanished. This turn must remember both accounts, including the one before the previous sentence.",
+      "required_evidence": ["The clarification text."]
+    },
+    {
+      "turn_id": "S05.4",
+      "catalog_heading": "S05.4 — primary: corrections and clarifications",
+      "primary_capability": "corrections_and_clarifications",
+      "player_input": "The runner's version, not the notice.",
+      "communicative_act": "The player resolved S05.3 in favor of the runner.",
+      "interpretation_pass": "The player resolved S05.3 in favor of the runner.",
+      "response_pass": "The footprint rumor only, still hearsay.",
+      "authority_pass": "The track-past-the-crates sentence is not substituted.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["The guard answering this turn."],
+      "clarification_expected": "none",
+      "clarification_notes": "Asking again is unnecessary_fail.",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved for the runner's account from S05.1.",
+      "required_evidence": ["The player's choice and the speaker id."]
+    }
+  ]
+}

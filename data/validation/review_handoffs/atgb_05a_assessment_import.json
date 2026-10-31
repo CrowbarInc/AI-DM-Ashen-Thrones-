@@ -1,0 +1,904 @@
+{
+  "campaign_id": "atgb_05a_assessment_import",
+  "campaign_name": "ATGB-05A Assessment Import and Initial Setup Closure",
+  "campaign_date": "2026-10-18",
+  "purpose": "Complete the blocked ATGB-05 provisional assessment import and verify initial ATGB v1 setup closure.",
+  "objective_status": "COMPLETE: PROVISIONAL IMPORT VERIFIED; INITIAL OPERATIONAL SETUP CLOSED; AUTHENTICATED HUMAN SCORING PENDING",
+  "executive_summary": "Original assessment files found at workspace root and preserved byte-identically. All 37 selected review IDs/trials match; rubric consistency and all summary aggregates agree without identified discrepancies. Provisional counts: interpretation 18/16/3, response 10/25/2, authority 35/0/2 (pass/fail/uncertain). S03.4/S05.4 authority uncertainty and six S07/S09 setup qualifications remain intact. ChatGPT (GPT-6) AI-assisted provenance and false human attestation are preserved; existing human-reporting rejection is verified. Initial ATGB v1 operational setup is complete, authenticated human scoring pending, conversational competence not established. Historical evidence-packet empty outcome categories mean unmeasured human findings, never zero failures. No gameplay or live-provider execution.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "No rubric, corpus, expectations, human-review semantics or benchmark framework changed. Offline import-integrity checks added as campaign evidence only."
+    ],
+    "tooling": [
+      "No reusable reporting implementation modified; campaign-local verification scripts only."
+    ],
+    "documentation": [
+      "ATGB-05 report and NEXT_SESSION now record verified provisional import and operational setup closure. Earlier blocked pass retained as history."
+    ],
+    "generated_artifacts": [
+      "Byte-identical original evaluation copies, source hashes, import verification, entry preservation snapshot, test results and standard handoff ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "21 existing offline human-review/handoff tests passed. Import checks found no discrepancies; all summary counts and determinate denominators agree. All 1,620 entry-protected and 609 original ATGB-05 protected files unchanged.",
+    "broader": "Not run; no gameplay changes.",
+    "full_suite": "Not run.",
+    "runtime_validation": "No new gameplay or provider execution. Existing human-report tool rejects the exact original false-attestation assessment. Extracted ZIP review checked separately.",
+    "model_runtime_boundary": "Reuses ATGB-03/03C captured live-enabled API baseline and supplied ChatGPT (GPT-6) provisional transcript assessment. No new model requests.",
+    "new_regressions": "No gameplay change or broad regression claim. Protected production and baseline hashes unchanged.",
+    "pre_existing_failures": "ATGB-03B routing-metadata expectation and missing answer_sufficiency failures remain documented; reset-write failures are separate environment history."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "No import discrepancies identified; consistency verification is not human adjudication.",
+      "Authenticated human scoring remains pending; provisional assessment must not be imported as human-approved results."
+    ],
+    "pre_existing": [
+      "S03.4/S05.4 faction-state changes unresolved; authority uncertain, not confirmed violations.",
+      "S07/S09 opening delivery limited; unsupported criteria not scored as failures merely for missing setup.",
+      "SDK transport retries not independently counted; historical accounting scopes differ.",
+      "Single environment/trials, bounded state and exposed held-out content limit claims.",
+      "Extensive pre-existing dirty worktree retained."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review provisional judgments and remaining authority/setup uncertainties. A human must independently review before explicit attestation in a separate review file.",
+    "Review proposed conversational investigation priorities before beginning the next Product Realization investigation."
+  ],
+  "missing_concepts": [
+    "No new scoring authority, framework, production repair, architectural migration or ATGB development campaign."
+  ],
+  "does_not_prove": [
+    "Authenticated human scoring, evaluator infallibility, conversational competence/playability, improvement from repairs, unseen generalization, full-suite regression success or SDK transport bounds."
+  ],
+  "recommended_next_step": "Await review before the next Product Realization investigation. Recommended priority is corrections treated as mechanical revisions, then related nonanswers/reference loss and social remarks/clarification. Establish the earliest incorrect pipeline stage before selecting repairs. No new ATGB campaign or gameplay work starts here.",
+  "primary_report": "development/reports/atgb_05_baseline_preservation.md",
+  "evidence_packets": [
+    "artifacts/atgb/atgb_03c/behavioral_evidence"
+  ],
+  "self_contained_review_test": "Extracted ZIP: check CRC, canonical SHA-256 hashes, required sections, 37 selected trial IDs, exact preserved assessment bytes and verified summary counts; execute existing human reporter with original false-attestation input and require rejection with no report output.",
+  "configuration_source": "data/validation/review_handoffs/atgb_05a_assessment_import.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_03/S01/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S01/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S03/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S04/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/configuration_and_provenance.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/scenario_status.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S04/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S06/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S07/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S09/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/provider_usage.jsonl",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/result.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/transcript.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S10/worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/baseline_coverage.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_review_source.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_worksheet.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/combined_baseline_worksheet.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/opening_context.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/provenance_before.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/provider_accounting.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/scenario_readiness.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/README.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/approved_rubric_excerpt.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/blank_judgments.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/blank_scoring_forms.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/check_form.cjs",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/conversational_review.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/evidence_provenance.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/evidence_sources.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/focused_tests.txt",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/historical_S04_trial_1.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/package_review.py",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/pending_report.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/preservation_before.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/preservation_checks.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/review.html",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/review_index.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/review_index.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/scenario_qualifications.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/validation_results.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_04/verify_package.py",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/review_handoffs/atgb_04_human_evaluation_preparation.json",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_02a_readiness.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_03_initial_live_baseline.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_03c_live_baseline_continuation.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_human_review.py",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/prepare_human_review.py",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/report_human_review.py",
+      "role": "independent_human_review_material",
+      "why": "Preserved authoritative evidence or supporting authority; no new evaluator judgment inferred.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_03b_provider_accounting_integrity.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_04_human_evaluation_preparation.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/12_FINAL_RECOMMENDATION.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/04_CURRENT_SEMANTIC_PIPELINE.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/38_FINAL_VERDICT.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r4_r1/37_RECOMMENDED_NEXT_CYCLE.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/campaigns/reconciliation/AR-CA_campaign6_chassis_strategy_closeout.md",
+      "role": "preservation_and_current_status",
+      "why": "Explicit ATGB-05 evidence, current product status, or integrity record. Missing original assessment remains explicit.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/assessment_import_verification.json",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/ATGB_05_report_before_05a.md",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/focused_tests.txt",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/focused_tests.xml",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/NEXT_SESSION_before_05a.md",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/preservation_before.json",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/source_manifest.json",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/verify_import.py",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/assessment/ATGB_04_review_judgments.json",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/assessment/ATGB_04_review_summary.md",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/review_handoffs/atgb_05a_assessment_import.json",
+      "role": "provisional_assessment_import",
+      "why": "Original provisional evidence, byte-preservation provenance, current verification or explicitly historical pre-import orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/verify_bundle.py",
+      "role": "bundle_integrity",
+      "why": "Standalone offline ZIP integrity and false-human-attestation rejection evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_05a/bundle_verification.json",
+      "role": "bundle_integrity",
+      "why": "Standalone offline ZIP integrity and false-human-attestation rejection evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

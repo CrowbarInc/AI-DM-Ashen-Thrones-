@@ -1,0 +1,21 @@
+Broad deterministic regression attempted.
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest -m "not transcript and not slow" -q --tb=short --basetemp=codex_pytest_tmp_prcc_broad
+
+Observed output before interruption:
+.............
+
+Result:
+INTERRUPTED after approximately 2.5 minutes of no additional output. No failure output was emitted before interruption.
+
+Adjacent social relevance slice attempted separately.
+
+Command:
+$env:PYTHONPATH='.'; .\.venv\Scripts\python.exe -m pytest tests\test_social_question_relevance_answer_selection.py -q --tb=short --basetemp=codex_pytest_tmp_prcc_relevance
+
+Observed output before interruption:
+............
+
+Result:
+INTERRUPTED after approximately 2 minutes of no additional output. No failure output was emitted before interruption.

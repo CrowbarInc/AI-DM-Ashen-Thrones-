@@ -1,0 +1,405 @@
+{
+  "campaign_id": "atgb_r1_08",
+  "campaign_name": "ATGB-R1-08 Live Conversational Correction Validation",
+  "campaign_date": "2026-10-19",
+  "purpose": "Bounded live validation only; mandatory stop after provider failure.",
+  "objective_status": "D — Inconclusive; await external review",
+  "executive_summary": "L1 passed readiness but one admitted dispatch failed with APIConnectionError; usage unknown. L2/L3/L4 not run. Live repair effect remains unmeasured; gameplay state unchanged.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "One authorized measured admission, failed before model response."
+    ],
+    "tooling": [
+      "Validation-only adaptation of corrected R1-05 runner; offline packaging."
+    ],
+    "documentation": [
+      "Eight reports and canonical NEXT_SESSION update."
+    ],
+    "generated_artifacts": [
+      "Complete available request/host/state/accounting evidence."
+    ]
+  },
+  "testing": {
+    "focused": "Reviewed prior deterministic evidence; no new pytest run.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Direct production chat; one failed interpretation dispatch.",
+    "model_runtime_boundary": "Configured gpt-4.1-mini; returned version unavailable; retries zero.",
+    "new_regressions": "None demonstrated; semantic behavior unmeasured.",
+    "pre_existing_failures": "Known historical conversational inadequacy remains untested by this failed call."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "APIConnectionError; unknown usage; L2/L3/L4 not evaluated.",
+      "Response completion counters report zero; durable ledger records one actual admission."
+    ],
+    "pre_existing": [
+      "Broad conversational competence and authenticated human assessment remain unestablished."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review inconclusive result; live repair acceptance withheld. Any next live pass needs separate authorization."
+  ],
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Live repair improvement/ineffectiveness, L4 preservation, broad reliability, independent generalization or benchmark performance."
+  ],
+  "recommended_next_step": "External review, then separately authorize validation in a verified provider-capable environment with a new explicit budget. No automatic retry or implementation.",
+  "primary_report": "development/reports/atgb_r1_08/08_final_verdict.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/atgb_r1_08"
+  ],
+  "self_contained_review_test": "Eight reports; full available transcript/messages/traces/before-after snapshots/ledger; historical comparison; protected hashes and explicit unknowns included.",
+  "configuration_source": "artifacts/atgb/atgb_r1_08/review_config.json",
+  "supporting_files": [
+    {
+      "path": "development/reports/atgb_r1_08/01_baseline_and_readiness.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/02_live_trial_results.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/03_interpretation_and_evidence_analysis.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/04_response_adequacy_and_naturalness.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/05_mechanical_revision_and_authority.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/06_historical_comparison.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/07_provider_accounting.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_08/08_final_verdict.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/baseline.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/commands.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/entry_hashes.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/NEXT_SESSION_before.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/package_review.py",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/provider_accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/repository_status_after.txt",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/repository_status_before.txt",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/run_trial.py",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/trial_disposition.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/accounting.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/after.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/before.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/configuration.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/evidence_selection.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/inherited_environment_names.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/preflight.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/provider_usage.jsonl",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/request_messages.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/response.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/setup.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/state_integrity.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/timing.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/traces.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/L1/transcript.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/readiness.py",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/02_live_trial_results.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/07_provider_accounting.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/02_live_trial_results.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/05_pending_action_control.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_06/04_evidence_selection_analysis.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_07/08_final_verdict.md",
+      "role": "validation_evidence",
+      "why": "Explicit scope-relevant review source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_08/review_config.json",
+      "role": "configuration_provenance",
+      "why": "Explicit bundle selection."
+    }
+  ]
+}

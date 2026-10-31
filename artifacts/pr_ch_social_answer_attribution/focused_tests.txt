@@ -1,0 +1,22 @@
+PR-CH focused tests
+
+Live provider calls: 0
+
+1. Target reproduction
+   .venv\Scripts\python.exe -m pytest tests\test_social_question_relevance_answer_selection.py::test_general_http_ask_a_not_b -q --tb=short
+   Result: failed as expected.
+   Observed: Kiln Tender says, "I cannot answer that from what is settled here."
+   Captured stdout included: [CLUE DISCOVERED] social_brine_yard_kiln_tender_kiln_bank
+
+2. Full adjacent social relevance file
+   .venv\Scripts\python.exe -m pytest tests\test_social_question_relevance_answer_selection.py -q --tb=short
+   Result: 20 passed, 4 failed.
+
+3. Deterministic local trace
+   Direct local functions over `_brine_world`, `_brine_scene`, `resolve_social_action`, `realize_authored_knowledge_answer`, and `run_preserve_if_valid`.
+   Result: no provider calls.
+   Key evidence: authored realization returns Kiln Tender mutters, "Word is, kiln three is banked from dusk until the morning bell."
+
+4. TestClient note
+   One ad hoc metadata probe using TestClient hung and was interrupted with Ctrl-C, matching the known PR-CG/PR-CF Windows TestClient instability. It was not used as application evidence.
+

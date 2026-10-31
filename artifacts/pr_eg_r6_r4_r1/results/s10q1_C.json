@@ -1,0 +1,51 @@
+{
+  "case_id": "s10q1",
+  "family": "s10",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "567dc0420696de399c21a883d65c87cd160481534477f8813079a3a62e4b27c3",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Two sentries guard the eastern bridge"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s10"
+    ],
+    "answered_arguments": [
+      "agent",
+      "object"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 directly states that two sentries provide security for the eastern bridge, which corresponds to the eastern crossing in the question."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

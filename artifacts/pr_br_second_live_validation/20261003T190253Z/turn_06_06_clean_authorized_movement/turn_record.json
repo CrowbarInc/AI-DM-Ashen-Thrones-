@@ -1,0 +1,173 @@
+{
+  "probe_id": "06_clean_authorized_movement",
+  "probe_question": "Valid move from the rope walk to the sail loft.",
+  "player_text": "I go to the sail loft.",
+  "http_status": 200,
+  "emitted_narration": "You step into the Ashford sail loft, where cut canvas hangs neatly from pegs along the spacious loft walls. The floor beneath your feet is swept clean, and the delicate scent of waxed thread mingles with the faint rustle of fabric. Light filters softly through high windows, illuminating coils of fresh rope lining the adjacent covered walk. At the far end, a sturdy stair leads upward, beckoning further exploration.",
+  "raw_generations": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "You step into the Ashford sail loft, where cut canvas hangs neatly from pegs along the spacious loft walls. The floor beneath your feet is swept clean, and the delicate scent of waxed thread mingles with the faint rustle of fabric. Light filters softly through high windows, illuminating coils of fresh rope lining the adjacent covered walk. At the far end, a sturdy stair leads upward, beckoning further exploration.",
+      "prompt_flags": {
+        "user_chars": 105907,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true,
+        "contains_authoritative_retry_context": false,
+        "contains_validation_failure": false
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "initial_generation_calls": 1,
+  "retry_generation_calls": 0,
+  "interpretation_call_count": 0,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": "scene_transition",
+  "resolution_social": null,
+  "resolution_npc_id": null,
+  "target_scene_id": "sail_loft",
+  "resolved_transition": true,
+  "selected_resolver": "travel",
+  "interaction_obligation": {
+    "kind": "action_request",
+    "target": null,
+    "interlocutor_id": null,
+    "subject": "I go to the sail loft.",
+    "requested_outcome": "accept, refuse, condition, or redirect the requested action",
+    "claim_id": null,
+    "resolution_mode": "grounded_information_request",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_2a0365ba3ddf"
+  },
+  "resolution_contract_id": "rc_2a0365ba3ddf",
+  "resolution_contract_operation": "act",
+  "resolution_contract_subject": "travel",
+  "decision_present": true,
+  "decision_contract_id": "rc_2a0365ba3ddf",
+  "decision_id_matches_contract": true,
+  "decision_outcome": "consequentially_unresolved",
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+    "Requested consequential result remains unresolved unless separately authorized by resolver/state."
+  ],
+  "permitted_mutations": null,
+  "proposed_facts": [
+    {
+      "text": "Coils of new rope line the covered walk.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "A stair at the far end climbs to the sail loft.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    }
+  ],
+  "accepted_response": {
+    "immutable": true,
+    "text": "You step into the Ashford sail loft, where cut canvas hangs neatly from pegs along the spacious loft walls. The floor beneath your feet is swept clean, and the delicate scent of waxed thread mingles with the faint rustle of fabric. Light filters softly through high windows, illuminating coils of fresh rope lining the adjacent covered walk. At the far end, a sturdy stair leads upward, beckoning further exploration.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "I go to the sail loft.",
+    "turn_identity": "rc_2a0365ba3ddf",
+    "speaker": "",
+    "addressee": "",
+    "target": "",
+    "operation": "act",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_2a0365ba3ddf",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "Light filters softly through high windows, illuminating coils of fresh rope lining the adjacent covered walk.",
+            "provenance": "authored_world_fact",
+            "consequence": "consequential",
+            "authorized": true,
+            "reason_codes": [
+              "authored_state_source"
+            ],
+            "authority": "world_truth",
+            "persistence": "world_truth",
+            "source_ref": "scene.visible_facts.0",
+            "outcome_classification": "established_or_retrieved",
+            "semantic_identity": {}
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_2a0365ba3ddf",
+      "operation": "act",
+      "interlocutor_id": "",
+      "expected_resolution": "action_outcome"
+    },
+    "resolution_kind": "scene_transition",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "gm_metadata_validation_keys": [
+    "hard_validation_attempt_1"
+  ],
+  "committed_active_scene_id": "sail_loft",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "sail_loft",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": {
+      "id": "rc_2a0365ba3ddf",
+      "label": "I go to the sail loft.",
+      "kind": "act",
+      "scene_id": "sail_loft",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_2a0365ba3ddf"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [],
+    "rejected": [],
+    "incidental_entities": []
+  },
+  "committed_world_flags": [],
+  "committed_factions": [],
+  "committed_event_log": []
+}

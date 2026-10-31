@@ -1,0 +1,573 @@
+{
+  "campaign_id": "pr-br-second-live-validation",
+  "campaign_name": "PR-BR Second Limited Live Validation",
+  "campaign_date": "2026-10-03",
+  "purpose": "Fresh 8-turn live measurement of GMResolutionDecision attachment, semantic fidelity, retry context, and the known mixed social/travel resolver path.",
+  "primary_report": "artifacts/pr_br_second_live_validation/20261003T190253Z/validation_report.md",
+  "executive_summary": "Eight fresh isolated gameplay turns scored 5 PASS and 3 FAIL. Every Resolution Contract carried a GMResolutionDecision whose contract_id matched. The first validation's missing-decision gap and the sentence-local negation reject did not recur, and the generic no-answer line was not emitted. The sluice turn still rejected a correct unknown-cause sentence as an event-site location fill, then preservation removed that sentence and kept a missing-patrol lead. The sail-loft move committed, while the decision recorded no location mutation and narration added an upward stair. The mixed thanks-and-courtyard line selected travel and moved; it did not reproduce the six social-blocks-travel failures, and it dropped the thanks. Exact model/API calls: 11 (8 initial generations, 1 retry, 1 interpretation, 1 preflight). Recommendation: localized defects. Return to targeted implementation. The six scene-transition tests remain unrepaired.",
+  "objective_status": "measured_localized_defects_for_targeted_implementation",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Ran 8 isolated live gameplay turns. No production code was changed."
+    ],
+    "tooling": [
+      "Added a measurement harness under artifacts/pr_br_second_live_validation/. It is not production."
+    ],
+    "documentation": [
+      "Wrote the 20-section validation report beside the turn artifacts."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_second_live_validation/20261003T190253Z/ holds initial states, contracts, decisions, generations, validation metadata, committed states, and the report."
+    ]
+  },
+  "testing": {
+    "focused": "Not run. This cycle was live measurement only.",
+    "broader": "Not run. The six scene-transition failures were not rerun and not patched.",
+    "full_suite": "Not run.",
+    "runtime_validation": "8 isolated POST /api/chat turns. Manual 5 PASS / 3 FAIL. Passes: turns 2, 3, 4, 5, 8. Fails: turns 1, 6, 7.",
+    "model_runtime_boundary": "8 gameplay turns. 8 initial generation calls. 1 retry generation call. 1 interpretation call. 1 startup preflight. 11 total model/API calls. 0 reruns. 0 gate sessions.",
+    "new_regressions": "No production patch. Live defects are an event-site false reject plus preservation of the wrong sentence, a movement decision with empty permitted mutations, and a mixed utterance contracted as travel only.",
+    "pre_existing_failures": "Six failures remain in tests/test_scene_transition_authority.py. Probe 7 did not reproduce social-blocks-travel. It selected travel, committed the courtyard, and omitted the thanks. Those six tests were not repaired."
+  },
+  "self_contained_review_test": "Bundle contains the validation report, all 8 turn artifacts, call logs, the harness, and the production modules that implement qualifier checks, preservation, and resolver selection.",
+  "decisions_requiring_human_review": [
+    "B. SECOND LIVE VALIDATION EXPOSED LOCALIZED DEFECTS; RETURN TO TARGETED IMPLEMENTATION.",
+    "Next implementation should stop the event-site pattern from rejecting an unknown cause, actor, and time, and should keep preservation from deleting that sentence while retaining an unrelated lead.",
+    "Movement decisions should record the location mutation the travel resolver commits, so arrival narration is not steered by the departure stair.",
+    "Mixed social-and-travel ownership remains a separate question. Probe 7 did not reproduce the six social-blocks-travel failures. Do not treat those tests as fixed.",
+    "Do not start a multi-turn validation, the 4x10 gate, a human playtest, or PR-BS on this evidence."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Turn 1 rejected the unseen-cause sentence as unauthorized_qualifier:location, then bounded preservation removed it and kept a missing-patrol lead.",
+      "Turn 1 retry context included the contract and the decision. The retry generation was empty (malformed_or_truncated).",
+      "Turns 6 and 7 record permitted_state_mutations as empty and outcome consequentially_unresolved after a committed scene_transition.",
+      "Turn 6 narration adds a stair that leads upward after arrival in the sail loft.",
+      "Turn 7 contract subject is travel. The thanks is not narrated. Social did not block the move."
+    ],
+    "pre_existing": [
+      "Six tests in tests/test_scene_transition_authority.py still fail when a social contract blocks travel. They were not rerun and not repaired.",
+      "The second full gate remained 8/40. This cycle did not rerun it."
+    ]
+  },
+  "missing_concepts": [
+    "Unknown-cause wording such as remain unseen must count as an unresolved slot, and happened-here must not match that wording.",
+    "A committed scene_transition should be a permitted location mutation on the decision that narrates the arrival.",
+    "A separate review of mixed-utterance ownership, using the six existing scene-transition failures as the social-blocks-travel evidence."
+  ],
+  "does_not_prove": [
+    "Does not prove multi-turn continuity.",
+    "Does not prove the six scene-transition tests would pass.",
+    "Does not rerun the 4x10 gate.",
+    "Does not authorize a human playtest or PR-BS.",
+    "Does not show that an empty retry can repair a false qualifier reject. Preservation edited the first generation instead."
+  ],
+  "recommended_next_step": "B. SECOND LIVE VALIDATION EXPOSED LOCALIZED DEFECTS; RETURN TO TARGETED IMPLEMENTATION.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/generation_calls.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/interpretation_calls.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/preflight_calls.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/run_manifest.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_01_01_established_condition_unknown_cause/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_02_02_prebuilt_social_unsupported_world_fact/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_03_03_negated_unrelated_predicate/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_04_04_multi_sentence_observation/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_05_05_background_npc_improvisation/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_06_06_clean_authorized_movement/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_07_07_mixed_social_and_declared_movement/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/committed_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/completed.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/generations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/gm_output.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/initial_state.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/interpretations.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/resolution.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/20261003T190253Z/turn_08_08_valid_answer_consequential_temptation/turn_record.json",
+      "role": "turn_artifact",
+      "why": "Saved live-probe evidence for external review.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_second_live_validation/run_probes.py",
+      "role": "validation_harness",
+      "why": "Exact fresh seeds, player lines, and capture path for the eight turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Event-site qualifier check and decision attachment used by these turns.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "production_code",
+      "why": "Retry context and bounded sentence preservation used on turn 1.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/ordinary_semantic_ownership.py",
+      "role": "production_code",
+      "why": "Resolver selection that followed contract subject on every turn, including probe 7.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

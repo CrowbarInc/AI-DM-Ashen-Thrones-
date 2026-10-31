@@ -1,0 +1,38 @@
+{
+  "application_realization_envelope": {},
+  "parser_attempts": [
+    {
+      "attempt": 1,
+      "provider_response_contract": "narration_only",
+      "structural_shape": {
+        "json_object": true,
+        "keys": [
+          "narration"
+        ]
+      },
+      "declared_claims": [],
+      "normalized_empty_declarations": true,
+      "declaration_authorship": false,
+      "structured_contract_failure": null,
+      "structured_contract_reason": null,
+      "player_facing_text": "The baker glances around briefly before muttering, “I’m afraid that’s not something I share lightly. Best you choose your own favorites from the loaves here.” Their tone holds a guarded edge, unwilling to reveal personal preference."
+    },
+    {
+      "attempt": 2,
+      "provider_response_contract": "narration_only",
+      "structural_shape": {
+        "json_object": true,
+        "keys": [
+          "declared_claims",
+          "narration"
+        ]
+      },
+      "declared_claims": null,
+      "normalized_empty_declarations": null,
+      "declaration_authorship": null,
+      "structured_contract_failure": true,
+      "structured_contract_reason": "unexpected_declared_claims",
+      "player_facing_text": ""
+    }
+  ]
+}

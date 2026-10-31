@@ -1,0 +1,50 @@
+{
+  "case_id": "s33q4",
+  "family": "s33",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "968b00810b74a548ca83605e0793ae28e7397132c1f5b3e7b8ff805c308de998",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "a dry fountain beside the copper stair"
+    ],
+    "qualifiers": [
+      "Authorized narration"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s33"
+    ],
+    "answered_arguments": [
+      "what stands beside the stair"
+    ],
+    "missing_arguments": [
+      "who built it"
+    ],
+    "conflict": false,
+    "reason": "The fact describes what stands beside the stair as a dry fountain but does not provide information about who built it."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

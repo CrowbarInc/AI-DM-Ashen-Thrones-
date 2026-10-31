@@ -1,0 +1,45 @@
+{
+  "qualification_engine": {
+    "calls": 47,
+    "input_tokens": 140305,
+    "output_tokens": 8322,
+    "purposes": {
+      "interpretation": 28,
+      "expression": 16,
+      "strict_social": 1,
+      "retry_escalation": 2
+    }
+  },
+  "qualification_auxiliary": {
+    "calls": 137,
+    "input_tokens": 165713,
+    "output_tokens": 23205,
+    "purposes": {
+      "player": 69,
+      "judge": 68
+    }
+  },
+  "interrupted_engine": {
+    "calls": 1,
+    "input_tokens": 1903,
+    "output_tokens": 216,
+    "purposes": {
+      "interpretation": 1
+    }
+  },
+  "interrupted_auxiliary": {
+    "calls": 5,
+    "input_tokens": 3332,
+    "output_tokens": 650,
+    "purposes": {
+      "player": 3,
+      "judge": 2
+    }
+  },
+  "total": {
+    "calls": 190,
+    "input_tokens": 311253,
+    "output_tokens": 32393
+  },
+  "notes": "No provider usage report exists for the failed sandbox player connection; it failed before a response. A fresh process resumed turn 52, so cumulative JSONL logs, not the final process-local engine snapshot, govern campaign totals. API prices were not captured."
+}

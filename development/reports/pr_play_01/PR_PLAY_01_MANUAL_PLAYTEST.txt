@@ -1,0 +1,152 @@
+PR-PLAY-01 MANUAL PLAYTEST — NOT EXECUTED
+2026-10-19 | About 10–15 minutes, excluding installation/environment repair.
+
+PURPOSE AND STOP GATE
+This is a procedure for a later externally approved session, not permission for
+additional calls after this checkpoint. Current Codex readiness failed DNS.
+Use the normal browser application and its configured production model.
+Do not restart repeatedly, switch models/endpoints, or repair networking here.
+
+Important operator prerequisite: the current stock application does not explicitly
+set SDK max_retries=0. ASHEN_DISABLE_PROVIDER_RETRIES=1 disables host narration
+retries, not necessarily SDK transport retries. Have the environment owner verify
+an EXISTING reviewed zero-SDK-retry launch control before live Start/Send.
+If none is available, STOP after preparation and return that limitation for review.
+Do not install a patch, invent a wrapper, or assume the host flag proves it.
+This limitation is inspected source evidence, not an observed billing incident.
+
+1. PREPARE A NEW DISPOSABLE COPY (PowerShell)
+Close other test server windows. Never reset an existing campaign at port 8000.
+Open PowerShell in the project folder, or paste this exact command:
+
+Set-Location -LiteralPath 'C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm'
+
+Use a fresh PowerShell window. Run this one nonbillable lookup; if it errors, stop:
+
+& .venv\Scripts\python.exe -c "import socket; socket.getaddrinfo('api.openai.com',443); print('DNS resolved; authentication and inference remain untested')"
+
+Only after a successful lookup, prepare the disposable directory:
+
+$playStamp = Get-Date -Format 'yyyyMMdd-HHmmss'
+$playRoot = Join-Path (Get-Location) "artifacts\pr_play_01\manual-$playStamp"
+$env:ASHEN_DATA_DIR = Join-Path $playRoot 'data'
+New-Item -ItemType Directory -Path $env:ASHEN_DATA_DIR | Out-Null
+Copy-Item -LiteralPath 'data\validation\atgb\baselines\frontier-gate-v1\campaign.json','data\validation\atgb\baselines\frontier-gate-v1\character.json','data\validation\atgb\baselines\frontier-gate-v1\conditions.json','data\validation\atgb\baselines\frontier-gate-v1\world.json' -Destination $env:ASHEN_DATA_DIR
+Copy-Item -LiteralPath 'data\validation\atgb\baselines\frontier-gate-v1\scenes' -Destination $env:ASHEN_DATA_DIR -Recurse
+$playRoot
+
+Keep the printed path. This copies existing campaign content and leaves the
+player's data folder untouched. Each run gets a new folder. Do not delete a prior
+run, change .env, or reuse a folder containing an existing campaign.
+
+2. LAUNCH — ONLY AFTER EXTERNAL APPROVAL AND THE RETRY PREREQUISITE
+Normal game launch is .venv\Scripts\python.exe run.py on port 8000.
+For this isolated test use the same production app on its own port:
+
+$env:ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT = '1'
+$env:ASHEN_DISABLE_PROVIDER_RETRIES = '1'
+$env:ASHEN_PROVIDER_REQUEST_LIMIT = '6'
+$env:ASHEN_PROVIDER_INPUT_TOKEN_LIMIT = '200000'
+$env:ASHEN_PROVIDER_OUTPUT_TOKEN_LIMIT = '20000'
+$env:ASHEN_PROVIDER_TOTAL_TOKEN_LIMIT = '220000'
+$env:ASHEN_PROVIDER_USAGE_PATH = Join-Path $playRoot 'provider_usage.jsonl'
+Remove-Item Env:ASHEN_DISABLE_PROVIDER_CALLS -ErrorAction SilentlyContinue
+Remove-Item Env:ASHEN_DISABLE_LIVE_INTERPRETATION -ErrorAction SilentlyContinue
+Remove-Item Env:ASHEN_DISABLE_EXPRESSION_GENERATION -ErrorAction SilentlyContinue
+& .venv\Scripts\python.exe -m uvicorn game.api:app --host 127.0.0.1 --port 8765
+
+These are disposable process test controls, not edits to provider settings.
+Startup inference preflight is skipped because it would be an extra inference.
+Skipping it is NOT proof of provider health. Do not change default model variables.
+The token values are ceilings, not forecasts or purchased-token allowances.
+Six admissions include the opening and every interpretation/narration/expression
+request. Six player inputs may exceed six admissions; stop when the ceiling is
+reached even if coverage is incomplete. Failed attempts count. Never raise caps.
+
+Open http://127.0.0.1:8765/ in the browser. If port is busy, stop; do not kill an
+unknown process. The page must correspond to this new server and disposable path.
+
+3. BEGIN A CAMPAIGN
+In Play, use New Campaign once. It is a silent reset; a reload with no narrated
+opening is expected. Then use Start Campaign once when enabled. These are two
+different controls, not repeated attempts at the same action. Time each operation.
+If blocked, save the message and stop. Do not click again to force recovery.
+Capture a screenshot before the opening, then one when it finishes.
+
+Before Start Campaign, use Explorer to copy the disposable data folder to a
+sibling folder named before. This is a file copy, not a game reset. Copy the
+entire data folder again to after when finished, after stopping the server.
+Do not inspect or edit JSON files. The reviewer compares them.
+
+4. PLAY ONE SHORT SEQUENCE — ONLY WHILE BUDGET REMAINS
+Read the actual opening. Use only the people/objects it establishes. These
+examples fit the existing Cinderwatch opening; adapt names to what is visible.
+Do not ask about secret facts printed in internal diagnostics.
+
+A. NPC conversation: "I ask the tavern runner what news people are talking about."
+Success: addresses the present runner and responds to that request coherently.
+
+B. Information question: choose a concrete detail in the delivered reply, e.g.
+"What does the notice say about the missing patrol?"
+Success: relevant authorized information, a useful partial answer or an honest
+limit. Repeating unrelated board categories is not a useful answer.
+
+C. Follow-up: use "What do you mean by that?" only when the preceding reply has
+a clear referent; otherwise ask about a named detail. If the game misread you,
+correct THAT mistake naturally, e.g. "I meant the people, not the weather."
+Success: retains established subject/speaker; no redundant confirmation of clear
+meaning, no invented action revision, and genuine ambiguity gets a focused question.
+
+D. Ordinary action: "I examine the notice board."
+Success: supported inspection outcome, intelligible result, discovery only when
+authorized; no invented travel, inventory, combat, or unearned information.
+
+E. Continuity: refer to a real fact just learned, e.g. "What did I just learn
+from the board?" Use this only if examination actually completed.
+Success: consistent recall, no silent reset, no undone action or changed NPC roster.
+
+Stop rather than manufacture a later interaction after an earlier blocker.
+The sequence is coverage guidance; it is not a rigid fixed script.
+
+5. RECORD EXACT WORDS AND TIMES
+For each input record the exact text before sending and copy the full visible
+reply afterward, preserving failures. Include the immediately preceding reply.
+Use a phone stopwatch from clicking Send/Start until the full reply appears.
+Write seconds and whether the interface remained responsive. Do not resend while
+waiting. If there is no reply after 60 seconds, capture it and stop this test
+(practical test stop threshold, not a proven product latency acceptance rule).
+Note whether you had to rephrase, restart, or use unusual syntax. Capture the scene,
+visible people, journal, inventory and pending-action indications before/after.
+Do not guess provider tokens, hidden mutations, model time or billed cost.
+
+6. STOP AND EXPORT EXISTING DIAGNOSTICS
+Press Ctrl+C in the PowerShell server window; closing the browser is insufficient.
+In File Explorer open the printed manual-... folder. Preserve:
+- data\session_log.jsonl (existing chronological transcript/resolver diagnostics)
+- data\session.json (existing debug traces and authoritative session)
+- data\world.json, character.json, combat.json, campaign.json, conditions.json
+  and scenes\ (the disposable authoritative state/content)
+- provider_usage.jsonl (existing admission/dispatch/usage ledger)
+- before\ and after\ copies, exact transcript notes, stopwatch notes, screenshots
+- screenshot or copied text of server errors; do not include secret-bearing headers
+
+No dedicated Export Diagnostic Bundle button was found. To make a bundle without
+reading JSON, select these files/folders in Explorer, right-click, Compress to ZIP
+(or Send to > Compressed (zipped) folder). Name it PR_PLAY_01_MANUAL_EVIDENCE.zip.
+The repository review exporter tools/build_review_handoff.py is a developer review
+packager; it is not a game UI export button. Do not upload the whole repository.
+
+7. REDACTION AND IMMEDIATE STOP CONDITIONS
+Never include .env, API keys, Authorization headers, credentials, browser cookies,
+unrelated player saves or private notes. Review screenshots and pasted terminal
+text before sharing. State files can contain unrevealed campaign content: send
+them only to the intended reviewer; do not publish them for players.
+
+Stop on failed readiness, unavailable zero-SDK-retry control, unexpected retry or
+extra call, sixth admission/budget refusal, authentication/billing/network error,
+no reply after 60 seconds, exception, unauthorized inventory/time/travel/combat,
+contradictory presence, duplicate action, silent reset, or risk of touching a
+non-disposable campaign. Keep evidence; do not repair or retry within this test.
+
+Return the ZIP and state which coverage steps were actually reached. A partial or
+blocked test is useful evidence; do not label planned interactions as executed.

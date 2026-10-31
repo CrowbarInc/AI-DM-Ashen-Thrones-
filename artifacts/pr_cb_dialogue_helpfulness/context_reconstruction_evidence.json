@@ -1,0 +1,2777 @@
+[
+  {
+    "turn": "T1",
+    "source": "artifacts\\pr_ca_dialogue_continuity\\evidence\\T1\\provider_request_attempt_generation_1.json",
+    "source_sha256": "b9cff7f0d382459565520d47b41798c31081a4e1d6f7a3770d3a9fdd5c00b1a2",
+    "roles": [
+      "system",
+      "user"
+    ],
+    "player": "Baker, which loaf do you usually keep for yourself?",
+    "output": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+    "scene": {
+      "public": {
+        "id": "bread_stall",
+        "location": "Bread stall",
+        "summary": "A baker stands at a bread stall.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A baker stands beside loaves at a bread stall."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "campaign_spine_opening_facts": [],
+        "spine_opening_facts": [],
+        "campaign_spine": {},
+        "scenario_spine": {},
+        "spine": {},
+        "exits": [],
+        "enemies": []
+      },
+      "discoverable_clues": [],
+      "gm_only": {
+        "hidden_facts": [],
+        "discoverable_clues_locked": []
+      },
+      "clue_records": {
+        "discovered": [],
+        "undiscovered": []
+      },
+      "visible_clues": [],
+      "discovered_clues": [],
+      "clue_visibility": {
+        "implicit": [],
+        "explicit": [],
+        "actionable": []
+      },
+      "pending_leads": [],
+      "runtime": {
+        "discovered_clues": [],
+        "pending_leads": [],
+        "recent_contextual_leads": [],
+        "repeated_action_count": 1,
+        "last_exploration_action_key": "question_baker",
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      },
+      "intent": {
+        "raw_text": "Baker, which loaf do you usually keep for yourself?",
+        "normalized_kind": "question",
+        "mode": "question",
+        "classified_action": "question",
+        "requires_check": false,
+        "check_request": null,
+        "targets": [
+          "baker"
+        ],
+        "labels": [],
+        "allow_discoverable_clues": false
+      },
+      "layering_rules": {
+        "visible_facts": "Only visible facts may be directly asserted; align with narration_visibility.visible_facts.",
+        "discoverable_clues": "Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.",
+        "hidden_facts": "Never reveal directly; use only for implications, NPC behavior, atmosphere, indirect clues."
+      }
+    },
+    "world": {
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks_summary": []
+      },
+      "recent_events": [
+        "House Verevin's pressure mounts.",
+        "The Ash Cowl's pressure mounts."
+      ],
+      "faction_names": [
+        "House Verevin",
+        "The Ash Cowl",
+        "Ordo Pyric"
+      ],
+      "progression_counts": {
+        "active_projects": 0,
+        "faction_pressure": 3,
+        "faction_agenda": 3,
+        "world_clocks": 0,
+        "set_flags": 0
+      }
+    },
+    "visibility": {
+      "visible_entities": [
+        "baker"
+      ],
+      "active_interlocutor_id": "baker",
+      "visible_facts": [
+        "a baker stands beside loaves at a bread stall"
+      ],
+      "rules": {
+        "no_unseen_entities": true,
+        "no_hidden_facts": true,
+        "no_undiscovered_facts": true
+      }
+    },
+    "social_context": {
+      "interlocutor_profile": {
+        "npc_is_promoted": false,
+        "stance": "neutral",
+        "reliability": "partial",
+        "knowledge_scope": [],
+        "agenda": null,
+        "affiliation": null
+      },
+      "answer_style_hints": [
+        "INTERLOCUTOR KNOWLEDGE GATE (engine): Answer as this specific NPC. Use knowledge_scope as the boundary for what they know firsthand. Topics outside those anchors must be hearsay, uncertainty, deflection, or an honest 'I don't know'\u2014not omniscient facts.",
+        "Engine knowledge_scope is empty: treat direct private knowledge as narrow unless grounded in visible role, scene, or prior established exchanges.",
+        "INFORMATION_RELIABILITY partial (engine): Within knowledge_scope, answers are incomplete, selective, or hedged; do not present full certainty or insider completeness they would not have."
+      ]
+    },
+    "dialogue_social_plan": {
+      "speaker_id": "baker",
+      "speaker_name": "baker",
+      "speaker_source": "referent_tracking.continuity_subject",
+      "dialogue_intent": "question",
+      "reply_kind": "unknown",
+      "pressure_state": "none",
+      "relationship_codes": [
+        "unknown"
+      ],
+      "tone_bounds": [
+        "neutral",
+        "direct"
+      ],
+      "prohibited_content_codes": [
+        "no_narrator_override",
+        "no_ooc_instructions",
+        "no_player_agency_override",
+        "no_prompt_text"
+      ],
+      "derivation_codes": [
+        "dialogue_social_plan:v1",
+        "intent:ctir_only",
+        "referent_tracking:consumed",
+        "session_hints:bounded",
+        "speaker:referent_tracking.continuity_subject"
+      ]
+    },
+    "narration_obligations": {
+      "is_opening_scene": false,
+      "must_advance_scene": true,
+      "should_answer_active_npc": true,
+      "avoid_input_echo": true,
+      "avoid_player_action_restatement": true,
+      "prefer_structured_turn_summary": true,
+      "active_npc_reply_expected": true,
+      "active_npc_reply_kind": "refusal",
+      "scene_momentum_due": false,
+      "scene_momentum_exchanges_since": 0,
+      "scene_momentum_next_due_in": 2,
+      "suppress_non_social_emitters": true
+    },
+    "mechanical_resolution": {
+      "kind": "question",
+      "action_id": "question_baker",
+      "label": "Baker, which loaf do you usually keep for yourself?",
+      "prompt": "Baker, which loaf do you usually keep for yourself?",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "hint": "Player spoke with Baker. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "metadata": {
+        "routed_via_dialogue_lock": true,
+        "route": "dialogue",
+        "canonical_entry_path": "social",
+        "canonical_entry_reason": "spoken_vocative_address",
+        "canonical_entry_target_actor_id": "baker",
+        "intent_route_debug": {
+          "routed_to": "social_exchange",
+          "route_reason": "spoken_vocative_address",
+          "addressed_actor_id": "baker",
+          "addressed_actor_source": "spoken_vocative"
+        },
+        "social_turn_contract": {
+          "social_followup_recovery": "not_applicable",
+          "interlocutor_status": "adopted",
+          "continuity_status": "redirected",
+          "fallback_anchor_source": "none",
+          "reply_owner_actor_id": "baker",
+          "routing_reason_code": "spoken_vocative_address",
+          "continuity_basis": "none",
+          "nearby_group_focus_source": "none"
+        },
+        "active_interaction_target_id": "baker",
+        "segmented_turn": {
+          "declared_action_text": "Baker, which loaf do you usually keep for yourself?"
+        },
+        "npc_stance": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": 2
+        },
+        "interaction_obligation": {
+          "kind": "question",
+          "target": "baker",
+          "interlocutor_id": "baker",
+          "subject": "Baker, which loaf do you usually keep for yourself",
+          "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+          "claim_id": null,
+          "resolution_mode": "grounded_information_request",
+          "turn_index": 2,
+          "resolution_contract_id": "rc_d4c97cad4722",
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          }
+        },
+        "ordinary_contract_established": true,
+        "semantic_owner": "resolution_contract",
+        "contract_before_resolver": true,
+        "contract_construction_source": "deterministic",
+        "selected_resolver": "social",
+        "turn_segmentation": {
+          "declared_action_text": "Baker, which loaf do you usually keep for yourself?"
+        },
+        "unknown_legacy_keys": {
+          "noncombat_resolution": {
+            "framework_version": "2026.04.noncombat.v1",
+            "kind": "social_probe",
+            "subkind": "question",
+            "authority_domain": "interaction_state",
+            "deterministic_resolved": true,
+            "requires_check": false,
+            "check_request": null,
+            "outcome_type": "closed",
+            "success_state": "neutral",
+            "discovered_entities": [
+              {
+                "entity_kind": "npc",
+                "entity_id": "baker"
+              }
+            ],
+            "surfaced_facts": [],
+            "state_changes": {},
+            "blocked_reason_codes": [],
+            "ambiguous_reason_codes": [],
+            "unsupported_reason_codes": [],
+            "authoritative_outputs": [
+              {
+                "output_kind": "resolution_trace",
+                "source_engine": "game.social",
+                "route": "social",
+                "engine_action_id": "question_baker"
+              }
+            ],
+            "narration_constraints": {
+              "npc_reply_expected": true,
+              "reply_kind": "refusal"
+            }
+          }
+        },
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        },
+        "response_type_contract": {
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "allow_escalation": false,
+          "escalation_block_reason": "social_question_guard",
+          "strict_target_id": "baker",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "action_must_preserve_agency": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ]
+        }
+      },
+      "social": {
+        "social_intent_class": "social_exchange",
+        "npc_id": "baker",
+        "npc_name": "Baker",
+        "target_resolved": true,
+        "topic_revealed": null,
+        "skill_check": null,
+        "npc_reply_expected": true,
+        "reply_kind": "refusal",
+        "target_source": "explicit_target",
+        "target_reason": "normalized target_id matches scene-addressable roster",
+        "target_candidate_id": "baker",
+        "target_candidate_valid": true,
+        "stale_interlocutor_cleared": false,
+        "addressability_checked_against": [
+          "active_entities",
+          "entity_presence_active_or_nearby",
+          "scene_addressables",
+          "world_roster_in_scene",
+          "interaction_continuity"
+        ],
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": true,
+        "spoken_vocative_target_actor_id": "baker",
+        "continuity_overridden_by_spoken_vocative": false,
+        "actor_addressable": true,
+        "target_binding": {
+          "final_target_kind": "npc",
+          "npc_id": "baker",
+          "target_source": "native_npc",
+          "origin_actor_id": null,
+          "promoted_this_turn": false
+        },
+        "target_profile_hints": {
+          "guardedness": "medium",
+          "answer_reliability_tier": "medium",
+          "speaks_authoritatively_for_scene": false
+        },
+        "authority_source_used": "explicit_target",
+        "proposed_reply_speaker_id": "baker",
+        "grounding_fallback_applied": false,
+        "grounding_reason_code": "authoritative_speaker_eligible",
+        "grounded_speaker_id": "baker",
+        "anchor_tokens_extracted": [],
+        "anchor_token_matched": null,
+        "anchor_followup_detected": false,
+        "explanation_of_recent_anchor_followup": false,
+        "correction_reask_followup_detected": false,
+        "recent_reference_clarification_detected": false,
+        "recent_reference_kind": null,
+        "recent_reference_phrase_matched": null,
+        "clarification_prompt_shape": null,
+        "social_escalation": {
+          "escalation_level": 1,
+          "escalation_reason": "first_attempt_same_topic",
+          "escalation_effect": "vague_or_guarded_answer_allowed",
+          "force_partial_answer": false,
+          "force_actionable_lead": false,
+          "add_suspicion": false,
+          "trigger_scene_momentum": false,
+          "convert_refusal_to_conditioned_offer": false,
+          "topic_exhausted": false,
+          "effective_reply_kind": null,
+          "social_question_dimension": "general",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false
+        },
+        "social_question_dimension": "general",
+        "topic_exhausted_for_dimension": false,
+        "valid_followup_detected": false,
+        "prior_same_dimension_answer_exists": false
+      },
+      "requires_check": false
+    },
+    "recent_log": [],
+    "selected_conversational_memory": [],
+    "recipe": {
+      "schema": "decision_facing_answer_recipe_v1",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+      "required_content": [
+        {
+          "claim_id": "rc_9ab69105465f",
+          "role": "MUST_STATE",
+          "text": "A baker stands beside loaves at a bread stall.",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "ordinary_predicate"
+        },
+        {
+          "claim_id": "rc_2bb408577206",
+          "role": "MUST_STATE",
+          "text": "Baker exists",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "observation"
+        }
+      ],
+      "permitted_content": [],
+      "permitted_inference": {
+        "allowed": false,
+        "qualified_observations": [],
+        "may_infer_claims": []
+      },
+      "inference_modality": "none",
+      "unresolved_content": [],
+      "forbidden_upgrades": [
+        "unauthorized_consequential_fact",
+        "generated_content_as_authored_world_fact",
+        "durable_preference_without_authorized_claim",
+        "generated_dialogue_as_authored_world_fact"
+      ],
+      "declaration_guidance": {
+        "consequential_authorized_claim": "Listed claims may be realized with source_claim_id and their provenance. The turn-local reply is narration, not a new authored world fact.",
+        "bounded_inference": "not permitted on this turn",
+        "epistemic_premise": "No player hypothesis, NPC claim, or unresolved premise is authorized on this turn.",
+        "epistemic_claims": [],
+        "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+      },
+      "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+      "answer_strategy": "Have baker reply in ordinary dialogue: a direct answer, a refusal, a hesitation, or an admission that they do not know."
+    },
+    "envelope": {
+      "selected_envelope": "narration_only",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "selection_authority_source": [
+        "resolution_contract.interlocutor_id",
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.permitted_state_mutations"
+      ],
+      "declaration_channel_exposed": false,
+      "reason": "ordinary_incidental_dialogue_reply_requires_no_declaration",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "consequential_realization_required": false
+    },
+    "validation": {
+      "attempt_1": {
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+        "reasons": [],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_d4c97cad4722",
+          "hard_valid": true,
+          "declaration_validation": {
+            "schema_version": 1,
+            "structured_contract_present": true,
+            "hard_valid": true,
+            "accepted_claims": [],
+            "rejected_claims": [],
+            "violations": []
+          },
+          "narration_validation": {
+            "decision_id": "rc_d4c97cad4722",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              },
+              {
+                "text": "\"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              },
+              {
+                "text": "\"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "hearsay",
+                "relation_kind": "epistemic_status",
+                "persistence": "claim_only",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ]
+              }
+            ]
+          },
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+              "provenance": "bounded_incidental",
+              "consequence": "low",
+              "authorized": true,
+              "reason_codes": [
+                "bounded_incidental_texture"
+              ],
+              "authority": "bounded_incidental",
+              "persistence": "runtime_incidental",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {}
+            },
+            {
+              "text": "\"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+              "semantic_identity": {},
+              "provenance": "bounded_incidental",
+              "authority": "bounded_incidental",
+              "epistemic_status": "",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "runtime_incidental",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "bounded_incidental_texture"
+              ]
+            },
+            {
+              "text": "\"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "hearsay",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ],
+          "accepted_realized_claims": []
+        }
+      },
+      "attempt_2": null,
+      "retry_context": "",
+      "acceptance": {
+        "why": "initial_hard_valid",
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall."
+      },
+      "hard_validation_attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stall."
+      },
+      "hard_validation_attempt_2": null,
+      "regeneration_feedback": null,
+      "regeneration_invoked": null,
+      "provider_response_contract": "narration_only"
+    },
+    "offline_reply_expectation": [
+      true,
+      "refusal"
+    ]
+  },
+  {
+    "turn": "T2",
+    "source": "artifacts\\pr_ca_dialogue_continuity\\evidence\\T2\\provider_request_attempt_generation_1.json",
+    "source_sha256": "e5db9b85aa44a786b43fc48be162c0a19211ee9f0c5d62c01b31548bb26b4153",
+    "roles": [
+      "system",
+      "user"
+    ],
+    "player": "Surely you have a favorite. What makes you reluctant to say?",
+    "output": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable.",
+    "scene": {
+      "public": {
+        "id": "bread_stall",
+        "location": "Bread stall",
+        "summary": "A baker stands at a bread stall.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A baker stands beside loaves at a bread stall."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "campaign_spine_opening_facts": [],
+        "spine_opening_facts": [],
+        "campaign_spine": {},
+        "scenario_spine": {},
+        "spine": {},
+        "exits": [],
+        "enemies": []
+      },
+      "discoverable_clues": [],
+      "gm_only": {
+        "hidden_facts": [],
+        "discoverable_clues_locked": []
+      },
+      "clue_records": {
+        "discovered": [],
+        "undiscovered": []
+      },
+      "visible_clues": [],
+      "discovered_clues": [],
+      "clue_visibility": {
+        "implicit": [],
+        "explicit": [],
+        "actionable": []
+      },
+      "pending_leads": [],
+      "runtime": {
+        "discovered_clues": [],
+        "pending_leads": [],
+        "recent_contextual_leads": [],
+        "repeated_action_count": 2,
+        "last_exploration_action_key": "question_baker",
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      },
+      "intent": {
+        "raw_text": "Surely you have a favorite. What makes you reluctant to say?",
+        "normalized_kind": "question",
+        "mode": "question",
+        "classified_action": "question",
+        "requires_check": false,
+        "check_request": null,
+        "targets": [
+          "baker"
+        ],
+        "labels": [],
+        "allow_discoverable_clues": false
+      },
+      "layering_rules": {
+        "visible_facts": "Only visible facts may be directly asserted; align with narration_visibility.visible_facts.",
+        "discoverable_clues": "Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.",
+        "hidden_facts": "Never reveal directly; use only for implications, NPC behavior, atmosphere, indirect clues."
+      }
+    },
+    "world": {
+      "world_state": {
+        "flags": {},
+        "counters": {},
+        "clocks_summary": []
+      },
+      "recent_events": [
+        "House Verevin's pressure mounts.",
+        "The Ash Cowl's pressure mounts.",
+        "Ordo Pyric's pressure mounts."
+      ],
+      "faction_names": [
+        "House Verevin",
+        "The Ash Cowl",
+        "Ordo Pyric"
+      ],
+      "progression_counts": {
+        "active_projects": 0,
+        "faction_pressure": 3,
+        "faction_agenda": 3,
+        "world_clocks": 0,
+        "set_flags": 0
+      }
+    },
+    "visibility": {
+      "visible_entities": [
+        "baker"
+      ],
+      "active_interlocutor_id": "baker",
+      "visible_facts": [
+        "a baker stands beside loaves at a bread stall"
+      ],
+      "rules": {
+        "no_unseen_entities": true,
+        "no_hidden_facts": true,
+        "no_undiscovered_facts": true
+      }
+    },
+    "social_context": {
+      "interlocutor_profile": {
+        "npc_is_promoted": false,
+        "stance": "neutral",
+        "reliability": "partial",
+        "knowledge_scope": [],
+        "agenda": null,
+        "affiliation": null
+      },
+      "answer_style_hints": [
+        "INTERLOCUTOR KNOWLEDGE GATE (engine): Answer as this specific NPC. Use knowledge_scope as the boundary for what they know firsthand. Topics outside those anchors must be hearsay, uncertainty, deflection, or an honest 'I don't know'\u2014not omniscient facts.",
+        "Engine knowledge_scope is empty: treat direct private knowledge as narrow unless grounded in visible role, scene, or prior established exchanges.",
+        "INFORMATION_RELIABILITY partial (engine): Within knowledge_scope, answers are incomplete, selective, or hedged; do not present full certainty or insider completeness they would not have."
+      ]
+    },
+    "dialogue_social_plan": {
+      "speaker_id": "baker",
+      "speaker_name": "baker",
+      "speaker_source": "referent_tracking.continuity_subject",
+      "dialogue_intent": "question",
+      "reply_kind": "unknown",
+      "pressure_state": "none",
+      "relationship_codes": [
+        "unknown"
+      ],
+      "tone_bounds": [
+        "neutral",
+        "direct"
+      ],
+      "prohibited_content_codes": [
+        "no_narrator_override",
+        "no_ooc_instructions",
+        "no_player_agency_override",
+        "no_prompt_text"
+      ],
+      "derivation_codes": [
+        "dialogue_social_plan:v1",
+        "intent:ctir_only",
+        "referent_tracking:consumed",
+        "session_hints:bounded",
+        "speaker:referent_tracking.continuity_subject"
+      ]
+    },
+    "narration_obligations": {
+      "is_opening_scene": false,
+      "must_advance_scene": true,
+      "should_answer_active_npc": true,
+      "avoid_input_echo": true,
+      "avoid_player_action_restatement": true,
+      "prefer_structured_turn_summary": true,
+      "active_npc_reply_expected": true,
+      "active_npc_reply_kind": "refusal",
+      "scene_momentum_due": false,
+      "scene_momentum_exchanges_since": 0,
+      "scene_momentum_next_due_in": 2,
+      "suppress_non_social_emitters": true
+    },
+    "mechanical_resolution": {
+      "kind": "question",
+      "action_id": "question_baker",
+      "label": "Surely you have a favorite. What makes you reluctant to say?",
+      "prompt": "Surely you have a favorite. What makes you reluctant to say?",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "hint": "Player spoke with Baker. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "metadata": {
+        "routed_via_dialogue_lock": true,
+        "route": "dialogue",
+        "canonical_entry_path": "social",
+        "canonical_entry_reason": "active_interlocutor_followup",
+        "canonical_entry_target_actor_id": "baker",
+        "intent_route_debug": {
+          "routed_to": "social_exchange",
+          "route_reason": "active_interlocutor_followup",
+          "addressed_actor_id": "baker",
+          "addressed_actor_source": "active_interlocutor"
+        },
+        "social_turn_contract": {
+          "social_followup_recovery": "not_applicable",
+          "interlocutor_status": "retained",
+          "continuity_status": "preserved",
+          "fallback_anchor_source": "active_interlocutor",
+          "reply_owner_actor_id": "baker",
+          "routing_reason_code": "active_interlocutor_followup",
+          "continuity_basis": "none",
+          "nearby_group_focus_source": "none"
+        },
+        "active_interaction_target_id": "baker",
+        "segmented_turn": {
+          "declared_action_text": "Surely you have a favorite. What makes you reluctant to say?"
+        },
+        "npc_stance": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": 3
+        },
+        "interaction_obligation": {
+          "kind": "question",
+          "target": "baker",
+          "interlocutor_id": "baker",
+          "subject": "Surely you have a favorite. What makes you reluctant to say",
+          "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+          "claim_id": null,
+          "resolution_mode": "grounded_information_request",
+          "turn_index": 3,
+          "resolution_contract_id": "rc_1e3fe37bac4d",
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          }
+        },
+        "ordinary_contract_established": true,
+        "semantic_owner": "resolution_contract",
+        "contract_before_resolver": true,
+        "contract_construction_source": "deterministic",
+        "selected_resolver": "social",
+        "turn_segmentation": {
+          "declared_action_text": "Surely you have a favorite. What makes you reluctant to say?"
+        },
+        "unknown_legacy_keys": {
+          "noncombat_resolution": {
+            "framework_version": "2026.04.noncombat.v1",
+            "kind": "social_probe",
+            "subkind": "question",
+            "authority_domain": "interaction_state",
+            "deterministic_resolved": true,
+            "requires_check": false,
+            "check_request": null,
+            "outcome_type": "closed",
+            "success_state": "neutral",
+            "discovered_entities": [
+              {
+                "entity_kind": "npc",
+                "entity_id": "baker"
+              }
+            ],
+            "surfaced_facts": [],
+            "state_changes": {},
+            "blocked_reason_codes": [],
+            "ambiguous_reason_codes": [],
+            "unsupported_reason_codes": [],
+            "authoritative_outputs": [
+              {
+                "output_kind": "resolution_trace",
+                "source_engine": "game.social",
+                "route": "social",
+                "engine_action_id": "question_baker"
+              }
+            ],
+            "narration_constraints": {
+              "npc_reply_expected": true,
+              "reply_kind": "refusal"
+            }
+          }
+        },
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        },
+        "response_type_contract": {
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "allow_escalation": false,
+          "escalation_block_reason": "social_question_guard",
+          "strict_target_id": "baker",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "action_must_preserve_agency": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ]
+        }
+      },
+      "social": {
+        "social_intent_class": "social_exchange",
+        "npc_id": "baker",
+        "npc_name": "Baker",
+        "target_resolved": true,
+        "topic_revealed": null,
+        "skill_check": null,
+        "npc_reply_expected": true,
+        "reply_kind": "refusal",
+        "target_source": "explicit_target",
+        "target_reason": "normalized target_id matches scene-addressable roster",
+        "target_candidate_id": "baker",
+        "target_candidate_valid": true,
+        "stale_interlocutor_cleared": false,
+        "addressability_checked_against": [
+          "active_entities",
+          "entity_presence_active_or_nearby",
+          "scene_addressables",
+          "world_roster_in_scene",
+          "interaction_continuity"
+        ],
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false,
+        "actor_addressable": true,
+        "target_binding": {
+          "final_target_kind": "npc",
+          "npc_id": "baker",
+          "target_source": "native_npc",
+          "origin_actor_id": null,
+          "promoted_this_turn": false
+        },
+        "target_profile_hints": {
+          "guardedness": "medium",
+          "answer_reliability_tier": "medium",
+          "speaks_authoritatively_for_scene": false
+        },
+        "authority_source_used": "explicit_target",
+        "proposed_reply_speaker_id": "baker",
+        "grounding_fallback_applied": false,
+        "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+        "grounded_speaker_id": "baker",
+        "anchor_tokens_extracted": [],
+        "anchor_token_matched": null,
+        "anchor_followup_detected": false,
+        "explanation_of_recent_anchor_followup": false,
+        "correction_reask_followup_detected": false,
+        "recent_reference_clarification_detected": false,
+        "recent_reference_kind": null,
+        "recent_reference_phrase_matched": null,
+        "clarification_prompt_shape": null,
+        "social_escalation": {
+          "escalation_level": 1,
+          "escalation_reason": "first_attempt_same_topic",
+          "escalation_effect": "vague_or_guarded_answer_allowed",
+          "force_partial_answer": false,
+          "force_actionable_lead": false,
+          "add_suspicion": false,
+          "trigger_scene_momentum": false,
+          "convert_refusal_to_conditioned_offer": false,
+          "topic_exhausted": false,
+          "effective_reply_kind": null,
+          "social_question_dimension": "general",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false
+        },
+        "social_question_dimension": "general",
+        "topic_exhausted_for_dimension": false,
+        "valid_followup_detected": false,
+        "prior_same_dimension_answer_exists": false
+      },
+      "requires_check": false
+    },
+    "recent_log": [
+      {
+        "player_input": "Baker, which loaf do you usually keep for yourself?",
+        "gm_snippet": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stal"
+      }
+    ],
+    "selected_conversational_memory": [
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 2,
+        "text": "P: Baker, which loaf do you usually keep for yourself? | G: The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stal",
+        "score": 103.71428571428571,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      }
+    ],
+    "recipe": {
+      "schema": "decision_facing_answer_recipe_v1",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "requested_answer": "Answer baker in ordinary speech. Player asked: Surely you have a favorite. What makes you reluctant to say?",
+      "required_content": [
+        {
+          "claim_id": "rc_9ab69105465f",
+          "role": "MUST_STATE",
+          "text": "A baker stands beside loaves at a bread stall.",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "ordinary_predicate"
+        },
+        {
+          "claim_id": "rc_2bb408577206",
+          "role": "MUST_STATE",
+          "text": "Baker exists",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "observation"
+        }
+      ],
+      "permitted_content": [],
+      "permitted_inference": {
+        "allowed": false,
+        "qualified_observations": [],
+        "may_infer_claims": []
+      },
+      "inference_modality": "none",
+      "unresolved_content": [],
+      "forbidden_upgrades": [
+        "unauthorized_consequential_fact",
+        "generated_content_as_authored_world_fact",
+        "durable_preference_without_authorized_claim",
+        "generated_dialogue_as_authored_world_fact"
+      ],
+      "declaration_guidance": {
+        "consequential_authorized_claim": "Listed claims may be realized with source_claim_id and their provenance. The turn-local reply is narration, not a new authored world fact.",
+        "bounded_inference": "not permitted on this turn",
+        "epistemic_premise": "No player hypothesis, NPC claim, or unresolved premise is authorized on this turn.",
+        "epistemic_claims": [],
+        "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+      },
+      "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+      "answer_strategy": "Have baker reply in ordinary dialogue: a direct answer, a refusal, a hesitation, or an admission that they do not know."
+    },
+    "envelope": {
+      "selected_envelope": "narration_only",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "selection_authority_source": [
+        "resolution_contract.interlocutor_id",
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.permitted_state_mutations"
+      ],
+      "declaration_channel_exposed": false,
+      "reason": "ordinary_incidental_dialogue_reply_requires_no_declaration",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "consequential_realization_required": false
+    },
+    "validation": {
+      "attempt_1": {
+        "text": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable.",
+        "reasons": [],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_1e3fe37bac4d",
+          "hard_valid": true,
+          "declaration_validation": {
+            "schema_version": 1,
+            "structured_contract_present": true,
+            "hard_valid": true,
+            "accepted_claims": [],
+            "rejected_claims": [],
+            "violations": []
+          },
+          "narration_validation": {
+            "decision_id": "rc_1e3fe37bac4d",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "\"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "\"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "hearsay",
+                "relation_kind": "epistemic_status",
+                "persistence": "claim_only",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ]
+              }
+            ]
+          },
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "\"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "\"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "hearsay",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            }
+          ],
+          "accepted_realized_claims": []
+        }
+      },
+      "attempt_2": null,
+      "retry_context": "",
+      "acceptance": {
+        "why": "initial_hard_valid",
+        "text": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable."
+      },
+      "hard_validation_attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "text": "The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps for safety or just to avoid stirring troubles.\" Their gaze lingers briefly on the crowded street beyond before returning to you, firm yet unreadable."
+      },
+      "hard_validation_attempt_2": null,
+      "regeneration_feedback": null,
+      "regeneration_invoked": null,
+      "provider_response_contract": "narration_only"
+    },
+    "offline_reply_expectation": [
+      true,
+      "refusal"
+    ]
+  },
+  {
+    "turn": "T3",
+    "source": "artifacts\\pr_ca_dialogue_continuity\\evidence\\T3\\provider_request_attempt_generation_1.json",
+    "source_sha256": "dff22e79be555db4e18c66001536904bd3b83339f4ac7ba540d176da7913f686",
+    "roles": [
+      "system",
+      "user"
+    ],
+    "player": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+    "output": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\"",
+    "scene": {
+      "public": {
+        "id": "bread_stall",
+        "location": "Bread stall",
+        "summary": "A baker stands at a bread stall.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A baker stands beside loaves at a bread stall."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "campaign_spine_opening_facts": [],
+        "spine_opening_facts": [],
+        "campaign_spine": {},
+        "scenario_spine": {},
+        "spine": {},
+        "exits": [],
+        "enemies": []
+      },
+      "discoverable_clues": [],
+      "gm_only": {
+        "hidden_facts": [],
+        "discoverable_clues_locked": []
+      },
+      "clue_records": {
+        "discovered": [],
+        "undiscovered": []
+      },
+      "visible_clues": [],
+      "discovered_clues": [],
+      "clue_visibility": {
+        "implicit": [],
+        "explicit": [],
+        "actionable": []
+      },
+      "pending_leads": [],
+      "runtime": {
+        "discovered_clues": [],
+        "pending_leads": [],
+        "recent_contextual_leads": [],
+        "repeated_action_count": 3,
+        "last_exploration_action_key": "question_baker",
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      },
+      "intent": {
+        "raw_text": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+        "normalized_kind": "question",
+        "mode": "question",
+        "classified_action": "question",
+        "requires_check": false,
+        "check_request": null,
+        "targets": [
+          "baker"
+        ],
+        "labels": [],
+        "allow_discoverable_clues": false
+      },
+      "layering_rules": {
+        "visible_facts": "Only visible facts may be directly asserted; align with narration_visibility.visible_facts.",
+        "discoverable_clues": "Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.",
+        "hidden_facts": "Never reveal directly; use only for implications, NPC behavior, atmosphere, indirect clues."
+      }
+    },
+    "world": {
+      "world_state": {
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "counters": {},
+        "clocks_summary": []
+      },
+      "recent_events": [
+        "House Verevin's pressure mounts.",
+        "The Ash Cowl's pressure mounts.",
+        "Ordo Pyric's pressure mounts."
+      ],
+      "faction_names": [
+        "House Verevin",
+        "The Ash Cowl",
+        "Ordo Pyric"
+      ],
+      "progression_counts": {
+        "active_projects": 0,
+        "faction_pressure": 3,
+        "faction_agenda": 3,
+        "world_clocks": 0,
+        "set_flags": 3
+      }
+    },
+    "visibility": {
+      "visible_entities": [
+        "baker"
+      ],
+      "active_interlocutor_id": "baker",
+      "visible_facts": [
+        "a baker stands beside loaves at a bread stall"
+      ],
+      "rules": {
+        "no_unseen_entities": true,
+        "no_hidden_facts": true,
+        "no_undiscovered_facts": true
+      }
+    },
+    "social_context": {
+      "interlocutor_profile": {
+        "npc_is_promoted": false,
+        "stance": "neutral",
+        "reliability": "partial",
+        "knowledge_scope": [],
+        "agenda": null,
+        "affiliation": null
+      },
+      "answer_style_hints": [
+        "INTERLOCUTOR KNOWLEDGE GATE (engine): Answer as this specific NPC. Use knowledge_scope as the boundary for what they know firsthand. Topics outside those anchors must be hearsay, uncertainty, deflection, or an honest 'I don't know'\u2014not omniscient facts.",
+        "Engine knowledge_scope is empty: treat direct private knowledge as narrow unless grounded in visible role, scene, or prior established exchanges.",
+        "INFORMATION_RELIABILITY partial (engine): Within knowledge_scope, answers are incomplete, selective, or hedged; do not present full certainty or insider completeness they would not have."
+      ]
+    },
+    "dialogue_social_plan": {
+      "speaker_id": "baker",
+      "speaker_name": "baker",
+      "speaker_source": "referent_tracking.continuity_subject",
+      "dialogue_intent": "question",
+      "reply_kind": "unknown",
+      "pressure_state": "none",
+      "relationship_codes": [
+        "unknown"
+      ],
+      "tone_bounds": [
+        "neutral",
+        "direct"
+      ],
+      "prohibited_content_codes": [
+        "no_narrator_override",
+        "no_ooc_instructions",
+        "no_player_agency_override",
+        "no_prompt_text"
+      ],
+      "derivation_codes": [
+        "dialogue_social_plan:v1",
+        "intent:ctir_only",
+        "referent_tracking:consumed",
+        "session_hints:bounded",
+        "speaker:referent_tracking.continuity_subject"
+      ]
+    },
+    "narration_obligations": {
+      "is_opening_scene": false,
+      "must_advance_scene": true,
+      "should_answer_active_npc": true,
+      "avoid_input_echo": true,
+      "avoid_player_action_restatement": true,
+      "prefer_structured_turn_summary": true,
+      "active_npc_reply_expected": true,
+      "active_npc_reply_kind": "refusal",
+      "scene_momentum_due": false,
+      "scene_momentum_exchanges_since": 0,
+      "scene_momentum_next_due_in": 2,
+      "suppress_non_social_emitters": true
+    },
+    "mechanical_resolution": {
+      "kind": "question",
+      "action_id": "question_baker",
+      "label": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+      "prompt": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "hint": "Player spoke with Baker. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "metadata": {
+        "routed_via_dialogue_lock": true,
+        "route": "dialogue",
+        "canonical_entry_path": "social",
+        "canonical_entry_reason": "directed_social_question",
+        "canonical_entry_target_actor_id": "baker",
+        "intent_route_debug": {
+          "routed_to": "social_exchange",
+          "route_reason": "directed_social_question",
+          "addressed_actor_id": "baker",
+          "addressed_actor_source": "scene_address_resolution"
+        },
+        "social_turn_contract": {
+          "social_followup_recovery": "not_applicable",
+          "interlocutor_status": "retained",
+          "continuity_status": "preserved",
+          "fallback_anchor_source": "active_interlocutor",
+          "reply_owner_actor_id": "baker",
+          "routing_reason_code": "directed_social_question",
+          "continuity_basis": "none",
+          "nearby_group_focus_source": "none"
+        },
+        "active_interaction_target_id": "baker",
+        "segmented_turn": {
+          "declared_action_text": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?"
+        },
+        "npc_stance": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": 4
+        },
+        "interaction_obligation": {
+          "kind": "question",
+          "target": "baker",
+          "interlocutor_id": "baker",
+          "subject": "Fair enough. Which loaf would you recommend to someone who has never bought brea",
+          "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+          "claim_id": null,
+          "resolution_mode": "grounded_information_request",
+          "turn_index": 4,
+          "resolution_contract_id": "rc_d9723da53bd1",
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          }
+        },
+        "ordinary_contract_established": true,
+        "semantic_owner": "resolution_contract",
+        "contract_before_resolver": true,
+        "contract_construction_source": "deterministic",
+        "selected_resolver": "social",
+        "turn_segmentation": {
+          "declared_action_text": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?"
+        },
+        "unknown_legacy_keys": {
+          "noncombat_resolution": {
+            "framework_version": "2026.04.noncombat.v1",
+            "kind": "social_probe",
+            "subkind": "question",
+            "authority_domain": "interaction_state",
+            "deterministic_resolved": true,
+            "requires_check": false,
+            "check_request": null,
+            "outcome_type": "closed",
+            "success_state": "neutral",
+            "discovered_entities": [
+              {
+                "entity_kind": "npc",
+                "entity_id": "baker"
+              }
+            ],
+            "surfaced_facts": [],
+            "state_changes": {},
+            "blocked_reason_codes": [],
+            "ambiguous_reason_codes": [],
+            "unsupported_reason_codes": [],
+            "authoritative_outputs": [
+              {
+                "output_kind": "resolution_trace",
+                "source_engine": "game.social",
+                "route": "social",
+                "engine_action_id": "question_baker"
+              }
+            ],
+            "narration_constraints": {
+              "npc_reply_expected": true,
+              "reply_kind": "refusal"
+            }
+          }
+        },
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        },
+        "response_type_contract": {
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "allow_escalation": false,
+          "escalation_block_reason": "social_question_guard",
+          "strict_target_id": "baker",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "action_must_preserve_agency": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ]
+        }
+      },
+      "social": {
+        "social_intent_class": "social_exchange",
+        "npc_id": "baker",
+        "npc_name": "Baker",
+        "target_resolved": true,
+        "topic_revealed": null,
+        "skill_check": null,
+        "npc_reply_expected": true,
+        "reply_kind": "refusal",
+        "target_source": "explicit_target",
+        "target_reason": "normalized target_id matches scene-addressable roster",
+        "target_candidate_id": "baker",
+        "target_candidate_valid": true,
+        "stale_interlocutor_cleared": false,
+        "addressability_checked_against": [
+          "active_entities",
+          "entity_presence_active_or_nearby",
+          "scene_addressables",
+          "world_roster_in_scene",
+          "interaction_continuity"
+        ],
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false,
+        "actor_addressable": true,
+        "target_binding": {
+          "final_target_kind": "npc",
+          "npc_id": "baker",
+          "target_source": "native_npc",
+          "origin_actor_id": null,
+          "promoted_this_turn": false
+        },
+        "target_profile_hints": {
+          "guardedness": "medium",
+          "answer_reliability_tier": "medium",
+          "speaks_authoritatively_for_scene": false
+        },
+        "authority_source_used": "explicit_target",
+        "proposed_reply_speaker_id": "baker",
+        "grounding_fallback_applied": false,
+        "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+        "grounded_speaker_id": "baker",
+        "anchor_tokens_extracted": [
+          "it's"
+        ],
+        "anchor_token_matched": null,
+        "anchor_followup_detected": false,
+        "explanation_of_recent_anchor_followup": false,
+        "correction_reask_followup_detected": false,
+        "recent_reference_clarification_detected": false,
+        "recent_reference_kind": null,
+        "recent_reference_phrase_matched": null,
+        "clarification_prompt_shape": null,
+        "social_escalation": {
+          "escalation_level": 1,
+          "escalation_reason": "first_attempt_same_topic",
+          "escalation_effect": "vague_or_guarded_answer_allowed",
+          "force_partial_answer": false,
+          "force_actionable_lead": false,
+          "add_suspicion": false,
+          "trigger_scene_momentum": false,
+          "convert_refusal_to_conditioned_offer": false,
+          "topic_exhausted": false,
+          "effective_reply_kind": null,
+          "social_question_dimension": "identity",
+          "topic_exhausted_for_dimension": false,
+          "valid_followup_detected": false,
+          "prior_same_dimension_answer_exists": false
+        },
+        "social_question_dimension": "identity",
+        "topic_exhausted_for_dimension": false,
+        "valid_followup_detected": false,
+        "prior_same_dimension_answer_exists": false
+      },
+      "requires_check": false
+    },
+    "recent_log": [
+      {
+        "player_input": "",
+        "gm_snippet": "P: Surely you have a favorite. What makes you reluctant to say? | G: The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cauti"
+      },
+      {
+        "player_input": "Baker, which loaf do you usually keep for yourself?",
+        "gm_snippet": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stal"
+      }
+    ],
+    "selected_conversational_memory": [
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 3,
+        "text": "P: Surely you have a favorite. What makes you reluctant to say? | G: The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps",
+        "score": 103.71428571428571,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      },
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 2,
+        "text": "P: Baker, which loaf do you usually keep for yourself? | G: The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stal",
+        "score": 89.42857142857143,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      }
+    ],
+    "recipe": {
+      "schema": "decision_facing_answer_recipe_v1",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "requested_answer": "Answer baker in ordinary speech. Player asked: Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+      "required_content": [
+        {
+          "claim_id": "rc_9ab69105465f",
+          "role": "MUST_STATE",
+          "text": "A baker stands beside loaves at a bread stall.",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "ordinary_predicate"
+        },
+        {
+          "claim_id": "rc_2bb408577206",
+          "role": "MUST_STATE",
+          "text": "Baker exists",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "observation"
+        }
+      ],
+      "permitted_content": [],
+      "permitted_inference": {
+        "allowed": false,
+        "qualified_observations": [],
+        "may_infer_claims": []
+      },
+      "inference_modality": "none",
+      "unresolved_content": [
+        "actor",
+        "Unresolved consequential slot"
+      ],
+      "forbidden_upgrades": [
+        "unauthorized_consequential_fact",
+        "generated_content_as_authored_world_fact",
+        "durable_preference_without_authorized_claim",
+        "generated_dialogue_as_authored_world_fact"
+      ],
+      "declaration_guidance": {
+        "consequential_authorized_claim": "Listed claims may be realized with source_claim_id and their provenance. The turn-local reply is narration, not a new authored world fact.",
+        "bounded_inference": "not permitted on this turn",
+        "epistemic_premise": "Preserve epistemic status and premise_claim_ids. Do not promote a hypothesis, NPC claim, or unresolved premise into world truth.",
+        "epistemic_claims": [
+          {
+            "claim_id": "rc_82f8e49c7630",
+            "role": "MUST_PRESERVE_UNCERTAINTY",
+            "text": "Unresolved consequential slot",
+            "provenance": "speculation",
+            "epistemic_status": "unresolved",
+            "relation_kind": "epistemic_status",
+            "modality": "unresolved"
+          }
+        ],
+        "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+      },
+      "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+      "answer_strategy": "State the required claims, then say in ordinary speech that the unresolved part is not established."
+    },
+    "envelope": {
+      "selected_envelope": "narration_only",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "selection_authority_source": [
+        "resolution_contract.interlocutor_id",
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.permitted_state_mutations"
+      ],
+      "declaration_channel_exposed": false,
+      "reason": "ordinary_incidental_dialogue_reply_requires_no_declaration",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "consequential_realization_required": false
+    },
+    "validation": {
+      "attempt_1": {
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\"",
+        "reasons": [],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_d9723da53bd1",
+          "hard_valid": true,
+          "declaration_validation": {
+            "schema_version": 1,
+            "structured_contract_present": true,
+            "hard_valid": true,
+            "accepted_claims": [],
+            "rejected_claims": [],
+            "violations": []
+          },
+          "narration_validation": {
+            "decision_id": "rc_d9723da53bd1",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              },
+              {
+                "text": "\"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                }
+              },
+              {
+                "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+                "provenance": "gm_inference",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "authorized_qualified_inference"
+                ],
+                "authority": "observation",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "inferred"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              },
+              {
+                "text": "\"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "hearsay"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "hearsay",
+                "relation_kind": "epistemic_status",
+                "persistence": "claim_only",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ]
+              },
+              {
+                "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "inferred"
+                },
+                "provenance": "gm_inference",
+                "authority": "observation",
+                "epistemic_status": "inferred",
+                "relation_kind": "epistemic_status",
+                "persistence": "do_not_persist",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "authorized_qualified_inference"
+                ]
+              }
+            ]
+          },
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+              "provenance": "bounded_incidental",
+              "consequence": "low",
+              "authorized": true,
+              "reason_codes": [
+                "bounded_incidental_texture"
+              ],
+              "authority": "bounded_incidental",
+              "persistence": "runtime_incidental",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {}
+            },
+            {
+              "text": "\"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              }
+            },
+            {
+              "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+              "provenance": "gm_inference",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "authorized_qualified_inference"
+              ],
+              "authority": "observation",
+              "persistence": "do_not_persist",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "inferred"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market.",
+              "semantic_identity": {},
+              "provenance": "bounded_incidental",
+              "authority": "bounded_incidental",
+              "epistemic_status": "",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "runtime_incidental",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "bounded_incidental_texture"
+              ]
+            },
+            {
+              "text": "\"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "hearsay"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "hearsay",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            },
+            {
+              "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "inferred"
+              },
+              "provenance": "gm_inference",
+              "authority": "observation",
+              "epistemic_status": "inferred",
+              "relation_kind": "epistemic_status",
+              "persistence": "do_not_persist",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "authorized_qualified_inference"
+              ]
+            }
+          ],
+          "accepted_realized_claims": []
+        }
+      },
+      "attempt_2": null,
+      "retry_context": "",
+      "acceptance": {
+        "why": "initial_hard_valid",
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\""
+      },
+      "hard_validation_attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [
+          "low_confidence_locate"
+        ],
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but sometimes, the choice you make here isn\u2019t just about bread. Perhaps you'll find your own favorite once you've walked these streets a little longer.\""
+      },
+      "hard_validation_attempt_2": null,
+      "regeneration_feedback": null,
+      "regeneration_invoked": null,
+      "provider_response_contract": "narration_only"
+    },
+    "offline_reply_expectation": [
+      true,
+      "refusal"
+    ]
+  },
+  {
+    "turn": "T4",
+    "source": "artifacts\\pr_ca_dialogue_continuity\\evidence\\T4\\provider_request_attempt_generation_1.json",
+    "source_sha256": "8f853bd2a93be7c3d5308863999af8b91ae9c4dfb9b24b6a5b9ec6511686277e",
+    "roles": [
+      "system",
+      "user"
+    ],
+    "player": "Thanks. I'll remember your recommendation.",
+    "output": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+    "scene": {
+      "public": {
+        "id": "bread_stall",
+        "location": "Bread stall",
+        "summary": "A baker stands at a bread stall.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A baker stands beside loaves at a bread stall."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "campaign_spine_opening_facts": [],
+        "spine_opening_facts": [],
+        "campaign_spine": {},
+        "scenario_spine": {},
+        "spine": {},
+        "exits": [],
+        "enemies": []
+      },
+      "discoverable_clues": [],
+      "gm_only": {
+        "hidden_facts": [],
+        "discoverable_clues_locked": []
+      },
+      "clue_records": {
+        "discovered": [],
+        "undiscovered": []
+      },
+      "visible_clues": [],
+      "discovered_clues": [],
+      "clue_visibility": {
+        "implicit": [],
+        "explicit": [],
+        "actionable": []
+      },
+      "pending_leads": [],
+      "runtime": {
+        "discovered_clues": [],
+        "pending_leads": [],
+        "recent_contextual_leads": [],
+        "repeated_action_count": 1,
+        "last_exploration_action_key": "social_probe_baker",
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      },
+      "intent": {
+        "raw_text": "Thanks. I'll remember your recommendation.",
+        "normalized_kind": "social_probe",
+        "mode": "social_probe",
+        "classified_action": "social_probe",
+        "requires_check": false,
+        "check_request": null,
+        "targets": [
+          "baker"
+        ],
+        "labels": [],
+        "allow_discoverable_clues": false
+      },
+      "layering_rules": {
+        "visible_facts": "Only visible facts may be directly asserted; align with narration_visibility.visible_facts.",
+        "discoverable_clues": "Reveal only when player investigates/searches/questions/observes closely; with discoverable_hinting, hint without asserting as confirmed truth.",
+        "hidden_facts": "Never reveal directly; use only for implications, NPC behavior, atmosphere, indirect clues."
+      }
+    },
+    "world": {
+      "world_state": {
+        "flags": {
+          "faction_house_verevin_agenda_advanced": true,
+          "faction_ash_cowl_agenda_advanced": true,
+          "faction_ordo_pyric_agenda_advanced": true
+        },
+        "counters": {},
+        "clocks_summary": []
+      },
+      "recent_events": [
+        "House Verevin's pressure mounts.",
+        "The Ash Cowl's pressure mounts.",
+        "Ordo Pyric's pressure mounts."
+      ],
+      "faction_names": [
+        "House Verevin",
+        "The Ash Cowl",
+        "Ordo Pyric"
+      ],
+      "progression_counts": {
+        "active_projects": 0,
+        "faction_pressure": 3,
+        "faction_agenda": 3,
+        "world_clocks": 0,
+        "set_flags": 3
+      }
+    },
+    "visibility": {
+      "visible_entities": [
+        "baker"
+      ],
+      "active_interlocutor_id": "baker",
+      "visible_facts": [
+        "a baker stands beside loaves at a bread stall"
+      ],
+      "rules": {
+        "no_unseen_entities": true,
+        "no_hidden_facts": true,
+        "no_undiscovered_facts": true
+      }
+    },
+    "social_context": {
+      "interlocutor_profile": {
+        "npc_is_promoted": false,
+        "stance": "neutral",
+        "reliability": "partial",
+        "knowledge_scope": [],
+        "agenda": null,
+        "affiliation": null
+      },
+      "answer_style_hints": [
+        "INTERLOCUTOR KNOWLEDGE GATE (engine): Answer as this specific NPC. Use knowledge_scope as the boundary for what they know firsthand. Topics outside those anchors must be hearsay, uncertainty, deflection, or an honest 'I don't know'\u2014not omniscient facts.",
+        "Engine knowledge_scope is empty: treat direct private knowledge as narrow unless grounded in visible role, scene, or prior established exchanges.",
+        "INFORMATION_RELIABILITY partial (engine): Within knowledge_scope, answers are incomplete, selective, or hedged; do not present full certainty or insider completeness they would not have."
+      ]
+    },
+    "dialogue_social_plan": {
+      "speaker_id": "baker",
+      "speaker_name": "baker",
+      "speaker_source": "referent_tracking.continuity_subject",
+      "dialogue_intent": "social_probe",
+      "reply_kind": "unknown",
+      "pressure_state": "none",
+      "relationship_codes": [
+        "unknown"
+      ],
+      "tone_bounds": [
+        "neutral",
+        "direct"
+      ],
+      "prohibited_content_codes": [
+        "no_narrator_override",
+        "no_ooc_instructions",
+        "no_player_agency_override",
+        "no_prompt_text"
+      ],
+      "derivation_codes": [
+        "dialogue_social_plan:v1",
+        "intent:ctir_only",
+        "referent_tracking:consumed",
+        "session_hints:bounded",
+        "speaker:referent_tracking.continuity_subject"
+      ]
+    },
+    "narration_obligations": {
+      "is_opening_scene": false,
+      "must_advance_scene": true,
+      "should_answer_active_npc": true,
+      "avoid_input_echo": true,
+      "avoid_player_action_restatement": true,
+      "prefer_structured_turn_summary": true,
+      "active_npc_reply_expected": true,
+      "active_npc_reply_kind": "reaction",
+      "scene_momentum_due": false,
+      "scene_momentum_exchanges_since": 0,
+      "scene_momentum_next_due_in": 2,
+      "suppress_non_social_emitters": true
+    },
+    "mechanical_resolution": {
+      "kind": "social_probe",
+      "action_id": "social_probe_baker",
+      "label": "Thanks. I'll remember your recommendation.",
+      "prompt": "Thanks. I'll remember your recommendation.",
+      "success": null,
+      "resolved_transition": false,
+      "target_scene_id": null,
+      "clue_id": null,
+      "discovered_clues": [],
+      "world_updates": null,
+      "state_changes": {},
+      "hint": "Player spoke with Baker. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+      "metadata": {
+        "routed_via_dialogue_lock": true,
+        "route": "dialogue",
+        "canonical_entry_path": "social",
+        "canonical_entry_reason": "active_interlocutor_followup",
+        "canonical_entry_target_actor_id": "baker",
+        "intent_route_debug": {
+          "routed_to": "social_exchange",
+          "route_reason": "active_interlocutor_followup",
+          "addressed_actor_id": "baker",
+          "addressed_actor_source": "active_interlocutor"
+        },
+        "social_turn_contract": {
+          "social_followup_recovery": "not_applicable",
+          "interlocutor_status": "retained",
+          "continuity_status": "preserved",
+          "fallback_anchor_source": "active_interlocutor",
+          "reply_owner_actor_id": "baker",
+          "routing_reason_code": "active_interlocutor_followup",
+          "continuity_basis": "none",
+          "nearby_group_focus_source": "none"
+        },
+        "active_interaction_target_id": "baker",
+        "segmented_turn": {
+          "declared_action_text": "Thanks. I'll remember your recommendation."
+        },
+        "npc_stance": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "topics_revealed": 0,
+          "last_interaction_turn": 5
+        },
+        "interaction_obligation": {
+          "kind": "question",
+          "target": "baker",
+          "interlocutor_id": "baker",
+          "subject": "baker",
+          "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+          "claim_id": null,
+          "resolution_mode": "grounded_information_request",
+          "turn_index": 5,
+          "resolution_contract_id": "rc_dd7293b4258c",
+          "executable_obligations": {
+            "primary": null,
+            "mutation_owner": null,
+            "sequence": [],
+            "supporting": []
+          }
+        },
+        "ordinary_contract_established": true,
+        "semantic_owner": "resolution_contract",
+        "contract_before_resolver": true,
+        "contract_construction_source": "deterministic",
+        "selected_resolver": "social",
+        "turn_segmentation": {
+          "declared_action_text": "Thanks. I'll remember your recommendation."
+        },
+        "unknown_legacy_keys": {
+          "noncombat_resolution": {
+            "framework_version": "2026.04.noncombat.v1",
+            "kind": "social_probe",
+            "subkind": "social_probe",
+            "authority_domain": "interaction_state",
+            "deterministic_resolved": true,
+            "requires_check": false,
+            "check_request": null,
+            "outcome_type": "closed",
+            "success_state": "neutral",
+            "discovered_entities": [
+              {
+                "entity_kind": "npc",
+                "entity_id": "baker"
+              }
+            ],
+            "surfaced_facts": [],
+            "state_changes": {},
+            "blocked_reason_codes": [],
+            "ambiguous_reason_codes": [],
+            "unsupported_reason_codes": [],
+            "authoritative_outputs": [
+              {
+                "output_kind": "resolution_trace",
+                "source_engine": "game.social",
+                "route": "social",
+                "engine_action_id": "social_probe_baker"
+              }
+            ],
+            "narration_constraints": {
+              "npc_reply_expected": false,
+              "reply_kind": "reaction"
+            }
+          }
+        },
+        "lead_landing": {
+          "revealed_lead_ids": [],
+          "already_known_lead_ids": [],
+          "actionable_lead_ids": [],
+          "lead_write_targets": [],
+          "extracted_lead_ids": [],
+          "extracted_lead_sources": [],
+          "extracted_from_text": false,
+          "extracted_from_reconciled_text": false,
+          "authoritative_created_ids": [],
+          "authoritative_updated_ids": [],
+          "authoritative_unchanged_ids": [],
+          "authoritative_promoted_ids": []
+        },
+        "response_type_contract": {
+          "required_response_type": "dialogue",
+          "source_route": "social",
+          "allow_escalation": false,
+          "escalation_block_reason": "social_question_guard",
+          "strict_target_id": "baker",
+          "strict_answer_expected": true,
+          "strict_dialogue_expected": true,
+          "action_must_preserve_agency": false,
+          "debug_reasons": [
+            "authoritative_social_target_requires_dialogue",
+            "dialogue_turn_contains_question_expectation",
+            "social_question_guard"
+          ]
+        }
+      },
+      "social": {
+        "social_intent_class": "social_exchange",
+        "npc_id": "baker",
+        "npc_name": "Baker",
+        "target_resolved": true,
+        "topic_revealed": null,
+        "skill_check": null,
+        "npc_reply_expected": false,
+        "reply_kind": "reaction",
+        "target_source": "explicit_target",
+        "target_reason": "normalized target_id matches scene-addressable roster",
+        "target_candidate_id": "baker",
+        "target_candidate_valid": true,
+        "stale_interlocutor_cleared": false,
+        "addressability_checked_against": [
+          "active_entities",
+          "entity_presence_active_or_nearby",
+          "scene_addressables",
+          "world_roster_in_scene",
+          "interaction_continuity"
+        ],
+        "declared_switch_detected": false,
+        "declared_switch_target_actor_id": null,
+        "continuity_overridden_by_declared_switch": false,
+        "spoken_vocative_detected": false,
+        "spoken_vocative_target_actor_id": null,
+        "continuity_overridden_by_spoken_vocative": false,
+        "actor_addressable": true,
+        "target_binding": {
+          "final_target_kind": "npc",
+          "npc_id": "baker",
+          "target_source": "native_npc",
+          "origin_actor_id": null,
+          "promoted_this_turn": false
+        },
+        "target_profile_hints": {
+          "guardedness": "medium",
+          "answer_reliability_tier": "medium",
+          "speaks_authoritatively_for_scene": false
+        },
+        "authority_source_used": "explicit_target",
+        "proposed_reply_speaker_id": "baker",
+        "grounding_fallback_applied": false,
+        "grounding_reason_code": "authoritative_speaker_topic_pressure_reinforced",
+        "grounded_speaker_id": "baker"
+      },
+      "requires_check": false
+    },
+    "recent_log": [
+      {
+        "player_input": "Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+        "gm_snippet": "The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but someti"
+      },
+      {
+        "player_input": "",
+        "gm_snippet": "P: Surely you have a favorite. What makes you reluctant to say? | G: The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cauti"
+      },
+      {
+        "player_input": "Baker, which loaf do you usually keep for yourself?",
+        "gm_snippet": "The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stal"
+      }
+    ],
+    "selected_conversational_memory": [
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 4,
+        "text": "P: Fair enough. Which loaf would you recommend to someone who has never bought bread here? | G: The baker shifts uncomfortably, wiping his hands on a cloth before glancing furtively around the bustling market. \"I wish I could point you to a loaf without hesitation,\" they say quietly, \"but someti",
+        "score": 103.71428571428571,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      },
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 3,
+        "text": "P: Surely you have a favorite. What makes you reluctant to say? | G: The baker shifts again, glancing around before lowering his voice slightly. \"It's not that I don't have a favorite,\" they say cautiously, \"but sometimes, some things are better kept private \u2014 perhaps",
+        "score": 89.42857142857143,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      },
+      {
+        "kind": "recent_turn",
+        "entity_ids": [],
+        "topic_tokens": [],
+        "source_turn": 2,
+        "text": "P: Baker, which loaf do you usually keep for yourself? | G: The baker shifts uncomfortably, wiping his hands on a cloth. \"I\u2019m sorry, but I prefer to keep that to myself,\" he says cautiously, his gaze briefly darting toward the busy street beyond the bread stal",
+        "score": 75.14285714285714,
+        "why_selected": [
+          "recency",
+          "recent_turn_kind"
+        ]
+      }
+    ],
+    "recipe": {
+      "schema": "decision_facing_answer_recipe_v1",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "requested_answer": "Answer baker in ordinary speech. Player asked: Thanks. I'll remember your recommendation.",
+      "required_content": [
+        {
+          "claim_id": "rc_9ab69105465f",
+          "role": "MUST_STATE",
+          "text": "A baker stands beside loaves at a bread stall.",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "ordinary_predicate"
+        },
+        {
+          "claim_id": "rc_2bb408577206",
+          "role": "MUST_STATE",
+          "text": "Baker exists",
+          "provenance": "authored_world_fact",
+          "epistemic_status": "established",
+          "relation_kind": "observation"
+        }
+      ],
+      "permitted_content": [],
+      "permitted_inference": {
+        "allowed": true,
+        "qualified_observations": [],
+        "may_infer_claims": [
+          {
+            "claim_id": "rc_ed575af8a1b1",
+            "role": "MAY_INFER",
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "modality": "possible"
+          }
+        ]
+      },
+      "inference_modality": "inferred",
+      "unresolved_content": [],
+      "forbidden_upgrades": [
+        "unauthorized_consequential_fact",
+        "generated_content_as_authored_world_fact",
+        "durable_preference_without_authorized_claim",
+        "generated_dialogue_as_authored_world_fact"
+      ],
+      "declaration_guidance": {
+        "consequential_authorized_claim": "Listed claims may be realized with source_claim_id and their provenance. The turn-local reply is narration, not a new authored world fact.",
+        "bounded_inference": "realize the listed may_infer claims at their existing status and modality. Do not propose a stronger inference.",
+        "epistemic_premise": "Preserve epistemic status and premise_claim_ids. Do not promote a hypothesis, NPC claim, or unresolved premise into world truth.",
+        "epistemic_claims": [
+          {
+            "claim_id": "rc_ed575af8a1b1",
+            "role": "MAY_INFER",
+            "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+            "provenance": "gm_inference",
+            "epistemic_status": "inferred",
+            "relation_kind": "epistemic_status",
+            "modality": "possible"
+          }
+        ],
+        "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+      },
+      "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+      "answer_strategy": "Answer from the required claims. Keep listed inferences and player hypotheses at their existing status."
+    },
+    "envelope": {
+      "selected_envelope": "narration_only",
+      "projection_only": true,
+      "authority_owner": "gm_resolution_decision",
+      "selection_authority_source": [
+        "resolution_contract.interlocutor_id",
+        "gm_resolution_decision.epistemic_acts",
+        "gm_resolution_decision.permitted_state_mutations"
+      ],
+      "declaration_channel_exposed": false,
+      "reason": "ordinary_incidental_dialogue_reply_requires_no_declaration",
+      "response_operation": "incidental_dialogue",
+      "declaration_expectation": "reply_not_required",
+      "consequential_realization_required": false
+    },
+    "validation": {
+      "attempt_1": {
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+        "reasons": [],
+        "gm_resolution_decision_audit": {
+          "decision_id": "rc_dd7293b4258c",
+          "hard_valid": true,
+          "declaration_validation": {
+            "schema_version": 1,
+            "structured_contract_present": true,
+            "hard_valid": true,
+            "accepted_claims": [],
+            "rejected_claims": [],
+            "violations": []
+          },
+          "narration_validation": {
+            "decision_id": "rc_dd7293b4258c",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              },
+              {
+                "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+                "provenance": "npc_claim",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "epistemically_qualified"
+                ],
+                "authority": "claim_only",
+                "persistence": "claim_only",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "world_truth"
+                }
+              },
+              {
+                "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+                "provenance": "gm_inference",
+                "consequence": "epistemic",
+                "authorized": true,
+                "reason_codes": [
+                  "authorized_qualified_inference"
+                ],
+                "authority": "observation",
+                "persistence": "do_not_persist",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "inferred"
+                }
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              },
+              {
+                "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "world_truth"
+                },
+                "provenance": "npc_claim",
+                "authority": "claim_only",
+                "epistemic_status": "world_truth",
+                "relation_kind": "epistemic_status",
+                "persistence": "claim_only",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "epistemically_qualified"
+                ]
+              },
+              {
+                "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+                "semantic_identity": {
+                  "relation_kind": "epistemic_status",
+                  "epistemic_status": "inferred"
+                },
+                "provenance": "gm_inference",
+                "authority": "observation",
+                "epistemic_status": "inferred",
+                "relation_kind": "epistemic_status",
+                "persistence": "do_not_persist",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "authorized_qualified_inference"
+                ]
+              }
+            ]
+          },
+          "violations": [],
+          "proposed_facts": [
+            {
+              "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+              "provenance": "bounded_incidental",
+              "consequence": "low",
+              "authorized": true,
+              "reason_codes": [
+                "bounded_incidental_texture"
+              ],
+              "authority": "bounded_incidental",
+              "persistence": "runtime_incidental",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {}
+            },
+            {
+              "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+              "provenance": "npc_claim",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "epistemically_qualified"
+              ],
+              "authority": "claim_only",
+              "persistence": "claim_only",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              }
+            },
+            {
+              "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+              "provenance": "gm_inference",
+              "consequence": "epistemic",
+              "authorized": true,
+              "reason_codes": [
+                "authorized_qualified_inference"
+              ],
+              "authority": "observation",
+              "persistence": "do_not_persist",
+              "source_ref": "",
+              "outcome_classification": "epistemically_qualified",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "inferred"
+              }
+            }
+          ],
+          "claim_results": [
+            {
+              "text": "The baker shifts uncomfortably, wiping his hands on a cloth.",
+              "semantic_identity": {},
+              "provenance": "bounded_incidental",
+              "authority": "bounded_incidental",
+              "epistemic_status": "",
+              "relation_kind": "ordinary_predicate",
+              "persistence": "runtime_incidental",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "bounded_incidental_texture"
+              ]
+            },
+            {
+              "text": "He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "world_truth"
+              },
+              "provenance": "npc_claim",
+              "authority": "claim_only",
+              "epistemic_status": "world_truth",
+              "relation_kind": "epistemic_status",
+              "persistence": "claim_only",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "epistemically_qualified"
+              ]
+            },
+            {
+              "text": "Perhaps you'll find your own favorite once you've walked these streets a little longer.",
+              "semantic_identity": {
+                "relation_kind": "epistemic_status",
+                "epistemic_status": "inferred"
+              },
+              "provenance": "gm_inference",
+              "authority": "observation",
+              "epistemic_status": "inferred",
+              "relation_kind": "epistemic_status",
+              "persistence": "do_not_persist",
+              "authorized": true,
+              "source_ref": "",
+              "source_turn": null,
+              "source_scene": "",
+              "reason_codes": [
+                "authorized_qualified_inference"
+              ]
+            }
+          ],
+          "accepted_realized_claims": []
+        }
+      },
+      "attempt_2": null,
+      "retry_context": "",
+      "acceptance": {
+        "why": "initial_hard_valid",
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer."
+      },
+      "hard_validation_attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [
+          "low_confidence_locate"
+        ],
+        "text": "The baker shifts uncomfortably, wiping his hands on a cloth. He offers a tight nod but says nothing more, leaving an unspoken caution lingering in the air. Perhaps you'll find your own favorite once you've walked these streets a little longer."
+      },
+      "hard_validation_attempt_2": null,
+      "regeneration_feedback": null,
+      "regeneration_invoked": null,
+      "provider_response_contract": "narration_only"
+    },
+    "offline_reply_expectation": [
+      false,
+      "reaction"
+    ]
+  }
+]

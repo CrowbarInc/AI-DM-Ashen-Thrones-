@@ -1,0 +1,107 @@
+--- before/game/api_turn_support.py
++++ after/game/api_turn_support.py
+@@ -156,6 +156,7 @@
+ def _strip_internal_gm_keys(gm: dict) -> dict:
+     out = dict(gm)
+     out.pop("_player_facing_emission_finalized", None)
++    out.pop("_final_delivery_seal", None)
+     # Emission debug/meta sidecar (author channel); must not ship on the public gm_output surface.
+     out.pop("internal_state", None)
+     return out
+@@ -334,6 +335,10 @@
+     scene: dict | None,
+     world: dict | None,
+ ) -> None:
++    from game.immutable_valid_response import leave_text_unchanged
++
++    if leave_text_unchanged(gm, "_preserve_authoritative_resolution_facts_after_gate"):
++        return
+     if not isinstance(gm, dict) or not isinstance(resolution, dict):
+         return
+     candidate, source = _authoritative_resolution_fact_text(resolution=resolution, scene=scene, world=world)
+@@ -364,6 +369,10 @@
+ 
+ 
+ def _preserve_accepted_bounded_resolution_after_gate(gm: dict | None, *, before_text: str, after_text: str) -> None:
++    from game.immutable_valid_response import leave_text_unchanged
++
++    if leave_text_unchanged(gm, "_preserve_accepted_bounded_resolution_after_gate"):
++        return
+     if not isinstance(gm, dict):
+         return
+     accepted_text = _accepted_bounded_resolution_text(gm)
+@@ -400,6 +409,10 @@
+     after_text: str,
+ ) -> None:
+     """Keep a resolved physical action from collapsing into unrelated scene or social fallback."""
++    from game.immutable_valid_response import leave_text_unchanged
++
++    if leave_text_unchanged(gm, "_preserve_physical_action_resolution_after_gate"):
++        return
+     if not isinstance(gm, dict) or not isinstance(resolution, dict) or isinstance(resolution.get("social"), dict):
+         return
+     md = resolution.get("metadata") if isinstance(resolution.get("metadata"), dict) else {}
+@@ -450,6 +463,10 @@
+     before_text: str = "",
+ ) -> None:
+     """Replace terminal dead air with the safest response that still resolves the turn."""
++    from game.immutable_valid_response import leave_text_unchanged
++
++    if leave_text_unchanged(gm, "preserve_interaction_obligation_after_gate"):
++        return
+     if not isinstance(gm, dict) or not isinstance(resolution, dict):
+         return
+     obligation = interaction_obligation_from_resolution(resolution)
+@@ -498,6 +515,10 @@
+     This check does not invent a better answer. It only replaces an obvious
+     semantic miss with the existing non-inventive obligation fallback.
+     """
++    from game.immutable_valid_response import leave_text_unchanged
++
++    if leave_text_unchanged(gm, "_preserve_resolution_contract_after_gate"):
++        return
+     if not isinstance(gm, dict) or not isinstance(resolution, dict):
+         return
+     from game.resolution_contract import assess_contract_satisfaction, contract_mapping_from_resolution
+@@ -644,6 +665,17 @@
+             "mismatch_repairs_applied": [],
+             "repaired_discovered_clue_texts": [],
+         }
++    from game.immutable_valid_response import accepted_record, restore_accepted_text, run_preserve_if_valid
++
++    if (isinstance(resolution, dict) and isinstance(resolution.get("social"), dict)
++            and accepted_record(gm) is None):
++        # Legacy retry/fallback constructors can discard an earlier adoption.
++        # They must re-enter the same complete decision path before delivery.
++        contract = (resolution.get("metadata") or {}).get("resolution_contract") or {}
++        gm = run_preserve_if_valid(gm, regenerate=None, resolution=resolution,
++            player_text=str(contract.get("raw_input") or resolution.get("prompt") or ""),
++            session=session, scene=scene, world=world)
++    restore_accepted_text(gm)
+     gm_out = dict(gm)
+     gm_out = attach_bounded_improvisation_evaluation(
+         gm_out,
+@@ -853,6 +885,11 @@
+     gm_out["_player_facing_emission_finalized"] = True
+     from game.immutable_valid_response import commit_text, restore_accepted_text
+ 
++    if accepted_record(gm_out) is None:
++        contract = (resolution.get("metadata") or {}).get("resolution_contract") or {} if isinstance(resolution, dict) else {}
++        gm_out = run_preserve_if_valid(gm_out, regenerate=None, resolution=resolution,
++            player_text=str(contract.get("raw_input") or (resolution or {}).get("prompt") or ""),
++            session=session, scene=scene, world=world)
+     equality = restore_accepted_text(gm_out)
+     _emission_debug(gm_out)["accepted_emitted_report"] = equality
+     _preserve_authoritative_resolution_facts_after_gate(
+@@ -1361,6 +1398,11 @@
+     gm_output_debug: dict | None = None
+     if isinstance(gm, dict):
+         gm = dict(gm)
++        from game.immutable_valid_response import response_is_immutable, restore_accepted_text
++
++        restore_accepted_text(gm)
++        if response_is_immutable(gm):
++            gm["_player_facing_emission_finalized"] = True
+         if gm.get("_player_facing_emission_finalized"):
+             ist = gm.get("internal_state")
+             if isinstance(ist, dict) and isinstance(ist.get("emission_debug_lane"), dict):

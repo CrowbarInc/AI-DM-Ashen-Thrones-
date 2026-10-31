@@ -1,0 +1,34 @@
+[
+  {
+    "event": "sandbox_provider_connection_failure",
+    "effect": "APIConnectionError before first player turn; no engine conversation delivered"
+  },
+  {
+    "event": "automatic_approval_rejection",
+    "reason": "External OpenAI scene/context payload and paid usage needed explicit user approval",
+    "resolution": "User explicitly approved fixture/transcript/production context transmission to OpenAI and the 600 engine / 380 auxiliary call caps."
+  },
+  {
+    "event": "authored_discovery_monitor_false_positive",
+    "evidence": "interrupted_monitor_run/",
+    "turns": 3,
+    "action": "Preserved the entire interrupted attempt; verified the sole world change was an append-only social_lead_revealed event tied to an existing fixture topic. Corrected the monitor, not the product or frozen prompts; started target corpus from a new initial state."
+  },
+  {
+    "event": "missing_product_history_monitor_pause",
+    "evidence": "history_gap_monitor_pause.json",
+    "at": "A_playful:6",
+    "action": "External transcript preserved exact delivery. No canonical mutation, acceptance replacement or new history corruption occurred; product omitted the entry. Resumed at turn 7 only after asserting disk world/session/character/combat equal the saved turn-6 state. Prior turns and prompts were not regenerated."
+  },
+  {
+    "event": "critical_adoption_integrity_stop",
+    "at": "B_skeptical:9",
+    "evidence": "critical_stop_evidence.json",
+    "action": "No further provider calls. 69 target turns, four complete conversations plus nine harbor turns; the planned third scene and seven remaining conversations were not reached."
+  },
+  {
+    "event": "sandbox_regression_stall",
+    "effect": "Windows asyncio socketpair blocked in FastAPI TestClient; interrupted sandboxes and reran unchanged tests outside sandbox with live-call guard intact.",
+    "result": "692 passed, 25 same inherited failures, no new identities."
+  }
+]

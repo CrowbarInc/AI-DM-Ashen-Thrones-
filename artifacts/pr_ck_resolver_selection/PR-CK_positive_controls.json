@@ -1,0 +1,40 @@
+{
+  "live_calls": 0,
+  "suite": "tests/test_pr_ck_ordinary_resolver_selection.py",
+  "passed": 30,
+  "failed": 0,
+  "skipped": 0,
+  "exploration": {
+    "phrases": [
+      "I investigate the desk.",
+      "I search the desk.",
+      "I examine the desk.",
+      "I look through the papers.",
+      "I inspect the contents of the drawer."
+    ],
+    "result": "exploration stage permitted, resolver exploration, no social addressee"
+  },
+  "authored_discovery": {
+    "phrase": "I search the desk.",
+    "route": "/api/chat",
+    "result": "kind discover_clue, discovered text is the authored desk clue 'A map indicates patrol locations.'"
+  },
+  "passive": {
+    "phrases": [
+      "I wait.",
+      "I wait for a while.",
+      "I remain silent and observe.",
+      "I stay here and watch."
+    ],
+    "result": "resolver is not social, passive_wait stage permitted, interlocutor is null"
+  },
+  "narration_and_unmatched": {
+    "phrases": [
+      "Describe the gate.",
+      "Where are we?",
+      "hello there",
+      "The rain is cold."
+    ],
+    "result": "resolver is not social, subject is not social, no invented addressee"
+  }
+}

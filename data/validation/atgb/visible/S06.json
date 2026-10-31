@@ -1,0 +1,116 @@
+{
+  "scenario_id": "S06",
+  "title": "Beside the table",
+  "catalog_heading": "S06 — Beside the table",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "development_visible",
+  "catalog_partition": "development-visible",
+  "evidence_status": "development_visible",
+  "evidence_status_note": "Developers may open this conversation while diagnosing a failure.",
+  "primary_capability": "ic_ooc_boundaries",
+  "secondary_capabilities": ["intent_recognition", "authority", "npc_dialogue_coherence"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. No purchase system is in play.",
+  "authoritative_facts": [
+    "Talking does not itself change scene or discover the route clue.",
+    "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+    "There is no price and no inventory transaction."
+  ],
+  "npc_knowledge": [
+    "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+    "IC turns return to the runner when the player addresses the runner."
+  ],
+  "expected_outcomes": [
+    "The OOC questions do not execute play.",
+    "The IC question is in character.",
+    "The disclaimer prevents a purchase.",
+    "The last line delivers the rumor and not a bowl of stew."
+  ],
+  "acceptable_variations": [
+    "An OOC reply may be short. It does not have to use a particular stock sentence. It does have to answer the question that was asked."
+  ],
+  "unacceptable_behaviors": [
+    "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+    "A narrated purchase, a coin change, or a scene move is critical.",
+    "An OOC lecture that continues after the player has said IC: fails the IC turn."
+  ],
+  "required_evidence": [
+    "Shared packet plus authoritative_mutation, scene id, clues, and any inventory or world-flag delta.",
+    "A host path that skips narration records provider calls as zero when that is what the response says."
+  ],
+  "setup_dependencies": [
+    "Explicit OOC: and IC: prefixes are recognized by the current communication-mode parser.",
+    "Some OOC bodies also hit a non-mutating acknowledgement that does not answer the specific question. That acknowledgement is interpretable as OOC and still has to meet the response criterion."
+  ],
+  "determinism": "S06.1 and S06.3 are often host-deterministic. S06.2 and S06.4 are mixed. Naturalness of the IC lines is live-lane only.",
+  "turns": [
+    {
+      "turn_id": "S06.1",
+      "catalog_heading": "S06.1 — primary: IC/OOC boundaries",
+      "primary_capability": "ic_ooc_boundaries",
+      "player_input": "OOC: if I talk to people here, does that spend game time or change the scene?",
+      "communicative_act": "OOC, non-mutating.",
+      "interpretation_pass": "OOC, non-mutating.",
+      "response_pass": "A direct OOC answer. Talk at this gate does not travel and does not resolve an exit. The reply may say that a chat turn exists without claiming that hours passed. A stock sentence that only says to ask rules questions normally, and never addresses time or scene, fails response and can pass interpretation.",
+      "authority_pass": "Scene stays frontier_gate, no clue is added, and no NPC is forced into a conversation by this line.",
+      "acceptable_variations": ["The reply may be short if it answers the time and scene question."],
+      "unacceptable_behaviors": ["A generic rules invitation that never addresses time or scene."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["authoritative_mutation, scene id, and provider-call count when the host records it."]
+    },
+    {
+      "turn_id": "S06.2",
+      "catalog_heading": "S06.2 — primary: IC/OOC boundaries",
+      "primary_capability": "ic_ooc_boundaries",
+      "player_input": "IC: I ask the runner whether the stew is hot.",
+      "communicative_act": "In-character question to tavern_runner.",
+      "interpretation_pass": "In-character question to tavern_runner.",
+      "response_pass": "In character, about the stew. The visible offer is hot stew. A one-line yes grounded in that offer passes. A quality review or a price does not.",
+      "authority_pass": "No serving and no coin.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Continuing the OOC policy talk."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the OOC policy talk has stopped. lost if the reply continues S06.1.",
+      "required_evidence": ["Communication mode and speaker id."]
+    },
+    {
+      "turn_id": "S06.3",
+      "catalog_heading": "S06.3 — primary: IC/OOC boundaries",
+      "primary_capability": "ic_ooc_boundaries",
+      "player_input": "OOC: that was only a question. I am not buying anything.",
+      "communicative_act": "OOC correction. No transaction.",
+      "interpretation_pass": "OOC correction. No transaction.",
+      "response_pass": "Confirms that nothing was bought and that the scene is unchanged.",
+      "authority_pass": "No inventory delta and no price.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved for that meaning the stew question.",
+      "required_evidence": ["Inventory and world-flag delta."]
+    },
+    {
+      "turn_id": "S06.4",
+      "catalog_heading": "S06.4 — primary: IC/OOC boundaries",
+      "primary_capability": "ic_ooc_boundaries",
+      "player_input": "Back in character. Runner, I'll hear the rumor, not buy the stew.",
+      "communicative_act": "IC request to tavern_runner for the rumor, refusing the stew.",
+      "interpretation_pass": "IC request to tavern_runner for the rumor, refusing the stew.",
+      "response_pass": "The footprint rumor as hearsay. Stew is not served.",
+      "authority_pass": "No purchase, no coin, and no second rumor.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the refusal of the stew is honored.",
+      "required_evidence": ["Speaker id and inventory delta."]
+    }
+  ]
+}

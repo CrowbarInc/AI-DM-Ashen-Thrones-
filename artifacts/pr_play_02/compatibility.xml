@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="24" time="3.865" timestamp="2026-10-19T18:23:46.314482-04:00" hostname="DESKTOP-NG8DRCH"><testcase classname="tests.test_model_routing_config" name="test_high_precision_falls_back_to_default_and_routing_flag_parses_false" time="0.010" /><testcase classname="tests.test_model_routing_config" name="test_retry_escalation_falls_back_to_high_precision_model" time="0.009" /><testcase classname="tests.test_model_routing_config" name="test_legacy_model_name_only_env_remains_backward_compatible" time="0.008" /><testcase classname="tests.test_model_routing_config" name="test_config_and_gm_import_without_openai_api_key" time="0.019" /><testcase classname="tests.test_model_routing_runtime" name="test_legacy_model_name_only_route_flows_through_call_gpt" time="0.003" /><testcase classname="tests.test_model_routing_runtime" name="test_call_gpt_uses_routed_selected_model_not_a_hardcoded_default" time="0.001" /><testcase classname="tests.test_model_routing_runtime" name="test_call_gpt_attaches_route_metadata_and_merges_existing_metadata" time="0.002"><failure message="AssertionError: assert {'existing': ..._family', ...} == {'existing': ..._family', ...}&#10;  &#10;  Omitting 8 identical items, use -vv to show&#10;  Left contains 1 more item:&#10;  {'provider_call': {'input_tokens': None,&#10;                     'latency_ms': 0,&#10;                     'output_tokens': None,&#10;                     'purpose': 'primary_turn',&#10;                     'sent': True}}&#10;  Use -v to get more diff">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002535DF0BA40&gt;
+
+    def test_call_gpt_attaches_route_metadata_and_merges_existing_metadata(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -&gt; None:
+        _install_openai_recorder(monkeypatch, response_text='{"ignored":true}')
+        monkeypatch.setattr(
+            gm_mod,
+            "_safe_json",
+            lambda _text, **_kwargs: {
+                "player_facing_text": "ok",
+                "tags": [],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "existing-debug",
+                "metadata": {"existing": "keep"},
+            },
+        )
+        monkeypatch.setattr(
+            gm_mod,
+            "resolve_model_route",
+            lambda **_kwargs: routing_mod.ModelRouteDecision(
+                selected_model="metadata-route-model",
+                route_reason="metadata_reason",
+                route_family="metadata_family",
+                escalation_allowed=True,
+            ),
+        )
+    
+        out = gm_mod.call_gpt(
+            [{"role": "user", "content": "Hello"}],
+            purpose="primary_turn",
+            retry_attempt=2,
+        )
+    
+&gt;       assert out["metadata"] == {
+            "existing": "keep",
+            "selected_model": "metadata-route-model",
+            "model_route_reason": "metadata_reason",
+            "model_route_family": "metadata_family",
+            "model_route_purpose": "primary_turn",
+            "model_retry_attempt": 2,
+            "model_escalated": False,
+            "model_escalation_trigger": None,
+        }
+E       AssertionError: assert {'existing': ..._family', ...} == {'existing': ..._family', ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Left contains 1 more item:
+E         {'provider_call': {'input_tokens': None,
+E                            'latency_ms': 0,
+E                            'output_tokens': None,
+E                            'purpose': 'primary_turn',
+E                            'sent': True}}
+E         Use -v to get more diff
+
+tests\test_model_routing_runtime.py:120: AssertionError</failure></testcase><testcase classname="tests.test_model_routing_runtime" name="test_provider_disable_short_circuits_before_openai_client" time="0.001" /><testcase classname="tests.test_model_routing_runtime" name="test_routing_disabled_forces_default_model_name_in_call_gpt" time="0.001" /><testcase classname="tests.test_model_routing_runtime" name="test_call_gpt_logs_one_concise_model_route_line" time="0.001" /><testcase classname="tests.test_model_routing_runtime" name="test_upstream_route_metadata_preservation_helper_marks_preserved" time="0.001" /><testcase classname="tests.test_model_routing_runtime" name="test_preserve_model_route_metadata_keeps_escalation_fields_without_fabrication" time="0.001" /><testcase classname="tests.test_model_routing_escalation" name="test_strict_social_turn_selects_high_precision_model_and_marks_escalation" time="0.001" /><testcase classname="tests.test_model_routing_escalation" name="test_retry_attempt_one_selects_retry_model_and_uses_retry_attempt_trigger" time="0.001" /><testcase classname="tests.test_model_routing_escalation" name="test_retry_reason_selects_retry_escalation_metadata_trigger" time="0.001" /><testcase classname="tests.test_model_routing_escalation" name="test_primary_turn_stays_on_default_model_without_escalation_debug_token" time="0.001" /><testcase classname="tests.test_model_routing_escalation" name="test_force_high_precision_marks_metadata_and_debug_trigger" time="0.001" /><testcase classname="tests.test_model_routing_escalation" name="test_api_initial_strict_social_call_passes_strict_social_route_kwargs" time="0.068" /><testcase classname="tests.test_model_routing_escalation" name="test_api_retry_loop_passes_retry_escalation_reason_and_attempt" time="0.024" /><testcase classname="tests.test_model_routing_escalation" name="test_api_retryable_upstream_retry_passes_attempt_one" time="0.023" /><testcase classname="tests.test_model_routing_escalation" name="test_strict_social_route_metadata_survives_upstream_fast_fallback_when_preserved" time="0.031" /><testcase classname="tests.test_model_routing_escalation" name="test_retry_escalation_metadata_survives_retry_loop_upstream_fast_fallback" time="0.026" /><testcase classname="tests.test_pr_dh_live_interpretation" name="test_pr_dh_strict_response_schemas_are_closed" time="0.001" /><testcase classname="tests.test_pr_dh_live_interpretation" name="test_pr_dh_budget_preflight_reserves_output_cap" time="0.001" /></testsuite></testsuites>

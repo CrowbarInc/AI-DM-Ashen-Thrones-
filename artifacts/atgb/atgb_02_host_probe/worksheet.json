@@ -1,0 +1,635 @@
+{
+  "worksheet_version": 1,
+  "benchmark_version": "ATGB-02",
+  "rubric_version": "atgb-rubric-01",
+  "execution_mode": "provider_disabled_host",
+  "evidence_distinction": "host_deterministic",
+  "gameplay_performance_claim": false,
+  "banner": "These responses are host output with providers disabled. Natural conversational competence is unchecked. This sheet is not an Ashen Thrones Gameplay Benchmark result.",
+  "judgment_instructions": {
+    "interpretation": "Did the system understand the player's communicative intent?",
+    "response": "Did the response adequately address that intent?",
+    "authority": "Did the system preserve established world facts and state?",
+    "uncertain": "Use uncertain when the captured evidence is insufficient.",
+    "acceptable": "Yes only when response and authority are both pass. Interpretation stays visible beside them.",
+    "qualitative": "Conversation notes are not a numerical score."
+  },
+  "conversations": [
+    {
+      "scenario_id": "S06",
+      "title": "Beside the table",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. No purchase system is in play.",
+        "authoritative_facts": [
+          "Talking does not itself change scene or discover the route clue.",
+          "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+          "There is no price and no inventory transaction."
+        ],
+        "npc_knowledge": [
+          "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+          "IC turns return to the runner when the player addresses the runner."
+        ],
+        "unacceptable_behaviors": [
+          "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+          "A narrated purchase, a coin change, or a scene move is critical.",
+          "An OOC lecture that continues after the player has said IC: fails the IC turn."
+        ]
+      },
+      "turns": [
+        {
+          "scenario_id": "S06",
+          "turn_id": "S06.1",
+          "partition": "development_visible",
+          "primary_capability": "ic_ooc_boundaries",
+          "player_input": "OOC: if I talk to people here, does that spend game time or change the scene?",
+          "ai_dm_response": "Understood. I will treat that as out-of-character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+          "response_origin": "host_provider_disabled",
+          "simulated": false,
+          "authoritative_context": {
+            "scenario": {
+              "environment_id": "frontier_gate",
+              "location_id": "frontier_gate",
+              "shared_facts": [
+                {
+                  "id": "visible_notice_board",
+                  "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+                },
+                {
+                  "id": "visible_serjeant",
+                  "text": "A gate serjeant manages the crowd and watches the roster board."
+                },
+                {
+                  "id": "visible_runner_offer",
+                  "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+                },
+                {
+                  "id": "visible_crowd",
+                  "text": "Threadbare watchers and refugees stand along the muddy line."
+                },
+                {
+                  "id": "visible_census_choke",
+                  "text": "Ash Compact census delays have tightened the eastern caravan choke."
+                },
+                {
+                  "id": "visible_banners",
+                  "text": "Frayed banners are in the opening description."
+                },
+                {
+                  "id": "clue_notice_patrol_route",
+                  "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+                },
+                {
+                  "id": "topic_watch_command",
+                  "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+                },
+                {
+                  "id": "topic_route_change",
+                  "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+                },
+                {
+                  "id": "topic_patrol_rumor",
+                  "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+                },
+                {
+                  "id": "exits",
+                  "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+                },
+                {
+                  "id": "hidden_facts",
+                  "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+                },
+                {
+                  "id": "unauthored",
+                  "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+                }
+              ],
+              "initial_context": "Fresh gate. No purchase system is in play.",
+              "authoritative_facts": [
+                "Talking does not itself change scene or discover the route clue.",
+                "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+                "There is no price and no inventory transaction."
+              ],
+              "npc_knowledge": [
+                "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+                "IC turns return to the runner when the player addresses the runner."
+              ],
+              "unacceptable_behaviors": [
+                "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+                "A narrated purchase, a coin change, or a scene move is critical.",
+                "An OOC lecture that continues after the player has said IC: fails the IC turn."
+              ]
+            },
+            "communicative_act": "OOC, non-mutating.",
+            "interpretation_pass": "OOC, non-mutating.",
+            "response_pass": "A direct OOC answer. Talk at this gate does not travel and does not resolve an exit. The reply may say that a chat turn exists without claiming that hours passed. A stock sentence that only says to ask rules questions normally, and never addresses time or scene, fails response and can pass interpretation.",
+            "authority_pass": "Scene stays frontier_gate, no clue is added, and no NPC is forced into a conversation by this line.",
+            "acceptable_variations": [
+              "The reply may be short if it answers the time and scene question."
+            ],
+            "unacceptable_behaviors": [
+              "A generic rules invitation that never addresses time or scene."
+            ]
+          },
+          "state_evidence": {
+            "before": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": null,
+              "transcript_entries": 0
+            },
+            "after": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": null,
+              "transcript_entries": 1
+            }
+          },
+          "interpretation_assessment": "unchecked",
+          "response_assessment": "unchecked",
+          "authority_assessment": "unchecked",
+          "failure_severity": "unscored",
+          "clarification_assessment": {
+            "expected": "none",
+            "reviewer": "unscored",
+            "applicable": true
+          },
+          "continuity_assessment": {
+            "expected": "not_applicable",
+            "reviewer": "unscored"
+          },
+          "reviewer_notes": "",
+          "human_review_status": "not_reviewed",
+          "evidence_references": [
+            "scenario:S06",
+            "turn:S06.1",
+            "catalog:S06.1 — primary: IC/OOC boundaries"
+          ]
+        },
+        {
+          "scenario_id": "S06",
+          "turn_id": "S06.2",
+          "partition": "development_visible",
+          "primary_capability": "ic_ooc_boundaries",
+          "player_input": "IC: I ask the runner whether the stew is hot.",
+          "ai_dm_response": "Tavern Runner says, \"I couldn't tell you.\"",
+          "response_origin": "host_provider_disabled",
+          "simulated": false,
+          "authoritative_context": {
+            "scenario": {
+              "environment_id": "frontier_gate",
+              "location_id": "frontier_gate",
+              "shared_facts": [
+                {
+                  "id": "visible_notice_board",
+                  "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+                },
+                {
+                  "id": "visible_serjeant",
+                  "text": "A gate serjeant manages the crowd and watches the roster board."
+                },
+                {
+                  "id": "visible_runner_offer",
+                  "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+                },
+                {
+                  "id": "visible_crowd",
+                  "text": "Threadbare watchers and refugees stand along the muddy line."
+                },
+                {
+                  "id": "visible_census_choke",
+                  "text": "Ash Compact census delays have tightened the eastern caravan choke."
+                },
+                {
+                  "id": "visible_banners",
+                  "text": "Frayed banners are in the opening description."
+                },
+                {
+                  "id": "clue_notice_patrol_route",
+                  "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+                },
+                {
+                  "id": "topic_watch_command",
+                  "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+                },
+                {
+                  "id": "topic_route_change",
+                  "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+                },
+                {
+                  "id": "topic_patrol_rumor",
+                  "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+                },
+                {
+                  "id": "exits",
+                  "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+                },
+                {
+                  "id": "hidden_facts",
+                  "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+                },
+                {
+                  "id": "unauthored",
+                  "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+                }
+              ],
+              "initial_context": "Fresh gate. No purchase system is in play.",
+              "authoritative_facts": [
+                "Talking does not itself change scene or discover the route clue.",
+                "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+                "There is no price and no inventory transaction."
+              ],
+              "npc_knowledge": [
+                "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+                "IC turns return to the runner when the player addresses the runner."
+              ],
+              "unacceptable_behaviors": [
+                "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+                "A narrated purchase, a coin change, or a scene move is critical.",
+                "An OOC lecture that continues after the player has said IC: fails the IC turn."
+              ]
+            },
+            "communicative_act": "In-character question to tavern_runner.",
+            "interpretation_pass": "In-character question to tavern_runner.",
+            "response_pass": "In character, about the stew. The visible offer is hot stew. A one-line yes grounded in that offer passes. A quality review or a price does not.",
+            "authority_pass": "No serving and no coin.",
+            "acceptable_variations": [],
+            "unacceptable_behaviors": [
+              "Continuing the OOC policy talk."
+            ]
+          },
+          "state_evidence": {
+            "before": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": null,
+              "transcript_entries": 1
+            },
+            "after": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": "tavern_runner",
+              "transcript_entries": 2
+            }
+          },
+          "interpretation_assessment": "unchecked",
+          "response_assessment": "unchecked",
+          "authority_assessment": "unchecked",
+          "failure_severity": "unscored",
+          "clarification_assessment": {
+            "expected": "none",
+            "reviewer": "unscored",
+            "applicable": true
+          },
+          "continuity_assessment": {
+            "expected": "preserved",
+            "reviewer": "unscored"
+          },
+          "reviewer_notes": "",
+          "human_review_status": "not_reviewed",
+          "evidence_references": [
+            "scenario:S06",
+            "turn:S06.2",
+            "catalog:S06.2 — primary: IC/OOC boundaries"
+          ]
+        },
+        {
+          "scenario_id": "S06",
+          "turn_id": "S06.3",
+          "partition": "development_visible",
+          "primary_capability": "ic_ooc_boundaries",
+          "player_input": "OOC: that was only a question. I am not buying anything.",
+          "ai_dm_response": "Understood. I will treat that as out-of-character. No gameplay action is executed, no game time advances, and committed state is unchanged.",
+          "response_origin": "host_provider_disabled",
+          "simulated": false,
+          "authoritative_context": {
+            "scenario": {
+              "environment_id": "frontier_gate",
+              "location_id": "frontier_gate",
+              "shared_facts": [
+                {
+                  "id": "visible_notice_board",
+                  "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+                },
+                {
+                  "id": "visible_serjeant",
+                  "text": "A gate serjeant manages the crowd and watches the roster board."
+                },
+                {
+                  "id": "visible_runner_offer",
+                  "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+                },
+                {
+                  "id": "visible_crowd",
+                  "text": "Threadbare watchers and refugees stand along the muddy line."
+                },
+                {
+                  "id": "visible_census_choke",
+                  "text": "Ash Compact census delays have tightened the eastern caravan choke."
+                },
+                {
+                  "id": "visible_banners",
+                  "text": "Frayed banners are in the opening description."
+                },
+                {
+                  "id": "clue_notice_patrol_route",
+                  "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+                },
+                {
+                  "id": "topic_watch_command",
+                  "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+                },
+                {
+                  "id": "topic_route_change",
+                  "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+                },
+                {
+                  "id": "topic_patrol_rumor",
+                  "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+                },
+                {
+                  "id": "exits",
+                  "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+                },
+                {
+                  "id": "hidden_facts",
+                  "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+                },
+                {
+                  "id": "unauthored",
+                  "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+                }
+              ],
+              "initial_context": "Fresh gate. No purchase system is in play.",
+              "authoritative_facts": [
+                "Talking does not itself change scene or discover the route clue.",
+                "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+                "There is no price and no inventory transaction."
+              ],
+              "npc_knowledge": [
+                "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+                "IC turns return to the runner when the player addresses the runner."
+              ],
+              "unacceptable_behaviors": [
+                "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+                "A narrated purchase, a coin change, or a scene move is critical.",
+                "An OOC lecture that continues after the player has said IC: fails the IC turn."
+              ]
+            },
+            "communicative_act": "OOC correction. No transaction.",
+            "interpretation_pass": "OOC correction. No transaction.",
+            "response_pass": "Confirms that nothing was bought and that the scene is unchanged.",
+            "authority_pass": "No inventory delta and no price.",
+            "acceptable_variations": [],
+            "unacceptable_behaviors": []
+          },
+          "state_evidence": {
+            "before": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": "tavern_runner",
+              "transcript_entries": 2
+            },
+            "after": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": "tavern_runner",
+              "transcript_entries": 3
+            }
+          },
+          "interpretation_assessment": "unchecked",
+          "response_assessment": "unchecked",
+          "authority_assessment": "unchecked",
+          "failure_severity": "unscored",
+          "clarification_assessment": {
+            "expected": "none",
+            "reviewer": "unscored",
+            "applicable": true
+          },
+          "continuity_assessment": {
+            "expected": "preserved",
+            "reviewer": "unscored"
+          },
+          "reviewer_notes": "",
+          "human_review_status": "not_reviewed",
+          "evidence_references": [
+            "scenario:S06",
+            "turn:S06.3",
+            "catalog:S06.3 — primary: IC/OOC boundaries"
+          ]
+        },
+        {
+          "scenario_id": "S06",
+          "turn_id": "S06.4",
+          "partition": "development_visible",
+          "primary_capability": "ic_ooc_boundaries",
+          "player_input": "Back in character. Runner, I'll hear the rumor, not buy the stew.",
+          "ai_dm_response": "Provider calls are disabled for this run, so no live narration was generated.",
+          "response_origin": "host_provider_disabled",
+          "simulated": false,
+          "authoritative_context": {
+            "scenario": {
+              "environment_id": "frontier_gate",
+              "location_id": "frontier_gate",
+              "shared_facts": [
+                {
+                  "id": "visible_notice_board",
+                  "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+                },
+                {
+                  "id": "visible_serjeant",
+                  "text": "A gate serjeant manages the crowd and watches the roster board."
+                },
+                {
+                  "id": "visible_runner_offer",
+                  "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+                },
+                {
+                  "id": "visible_crowd",
+                  "text": "Threadbare watchers and refugees stand along the muddy line."
+                },
+                {
+                  "id": "visible_census_choke",
+                  "text": "Ash Compact census delays have tightened the eastern caravan choke."
+                },
+                {
+                  "id": "visible_banners",
+                  "text": "Frayed banners are in the opening description."
+                },
+                {
+                  "id": "clue_notice_patrol_route",
+                  "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+                },
+                {
+                  "id": "topic_watch_command",
+                  "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+                },
+                {
+                  "id": "topic_route_change",
+                  "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+                },
+                {
+                  "id": "topic_patrol_rumor",
+                  "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+                },
+                {
+                  "id": "exits",
+                  "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+                },
+                {
+                  "id": "hidden_facts",
+                  "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+                },
+                {
+                  "id": "unauthored",
+                  "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+                }
+              ],
+              "initial_context": "Fresh gate. No purchase system is in play.",
+              "authoritative_facts": [
+                "Talking does not itself change scene or discover the route clue.",
+                "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+                "There is no price and no inventory transaction."
+              ],
+              "npc_knowledge": [
+                "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+                "IC turns return to the runner when the player addresses the runner."
+              ],
+              "unacceptable_behaviors": [
+                "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+                "A narrated purchase, a coin change, or a scene move is critical.",
+                "An OOC lecture that continues after the player has said IC: fails the IC turn."
+              ]
+            },
+            "communicative_act": "IC request to tavern_runner for the rumor, refusing the stew.",
+            "interpretation_pass": "IC request to tavern_runner for the rumor, refusing the stew.",
+            "response_pass": "The footprint rumor as hearsay. Stew is not served.",
+            "authority_pass": "No purchase, no coin, and no second rumor.",
+            "acceptable_variations": [],
+            "unacceptable_behaviors": []
+          },
+          "state_evidence": {
+            "before": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": "tavern_runner",
+              "transcript_entries": 3
+            },
+            "after": {
+              "scene_id": "frontier_gate",
+              "discovered_clues": [],
+              "world_flag_names": [],
+              "world_state_flag_names": [],
+              "interlocutor": "tavern_runner",
+              "transcript_entries": 4
+            }
+          },
+          "interpretation_assessment": "unchecked",
+          "response_assessment": "unchecked",
+          "authority_assessment": "unchecked",
+          "failure_severity": "unscored",
+          "clarification_assessment": {
+            "expected": "none",
+            "reviewer": "unscored",
+            "applicable": true
+          },
+          "continuity_assessment": {
+            "expected": "preserved",
+            "reviewer": "unscored"
+          },
+          "reviewer_notes": "",
+          "human_review_status": "not_reviewed",
+          "evidence_references": [
+            "scenario:S06",
+            "turn:S06.4",
+            "catalog:S06.4 — primary: IC/OOC boundaries"
+          ]
+        }
+      ],
+      "qualitative": {
+        "prompts": [
+          "repetitive responses",
+          "unnatural phrasing",
+          "excessive clarification",
+          "poor conversational pacing",
+          "failure to sustain initiative",
+          "mechanical or validation-like dialogue"
+        ],
+        "observations": [],
+        "notes": "",
+        "scored": false
+      }
+    }
+  ]
+}

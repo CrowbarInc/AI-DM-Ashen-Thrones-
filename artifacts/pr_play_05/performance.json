@@ -1,0 +1,19 @@
+{
+  "parser_only": {
+    "iterations": 2000,
+    "median_ms": 0.0047,
+    "p95_ms": 0.0051
+  },
+  "parser_and_structural_diagnostics": {
+    "iterations": 2000,
+    "median_ms": 0.0146,
+    "p95_ms": 0.0244
+  },
+  "durable_observation": {
+    "iterations": 100,
+    "median_ms": 0.8789,
+    "p95_ms": 1.2156
+  },
+  "provider_admissions": 0,
+  "scope": "Synthetic local microbenchmark; excludes SDK, UI, gameplay latency; fsync retained."
+}

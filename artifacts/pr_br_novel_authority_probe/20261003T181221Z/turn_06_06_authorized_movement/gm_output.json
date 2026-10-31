@@ -1,0 +1,458 @@
+{
+  "player_facing_text": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harvested from nearby waterways, its atmosphere marked by a patient, unhurried diligence.",
+  "tags": [
+    "scene_momentum:new_information",
+    "resolution_contract_semantic_preserved"
+  ],
+  "scene_update": null,
+  "activate_scene_id": null,
+  "new_scene_draft": null,
+  "world_updates": null,
+  "suggested_action": null,
+  "debug_notes": "Anchored to the scene reed_drying_loft after transition; focused on sensory and atmospheric detail to set the environment. | model_route:default:purpose_primary_turn:gpt-4.1-mini",
+  "metadata": {
+    "output_form": "structured",
+    "selected_model": "gpt-4.1-mini",
+    "model_route_reason": "purpose_primary_turn",
+    "model_route_family": "default",
+    "model_route_purpose": "primary_turn",
+    "model_retry_attempt": 0,
+    "model_escalated": false,
+    "model_escalation_trigger": null,
+    "emission_debug": {
+      "live_resolution_mode": {
+        "mode": "grounded_information_request",
+        "reason_codes": [
+          "default_existing_resolution"
+        ],
+        "target": "reed_drying_loft",
+        "speaker_id": "",
+        "topic": "reed_drying_loft",
+        "improvisation_opportunity_detected": false,
+        "proposal_created": false,
+        "proposal_reason": "not_improvable_mode",
+        "response_complete": true,
+        "response_completeness_reason": "not_gap_mode",
+        "requested_dimension": null,
+        "contract_id": "rc_6750b7d1db9d"
+      },
+      "accepted_response_provenance": "initial_generation",
+      "generation_attempts": 1,
+      "legacy_emission_authority": false,
+      "semantic_degradation": false,
+      "semantic_degradation_reasons": [],
+      "resolution_contract_semantic": {
+        "status": "legitimate_nonresolution",
+        "reasons": [
+          "action_nonresolution"
+        ],
+        "contract_id": "rc_6750b7d1db9d",
+        "replaced": true,
+        "replaced_preview": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and s"
+      },
+      "opening_upstream_prepared_present": false,
+      "opening_upstream_prepared_len": 0,
+      "opening_upstream_prepared_promoted": false,
+      "opening_raw_text_source": "gm_player_facing_text",
+      "pre_gate_text_len": 583,
+      "post_final_emission_gate_text_len": 583,
+      "narration_state_consistency_before_preview": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and s...",
+      "resolution_contract": {
+        "contract_id": "rc_6750b7d1db9d",
+        "turn_index": 1,
+        "request_kind": "action",
+        "operation": "act",
+        "target_ref": null,
+        "interlocutor_id": null,
+        "conversational_subject": "I go to the reed drying loft.",
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "action_outcome",
+        "epistemic_mode": "authoritative",
+        "discourse_ref": null,
+        "referent_provenance": "explicit_player",
+        "ambiguous": false,
+        "raw_input": "I go to the reed drying loft.",
+        "construction": {
+          "cues": [],
+          "referent_slot": null,
+          "referent_reason": "no_anaphor",
+          "ambiguity_detected": false,
+          "actionable_inherited": false,
+          "active_claim_inherited": false,
+          "fast_path_proposal": true,
+          "fast_path_used": true,
+          "fast_path_abstained": false,
+          "fast_path_abstention_reason": null,
+          "model_interpreter_invoked": false,
+          "model_proposal_rejected": false,
+          "clarification_after_model": false,
+          "interpretation_api_calls": 0,
+          "interpretation_error": null,
+          "canonical_candidates": [
+            {
+              "id": "reed_landing",
+              "type": "place",
+              "label": "Brineward reed landing"
+            },
+            {
+              "id": "reed_drying_loft",
+              "type": "place",
+              "label": "Go to the reed drying loft"
+            }
+          ],
+          "proposal_source": "deterministic_fast_path",
+          "proposed_operation": "act",
+          "proposed_supporting_operations": [],
+          "proposed_raw_target": null,
+          "canonicalization_attempted": true,
+          "canonical_target_found": false,
+          "operation_conflict": false,
+          "validation_status": "validated",
+          "validation_result": {
+            "status": "validated",
+            "reason": null,
+            "failed_fields": [],
+            "clarification_required": false,
+            "model_interpretation_appropriate": false,
+            "canonical_target_id": null,
+            "canonical_target_label": null,
+            "canonical_target_type": null,
+            "canonical_basis": null,
+            "authoritative_operation": "act",
+            "discourse_commit_allowed": true,
+            "compatibility_bridge": null
+          },
+          "abstention_reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "discourse_commit_allowed": true,
+          "interlocutor_rejected": false,
+          "entity_binding": {
+            "status": "unresolved",
+            "entity_class": "ambiguous_unresolved",
+            "proposed_interlocutor": null,
+            "proposed_span": null,
+            "bound_interlocutor_id": null,
+            "entity_id": null,
+            "label": null,
+            "explicit_new_interlocutor": false,
+            "authority_reasons": [],
+            "claim_binding": "none"
+          },
+          "authoritative": true,
+          "semantic_completeness": "sufficient",
+          "compatibility_bridge": null,
+          "interpretation_proposal": {
+            "raw_input": "I go to the reed drying loft.",
+            "source": "deterministic_fast_path",
+            "primary_operation": "act",
+            "supporting_operations": [],
+            "raw_target_text": null,
+            "proposed_target_id": null,
+            "target_capture": "none",
+            "has_determiner": false,
+            "interlocutor_id": null,
+            "conversational_subject": null,
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "action_outcome",
+            "referenced_claim_id": null,
+            "referenced_action_id": null,
+            "referenced_inspected_id": null,
+            "confidence": null,
+            "clarification_required": false,
+            "ambiguous": false,
+            "operation_conflict": false,
+            "notes": {}
+          },
+          "commitment_status": "executed_now",
+          "primary_operation": "act",
+          "resolution_subject": "travel",
+          "resolution_subject_coherence": "accepted",
+          "semantic_input_length": 29,
+          "provenance_excerpt": "I go to the reed drying loft.",
+          "secondary_operations": [],
+          "requested_addressee": null,
+          "addressee_binding_status": "unresolved"
+        },
+        "retry_preserved": true
+      },
+      "outcome_precedence": {
+        "downgrade_attempted": false,
+        "downgrade_rejected": false,
+        "downgrade_reason": null,
+        "recovery_used": false,
+        "recovery_source": null,
+        "destroyed": false,
+        "scene_momentum_appended": false,
+        "final_outcome_kind": null,
+        "final_satisfaction": "legitimate_nonresolution",
+        "replacement_reason": "higher_rank"
+      },
+      "post_narration_state_consistency_text_len": 71,
+      "narration_state_consistency_changed_text": true,
+      "narration_state_consistency_after_preview": "The requested action cannot be completed here; another route is needed.",
+      "accepted_emitted_equality": {
+        "exact_match": true,
+        "semantic_match": true,
+        "presentation_only": false,
+        "mutation_blocked": false,
+        "attempted_text": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harves"
+      },
+      "accepted_emitted_report": {
+        "immutable": true,
+        "exact_match": true,
+        "semantic_match": true,
+        "presentation_only": false,
+        "mutation_blocked": true,
+        "accepted_response_text": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harvested from nearby waterways, its atmosphere marked by a patient, unhurried diligence.",
+        "emitted_response_text": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harvested from nearby waterways, its atmosphere marked by a patient, unhurried diligence."
+      },
+      "legacy_would_emit": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harves",
+      "legacy_comparison": {
+        "downgrade_attempted": false,
+        "downgrade_rejected": false,
+        "downgrade_reason": null,
+        "recovery_used": false,
+        "recovery_source": null,
+        "destroyed": false,
+        "scene_momentum_appended": false,
+        "final_outcome_kind": "unrelated",
+        "final_satisfaction": "unsatisfied"
+      },
+      "gm_output_player_facing_len": 583,
+      "final_emission_text_preview": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and s...",
+      "response_payload_text_preview": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and s...",
+      "log_payload_text_preview": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and s...",
+      "canonical_gm_object_id": 2011571022976
+    },
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harvested from nearby waterways, its atmosphere marked by a patient, unhurried diligence."
+    },
+    "accepted_response": {
+      "immutable": true,
+      "text": "You step into the Brineward reed drying loft, where bundles of cut reed hang thickly from the wooden beams overhead. The air is dry and dusty, carrying a faint scent of earth and straw, settling gently in your nostrils. Soft beams of light filter through slatted walls, casting long shadows among the suspended bundles, and the quiet creak of the timbers shifts subtly with a light breeze. This loft is a workspace suspended above the ground, clearly built to aid in drying and processing reed harvested from nearby waterways, its atmosphere marked by a patient, unhurried diligence.",
+      "provenance": "initial_generation",
+      "attempt": 1,
+      "player_input": "I go to the reed drying loft.",
+      "turn_identity": "rc_6750b7d1db9d",
+      "speaker": "",
+      "addressee": "",
+      "target": "",
+      "operation": "act",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "rc_6750b7d1db9d",
+        "operation": "act",
+        "interlocutor_id": "",
+        "expected_resolution": "action_outcome"
+      },
+      "resolution_kind": "scene_transition",
+      "generation_attempts": 1,
+      "skipped_mutators": [
+        "apply_response_policy_enforcement",
+        "apply_authored_knowledge_realization_to_gm",
+        "apply_stay_leave_narration_agreement_to_gm",
+        "apply_destination_arrival_realization_to_gm",
+        "apply_perception_non_invention_to_gm",
+        "apply_repeated_description_guard",
+        "apply_final_emission_gate",
+        "enforce_emitted_contract_monotonicity",
+        "apply_spoken_state_refinement_cash_out"
+      ]
+    },
+    "skipped_semantic_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ],
+    "live_resolution_mode": {
+      "mode": "grounded_information_request",
+      "reason_codes": [
+        "default_existing_resolution"
+      ],
+      "target": "reed_drying_loft",
+      "speaker_id": "",
+      "topic": "reed_drying_loft",
+      "proposal_kind": null,
+      "proposal_category": null,
+      "epistemic_status": null,
+      "requested_dimension": null,
+      "contract_id": "rc_6750b7d1db9d"
+    },
+    "narration_seam": {
+      "path_kind": "resolved_turn_ctir_bundle",
+      "ctir_backed": true,
+      "bundle_required": true,
+      "plan_driven": true,
+      "emergency_nonplan_output": false,
+      "explicit_nonplan_model_narration": false,
+      "same_turn_retry_messages_reused": false,
+      "continuation": {
+        "is_continuation_turn": false,
+        "continuation_path_kind": null,
+        "requires_plan_driven_continuation": false,
+        "allows_nonplan_output": true,
+        "reason_codes": [
+          "opening_reason:post_transition",
+          "turn_is_scene_opening"
+        ],
+        "continuation_plan_verified": true,
+        "continuation_plan_failure_reason": null,
+        "continuation_source": "narrative_plan_bundle",
+        "continuation_enforcement_applied": false
+      }
+    },
+    "planner_convergence_report": {
+      "enabled": true,
+      "owner_module": "game.api",
+      "path_label": "transition",
+      "ctir_present": true,
+      "ctir_stamp": "0:1d45b091680:7e132744",
+      "narrative_plan_present": true,
+      "narrative_plan_stamp": "0:1d45b091680:7e132744",
+      "stamp_matches": true,
+      "prompt_consumes_plan": true,
+      "raw_state_prompt_bypass_detected": false,
+      "emergency_nonplan_allowed": false,
+      "failure_codes": []
+    }
+  },
+  "scene_state_anchor_contract": {
+    "enabled": true,
+    "required_any_of": [
+      "location",
+      "actor",
+      "player_action"
+    ],
+    "minimum_anchor_hits": 1,
+    "scene_id": "reed_drying_loft",
+    "scene_location_label": "Brineward reed drying loft",
+    "location_tokens": [
+      "reed_drying_loft",
+      "reed drying loft",
+      "brineward reed drying loft",
+      "brineward reed",
+      "reed drying",
+      "drying loft",
+      "bundles",
+      "reed",
+      "hang",
+      "loft",
+      "beams"
+    ],
+    "actor_tokens": [
+      "guard captain",
+      "tavern runner"
+    ],
+    "player_action_tokens": [
+      "scene_transition",
+      "reed_drying_loft",
+      "reed drying loft"
+    ],
+    "preferred_repair_order": [
+      "actor",
+      "player_action",
+      "location"
+    ],
+    "debug_reason": "scene_state_anchor: loc=11 actor=2 player_action=3 enabled=True",
+    "debug_sources": {
+      "location": [
+        "scene.id",
+        "scene.location",
+        "visible_facts"
+      ],
+      "actor": [
+        "visible_entity_aliases"
+      ],
+      "player_action": [
+        "resolution.kind",
+        "resolution.action_id"
+      ]
+    }
+  },
+  "conversational_memory_window": {
+    "enabled": true,
+    "window_version": "v1",
+    "prioritize_recent_turns": true,
+    "prioritize_active_scene_entities": true,
+    "deprioritize_stale_inactive_elements": true,
+    "allow_explicit_reintroduction": true,
+    "recent_turn_window": 6,
+    "soft_memory_limit": 12,
+    "stale_after_turns": 18,
+    "active_scene_entity_ids": [],
+    "anchored_interlocutor_id": "",
+    "active_interaction_target_id": "",
+    "explicit_reintroduced_entity_ids": [],
+    "explicit_reintroduced_topics": [],
+    "selection_debug": {
+      "matched_entity_ids": [],
+      "matched_topics": [],
+      "matched_grounded_ids": [],
+      "callback_marker_hit": null,
+      "source_of_activity_anchor": "none",
+      "source_of_recentness": "session.turn_counter",
+      "source_of_reintroductions": "player_text+visibility_aliases"
+    }
+  },
+  "selected_conversational_memory": [],
+  "upstream_prepared_emission": {
+    "prepared_answer_fallback_text": "No direct answer is established from the current state yet.",
+    "prepared_action_fallback_text": "You go to the reed drying loft, and your position changes with that movement.",
+    "prepared_sanitizer_empty_fallback_text": "For a breath, the scene stays still.",
+    "upstream_prepared_bundle_origin": "upstream_response_repairs.build_upstream_prepared_emission_payload",
+    "semantic_mutation_write_sites": [
+      {
+        "mutation_id": "07046bbcdb25",
+        "write_site_family": "repair",
+        "write_site_file": "game/upstream_response_repairs.py",
+        "write_site_function": "build_upstream_prepared_emission_payload",
+        "before_semantic_hash": "e3b0c44298fc1c14",
+        "after_semantic_hash": "75e471cc6f23dc31",
+        "selected_active_stream": false,
+        "candidate_only": true,
+        "owner": "game.upstream_response_repairs",
+        "source": "prepared_answer_fallback_text",
+        "mutation_reason": "candidate_creation:answer_upstream_prepared_repair",
+        "compatibility_status": "diagnostic_only"
+      },
+      {
+        "mutation_id": "8f776db75c98",
+        "write_site_family": "repair",
+        "write_site_file": "game/upstream_response_repairs.py",
+        "write_site_function": "build_upstream_prepared_emission_payload",
+        "before_semantic_hash": "e3b0c44298fc1c14",
+        "after_semantic_hash": "73c31fce18dca687",
+        "selected_active_stream": false,
+        "candidate_only": true,
+        "owner": "game.upstream_response_repairs",
+        "source": "prepared_action_fallback_text",
+        "mutation_reason": "candidate_creation:action_outcome_upstream_prepared_repair",
+        "compatibility_status": "diagnostic_only"
+      }
+    ],
+    "realization_fallback_family": "upstream_prepared_emission"
+  }
+}

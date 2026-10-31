@@ -1,0 +1,513 @@
+{
+  "kind": "question",
+  "action_id": "question_nessa_whether_she_belongs_to_th",
+  "label": "I ask Nessa whether she belongs to the Violet Compact.",
+  "prompt": "I ask Nessa whether she belongs to the Violet Compact.",
+  "success": null,
+  "resolved_transition": false,
+  "target_scene_id": null,
+  "clue_id": null,
+  "discovered_clues": [],
+  "world_updates": null,
+  "state_changes": {},
+  "hint": "Player spoke with Nessa. No new information was revealed. Narrate a refusal, uncertainty, or inability without inventing facts the speaker does not have.",
+  "metadata": {
+    "canonical_entry_path": "social",
+    "canonical_entry_reason": "declared_action_actor_switch",
+    "canonical_entry_target_actor_id": "nessa",
+    "segmented_turn": {
+      "declared_action_text": "I ask Nessa whether she belongs to the Violet Compact."
+    },
+    "npc_stance": {
+      "attitude": 0,
+      "trust": 0,
+      "fear": 0,
+      "suspicion": 0,
+      "topics_revealed": 0,
+      "last_interaction_turn": 1
+    },
+    "resolution_contract": {
+      "contract_id": "rc_0f985d4682e7",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": {
+        "type": "interlocutor",
+        "id_or_text": "Nessa",
+        "source": "explicit_player"
+      },
+      "interlocutor_id": "nessa",
+      "conversational_subject": "Nessa",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": {
+        "type": "interlocutor",
+        "id": "nessa",
+        "label": "Nessa",
+        "source_turn": null
+      },
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I ask Nessa whether she belongs to the Violet Compact.",
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "explicit_target",
+        "referent_reason": "explicit_current_turn_interlocutor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "net_loft",
+            "type": "place",
+            "label": "Brineward net loft"
+          },
+          {
+            "id": "nessa",
+            "type": "interlocutor",
+            "label": "Nessa"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "ask",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": "Nessa",
+        "canonicalization_attempted": true,
+        "canonical_target_found": true,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": "nessa",
+          "canonical_target_label": "Nessa",
+          "canonical_target_type": "interlocutor",
+          "canonical_basis": "scene",
+          "authoritative_operation": "ask",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "bound_canonical",
+          "entity_class": "canonical_established",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": "nessa",
+          "entity_id": null,
+          "label": "Nessa",
+          "explicit_new_interlocutor": true,
+          "authority_reasons": [
+            "identity:established"
+          ],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I ask Nessa whether she belongs to the Violet Compact.",
+          "source": "deterministic_fast_path",
+          "primary_operation": "ask",
+          "supporting_operations": [],
+          "raw_target_text": "Nessa",
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": "nessa",
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "answer",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "commitment_status": "executed_now",
+        "primary_operation": "ask",
+        "resolution_subject": "social",
+        "resolution_subject_coherence": "accepted",
+        "semantic_input_length": 54,
+        "provenance_excerpt": "I ask Nessa whether she belongs to the Violet Compact.",
+        "secondary_operations": [],
+        "requested_addressee": "Nessa",
+        "addressee_binding_status": "bound_canonical"
+      },
+      "retry_preserved": true
+    },
+    "interaction_obligation": {
+      "kind": "question",
+      "target": "nessa",
+      "interlocutor_id": "nessa",
+      "subject": "whether she belongs to the Violet Compact",
+      "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_0f985d4682e7"
+    },
+    "ordinary_contract_established": true,
+    "semantic_owner": "resolution_contract",
+    "contract_before_resolver": true,
+    "contract_construction_source": "deterministic",
+    "selected_resolver": "social",
+    "turn_segmentation": {
+      "declared_action_text": "I ask Nessa whether she belongs to the Violet Compact."
+    },
+    "unknown_legacy_keys": {
+      "noncombat_resolution": {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "social_probe",
+        "subkind": "question",
+        "authority_domain": "interaction_state",
+        "deterministic_resolved": true,
+        "requires_check": false,
+        "check_request": null,
+        "outcome_type": "closed",
+        "success_state": "neutral",
+        "discovered_entities": [
+          {
+            "entity_kind": "npc",
+            "entity_id": "nessa"
+          }
+        ],
+        "surfaced_facts": [],
+        "state_changes": {},
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+        "authoritative_outputs": [
+          {
+            "output_kind": "resolution_trace",
+            "source_engine": "game.social",
+            "route": "social",
+            "engine_action_id": "question_nessa_whether_she_belongs_to_th"
+          }
+        ],
+        "narration_constraints": {
+          "npc_reply_expected": true,
+          "reply_kind": "answer"
+        }
+      }
+    },
+    "lead_landing": {
+      "revealed_lead_ids": [],
+      "already_known_lead_ids": [],
+      "actionable_lead_ids": [],
+      "lead_write_targets": [],
+      "extracted_lead_ids": [],
+      "extracted_lead_sources": [],
+      "extracted_from_text": false,
+      "extracted_from_reconciled_text": false,
+      "authoritative_created_ids": [],
+      "authoritative_updated_ids": [],
+      "authoritative_unchanged_ids": [],
+      "authoritative_promoted_ids": []
+    },
+    "response_type_contract": {
+      "required_response_type": "dialogue",
+      "source_route": "social",
+      "allow_escalation": false,
+      "escalation_block_reason": "social_question_guard",
+      "strict_target_id": "nessa",
+      "strict_answer_expected": true,
+      "strict_dialogue_expected": true,
+      "action_must_preserve_agency": false,
+      "debug_reasons": [
+        "authoritative_social_target_requires_dialogue",
+        "dialogue_turn_contains_question_expectation",
+        "social_question_guard"
+      ]
+    },
+    "emission_debug": {
+      "dialogue_social_plan": {
+        "version": 1,
+        "applies": true,
+        "speaker_id": "nessa",
+        "speaker_name": "nessa",
+        "speaker_source": "referent_tracking.continuity_subject",
+        "dialogue_intent": "question",
+        "reply_kind": "unknown",
+        "pressure_state": "none",
+        "relationship_codes": [
+          "unknown"
+        ],
+        "tone_bounds": [
+          "neutral",
+          "direct"
+        ],
+        "prohibited_content_codes": [
+          "no_narrator_override",
+          "no_ooc_instructions",
+          "no_player_agency_override",
+          "no_prompt_text"
+        ],
+        "derivation_codes": [
+          "dialogue_social_plan:v1",
+          "intent:ctir_only",
+          "referent_tracking:consumed",
+          "session_hints:bounded",
+          "speaker:referent_tracking.continuity_subject"
+        ],
+        "validator": {
+          "validated": true,
+          "errors": [],
+          "reject_field_names": [
+            "dialogue",
+            "dialogue_line",
+            "gm_guidance",
+            "instructions",
+            "message",
+            "narration",
+            "player_facing_text",
+            "prompt",
+            "system_prompt",
+            "text"
+          ],
+          "allowed_reply_kinds": [
+            "answer",
+            "explanation",
+            "reaction",
+            "refusal",
+            "unknown"
+          ],
+          "allowed_pressure_states": [
+            "high",
+            "low",
+            "moderate",
+            "none"
+          ],
+          "allowed_tone_codes": [
+            "cold",
+            "deferential",
+            "direct",
+            "evasive",
+            "guarded",
+            "hostile",
+            "neutral",
+            "threatening",
+            "warm"
+          ],
+          "allowed_relationship_codes": [
+            "engagement_engaged",
+            "engagement_focused",
+            "engagement_none",
+            "fear_high",
+            "fear_low",
+            "friendly",
+            "hostile",
+            "neutral",
+            "suspicion_high",
+            "suspicion_low",
+            "trust_high",
+            "trust_low",
+            "unfriendly",
+            "unknown"
+          ],
+          "allowed_speaker_alias_resolution_sources": [
+            "continuity_snapshot",
+            "interaction_continuity_contract",
+            "manual_bundle_override",
+            "referent_tracking"
+          ]
+        },
+        "bounded_session_hints": {
+          "active_interaction_target_id": "nessa",
+          "active_interaction_target_name": "Nessa",
+          "active_interaction_kind": "social",
+          "interaction_mode": "social",
+          "engagement_level": "engaged",
+          "conversation_privacy": null,
+          "player_position_context": null
+        }
+      },
+      "scene_state_anchor": {
+        "enabled": true,
+        "scene_id": "net_loft",
+        "counts": {
+          "location": 9,
+          "actor": 2,
+          "player_action": 10
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "interaction_kind": "question",
+        "pressure_focus_allowed": false,
+        "debug_reason": "context_separation: pressure_focus_allowed=False primary_topics=20 ambient=1"
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [
+          "nessa"
+        ],
+        "anchored_interlocutor_id": "nessa",
+        "active_interaction_target_id": "nessa",
+        "explicit_reintroduced_entity_ids": [
+          "nessa"
+        ],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [
+            "nessa"
+          ],
+          "matched_topics": [],
+          "matched_grounded_ids": [
+            {
+              "id": "nessa",
+              "via": "anchored_interlocutor_id"
+            },
+            {
+              "id": "nessa",
+              "via": "active_interaction_target_id"
+            }
+          ],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "active_interaction_target_id",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      },
+      "selected_conversational_memory": [],
+      "conversational_memory": {
+        "selected_count": 0
+      },
+      "speaker_selection_contract": {
+        "primary_speaker_id": "nessa",
+        "primary_speaker_name": "Nessa",
+        "primary_speaker_source": "declared_action",
+        "allowed_speaker_ids": [
+          "nessa"
+        ],
+        "continuity_locked": true,
+        "continuity_lock_reason": "single_grounded_in_scene_speaker",
+        "speaker_switch_allowed": true,
+        "speaker_switch_reason": "declared_actor_switch",
+        "generic_fallback_forbidden": false,
+        "forbidden_fallback_labels": [
+          "ragged stranger",
+          "stranger",
+          "someone nearby",
+          "someone in the crowd",
+          "a voice nearby",
+          "a passerby",
+          "a bystander",
+          "an onlooker",
+          "a figure nearby",
+          "someone anonymous"
+        ],
+        "interruption_allowed": true,
+        "interruption_requires_scene_event": true,
+        "offscene_speakers_forbidden": true,
+        "debug": {
+          "merged_player_prompt_preview": "I ask Nessa whether she belongs to the Violet Compact. I ask Nessa whether she belongs to the Violet Compact.",
+          "strict_social_active": true,
+          "authoritative_source": "declared_action",
+          "authoritative_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+          "grounding_reason_code": "authoritative_speaker_eligible",
+          "grounding_fallback_applied": false,
+          "neutral_reply_bridge": false,
+          "why_speaker_chosen": "grounded_in_scene_npc:nessa;authority_source=declared_action;grounding=authoritative_speaker_eligible",
+          "why_continuity_locked_or_not": "single_grounded_in_scene_speaker",
+          "why_switch_permitted_or_not": "declared_actor_switch",
+          "interruption_tracker_active": false,
+          "resolution_path": "engine_reuse_strict_reconcile"
+        }
+      }
+    },
+    "narration_state_consistency": {
+      "narration_state_mismatch_detected": true,
+      "mismatch_kind": "empty_social_payload_vs_narration:directional_phrase",
+      "mismatch_repair_applied": "fail_closed_no_authoritative_provenance",
+      "mismatch_repairs_applied": [
+        "fail_closed_no_authoritative_provenance"
+      ],
+      "repaired_discovered_clue_texts": [],
+      "emergent_actor_hint_detected": false,
+      "scene_opening_reconcile_telemetry_only": false,
+      "prose_derived_authority_suppressed": true
+    }
+  },
+  "social": {
+    "social_intent_class": "social_exchange",
+    "npc_id": "nessa",
+    "npc_name": "Nessa",
+    "target_resolved": true,
+    "topic_revealed": null,
+    "skill_check": null,
+    "npc_reply_expected": true,
+    "reply_kind": "answer",
+    "target_source": "declared_action",
+    "target_reason": "declared_action_phrase_resolved_before_vocative_or_continuity",
+    "target_candidate_id": "nessa whether she belongs to the violet compact",
+    "target_candidate_valid": false,
+    "stale_interlocutor_cleared": false,
+    "addressability_checked_against": [
+      "active_entities",
+      "entity_presence_active_or_nearby",
+      "scene_addressables",
+      "world_roster_in_scene",
+      "interaction_continuity"
+    ],
+    "declared_switch_detected": true,
+    "declared_switch_target_actor_id": "nessa",
+    "continuity_overridden_by_declared_switch": false,
+    "spoken_vocative_detected": false,
+    "spoken_vocative_target_actor_id": null,
+    "continuity_overridden_by_spoken_vocative": false,
+    "actor_addressable": true,
+    "target_binding": {
+      "final_target_kind": "npc",
+      "npc_id": "nessa",
+      "target_source": "native_npc",
+      "origin_actor_id": null,
+      "promoted_this_turn": false
+    },
+    "target_profile_hints": {
+      "guardedness": "medium",
+      "answer_reliability_tier": "medium",
+      "speaks_authoritatively_for_scene": false
+    },
+    "authority_source_used": "declared_action",
+    "proposed_reply_speaker_id": "nessa",
+    "grounding_fallback_applied": false,
+    "grounding_reason_code": "authoritative_speaker_eligible",
+    "grounded_speaker_id": "nessa"
+  },
+  "requires_check": false,
+  "world_tick_events": []
+}

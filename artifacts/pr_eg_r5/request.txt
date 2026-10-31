@@ -1,0 +1,1049 @@
+# ============================================================
+# PR-EG-R5 — Conversational Architecture Reassessment
+# ============================================================
+#
+# ERA: Product Realization
+# CHAPTER: II
+# CYCLE: PR-EG-R5
+# LANES: Architecture / AI / Gameplay / Validation / Performance
+# PRIORITY: HIGH
+# TYPE: Architectural Investigation & Decision
+# PREDECESSOR: PR-EG-R4-R1
+#
+# ============================================================
+# 0. MISSION
+# ============================================================
+#
+# Determine why the current AI-DM remains conversationally
+# unplayable despite successful implementation of:
+#
+# - Conversational authority.
+# - Reference grounding.
+# - NPC knowledge selection.
+# - Host-owned speech adoption.
+# - Bounded generative expression.
+# - Proposition-level continuity.
+# - Answer-sufficiency handling.
+# - Final-response integrity.
+#
+# Identify the architectural causes of the discrepancy
+# between focused component qualification and actual
+# conversational playability.
+#
+# Determine whether the existing conversational pipeline
+# should be:
+#
+# A. Retained with targeted repairs.
+#
+# B. Simplified and consolidated.
+#
+# C. Partially reorganized around AI-owned semantic
+#    interpretation and host-owned authority.
+#
+# D. Replaced more substantially.
+#
+# This is an investigation and architectural decision
+# cycle.
+#
+# DO NOT IMPLEMENT THE RECOMMENDED ARCHITECTURE.
+#
+# ============================================================
+# 1. CENTRAL QUESTION
+# ============================================================
+#
+# Why does the engine repeatedly fail to understand
+# and sustain ordinary conversation when its individual
+# conversational mechanisms can pass focused tests?
+#
+# Investigate whether:
+#
+# - Player meaning is lost during interpretation.
+#
+# - Conversational intent is prematurely reduced to
+#   deterministic command categories.
+#
+# - Multiple modules independently select the
+#   addressee, subject, or relevant information.
+#
+# - Available authored facts are preferred over
+#   actually relevant answers.
+#
+# - Answer sufficiency is evaluated too narrowly.
+#
+# - Conversational continuity is fragmented.
+#
+# - The AI has insufficient freedom to propose
+#   harmless incidental conversation.
+#
+# - Defensive validation and fallback mechanisms
+#   create conversational dead ends.
+#
+# - The pipeline's complexity itself contributes
+#   to contradictory decisions.
+#
+# Test these hypotheses against source code and
+# observed production behavior.
+#
+# Do not assume any hypothesis is correct.
+#
+# ============================================================
+# 2. BASELINE
+# ============================================================
+#
+# PR-EG-R4:
+#
+# - 69 evaluated player turns.
+# - 5 conversations started.
+# - 4 conversations reached 15 turns.
+# - Dialogue quality >=2: 2/69.
+# - Playability >=2: 1/69.
+# - Recovery success: 1/11.
+# - Continuity success: 8/57.
+# - Critical post-validation speech replacement found.
+#
+# PR-EG-R4-R1:
+#
+# - Critical delivery bypass repaired.
+# - 63 focused integrity checks passed.
+# - 692 relevant regression tests passed.
+# - 25 inherited regression failures.
+# - No new reported regression failures.
+# - 24 fresh-provider turns.
+# - 24/24 authorized/API response agreement.
+# - 24/24 authorized/history agreement.
+# - Legitimate authorized disclosure preserved.
+#
+# Remaining observed failures:
+#
+# - Contradictory NPC preferences.
+# - Unnecessary clarification.
+# - Incorrect speaker selection.
+# - Repeated irrelevant facts.
+# - Poor recovery from misunderstandings.
+# - Generic refusal during reasonable dialogue.
+# - Expensive strict-social fallback paths.
+#
+# Verify the current repository state before
+# relying on these historical findings.
+#
+# ============================================================
+# 3. NON-NEGOTIABLE ARCHITECTURAL CONSTRAINTS
+# ============================================================
+#
+# Any proposed architecture must preserve:
+#
+# A. ENGINE AUTHORITY
+#
+# The engine remains authoritative for:
+#
+# - Canonical world state.
+# - Mechanical rules.
+# - Action execution.
+# - Time advancement.
+# - Inventory and resources.
+# - Consequential NPC commitments.
+# - Authorized factual disclosure.
+# - Persistence.
+#
+# B. SPEECH INTEGRITY
+#
+# Rejected responses cannot bypass final adoption.
+#
+# C. INFORMATION INTEGRITY
+#
+# Generated dialogue cannot independently establish
+# consequential world facts.
+#
+# D. EPISTEMIC DISTINCTION
+#
+# NPC speech, rumor, belief, and canonical truth
+# remain distinguishable.
+#
+# E. PLAYER AGENCY
+#
+# The engine must not invent player actions,
+# decisions, or consent.
+#
+# F. SIMULATION INTEGRITY
+#
+# Conversational flexibility must not bypass
+# mechanics or authoritative state transitions.
+#
+# G. PERFORMANCE
+#
+# Avoid returning to enormous prompts and
+# repeated provider retries.
+#
+# These constraints are not optional.
+#
+# ============================================================
+# 4. INVESTIGATION BOUNDARIES
+# ============================================================
+#
+# IN SCOPE:
+#
+# - Conversational architecture.
+# - Intent interpretation.
+# - GM/NPC ownership.
+# - Addressee grounding.
+# - Subject grounding.
+# - Knowledge selection.
+# - Answer sufficiency.
+# - Conversational planning.
+# - Bounded expression.
+# - Authorization.
+# - Delivered-history continuity.
+# - Fallback behavior.
+# - Provider orchestration.
+# - Prompt construction.
+# - Cost and latency implications.
+#
+# OUT OF SCOPE:
+#
+# - Combat implementation.
+# - Movement mechanics.
+# - Inventory systems.
+# - Character generation.
+# - Campaign lifecycle.
+# - General world generation.
+# - UI redesign.
+# - New NPC content authoring.
+# - Broad unrelated refactoring.
+#
+# Do not use this cycle to repair individual
+# dialogue examples.
+#
+# ============================================================
+# 5. SOURCE-LEVEL PIPELINE RECONSTRUCTION
+# ============================================================
+#
+# Reconstruct the complete conversational pipeline
+# from player input to delivered response.
+#
+# Include:
+#
+# - Initial API entry.
+# - Request classification.
+# - Provider interpretation.
+# - Deterministic interpretation.
+# - Conversational ownership.
+# - Addressee selection.
+# - Subject selection.
+# - Reference resolution.
+# - NPC knowledge selection.
+# - Answer-sufficiency assessment.
+# - Response planning.
+# - Expression generation.
+# - Candidate validation.
+# - Final speech adoption.
+# - Response sealing.
+# - Delivered-history recording.
+# - API serialization.
+#
+# Identify all relevant production modules.
+#
+# Do not restrict the investigation to files
+# previously modified during PR-EG.
+#
+# Produce a source-linked pipeline diagram.
+#
+# For every stage document:
+#
+# - Inputs.
+# - Outputs.
+# - Authority.
+# - Provider involvement.
+# - State dependencies.
+# - Fallback behavior.
+# - Ability to override prior decisions.
+#
+# ============================================================
+# 6. DECISION-OWNERSHIP MATRIX
+# ============================================================
+#
+# Construct a matrix for these decisions:
+#
+# 1. Is the player speaking to the GM or an NPC?
+#
+# 2. Which NPC is being addressed?
+#
+# 3. What conversational act is intended?
+#
+# 4. What subject is being discussed?
+#
+# 5. Is the player asking for information?
+#
+# 6. Is the player proposing an action?
+#
+# 7. Is the player correcting a prior statement?
+#
+# 8. Is the player asking for historical recall?
+#
+# 9. What information is relevant?
+#
+# 10. What information is authorized?
+#
+# 11. Is the available information sufficient?
+#
+# 12. Should the NPC answer, clarify, decline,
+#     or express uncertainty?
+#
+# 13. What wording may be generated?
+#
+# 14. What response is finally delivered?
+#
+# For each decision identify:
+#
+# - Current owner.
+# - Other modules that influence it.
+# - Conflicting owners.
+# - Required authority level.
+# - Whether semantic interpretation is needed.
+# - Whether deterministic enforcement is needed.
+#
+# Explicitly identify duplicated decision-making.
+#
+# ============================================================
+# 7. TRACE HISTORICAL PLAYABILITY FAILURES
+# ============================================================
+#
+# Use preserved PR-EG-R4 and PR-EG-R4-R1 evidence.
+#
+# Reconstruct representative failures.
+#
+# REQUIRED CASES:
+#
+# A. Harbor-coordination question repeatedly
+#    answered with harbor-bell information.
+#
+# B. Player correction failing to redirect
+#    the conversation.
+#
+# C. NPC preference changing from morning
+#    to evening.
+#
+# D. Explicit reference to Sergeant Mara
+#    producing unnecessary speaker clarification.
+#
+# E. Harmless casual dialogue routed into
+#    unsupported-action or refusal behavior.
+#
+# F. Long or playful conversational input
+#    triggering strict-social retries.
+#
+# For each:
+#
+# - Identify the first incorrect decision.
+# - Identify subsequent propagation.
+# - Identify why existing safeguards did not help.
+# - Identify the smallest architectural boundary
+#   that could prevent the failure class.
+#
+# Distinguish root cause from downstream symptom.
+#
+# ============================================================
+# 8. INFORMATION LOSS AUDIT
+# ============================================================
+#
+# Determine where conversational meaning is lost.
+#
+# Inspect transformations such as:
+#
+# Natural-language utterance
+#    ->
+# Provider interpretation
+#    ->
+# Structured intent
+#    ->
+# Host resolution
+#    ->
+# Selected proposition
+#    ->
+# Final response.
+#
+# For representative turns, compare:
+#
+# - Original player meaning.
+# - Provider's interpretation.
+# - Structured representation.
+# - Host-selected operation.
+# - Host-selected subject.
+# - Selected knowledge.
+# - Delivered response.
+#
+# Identify:
+#
+# - Omitted meaning.
+# - Incorrectly added meaning.
+# - Premature commitment to one interpretation.
+# - Lost correction signals.
+# - Lost discourse references.
+# - Unsupported inference.
+#
+# Do not assume the provider interpretation
+# is automatically correct.
+#
+# ============================================================
+# 9. CONVERSATIONAL OWNERSHIP AUDIT
+# ============================================================
+#
+# Investigate how the engine distinguishes:
+#
+# - Player-to-GM speech.
+# - Player-to-NPC speech.
+# - Player-declared actions.
+# - Player corrections.
+# - Player questions about prior speech.
+# - NPC-to-NPC references.
+# - Out-of-character discussion.
+#
+# Identify cases where:
+#
+# - GM speech is mistaken for NPC speech.
+# - NPC speech is mistaken for GM speech.
+# - Conversational questions become actions.
+# - Player corrections become refusals.
+# - Multiple NPCs compete for one response.
+#
+# Determine whether ownership is decided once
+# or repeatedly by different modules.
+#
+# ============================================================
+# 10. ADDRESSEE AND SUBJECT GROUNDING
+# ============================================================
+#
+# Analyze:
+#
+# - Explicit names.
+# - Pronouns.
+# - "One of them."
+# - "The guard."
+# - "What did she mean?"
+# - "Back to the road."
+# - "I meant the ferry schedule."
+#
+# Determine:
+#
+# - Which stage identifies the addressee.
+# - Which stage identifies the subject.
+# - Whether later stages can change either.
+# - How genuine ambiguity is represented.
+# - How false ambiguity is introduced.
+# - Whether corrections override stale topics.
+#
+# Identify whether grounding responsibilities
+# should be consolidated.
+#
+# ============================================================
+# 11. KNOWLEDGE SELECTION VS QUESTION RELEVANCE
+# ============================================================
+#
+# Investigate why the engine repeatedly selects
+# an authorized fact that does not answer the
+# player's question.
+#
+# Example:
+#
+# PLAYER:
+#
+# "Who manages ferry schedules?"
+#
+# AVAILABLE FACT:
+#
+# "The bell beside the ferry is called the
+# harbor bell."
+#
+# These share vocabulary and location context.
+#
+# They do not answer the same question.
+#
+# Determine whether current selection relies on:
+#
+# - Topic keywords.
+# - Entity overlap.
+# - Previously revealed information.
+# - Resolver priorities.
+# - Provider-selected facts.
+# - Historical conversational recency.
+# - Narrow answer-sufficiency rules.
+#
+# Propose how relevance and authorization
+# could become separate explicit decisions.
+#
+# AUTHORIZATION:
+#
+# May the NPC disclose this information?
+#
+# RELEVANCE:
+#
+# Does this information answer the question?
+#
+# Both must be considered.
+#
+# ============================================================
+# 12. ANSWER-SUFFICIENCY AUDIT
+# ============================================================
+#
+# Examine the current classification:
+#
+# - Direct answer.
+# - Partial answer.
+# - Does not answer.
+# - Unknown.
+#
+# Determine:
+#
+# - How these categories are selected.
+# - Whether they generalize beyond known fixtures.
+# - Whether they depend on lexical patterns.
+# - Whether partial answers are overused.
+# - Whether unrelated facts are misclassified.
+#
+# Investigate the feasibility of using AI for
+# semantic relevance assessment while retaining
+# host authority over what may be disclosed.
+#
+# Do not assume an AI relevance judgment can
+# authorize new information.
+#
+# ============================================================
+# 13. CONVERSATIONAL MEMORY AUDIT
+# ============================================================
+#
+# Identify all structures tracking:
+#
+# - Delivered NPC speech.
+# - Current conversational topic.
+# - Prior conversational topics.
+# - Proposition identity.
+# - Speaker identity.
+# - NPC commitments.
+# - Player corrections.
+# - Pending clarifications.
+# - Historical recall.
+#
+# Determine:
+#
+# - Which structures are authoritative.
+# - Which are derived.
+# - Which duplicate information.
+# - Which can disagree.
+# - Which survive save/load.
+# - Which influence future interpretation.
+#
+# Identify fragmentation and conflicting
+# reference-resolution behavior.
+#
+# Do not propose another independent memory
+# store without strong justification.
+#
+# ============================================================
+# 14. BOUNDED IMPROVISATION AUDIT
+# ============================================================
+#
+# Investigate whether the current expression
+# contract provides enough freedom for ordinary
+# incidental conversation.
+#
+# Distinguish:
+#
+# A. CONSEQUENTIAL FACTS
+#
+# Must remain host-authorized.
+#
+# B. INCIDENTAL CHARACTERIZATION
+#
+# May be safely generated within bounded
+# semantic authorization.
+#
+# C. CONVERSATIONAL ACKNOWLEDGMENT
+#
+# May not require world-state authorization.
+#
+# D. QUESTIONS AND CLARIFICATIONS
+#
+# May require semantic understanding but not
+# new world facts.
+#
+# E. UNCERTAINTY AND NONBINDING REFUSAL
+#
+# Should be conversationally appropriate.
+#
+# Determine whether the current architecture
+# treats these categories too similarly.
+#
+# Evaluate whether harmless conversational
+# operations are unnecessarily routed through
+# consequential-action validation.
+#
+# ============================================================
+# 15. FALLBACK AND RETRY AUDIT
+# ============================================================
+#
+# Inventory fallback behavior.
+#
+# Include:
+#
+# - Unknown information.
+# - Missing reference.
+# - Conflicting authority.
+# - Failed expression validation.
+# - Unsupported action.
+# - Missing adoption.
+# - Provider failure.
+# - Strict-social retry.
+#
+# Determine:
+#
+# - Which fallbacks are player-facing.
+# - Which preserve conversational context.
+# - Which discard the player's question.
+# - Which repeat prior statements.
+# - Which create dead ends.
+# - Which trigger expensive provider calls.
+#
+# Identify fallback loops and escalation chains.
+#
+# Do not modify them during R5.
+#
+# ============================================================
+# 16. PROVIDER PROMPT AND PAYLOAD AUDIT
+# ============================================================
+#
+# Inspect provider prompts and structured payloads
+# used for conversational interpretation.
+#
+# Determine whether the provider receives:
+#
+# - The current utterance.
+# - Relevant preceding dialogue.
+# - Current speaker context.
+# - Available NPCs.
+# - Current scene.
+# - Prior corrections.
+# - Pending clarifications.
+# - Relevant known facts.
+# - Clear output semantics.
+#
+# Identify:
+#
+# - Missing context.
+# - Excessive context.
+# - Conflicting instructions.
+# - Duplicated policies.
+# - Premature command-oriented framing.
+# - Token-heavy defensive scaffolding.
+#
+# Record approximate token costs.
+#
+# Do not optimize prompts yet.
+#
+# ============================================================
+# 17. ARCHITECTURAL OPTIONS
+# ============================================================
+#
+# Evaluate at least four options.
+#
+# OPTION A — TARGETED REPAIRS
+#
+# Retain current ownership and pipeline.
+# Repair identified defects individually.
+#
+# OPTION B — CONSOLIDATED HOST PIPELINE
+#
+# Consolidate duplicated deterministic decisions
+# and eliminate conflicting authority paths.
+#
+# OPTION C — AI SEMANTIC PLANNING / HOST AUTHORITY
+#
+# Let AI propose:
+#
+# - Conversational intent.
+# - Addressee.
+# - Subject.
+# - Relevant source candidates.
+# - Conversational response plan.
+#
+# Let the host:
+#
+# - Ground entities.
+# - Verify knowledge and disclosure.
+# - Validate consequential claims.
+# - Authorize state transitions.
+# - Approve final speech.
+#
+# OPTION D — SUBSTANTIAL CONVERSATIONAL REWRITE
+#
+# Replace the existing conversational routing
+# architecture while preserving authoritative
+# simulation and persistence boundaries.
+#
+# Do not assume Option C is automatically best.
+#
+# ============================================================
+# 18. OPTION EVALUATION MATRIX
+# ============================================================
+#
+# Compare each option on:
+#
+# - Conversational flexibility.
+# - Information integrity.
+# - State integrity.
+# - Implementation complexity.
+# - Regression risk.
+# - Maintainability.
+# - Provider cost.
+# - Latency.
+# - Debuggability.
+# - Compatibility with existing architecture.
+# - Migration requirements.
+# - Expected impact on observed failure classes.
+#
+# Identify tradeoffs explicitly.
+#
+# ============================================================
+# 19. CONTROLLED ARCHITECTURAL PROBES
+# ============================================================
+#
+# Where useful, conduct isolated, nonproduction
+# experiments to test architectural hypotheses.
+#
+# Examples:
+#
+# - Give an AI interpreter a complete conversation
+#   and ask it to identify the player's intended
+#   conversational act.
+#
+# - Compare AI semantic subject selection with
+#   the current host-selected subject.
+#
+# - Compare AI relevance judgments with the
+#   current knowledge selector.
+#
+# - Test whether a compact conversational plan
+#   can preserve corrections and earlier topics.
+#
+# - Evaluate whether harmless acknowledgment
+#   can be distinguished from consequential claims.
+#
+# These experiments must:
+#
+# - Be isolated from production state.
+# - Avoid canonical mutations.
+# - Preserve prompts and outputs.
+# - Use independent examples.
+# - Include adversarial cases.
+# - Report token costs.
+#
+# CRITICAL:
+#
+# An isolated AI planning success is not proof
+# that the production engine can safely adopt it.
+#
+# Do not claim production qualification.
+#
+# ============================================================
+# 20. ADVERSARIAL ARCHITECTURE PROBES
+# ============================================================
+#
+# Test proposed boundaries against:
+#
+# - Unsupported security claims.
+# - Unauthorized NPC commitments.
+# - Hidden-information requests.
+# - Ambiguous speakers.
+# - False player assumptions.
+# - NPC lies and rumors.
+# - Contradictory player corrections.
+# - Unauthorized state changes.
+# - Player attempts to override GM authority.
+# - Generated information that appears harmless
+#   but has consequential implications.
+#
+# Determine whether each architectural option
+# can preserve host authority.
+#
+# Do not permit AI semantic confidence to become
+# world-state authority.
+#
+# ============================================================
+# 21. COMPLEXITY AND MAINTAINABILITY
+# ============================================================
+#
+# Quantify architectural complexity where feasible.
+#
+# Examples:
+#
+# - Number of interpretation stages.
+# - Number of response-selection stages.
+# - Number of fallback branches.
+# - Number of modules able to alter addressee.
+# - Number of modules able to alter subject.
+# - Number of modules able to alter response text.
+# - Number of provider calls in common paths.
+# - Number of independent conversational
+#   memory structures.
+#
+# Identify:
+#
+# - Duplicated logic.
+# - Dead paths.
+# - Historical compatibility layers.
+# - Contradictory contracts.
+# - Excessive defensive transformations.
+#
+# Do not equate line count alone with complexity.
+#
+# ============================================================
+# 22. ROOT-CAUSE SYNTHESIS
+# ============================================================
+#
+# Produce a ranked root-cause analysis.
+#
+# For each root cause:
+#
+# - Describe the architectural defect.
+# - Identify source evidence.
+# - Identify affected failure classes.
+# - Explain why focused tests missed it.
+# - Estimate severity.
+# - Estimate remediation scope.
+# - Identify dependencies.
+#
+# Distinguish:
+#
+# - Demonstrated causes.
+# - Strongly supported hypotheses.
+# - Speculative possibilities.
+#
+# Do not present speculation as established fact.
+#
+# ============================================================
+# 23. RECOMMENDED TARGET ARCHITECTURE
+# ============================================================
+#
+# Recommend one architectural direction.
+#
+# Provide:
+#
+# - Responsibility boundaries.
+# - Decision ownership.
+# - Data flow.
+# - Provider involvement.
+# - Host validation.
+# - Memory model.
+# - Fallback behavior.
+# - Final speech adoption.
+# - Persistence behavior.
+# - Performance expectations.
+#
+# Explain how it addresses:
+#
+# - Irrelevant answer selection.
+# - Unnecessary clarification.
+# - Lost corrections.
+# - Contradictory NPC speech.
+# - Poor conversational recovery.
+# - Rigid incidental conversation.
+#
+# Preserve the final-response integrity
+# improvements from PR-EG-R4-R1.
+#
+# ============================================================
+# 24. MIGRATION STRATEGY
+# ============================================================
+#
+# Propose an incremental migration plan.
+#
+# Prefer:
+#
+# - Small independently testable stages.
+# - Explicit ownership changes.
+# - Removal of superseded logic.
+# - Preserved safety invariants.
+# - Production-path qualification.
+# - Reversible changes where practical.
+#
+# Avoid:
+#
+# - Parallel permanent architectures.
+# - Endless compatibility shims.
+# - Repeated lexical patches.
+# - Broad rewrites without intermediate evidence.
+#
+# Identify the first implementation slice
+# that would test the recommendation.
+#
+# Do not implement it in R5.
+#
+# ============================================================
+# 25. SUCCESS CRITERIA FOR THE NEXT IMPLEMENTATION
+# ============================================================
+#
+# Define measurable criteria for the first
+# implementation slice.
+#
+# Include:
+#
+# - Natural intent recognition.
+# - Correct addressee selection.
+# - Correct subject selection.
+# - Relevant information selection.
+# - Correction handling.
+# - Conversational recovery.
+# - Authorized disclosure.
+# - No unsupported consequential facts.
+# - Final-response integrity.
+# - Provider cost.
+# - Latency.
+#
+# Require fresh-provider production-path
+# qualification.
+#
+# Avoid testing only known scripted examples.
+#
+# ============================================================
+# 26. EVIDENCE QUALITY
+# ============================================================
+#
+# Clearly separate:
+#
+# A. Source-code inspection.
+#
+# B. Historical production evidence.
+#
+# C. Controlled production-path experiments.
+#
+# D. Isolated provider experiments.
+#
+# E. Fresh-provider final-code qualification.
+#
+# F. Architectural hypotheses.
+#
+# Do not conflate these categories.
+#
+# R5 is not required to produce a new playable
+# implementation.
+#
+# Its success depends on the quality of its
+# architectural diagnosis and recommendation.
+#
+# ============================================================
+# 27. REQUIRED REVIEW ARTIFACTS
+# ============================================================
+#
+# Generate:
+#
+# 01 — Executive Summary
+# 02 — Baseline and Repository State
+# 03 — Source-Level Pipeline Map
+# 04 — Decision-Ownership Matrix
+# 05 — Historical Failure Traces
+# 06 — Information-Loss Audit
+# 07 — Conversational Ownership Audit
+# 08 — Addressee and Subject Grounding
+# 09 — Knowledge Selection and Relevance
+# 10 — Answer-Sufficiency Audit
+# 11 — Conversational Memory Audit
+# 12 — Bounded Improvisation Audit
+# 13 — Fallback and Retry Audit
+# 14 — Provider Prompt and Payload Audit
+# 15 — Architectural Options
+# 16 — Option Evaluation Matrix
+# 17 — Controlled Architectural Probes
+# 18 — Adversarial Boundary Probes
+# 19 — Complexity and Maintainability
+# 20 — Root-Cause Synthesis
+# 21 — Recommended Target Architecture
+# 22 — Migration Strategy
+# 23 — First Implementation Slice
+# 24 — Success Criteria
+# 25 — Risks and Uncertainties
+# 26 — Final Recommendation
+# 27 — Source and Evidence Inventory
+#
+# Package all artifacts through the established
+# CURRENT_REVIEW workflow.
+#
+# ============================================================
+# 28. VERDICT
+# ============================================================
+#
+# Choose:
+#
+# A — ARCHITECTURAL DIRECTION ESTABLISHED
+#
+# B — DIRECTION ESTABLISHED WITH LIMITATIONS
+#
+# C — ADDITIONAL INVESTIGATION REQUIRED
+#
+# D — FUNDAMENTAL ARCHITECTURAL BLOCKER
+#
+# UNVERIFIED — INSUFFICIENT EVIDENCE
+#
+# Do not award A or B merely because an isolated
+# provider experiment produces natural dialogue.
+#
+# The recommendation must explain how authority
+# and information integrity remain protected.
+#
+# ============================================================
+# 29. STOP CONDITIONS
+# ============================================================
+#
+# Stop and report if:
+#
+# - Critical integrity invariants cannot be
+#   preserved under the proposed architecture.
+#
+# - Evidence is insufficient to identify a
+#   credible direction.
+#
+# - The proposed solution requires granting
+#   unrestricted world authority to the provider.
+#
+# - Controlled experiments reveal an uncontained
+#   consequential-information leak.
+#
+# - The investigation cannot distinguish
+#   architectural causes from symptoms.
+#
+# Do not force an architectural recommendation
+# when evidence does not support one.
+#
+# ============================================================
+# 30. FINAL INSTRUCTION
+# ============================================================
+#
+# Investigate the current conversational pipeline.
+#
+# Identify duplicated or conflicting decision
+# ownership.
+#
+# Trace historical failures to their earliest
+# incorrect decisions.
+#
+# Determine where conversational meaning is lost.
+#
+# Evaluate whether AI semantic planning should
+# precede host authority enforcement.
+#
+# Compare targeted repair, consolidation,
+# partial reorganization, and substantial rewrite.
+#
+# Recommend one coherent architectural direction.
+#
+# Produce an incremental migration strategy.
+#
+# Define the first implementation slice and
+# measurable success criteria.
+#
+# DO NOT IMPLEMENT THE RECOMMENDATION.
+#
+# DO NOT BEGIN PR-EH.
+#
+# Generate CURRENT_REVIEW.
+#
+# STOP after PR-EG-R5.
+#
+# Await external review before proceeding.

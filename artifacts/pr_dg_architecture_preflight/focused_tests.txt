@@ -1,0 +1,27 @@
+PR-DG focused tests
+tests/test_pr_dg_architecture_preflight.py
+2 passed, 0 failed, 0 skipped
+
+test_preview_does_not_roll
+test_preflight_stays_inside_the_authority_contract
+
+Relevant existing suites this cycle:
+resolver 30 passed
+state authority 26 passed
+PR-CX authority 9 passed
+PR-CP finalization 9 passed
+combat 8 passed
+improvisation 5 passed
+PR-DE 6 passed
+noncombat 11 passed
+world state 11 passed
+world clock 6 passed
+
+Shared turn pipeline:
+41 passed, 24 failed, 0 skipped
+Same counts as the PR-DE inherited baseline. Failures were not repaired.
+
+The PR-DE required suite of 353 tests (326 passed, 27 failed) was not re-run as a whole.
+
+No live provider calls.
+Production save hashes were unchanged after the suite.

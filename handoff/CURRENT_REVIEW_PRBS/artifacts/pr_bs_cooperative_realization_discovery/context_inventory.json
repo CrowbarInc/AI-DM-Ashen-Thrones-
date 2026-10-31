@@ -1,0 +1,145 @@
+{
+  "mode": "discovery_only",
+  "model_or_gameplay_calls_performed": 0,
+  "primary_live_evidence_source": "artifacts/pr_br_closeout_live_revalidation/",
+  "prior_payload_breakdown_source": "handoff/payload_breakdown.json",
+  "provider_usage_from_pr_br_closeout": {
+    "gameplay_turns": 4,
+    "preflight_calls": 1,
+    "initial_generation_calls": 4,
+    "retry_generation_calls": 4,
+    "total_model_calls": 9,
+    "provider_input_tokens": 235232,
+    "provider_output_tokens": 3042,
+    "provider_total_tokens": 238274,
+    "bounded_keep_invocations": 0
+  },
+  "representative_request_measurements": {
+    "a1_initial": {
+      "input_tokens": 24750,
+      "system_chars": 12543,
+      "user_chars": 90681,
+      "largest_top_level_user_components_chars": {
+        "instructions": 26068,
+        "response_policy": 20609,
+        "turn_packet": 10668,
+        "narrative_plan": 4475,
+        "context_separation_contract": 3492,
+        "gm_resolution_decision": 2124,
+        "interaction_continuity_contract": 1805,
+        "scene": 1716,
+        "dialogue_social_plan": 1649,
+        "anti_railroading_contract": 1451,
+        "fallback_behavior": 1315,
+        "referent_tracking": 1250,
+        "speaker_selection": 1233,
+        "character": 1059,
+        "campaign": 1057
+      }
+    },
+    "a1_retry": {
+      "input_tokens": 26010,
+      "system_chars": 12543,
+      "base_user_chars": 90681,
+      "feedback_user_chars": 5068,
+      "base_user_identical_to_initial": true
+    },
+    "a2_initial": {
+      "input_tokens": 29221,
+      "system_chars": 12543,
+      "user_chars": 108086
+    },
+    "a2_retry": {
+      "input_tokens": 30917,
+      "system_chars": 12543,
+      "base_user_chars": 108086,
+      "feedback_user_chars": 6676,
+      "base_user_identical_to_initial": true
+    }
+  },
+  "duplication_measurements": {
+    "retry_resends_entire_base_user_payload": true,
+    "retry_feedback_contains_resolution_contract_and_decision": true,
+    "a2_gm_resolution_decision_top_level_chars": 2961,
+    "a2_gm_resolution_decision_inside_mechanical_resolution_metadata_chars": 3508,
+    "a2_realization_claims_copied_in_both": 1233,
+    "a2_compact_resolution_contract_chars": 522,
+    "a2_full_resolution_contract_inside_mechanical_resolution_chars": 3822,
+    "a2_turn_packet_response_policy_chars": 6096,
+    "a2_top_level_response_policy_chars": 21229,
+    "a2_emission_debug_inside_mechanical_resolution_chars": 3335,
+    "instruction_strings_unique": "108/108",
+    "long_system_lines_also_in_user_json": "6/47",
+    "dominant_cost": "instruction list plus response_policy plus system prompt, resent on retry",
+    "scene_world_not_dominant": true
+  },
+  "call_chain_evidence": [
+    {
+      "file": "game/api.py",
+      "lines": "5404-5520",
+      "owner": "chat endpoint, state load, segmentation, social entry"
+    },
+    {
+      "file": "game/live_resolution.py",
+      "lines": "384-458",
+      "owner": "interaction obligation and resolution_contract attachment"
+    },
+    {
+      "file": "game/resolution_contract.py",
+      "lines": "1-5, 24-64, 265-279",
+      "owner": "typed player request contract, dimensions, epistemic mode"
+    },
+    {
+      "file": "game/gm_resolution_decision.py",
+      "lines": "231-306, 1496-1574, 2054-2290",
+      "owner": "realization claims and GMResolutionDecision"
+    },
+    {
+      "file": "game/prompt_context.py",
+      "lines": "1-91, 735-759",
+      "owner": "model-facing prompt-context payload owner"
+    },
+    {
+      "file": "game/gm.py",
+      "lines": "183-323, 4005-4244, 4473-4505",
+      "owner": "system prompt, payload serialization, provider call"
+    },
+    {
+      "file": "game/immutable_valid_response.py",
+      "lines": "1-16, 684-790, 1288-1320",
+      "owner": "hard-valid acceptance, regeneration feedback, immutable accepted response"
+    },
+    {
+      "file": "game/gm_retry.py",
+      "lines": "116-127, 2308-2517, 2747-2887",
+      "owner": "targeted retry instructions and terminal fallback"
+    },
+    {
+      "file": "game/bounded_improvisation.py",
+      "lines": "1-5, 230-316, 402-450, 453-482",
+      "owner": "low-consequence improvisation proposal validation and persistence"
+    }
+  ],
+  "live_trace_file_sizes": {
+    "A1_decision_1.json": 9856,
+    "A1_digest.json": 9451,
+    "A1_full_trace.json": 360040,
+    "A1_raw_envelope_attempt_1.json": 2679,
+    "A1_raw_envelope_attempt_2.json": 930,
+    "A2_decision_2.json": 10994,
+    "A2_digest.json": 13881,
+    "A2_full_trace.json": 408406,
+    "A2_raw_envelope_attempt_1.json": 2549,
+    "A2_raw_envelope_attempt_2.json": 1262,
+    "A3_decision_3.json": 16530,
+    "A3_digest.json": 20336,
+    "A3_full_trace.json": 462724,
+    "A3_raw_envelope_attempt_1.json": 3484,
+    "A3_raw_envelope_attempt_2.json": 1972,
+    "B1_decision_4.json": 9638,
+    "B1_digest.json": 8416,
+    "B1_full_trace.json": 377101,
+    "B1_raw_envelope_attempt_1.json": 1992,
+    "B1_raw_envelope_attempt_2.json": 1439
+  }
+}

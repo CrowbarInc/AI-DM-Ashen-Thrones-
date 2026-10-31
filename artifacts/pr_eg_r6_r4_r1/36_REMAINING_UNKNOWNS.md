@@ -1,0 +1,3 @@
+# 36 — Remaining Unknowns
+
+Can a useful semantic bridge preserve role direction without gold relation names? Can reported-content attribution be represented without promotion? Can qualifier omission be detected outside lexical lists? What trusted process establishes semantic support without expensive manual annotations? What are semantic precision/recall on exhaustive labels? Which strict-match failures are evaluator disagreement? How much human review and correction does each source need? What does an actual long campaign context cost? Can the A and B/C output contracts be fairly equalized? Is caching useful enough after ongoing alignment calls and invalidation? These questions remain open.

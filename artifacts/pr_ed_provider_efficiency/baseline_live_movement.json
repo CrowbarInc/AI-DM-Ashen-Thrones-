@@ -1,0 +1,577 @@
+{
+  "live": true,
+  "model": {
+    "default": "gpt-4.1-mini",
+    "high_precision": "gpt-4.1-mini",
+    "routing_enabled": true
+  },
+  "retry_ceiling": 2,
+  "manual_play_gpt_ceiling": 6,
+  "narration_timeout": "openai_sdk_default",
+  "provider_budget_defaults": {
+    "request_limit_env": "ASHEN_PROVIDER_REQUEST_LIMIT",
+    "input_default_when_limit_set": 8000,
+    "output_default_when_limit_set": 2000,
+    "total_default_when_limit_set": 10000,
+    "narration_max_output_tokens_env": "ASHEN_NARRATION_MAX_OUTPUT_TOKENS",
+    "narration_max_output_default": 600,
+    "interpretation_max_output": 320
+  },
+  "caching": "No application-level prompt cache. Provider prompt caching is not configured in call sites.",
+  "instrumentation": "External wrappers around call_gpt, save_session, and save_world. No production edit.",
+  "seed_ids": {
+    "courtyard": "waystation_courtyard",
+    "street": "waystation_street",
+    "npc": "sergeant_mara"
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "ordinary_movement",
+      "player_text": "I go through the courtyard gate.",
+      "elapsed_ms": 16646,
+      "latency_ms": {},
+      "narration_provider_calls": 2,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [
+        "hard_invalid"
+      ],
+      "prompt_estimated_input_tokens": 45076,
+      "persistence_ms": {
+        "save_session": 22,
+        "save_world": 2
+      },
+      "usage_delta_requests": 2,
+      "usage_delta_input_tokens": 47345,
+      "usage_delta_output_tokens": 2034,
+      "resolution_kind": "scene_transition",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 80588,
+          "user_estimated_tokens": 20147,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20530,
+              "estimated_tokens": 5132
+            },
+            {
+              "key": "instructions",
+              "chars": 14750,
+              "estimated_tokens": 3687
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10754,
+              "estimated_tokens": 2688
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 6447,
+              "estimated_tokens": 1611
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 3370,
+              "estimated_tokens": 842
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2908,
+              "estimated_tokens": 727
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2894,
+              "estimated_tokens": 723
+            },
+            {
+              "key": "scene",
+              "chars": 2366,
+              "estimated_tokens": 591
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2245,
+              "estimated_tokens": 561
+            },
+            {
+              "key": "opening_scene_realization",
+              "chars": 1927,
+              "estimated_tokens": 481
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1142,
+              "estimated_tokens": 285
+            }
+          ],
+          "instruction_count": 85,
+          "unique_instruction_count": 85,
+          "instruction_chars": 14396,
+          "longest_instructions": [
+            {
+              "chars": 611,
+              "prefix": "OPENING SCENE PROHIBITED CONTENT: Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims. | D"
+            },
+            {
+              "chars": 606,
+              "prefix": "OPENING SCENE COMPOSITION CONTRACT: Do not list facts. Do not compress facts into clauses. Expand each fact into a natural sentence or phras"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 422,
+              "prefix": "SCENE MOMENTUM RULE (HARD RULE): Every 2\u20133 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 392,
+              "prefix": "OPENING SCENE EXAMPLE: BAD: \"Rain spatters... Refugees... Guards...\" GOOD: \"You stand in the churned mud before Cinderwatch's eastern gate a"
+            },
+            {
+              "chars": 377,
+              "prefix": "OPENING SCENE (STRUCTURED COMPOSITION): Start from the player's anchored perspective: where the player is positioned and what immediately su"
+            },
+            {
+              "chars": 318,
+              "prefix": "UNCERTAINTY POLICY: response_policy.uncertainty.categories; response_policy.uncertainty.sources; response_policy.uncertainty.answer_shape; u"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3351,
+              "estimated_tokens": 837
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2082,
+              "estimated_tokens": 520
+            },
+            {
+              "key": "response_delta",
+              "chars": 1814,
+              "estimated_tokens": 453
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 1805,
+              "estimated_tokens": 451
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1608,
+              "estimated_tokens": 402
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1444,
+              "estimated_tokens": 361
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1444,
+              "estimated_tokens": 361
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1315,
+              "estimated_tokens": 328
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 6074,
+              "estimated_tokens": 1518
+            },
+            {
+              "key": "contracts",
+              "chars": 3805,
+              "estimated_tokens": 951
+            },
+            {
+              "key": "debug",
+              "chars": 287,
+              "estimated_tokens": 71
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 132,
+              "estimated_tokens": 33
+            },
+            {
+              "key": "route",
+              "chars": 114,
+              "estimated_tokens": 28
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "player_text",
+              "chars": 34,
+              "estimated_tokens": 8
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1343,
+              "estimated_tokens": 335
+            },
+            {
+              "key": "transition_node",
+              "chars": 1016,
+              "estimated_tokens": 254
+            },
+            {
+              "key": "scene_opening",
+              "chars": 871,
+              "estimated_tokens": 217
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 683,
+              "estimated_tokens": 170
+            },
+            {
+              "key": "action_outcome",
+              "chars": 632,
+              "estimated_tokens": 158
+            },
+            {
+              "key": "required_new_information",
+              "chars": 619,
+              "estimated_tokens": 154
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 458,
+              "estimated_tokens": 114
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 291,
+              "estimated_tokens": 72
+            }
+          ],
+          "latency_ms": 7222,
+          "result_chars": 410
+        },
+        {
+          "purpose": "retry_escalation",
+          "retry_attempt": 1,
+          "retry_reason": "hard_invalid",
+          "message_count": 3,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 80588,
+          "user_estimated_tokens": 20147,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20530,
+              "estimated_tokens": 5132
+            },
+            {
+              "key": "instructions",
+              "chars": 14750,
+              "estimated_tokens": 3687
+            },
+            {
+              "key": "turn_packet",
+              "chars": 10754,
+              "estimated_tokens": 2688
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 6447,
+              "estimated_tokens": 1611
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 3370,
+              "estimated_tokens": 842
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2908,
+              "estimated_tokens": 727
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2894,
+              "estimated_tokens": 723
+            },
+            {
+              "key": "scene",
+              "chars": 2366,
+              "estimated_tokens": 591
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2245,
+              "estimated_tokens": 561
+            },
+            {
+              "key": "opening_scene_realization",
+              "chars": 1927,
+              "estimated_tokens": 481
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1250,
+              "estimated_tokens": 312
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1142,
+              "estimated_tokens": 285
+            }
+          ],
+          "instruction_count": 85,
+          "unique_instruction_count": 85,
+          "instruction_chars": 14396,
+          "longest_instructions": [
+            {
+              "chars": 611,
+              "prefix": "OPENING SCENE PROHIBITED CONTENT: Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims. | D"
+            },
+            {
+              "chars": 606,
+              "prefix": "OPENING SCENE COMPOSITION CONTRACT: Do not list facts. Do not compress facts into clauses. Expand each fact into a natural sentence or phras"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 422,
+              "prefix": "SCENE MOMENTUM RULE (HARD RULE): Every 2\u20133 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 392,
+              "prefix": "OPENING SCENE EXAMPLE: BAD: \"Rain spatters... Refugees... Guards...\" GOOD: \"You stand in the churned mud before Cinderwatch's eastern gate a"
+            },
+            {
+              "chars": 377,
+              "prefix": "OPENING SCENE (STRUCTURED COMPOSITION): Start from the player's anchored perspective: where the player is positioned and what immediately su"
+            },
+            {
+              "chars": 318,
+              "prefix": "UNCERTAINTY POLICY: response_policy.uncertainty.categories; response_policy.uncertainty.sources; response_policy.uncertainty.answer_shape; u"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3351,
+              "estimated_tokens": 837
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2082,
+              "estimated_tokens": 520
+            },
+            {
+              "key": "response_delta",
+              "chars": 1814,
+              "estimated_tokens": 453
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 1805,
+              "estimated_tokens": 451
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1608,
+              "estimated_tokens": 402
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1444,
+              "estimated_tokens": 361
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1444,
+              "estimated_tokens": 361
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1315,
+              "estimated_tokens": 328
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 6074,
+              "estimated_tokens": 1518
+            },
+            {
+              "key": "contracts",
+              "chars": 3805,
+              "estimated_tokens": 951
+            },
+            {
+              "key": "debug",
+              "chars": 287,
+              "estimated_tokens": 71
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 132,
+              "estimated_tokens": 33
+            },
+            {
+              "key": "route",
+              "chars": 114,
+              "estimated_tokens": 28
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "player_text",
+              "chars": 34,
+              "estimated_tokens": 8
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1343,
+              "estimated_tokens": 335
+            },
+            {
+              "key": "transition_node",
+              "chars": 1016,
+              "estimated_tokens": 254
+            },
+            {
+              "key": "scene_opening",
+              "chars": 871,
+              "estimated_tokens": 217
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 683,
+              "estimated_tokens": 170
+            },
+            {
+              "key": "action_outcome",
+              "chars": 632,
+              "estimated_tokens": 158
+            },
+            {
+              "key": "required_new_information",
+              "chars": 619,
+              "estimated_tokens": 154
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 458,
+              "estimated_tokens": 114
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 291,
+              "estimated_tokens": 72
+            }
+          ],
+          "latency_ms": 9264,
+          "result_chars": 223
+        }
+      ]
+    }
+  ],
+  "provider_snapshot": {
+    "requests": 2,
+    "input_tokens": 47345,
+    "output_tokens": 2034,
+    "total_tokens": 49379,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "primary_turn",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_0f36699dfd305fca006acc04f6144c87d2871ee5cd26e4796c",
+        "input_tokens": 22138,
+        "output_tokens": 917,
+        "total_tokens": 23055,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      },
+      {
+        "purpose": "retry_escalation",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_07e2639f2dcf3bc0006acc04fcdd4087d2b984176f2d047641",
+        "input_tokens": 25207,
+        "output_tokens": 1117,
+        "total_tokens": 26324,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      }
+    ]
+  },
+  "persist_totals": {
+    "save_session": 22,
+    "save_world": 2,
+    "save_session_count": 4,
+    "save_world_count": 2
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "campaign_id": "pr-br-claim-ownership-reassessment",
+  "campaign_name": "PR-BR Claim Ownership, Proposition Decomposition, and Temporal Authority",
+  "campaign_date": "2026-10-03",
+  "purpose": "Architectural reassessment of who owns semantic claims that reach the player, after the four-turn live run reproduced authority laundering. Discovery only. No production edits and no model calls.",
+  "primary_report": "artifacts/pr_br_claim_ownership_reassessment/ARCHITECTURAL_REVIEW.md",
+  "executive_summary": "Narration still creates the consequential proposition, and sentence-level alias overlap can stamp that whole sentence as authored world truth. NarratedClaim is an annotated sentence. The temporal ledger is written after seal and is not read by authorization. The GM Resolution Decision already claims this ownership and does not exercise it before prose. Decision A: salvage by making that decision own the complete consequential claim set before narration.",
+  "objective_status": "architecture_salvageable_by_decision_owned_claim_set_before_narration",
+  "changes": {
+    "production": [],
+    "validation": [],
+    "tooling": [],
+    "documentation": [
+      "Wrote the architectural review and the four-turn proposition timeline from saved artifacts only."
+    ],
+    "generated_artifacts": [
+      "handoff/CURRENT_REVIEW.md, handoff/REVIEW_MANIFEST.json, and handoff/CURRENT_REVIEW.zip package this review with the live-run report, temporal ledgers, and the production modules that match, classify, and persist claims."
+    ]
+  },
+  "testing": {
+    "focused": "Not run. This cycle is review only.",
+    "broader": "Not run. The 333-test result cited here is the prior localized-repair campaign, not a new run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "None. Zero gameplay turns and zero model calls in this cycle. Findings use the completed 20261004T035044Z four-turn run.",
+    "model_runtime_boundary": "0 gameplay turns. 0 generation calls. 0 retry calls. 0 interpretation calls. 0 preflight calls. 0 other calls. 0 total model/API calls.",
+    "new_regressions": "No production patch.",
+    "pre_existing_failures": "The four-turn live result remains 0 PASS / 4 FAIL. Turn 2 routing is classified as a separate local defect and was not redesigned here."
+  },
+  "self_contained_review_test": "The bundle contains the architectural review, the proposition timeline, the live validation report and temporal ledgers, the prior 333-test campaign summary, the claim-control tests that stayed green, and the production modules that construct the decision, match semantic identity, classify narrated sentences, and write temporal provenance.",
+  "decisions_requiring_human_review": [
+    "A. CURRENT ARCHITECTURE IS SALVAGEABLE BY MAKING THE GM RESOLUTION DECISION OWN THE COMPLETE CONSEQUENTIAL CLAIM SET BEFORE NARRATION."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Turn 3 stamped 'sudden, violent pressure seems a likely cause' as authored world truth because observation aliases matched the sentence.",
+      "NarratedClaim recorded one object for that sentence and copied the observation identity onto it.",
+      "gm_inferences stayed empty. The player hypothesis was stored and then ignored by authorization.",
+      "Uncertainty suppressed accounting for the wear/pressure alternatives, the disturbance absence, and the witness lead.",
+      "Turn 4 NPC color was classified claim_only and persisted in neither ledger.",
+      "Turn 2 mis-bound the hypothetical as a place/addressee problem. That defect is local routing."
+    ],
+    "pre_existing": [
+      "The 333/333 deterministic band did not compose fast-path contract construction with unrestricted prose and post-seal ledger writes."
+    ]
+  },
+  "missing_concepts": [
+    "A RealizationClaim owned by the decision before narration, with actor, relation, object, cause, time, polarity, and modality.",
+    "Monotonic authority: co-occurrence and paraphrase do not promote a hypothesis.",
+    "Separate accounting for gameplay leads and negative evidence.",
+    "One persistence consumer for accepted NPC claims and bounded incidentals."
+  ],
+  "does_not_prove": [
+    "Does not implement the claim set, a prompt change, or a validator change.",
+    "Does not prove a residual regex could be extended to cover the next paraphrase.",
+    "Does not rerun the four turns or the 4x10 gate.",
+    "Does not authorize PR-BS.",
+    "Does not treat Turn 2 routing as the same defect as proposition laundering."
+  ],
+  "recommended_next_step": "Implement only the decision-owned consequential claim set in section 21 of the architectural review. Deterministic tests on the saved Turn 3 sentence come before any further live call.",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_br_claim_ownership_reassessment/PROPOSITION_TIMELINE.md",
+      "role": "proposition_timeline",
+      "why": "Proposition-level timeline for Turns 1-4, including authority changes.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_final_live_validation/20261004T035044Z/validation_report.md",
+      "role": "live_validation_report",
+      "why": "Measured 0 PASS / 4 FAIL report for the run this review explains.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_final_live_validation/20261004T035044Z/run_manifest.json",
+      "role": "live_validation_manifest",
+      "why": "Exact call counts, inputs, and emitted text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_final_live_validation/20261004T035044Z/turn_1/temporal_provenance_after.json",
+      "role": "temporal_ledger",
+      "why": "Turn 1 ledger: speculation active claim, empty gm_inferences, rejected great-force row.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_final_live_validation/20261004T035044Z/turn_2/temporal_provenance_after.json",
+      "role": "temporal_ledger",
+      "why": "Turn 2 ledger: player hypothesis stored and not promoted.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_final_live_validation/20261004T035044Z/turn_3/temporal_provenance_after.json",
+      "role": "temporal_ledger",
+      "why": "Turn 3 ledger: gm_inferences still empty after the likely-cause sentence.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_final_live_validation/20261004T035044Z/turn_4/temporal_provenance_after.json",
+      "role": "temporal_ledger",
+      "why": "Turn 4 ledger: accepted_incidentals still empty.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_claim_ownership_reassessment/prior_333_test_record.md",
+      "role": "prior_test_campaign",
+      "why": "Records the 333/333 deterministic result that preceded the 0/4 live run.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_claim_control_slice2.py",
+      "role": "deterministic_test_surface",
+      "why": "Shows the hand-built paraphrases the green tests actually reject.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_authority_code",
+      "why": "Decision construction, semantic identity match, NarratedClaim, audit, and temporal writer.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/proposition_authority.py",
+      "role": "production_authority_code",
+      "why": "Older sentence classifier whose hedge and non-assertion rules drop or soften consequential sentences.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "production_contract_code",
+      "why": "Interpretation dimension pattern and contract construction that dropped Turn 1's infer request.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "production_discourse_code",
+      "why": "Active-claim commit and emitted NPC-claim focus.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/bounded_improvisation.py",
+      "role": "production_persistence_code",
+      "why": "Improvisation ledger that stayed empty on the Turn 4 NPC claim.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ]
+}

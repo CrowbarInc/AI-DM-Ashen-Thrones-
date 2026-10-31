@@ -1,0 +1,17 @@
+{
+  "case_id": "case_009_valid_terse_observation",
+  "category": "positive.valid_terse_observation",
+  "player_input": "Is the door open?",
+  "prior_context": "The player is asking a directly observable yes/no fact.",
+  "gm_response": "Yes.",
+  "expected_semantic_result": "PASS",
+  "expected_mandatory_gates": {
+    "malformed_output": "PASS",
+    "player_intent_addressed": "PASS"
+  },
+  "rationale": "A terse answer is sufficient where the context makes the observable fact clear.",
+  "provenance": {"kind": "synthetic_boundary_example"},
+  "synthetic": true,
+  "action_type": "question",
+  "whether_terseness_is_valid": true
+}

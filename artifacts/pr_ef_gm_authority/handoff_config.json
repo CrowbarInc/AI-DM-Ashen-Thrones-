@@ -1,0 +1,471 @@
+{
+  "campaign_id": "pr_ef_gm_authority_20261016",
+  "campaign_name": "PR-EF — GM Conversational Authority & Continuity",
+  "campaign_date": "2026-10-16",
+  "purpose": "Bounded communication ownership and continuity repair; stop before PR-EG.",
+  "objective_status": "REQUIRES REPAIR",
+  "executive_summary": "**C — PR-EF REQUIRES REPAIR. Do not begin PR-EG.**\n\nImplemented an explicit communication recipient/purpose extension to the existing live interpretation call and the PR-EA decision envelope. GM answers select existing public passages rather than generated facts. Added bounded persisted facilitator context, correction/withdrawal handling, proposal eligibility checks, unsupported-singleton separation, and resolver-owned recall of an NPC's disclosed topic. Existing movement, exploration, social and final-emission owners remain in charge.\n\nThe final production HTTP replay sustains ten unchanged player messages in one campaign, with save/load at turn six. It uses captured real interpretation outputs and recorded narration; it is **not a fresh fully live success**. The two fresh ten-turn live samples both failed the NPC follow-up at turn five. The final recall repair fixes that exact recorded contract through the real social resolver and final-emission path, but was not freshly requalified after the 30-call approved budget was exhausted.\n\nFrozen, isolated live interpreter holdouts scored **5/12** against the prespecified labels. A question about an NPC's expression became NPC ASK, so a GM question could still advance the world if that classification reaches execution. Some label failures are contained by deterministic correction/withdrawal handling or safe clarification in the full pipeline, but that does not establish broad conversational competence. The final structural mixed-intent safeguard retains the action that the provider mislabeled as part of a GM question.\n\nThe comparable regression family retains the same 30 inherited failures, with no new failing IDs. New PR-EF checks cover authority, persistence, proposal integrity, continuous HTTP routing and compound order. No new mechanics, campaign-start workflow or simulation rewrite was introduced. Review the remaining semantic ownership defect before acceptance.\n",
+  "changes": {
+    "production": [
+      "Ownership/purpose, public evidence, GM continuity, safe mixed communication, unsupported cardinality, proposal eligibility/order, deferred-intent handling.",
+      "Production schema extension and validation, public-evidence/context projection, same-call ownership, conservative mode/purpose reconciliation, accurate schema token preflight.",
+      "Carry descriptive ownership and selected public-evidence metadata to the existing social resolver; execution checks retained.",
+      "Recall an already revealed authored topic only after rechecking speaker, payload and runtime disclosure; mark the existing resolver result.",
+      "Production decision context, bounded discourse persistence, resolver-owned recalled-answer skip through final emission, interpretation usage summary and decision-success distinction."
+    ],
+    "validation": [
+      "15 PR-EF tests plus production HTTP replay and 30 approved live calls."
+    ],
+    "documentation": [
+      "13 required review reports and raw failure evidence."
+    ]
+  },
+  "testing": {
+    "focused": "15 new checks; see final_junit.xml.",
+    "broader": "Baseline 256 pass / 30 fail; final 271 pass / 30 fail.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Final recorded-provider ten-turn HTTP replay coherent; fresh live ten-turn attempts failed NPC follow-up.",
+    "model_runtime_boundary": "gpt-4.1-mini; 30 explicitly approved synthetic live calls; no active campaign payload.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "30 unchanged failing IDs in the comparison family."
+  },
+  "decisions_requiring_human_review": [
+    "Review recommendation C and the known live recipient error before any PR-EG work."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Live ownership holdouts 5/12; third-person expression question became NPC ASK.",
+      "Final NPC recall fix has recorded-input validation, not fresh live requalification."
+    ],
+    "pre_existing": [
+      "30 social/retry/emission/exploration failures."
+    ]
+  },
+  "missing_concepts": [
+    "Formal campaign-start workflow deferred to PR-EG."
+  ],
+  "does_not_prove": [
+    "General natural-language conversational competence.",
+    "A completely successful final-code fresh live ten-turn campaign.",
+    "No regressions outside the comparison family."
+  ],
+  "recommended_next_step": "External review, then PR-EF recipient/purpose repair and fresh requalification. Do not start PR-EG.",
+  "primary_report": "artifacts/pr_ef_gm_authority/REVIEW.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_ef_gm_authority/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/02_ARCHITECTURE_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/03_CONVERSATIONAL_AUTHORITY_CONTRACT.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/04_PRODUCTION_INTEGRATION_EVIDENCE.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/05_CONTINUOUS_TEN_TURN_TRANSCRIPT.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/06_SEMANTIC_GENERALIZATION_RESULTS.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/07_CONFIRMATION_COMPOUND_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/08_AUTHORITY_PERSISTENCE_AUDIT.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/09_PERFORMANCE_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/10_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/11_REMAINING_ISSUES.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/12_FINAL_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/13_CHANGED_FILE_INVENTORY.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/aborted_harness_mode_probe.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/aborted_harness_mode_probe.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/BASELINE.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/baseline_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/baseline_output.txt",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/baseline_profile.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/baseline_profile_output.txt",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/final_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/final_profile.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/final_recorded_http_ten_turns.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/focused_initial.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/focused_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/holdouts.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/intermediate_final2_with_transient_storage_failure.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/live_final_ten_turns.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/live_final_ten_turns.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/live_holdouts.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/live_holdouts.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/live_ten_turns.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/live_ten_turns.usage.jsonl",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/new_tests.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/ORIGINAL_REQUEST.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/performance_comparison.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/post_junit.xml",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/production_holdout_replay.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/pr_ef_only.patch",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/regression_comparison.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/replay_holdouts.py",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/REVIEW.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/revision.txt",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/status_before.txt",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/validation_commands.json",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/source_before/api.py",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/source_before/conversational_orchestration.py",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/source_before/live_chat_interpretation.py",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/source_before/player_interpretation_bridge.py",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/source_before/README.md",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_ef_gm_authority/source_before/social.py",
+      "role": "evidence",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/player_interpretation_bridge.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/social.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_ef_gm_authority.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/validate_pr_ef.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/build_pr_ef_review.py",
+      "role": "source",
+      "why": "PR-EF source, decision report, reproducible validation or raw evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "Portable ZIP contains 13 reports, raw HTTP/live/holdout records, baseline/final JUnit, measured profiles, PR-EF-only diff and changed source/tests/tools, with SHA-256 manifest. Does not include dependencies or the full repository."
+}

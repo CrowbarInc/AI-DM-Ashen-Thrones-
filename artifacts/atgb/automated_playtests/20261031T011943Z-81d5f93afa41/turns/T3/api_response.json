@@ -1,0 +1,101 @@
+{
+  "ok": true,
+  "gm_output": {
+    "player_facing_text": "I couldn't read that as a gameplay action. Please say it again in plain words.",
+    "tags": [
+      "interpretation_rejected",
+      "non_mutating",
+      "malformed_interpretation"
+    ],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null,
+    "debug_notes": "live_interpretation_blocked:malformed_interpretation"
+  },
+  "resolution": {
+    "kind": "interpretation_rejected",
+    "action_id": "interpretation_rejected",
+    "label": "I examine the notice board carefully. What notices are posted?",
+    "prompt": "I examine the notice board carefully. What notices are posted?",
+    "success": false,
+    "resolved_transition": false,
+    "target_scene_id": null,
+    "discovered_clues": [],
+    "world_updates": null,
+    "state_changes": {},
+    "metadata": {
+      "communication_mode": "AUTO",
+      "mode_source": "automatic",
+      "authoritative_mutation": false,
+      "resolver_invoked": false,
+      "gameplay_parser_invoked": false,
+      "narration_invoked": false,
+      "processing_outcome": "malformed_interpretation",
+      "live_chat_interpretation": {
+        "status": "blocked",
+        "reason": "malformed_interpretation",
+        "raw_interpretation": "{broken",
+        "provider_requests": [
+          {
+            "event": "completed",
+            "version": "ATGB-03B-1",
+            "run_id": "c89d2bc6d9d2440eb9dc8a99a415ad03",
+            "attempt_id": "7a83c1126a954d1f9149214285099468",
+            "purpose": "interpretation",
+            "owner": "live_chat_interpretation.request_interpretation",
+            "configured_model": "gpt-4.1-mini",
+            "admitted_at": "2026-10-31T01:19:47.623828+00:00",
+            "time": "2026-10-31T01:19:47.626829+00:00",
+            "sequence": 4,
+            "admission": "admitted",
+            "budget_remaining": 2,
+            "sdk_retries": 0,
+            "host_retries": "disabled",
+            "sent": true,
+            "request_id": "synthetic-response",
+            "model": "gpt-4.1-mini",
+            "input_tokens": 20,
+            "output_tokens": 10,
+            "total_tokens": 30,
+            "usage_consistent": true,
+            "refusal": null,
+            "completion_status": "completed",
+            "dispatch_attempted": true,
+            "latency_ms": 0.075
+          }
+        ],
+        "record": null
+      },
+      "provider_calls": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "ooc_assistance_requests": 0,
+        "retries": 0
+      },
+      "performance": {
+        "elapsed_ms": 15,
+        "interpretation_ms": null,
+        "resolution_ms": null,
+        "narration_ms": null,
+        "validation_ms": null,
+        "retry_ms": null,
+        "provider_call_count": 1,
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "retry_count": 0,
+        "retry_reason": null,
+        "disposition": "interpretation_rejected",
+        "successful": true,
+        "provider_narration_skipped": false
+      },
+      "provider_accounting": {
+        "version": "ATGB-03B-1",
+        "scope": "process_cumulative_admissions",
+        "request_upper_bound": 4,
+        "status": "recorded"
+      }
+    }
+  }
+}

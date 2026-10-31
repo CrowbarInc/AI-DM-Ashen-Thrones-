@@ -1,0 +1,200 @@
+{
+  "campaign_id": "pr-br-continuation-16",
+  "campaign_name": "PR-BR Continuation 16 — Interaction Completion, Explicit Discourse Transitions & Structural Response Integrity",
+  "campaign_date": "2026-10-01",
+  "purpose": "Make interaction completion, current-turn discourse precedence, and structural candidate validity explicit. Replay the failed smoke. Six focused live turns. No independent smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Structural completion now blocks attribution shells, player-text fallback splices, stale interlocutors, and passive-scene substitutions in deterministic replay. The 350-test band passed. Live contracts were 6/6, but final manual PASS was 2/6. A quoted manner line, a false find-them rejection, and a guard line spoken for the watcher all reached the player. Telemetry caught 1 of 4 manual degradations. READY FOR ANOTHER INDEPENDENT 10-TURN SMOKE: NO. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/interaction_completion.py judges ASK payload, attribution shells, nonverbal resolution, discourse binding, and structural degradation.",
+      "game/resolution_contract.py applies current-turn discourse before rank and refuses structurally invalid challengers.",
+      "game/live_resolution.py does not voice a subject that repeats the player's own opening.",
+      "game/discourse_state.py clears a rejected interlocutor and can adopt the emitted speaker.",
+      "game/dialogue_social_plan.py treats a manner tail with no proposition as a bare attribution shell."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation16_interaction_completion.py replays all ten smoke turns, structural variants, and the stubbed /api/chat path.",
+      "Broader band: 350 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation16_live.py runs at most six focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 16 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation16 live transcript, manual review, junit, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 16 interaction-completion, discourse, shell, leakage, and ten-turn replay tests passed inside the 350-test band.",
+    "broader": "350 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation16/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 2 interpretation calls. 6 generation calls. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "2 interpretation calls. 6 generation calls. 0 evaluator model calls. 0 retries. 0 aborted.",
+    "new_regressions": "None in the deterministic band. Live final manual PASS was 2/6.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Independent 10-turn smoke is not ready. Live structural failures recurred.",
+    "Do not retune the locate cue or the quoted-manner check and rerun these six turns in this cycle.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "A quoted manner sentence still counts as ASK payload.",
+      "The word find plus the current speaker's name can discard a real inability.",
+      "Emission can speak as a different NPC when the line does not use a Name-says frame.",
+      "A successful notice reading can be prefixed with Nothing here matches that."
+    ],
+    "pre_existing": [
+      "The grounding lock can still replace a mixed invented-and-authored inspection with the visible-fact closer."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health. The smoke was not run.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest.",
+    "Does not prove live attribution shells are gone. Turn 1 emitted a quoted manner line."
+  ],
+  "recommended_next_step": "External review. Do not close PR-BR. Do not start PR-BS. Do not run another independent smoke or the six live turns again in this cycle.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+      "role": "audit",
+      "why": "Continuation 16 forensic table and live record.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interaction_completion.py",
+      "role": "completion",
+      "why": "Interaction completion, discourse binding, and structural degradation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "selection",
+      "why": "Current-turn precedence and structural validity before rank.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_resolution.py",
+      "role": "fallback",
+      "why": "Player-opening subjects are not voiced.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "discourse",
+      "why": "Rejected interlocutor is cleared.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/dialogue_social_plan.py",
+      "role": "shells",
+      "why": "Manner tails with no proposition are attribution shells.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api_turn_support.py",
+      "role": "commit",
+      "why": "Discourse commit receives the emitted line and the referent catalog.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation16_interaction_completion.py",
+      "role": "tests",
+      "why": "Ten smoke replays, variants, and stubbed chat.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation15_content_clarification.py",
+      "role": "tests",
+      "why": "Continuation 15 regressions.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation14_resolution_content.py",
+      "role": "tests",
+      "why": "Continuation 14 regressions.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/junit.xml",
+      "role": "regression",
+      "why": "350 passed, 0 failed.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/manual_review.md",
+      "role": "manual_review",
+      "why": "Manual review of the six live turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/provenance.json",
+      "role": "provenance",
+      "why": "HEAD and cost bounds.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/20261001T113214Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/20261001T113214Z/turns.json",
+      "role": "traces",
+      "why": "Per-turn contracts and candidate transitions.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/20261001T113214Z/summary.json",
+      "role": "cost",
+      "why": "Call counts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/20261001T113214Z/generation_calls.json",
+      "role": "traces",
+      "why": "Generated candidates before final emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation16/20261001T113214Z/interpretation_calls.json",
+      "role": "traces",
+      "why": "Structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation16_live.py",
+      "role": "harness",
+      "why": "Six-turn cap and the live shapes.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

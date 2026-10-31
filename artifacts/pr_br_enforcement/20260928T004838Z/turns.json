@@ -1,0 +1,169 @@
+[
+  {
+    "probe_id": "establish_claim",
+    "player_text": "I catch the tavern runner and ask what travelers have been saying about the roads.",
+    "gm_text": "Tavern Runner shakes their head with a shrug, glancing around nervously. \"I wish I could tell you, but the travelers passing through here keep their lips sealed tight these days. Best you find someone who moves in the deeper circles of the trade caravans if you want something more than silence.\"",
+    "model_calls": 1,
+    "contract_id": "rc_2df9aea9d77f",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_2df9aea9d77f",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "probe_id": "claim_source",
+    "player_text": "Who passed that on to you?",
+    "gm_text": "Tavern Runner says, \"I couldn't tell you the requested information; you will need another source.\"",
+    "model_calls": 1,
+    "contract_id": "rc_a95935a7cc4f",
+    "operation": "ask",
+    "request_kind": "clarification",
+    "dimension": "source",
+    "referent_provenance": "unresolved",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_a95935a7cc4f",
+      "dimension": "source",
+      "dimensions": [
+        "source"
+      ],
+      "operation": "ask",
+      "referent_provenance": "unresolved",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "clarification_or_inability"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "probe_id": "claim_confidence",
+    "player_text": "How sure are you about it?",
+    "gm_text": "Tavern Runner says, \"I couldn't tell you it; you will need another source.\"",
+    "model_calls": 1,
+    "contract_id": "rc_4072ba6aecb2",
+    "operation": "ask",
+    "request_kind": "clarification",
+    "dimension": "confidence",
+    "referent_provenance": "unresolved",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_4072ba6aecb2",
+      "dimension": "confidence",
+      "dimensions": [
+        "confidence"
+      ],
+      "operation": "ask",
+      "referent_provenance": "unresolved",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "clarification_or_inability"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "probe_id": "action_request",
+    "player_text": "If that points somewhere nearby, take me there.",
+    "gm_text": "Tavern Runner shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "model_calls": 2,
+    "contract_id": "rc_130fdd10fc74",
+    "operation": "act",
+    "request_kind": "social_action",
+    "dimension": null,
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": 3
+    },
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_130fdd10fc74",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "act",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "unsatisfied",
+      "assessment_reasons": [
+        "action_outcome_missing"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "FAIL"
+  },
+  {
+    "probe_id": "inspect_board",
+    "player_text": "I step over to the notice board and look at the paper.",
+    "gm_text": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_calls": 1,
+    "contract_id": "rc_80ff34c111e0",
+    "operation": "inspect",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_80ff34c111e0",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "inspect",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "probe_id": "perception_smell",
+    "player_text": "This close, what does the paper smell like?",
+    "gm_text": "No distinct sound or smell can be established beyond the current scene's general activity.",
+    "model_calls": 1,
+    "contract_id": "rc_41d9c081a104",
+    "operation": "perceive",
+    "request_kind": "inquiry",
+    "dimension": "smell",
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_41d9c081a104",
+      "dimension": "smell",
+      "dimensions": [
+        "smell"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "covered:smell"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  }
+]

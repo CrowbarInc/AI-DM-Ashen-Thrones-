@@ -1,0 +1,153 @@
+[
+  {
+    "turn_index": 0,
+    "player_text": "I look over the yard for whatever is posted for travelers.",
+    "gm_text": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_calls": 1,
+    "operation": "inspect",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_30965d5698ba",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "inspect",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 1,
+    "player_text": "I read the uppermost notice.",
+    "gm_text": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_calls": 1,
+    "operation": "inspect",
+    "dimension": null,
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_eecec4c84c42",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "inspect",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "unchecked",
+      "assessment_reasons": [
+        "no_dimension"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 2,
+    "player_text": "Does the sheet look recently handled?",
+    "gm_text": "No reliable source here can verify the requested information; another source is needed.",
+    "model_calls": 2,
+    "operation": "perceive",
+    "dimension": "use",
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_71e06213306a",
+      "dimension": "use",
+      "dimensions": [
+        "use",
+        "wear"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "legitimate_nonresolution"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 3,
+    "player_text": "Up close, what does the sheet smell like?",
+    "gm_text": "You lean in toward the sheet pinned beneath the missing patrol notice on the board. The damp air carries a faint, musty odor, mixed with soot and rain-soaked paper. It's aged and weathered, with the scent of the chill and mud from the gateyard clinging to it. Hard edges aside, no strong perfumes or signs of recent handling reach your senses here. For more detailed accounts, the threadbare watchers and ragged refugees clustered along the muddy gate line might offer sharper impressions.",
+    "model_calls": 1,
+    "operation": "perceive",
+    "dimension": "smell",
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_4204fc9fbf25",
+      "dimension": "smell",
+      "dimensions": [
+        "smell"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "covered:smell"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 4,
+    "player_text": "I ask the nearest guard to point me toward a safe next step inside the yard.",
+    "gm_text": "The requested action cannot be completed here; another route is needed.",
+    "model_calls": 1,
+    "operation": "ask",
+    "dimension": "next_step",
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_5638300ab4ed",
+      "dimension": "next_step",
+      "dimensions": [
+        "next_step"
+      ],
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "covered:next_step"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  },
+  {
+    "turn_index": 5,
+    "player_text": "I take that step, staying inside the yard.",
+    "gm_text": "No reliable source here can verify the requested information; another source is needed.",
+    "model_calls": 1,
+    "operation": "act",
+    "dimension": null,
+    "referent_provenance": "ambiguous",
+    "discourse_ref": null,
+    "active_claim": null,
+    "assessment": {
+      "contract_id": "rc_d9272f3cda7c",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "act",
+      "referent_provenance": "ambiguous",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "clarification_or_inability"
+      ],
+      "echo_detected": false
+    },
+    "semantic_result": "PASS"
+  }
+]

@@ -1,0 +1,415 @@
+{
+  "campaign_id": "pr_eg_r6_r3_r1_candidate_integration_20261017",
+  "campaign_name": "PR-EG-R6-R3-R1 \u2014 Host-Constrained Candidate Integration",
+  "campaign_date": "2026-10-17",
+  "purpose": "Integrate host-constrained candidate selection into the production conversational pipeline without bypassing authorization.",
+  "objective_status": "C \u2014 BELOW ACCEPTANCE",
+  "executive_summary": "Host-constrained candidate selection is now a third routing mode. It is off unless `ASHEN_HOST_CONSTRAINED_CANDIDATES` is set, and it still ends in the existing source, disclosure, and sealed-response pipeline.\n\nOn 150 fresh `/api/chat` turns, integrity held: 0 unauthorized disclosures, 0 canonical mutations, 0 clue discoveries, and 0 final-response mismatches. Conversational gates did not. Independent labels scored operation classification 99/150, role preservation 83/150, answer success 70/150, corrections 13/25, and follow-ups 26/50. A 60-turn matched comparison did not beat the existing semantic planner.\n\nVerdict: C \u2014 BELOW ACCEPTANCE. The gate stays off. Do not begin PR-EH.",
+  "self_contained_review_test": "Structural package verification only. This is not independent human review.",
+  "changes": {
+    "production": [
+      "game/host_constrained_candidates.py",
+      "game/unified_semantic_planning.py"
+    ],
+    "validation": [
+      "tests/test_pr_eg_r6_r3_r1_candidates.py"
+    ],
+    "tooling": [
+      "tools/qualify_pr_eg_r6_r3_r1.py",
+      "tools/score_pr_eg_r6_r3_r1.py",
+      "tools/write_pr_eg_r6_r3_r1_review.py"
+    ],
+    "documentation": [
+      "36 numbered review artifacts."
+    ]
+  },
+  "testing": {
+    "focused": "68 candidate tests passed without network calls.",
+    "broader": "Semantic planner, operation, disclosure, and provenance suites passed except the 14 previously explained contract failures.",
+    "full_suite": "Not run.",
+    "runtime_validation": "150 fresh /api/chat turns and 60 matched planner turns, real provider.",
+    "model_runtime_boundary": "Configured repo model, temperature 0 for candidate selection.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "14 R6-R2-R2 contract tests still expect clarification and receive unknown."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Matched production correctness did not improve.",
+      "Candidate input tokens miss the p95 budget.",
+      "Public facts are often dropped because source interpretations are missing."
+    ],
+    "pre_existing": [
+      "Fourteen red contract tests remain fail-closed unknowns."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Whether to keep developing candidate selection or leave the existing semantic planner as the only gated path.",
+    "Whether the unqualified-historical-id test should stay stricter than silent-focus preservation."
+  ],
+  "does_not_prove": [
+    "Human playability, a 90% operation rate, or a cost reduction against the current planner."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R6-R3-R1. Leave the candidate gate off. Do not begin PR-EH.",
+  "primary_report": "artifacts/pr_eg_r6_r3_r1/01_EXECUTIVE_SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/02_REPOSITORY_BASELINE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/03_ARCHITECTURE_C_PROTOTYPE_AUDIT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/04_PRODUCTION_INTEGRATION_DESIGN.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/05_FEATURE_GATE_STRATEGY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/06_CANDIDATE_GENERATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/07_CANDIDATE_REPRESENTATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/08_PROVIDER_SELECTION_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/09_HOST_VALIDATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/10_NEW_QUESTIONS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/11_CORRECTIONS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/12_MULTI_ROLE_PROPOSITIONS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/13_FOLLOW_UPS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/14_GENUINE_AMBIGUITY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/15_UNSUPPORTED_TRANSFORMATIONS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/16_OPEN_WORLD_GENERALIZATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/17_SOURCE_RESOLUTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/18_DISCLOSURE_AUTHORIZATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/19_ANSWER_SUFFICIENCY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/20_FINAL_RESPONSE_INTEGRITY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/21_REFERENT_PERSISTENCE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/22_LEGACY_REGRESSION_DISPOSITION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/23_CONTROLLED_TESTS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/24_FROZEN_HOLDOUTS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/25_MATCHED_PRODUCTION_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/26_FRESH_PROVIDER_QUALIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/27_INDEPENDENT_EVALUATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/28_DIALOGUE_QUALITY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/29_PERFORMANCE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/30_REGRESSION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/31_ACCEPTANCE_GATES.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/32_FAILURE_ATTRIBUTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/33_REMAINING_LIMITATIONS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/34_RECOMMENDED_NEXT_ACTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/35_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/36_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/freeze.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/frozen_production_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/fresh/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/fresh/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/fresh/live_status.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/fresh/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/matched_planner/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/matched_planner/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/matched_planner/live_status.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r3_r1/matched_candidate_60.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "game/host_constrained_candidates.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r3_r1_candidates.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r3_r1.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/score_pr_eg_r6_r3_r1.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R3-R1 integration and production-path evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ],
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000
+}

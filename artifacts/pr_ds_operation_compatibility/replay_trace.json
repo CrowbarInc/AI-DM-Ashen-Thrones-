@@ -1,0 +1,1688 @@
+{
+  "rows": [
+    {
+      "scenario_id": "DR01",
+      "utterance": "Let me get a better look at the lantern hanging beside the gate.",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The character wants to closely examine the lantern hanging beside the gate in the courtyard."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a lit lantern hanging beside the gate in the courtyard."
+          },
+          {
+            "text": "The character is currently in the waystation courtyard."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character obtains a better visual inspection of the courtyard lantern."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The character looks closely at the courtyard lantern to get a better view.",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_076cd51de1bfe4e8006acada8e5c8c87d1a141543ce0620d9e",
+      "prompt_match": true,
+      "predicted_mode": "IN_WORLD_ACTION",
+      "operation_classes": [
+        "INSPECT"
+      ],
+      "target_refs": [
+        "courtyard_lantern"
+      ],
+      "envelope_mode": "IC",
+      "mode_source": "AUTO",
+      "compatibility": "visible_surface_inspection",
+      "bind_reason": "",
+      "offered_action": {
+        "operation_class": "INSPECT",
+        "engine_type": "investigate",
+        "target_id": "courtyard_lantern",
+        "visible_surface_inspection": true
+      },
+      "executed": true,
+      "resolver_invoked": true,
+      "new_resolver_calls": [
+        "game.exploration.resolve_exploration_action"
+      ],
+      "reason": "accepted_by_engine",
+      "response": "A soot-streaked lantern burns beside the courtyard gate.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 1,
+      "mutated_state": true,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR02",
+      "utterance": "Hold on, GM, I was only asking about how the lantern looks, not trying to take it down.",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player clarifies that their previous inquiry was about the appearance of the lantern, not an attempt to interact with or take it down."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player was only asking about how the lantern looks."
+          },
+          {
+            "text": "The player was not trying to take the lantern down."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarify that the player's intent was to inquire about the lantern's appearance only."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Clarify that the player's previous question was about the lantern's appearance, not an action to take it down.",
+            "target_ref": "courtyard_lantern",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "COMMITTED_ACTION",
+          "note": "Player corrects the interpretation of their previous action, clarifying it was not an attempt to take down the lantern."
+        }
+      },
+      "provider_request_id": "resp_0ac8330988b9a781006acada90abb087d19aa5702dde0ee7e4",
+      "prompt_match": true,
+      "predicted_mode": "OUT_OF_CHARACTER_CORRECTION",
+      "operation_classes": [
+        "ASK"
+      ],
+      "target_refs": [
+        "courtyard_lantern"
+      ],
+      "envelope_mode": "OOC",
+      "mode_source": "AUTO",
+      "compatibility": "",
+      "bind_reason": "not_offered",
+      "offered_action": null,
+      "executed": false,
+      "resolver_invoked": false,
+      "new_resolver_calls": [],
+      "reason": "ooc_cannot_execute_authoritative_gameplay",
+      "response": "That correction concerns a committed action. Explicit adjudication is required. No state was changed.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 1,
+      "mutated_state": false,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR03",
+      "utterance": "Set my hit points to full and skip any roll for whatever I just did.",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "OUT_OF_CHARACTER_CORRECTION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player wants to restore their character's hit points to full and avoid any dice rolls for the last action taken."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player has a character with hit points that can be set to full."
+          },
+          {
+            "text": "The player recently performed an action that would normally require a dice roll."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Set the character's hit points to full."
+          },
+          {
+            "text": "Skip any dice roll related to the last action performed."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Set character's hit points to full.",
+            "target_ref": null,
+            "operation_class": "HP_ASSIGNMENT"
+          },
+          {
+            "order": 2,
+            "description": "Skip any dice roll for the last action.",
+            "target_ref": null,
+            "operation_class": "DICE_OVERRIDE"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Do you want to restore your character's hit points to full and cancel the dice roll for the last action you performed in the game?",
+        "correction": {
+          "subject": "INTENTION",
+          "note": "The request involves game mechanics (hit point assignment and dice roll skipping) that are not standard in-world actions and require clarification."
+        }
+      },
+      "provider_request_id": "resp_0e50364727451829006acada92a41c87d1a47648793be9594f",
+      "prompt_match": true,
+      "predicted_mode": "OUT_OF_CHARACTER_CORRECTION",
+      "operation_classes": [
+        "HP_ASSIGNMENT",
+        "DICE_OVERRIDE"
+      ],
+      "target_refs": [],
+      "envelope_mode": "OOC",
+      "mode_source": "AUTO",
+      "compatibility": "",
+      "bind_reason": "not_offered",
+      "offered_action": null,
+      "executed": false,
+      "resolver_invoked": false,
+      "new_resolver_calls": [],
+      "reason": "ooc_cannot_execute_authoritative_gameplay",
+      "response": "Correction noted. It does not change committed state.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 1,
+      "mutated_state": false,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR04",
+      "utterance": "I ask Sergeant Mara what lies through the gate.",
+      "mode_override": "OOC",
+      "stored_model_output": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player character asks Sergeant Mara about what lies beyond the courtyard gate."
+        },
+        "asserted_premises": [
+          {
+            "text": "The scene is a walled courtyard with a gate and a lit lantern beside it."
+          },
+          {
+            "text": "Sergeant Mara is present in the scene and can be addressed."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Sergeant Mara provides information about what lies beyond the gate."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The player character asks Sergeant Mara what lies through the gate.",
+            "target_ref": "sergeant_mara",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_0a904c369baa04ba006acadab3a03c87d28cc9a70826c1775b",
+      "prompt_match": true,
+      "predicted_mode": "IN_WORLD_ACTION",
+      "operation_classes": [
+        "ASK"
+      ],
+      "target_refs": [
+        "sergeant_mara"
+      ],
+      "envelope_mode": "OOC",
+      "mode_source": "USER_OVERRIDE",
+      "compatibility": "",
+      "bind_reason": "not_offered",
+      "offered_action": null,
+      "executed": false,
+      "resolver_invoked": false,
+      "new_resolver_calls": [],
+      "reason": "ooc_cannot_execute_authoritative_gameplay",
+      "response": "Out-of-character question noted. No gameplay action was executed.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 1,
+      "mutated_state": false,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR05",
+      "utterance": "Sergeant Mara, is the road on the other side of this gate?",
+      "mode_override": "IC",
+      "stored_model_output": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player character is asking Sergeant Mara whether the road lies beyond the courtyard gate."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a gate in the courtyard."
+          },
+          {
+            "text": "Sergeant Mara is present and can be addressed."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Obtain information from Sergeant Mara about whether the road is on the other side of the gate."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Address Sergeant Mara with a question about the location of the road relative to the gate.",
+            "target_ref": "sergeant_mara",
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_08529ba360cd3133006acadab5a16c87d2a50a37a5019804f7",
+      "prompt_match": true,
+      "predicted_mode": "IN_WORLD_ACTION",
+      "operation_classes": [
+        "ASK"
+      ],
+      "target_refs": [
+        "sergeant_mara"
+      ],
+      "envelope_mode": "IC",
+      "mode_source": "USER_OVERRIDE",
+      "compatibility": "",
+      "bind_reason": "",
+      "offered_action": {
+        "operation_class": "ASK",
+        "engine_type": "question",
+        "target_id": "sergeant_mara"
+      },
+      "executed": true,
+      "resolver_invoked": true,
+      "new_resolver_calls": [
+        "game.social.resolve_social_action"
+      ],
+      "reason": "accepted_by_engine",
+      "response": "The street beyond the gate is the north road.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 2,
+      "mutated_state": true,
+      "meaningful_change": true,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {}
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR06",
+      "utterance": "How does looking at an object work at this table?",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "RULES_QUESTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player is asking how the game mechanic of looking at or inspecting an object works at this game table."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player wants to understand the rules or procedure for inspecting objects in the game."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "An explanation of how to perform the action of looking at or inspecting an object at this table."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Ask the game master or system how the mechanic of looking at an object works at this table.",
+            "target_ref": null,
+            "operation_class": "ASK"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_0300a189396c34cb006acadab76e6887d2972090eecd1c8ded",
+      "prompt_match": true,
+      "predicted_mode": "RULES_QUESTION",
+      "operation_classes": [
+        "ASK"
+      ],
+      "target_refs": [],
+      "envelope_mode": "OOC",
+      "mode_source": "AUTO",
+      "compatibility": "",
+      "bind_reason": "not_offered",
+      "offered_action": null,
+      "executed": false,
+      "resolver_invoked": false,
+      "new_resolver_calls": [],
+      "reason": "ooc_cannot_execute_authoritative_gameplay",
+      "response": "Rules question deferred. No gameplay action was executed.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 2,
+      "mutated_state": false,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR07",
+      "utterance": "Wait, are we still in the scene, or are you asking me what I want to do?",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "CLARIFICATION",
+        "interpretation_status": "CLARIFICATION_REQUIRED",
+        "player_intent": {
+          "summary": "The player is asking whether the current interaction is still within the game scene or if the game master is asking for the player's intended action out of character."
+        },
+        "asserted_premises": [
+          {
+            "text": "The player is uncertain about the current mode of interaction (in-character or out-of-character)."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "Clarification on whether the player is still in the scene or being asked for their next action."
+          }
+        ],
+        "action_components": [],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_lantern",
+            "courtyard_gate",
+            "sergeant_mara"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "Are we still roleplaying in the scene, or are you asking me what I want to do next out of character?",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_012e45ee2b17e711006acadab980c887d2a8fd8d54643b8698",
+      "prompt_match": true,
+      "predicted_mode": "CLARIFICATION",
+      "operation_classes": [],
+      "target_refs": [],
+      "envelope_mode": "UNRESOLVED",
+      "mode_source": "AUTO",
+      "compatibility": "",
+      "bind_reason": "not_offered",
+      "offered_action": null,
+      "executed": false,
+      "resolver_invoked": false,
+      "new_resolver_calls": [],
+      "reason": "unresolved_mode_not_executed",
+      "response": "Message deferred. No gameplay action was executed.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_courtyard",
+      "time_before": 0,
+      "time_after": 0,
+      "turn_counter": 2,
+      "mutated_state": false,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "meaningful_after": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR08",
+      "utterance": "I'll head out through the gate.",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The character intends to leave the courtyard by going through the gate."
+        },
+        "asserted_premises": [
+          {
+            "text": "The character is currently in the waystation courtyard."
+          },
+          {
+            "text": "There is a gate in the courtyard that can be used to exit."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character moves from the courtyard through the gate to another location."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Move the character through the courtyard gate to exit the courtyard.",
+            "target_ref": "courtyard_gate",
+            "operation_class": "MOVE"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "courtyard_gate"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_05637120bf803264006acadabb1af087d292e1fef963217a55",
+      "prompt_match": true,
+      "predicted_mode": "IN_WORLD_ACTION",
+      "operation_classes": [
+        "MOVE"
+      ],
+      "target_refs": [
+        "courtyard_gate"
+      ],
+      "envelope_mode": "IC",
+      "mode_source": "AUTO",
+      "compatibility": "",
+      "bind_reason": "",
+      "offered_action": {
+        "operation_class": "MOVE",
+        "engine_type": "scene_transition",
+        "target_id": "courtyard_gate",
+        "target_scene_id": "waystation_street"
+      },
+      "executed": true,
+      "resolver_invoked": true,
+      "new_resolver_calls": [
+        "game.exploration.resolve_exploration_action"
+      ],
+      "reason": "accepted_by_engine",
+      "response": "The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "scene_before": "waystation_courtyard",
+      "scene_after": "waystation_street",
+      "time_before": 0,
+      "time_after": 1,
+      "turn_counter": 3,
+      "mutated_state": true,
+      "meaningful_change": true,
+      "meaningful_before": {
+        "scene": "waystation_courtyard",
+        "visited": [
+          "waystation_courtyard"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 0
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "meaningful_after": {
+        "scene": "waystation_street",
+        "visited": [
+          "waystation_courtyard",
+          "waystation_street"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR09",
+      "utterance": "Put me back in the courtyard and pretend I never left.",
+      "mode_override": "OOC",
+      "stored_model_output": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The player wants their character to be moved back to the courtyard and to have it treated as if they never left the courtyard."
+        },
+        "asserted_premises": [
+          {
+            "text": "The character is currently on Waystation street, which runs north from the courtyard gate."
+          },
+          {
+            "text": "The player wants to be placed back in the courtyard."
+          },
+          {
+            "text": "The player wants the narrative to ignore the character's departure from the courtyard."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character is moved back to the courtyard."
+          },
+          {
+            "text": "The story or scene treats the character as if they never left the courtyard."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "Move the character back to the courtyard location.",
+            "target_ref": null,
+            "operation_class": "MOVE"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_088bea2734f3a049006acadaf47b5c87d28e307705ad4b2fb4",
+      "prompt_match": true,
+      "predicted_mode": "IN_WORLD_ACTION",
+      "operation_classes": [
+        "MOVE"
+      ],
+      "target_refs": [],
+      "envelope_mode": "OOC",
+      "mode_source": "USER_OVERRIDE",
+      "compatibility": "",
+      "bind_reason": "not_offered",
+      "offered_action": null,
+      "executed": false,
+      "resolver_invoked": false,
+      "new_resolver_calls": [],
+      "reason": "ooc_cannot_execute_authoritative_gameplay",
+      "response": "Out-of-character question noted. No gameplay action was executed.",
+      "scene_before": "waystation_street",
+      "scene_after": "waystation_street",
+      "time_before": 1,
+      "time_after": 1,
+      "turn_counter": 3,
+      "mutated_state": false,
+      "meaningful_change": false,
+      "meaningful_before": {
+        "scene": "waystation_street",
+        "visited": [
+          "waystation_courtyard",
+          "waystation_street"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "meaningful_after": {
+        "scene": "waystation_street",
+        "visited": [
+          "waystation_courtyard",
+          "waystation_street"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "persistence_match": true,
+      "notice_resolved": false,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    },
+    {
+      "scenario_id": "DR10",
+      "utterance": "Let me read the notice board.",
+      "mode_override": "AUTO",
+      "stored_model_output": {
+        "communication_mode": "IN_WORLD_ACTION",
+        "interpretation_status": "INTERPRETED",
+        "player_intent": {
+          "summary": "The character intends to read the notice board."
+        },
+        "asserted_premises": [
+          {
+            "text": "There is a notice board standing by the road on Waystation street."
+          }
+        ],
+        "requested_outcomes": [
+          {
+            "text": "The character obtains information from reading the notice board."
+          }
+        ],
+        "action_components": [
+          {
+            "order": 1,
+            "description": "The character reads the notice board.",
+            "target_ref": "notice_board",
+            "operation_class": "INSPECT"
+          }
+        ],
+        "references": {
+          "permitted_entity_ids": [
+            "notice_board"
+          ],
+          "unresolved_references": []
+        },
+        "clarification_question": "",
+        "correction": {
+          "subject": "NONE",
+          "note": ""
+        }
+      },
+      "provider_request_id": "resp_0bb1fb2c79014902006acadaf68abc87d295c3d9e7afcf9d14",
+      "prompt_match": true,
+      "predicted_mode": "IN_WORLD_ACTION",
+      "operation_classes": [
+        "INSPECT"
+      ],
+      "target_refs": [
+        "notice_board"
+      ],
+      "envelope_mode": "IC",
+      "mode_source": "AUTO",
+      "compatibility": "",
+      "bind_reason": "",
+      "offered_action": {
+        "operation_class": "INSPECT",
+        "engine_type": "investigate",
+        "target_id": "notice_board"
+      },
+      "executed": true,
+      "resolver_invoked": true,
+      "new_resolver_calls": [
+        "game.exploration.resolve_exploration_action"
+      ],
+      "reason": "accepted_by_engine",
+      "response": "The board names the north road past the waystation.",
+      "scene_before": "waystation_street",
+      "scene_after": "waystation_street",
+      "time_before": 1,
+      "time_after": 1,
+      "turn_counter": 4,
+      "mutated_state": true,
+      "meaningful_change": true,
+      "meaningful_before": {
+        "scene": "waystation_street",
+        "visited": [
+          "waystation_courtyard",
+          "waystation_street"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "resolved": {},
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "meaningful_after": {
+        "scene": "waystation_street",
+        "visited": [
+          "waystation_courtyard",
+          "waystation_street"
+        ],
+        "clocks": {
+          "suspicion": 0,
+          "unrest": 0,
+          "danger": 0,
+          "occult_instability": 0,
+          "time_pressure": 1
+        },
+        "resolved": {
+          "waystation_street": [
+            "notice_board"
+          ]
+        },
+        "discovered": {},
+        "inventory": [],
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "combat_action_used": false,
+        "flags": {},
+        "npc_runtime": {
+          "sergeant_mara": {
+            "attitude": 0,
+            "trust": 1,
+            "fear": 0,
+            "suspicion": 0,
+            "known_topics": [],
+            "revealed_topics": [
+              "street"
+            ],
+            "last_interaction_turn": 1
+          }
+        }
+      },
+      "persistence_match": true,
+      "notice_resolved": true,
+      "rolls_dice": false,
+      "hp": {
+        "current": 8,
+        "max": 8,
+        "nonlethal": 0
+      },
+      "inventory": [],
+      "schema_valid": true,
+      "unsafe_reasons": [],
+      "execution_authorized": false
+    }
+  ],
+  "history_ids": [
+    "dr01",
+    "dr02",
+    "dr03",
+    "dr04",
+    "dr05",
+    "dr06",
+    "dr07",
+    "dr08",
+    "dr09",
+    "dr10"
+  ],
+  "final_scene": "waystation_street",
+  "time_pressure": 1,
+  "turn_counter": 4,
+  "notice_resolved": true,
+  "hp": {
+    "current": 8,
+    "max": 8,
+    "nonlethal": 0
+  },
+  "inventory": [],
+  "opening_hp": {
+    "current": 8,
+    "max": 8,
+    "nonlethal": 0
+  },
+  "opening_inventory": [],
+  "pr_dr_sequence_complete": false,
+  "gameplay_executed": [
+    "DR01",
+    "DR05",
+    "DR08",
+    "DR10"
+  ],
+  "non_gameplay_executed": [],
+  "prompt_mismatches": [],
+  "persistence_failures": [],
+  "provider_hits": [],
+  "raw_results_sha256": "dfa32a80218647a1e68d47384536b6b0550be78025dbe26c38e39278ade18e42",
+  "production_saves_unchanged": true,
+  "save_fingerprints": {
+    "data/session.json": "0a77beb47a2c30deb0b1977e915f3a5e2f67f5560e15a8bf0a5874015e244023",
+    "data/world.json": "3592e4af8723e631bb14d4f512431e8697987546f7fdf8076b3fbd1b135a42ef",
+    "data/combat.json": "ac977a4ab7d9eae556ba30893d9b09ec075efaf70ba67de0a6d60736eaf685b9",
+    "data/session_log.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "harness_note": "DR09 was not sent. A visibility guard treated the notice board as illegal after the gate had already moved the disposable scene to the street. The guard now applies only while the courtyard is active. No provider request was retried.",
+  "dr09_usage": {
+    "scenario_id": "DR09",
+    "request_id": "resp_088bea2734f3a049006acadaf47b5c87d28e307705ad4b2fb4",
+    "configured_model": "gpt-4.1-mini",
+    "model": "gpt-4.1-mini-2025-04-14",
+    "input_tokens": 667,
+    "output_tokens": 205,
+    "total_tokens": 872,
+    "latency_ms": 2489.364,
+    "estimated_input_tokens_preflight": 1218,
+    "max_output_tokens": 320,
+    "status": "completed"
+  },
+  "budget": {
+    "requests": 10,
+    "input_tokens": 6835,
+    "output_tokens": 1934,
+    "total_tokens": 8769,
+    "records": [
+      {
+        "scenario_id": "DR01",
+        "request_id": "resp_076cd51de1bfe4e8006acada8e5c8c87d1a141543ce0620d9e",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 688,
+        "output_tokens": 183,
+        "total_tokens": 871,
+        "latency_ms": 3275.217,
+        "estimated_input_tokens_preflight": 1239,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR02",
+        "request_id": "resp_0ac8330988b9a781006acada90abb087d19aa5702dde0ee7e4",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 696,
+        "output_tokens": 222,
+        "total_tokens": 918,
+        "latency_ms": 1953.869,
+        "estimated_input_tokens_preflight": 1246,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR03",
+        "request_id": "resp_0e50364727451829006acada92a41c87d1a47648793be9594f",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 690,
+        "output_tokens": 282,
+        "total_tokens": 972,
+        "latency_ms": 2504.824,
+        "estimated_input_tokens_preflight": 1240,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR04",
+        "request_id": "resp_0a904c369baa04ba006acadab3a03c87d28cc9a70826c1775b",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 684,
+        "output_tokens": 184,
+        "total_tokens": 868,
+        "latency_ms": 3027.424,
+        "estimated_input_tokens_preflight": 1233,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR05",
+        "request_id": "resp_08529ba360cd3133006acadab5a16c87d2a50a37a5019804f7",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 688,
+        "output_tokens": 180,
+        "total_tokens": 868,
+        "latency_ms": 1769.307,
+        "estimated_input_tokens_preflight": 1237,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR06",
+        "request_id": "resp_0300a189396c34cb006acadab76e6887d2972090eecd1c8ded",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 685,
+        "output_tokens": 186,
+        "total_tokens": 871,
+        "latency_ms": 2093.199,
+        "estimated_input_tokens_preflight": 1234,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR07",
+        "request_id": "resp_012e45ee2b17e711006acadab980c887d2a8fd8d54643b8698",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 694,
+        "output_tokens": 186,
+        "total_tokens": 880,
+        "latency_ms": 1597.437,
+        "estimated_input_tokens_preflight": 1241,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR08",
+        "request_id": "resp_05637120bf803264006acadabb1af087d292e1fef963217a55",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 681,
+        "output_tokens": 166,
+        "total_tokens": 847,
+        "latency_ms": 1528.719,
+        "estimated_input_tokens_preflight": 1228,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR09",
+        "request_id": "resp_088bea2734f3a049006acadaf47b5c87d28e307705ad4b2fb4",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 667,
+        "output_tokens": 205,
+        "total_tokens": 872,
+        "latency_ms": 2489.364,
+        "estimated_input_tokens_preflight": 1218,
+        "max_output_tokens": 320,
+        "status": "completed"
+      },
+      {
+        "scenario_id": "DR10",
+        "request_id": "resp_0bb1fb2c79014902006acadaf68abc87d295c3d9e7afcf9d14",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 662,
+        "output_tokens": 140,
+        "total_tokens": 802,
+        "latency_ms": 2274.795,
+        "estimated_input_tokens_preflight": 1210,
+        "max_output_tokens": 320,
+        "status": "completed"
+      }
+    ]
+  },
+  "notice_before_transition": {
+    "executed": false,
+    "resolver_invoked": false,
+    "bind_reason": "clarification_or_compound_not_executed",
+    "scene_after": "waystation_courtyard",
+    "time_after": 0,
+    "notice_resolved": false,
+    "visible_ids": [
+      "courtyard_lantern",
+      "courtyard_gate",
+      "sergeant_mara"
+    ],
+    "response": "That in-character request is not a supported mechanic. No state was changed.",
+    "persistence_match": true,
+    "disposition": "NEEDS_CLARIFICATION",
+    "unresolved_references": []
+  },
+  "lantern_text_disclosed": true,
+  "notice_text_on_dr01": false
+}

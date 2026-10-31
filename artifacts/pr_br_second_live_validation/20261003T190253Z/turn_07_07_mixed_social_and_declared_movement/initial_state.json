@@ -1,0 +1,159 @@
+{
+  "scene": {
+    "scene": {
+      "id": "cistern_steps",
+      "location": "Ashford cistern steps",
+      "summary": "Stone steps drop from the cistern house toward a paved yard. Mirelle, the cistern keeper, has warned that the steps are slick. The eastern courtyard is through the arch at the bottom.",
+      "mode": "social",
+      "visible_facts": [
+        "Mirelle warns that the cistern steps are slick.",
+        "An arch at the bottom of the steps opens onto the eastern courtyard."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Go to the eastern courtyard",
+          "target_scene_id": "eastern_courtyard"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "mirelle",
+          "name": "Mirelle",
+          "scene_id": "cistern_steps",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "cistern keeper",
+            "cistern keeper"
+          ],
+          "aliases": [
+            "cistern keeper"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [
+    {
+      "scene": {
+        "id": "eastern_courtyard",
+        "location": "Ashford eastern courtyard",
+        "summary": "The eastern courtyard is a paved yard between the cistern house and the mill wall. A dry stone trough stands against the wall.",
+        "mode": "exploration",
+        "visible_facts": [
+          "A dry stone trough stands against the mill wall."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to the cistern steps",
+            "target_scene_id": "cistern_steps"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [],
+        "interactables": []
+      }
+    }
+  ],
+  "world": {
+    "settlements": [
+      {
+        "id": "ashford",
+        "name": "Ashford",
+        "type": "hill_town",
+        "tags": [
+          "mill",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hill town of mills, cisterns, yards, and a ferry slip."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "mirelle",
+        "name": "Mirelle",
+        "location": "cistern_steps",
+        "role": "cistern keeper",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "cistern keeper"
+        ],
+        "topics": [
+          {
+            "id": "work",
+            "text": "Mirelle keeps the cistern house and has warned that the steps are slick."
+          }
+        ]
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_patch": {
+    "interaction_context": {
+      "active_interaction_target_id": "mirelle",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged",
+      "conversation_privacy": null,
+      "player_position_context": null
+    }
+  },
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "starting_context": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a hill town."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace, yard, or slip in Ashford.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "cistern_steps",
+    "visited_scene_ids": [
+      "cistern_steps"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "interaction_context": {
+      "active_interaction_target_id": "mirelle",
+      "active_interaction_kind": "social",
+      "interaction_mode": "social",
+      "engagement_level": "engaged",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

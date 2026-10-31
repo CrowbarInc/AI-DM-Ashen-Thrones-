@@ -1,0 +1,366 @@
+{
+  "world": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "sergeant_mara",
+        "name": "Sergeant Mara",
+        "role": "guard",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "street",
+            "text": "The street beyond the gate is the north road."
+          },
+          {
+            "id": "night_watch",
+            "text": "Guards watch the north gate throughout the night."
+          },
+          {
+            "id": "preference",
+            "text": "I prefer the evening."
+          },
+          {
+            "id": "rumor",
+            "text": "I have heard a rumor that a caravan may be late; I am not sure."
+          }
+        ],
+        "affiliation": "ash_cowl",
+        "current_agenda": "",
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "role": "informant",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          },
+          {
+            "id": "preference",
+            "text": "I prefer the morning."
+          },
+          {
+            "id": "rumor",
+            "text": "I have heard a rumor that a caravan may be late; I am not sure."
+          }
+        ],
+        "affiliation": "",
+        "current_agenda": "",
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T15:19:08.539548Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Hey Sergeant Mara, that lantern really sets a cozy mood here. Does it stay lit all night, or is there a special reason for it? And Tavern Runner, you must have some great stories from all the travelers passing through—got any favorite gossip to share?",
+          "delivered_text": "Let's settle the question before attempting the action. You are at Waystation public courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate. Visible points of interest: courtyard lantern. Known exits: Courtyard gate. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate. No part of the action has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Sergeant Mara, does that lantern have any special significance to the waystation or is it just for the ambiance? And Tavern Runner, have you heard any unusual rumors lately that might be worth a chuckle or two?",
+          "delivered_text": "You're considering the waystation or is it just for the ambiance. Nothing has been attempted yet. Say when you want to go there.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "authorization_source": "conversational_decision:tentative_intention",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Sergeant Mara, I'm curious—does the lantern here have a story behind it, or is it just to keep the shadows away? And Tavern Runner, what's the most ridiculous rumor you've heard recently? Something that made you laugh out loud?",
+          "delivered_text": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Sergeant Mara, I’m really curious—what’s the real story behind that lantern by the gate? Is it just for light, or does it have some sort of tradition or legend tied to it? And Tavern Runner, since you hear all the chatter, what’s the funniest or most absurd rumor you’ve caught wind of recently?",
+          "delivered_text": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Hey Sergeant Mara, is it okay if I ask you directly about that lantern? Does it have a special story or purpose here at the waystation? And Tavern Runner, since you’re always running around, any juicy or funny tales from the road lately?",
+          "delivered_text": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "MIXED",
+        "purpose": "QUESTION",
+        "subject": "Hey Sergeant Mara, is it okay if I ask you directly about that lantern? Does it have a special story or purpose here at the waystation? And Tavern Runner, since you’re always running around, any juicy or funny tales from the road lately?",
+        "response": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat": {
+    "in_combat": false,
+    "player_turn_used": false,
+    "round": 0
+  }
+}

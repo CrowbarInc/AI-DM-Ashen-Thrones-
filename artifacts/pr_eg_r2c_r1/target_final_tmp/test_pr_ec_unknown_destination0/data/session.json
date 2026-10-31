@@ -1,0 +1,64 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:21:25.397097Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:21:25.397097Z",
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I go to the moon tavern.",
+          "delivered_text": "You want to reach the moon tavern, but that is not an established destination from here. You stay where you are.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:destination_not_established",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "DECLINE",
+        "owner": "GM",
+        "purpose": "EXPLANATION",
+        "subject": "I go to the moon tavern.",
+        "response": "You want to reach the moon tavern, but that is not an established destination from here. You stay where you are.",
+        "refusal_reason": "destination_not_established",
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "a618f7eff1957e9f95d131d77987f6889db4efa0b09a1dec4519cdb0ef4e839d",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

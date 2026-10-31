@@ -1,0 +1,583 @@
+[
+  {
+    "persona_id": "social_goal",
+    "style": "social / goal-oriented",
+    "objective": "Get through the gate tonight by finding someone who can tell a traveler what to do.",
+    "turn_number": 1,
+    "player_text": "I look for someone on duty and ask what a traveler has to do to pass the gate tonight.",
+    "gm_text": "You find no such thing among what is actually present. The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "You catch the eye of a gate serjeant, who stands alertly keeping order among the crowd at Cinderwatch's eastern gate. With a measured nod, they reply, \"Travelers seeking passage after hours must present proper papers, pay the nightly toll, and submit to inspection. The curfew tightens tonight due to recent troubles, so expect delays and questioning. If you lack clearance, waiting out the night at the gate district is advised.\" Their gaze flickers briefly to the notice board where the missing patrol warning is posted, hinting at why the guards are on edge."
+      }
+    ],
+    "contract_id": "rc_c0ed9887a705",
+    "operation": "inspect",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "duty",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "semantic_result": "FAIL",
+    "tags": [
+      "scene_momentum:new_information",
+      "referenced_surface_realization",
+      "resolution_contract_semantic_preserved"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "inability",
+      "final_satisfaction": "legitimate_nonresolution"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "duty",
+      "label": "duty",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "You catch the eye of a gate serjeant, who stands alertly keeping order among the crowd at Cinderwatch's eastern gate. With a measured nod, they reply, \"Travelers seeking passage after hours must present proper papers, pay the nightly toll, and submit to inspection. The curfew tightens tonight due to recent troubles, so expect delays and questioning. If you lack clearance, waiting out the night at the gate district is advised.\" Their gaze flickers briefly to the notice board where the missing patrol warning is posted, hinting at why the guards are on edge."
+  },
+  {
+    "persona_id": "social_goal",
+    "style": "social / goal-oriented",
+    "objective": "Get through the gate tonight by finding someone who can tell a traveler what to do.",
+    "turn_number": 2,
+    "player_text": "I ask them to name the actual snag, and who can deal with it.",
+    "gm_text": "The guard shakes their head. \"I have heard talk, but I cannot verify it.\"",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "The gate serjeant, ever watchful over the crowd and roster board, explains that the primary snag is the missing patrol, which the notice board warns about but leaves unresolved. He admits the situation has tightened the choke point here, especially with the Ash Compact's census delays slowing caravan passage. No clear solution or responsible party is immediately named, but the guard captain is the highest authority on duty who could potentially address the patrol issue or assign someone to do so. You could seek him out for a more direct intervention or inquire among the serjeant and gate guards to learn if anyone is being dispatched to resolve the patrol disappearance."
+      }
+    ],
+    "contract_id": "rc_2efea75725ee",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "duty",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "duty",
+      "label": "duty",
+      "source_turn": 1
+    },
+    "semantic_result": "PASS",
+    "tags": [
+      "scene_momentum:new_information",
+      "grounded_social_absence_realization",
+      "final_emission_gate_replaced",
+      "referential_clarity_enforcement_replaced",
+      "referential_clarity_violation:ambiguous_entity_reference"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "duty",
+      "label": "duty",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "The gate serjeant, ever watchful over the crowd and roster board, explains that the primary snag is the missing patrol, which the notice board warns about but leaves unresolved. He admits the situation has tightened the choke point here, especially with the Ash Compact's census delays slowing caravan passage. No clear solution or responsible party is immediately named, but the guard captain is the highest authority on duty who could potentially address the patrol issue or assign someone to do so. You could seek him out for a more direct intervention or inquire among the serjeant and gate guards to learn if anyone is being dispatched to resolve the patrol disappearance."
+  },
+  {
+    "persona_id": "social_goal",
+    "style": "social / goal-oriented",
+    "objective": "Get through the gate tonight by finding someone who can tell a traveler what to do.",
+    "turn_number": 3,
+    "player_text": "I take that to the person they named, or I ask the one in front of me what they need from me.",
+    "gm_text": "The reference cannot be identified clearly enough to resolve without clarification.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "There is no clear indication in the crowd or from the watchers about who 'the person they named' might be. The gate serjeant glances between the roster board and the line but offers no hint of such a figure, and the ragged strangers or watchers nearby show no notable signs of expectation or authority. The individual directly in front of you appears tense and holds a small bundle of worn maps and papers, likely involved in the same concern but not revealing precisely what they need from you. If you wish, you can attempt to speak with this person to learn their intentions or look around once more for anyone who might stand out as a guide or contact regarding the missing patrol or gate issues."
+      }
+    ],
+    "contract_id": "rc_8c02bcfd114e",
+    "operation": "act",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": null,
+    "discourse_ref": null,
+    "semantic_result": "PASS",
+    "tags": [
+      "scene_momentum:new_information",
+      "final_emission_gate_replaced",
+      "final_emission_gate:neutral_speaker_grounding_bridge",
+      "interaction_obligation_terminal_preserved"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": null,
+      "final_satisfaction": "legitimate_nonresolution"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "duty",
+      "label": "duty",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "There is no clear indication in the crowd or from the watchers about who 'the person they named' might be. The gate serjeant glances between the roster board and the line but offers no hint of such a figure, and the ragged strangers or watchers nearby show no notable signs of expectation or authority. The individual directly in front of you appears tense and holds a small bundle of worn maps and papers, likely involved in the same concern but not revealing precisely what they need from you. If you wish, you can attempt to speak with this person to learn their intentions or look around once more for anyone who might stand out as a guide or contact regarding the missing patrol or gate issues."
+  },
+  {
+    "persona_id": "social_goal",
+    "style": "social / goal-oriented",
+    "objective": "Get through the gate tonight by finding someone who can tell a traveler what to do.",
+    "turn_number": 4,
+    "player_text": "I do the concrete thing they just described.",
+    "gm_text": "No reliable source here can verify the requested information; another source is needed.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "At the Cinderwatch Gate District, pressing onward stalls as the rain soaks the throng. No clearly appointed intermediary or named contact stands out to receive any package or direct inquiry—neither the gate guard, the gate serjeant watching the roster board, nor the guard captain overseeing the checkpoint offers a lead. The ragged strangers and threadbare watchers linger quietly, alert but not indicating who might resolve your question. Beyond the notice board outlining curfews, tax changes, and a warning about a missing patrol, no new figure steps forward or signals authority for immediate business. The practical next step might be to choose between braving the gate’s controlled entry into Cinderwatch’s market quarter or following the murmur of the missing patrol rumor toward the old milestone. Each path offers distinct possibilities but no assured shortcut here."
+      }
+    ],
+    "contract_id": "rc_2b95e57c2ccb",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "duty",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "duty",
+      "label": "duty",
+      "source_turn": 1
+    },
+    "semantic_result": "FAIL",
+    "tags": [
+      "scene_momentum:opportunity",
+      "final_emission_gate_replaced",
+      "final_emission_gate:neutral_speaker_grounding_bridge",
+      "interaction_obligation_terminal_preserved"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": null,
+      "final_satisfaction": "unchecked"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "duty",
+      "label": "duty",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "At the Cinderwatch Gate District, pressing onward stalls as the rain soaks the throng. No clearly appointed intermediary or named contact stands out to receive any package or direct inquiry—neither the gate guard, the gate serjeant watching the roster board, nor the guard captain overseeing the checkpoint offers a lead. The ragged strangers and threadbare watchers linger quietly, alert but not indicating who might resolve your question. Beyond the notice board outlining curfews, tax changes, and a warning about a missing patrol, no new figure steps forward or signals authority for immediate business. The practical next step might be to choose between braving the gate’s controlled entry into Cinderwatch’s market quarter or following the murmur of the missing patrol rumor toward the old milestone. Each path offers distinct possibilities but no assured shortcut here."
+  },
+  {
+    "persona_id": "social_goal",
+    "style": "social / goal-oriented",
+    "objective": "Get through the gate tonight by finding someone who can tell a traveler what to do.",
+    "turn_number": 5,
+    "player_text": "Before I move on, I ask what trouble I should watch for in the next few minutes.",
+    "gm_text": "The gate guard shrugs with a weary glance at the muddy queue and dripping banners. \"The biggest trouble right now is the missing patrol,\" they say quietly. \"Their absence has everyone on edge—guards and travelers alike. There's talk of increased bandit activity along the northwest mud track where they were last seen. Expect delays, tighter scrutiny, and unsettled nerves near the gate for the next while.\" Around you, the crowd shifts uneasily, and the serjeant eyes the roster board with tension. No immediate threats have manifested, but the unsettled mood suggests caution is warranted.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "The gate guard shrugs with a weary glance at the muddy queue and dripping banners. \"The biggest trouble right now is the missing patrol,\" they say quietly. \"Their absence has everyone on edge—guards and travelers alike. There's talk of increased bandit activity along the northwest mud track where they were last seen. Expect delays, tighter scrutiny, and unsettled nerves near the gate for the next while.\" Around you, the crowd shifts uneasily, and the serjeant eyes the roster board with tension. No immediate threats have manifested, but the unsettled mood suggests caution is warranted."
+      }
+    ],
+    "contract_id": "rc_e29f322a8a70",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": null,
+    "discourse_ref": null,
+    "semantic_result": "PASS",
+    "tags": [
+      "scene_momentum:new_information",
+      "interaction_obligation_terminal_preserved"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": true,
+      "downgrade_reason": "post_processing_destroyed_answer",
+      "recovery_used": true,
+      "recovery_source": "candidate",
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "duty",
+      "label": "duty",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "The gate guard shrugs with a weary glance at the muddy queue and dripping banners. \"The biggest trouble right now is the missing patrol,\" they say quietly. \"Their absence has everyone on edge—guards and travelers alike. There's talk of increased bandit activity along the northwest mud track where they were last seen. Expect delays, tighter scrutiny, and unsettled nerves near the gate for the next while.\" Around you, the crowd shifts uneasily, and the serjeant eyes the roster board with tension. No immediate threats have manifested, but the unsettled mood suggests caution is warranted."
+  },
+  {
+    "persona_id": "explore_action",
+    "style": "exploration / action-oriented",
+    "objective": "Learn the yard well enough to move through it without causing trouble.",
+    "turn_number": 1,
+    "player_text": "I take in the yard and walk toward the nearest ordinary thing a traveler could look at or use.",
+    "gm_text": "The reference cannot be identified clearly enough to resolve without clarification.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "You step through the muddy yard, rain dripping from tattered banners. The closest ordinary thing to catch your eye is the notice board nailed against the gate’s stout wooden frame, its weathered surface plastered with lists and warnings. Travelers nearby glance toward it, adjusting their burdens and shifting in soggy boots.\n\nThe notice board shows the new taxes and curfew rules, but the dominant notice warns of a missing patrol, casting a shadow over the gate's normally bureaucratic bustle. Not far off, a gate serjeant keeps a watchful eye on the assembled crowd while a tavern runner hawks warm stew and news near a rain barrel. Threadbare watchers and refugees press forward in the gloomy space, all beneath the grim watch of Cinderwatch’s frayed eastern gate.\n\nYour movement through the gate district stirs little immediate reaction but reminds you that tensions linger, the missing patrol’s"
+      }
+    ],
+    "contract_id": "rc_b3024bbaa96f",
+    "operation": "inspect",
+    "dimension": "use",
+    "dimensions": [
+      "use"
+    ],
+    "target_ref": null,
+    "discourse_ref": null,
+    "semantic_result": "PASS",
+    "tags": [
+      "scene_momentum:environmental_change",
+      "final_emission_gate_replaced",
+      "first_mention_enforcement_replaced",
+      "first_mention_violation:pronoun_before_first_explicit_entity",
+      "resolution_contract_semantic_preserved"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": null,
+      "final_satisfaction": "legitimate_nonresolution"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "duty",
+      "label": "duty",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "You step through the muddy yard, rain dripping from tattered banners. The closest ordinary thing to catch your eye is the notice board nailed against the gate’s stout wooden frame, its weathered surface plastered with lists and warnings. Travelers nearby glance toward it, adjusting their burdens and shifting in soggy boots.\n\nThe notice board shows the new taxes and curfew rules, but the dominant notice warns of a missing patrol, casting a shadow over the gate's normally bureaucratic bustle. Not far off, a gate serjeant keeps a watchful eye on the assembled crowd while a tavern runner hawks warm stew and news near a rain barrel. Threadbare watchers and refugees press forward in the gloomy space, all beneath the grim watch of Cinderwatch’s frayed eastern gate.\n\nYour movement through the gate district stirs little immediate reaction but reminds you that tensions linger, the missing patrol’s"
+  },
+  {
+    "persona_id": "explore_action",
+    "style": "exploration / action-oriented",
+    "objective": "Learn the yard well enough to move through it without causing trouble.",
+    "turn_number": 2,
+    "player_text": "I examine it up close and try to work out what people use it for.",
+    "gm_text": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "Upon close inspection, the notice board is a weathered wooden frame plastered with parchments amid the drizzly Cinderwatch rain. The bulletins are of practical use: travelers and locals alike rely on it to learn of current taxes owed, curfew regulations, and warnings such as the recently posted notice about a missing patrol. It functions as the gate district's central communication hub for public orders and alerts, especially valuable here where news spreads slowly through rumor and official word. People pause nearby, murmuring as they glance over the list of rules and unsettled reports, gauging how these edicts affect their immediate movements and safety."
+      }
+    ],
+    "contract_id": "rc_b79bc247b0b3",
+    "operation": "inspect",
+    "dimension": "use",
+    "dimensions": [
+      "use"
+    ],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "it up close and try to work out what people use it for",
+      "source": "explicit_player"
+    },
+    "discourse_ref": null,
+    "semantic_result": "FAIL",
+    "tags": [
+      "scene_momentum:new_information",
+      "referenced_surface_realization"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "Upon close inspection, the notice board is a weathered wooden frame plastered with parchments amid the drizzly Cinderwatch rain. The bulletins are of practical use: travelers and locals alike rely on it to learn of current taxes owed, curfew regulations, and warnings such as the recently posted notice about a missing patrol. It functions as the gate district's central communication hub for public orders and alerts, especially valuable here where news spreads slowly through rumor and official word. People pause nearby, murmuring as they glance over the list of rules and unsettled reports, gauging how these edicts affect their immediate movements and safety."
+  },
+  {
+    "persona_id": "explore_action",
+    "style": "exploration / action-oriented",
+    "objective": "Learn the yard well enough to move through it without causing trouble.",
+    "turn_number": 3,
+    "player_text": "I try the simplest ordinary use, without forcing or breaking anything.",
+    "gm_text": "Inspecting the notice board again, you find no indication of practical devices or tools meant for public use here. The board mainly serves to disseminate official information: new tax rates, updated curfew mandates, and alerts about the missing patrol. None of these postings suggest an ordinary object's intended function nearby, leaving you without a straightforward utility to engage.",
+    "model_calls": 2,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "You try the simplest ordinary use of the notice board—glancing over the posted papers without disturbing or damaging anything. It functions as a public message point, listing updated taxes, curfew rules, and a prominent warning about the missing patrol. Travelers and locals alike glance up to keep informed or spread word. Beyond reading, there’s little else to physically do with the board here without cooperation from the gate serjeant who manages the crowd and the roster nearby."
+      },
+      {
+        "purpose": "retry_escalation",
+        "retry_attempt": 1,
+        "retry_reason": "echo_or_repetition",
+        "model_player_facing_excerpt": "Inspecting the notice board again, you find no indication of practical devices or tools meant for public use here. The board mainly serves to disseminate official information: new tax rates, updated curfew mandates, and alerts about the missing patrol. None of these postings suggest an ordinary object's intended function nearby, leaving you without a straightforward utility to engage."
+      }
+    ],
+    "contract_id": "rc_899239eca078",
+    "operation": "perceive",
+    "dimension": "use",
+    "dimensions": [
+      "use"
+    ],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "it up close and try to work out what people use it for",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "source_turn": 7
+    },
+    "semantic_result": "PASS",
+    "tags": [],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "You try the simplest ordinary use of the notice board—glancing over the posted papers without disturbing or damaging anything. It functions as a public message point, listing updated taxes, curfew rules, and a prominent warning about the missing patrol. Travelers and locals alike glance up to keep informed or spread word. Beyond reading, there’s little else to physically do with the board here without cooperation from the gate serjeant who manages the crowd and the roster nearby."
+  },
+  {
+    "persona_id": "explore_action",
+    "style": "exploration / action-oriented",
+    "objective": "Learn the yard well enough to move through it without causing trouble.",
+    "turn_number": 4,
+    "player_text": "If anyone is close enough to hear me, I ask what people usually do with it.",
+    "gm_text": "The notice board here serves mainly as a public information hub rather than a tool or device for direct use. Most people come to it to check announcements like tax changes, curfew rules, or warnings—such as the recent alert about a missing patrol. Those seeking actionable details generally look elsewhere or listen for rumors, like those exchanged by the nearby tavern runner.",
+    "model_calls": 2,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "You ask nearby individuals what people usually do with the notice board. The gate serjeant, barely glancing up from the roster, replies with a dry tone, \"It’s not for anything hands-on. This board is for reading — to know the taxes, the curfew hours, and warnings like that missing patrol.\" A ragged stranger nearby nods in agreement, adding quietly, \"Folks check it to keep from stepping on a landmine — whether tax collectors or the city's watch. It’s how the authorities try to keep order here.\""
+      },
+      {
+        "purpose": "retry_escalation",
+        "retry_attempt": 1,
+        "retry_reason": "echo_or_repetition",
+        "model_player_facing_excerpt": "The notice board here serves mainly as a public information hub rather than a tool or device for direct use. Most people come to it to check announcements like tax changes, curfew rules, or warnings—such as the recent alert about a missing patrol. Those seeking actionable details generally look elsewhere or listen for rumors, like those exchanged by the nearby tavern runner."
+      }
+    ],
+    "contract_id": "rc_0613368c0760",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "it up close and try to work out what people use it for",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "source_turn": 8
+    },
+    "semantic_result": "PASS",
+    "tags": [
+      "scene_momentum:new_information",
+      "final_emission_gate_replaced",
+      "first_mention_enforcement_replaced",
+      "first_mention_violation:pronoun_before_first_explicit_entity",
+      "interaction_obligation_terminal_preserved"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": true,
+      "downgrade_reason": "post_processing_destroyed_answer",
+      "recovery_used": true,
+      "recovery_source": "candidate",
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "You ask nearby individuals what people usually do with the notice board. The gate serjeant, barely glancing up from the roster, replies with a dry tone, \"It’s not for anything hands-on. This board is for reading — to know the taxes, the curfew hours, and warnings like that missing patrol.\" A ragged stranger nearby nods in agreement, adding quietly, \"Folks check it to keep from stepping on a landmine — whether tax collectors or the city's watch. It’s how the authorities try to keep order here.\""
+  },
+  {
+    "persona_id": "explore_action",
+    "style": "exploration / action-oriented",
+    "objective": "Learn the yard well enough to move through it without causing trouble.",
+    "turn_number": 5,
+    "player_text": "I take the next safe step that follows from what I just found.",
+    "gm_text": "You step carefully through the churned mud of the gate's queue, navigating past threadbare watchers and refugees clustering under sodden cloaks. The rain thickens the air with the scent of wet earth and smoke. Ahead, the gate serjeant adjusts the roster board while keeping a wary eye on the restless crowd. Alongside the line, the tavern runner calls out, offering hot stew and the latest whispers, while worn faces glance toward the missing patrol warning pinned to the notice board. Your next safe step places you closer to the heart of scrutiny here, where rumors and official tensions mingle under gray skies.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "model_player_facing_excerpt": "You step carefully through the churned mud of the gate's queue, navigating past threadbare watchers and refugees clustering under sodden cloaks. The rain thickens the air with the scent of wet earth and smoke. Ahead, the gate serjeant adjusts the roster board while keeping a wary eye on the restless crowd. Alongside the line, the tavern runner calls out, offering hot stew and the latest whispers, while worn faces glance toward the missing patrol warning pinned to the notice board. Your next safe step places you closer to the heart of scrutiny here, where rumors and official tensions mingle under gray skies."
+      }
+    ],
+    "contract_id": "rc_2910ee50d755",
+    "operation": "ask",
+    "dimension": null,
+    "dimensions": [],
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "it up close and try to work out what people use it for",
+      "source": "inherited_discourse"
+    },
+    "discourse_ref": {
+      "type": "object",
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "source_turn": 8
+    },
+    "semantic_result": "PASS",
+    "tags": [
+      "scene_momentum:environmental_change"
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "it up close and try to work out what people use it for",
+      "label": "it up close and try to work out what people use it for",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "final_emission": {},
+    "model_excerpt": "You step carefully through the churned mud of the gate's queue, navigating past threadbare watchers and refugees clustering under sodden cloaks. The rain thickens the air with the scent of wet earth and smoke. Ahead, the gate serjeant adjusts the roster board while keeping a wary eye on the restless crowd. Alongside the line, the tavern runner calls out, offering hot stew and the latest whispers, while worn faces glance toward the missing patrol warning pinned to the notice board. Your next safe step places you closer to the heart of scrutiny here, where rumors and official tensions mingle under gray skies."
+  }
+]

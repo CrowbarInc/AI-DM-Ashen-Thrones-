@@ -1,0 +1,50 @@
+{
+  "case_id": "s31q2",
+  "family": "s31",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "b9c4893abdecdc6d7219fdb6fd732ed7cdb36e0178e0e33c47519c15ee8c1ac2",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "on the ground floor"
+    ],
+    "qualifiers": [
+      "wet"
+    ],
+    "selected_fact_ids": [
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s31"
+    ],
+    "answered_arguments": [
+      "theme"
+    ],
+    "missing_arguments": [
+      "agent"
+    ],
+    "conflict": false,
+    "reason": "Fact f2 directly states that wet sacks remain on the ground floor."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

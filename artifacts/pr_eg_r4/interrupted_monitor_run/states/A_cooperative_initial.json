@@ -1,0 +1,279 @@
+{
+  "world": {
+    "settlements": [
+      {
+        "id": "cinderwatch",
+        "name": "Cinderwatch",
+        "type": "frontier_city",
+        "tags": [
+          "frontier",
+          "trade",
+          "unstable"
+        ],
+        "status": "strained",
+        "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "sergeant_mara",
+        "name": "Sergeant Mara",
+        "role": "guard",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "street",
+            "text": "The street beyond the gate is the north road."
+          },
+          {
+            "id": "night_watch",
+            "text": "Guards watch the north gate throughout the night."
+          },
+          {
+            "id": "preference",
+            "text": "I prefer the evening."
+          },
+          {
+            "id": "rumor",
+            "text": "I have heard a rumor that a caravan may be late; I am not sure."
+          }
+        ],
+        "affiliation": "ash_cowl",
+        "current_agenda": "",
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "role": "informant",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "topics": [
+          {
+            "id": "stew",
+            "text": "Hot stew and rumors for coin."
+          },
+          {
+            "id": "preference",
+            "text": "I prefer the morning."
+          },
+          {
+            "id": "rumor",
+            "text": "I have heard a rumor that a caravan may be late; I am not sure."
+          }
+        ],
+        "affiliation": "",
+        "current_agenda": "",
+        "stance_toward_player": "favorable",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "origin_kind": "npc",
+        "origin_scene_id": "waystation_courtyard",
+        "promoted_from_actor_id": null,
+        "promotion_reason": null,
+        "promotion_turn": null,
+        "tags": []
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T15:13:19.410612Z",
+    "campaign_started": true
+  },
+  "scene": {
+    "scene": {
+      "id": "waystation_courtyard",
+      "location": "Waystation public courtyard",
+      "summary": "A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.",
+      "visible_facts": [
+        "A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate."
+      ],
+      "interactables": [
+        {
+          "id": "courtyard_lantern",
+          "label": "courtyard lantern",
+          "type": "examine",
+          "description": "A soot-streaked lantern burns beside the courtyard gate.",
+          "reveals_clue": "lantern_mark"
+        }
+      ],
+      "exits": [
+        {
+          "id": "courtyard_gate",
+          "label": "Courtyard gate",
+          "target_scene_id": "waystation_street",
+          "aliases": [
+            "gate",
+            "courtyard gate"
+          ]
+        }
+      ],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "actions": [],
+      "objects": [],
+      "discovered_clues": [],
+      "runtime_entities": []
+    }
+  },
+  "character": {
+    "id": "galinor",
+    "name": "Galinor",
+    "class": "Wizard",
+    "level": 1,
+    "ancestry": "Human",
+    "hp": {
+      "current": 8,
+      "max": 8,
+      "nonlethal": 0
+    },
+    "ac": {
+      "normal": 12,
+      "touch": 12,
+      "flat_footed": 10
+    },
+    "initiative_bonus": 2,
+    "speed": 30,
+    "ability_scores": {
+      "str": 10,
+      "dex": 14,
+      "con": 12,
+      "int": 18,
+      "wis": 12,
+      "cha": 10
+    },
+    "saves": {
+      "fort": 1,
+      "ref": 2,
+      "will": 3
+    },
+    "bab": 0,
+    "cmb": 0,
+    "cmd": 12,
+    "skills": {
+      "knowledge_arcana": 8,
+      "spellcraft": 8,
+      "perception": 4,
+      "sense_motive": 4,
+      "stealth": 4,
+      "diplomacy": 4,
+      "intimidate": 2,
+      "bluff": 2
+    },
+    "attacks": [
+      {
+        "id": "quarterstaff",
+        "name": "Quarterstaff",
+        "attack_bonus": 0,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 6,
+          "bonus": 0,
+          "type": "bludgeoning"
+        },
+        "type": "melee"
+      },
+      {
+        "id": "crossbow",
+        "name": "Light Crossbow",
+        "attack_bonus": 2,
+        "damage": {
+          "dice_count": 1,
+          "dice_sides": 8,
+          "bonus": 0,
+          "type": "piercing"
+        },
+        "type": "ranged"
+      }
+    ],
+    "conditions": [],
+    "inventory": [
+      {
+        "id": "spellbook",
+        "name": "Spellbook",
+        "quantity": 1,
+        "usable": false
+      }
+    ],
+    "spells": {
+      "prepared": [
+        {
+          "id": "daze",
+          "name": "Daze",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "detect_magic",
+          "name": "Detect Magic",
+          "cast": false,
+          "level": 0
+        },
+        {
+          "id": "magic_missile",
+          "name": "Magic Missile",
+          "cast": false,
+          "level": 1
+        },
+        {
+          "id": "shield",
+          "name": "Shield",
+          "cast": false,
+          "level": 1
+        }
+      ],
+      "slots": {
+        "0": 3,
+        "1": 1
+      }
+    },
+    "notes": "Default template character. Import a custom sheet for campaign play."
+  },
+  "combat": {
+    "in_combat": false,
+    "player_turn_used": false,
+    "round": 0
+  }
+}

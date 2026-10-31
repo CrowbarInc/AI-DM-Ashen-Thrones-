@@ -1,0 +1,53 @@
+{
+  "case_id": "s24q4",
+  "family": "s24",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "4a0d928574aaf0b3aa35d431e66cffb60a66599d7063be2c213177ef413626ec",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "novice Pell rings the storm bell"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s24"
+    ],
+    "answered_arguments": [
+      "Who rings the storm bell"
+    ],
+    "missing_arguments": [
+      "when is the next storm"
+    ],
+    "conflict": false,
+    "reason": "The facts specify that novice Pell rings the storm bell as delegated by Abbess Irra, but there is no information about when the next storm is."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_answer",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

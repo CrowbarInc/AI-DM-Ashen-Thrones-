@@ -1,0 +1,23 @@
+{
+  "status": "completed",
+  "turns": 80,
+  "conversations": 5,
+  "provider_calls": 21,
+  "calls_per_turn": 0.2625,
+  "mean_input_tokens_per_turn": 4394.575,
+  "p95_input_tokens_per_turn": 39389,
+  "mean_latency_ms": 796.0034300005645,
+  "p95_latency_ms": 3488.477300008526,
+  "retry_calls": 5,
+  "failed_integrity_checks": 0,
+  "secret_value_leaks": 0,
+  "unauthorized_secret_clues": 0,
+  "categories_observed": [
+    "None",
+    "bounded_expression",
+    "host_operation",
+    "verified_history",
+    "world_source"
+  ],
+  "note": "Provenance validation is host-owned and adds no provider call. Input-token p95 is carried by the existing narration calls, not by a provenance model."
+}

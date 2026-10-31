@@ -1,0 +1,46 @@
+{
+  "case_id": "s03q1",
+  "family": "s03",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "32122d57ed25175d19dd2d4f89be5d1c40c5120b7182bfaa3ae229e25e9afaa9",
+  "answer": {
+    "response_class": "UNKNOWN",
+    "values": [],
+    "qualifiers": [],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s03"
+    ],
+    "answered_arguments": [
+      "borrower"
+    ],
+    "missing_arguments": [
+      "borrower"
+    ],
+    "conflict": false,
+    "reason": "The provided facts and recent dialogue do not contain any information about who borrowed the copper whistle from Mara. The only fact relates to Mara not selling the ivory key to Tovin, which is unrelated to the copper whistle borrowing question."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": false,
+    "false_rejection": true,
+    "unsupported_inference": false,
+    "earliest_failure": "F15"
+  },
+  "provider_error": null
+}

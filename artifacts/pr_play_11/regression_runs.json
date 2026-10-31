@@ -1,0 +1,267 @@
+{
+  "harness": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_automated_playtest.py",
+      "tests/test_validation_coverage_registry.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_harness_1793413577825902400",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\harness_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 32.687
+  },
+  "gameplay": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_five_turn_gameplay.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_gameplay_1793413610510603400",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\gameplay_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 24.563
+  },
+  "rules_persistence": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_noncombat_resolution.py",
+      "tests/test_noncombat_runtime_integration.py",
+      "tests/test_state_authority.py",
+      "tests/test_activate_scene_validation_and_get_persistence.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_rules_persistence_1793413505024499200",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\rules_persistence_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 2.734
+  },
+  "conversation": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_social_interaction_authority.py",
+      "tests/test_atgb_r1_07_correction_contract.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_conversation_1793413366292830700",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\conversation_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 2.344
+  },
+  "provider": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_02_controls.py",
+      "tests/test_provider_accounting_integrity.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_provider_1793413368647344400",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\provider_regression.xml"
+    ],
+    "exit": 1,
+    "timeout": false,
+    "seconds": 27.687
+  },
+  "diagnostics": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_04_opening_integrity.py",
+      "tests/test_pr_play_05_diagnostics.py",
+      "tests/test_pr_play_06_opening_budget.py",
+      "tests/test_pr_play_07_semantic_acceptance.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_diagnostics_1793413488857868800",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\diagnostics_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 16.172
+  },
+  "structured": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_br_structured_realization_envelope.py",
+      "tests/test_pr_bw_narration_only_envelope.py",
+      "tests/test_pr_by_narration_only_retry_contract.py",
+      "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_structured_1793413412359102000",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\structured_regression.xml"
+    ],
+    "exit": 1,
+    "timeout": false,
+    "seconds": 3.328
+  },
+  "opening": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_start_campaign_api.py",
+      "tests/test_opening_start_seam_regressions.py",
+      "tests/test_scene_canon_hygiene.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_opening_1793413415693870000",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\opening_regression.xml"
+    ],
+    "exit": 1,
+    "timeout": false,
+    "seconds": 8.25
+  },
+  "world": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_world_progression_tick_integration.py",
+      "tests/test_world_state.py",
+      "tests/test_world_progression_backbone.py",
+      "tests/test_opening_scene_realization.py",
+      "tests/test_scene_opening_narrative_plan.py",
+      "tests/test_atgb_r2_04_question_evidence_contract.py",
+      "tests/test_atgb_r2_02_speech_participant_grounding.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_world_1793413423953604300",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\world_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 3.297
+  },
+  "export_atgb": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_review_handoff.py",
+      "tests/test_atgb_infrastructure.py",
+      "tests/test_atgb_accounting.py",
+      "tests/test_atgb_readiness.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_export_atgb_1793413643850655500",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\export_atgb_regression.xml"
+    ],
+    "exit": 1,
+    "timeout": false,
+    "seconds": 16.016
+  },
+  "overlay": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_10_overlays.py",
+      "tests/test_post_gm_adoption_gateway.py",
+      "tests/test_world_updates_and_clue_normalization.py",
+      "tests/test_save_load.py",
+      "tests/test_unparsed_movement_state_narration_integrity.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_overlay_1793413442923566400",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\overlay_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 4.125
+  },
+  "hidden_faction": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_narrative_authority_rules.py",
+      "tests/test_bounded_improvisation_authority.py",
+      "tests/test_validation_journal_affordances.py",
+      "tests/test_state_authority.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_hidden_faction_1793413447047543400",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\hidden_faction_regression.xml"
+    ],
+    "exit": 0,
+    "timeout": false,
+    "seconds": 2.454
+  },
+  "claim_authority": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_play_11_claim_authority.py",
+      "tests/test_pr_bu_narration_claim_composition.py",
+      "tests/test_pr_br_claim_control_slice1.py",
+      "tests/test_pr_br_claim_control_slice2.py",
+      "tests/test_realization_provenance.py",
+      "tests/test_investigation_result_provenance_non_invention.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_claim_authority_1793413507764575700",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\claim_authority_regression.xml"
+    ],
+    "exit": 1,
+    "timeout": false,
+    "seconds": 9.875
+  },
+  "entry_claim_authority": {
+    "command": [
+      "C:\\Users\\Master Mandalcio\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-u",
+      "-m",
+      "pytest",
+      "tests/test_pr_bu_narration_claim_composition.py",
+      "tests/test_pr_br_claim_control_slice1.py",
+      "tests/test_pr_br_claim_control_slice2.py",
+      "tests/test_realization_provenance.py",
+      "tests/test_investigation_result_provenance_non_invention.py",
+      "-q",
+      "--tb=short",
+      "--basetemp=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_11_entry_claim_authority_1793413520419337200",
+      "--junitxml=C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_11\\entry_claim_authority_regression.xml",
+      "-p",
+      "tests.helpers.pr_play_11_entry_source"
+    ],
+    "exit": 1,
+    "timeout": false,
+    "seconds": 8.579
+  }
+}

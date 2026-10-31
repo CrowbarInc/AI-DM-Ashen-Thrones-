@@ -1,0 +1,463 @@
+{
+  "kind": "scene_transition",
+  "action_id": "i_thank_mirelle_for_the_warning_then_hea",
+  "label": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+  "prompt": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+  "success": true,
+  "resolved_transition": true,
+  "target_scene_id": "eastern_courtyard",
+  "clue_id": null,
+  "discovered_clues": [],
+  "world_updates": null,
+  "state_changes": {
+    "scene_changed": true,
+    "scene_transition_occurred": true,
+    "arrived_at_scene": true,
+    "new_scene_context_available": true
+  },
+  "hint": "Player has moved to scene eastern_courtyard. Narrate arrival and what they see there.",
+  "metadata": {
+    "parser_lane": "authored_exit_resolution",
+    "prompt": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+    "destination_binding_source": "normalized_action_target",
+    "destination_binding_conflict": false,
+    "destination_binding_conflict_candidates": [],
+    "destination_binding_resolution_reason": "use_parser_or_affordance_target_scene_id",
+    "destination_semantic_kind": "explicit_scene_id",
+    "destination_compatibility_checked": true,
+    "destination_compatibility_passed": true,
+    "destination_compatibility_failure_reason": null,
+    "blocked_incompatible_scene_transition": false,
+    "destination_compatibility_expected_kind": "generic_travel",
+    "destination_compatibility_actual_kind": "",
+    "resolution_contract": {
+      "contract_id": "rc_6ff0fda95ff8",
+      "turn_index": 1,
+      "request_kind": "action",
+      "operation": "act",
+      "target_ref": null,
+      "interlocutor_id": null,
+      "conversational_subject": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "action_outcome",
+      "epistemic_mode": "authoritative",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+      "construction": {
+        "cues": [],
+        "referent_slot": null,
+        "referent_reason": "no_anaphor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false,
+        "fast_path_proposal": true,
+        "fast_path_used": true,
+        "fast_path_abstained": false,
+        "fast_path_abstention_reason": null,
+        "model_interpreter_invoked": false,
+        "model_proposal_rejected": false,
+        "clarification_after_model": false,
+        "interpretation_api_calls": 0,
+        "interpretation_error": null,
+        "canonical_candidates": [
+          {
+            "id": "cistern_steps",
+            "type": "place",
+            "label": "Ashford cistern steps"
+          },
+          {
+            "id": "eastern_courtyard",
+            "type": "place",
+            "label": "Go to the eastern courtyard"
+          },
+          {
+            "id": "mirelle",
+            "type": "interlocutor",
+            "label": "Mirelle"
+          }
+        ],
+        "proposal_source": "deterministic_fast_path",
+        "proposed_operation": "act",
+        "proposed_supporting_operations": [],
+        "proposed_raw_target": null,
+        "canonicalization_attempted": true,
+        "canonical_target_found": false,
+        "operation_conflict": false,
+        "validation_status": "validated",
+        "validation_result": {
+          "status": "validated",
+          "reason": null,
+          "failed_fields": [],
+          "clarification_required": false,
+          "model_interpretation_appropriate": false,
+          "canonical_target_id": null,
+          "canonical_target_label": null,
+          "canonical_target_type": null,
+          "canonical_basis": null,
+          "authoritative_operation": "act",
+          "discourse_commit_allowed": true,
+          "compatibility_bridge": null
+        },
+        "abstention_reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "discourse_commit_allowed": true,
+        "interlocutor_rejected": false,
+        "entity_binding": {
+          "status": "unresolved",
+          "entity_class": "ambiguous_unresolved",
+          "proposed_interlocutor": null,
+          "proposed_span": null,
+          "bound_interlocutor_id": null,
+          "entity_id": null,
+          "label": null,
+          "explicit_new_interlocutor": false,
+          "authority_reasons": [],
+          "claim_binding": "none"
+        },
+        "authoritative": true,
+        "semantic_completeness": "sufficient",
+        "compatibility_bridge": null,
+        "interpretation_proposal": {
+          "raw_input": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+          "source": "deterministic_fast_path",
+          "primary_operation": "act",
+          "supporting_operations": [],
+          "raw_target_text": null,
+          "proposed_target_id": null,
+          "target_capture": "none",
+          "has_determiner": false,
+          "interlocutor_id": null,
+          "conversational_subject": null,
+          "dimension": null,
+          "dimensions": [],
+          "expected_resolution": "action_outcome",
+          "referenced_claim_id": null,
+          "referenced_action_id": null,
+          "referenced_inspected_id": null,
+          "confidence": null,
+          "clarification_required": false,
+          "ambiguous": false,
+          "operation_conflict": false,
+          "notes": {}
+        },
+        "commitment_status": "executed_now",
+        "primary_operation": "act",
+        "resolution_subject": "travel",
+        "resolution_subject_coherence": "accepted",
+        "semantic_input_length": 69,
+        "provenance_excerpt": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+        "secondary_operations": [],
+        "requested_addressee": null,
+        "addressee_binding_status": "unresolved"
+      },
+      "retry_preserved": true
+    },
+    "interaction_obligation": {
+      "kind": "action_request",
+      "target": null,
+      "interlocutor_id": null,
+      "subject": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+      "requested_outcome": "accept, refuse, condition, or redirect the requested action",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_6ff0fda95ff8"
+    },
+    "gm_resolution_decision": {
+      "contract_id": "rc_6ff0fda95ff8",
+      "resolution_method": "act",
+      "outcome_classification": "consequentially_unresolved",
+      "established_fact_refs": [
+        "scene_world_authored_corpus"
+      ],
+      "proposed_facts": [
+        {
+          "text": "Mirelle warns that the cistern steps are slick.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        },
+        {
+          "text": "An arch at the bottom of the steps opens onto the eastern courtyard.",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_state_source"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "scene.visible_facts.1",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {}
+        },
+        {
+          "text": "Mirelle exists as cistern keeper",
+          "provenance": "authored_world_fact",
+          "consequence": "consequential",
+          "authorized": true,
+          "reason_codes": [
+            "authored_world_npc"
+          ],
+          "authority": "world_truth",
+          "persistence": "world_truth",
+          "source_ref": "world.npcs.0",
+          "outcome_classification": "established_or_retrieved",
+          "semantic_identity": {
+            "kind": "entity",
+            "subject": "mirelle",
+            "subject_aliases": [
+              "Mirelle"
+            ],
+            "relation": "exists",
+            "value": "cistern keeper",
+            "authority": "world_truth"
+          }
+        }
+      ],
+      "permitted_state_mutations": [],
+      "persistence_policy": "do_not_persist",
+      "narration_constraints": [
+        "Narration may not establish consequential world facts absent this decision.",
+        "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+        "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+        "Inference must not be narrated as physical evidence.",
+        "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+        "Requested consequential result remains unresolved unless separately authorized by resolver/state."
+      ],
+      "unresolved_consequential_questions": [
+        "requested_consequence_not_established"
+      ],
+      "unresolved_qualifiers": [],
+      "answer_relations": [],
+      "authority_algorithm": "source_provenance_v2"
+    },
+    "ordinary_contract_established": true,
+    "semantic_owner": "resolution_contract",
+    "contract_before_resolver": true,
+    "contract_construction_source": "deterministic",
+    "selected_resolver": "travel",
+    "turn_segmentation": {
+      "declared_action_text": "I thank Mirelle for the warning, then head for the eastern courtyard."
+    },
+    "unknown_legacy_keys": {
+      "noncombat_resolution": {
+        "framework_version": "2026.04.noncombat.v1",
+        "kind": "exploration",
+        "subkind": "scene_transition",
+        "authority_domain": "scene_state",
+        "deterministic_resolved": true,
+        "requires_check": false,
+        "check_request": null,
+        "outcome_type": "closed",
+        "success_state": "success",
+        "discovered_entities": [
+          {
+            "entity_kind": "scene",
+            "entity_id": "eastern_courtyard"
+          }
+        ],
+        "surfaced_facts": [],
+        "state_changes": {
+          "arrived_at_scene": true,
+          "new_scene_context_available": true,
+          "scene_changed": true,
+          "scene_transition_occurred": true
+        },
+        "blocked_reason_codes": [],
+        "ambiguous_reason_codes": [],
+        "unsupported_reason_codes": [],
+        "authoritative_outputs": [
+          {
+            "output_kind": "resolution_trace",
+            "source_engine": "game.exploration",
+            "route": "exploration",
+            "engine_action_id": "i_thank_mirelle_for_the_warning_then_hea"
+          }
+        ],
+        "narration_constraints": {
+          "scene_transition_occurred": true
+        }
+      }
+    },
+    "response_type_contract": {
+      "required_response_type": "action_outcome",
+      "source_route": "exploration",
+      "allow_escalation": false,
+      "escalation_block_reason": "non_hostile_world_action_guard",
+      "strict_target_id": null,
+      "strict_answer_expected": false,
+      "strict_dialogue_expected": false,
+      "action_must_preserve_agency": true,
+      "debug_reasons": [
+        "resolved_world_action_requires_action_outcome",
+        "non_hostile_world_action_guard"
+      ]
+    },
+    "emission_debug": {
+      "dialogue_social_plan": {
+        "version": 1,
+        "applies": false,
+        "speaker_id": null,
+        "speaker_name": null,
+        "speaker_source": "unresolved",
+        "dialogue_intent": null,
+        "reply_kind": "unknown",
+        "pressure_state": "none",
+        "relationship_codes": [
+          "unknown"
+        ],
+        "tone_bounds": [
+          "neutral"
+        ],
+        "prohibited_content_codes": [
+          "no_narrator_override",
+          "no_ooc_instructions",
+          "no_player_agency_override",
+          "no_prompt_text"
+        ],
+        "derivation_codes": [
+          "dialogue_social_plan:v1",
+          "intent:ctir_only",
+          "referent_tracking:consumed",
+          "session_hints:bounded",
+          "speaker:unresolved"
+        ],
+        "validator": {
+          "validated": true,
+          "errors": [],
+          "reject_field_names": [
+            "dialogue",
+            "dialogue_line",
+            "gm_guidance",
+            "instructions",
+            "message",
+            "narration",
+            "player_facing_text",
+            "prompt",
+            "system_prompt",
+            "text"
+          ],
+          "allowed_reply_kinds": [
+            "answer",
+            "explanation",
+            "reaction",
+            "refusal",
+            "unknown"
+          ],
+          "allowed_pressure_states": [
+            "high",
+            "low",
+            "moderate",
+            "none"
+          ],
+          "allowed_tone_codes": [
+            "cold",
+            "deferential",
+            "direct",
+            "evasive",
+            "guarded",
+            "hostile",
+            "neutral",
+            "threatening",
+            "warm"
+          ],
+          "allowed_relationship_codes": [
+            "engagement_engaged",
+            "engagement_focused",
+            "engagement_none",
+            "fear_high",
+            "fear_low",
+            "friendly",
+            "hostile",
+            "neutral",
+            "suspicion_high",
+            "suspicion_low",
+            "trust_high",
+            "trust_low",
+            "unfriendly",
+            "unknown"
+          ],
+          "allowed_speaker_alias_resolution_sources": [
+            "continuity_snapshot",
+            "interaction_continuity_contract",
+            "manual_bundle_override",
+            "referent_tracking"
+          ]
+        },
+        "bounded_session_hints": {
+          "active_interaction_target_id": null,
+          "active_interaction_target_name": null,
+          "active_interaction_kind": null,
+          "interaction_mode": "none",
+          "engagement_level": "none",
+          "conversation_privacy": null,
+          "player_position_context": null
+        }
+      },
+      "scene_state_anchor": {
+        "enabled": true,
+        "scene_id": "eastern_courtyard",
+        "counts": {
+          "location": 10,
+          "actor": 2,
+          "player_action": 3
+        }
+      },
+      "context_separation": {
+        "enabled": true,
+        "interaction_kind": "scene_transition",
+        "pressure_focus_allowed": true,
+        "debug_reason": "context_separation: pressure_focus_allowed=True primary_topics=20 ambient=1"
+      },
+      "conversational_memory_window": {
+        "enabled": true,
+        "window_version": "v1",
+        "prioritize_recent_turns": true,
+        "prioritize_active_scene_entities": true,
+        "deprioritize_stale_inactive_elements": true,
+        "allow_explicit_reintroduction": true,
+        "recent_turn_window": 6,
+        "soft_memory_limit": 12,
+        "stale_after_turns": 18,
+        "active_scene_entity_ids": [],
+        "anchored_interlocutor_id": "",
+        "active_interaction_target_id": "",
+        "explicit_reintroduced_entity_ids": [
+          "mirelle"
+        ],
+        "explicit_reintroduced_topics": [],
+        "selection_debug": {
+          "matched_entity_ids": [
+            "mirelle"
+          ],
+          "matched_topics": [],
+          "matched_grounded_ids": [],
+          "callback_marker_hit": null,
+          "source_of_activity_anchor": "none",
+          "source_of_recentness": "session.turn_counter",
+          "source_of_reintroductions": "player_text+visibility_aliases"
+        }
+      },
+      "selected_conversational_memory": [],
+      "conversational_memory": {
+        "selected_count": 0
+      }
+    }
+  },
+  "originating_scene_id": "cistern_steps",
+  "world_tick_events": []
+}

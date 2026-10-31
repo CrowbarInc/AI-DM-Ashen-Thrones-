@@ -1,0 +1,71 @@
+.F..FF......FFF........F..F......                                        [100%]
+================================== FAILURES ===================================
+___________________________ test_G2_opening_failure ___________________________
+tests\test_five_turn_gameplay.py:70: in test_G2_opening_failure
+    assert result['verdict'] == 'FAIL' and result['attempted_turns'] == 0
+E   AssertionError: assert ('BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED)
+---------------------------- Captured stdout setup ----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+_ test_real_http_turn_failures[turn2_exception-T2-provider_transport_failure] _
+tests\test_five_turn_gameplay.py:88: in test_real_http_turn_failures
+    assert result['verdict'] == 'FAIL'
+E   AssertionError: assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+_ test_real_http_turn_failures[turn3_invalid_json-T3-invalid_interpretation_response] _
+tests\test_five_turn_gameplay.py:88: in test_real_http_turn_failures
+    assert result['verdict'] == 'FAIL'
+E   AssertionError: assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+_____________________________ test_G11_divergence _____________________________
+tests\test_five_turn_gameplay.py:148: in test_G11_divergence
+    assert result['stop_reason'] == 'scenario_divergence' and result['verdict'] == 'PARTIAL'
+E   AssertionError: assert ('timeout' == 'scenario_divergence'
+E     
+E     - scenario_divergence
+E     + timeout)
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+_________________________ test_G12_budget_exhaustion __________________________
+tests\test_five_turn_gameplay.py:159: in test_G12_budget_exhaustion
+    assert result['provider_usage']['dispatched_requests'] == 6
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'dispatched_requests'
+---------------------------- Captured stdout setup ----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+____________________________ test_G13_turn_timeout ____________________________
+tests\test_five_turn_gameplay.py:174: in test_G13_turn_timeout
+    assert (run/'turns/T1/interruption.json').is_file()
+E   AssertionError: assert False
+E    +  where False = is_file()
+E    +    where is_file = (WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_play_12/sandbox/artifacts/atgb/automated_playtests/20261031T175159Z-a39a849f2923') / 'turns/T1/interruption.json').is_file
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 6 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+__________________________ test_G22_exact_accounting __________________________
+tests\test_five_turn_gameplay.py:231: in test_G22_exact_accounting
+    assert usage['request_count'] == result['provider_usage']['dispatched_requests'] == 6
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'dispatched_requests'
+__________________________ test_G25_complete_export ___________________________
+tests\test_five_turn_gameplay.py:258: in test_G25_complete_export
+    assert path in names
+E   AssertionError: assert 'opening/documents.json' in {'configuration/run.json', 'configuration/scenario.json', 'diagnostics/application.log', 'diagnostics/execution_log.json', 'diagnostics/provider_usage.jsonl', 'diagnostics/ready.json', ...}
+=========================== short test summary info ===========================
+FAILED tests/test_five_turn_gameplay.py::test_G2_opening_failure - AssertionE...
+FAILED tests/test_five_turn_gameplay.py::test_real_http_turn_failures[turn2_exception-T2-provider_transport_failure]
+FAILED tests/test_five_turn_gameplay.py::test_real_http_turn_failures[turn3_invalid_json-T3-invalid_interpretation_response]
+FAILED tests/test_five_turn_gameplay.py::test_G11_divergence - AssertionError...
+FAILED tests/test_five_turn_gameplay.py::test_G12_budget_exhaustion - KeyErro...
+FAILED tests/test_five_turn_gameplay.py::test_G13_turn_timeout - AssertionErr...
+FAILED tests/test_five_turn_gameplay.py::test_G22_exact_accounting - KeyError...
+FAILED tests/test_five_turn_gameplay.py::test_G25_complete_export - Assertion...

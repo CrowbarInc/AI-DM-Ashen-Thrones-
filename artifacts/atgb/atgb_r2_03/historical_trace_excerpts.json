@@ -1,0 +1,1298 @@
+[
+  {
+    "turn_id": "S02.2",
+    "trial": 1,
+    "partition": "development_visible",
+    "input_classification": "representative_player_behavior",
+    "classification_basis": "Authored ATGB corpus; not human-captured; some turns are boundary-shaped.",
+    "source": "artifacts/atgb/atgb_03/S02/result.json",
+    "source_sha256": "23657aa22e25c08b1d42c91d326e95370cd761fc6b35b6c90aa0a92b8e602ad8",
+    "log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+    "log_sha256": "e2aff7fc022205b14029ccd9badaa633a8134d01835ff5380f260e4a5d43e623",
+    "player_input": "When does the curfew start?",
+    "preceding_conversation": [
+      {
+        "turn_id": "S02.1",
+        "player": "I read the notices.",
+        "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    ],
+    "available_context_caveat": "Corpus turn_context is evaluation ground truth, not proof of provider request content. Original request messages not retained here.",
+    "expected_behavior": {
+      "scenario": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. The board has not been read.",
+        "authoritative_facts": [
+          "The board lists taxes, curfew rules, and a missing-patrol warning. Hours are not authored.",
+          "Investigating the notice board may reveal notice_patrol_route.",
+          "S02.2 is the distinction between a true nearby fact and an answer."
+        ],
+        "npc_knowledge": [
+          "The board is an object. An NPC who has not been given the clue does not gain it by standing nearby.",
+          "The runner's rumor is a different sentence and is not a substitute for the posted warning."
+        ],
+        "unacceptable_behaviors": [
+          "Dusk-until-dawn, a fine, bandits, a statute number, or answering S02.2 or S02.3 with the crate track."
+        ]
+      },
+      "communicative_act": "A time question about the curfew.",
+      "interpretation_pass": "A time question about the curfew.",
+      "response_pass": "The start time is not known or not posted. The player is not handed a different fact in its place. An accurate patrol sentence on this turn fails response, and if it is presented as the curfew answer it stays a response failure even when the sentence itself is owned.",
+      "authority_pass": "No clock hour and no penalty.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [
+        "Dusk-until-dawn, a fine, or the crate track as the curfew answer."
+      ]
+    },
+    "state_evidence": {
+      "before": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": null,
+        "transcript_entries": 1
+      },
+      "after": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": null,
+        "transcript_entries": 2
+      }
+    },
+    "model_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "curfew start time",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM when the curfew starts."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board lists curfew rules."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Information about the start time of the curfew."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM when the curfew starts.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "adapted_interpretation": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM when the curfew starts."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board lists curfew rules.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Information about the start time of the curfew.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM when the curfew starts.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "curfew start time",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "interpretation_status": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION"
+    },
+    "host_decision": {
+      "category": "ANSWER",
+      "primary_intention": "When does the curfew start?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "visible:0"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "final_player_facing_response": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "resolution_kind": "conversational_answer",
+    "telemetry": {
+      "elapsed_ms": {
+        "status": "recorded",
+        "value": 1858
+      },
+      "provider_call_count": {
+        "status": "recorded",
+        "value": 1
+      },
+      "input_tokens": {
+        "status": "recorded",
+        "value": 1858
+      },
+      "output_tokens": {
+        "status": "recorded",
+        "value": 157
+      },
+      "retry_count": {
+        "status": "recorded",
+        "value": 0
+      },
+      "estimated_cost": {
+        "status": "unavailable",
+        "value": null,
+        "reason": "no_price_table"
+      },
+      "provider_call_detail": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "retries": 0
+      }
+    },
+    "narration_invoked": false,
+    "runtime_validity": "captured",
+    "human_review_status": "UNREVIEWED; historical AI-assisted judgments separate",
+    "historical_rubric": {
+      "review_id": "S02.2/trial-1",
+      "interpretation": "pass",
+      "response": "fail",
+      "authority": "pass",
+      "failure_severity": "major",
+      "clarification": "none",
+      "continuity": "preserved",
+      "reviewer_explanation": "Curfew time not authored; should explicitly say exact hour is unknown, not repeat board categories."
+    }
+  },
+  {
+    "turn_id": "S02.3",
+    "trial": 1,
+    "partition": "development_visible",
+    "input_classification": "representative_player_behavior",
+    "classification_basis": "Authored ATGB corpus; not human-captured; some turns are boundary-shaped.",
+    "source": "artifacts/atgb/atgb_03/S02/result.json",
+    "source_sha256": "23657aa22e25c08b1d42c91d326e95370cd761fc6b35b6c90aa0a92b8e602ad8",
+    "log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+    "log_sha256": "e2aff7fc022205b14029ccd9badaa633a8134d01835ff5380f260e4a5d43e623",
+    "player_input": "I wasn't asking where the patrol went. I asked when it starts.",
+    "preceding_conversation": [
+      {
+        "turn_id": "S02.1",
+        "player": "I read the notices.",
+        "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      },
+      {
+        "turn_id": "S02.2",
+        "player": "When does the curfew start?",
+        "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    ],
+    "available_context_caveat": "Corpus turn_context is evaluation ground truth, not proof of provider request content. Original request messages not retained here.",
+    "expected_behavior": {
+      "scenario": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. The board has not been read.",
+        "authoritative_facts": [
+          "The board lists taxes, curfew rules, and a missing-patrol warning. Hours are not authored.",
+          "Investigating the notice board may reveal notice_patrol_route.",
+          "S02.2 is the distinction between a true nearby fact and an answer."
+        ],
+        "npc_knowledge": [
+          "The board is an object. An NPC who has not been given the clue does not gain it by standing nearby.",
+          "The runner's rumor is a different sentence and is not a substitute for the posted warning."
+        ],
+        "unacceptable_behaviors": [
+          "Dusk-until-dawn, a fine, bandits, a statute number, or answering S02.2 or S02.3 with the crate track."
+        ]
+      },
+      "communicative_act": "Correction of S02.2.",
+      "interpretation_pass": "Correction of S02.2.",
+      "response_pass": "Returns to the start time and keeps the uncertainty. It does not repeat the route as the answer.",
+      "authority_pass": "Still no invented hour.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [
+        "Repeating the route as the answer."
+      ]
+    },
+    "state_evidence": {
+      "before": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": null,
+        "transcript_entries": 2
+      },
+      "after": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": null,
+        "transcript_entries": 3
+      }
+    },
+    "model_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Timing of the missing patrol start",
+        "evidence_refs": [
+          "reply:1"
+        ]
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you have information about when the missing patrol starts rather than where it went?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "adapted_interpretation": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Clarify that the question is about when the missing patrol starts, not where it went."
+      },
+      "asserted_premises": [
+        {
+          "text": "The player previously asked about the missing patrol's timing, not its location.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about when the missing patrol starts.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Clarify to the GM that the question concerns the timing of the missing patrol's start, not its location.",
+          "target_ref": null,
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board",
+          "gate_guard",
+          "gate_serjeant",
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "Do you have information about when the missing patrol starts rather than where it went?",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Timing of the missing patrol start",
+        "evidence_refs": [
+          "reply:1"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "reply:1": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "interpretation_status": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION"
+    },
+    "host_decision": {
+      "category": "ANSWER",
+      "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "reply:1"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": null
+    },
+    "final_player_facing_response": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "resolution_kind": "conversational_answer",
+    "telemetry": {
+      "elapsed_ms": {
+        "status": "recorded",
+        "value": 2026
+      },
+      "provider_call_count": {
+        "status": "recorded",
+        "value": 1
+      },
+      "input_tokens": {
+        "status": "recorded",
+        "value": 1925
+      },
+      "output_tokens": {
+        "status": "recorded",
+        "value": 222
+      },
+      "retry_count": {
+        "status": "recorded",
+        "value": 0
+      },
+      "estimated_cost": {
+        "status": "unavailable",
+        "value": null,
+        "reason": "no_price_table"
+      },
+      "provider_call_detail": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "retries": 0
+      }
+    },
+    "narration_invoked": false,
+    "runtime_validity": "captured",
+    "human_review_status": "UNREVIEWED; historical AI-assisted judgments separate",
+    "historical_rubric": {
+      "review_id": "S02.3/trial-1",
+      "interpretation": "fail",
+      "response": "fail",
+      "authority": "pass",
+      "failure_severity": "major",
+      "clarification": "none",
+      "continuity": "lost",
+      "reviewer_explanation": "Player corrects time question; identical generic notice text fails to acknowledge correction."
+    }
+  },
+  {
+    "turn_id": "S02.4",
+    "trial": 1,
+    "partition": "development_visible",
+    "input_classification": "representative_player_behavior",
+    "classification_basis": "Authored ATGB corpus; not human-captured; some turns are boundary-shaped.",
+    "source": "artifacts/atgb/atgb_03/S02/result.json",
+    "source_sha256": "23657aa22e25c08b1d42c91d326e95370cd761fc6b35b6c90aa0a92b8e602ad8",
+    "log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+    "log_sha256": "e2aff7fc022205b14029ccd9badaa633a8134d01835ff5380f260e4a5d43e623",
+    "player_input": "All right. What did the warning say about where they were last seen?",
+    "preceding_conversation": [
+      {
+        "turn_id": "S02.1",
+        "player": "I read the notices.",
+        "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      },
+      {
+        "turn_id": "S02.2",
+        "player": "When does the curfew start?",
+        "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      },
+      {
+        "turn_id": "S02.3",
+        "player": "I wasn't asking where the patrol went. I asked when it starts.",
+        "gm": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    ],
+    "available_context_caveat": "Corpus turn_context is evaluation ground truth, not proof of provider request content. Original request messages not retained here.",
+    "expected_behavior": {
+      "scenario": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. The board has not been read.",
+        "authoritative_facts": [
+          "The board lists taxes, curfew rules, and a missing-patrol warning. Hours are not authored.",
+          "Investigating the notice board may reveal notice_patrol_route.",
+          "S02.2 is the distinction between a true nearby fact and an answer."
+        ],
+        "npc_knowledge": [
+          "The board is an object. An NPC who has not been given the clue does not gain it by standing nearby.",
+          "The runner's rumor is a different sentence and is not a substitute for the posted warning."
+        ],
+        "unacceptable_behaviors": [
+          "Dusk-until-dawn, a fine, bandits, a statute number, or answering S02.2 or S02.3 with the crate track."
+        ]
+      },
+      "communicative_act": "Recall of the posted warning from S02.1, after the curfew detour, not a new rumor request.",
+      "interpretation_pass": "Recall of the posted warning, not a new rumor request.",
+      "response_pass": "The northwest mud track past the crates, if that clue was revealed in S02.1. If S02.1 never revealed it, the reply says the warning names a missing patrol and does not add a place, or it investigates now and then reports the clue.",
+      "authority_pass": "The place comes from notice_patrol_route or is withheld. The runner's footprint sentence is not quoted as the notice.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": [
+        "Quoting the runner's footprint sentence as the notice."
+      ]
+    },
+    "state_evidence": {
+      "before": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": null,
+        "transcript_entries": 3
+      },
+      "after": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": null,
+        "transcript_entries": 4
+      }
+    },
+    "model_interpretation": {
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Content of the warning about where the missing patrol was last seen",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM what the warning on the notice board says about the last known location of the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board includes a warning about a missing patrol."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about where the missing patrol was last seen according to the warning."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM what the warning says about where the missing patrol was last seen.",
+          "target_ref": "notice_board",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "adapted_interpretation": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Ask GM what the warning on the notice board says about the last known location of the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The notice board includes a warning about a missing patrol.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Receive information about where the missing patrol was last seen according to the warning.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask GM what the warning says about where the missing patrol was last seen.",
+          "target_ref": "notice_board",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "notice_board"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "GM",
+        "purpose": "QUESTION",
+        "subject": "Content of the warning about where the missing patrol was last seen",
+        "evidence_refs": [
+          "visible:0"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      }
+    },
+    "interpretation_status": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION"
+    },
+    "host_decision": {
+      "category": "ANSWER",
+      "primary_intention": "All right. What did the warning say about where they were last seen?",
+      "intent_family": "gm_communication",
+      "incidental_context": [],
+      "proposed_operation": null,
+      "proposed_target": null,
+      "proposed_record": null,
+      "missing_information": [],
+      "context_references": [
+        "visible:0"
+      ],
+      "requires_authoritative_execution": false,
+      "reason": "communication_before_execution",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "context_update": null,
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "QUESTION",
+      "authorization": null
+    },
+    "final_player_facing_response": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "resolution_kind": "conversational_answer",
+    "telemetry": {
+      "elapsed_ms": {
+        "status": "recorded",
+        "value": 1894
+      },
+      "provider_call_count": {
+        "status": "recorded",
+        "value": 1
+      },
+      "input_tokens": {
+        "status": "recorded",
+        "value": 1966
+      },
+      "output_tokens": {
+        "status": "recorded",
+        "value": 193
+      },
+      "retry_count": {
+        "status": "recorded",
+        "value": 0
+      },
+      "estimated_cost": {
+        "status": "unavailable",
+        "value": null,
+        "reason": "no_price_table"
+      },
+      "provider_call_detail": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "retries": 0
+      }
+    },
+    "narration_invoked": false,
+    "runtime_validity": "captured",
+    "human_review_status": "UNREVIEWED; historical AI-assisted judgments separate",
+    "historical_rubric": {
+      "review_id": "S02.4/trial-1",
+      "interpretation": "pass",
+      "response": "fail",
+      "authority": "pass",
+      "failure_severity": "major",
+      "clarification": "none",
+      "continuity": "lost",
+      "reviewer_explanation": "Asks warning location, but response repeats notice headings and fails to deliver route detail or acknowledge unavailable text."
+    }
+  },
+  {
+    "turn_id": "S05.3",
+    "trial": 1,
+    "partition": "development_visible",
+    "input_classification": "representative_player_behavior",
+    "classification_basis": "Authored ATGB corpus; not human-captured; some turns are boundary-shaped.",
+    "source": "artifacts/atgb/atgb_03c/S05/result.json",
+    "source_sha256": "bdc3476c9d588ac25228380a5820da225894fbdf2d8e63761c8602d0f97fe6ca",
+    "log_source": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+    "log_sha256": "25061f4a3b36c3ad2b0975e82e51ae10a50ced201ce7b303d78106e89228aace",
+    "player_input": "Tell me more about that.",
+    "preceding_conversation": [
+      {
+        "turn_id": "S05.1",
+        "player": "Runner, what did you hear about the patrol?",
+        "gm": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\""
+      },
+      {
+        "turn_id": "S05.2",
+        "player": "And the board, what does it say about the same patrol?",
+        "gm": "I cannot provide a validated response to that request."
+      }
+    ],
+    "available_context_caveat": "Corpus turn_context is evaluation ground truth, not proof of provider request content. Original request messages not retained here.",
+    "expected_behavior": {
+      "scenario": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate.",
+        "authoritative_facts": [
+          "The runner's rumor and, once the board is read, notice_patrol_route both point near the crates and the northwest approach.",
+          "They are different sentences and different sources."
+        ],
+        "npc_knowledge": [
+          "The runner knows the rumor as hearsay. The board holds the posted warning. Neither may absorb the other's wording."
+        ],
+        "unacceptable_behaviors": [
+          "The same paragraph presented as both the notice and the rumor.",
+          "A third story.",
+          "The guard answering S05.4."
+        ]
+      },
+      "communicative_act": "The referent is unresolved between the rumor and the notice.",
+      "interpretation_pass": "The referent is unresolved between the rumor and the notice.",
+      "response_pass": "One question that names both, or otherwise distinguishes them. No new facts. This is a successful turn when the clarification is necessary and focused. Guessing is a major failure.",
+      "authority_pass": "No additional detail about either account.",
+      "acceptable_variations": [
+        "The clarification may pick neither account and ask."
+      ],
+      "unacceptable_behaviors": [
+        "Picking one account and calling the choice obvious."
+      ]
+    },
+    "state_evidence": {
+      "before": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "Follow the missing patrol rumor"
+        ],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": "tavern_runner",
+        "transcript_entries": 2
+      },
+      "after": {
+        "scene_id": "frontier_gate",
+        "discovered_clues": [
+          "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+          "Follow the missing patrol rumor"
+        ],
+        "world_flag_names": [],
+        "world_state_flag_names": [],
+        "interlocutor": "tavern_runner",
+        "transcript_entries": 3
+      }
+    },
+    "model_interpretation": {
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "communication_mode": "CLARIFICATION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates."
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner."
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+          "target_ref": "tavern_runner",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      }
+    },
+    "adapted_interpretation": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Request the Tavern Runner to provide more details about the missing patrol."
+      },
+      "asserted_premises": [
+        {
+          "text": "The Tavern Runner mentioned the patrol vanished near muddy footprints northwest of the crates.",
+          "canon_status": "PLAYER_CLAIM"
+        }
+      ],
+      "requested_outcomes": [
+        {
+          "text": "Additional information or clarification about the missing patrol from the Tavern Runner.",
+          "adjudication_status": "UNADJUDICATED"
+        }
+      ],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "Ask the Tavern Runner for more details about the missing patrol rumor.",
+          "target_ref": "tavern_runner",
+          "operation_class": "ASK"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "tavern_runner"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "CLARIFICATION",
+        "subject": "More information about the patrol rumor from the Tavern Runner",
+        "evidence_refs": [
+          "npc:tavern_runner:patrol_rumor"
+        ]
+      },
+      "incidental_context": [],
+      "reference_reconciliation": {
+        "annotations": [],
+        "addressee": null,
+        "operation": "ASK"
+      },
+      "public_evidence": {
+        "npc:tavern_runner:patrol_rumor": "The runner heard the patrol vanished near muddy footprints northwest of the crates."
+      }
+    },
+    "interpretation_status": {
+      "status": "accepted",
+      "reason": "eligible_for_bridge",
+      "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION"
+    },
+    "host_decision": {
+      "category": "CLARIFY",
+      "primary_intention": "Tell me more about that.",
+      "intent_family": "clarification",
+      "incidental_context": [],
+      "proposed_operation": "ASK",
+      "proposed_target": "tavern_runner",
+      "proposed_record": null,
+      "missing_information": [
+        "interlocutor"
+      ],
+      "context_references": [],
+      "requires_authoritative_execution": false,
+      "reason": "unresolved_addressee",
+      "confidence": null,
+      "ambiguity": null,
+      "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "context_update": {
+        "conversational_context": {
+          "pending_clarification": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "frontier_gate",
+            "original_text": "Tell me more about that.",
+            "choices": [
+              {
+                "entity_id": "gate_guard",
+                "label": "Gate Guard"
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "target_resolution": "unresolved"
+          },
+          "pending_intention": {
+            "kind": "ambiguous_addressee",
+            "operation": "ASK",
+            "status": "pending",
+            "scene_id": "frontier_gate",
+            "original_text": "Tell me more about that.",
+            "choices": [
+              {
+                "entity_id": "gate_guard",
+                "label": "Gate Guard"
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "target_resolution": "unresolved"
+          }
+        }
+      },
+      "intent_modality": "informational",
+      "secondary_intentions": [],
+      "execution_policy": "answer_only",
+      "communication_owner": "GM",
+      "communication_purpose": "CLARIFICATION",
+      "authorization": {
+        "communication_ownership": "ambiguous_unresolved",
+        "intent_purpose": "address_npc",
+        "target_resolution": "unresolved",
+        "target_provenance": "provider_candidate_only",
+        "target_id": null,
+        "candidate_target_ids": [
+          "tavern_runner"
+        ],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "authority_provenance": "communication_decision",
+        "conflict_status": "unresolved",
+        "conflict_details": {},
+        "pending_intention_relationship": "requires_clarification",
+        "allowed_operation": null,
+        "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "choices": [
+          {
+            "entity_id": "gate_guard",
+            "label": "Gate Guard"
+          },
+          {
+            "entity_id": "gate_serjeant",
+            "label": "Gate Serjeant"
+          },
+          {
+            "entity_id": "tavern_runner",
+            "label": "Tavern Runner"
+          }
+        ],
+        "direct_address": true,
+        "player_text": "Tell me more about that."
+      }
+    },
+    "final_player_facing_response": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+    "resolution_kind": "conversational_clarify",
+    "telemetry": {
+      "elapsed_ms": {
+        "status": "recorded",
+        "value": 2166
+      },
+      "provider_call_count": {
+        "status": "recorded",
+        "value": 1
+      },
+      "input_tokens": {
+        "status": "recorded",
+        "value": 1948
+      },
+      "output_tokens": {
+        "status": "recorded",
+        "value": 198
+      },
+      "retry_count": {
+        "status": "recorded",
+        "value": 0
+      },
+      "estimated_cost": {
+        "status": "unavailable",
+        "value": null,
+        "reason": "no_price_table"
+      },
+      "provider_call_detail": {
+        "interpretation_requests": 1,
+        "narration_requests": 0,
+        "retries": 0
+      }
+    },
+    "narration_invoked": false,
+    "runtime_validity": "captured",
+    "human_review_status": "UNREVIEWED; historical AI-assisted judgments separate",
+    "historical_rubric": {
+      "review_id": "S05.3/trial-1",
+      "interpretation": "fail",
+      "response": "fail",
+      "authority": "pass",
+      "failure_severity": "major",
+      "clarification": "unnecessary_fail",
+      "continuity": "lost",
+      "reviewer_explanation": "Referent may be ambiguous between runner and board, but asks which person instead of which account; prior addressee remains runner."
+    }
+  }
+]

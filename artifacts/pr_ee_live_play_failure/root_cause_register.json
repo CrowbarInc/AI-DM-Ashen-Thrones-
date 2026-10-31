@@ -1,0 +1,120 @@
+[
+  {
+    "id": "EE-01",
+    "role": "primary",
+    "categories": [
+      "C",
+      "J",
+      "L"
+    ],
+    "defect": "Message-purpose/authority contract excludes ordinary GM/session/narrative requests",
+    "trigger": "Understood readiness/start/GM address with no connected world operation",
+    "component": "PR-DR prompt / PR-DO schema / record decision / API mode routing",
+    "evidence": "Original turns 1,2,6; orchestration:1616\u20131674; schema modes; prompt mode line",
+    "consequence": "Understood intention becomes clarification or unsupported executable proposal",
+    "severity": "Critical",
+    "confidence": "High",
+    "repair": "Typed recipient and purpose independent of executable components; non-mutating GM answer path with grounded context"
+  },
+  {
+    "id": "EE-02",
+    "role": "primary",
+    "categories": [
+      "C",
+      "E",
+      "F",
+      "I"
+    ],
+    "defect": "Unsupported singleton becomes compound confirmation, including zero executable steps",
+    "trigger": "Any unsupported component, even when component count is one",
+    "component": "conversational_orchestration.py:1442\u20131477,1673;1146\u20131188",
+    "evidence": "Original turns 3,6 and exact HTTP replay; stored supported=false",
+    "consequence": "False multi-action language, approval of known impossible action, misleading promise",
+    "severity": "Critical",
+    "confidence": "High",
+    "repair": "Separate unsupported/single/compound routes; validate each offer before confirmation; preserve operation identity and scope"
+  },
+  {
+    "id": "EE-03",
+    "role": "primary",
+    "categories": [
+      "D",
+      "C",
+      "E",
+      "B"
+    ],
+    "defect": "GM rejection/recipient absent from typed continuation; questions bypass pending; bridge clarification not stored",
+    "trigger": "Why not? after engine-owned rejection; subsequent explicit GM recipient",
+    "component": "orchestration:323\u2013449,1352\u20131360; API early-response/context updater",
+    "evidence": "Original turns 4\u20136, original post-session; captured reconstructed context includes prior refusal",
+    "consequence": "Question becomes NPC ASK; missing_target emits Who are you asking; next reply cannot fill unstored question slot",
+    "severity": "Critical",
+    "confidence": "High",
+    "repair": "Persist rejection subject/reason/recipient and actual pending conversational obligation; dispatch GM follow-ups before NPC action routing"
+  },
+  {
+    "id": "EE-04",
+    "role": "primary",
+    "categories": [
+      "A",
+      "C",
+      "L"
+    ],
+    "defect": "Lifecycle availability tied to empty transcript; recognized chat opening still filtered before lifecycle dispatch",
+    "trigger": "Any non-opening chat before start; or fresh matching start cue with live interpretation enabled",
+    "component": "api.py:4474\u20134494,4565\u20134578,6198\u20136290,6508",
+    "evidence": "Original turn 2 follows logged clarification; lifecycle_gate_probes; recognized_fresh_start_replay",
+    "consequence": "Started=false yet start UI disabled; existing opening implementation unreachable for these requests",
+    "severity": "Critical",
+    "confidence": "High for current implementation; historical UI before turn one unknown",
+    "repair": "Route lifecycle intent before world interpretation; gate start on authoritative lifecycle completion rather than arbitrary transcript content"
+  },
+  {
+    "id": "EE-05",
+    "role": "contributor",
+    "categories": [
+      "B",
+      "J"
+    ],
+    "defect": "Provider assigns campaign start to INVENTORY_GRANT; Why not to in-world ASK",
+    "trigger": "Begin; Why not under restricted mode/operation prompt",
+    "component": "Original interpreter completions / prompt-schema authority categories",
+    "evidence": "Original raw_interpretation turns 3 and 5, not inferred from replies",
+    "consequence": "Unsupported/missing-target processing; downstream routing amplifies classifier errors",
+    "severity": "High",
+    "confidence": "High occurrence; frequency unmeasured",
+    "repair": "Correct semantic contract and context projection; retain validation against unintended operations, avoid phrase handlers"
+  },
+  {
+    "id": "EE-06",
+    "role": "secondary integration defect",
+    "categories": [
+      "C",
+      "F",
+      "J"
+    ],
+    "defect": "Mode and operation vocabularies disagree across schema, eligibility and orchestration",
+    "trigger": "OTHER+SOCIAL_SIGNAL observed; RULES_QUESTION mismatch latent",
+    "component": "schema.py:9,35; eligibility.py:23; orchestration.py:91\u2013108,1619",
+    "evidence": "Original turn 6; static schema/routing inspection for RULES_QUESTION",
+    "consequence": "Describable social signal becomes unsupported; some OOC modes miss answer handling",
+    "severity": "High",
+    "confidence": "High current source; RULES_QUESTION not observed here",
+    "repair": "One shared, explicit mapping from message domain and class to conversation/execution disposition"
+  },
+  {
+    "id": "EE-07",
+    "role": "secondary observability",
+    "categories": [
+      "K"
+    ],
+    "defect": "Early-path telemetry calls every completed conversational response successful; tokens/stages missing at summary",
+    "trigger": "Non-mutating clarify/decline early return with interpreter usage",
+    "component": "api.py:785\u2013791,1002\u20131033",
+    "evidence": "Original turn 4 resolution.success=false but performance.successful=true; nested usage vs null summary",
+    "consequence": "Responsiveness instrumentation cannot measure playability or summarize interpreter cost reliably",
+    "severity": "Medium",
+    "confidence": "High",
+    "repair": "Separate transport/delivery, decision validity, opening/gameplay success; aggregate interpreter usage"
+  }
+]

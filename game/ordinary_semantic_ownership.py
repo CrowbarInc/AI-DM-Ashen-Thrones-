@@ -525,6 +525,14 @@ _SECOND_PERSON_RE = re.compile(r"\b(?:you|your|you're|youre)\b", re.IGNORECASE)
 _THIRD_PERSON_RE = re.compile(r"\b(?:she|he|her|him|his|hers)\b", re.IGNORECASE)
 _SINGULAR_PRONOUNS = frozenset({"him", "her", "he", "she"})
 _PLURAL_PRONOUNS = frozenset({"them", "they", "those"})
+# First person is the player. Second person is the established addressee.
+# Neither word is an NPC identity. Third-person singular stays in the same
+# contextual branch it already used.
+_SPEECH_ROLE_PRONOUNS = frozenset({
+    "you", "your", "yours", "yourself", "yourselves",
+    "i", "me", "my", "mine", "myself", "we", "us", "our", "ours", "ourselves",
+})
+_CONTEXTUAL_ADDRESSEE_PRONOUNS = _SINGULAR_PRONOUNS | _SPEECH_ROLE_PRONOUNS
 _DETERMINERS = frozenset({"the", "a", "an", "that", "this"})
 # Narration is unnecessary only when the resolver has already closed the
 # reply. A missing fact, a characterization opening, or claim_only speech
@@ -651,8 +659,10 @@ def assess_addressee_grounding(
     """Decide whether a person reference is grounded enough to attempt.
 
     A provider id is a candidate. It authorizes nothing by itself. Explicit
-    names and unique contextual referents resolve. Quantified or unmatched
-    references stay unresolved even when one visible person would be convenient.
+    names and unique contextual referents resolve. A first- or second-person
+    speech role uses the established, present interlocutor and is not an NPC
+    name. Quantified or unmatched references stay unresolved even when one
+    visible person would be convenient.
     """
     from game.interaction_completion import addressed_person_nominal
 
@@ -743,7 +753,7 @@ def assess_addressee_grounding(
             "conflict_details": {"provider_target": proposed} if proposed else {},
         }
 
-    if len(words) == 1 and words[0] in _SINGULAR_PRONOUNS:
+    if len(words) == 1 and words[0] in _CONTEXTUAL_ADDRESSEE_PRONOUNS:
         active = _active_npc_id(session, npcs)
         chosen = ""
         provenance = ""

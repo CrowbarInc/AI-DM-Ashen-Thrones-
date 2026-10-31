@@ -1,0 +1,52 @@
+{
+  "case_id": "s00q4",
+  "family": "s00",
+  "partition": "development",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "c1ffc153877866dc9251d526584bb4324214e3e0d56a5947de5370a2f36fefdd",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "The surveyor keeps the amber lens in a padded case"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f00"
+    ],
+    "selected_source_ids": [
+      "s00"
+    ],
+    "answered_arguments": [
+      "protector"
+    ],
+    "missing_arguments": [
+      "paid status"
+    ],
+    "conflict": false,
+    "reason": "The surveyor is identified as the keeper of the amber lens, but there is no information about whether the surveyor is paid to protect it."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

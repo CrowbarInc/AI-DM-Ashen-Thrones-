@@ -1,0 +1,291 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "structural_only",
+  "campaign": {
+    "campaign_id": "atgb_r1_07",
+    "what_was_tested": "Recorded and substituted interpretations across three preserved failures; host structural contract only.",
+    "runtime_path": "Production request construction -> stub wire -> adapter -> conversational decision",
+    "gm_boundary": "No model/provider calls; explicit counterfactuals",
+    "player_input_mode": "Preserved text, synthetic controls",
+    "run_count": 6,
+    "turn_count": 6,
+    "automated_conclusion": "Host contract assertions passed; live selection unproven."
+  },
+  "claim_types": [
+    "structural_evidence",
+    "runtime_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "atgb_r1_05_L1_recorded_output",
+      "scenario_run_id": "atgb_r1_05/L1/recorded_output",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "synthetic_negative_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Preserved failure input; controlled interpretation, no simulated player.",
+      "prior_visible_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+      "historical_result": "Recorded model output gave redundant clarification; substitution is not a new model result.",
+      "semantic_result": "NOT_EVALUATED",
+      "mandatory_gates": {
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "host_contract": "PASS"
+      },
+      "automated_evaluation": {
+        "host_only": true
+      },
+      "runtime_validity": "VALID_OFFLINE_HOST_PATH",
+      "final_emission_metadata": "Decision text only; direct API final delivery tested separately in test_direct_chat_delivery_and_state_integrity.",
+      "continuation_action_or_termination_reason": "Stop after offline decision",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await external review; no authenticated scoring."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      }
+    },
+    {
+      "example_id": "atgb_r1_05_L1_substituted_interpretation",
+      "scenario_run_id": "atgb_r1_05/L1/substituted_interpretation",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "synthetic_positive_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Preserved failure input; controlled interpretation, no simulated player.",
+      "prior_visible_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Understood. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line.",
+      "historical_result": "Recorded model output gave redundant clarification; substitution is not a new model result.",
+      "semantic_result": "NOT_EVALUATED",
+      "mandatory_gates": {
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "host_contract": "PASS"
+      },
+      "automated_evaluation": {
+        "host_only": true
+      },
+      "runtime_validity": "VALID_OFFLINE_HOST_PATH",
+      "final_emission_metadata": "Decision text only; direct API final delivery tested separately in test_direct_chat_delivery_and_state_integrity.",
+      "continuation_action_or_termination_reason": "Stop after offline decision",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await external review; no authenticated scoring."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      }
+    },
+    {
+      "example_id": "atgb_r1_05_L2_recorded_output",
+      "scenario_run_id": "atgb_r1_05/L2/recorded_output",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "synthetic_negative_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Preserved failure input; controlled interpretation, no simulated player.",
+      "prior_visible_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+      "historical_result": "Recorded model output gave redundant clarification; substitution is not a new model result.",
+      "semantic_result": "NOT_EVALUATED",
+      "mandatory_gates": {
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "host_contract": "PASS"
+      },
+      "automated_evaluation": {
+        "host_only": true
+      },
+      "runtime_validity": "VALID_OFFLINE_HOST_PATH",
+      "final_emission_metadata": "Decision text only; direct API final delivery tested separately in test_direct_chat_delivery_and_state_integrity.",
+      "continuation_action_or_termination_reason": "Stop after offline decision",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await external review; no authenticated scoring."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      }
+    },
+    {
+      "example_id": "atgb_r1_05_L2_substituted_interpretation",
+      "scenario_run_id": "atgb_r1_05/L2/substituted_interpretation",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "synthetic_positive_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Preserved failure input; controlled interpretation, no simulated player.",
+      "prior_visible_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Understood. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line.",
+      "historical_result": "Recorded model output gave redundant clarification; substitution is not a new model result.",
+      "semantic_result": "NOT_EVALUATED",
+      "mandatory_gates": {
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "host_contract": "PASS"
+      },
+      "automated_evaluation": {
+        "host_only": true
+      },
+      "runtime_validity": "VALID_OFFLINE_HOST_PATH",
+      "final_emission_metadata": "Decision text only; direct API final delivery tested separately in test_direct_chat_delivery_and_state_integrity.",
+      "continuation_action_or_termination_reason": "Stop after offline decision",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await external review; no authenticated scoring."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      }
+    },
+    {
+      "example_id": "atgb_r1_03_L3_recorded_output",
+      "scenario_run_id": "atgb_r1_03/L3/recorded_output",
+      "turn_index": 2,
+      "player_input": "No, I was asking about the people, not the weather.",
+      "player_input_classification": [
+        "synthetic_negative_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Preserved failure input; controlled interpretation, no simulated player.",
+      "prior_visible_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Do you want a description of the people present at the gate district instead of the weather?",
+      "historical_result": "Recorded model output gave redundant clarification; substitution is not a new model result.",
+      "semantic_result": "NOT_EVALUATED",
+      "mandatory_gates": {
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "host_contract": "PASS"
+      },
+      "automated_evaluation": {
+        "host_only": true
+      },
+      "runtime_validity": "VALID_OFFLINE_HOST_PATH",
+      "final_emission_metadata": "Decision text only; direct API final delivery tested separately in test_direct_chat_delivery_and_state_integrity.",
+      "continuation_action_or_termination_reason": "Stop after offline decision",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await external review; no authenticated scoring."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      }
+    },
+    {
+      "example_id": "atgb_r1_03_L3_substituted_interpretation",
+      "scenario_run_id": "atgb_r1_03/L3/substituted_interpretation",
+      "turn_index": 2,
+      "player_input": "No, I was asking about the people, not the weather.",
+      "player_input_classification": [
+        "synthetic_positive_control",
+        "boundary_case"
+      ],
+      "simulated_player_rationale": "Preserved failure input; controlled interpretation, no simulated player.",
+      "prior_visible_context": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "exact_gm_output": "Understood. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line.",
+      "historical_result": "Recorded model output gave redundant clarification; substitution is not a new model result.",
+      "semantic_result": "NOT_EVALUATED",
+      "mandatory_gates": {
+        "authority": {
+          "status": "PASS"
+        }
+      },
+      "diagnostic_result": {
+        "host_contract": "PASS"
+      },
+      "automated_evaluation": {
+        "host_only": true
+      },
+      "runtime_validity": "VALID_OFFLINE_HOST_PATH",
+      "final_emission_metadata": "Decision text only; direct API final delivery tested separately in test_direct_chat_delivery_and_state_integrity.",
+      "continuation_action_or_termination_reason": "Stop after offline decision",
+      "source_artifact_path": "artifacts/atgb/atgb_r1_07/offline_replay.json",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Await external review; no authenticated scoring."
+      },
+      "evaluator_disagreement": {
+        "present": false
+      }
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [],
+  "limitations_and_unproven_claims": [
+    "No new live result, semantic evaluator, human review, benchmark performance or independent generalization.",
+    "Six offline arms over three historical inputs; recorded-output arms remain redundant clarification."
+  ]
+}

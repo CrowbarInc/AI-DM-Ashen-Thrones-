@@ -1,0 +1,152 @@
+==================== persona_a 4 prov=regeneration h1=False reasons=['ungrounded_authoritative_rule'] h2=True r2=[]
+PLAYER: I face the guard, give my name as Galinor, a traveling wizard with no goods to declare, and wait for them to name the toll and begin the check.
+A1: The gate guard acknowledges your introduction with a curt nod. Their eyes briefly scan the modest robes and lack of goods before they state in a tired but precise tone, "The toll for a traveling wizard without goods, like yourself, is three copper pieces. The examination will be brief—mostly to ensure you carry nothing forbidden. Step forward, and someone will assist with the check." The rain continues to drum softly against the soot-dark stones as the guard signals a younger sentry to approach you for the inspection.
+A2: The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency.
+EMIT: The gate serjeant meets your gaze steadily as you identify yourself as Galinor, a traveling wizard without goods to declare. After a brief pause, they state the toll for such travelers is a modest fee and gesture to the nearby gate guard to begin the routine check. The guard moves forward, preparing to inspect your belongings with practiced efficiency.
+UNAUTH_G: ["Their eyes briefly scan the modest robes and lack of goods before they state in a tired but precise tone, \"The toll for a traveling wizard without goods, like yourself, is three copper pieces."]
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_a 5 prov=regeneration h1=False reasons=['wrong_interlocutor'] h2=True r2=[]
+PLAYER: I set my pack open for the guard and ask the exact coin of that modest fee so I can pay it while they look.
+A1: You reveal your open pack to the gate guard and ask plainly for the exact coin of the modest fee you owe. The gate guard, a sturdy figure with a sharp gaze, counts silver coins from a small pouch and replies, "The fee for travelers such as yourself is two silver coins. Pay this, and you may pass subject to the usual inspection." They nod toward the guard moving forward, who already begins a methodical glance over your belongings.
+A2: The gate serjeant eyes your open pack briefly before replying, "The modest fee for a lone traveler passing through is exactly three silver coins. Payment is expected upfront, especially with the delays tightening the checkpoint." They nod toward the tired guard ready to inspect your belongings, signaling the toll must be settled before proceeding.
+EMIT: The gate serjeant eyes your open pack briefly before replying, "The modest fee for a lone traveler passing through is exactly three silver coins. Payment is expected upfront, especially with the delays tightening the checkpoint." They nod toward the tired guard ready to inspect your belongings, signaling the toll must be settled before proceeding.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_a 9 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I stay on the main road and ask the first local I pass where a traveler can get a bed and a meal before curfew.
+A1: "A tavern runner, wiping rain from their brow as they ward off the drizzle near a steaming barrel of stew, glances up when you approach. "If you're a traveler looking for shelter and a meal before curfew," they say, voice low and hurried, "the Rusty Tankard down the road is your best bet. They offer beds and a hot meal, but you'll want to get in before sundown." They gesture down the main road where a weathered sign points toward the tavern's murky lantern-lit entrance. "After that, the curfew tightens and the gates shut. It's not wise to be caught outside."
+A2: 
+EMIT: "A tavern runner, wiping rain from their brow as they ward off the drizzle near a steaming barrel of stew, glances up when you approach. "If you're a traveler looking for shelter and a meal before curfew," they say, voice low and hurried, "the Rusty Tankard down the road is your best bet. They offer beds and a hot meal, but you'll want to get in before sundown." They gesture down the main road where a weathered sign points toward the tavern's murky lantern-lit entrance. "After that, the curfew tightens and the gates shut. It's not wise to be caught outside."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_a 10 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I follow the weathered sign down the main road and go into the Rusty Tankard.
+A1: You step off the muddy main road, following the weathered wooden sign bearing the faded name "Rusty Tankard." A low building with soot-darkened stone walls and a sagging roof stands before you. The scent of spilled ale and worn leather blends with the damp air as you push open the heavy door and step inside, greeted by murmurs and the glint of hearth fires within.
+A2: 
+EMIT: You step off the muddy main road, following the weathered wooden sign bearing the faded name "Rusty Tankard." A low building with soot-darkened stone walls and a sagging roof stands before you. The scent of spilled ale and worn leather blends with the damp air as you push open the heavy door and step inside, greeted by murmurs and the glint of hearth fires within.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_b 2 prov=regeneration h1=False reasons=['wrong_interlocutor'] h2=True r2=[]
+PLAYER: I keep my voice low and don't take the coin back yet. "Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?"
+A1: "From what I gathered," the guard captain says quietly, "several gate guards spotted those footprints just this morning near the crates northwest of the entrance. A couple of them were sent out to investigate, but they came back without word—no sign of the patrol or what became of them. So far, the talk you're hearing is mostly rumors swirling among travelers and refugees, patchy and unsettled." They glance toward the muddy approach, their expression tight. "If you want answers, the northwest track past the crates is where to start looking."
+A2: The guard captain narrows their eyes, considering your questions carefully. "No one from the gate watch has actually gone to inspect those footprints yet," they say quietly. "Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head."
+EMIT: The guard captain narrows their eyes, considering your questions carefully. "No one from the gate watch has actually gone to inspect those footprints yet," they say quietly. "Locals and travelers passing through noticed them earlier this morning near the northwest crates. The timing matches when the patrol last checked in before disappearing. If you’re thinking of investigating, that’s the direction to head."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_b 3 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I turn to the guard captain and keep my voice down. "If the timing matches their last check-in, why hasn't the watch gone to look? What was that patrol supposed to be doing when they vanished?"
+A1: "The watch hasn't sent anyone to investigate the footprints yet," the guard captain says with a tight expression. "That patrol was assigned to the usual perimeter check northwest of the crates, but they vanished before their next scheduled report. As for why no one has gone to look, I can only say that orders haven't come down from higher up to dispatch a search party so far." They glance toward the crowded gate and lower their voice. "If you're serious about following up, you might start by checking the old milestone to the northwest — travelers say the patrol was last seen heading that way."
+A2: 
+EMIT: "The watch hasn't sent anyone to investigate the footprints yet," the guard captain says with a tight expression. "That patrol was assigned to the usual perimeter check northwest of the crates, but they vanished before their next scheduled report. As for why no one has gone to look, I can only say that orders haven't come down from higher up to dispatch a search party so far." They glance toward the crowded gate and lower their voice. "If you're serious about following up, you might start by checking the old milestone to the northwest — travelers say the patrol was last seen heading that way."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_b 6 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I hold the captain's look and keep my voice just as low. "Old secrets and unsettled scores — whose? If the brass won't name them, who around this gate still will?"
+A1: You hold the guard captain's steady gaze, voice lowered with the rain-slicked tension around you. The captain exhales quietly, eyes flicking briefly toward the cluster of guards and the crowded gate. "Old secrets and unsettled scores," they murmur, "belong mostly to city watch brass and those who whisper in shadow—noble intrigues tangled with unspoken debts. Around the gate, no one openly talks; the brass has sealed lips tight. If anyone here knows more, they've learned well the price of loose tongues." Your best lead would be to press local informants or seek someone with ties to the city watch command—perhaps the tavern runner or a more discreet contact beyond the gate crowd."
+A2: 
+EMIT: You hold the guard captain's steady gaze, voice lowered with the rain-slicked tension around you. The captain exhales quietly, eyes flicking briefly toward the cluster of guards and the crowded gate. "Old secrets and unsettled scores," they murmur, "belong mostly to city watch brass and those who whisper in shadow—noble intrigues tangled with unspoken debts. Around the gate, no one openly talks; the brass has sealed lips tight. If anyone here knows more, they've learned well the price of loose tongues." Your best lead would be to press local informants or seek someone with ties to the city watch command—perhaps the tavern runner or a more discreet contact beyond the gate crowd."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_b 8 prov=regeneration h1=False reasons=['wrong_interlocutor'] h2=True r2=[]
+PLAYER: I slide another coin toward him, slower this time. "Then sell me one name. Which family, and what debt would make a patrol vanish before their next report?"
+A1: "Names and debts? That's a tough one to pin down," the tavern runner replies, voice low and cautious beneath the steady rain. "Families, sure — old bloodlines like the Durains or the Velmarks have tangled grudges, and their debts? They're not the kind you'd settle at the market. But no honest soul talks openly about who might silence a patrol."
+
+He shifts slightly, eyes flicking toward the gate guards. "If you want a name, you'd do better to start by shadowing the rumors past the old milestone northwest of the crates. That's where trouble’s been simmering, and that's what some say keeps patrols from sending reports back."
+
+"But be careful—ask too much too loud, and you'd find yourself needing that thick purse to pay for silence."
+A2: The tavern runner shakes their head, eyes flickering with a mix of caution and old suspicion. "I can’t pin it to one family or debt," they say, voice low. "The troubles beyond that milestone are tangled up with many old scores and whispered deals—too many shadows for any one name to hold." They glance around briefly. "If you want names, you’ll need someone with deeper roots and thicker pockets than mine."
+EMIT: The tavern runner shakes their head, eyes flickering with a mix of caution and old suspicion. "I can’t pin it to one family or debt," they say, voice low. "The troubles beyond that milestone are tangled up with many old scores and whispered deals—too many shadows for any one name to hold." They glance around briefly. "If you want names, you’ll need someone with deeper roots and thicker pockets than mine."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_b 9 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I leave the coin where it is and follow his glance around the square. "Then point. Who here has those deeper roots, and will they talk to a stranger with a thin purse?"
+A1: "You'll want to keep your ears open for the families tied longest to this place, though few speak freely," the ragged stranger says quietly, nodding toward the cluster near the gate guard posts. "Noble houses like Verevin and shadowed groups like the Ash Cowl — both play dangerous games here. But talk? They won’t warm up to just any stranger, especially one with a thin purse." They glance sideways, voice dropping. "Silence often costs less than a coin, though it’s a rare favor to earn."
+A2: 
+EMIT: Ragged stranger grimaces. "Not something I can say here."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_b 10 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I tilt my head toward the quieter fringe of the square, away from the guards. "Then not here. Walk with me as far as the notice board, and tell me who you meant."
+A1: The ragged stranger glances toward the quieter fringe of the square where you indicate, then shakes their head. "Not somewhere I can name," they say quietly, voice edged with hesitation. "Whoever it is, they watch too closely. Better to keep their names out of this muddy rain."
+
+The square remains soaked and restless below frayed banners, the notice board nearby casting little comfort with its lists of taxes, curfews, and a warning about the missing patrol.
+A2: 
+EMIT: The ragged stranger glances toward the quieter fringe of the square where you indicate, then shakes their head. "Not somewhere I can name," they say quietly, voice edged with hesitation. "Whoever it is, they watch too closely. Better to keep their names out of this muddy rain."
+
+The square remains soaked and restless below frayed banners, the notice board nearby casting little comfort with its lists of taxes, curfews, and a warning about the missing patrol.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_c 2 prov=regeneration h1=False reasons=['interaction_incomplete'] h2=True r2=[]
+PLAYER: I step back from the board and scan the gate approach for the crate yards, looking northwest for the mud track the notice names and whether anything there looks recently disturbed.
+A1: The area northwest of the Cinderwatch gate, where the crate yards lie, is churned by heavy traffic and recent rain, turning the mud track into a thick, sludgy mess. Close inspection reveals fresh ruts and disturbed patches indicating recent passage, but no signs of unusual activity or footprints beyond the typical caravan traffic. The muddy trail winds past stacked crates, their tarps damp and sagging under the rain. Nearby, guards keep a wary eye on the usual flow but show no sign of immediate alarm regarding the crate yards.
+A2: The muddy path northwest of the gate, where the crate yards lie, shows no fresh tracks or obvious signs of disturbance in the rain-soaked earth. The worn mud is churned from regular traffic, but nothing suggests recent unusual activity beyond the usual traffic of wagons and laborers.
+EMIT: The muddy path northwest of the gate, where the crate yards lie, shows no fresh tracks or obvious signs of disturbance in the rain-soaked earth. The worn mud is churned from regular traffic, but nothing suggests recent unusual activity beyond the usual traffic of wagons and laborers.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_c 4 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I pause between the stacks and look at the nearest guard, noting where their eyes go and whether their hand is on a weapon, then ask quietly if anyone passed through the yards since the notice went up.
+A1: The gate guard's gaze flicks briefly to the muddy crate yards and then back to the road beyond, a subtle tension visible beneath the worn leather of their gauntlets. Their hand rests lightly on the hilt of a sheathed shortsword, fingers twitching in a manner that suggests alertness rather than ease. In a low voice, they admit, "No one passed through the yards since the notice was posted. We've kept watch close, but the usual wagon traffic continues, nothing out of the ordinary."
+A2: 
+EMIT: The gate guard's gaze flicks briefly to the muddy crate yards and then back to the road beyond, a subtle tension visible beneath the worn leather of their gauntlets. Their hand rests lightly on the hilt of a sheathed shortsword, fingers twitching in a manner that suggests alertness rather than ease. In a low voice, they admit, "No one passed through the yards since the notice was posted. We've kept watch close, but the usual wagon traffic continues, nothing out of the ordinary."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_c 8 prov=regeneration h1=False reasons=['wrong_interlocutor'] h2=True r2=[]
+PLAYER: I let the silence stand and look into the knot of guards and refugees their eyes just left, picking out which face they lingered on and who went still when I spoke.
+A1: "I don't know," the ragged stranger says sharply, eyes darting nervously toward the knot of guards and refugees. "No one here will say who that is, not to me, not to anyone. Best you look elsewhere if you want answers." Their features harden as they fall silent, unwilling or unable to share more.
+A2: The ragged stranger shrugs, eyes flicking briefly over the knot of guards and refugees without lingering on any particular face. Their voice is low and uncertain. "I can’t say who exactly—they just keep to themselves, and no one here talks much about it."
+EMIT: The ragged stranger shrugs, eyes flicking briefly over the knot of guards and refugees without lingering on any particular face. Their voice is low and uncertain. "I can’t say who exactly—they just keep to themselves, and no one here talks much about it."
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_c 10 prov=safe_nonresolution h1=False reasons=['interaction_incomplete'] h2=False r2=['interaction_incomplete']
+PLAYER: I cross the mud to the townhouse and look past the sky in the polished windows, checking for a lamp, a face, or any movement behind the glass, and I read whatever mark or crest is on the shut door.
+A1: The bright townhouse stands perched above the muddy square, its polished windows reflecting the low, gray sky above Cinderwatch's eastern gate. Peering through the glass, no lamp is lit inside this afternoon, and no face appears at the windows—it feels deserted or deliberately unwelcoming. The sturdy wooden door is shut tight, displaying a carved crest: a silver hawk clutching a ring in its talons against a field of deep blue. The emblem suggests ties to a local noble house, likely House Verevin, known for their heraldry bearing a hawk. No sign of someone watching the gate from here is visible.
+A2: You cross the slick mud toward the bright townhouse standing like a beacon against the gray wash of the sky. Its polished windows mirror the bleak daylight, betraying no sign of life within—no lamp glows, no shadow shifts. The heavy door bears a finely wrought crest, its details crisply carved: an intricate interlacing of a tree entwined with a serpentine dragon, suggesting the emblem of a noble house. The door remains shut tight, granting no clue what lies inside.
+EMIT: The inspection establishes no further reliable detail about the wear.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_d 1 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I shoulder through the rain and the crowd to the notice board and read the fresh postings on the new taxes, the curfew, and the missing patrol, looking for names, places, and how recently the ink was put up.
+A1: The notice board before you bears three fresh postings. The first announces increased taxes levied this month, citing increased caravan congestion and census delays around the Ash Compact. The second outlines the newly imposed curfew, starting tonight at dusk, restricting movement through the gate district until dawn. The third warns that a patrol dispatched northwest along the muddy track past the old crates has gone missing; the roster lists the patrol leader's name, Eldrin Voss, and the last update was put up just this morning. The ink still looks slightly damp, a stark reminder that this concern is recent and urgent.
+A2: 
+EMIT: The notice board before you bears three fresh postings. The first announces increased taxes levied this month, citing increased caravan congestion and census delays around the Ash Compact. The second outlines the newly imposed curfew, starting tonight at dusk, restricting movement through the gate district until dawn. The third warns that a patrol dispatched northwest along the muddy track past the old crates has gone missing; the roster lists the patrol leader's name, Eldrin Voss, and the last update was put up just this morning. The ink still looks slightly damp, a stark reminder that this concern is recent and urgent.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_d 3 prov=safe_nonresolution h1=False reasons=['interaction_incomplete'] h2=False r2=['interaction_incomplete']
+PLAYER: I walk the few dozen paces to the old crates and check the muddy ruts for fresh boot prints or drag marks, then listen toward the underbrush for whatever is moving out there.
+A1: You approach the old crates at the edge of the muddy track, crouching to inspect the rut marks left by boots and carts. The prints appear fresh, some bearing the clear tread of heavy boots dragged unevenly through the thick mud, suggesting urgent travel or fatigue. Beyond the crates, the underbrush shifts faintly, the dry rustle of leaves and snapping twigs betraying movement just beyond sight, hinting at an unseen presence moving cautiously in the rain-soaked thicket.
+A2: You crouch beside the old crates, bending close to the damp earth. The muddy ruts are fresh—clearly from boot prints, some deeper than others—stretching northwest along the track mentioned on the notice board. No distinct drag marks disrupt the path here, indicating nothing heavy has been hauled recently. From here, the underbrush absorbs the patter of muted sounds; something stirs within, but the shadows and rain obscure its shape and distance.
+EMIT: The inspection establishes no further reliable detail about the wear.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_d 6 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I step out of the brush onto the track where the shape can see me and call over, asking whether they came from the gate or from farther up the patrol route.
+A1: The shifting figure hesitates, pausing in the muddy track as your voice carries through the damp air. No clear answer comes back from the shadows of the underbrush; whatever moves there remains silent and unseen, offering no sign of origin from gate or patrol route. The soggy foliage rustles faintly as a breeze stirs, but the source of the shape offers no words or greeting—only cautious stillness amid the dripping leaves.
+A2: 
+EMIT: The shifting figure hesitates, pausing in the muddy track as your voice carries through the damp air. No clear answer comes back from the shadows of the underbrush; whatever moves there remains silent and unseen, offering no sign of origin from gate or patrol route. The soggy foliage rustles faintly as a breeze stirs, but the source of the shape offers no words or greeting—only cautious stillness amid the dripping leaves.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []
+==================== persona_d 10 prov=initial_generation h1=True reasons=[] h2=None r2=[]
+PLAYER: I leave the figure in the brush and follow the muddy track farther northwest, watching the ruts and the verges for anything a patrol might have dropped.
+A1: You follow the muddy track northwest, leaving the indistinct figure lurking in the brush behind. The weathered stone milestone appears beside the narrow road, its worn surface leaning slightly amid the damp and overgrown verges. The mud around the marker is churned with faint overlapping prints that fade into the scrub. Beyond the milestone, the track continues a short distance before rainwater pools and thick brush make the way unclear. You keep a steady watch on the muddy ruts and roadside, scanning for anything a patrol might have dropped or missed.
+A2: 
+EMIT: You follow the muddy track northwest, leaving the indistinct figure lurking in the brush behind. The weathered stone milestone appears beside the narrow road, its worn surface leaning slightly amid the damp and overgrown verges. The mud around the marker is churned with faint overlapping prints that fade into the scrub. Beyond the milestone, the track continues a short distance before rainwater pools and thick brush make the way unclear. You keep a steady watch on the muddy ruts and roadside, scanning for anything a patrol might have dropped or missed.
+UNAUTH_G: []
+UNAUTH_R: []
+UNAUTH_E: []

@@ -1,0 +1,113 @@
+{
+  "id": "galinor",
+  "name": "Galinor",
+  "class": "Wizard",
+  "level": 1,
+  "ancestry": "Human",
+  "hp": {
+    "current": 8,
+    "max": 8,
+    "nonlethal": 0
+  },
+  "ac": {
+    "normal": 12,
+    "touch": 12,
+    "flat_footed": 10
+  },
+  "initiative_bonus": 2,
+  "speed": 30,
+  "ability_scores": {
+    "str": 10,
+    "dex": 14,
+    "con": 12,
+    "int": 18,
+    "wis": 12,
+    "cha": 10
+  },
+  "saves": {
+    "fort": 1,
+    "ref": 2,
+    "will": 3
+  },
+  "bab": 0,
+  "cmb": 0,
+  "cmd": 12,
+  "skills": {
+    "knowledge_arcana": 8,
+    "spellcraft": 8,
+    "perception": 4,
+    "sense_motive": 4,
+    "stealth": 4,
+    "diplomacy": 4,
+    "intimidate": 2,
+    "bluff": 2
+  },
+  "attacks": [
+    {
+      "id": "quarterstaff",
+      "name": "Quarterstaff",
+      "attack_bonus": 0,
+      "damage": {
+        "dice_count": 1,
+        "dice_sides": 6,
+        "bonus": 0,
+        "type": "bludgeoning"
+      },
+      "type": "melee"
+    },
+    {
+      "id": "crossbow",
+      "name": "Light Crossbow",
+      "attack_bonus": 2,
+      "damage": {
+        "dice_count": 1,
+        "dice_sides": 8,
+        "bonus": 0,
+        "type": "piercing"
+      },
+      "type": "ranged"
+    }
+  ],
+  "conditions": [],
+  "inventory": [
+    {
+      "id": "spellbook",
+      "name": "Spellbook",
+      "quantity": 1,
+      "usable": false
+    }
+  ],
+  "spells": {
+    "prepared": [
+      {
+        "id": "daze",
+        "name": "Daze",
+        "cast": false,
+        "level": 0
+      },
+      {
+        "id": "detect_magic",
+        "name": "Detect Magic",
+        "cast": false,
+        "level": 0
+      },
+      {
+        "id": "magic_missile",
+        "name": "Magic Missile",
+        "cast": false,
+        "level": 1
+      },
+      {
+        "id": "shield",
+        "name": "Shield",
+        "cast": false,
+        "level": 1
+      }
+    ],
+    "slots": {
+      "0": 3,
+      "1": 1
+    }
+  },
+  "notes": "Default template character. Import a custom sheet for campaign play."
+}

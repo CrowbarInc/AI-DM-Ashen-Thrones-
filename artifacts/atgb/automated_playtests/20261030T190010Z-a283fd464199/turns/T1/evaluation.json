@@ -1,0 +1,518 @@
+{
+  "step_id": "T1",
+  "player_input": "I take a moment to look around the gate district. What do I notice?",
+  "dm_response": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+  "response_truncated": false,
+  "http_status": 200,
+  "outcome_classification": {
+    "kind": "unknown",
+    "evidence": "native accepted response and resolution; no invented success condition"
+  },
+  "state_diff": [
+    {
+      "path": "/session.json/conversational_context/delivered_exchanges",
+      "before": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "",
+          "delivered_text": "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 1,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "fcbb0e6c1fe3fc832c2ab64ec0aecc6d19f664d99b9b09b4b74c8ec7c8660649",
+          "authorization_source": "initial_generation",
+          "adoption_turn_identity": "rc_dd89a2b89c62"
+        }
+      ],
+      "after": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "",
+          "delivered_text": "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 1,
+          "active": false,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "fcbb0e6c1fe3fc832c2ab64ec0aecc6d19f664d99b9b09b4b74c8ec7c8660649",
+          "authorization_source": "initial_generation",
+          "adoption_turn_identity": "rc_dd89a2b89c62"
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I take a moment to look around the gate district. What do I notice?",
+          "delivered_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "frontier_gate",
+          "turn": 1,
+          "active": true,
+          "authorized_proposition": "",
+          "answer_sufficiency": "",
+          "proposition_id": "",
+          "response_integrity_digest": "1fb5b9da538c7e273c33ce1cfbcd66ea1e07e43e5831d57f282b71b6500dd25d",
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ]
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/category",
+      "before": "RESOLVED",
+      "after": "ANSWER"
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/operation",
+      "before": "scene_opening",
+      "after": null
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/purpose",
+      "before": "ACTION_RESULT",
+      "after": "DESCRIPTION"
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/response",
+      "before": "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in. A tavern runner shouts offers of hot stew and paid rumor. A notice board lists new taxes, curfews, and a posted warning about a missing patrol. You can read the notice board, approach the tavern runner, or watch the crowd.",
+      "after": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board."
+    },
+    {
+      "path": "/session.json/conversational_context/last_gm_exchange/subject",
+      "before": "",
+      "after": "I take a moment to look around the gate district. What do I notice?"
+    },
+    {
+      "path": "/session_log.jsonl",
+      "before": {
+        "preview": "[{\"timestamp\": \"2026-10-30T19:00:12.791330Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 86224,
+        "sha256": "ba752d4db5de0d9c8e7d26c1fcb848498dfd0773e43af686183ca30307c33c2e"
+      },
+      "after": {
+        "preview": "[{\"timestamp\": \"2026-10-30T19:00:12.791330Z\", \"player_input\": \"\", \"request\": {\"start_campaign\": true, \"action_type\": \"start_campaign\"}, \"resolution\": {\"kind\": \"scene_opening\", \"action_id\": \"campaign_start_opening_scene\", \"label\": \"start_campaign\", \"prompt\": \"\", \"success\": true, \"resolved_transition\": false, \"target_scene_id\": \"frontier_gate\", \"clue_id\": null, \"discovered_clues\": [], \"world_updates\": null, \"state_changes\": {\"opening_scene_turn\": true, \"arrived_at_scene\": true, \"new_scene_context_available\": true}, \"hint\": \"Campaign opening turn: narrate the active scene as an immediate playable situation, with concrete opportunities grounded in the current scene state.\", \"metadata\": {\"resolution_contract\": {\"contract_id\": \"rc_dd89a2b89c62\", \"turn_index\": 1, \"request_kind\": \"action\", \"operation\": \"unresolved\", \"target_ref\": null, \"interlocutor_id\": null, \"conversational_subject\": null, \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"epistemic_mode\": \"unknown_allowed\", \"discourse_ref\": null, \"referent_provenance\": \"explicit_player\", \"ambiguous\": false, \"raw_input\": \"\", \"construction\": {\"cues\": [], \"referent_slot\": null, \"referent_reason\": \"no_anaphor\", \"ambiguity_detected\": false, \"actionable_inherited\": false, \"active_claim_inherited\": false, \"fast_path_proposal\": true, \"fast_path_used\": true, \"fast_path_abstained\": false, \"fast_path_abstention_reason\": null, \"model_interpreter_invoked\": false, \"model_proposal_rejected\": false, \"clarification_after_model\": false, \"interpretation_api_calls\": 0, \"interpretation_error\": null, \"canonical_candidates\": [{\"id\": \"frontier_gate\", \"type\": \"place\", \"label\": \"Cinderwatch Gate District\"}, {\"id\": \"notice_board\", \"type\": \"object\", \"label\": \"Notice board\"}, {\"id\": \"market_quarter\", \"type\": \"place\", \"label\": \"Enter Cinderwatch\"}, {\"id\": \"old_milestone\", \"type\": \"place\", \"label\": \"Follow the missing patrol rumor\"}, {\"id\": \"guard_captain\", \"type\": \"interlocutor\", \"label\": \"Guard Captain\"}, {\"id\": \"tavern_runner\", \"type\": \"interlocutor\", \"label\": \"Tavern Runner\"",
+        "truncated": true,
+        "characters": 95284,
+        "sha256": "bc4d535b1be5362ba22947a10269b47c5f8eb228f4d704df321e5ef2a9b0896d"
+      }
+    }
+  ],
+  "state_before": "turns/T1/before/documents.json",
+  "state_after": "turns/T1/after/documents.json",
+  "diagnostics": [
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "08dc9d6595784ac7a34039aa3902784a",
+      "attempt_id": "99054da750c641dab30bdbed55fac074",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-30T19:00:13.154810+00:00",
+      "time": "2026-10-30T19:00:13.154810+00:00",
+      "sequence": 2,
+      "admission": "admitted",
+      "budget_remaining": 4,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "08dc9d6595784ac7a34039aa3902784a",
+      "attempt_id": "99054da750c641dab30bdbed55fac074",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-30T19:00:13.154810+00:00",
+      "time": "2026-10-30T19:00:13.155810+00:00",
+      "sequence": 2,
+      "admission": "admitted",
+      "budget_remaining": 4,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "08dc9d6595784ac7a34039aa3902784a",
+      "attempt_id": "99054da750c641dab30bdbed55fac074",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-30T19:00:13.154810+00:00",
+      "time": "2026-10-30T19:00:13.156809+00:00",
+      "sequence": 2,
+      "admission": "admitted",
+      "budget_remaining": 4,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": true,
+      "request_id": "synthetic-response",
+      "model": "gpt-4.1-mini",
+      "input_tokens": 20,
+      "output_tokens": 10,
+      "total_tokens": 30,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 0.052
+    }
+  ],
+  "provider_usage": {
+    "request_count": 1,
+    "input_tokens": 20,
+    "output_tokens": 10,
+    "total_tokens": 30,
+    "retry_count": 0,
+    "operations": [
+      {
+        "attempt_id": "99054da750c641dab30bdbed55fac074",
+        "owner": "live_chat_interpretation.request_interpretation",
+        "purpose": "interpretation",
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini",
+        "input_tokens": 20,
+        "output_tokens": 10,
+        "total_tokens": 30,
+        "latency_ms": 0.052,
+        "completion_status": "completed"
+      }
+    ],
+    "provider_latency_ms": 0.052,
+    "provider_latency_status": "native latency_ms only; unavailable remains null"
+  },
+  "mechanical": {
+    "status": "PASS",
+    "completed_interaction": true,
+    "turn_delta": 0,
+    "log_delta": 1,
+    "scene_before": "frontier_gate",
+    "scene_after": "frontier_gate",
+    "rules": {
+      "status": "recorded_requires_review",
+      "evidence": {
+        "kind": "conversational_answer",
+        "action_id": "conversational_answer",
+        "label": "I take a moment to look around the gate district. What do I notice?",
+        "prompt": "I take a moment to look around the gate district. What do I notice?",
+        "success": null,
+        "resolved_transition": false,
+        "target_scene_id": null,
+        "discovered_clues": [],
+        "world_updates": null,
+        "state_changes": {},
+        "metadata": {
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "authoritative_mutation": false,
+          "resolver_invoked": false,
+          "gameplay_parser_invoked": false,
+          "narration_invoked": false,
+          "processing_outcome": "conversational_answer",
+          "conversational_decision": {
+            "category": "ANSWER",
+            "primary_intention": "I take a moment to look around the gate district. What do I notice?",
+            "intent_family": "gm_communication",
+            "incidental_context": [],
+            "proposed_operation": null,
+            "proposed_target": null,
+            "proposed_record": null,
+            "missing_information": [],
+            "context_references": [
+              "visible:0",
+              "visible:1"
+            ],
+            "requires_authoritative_execution": false,
+            "reason": "communication_before_execution",
+            "confidence": null,
+            "ambiguity": null,
+            "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+            "context_update": null,
+            "intent_modality": "informational",
+            "secondary_intentions": [],
+            "execution_policy": "answer_only",
+            "communication_owner": "GM",
+            "communication_purpose": "DESCRIPTION",
+            "authorization": null
+          },
+          "live_chat_interpretation": {
+            "status": "blocked",
+            "reason": "clarification_required",
+            "eligibility_disposition": "SAFE_ABSTENTION",
+            "model_communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "raw_interpretation": "{\"communication_mode\": \"OTHER\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Look around the gate district\"}, \"asserted_premises\": [], \"requested_outcomes\": [], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"NONE\", \"note\": \"\"}, \"communication\": {\"recipient\": \"GM\", \"purpose\": \"DESCRIPTION\", \"subject\": \"surroundings\", \"evidence_refs\": [\"visible:0\", \"visible:1\"]}}",
+            "provider_requests": [
+              {
+                "event": "completed",
+                "version": "ATGB-03B-1",
+                "run_id": "08dc9d6595784ac7a34039aa3902784a",
+                "attempt_id": "99054da750c641dab30bdbed55fac074",
+                "purpose": "interpretation",
+                "owner": "live_chat_interpretation.request_interpretation",
+                "configured_model": "gpt-4.1-mini",
+                "admitted_at": "2026-10-30T19:00:13.154810+00:00",
+                "time": "2026-10-30T19:00:13.156809+00:00",
+                "sequence": 2,
+                "admission": "admitted",
+                "budget_remaining": 4,
+                "sdk_retries": 0,
+                "host_retries": "disabled",
+                "sent": true,
+                "request_id": "synthetic-response",
+                "model": "gpt-4.1-mini",
+                "input_tokens": 20,
+                "output_tokens": 10,
+                "total_tokens": 30,
+                "usage_consistent": true,
+                "refusal": null,
+                "completion_status": "completed",
+                "dispatch_attempted": true,
+                "latency_ms": 0.052
+              }
+            ],
+            "record": {
+              "communication_mode": "OTHER",
+              "interpretation_status": "INTERPRETED",
+              "player_intent": {
+                "summary": "Look around the gate district"
+              },
+              "asserted_premises": [],
+              "requested_outcomes": [],
+              "action_components": [],
+              "references": {
+                "permitted_entity_ids": [],
+                "unresolved_references": []
+              },
+              "clarification_question": "",
+              "correction": {
+                "subject": "NONE",
+                "note": ""
+              },
+              "communication": {
+                "recipient": "GM",
+                "purpose": "DESCRIPTION",
+                "subject": "surroundings",
+                "evidence_refs": [
+                  "visible:0",
+                  "visible:1"
+                ]
+              },
+              "incidental_context": [],
+              "reference_reconciliation": {
+                "annotations": [],
+                "addressee": null,
+                "operation": ""
+              },
+              "public_evidence": {
+                "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board."
+              }
+            }
+          },
+          "stored_interpretation_bridge": null,
+          "provider_calls": {
+            "interpretation_requests": 1,
+            "narration_requests": 0,
+            "ooc_assistance_requests": 0,
+            "retries": 0
+          },
+          "performance": {
+            "elapsed_ms": 19,
+            "interpretation_ms": null,
+            "resolution_ms": null,
+            "narration_ms": null,
+            "validation_ms": null,
+            "retry_ms": null,
+            "provider_call_count": 1,
+            "input_tokens": 20,
+            "output_tokens": 10,
+            "retry_count": 0,
+            "retry_reason": null,
+            "disposition": "conversational_answer",
+            "successful": true,
+            "provider_narration_skipped": false
+          }
+        }
+      },
+      "source": "production resolution; no independent adjudication"
+    },
+    "mutation_authority": "REQUIRES_HUMAN_REVIEW for changes not covered by explicit invariants"
+  },
+  "semantic": {
+    "status": "RECORDED",
+    "final_hard_validation": true,
+    "native_validation": {
+      "accepted_response": {
+        "addressee": "player",
+        "adoption_status": "candidate_accepted",
+        "attempt": 0,
+        "authority_result": "accepted",
+        "authorization_provenance": {
+          "addressee": "player",
+          "authority_category": "host_operation",
+          "authorized_proposition": "",
+          "epistemic_status": "none",
+          "operation": "ask",
+          "policy_version": "pr-eg-r6-r1-r1",
+          "provenance_id": "2608602d877553f8",
+          "source_id": "",
+          "speaker_id": "",
+          "validation": "host_operation"
+        },
+        "authorization_source": "conversational_decision:communication_before_execution",
+        "candidate_disposition": "host_selected",
+        "canonical": false,
+        "contract": {
+          "contract_id": "",
+          "expected_resolution": "",
+          "interlocutor_id": "",
+          "operation": ""
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 0,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            "conversational_decision:communication_before_execution"
+          ],
+          "gm_resolution_decision_audit": null,
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "ask",
+        "player_input": "I take a moment to look around the gate district. What do I notice?",
+        "provenance": "authorized_host_speech",
+        "resolution_kind": "conversational_answer",
+        "speaker": "GM",
+        "speaker_id": "",
+        "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+        "subject": "",
+        "target": "",
+        "text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "turn_identity": "",
+        "integrity_digest": "1fb5b9da538c7e273c33ce1cfbcd66ea1e07e43e5831d57f282b71b6500dd25d"
+      }
+    },
+    "nonresolution": "authorized_host_speech",
+    "gameplay_acceptance": true,
+    "provider_stages": [],
+    "extraction": [],
+    "json_parsing": [],
+    "structured_validation": []
+  },
+  "quality": {
+    "rubric_version": "pr-play-09-quality-v1",
+    "scale": {
+      "0": "Complete failure",
+      "1": "Major deficiency",
+      "2": "Partially adequate",
+      "3": "Good",
+      "4": "Strong"
+    },
+    "dimensions": {
+      "Q1": {
+        "dimension": "Responsiveness",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q2": {
+        "dimension": "Grounding",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q3": {
+        "dimension": "Continuity",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q4": {
+        "dimension": "Actionability",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q5": {
+        "dimension": "Narrative quality",
+        "score": null,
+        "status": "REQUIRES_HUMAN_REVIEW",
+        "evidence": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "Automated presence/subject/repetition probes cannot establish this 0\u20134 judgment."
+      },
+      "Q6": {
+        "dimension": "Agency and consequences",
+        "score": null,
+        "status": "N/A",
+        "evidence": "The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "method": "human_review_pending",
+        "confidence": "not_assessed",
+        "explanation": "No immediate consequence required."
+      }
+    },
+    "probes": {
+      "response_exists": true,
+      "requested_subject_mentioned": true,
+      "repeated_exact_response": false,
+      "generic_marker": false
+    },
+    "concerns": [],
+    "method": "deterministic presence and exact markers; heuristic relevance and repetition",
+    "status": "REQUIRES_HUMAN_REVIEW"
+  },
+  "findings": [],
+  "stop": false,
+  "application_latency_seconds": 0.203,
+  "ok": true,
+  "action": "player_turn"
+}

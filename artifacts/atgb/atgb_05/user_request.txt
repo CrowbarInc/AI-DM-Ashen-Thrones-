@@ -1,0 +1,279 @@
+# Ashen Thrones — ATGB-05
+
+## Baseline Preservation and NEXT_SESSION Reconciliation
+
+### Objective
+
+Finalize the initial ATGB v1 benchmark setup, preserve its first conversational assessment, and reconcile `NEXT_SESSION.md` with the project's actual development status.
+
+This is a documentation, evidence-preservation, and development-handoff pass.
+
+Do not modify production gameplay behavior.
+
+Do not execute live-provider requests.
+
+Do not introduce new benchmark infrastructure unless an essential integrity defect prevents preservation.
+
+---
+
+## 1. Review project authority
+
+Read the current Development Constitution and applicable validation standards.
+
+Review:
+
+* ATGB-01 through ATGB-04 documentation.
+* ATGB-03 and ATGB-03C execution evidence.
+* ATGB-04 authoritative 37-turn review package.
+* Current `NEXT_SESSION.md`.
+* Current Product Realization status.
+* Existing benchmark reporting tools.
+
+Use the current repository as the source of truth.
+
+Do not assume historical planning documents accurately describe the present implementation.
+
+---
+
+## 2. Import the independent assessment
+
+Two evaluation artifacts are supplied separately:
+
+* `ATGB_04_review_judgments.json`
+* `ATGB_04_review_summary.md`
+
+These contain ChatGPT's independent assessment of all 37 captured exchanges.
+
+Verify:
+
+1. All 37 authoritative turns are represented exactly once.
+2. Scenario and turn identifiers match the captured transcripts.
+3. Original and continuation trial provenance is preserved.
+4. The supplied judgments are internally consistent.
+5. Aggregate counts match the individual judgments.
+6. S07/S09 setup limitations remain documented.
+7. Uncertain authority judgments remain uncertain.
+
+Do not silently modify the evaluator's judgments.
+
+If a discrepancy is found, document it and request clarification.
+
+### Evaluation provenance
+
+The assessment was conducted by ChatGPT (GPT-6), independently of Cursor's implementation process.
+
+It is an AI-assisted transcript assessment, not authenticated human scoring.
+
+Preserve:
+
+`human_review_attestation: false`
+
+Do not forge or bypass human attestation.
+
+If the existing reporting mechanism requires human attestation, preserve the assessment as a provisional evaluation artifact rather than weakening the reporting mechanism.
+
+The initial ATGB setup may be considered operationally established without misrepresenting provisional judgments as formally human-approved results.
+
+---
+
+## 3. Preserve the baseline findings
+
+The supplied provisional assessment reports:
+
+| Dimension            | Pass | Fail | Uncertain |
+| -------------------- | ---: | ---: | --------: |
+| Interpretation       |   18 |   16 |         3 |
+| Response adequacy    |   10 |   25 |         2 |
+| Authority compliance |   35 |    0 |         2 |
+
+Preserve the original judgments and supporting evidence.
+
+Do not recalculate the figures by treating uncertain results as successes.
+
+Do not create a composite gameplay score.
+
+Document the recurring failure families:
+
+* Conversational intent misclassification.
+* Corrections treated as mechanical revisions.
+* Related but nonresponsive answers.
+* Loss of conversational references.
+* Unnecessary clarification.
+* Mechanical fallback messages exposed to players.
+* Weak handling of ordinary social remarks.
+
+Preserve S03.4 and S05.4 as unresolved authority-investigation candidates because unrelated faction agenda flags appeared after conversational turns.
+
+Do not classify these as confirmed authority violations without additional evidence.
+
+---
+
+## 4. Establish ATGB v1 status
+
+Document that the initial benchmark has:
+
+* An approved scenario corpus.
+* A reproducible frozen starting state.
+* Isolated scenario execution.
+* Provider-request accounting safeguards.
+* A complete 37-turn live baseline.
+* Preserved transcripts and telemetry.
+* A defined evaluation rubric.
+* Human-review tools.
+* A completed provisional independent assessment.
+
+Clearly distinguish:
+
+**Operational benchmark readiness:** Complete.
+
+**Initial live evidence capture:** Complete.
+
+**Provisional independent assessment:** Complete.
+
+**Authenticated human scoring:** Pending.
+
+**Conversational gameplay competence:** Not established.
+
+Do not describe ATGB v1 as proving the game is playable.
+
+Do not describe previously exposed held-out scenarios as independently unseen generalization evidence.
+
+---
+
+## 5. Reconcile NEXT_SESSION.md
+
+Inspect the existing document and identify obsolete or contradictory development-status statements.
+
+Update it to reflect the actual state of Ashen Thrones.
+
+The document should explain:
+
+### Current development position
+
+* Reconciliation-era architectural work has been completed.
+* Product Realization has progressed substantially.
+* ATGB v1 has been established.
+* The initial conversational benchmark exposes significant player-facing weaknesses.
+* The project is not yet reliably playable by its intended conversational standard.
+
+### Principal findings
+
+The greatest demonstrated weakness is response adequacy.
+
+The engine can sometimes answer direct questions but frequently struggles with:
+
+* Natural conversation.
+* Follow-up references.
+* Corrections.
+* Contextual NPC dialogue.
+* Distinguishing conversation from mechanical actions.
+
+### Immediate development priority
+
+Investigate the highest-impact conversational failure families using the existing benchmark evidence.
+
+Prioritize identifying the responsible pipeline stage before implementing repairs.
+
+Avoid another broad architectural overhaul without evidence that it is necessary.
+
+### Evaluation workflow
+
+Future relevant gameplay changes should be evaluated against:
+
+1. The original failing interaction.
+2. Related variations.
+3. The existing benchmark corpus.
+4. Independent generalization evidence when available.
+
+Do not claim that passing deterministic tests establishes conversational competence.
+
+### Remaining investigations
+
+Record unresolved issues without allowing them to block the next development session unnecessarily.
+
+These include:
+
+* S03.4/S05.4 faction-state changes.
+* S07/S09 opening-context delivery limitations.
+* Existing regression failures documented during ATGB-03B.
+* Provider SDK retry accounting limitations.
+* Pending authenticated human review.
+
+---
+
+## 6. Keep NEXT_SESSION useful
+
+`NEXT_SESSION.md` should serve as a practical orientation document, not another comprehensive project report.
+
+Prefer:
+
+* Concise current status.
+* What has been demonstrated.
+* What remains uncertain.
+* Immediate recommended work.
+* References to authoritative supporting documents.
+
+Remove obsolete instructions that conflict with the current state.
+
+Preserve useful historical references elsewhere rather than duplicating lengthy development history.
+
+Do not create competing governance documents.
+
+---
+
+## 7. Recommend the next Product Realization investigation
+
+Identify two or three high-leverage conversational failure families from the provisional ATGB assessment.
+
+For each, provide:
+
+* Representative benchmark turns.
+* Observable failure.
+* Likely responsible subsystem candidates.
+* Evidence needed to establish root cause.
+* Suggested diagnostic approach.
+* How a future repair would be validated.
+
+These are investigation recommendations, not authorization to implement gameplay changes.
+
+Do not begin repairs.
+
+---
+
+## 8. Validate and deliver
+
+Run appropriate documentation, integrity, and reporting checks.
+
+Verify that:
+
+* The 37-turn baseline remains intact.
+* No gameplay behavior changed.
+* No benchmark expectations changed.
+* No human attestation was fabricated.
+* The provisional assessment remains clearly labeled.
+* `NEXT_SESSION.md` accurately describes current project status.
+* The next development priorities are evidence-driven.
+
+Produce the standard review handoff ZIP.
+
+Include:
+
+1. Updated `NEXT_SESSION.md`.
+2. ATGB v1 status summary.
+3. Preserved provisional evaluation artifacts.
+4. Integrity validation results.
+5. Recommended next investigations.
+6. Known limitations.
+7. Complete change summary.
+
+### Stop condition
+
+Stop after baseline preservation and development-handoff reconciliation.
+
+Do not initiate another ATGB infrastructure campaign.
+
+Do not execute additional live-provider requests.
+
+Do not modify gameplay behavior.
+
+Await review.

@@ -1,0 +1,155 @@
+{
+  "application_runtime_dispatch_owners": [
+    {
+      "owner": "api_upstream_preflight.run_upstream_api_preflight",
+      "purpose": "preflight",
+      "feature_gate_conditions": "Startup unless ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT; explicit probe can also be called",
+      "previous_enforcement_and_ledger": "No guard or ledger before repair",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    },
+    {
+      "owner": "gm.call_gpt",
+      "purpose": "Caller purpose; narration/primary/OOC/retry as routed",
+      "feature_gate_conditions": "Existing provider disable and retry-disable gates; same routing/pinned model behavior",
+      "previous_enforcement_and_ledger": "Guard when accounting active; completion/failure ledger; post-completion parser failure could account twice",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    },
+    {
+      "owner": "live_chat_interpretation.request_interpretation",
+      "purpose": "interpretation",
+      "feature_gate_conditions": "Production interpretation enabled, provider calls enabled; upstream orchestration unchanged",
+      "previous_enforcement_and_ledger": "Guard plus completion/failure ledger; allowance charged only at completion",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    },
+    {
+      "owner": "expressive_dialogue.request_expression",
+      "purpose": "expression",
+      "feature_gate_conditions": "Existing expression-disable/provider-disable gates and expression eligibility",
+      "previous_enforcement_and_ledger": "Guard plus completion/failure ledger; omitted by some host performance counters",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    },
+    {
+      "owner": "semantic_interpreter._invoke_interpretation_model",
+      "purpose": "contract_interpretation",
+      "feature_gate_conditions": "Live interpretation enabled and production interpretation not already consumed",
+      "previous_enforcement_and_ledger": "No guard or ledger before repair",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    },
+    {
+      "owner": "unified_semantic_planning._invoke_provider",
+      "purpose": "semantic_plan",
+      "feature_gate_conditions": "ASHEN_UNIFIED_SEMANTIC_PLANNING enabled and semantic candidate path not selected; direct test seam separate",
+      "previous_enforcement_and_ledger": "Guard; successful completions only, dispatch exception could disappear",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    },
+    {
+      "owner": "host_constrained_candidates.invoke_candidate_provider",
+      "purpose": "semantic_candidate",
+      "feature_gate_conditions": "ASHEN_UNIFIED_SEMANTIC_PLANNING plus ASHEN_HOST_CONSTRAINED_CANDIDATES; direct calls remain possible",
+      "previous_enforcement_and_ledger": "Guard; successful completions only, dispatch exception could disappear",
+      "admission": "Existing budget owner atomically reserves request plus pending token allowance; durable admitted event before return",
+      "dispatch": "attempt.dispatch durably fsyncs dispatch_attempted before invoking original SDK callable once with unchanged kwargs",
+      "completion": "Centralized usage capture before caller parsing; one completion per attempt identity; provider response id remains separate",
+      "exceptions": "BaseException records failed/interrupted completion then rethrows; existing owner fallback/propagation unchanged",
+      "pre_dispatch_interruption": "Durable admission remains consumed and pending; no silent reset/reuse of ledger",
+      "coverage_status": "verified_current_source_and_controlled_stub_tests",
+      "actual_live_dispatch_observed_in_this_pass": false
+    }
+  ],
+  "separate_non_runtime_dispatch_sites": [
+    {
+      "path": "experiments/pr_dl/live.py",
+      "line": 45,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "experiments/pr_dp/runner.py",
+      "line": 346,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "experiments/pr_dr/runner.py",
+      "line": 317,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "experiments/pr_eg_r6_r3/common.py",
+      "line": 183,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "experiments/pr_eg_r6_r4_r1/engine.py",
+      "line": 192,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "tools/assess_pr_eg_r6_r2_r2.py",
+      "line": 82,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "tools/qualify_pr_eg_r4.py",
+      "line": 243,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6.py",
+      "line": 504,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r1.py",
+      "line": 44,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "tools/run_pr_dh_live_interpretation.py",
+      "line": 138,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    },
+    {
+      "path": "tools/run_pr_dt_authoritative_narration.py",
+      "line": 190,
+      "classification": "separate experiment/developer utility; not a production game dispatch owner; not executed or certified by ATGB readiness"
+    }
+  ],
+  "scope": "run.py starts the game API; production game package has seven SDK dispatch references. Legacy experimental runners and standalone developer clients are outside ATGB runtime and are separately inventoried, not silently certified.",
+  "active_vs_conditional": "Gate conditions identify eligibility, not evidence of dispatch. ATGB startup preflight remains skipped; no configuration flags were changed by this pass.",
+  "accounting_enabled_when": "ASHEN_PROVIDER_REQUEST_LIMIT or ASHEN_PROVIDER_USAGE_PATH is set; active accounting requires a fresh writable durable ledger path. ATGB configures both before game import."
+}

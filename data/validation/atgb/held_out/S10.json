@@ -1,0 +1,78 @@
+{
+  "scenario_id": "S10",
+  "title": "The barrel",
+  "catalog_heading": "S10 — The barrel",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "held_out",
+  "catalog_partition": "held-out",
+  "evidence_status": "held_out_previously_exposed",
+  "evidence_status_note": "S10 was included in the ATGB-01 review catalog so a reviewer could judge it. The held-out partition remains. It is not fully independent unseen evaluation data.",
+  "primary_capability": "ambiguity_handling",
+  "secondary_capabilities": ["conversational_continuity", "response_relevance", "authority"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. Held-out. The rain barrel and the runner's offer are visible. Nothing has been said yet.",
+  "authoritative_facts": [
+    "The runner trades hot stew and rumors beside the rain barrel.",
+    "The non-food half of that offer is the rumor, whose content is the footprint hearsay once the runner is actually asked.",
+    "The barrel is not an interactable with a clue."
+  ],
+  "npc_knowledge": [
+    "The runner knows the owned rumor when the rumor is requested. The barrel has no knowledge."
+  ],
+  "expected_outcomes": [
+    "The thing by the barrel is not quietly resolved into travel, a purchase, or a single guess.",
+    "The follow-up selects the rumor rather than the stew."
+  ],
+  "acceptable_variations": [
+    "The clarification may offer the barrel, the runner, the stew, and the rumor as the live possibilities. It does not need all four words if the real ambiguity is stated plainly."
+  ],
+  "unacceptable_behaviors": [
+    "Taking the missing-patrol exit.",
+    "Investigating a new object called the thing.",
+    "Serving stew.",
+    "Quoting the notice clue as what the runner sells."
+  ],
+  "required_evidence": ["Shared packet, labeled held_out, plus scene id to confirm no exit."],
+  "setup_dependencies": [
+    "Follow the rumor is an authored exit label and is intentionally not the player line, so a travel parse is not the favored reading. If the host nonetheless travels, that is a critical authority failure unless the player-facing text and resolved_transition both show a real, intended exit, which this wording does not justify."
+  ],
+  "determinism": "mixed",
+  "turns": [
+    {
+      "turn_id": "S10.1",
+      "catalog_heading": "S10.1 — primary: ambiguity handling",
+      "primary_capability": "ambiguity_handling",
+      "player_input": "Handle the thing by the barrel.",
+      "communicative_act": "The target is ambiguous. It is not a completed travel action and not a completed purchase.",
+      "interpretation_pass": "The target is ambiguous. It is not a completed travel action and not a completed purchase.",
+      "response_pass": "One focused question among the barrel, the runner, and the runner's offer.",
+      "authority_pass": "Scene stays frontier_gate. No clue. No coin.",
+      "acceptable_variations": [
+        "The clarification may offer the barrel, the runner, the stew, and the rumor. It does not need all four words if the real ambiguity is stated plainly."
+      ],
+      "unacceptable_behaviors": ["Taking the missing-patrol exit or serving stew."],
+      "clarification_expected": "necessary_pass",
+      "clarification_notes": "Guessing a purchase or a journey is missing_when_needed_fail and critical if state changes.",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Scene id, to confirm no exit."]
+    },
+    {
+      "turn_id": "S10.2",
+      "catalog_heading": "S10.2 — primary: conversational continuity",
+      "primary_capability": "conversational_continuity",
+      "player_input": "Not the barrel. What the runner said he'd sell, the one that isn't food.",
+      "communicative_act": "The player selects the non-food offer, which is the rumor.",
+      "interpretation_pass": "The player selects the non-food offer, which is the rumor.",
+      "response_pass": "The footprint rumor as hearsay, from the runner.",
+      "authority_pass": "Stew is not delivered. The notice's track sentence is not relabeled as the sold rumor. No price.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Returning to the barrel or answering with food."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if S10.1's alternatives are closed by this sentence and the rumor is the survivor. lost if the reply returns to the barrel or answers with food. This turn reaches back to the visible offer and to the clarification.",
+      "required_evidence": ["Scene id and speaker."]
+    }
+  ]
+}

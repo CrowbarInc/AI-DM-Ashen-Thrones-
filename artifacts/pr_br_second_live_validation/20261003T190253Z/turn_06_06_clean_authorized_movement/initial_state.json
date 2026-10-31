@@ -1,0 +1,107 @@
+{
+  "scene": {
+    "scene": {
+      "id": "rope_walk",
+      "location": "Ashford rope walk",
+      "summary": "A long covered walk holds coils of new rope. A stair at the far end climbs to the sail loft.",
+      "mode": "exploration",
+      "visible_facts": [
+        "Coils of new rope line the covered walk.",
+        "A stair at the far end climbs to the sail loft."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [
+        {
+          "label": "Go to the sail loft",
+          "target_scene_id": "sail_loft"
+        }
+      ],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [
+    {
+      "scene": {
+        "id": "sail_loft",
+        "location": "Ashford sail loft",
+        "summary": "Cut canvas hangs from pegs along the loft. The floor is swept, and the air smells of waxed thread.",
+        "mode": "exploration",
+        "visible_facts": [
+          "Cut canvas hangs from pegs along the loft.",
+          "The floor of the sail loft is swept."
+        ],
+        "opening_seed_facts": [],
+        "journal_seed_facts": [],
+        "discoverable_clues": [],
+        "hidden_facts": [],
+        "exits": [
+          {
+            "label": "Return to the rope walk",
+            "target_scene_id": "rope_walk"
+          }
+        ],
+        "enemies": [],
+        "actions": [],
+        "addressables": [],
+        "interactables": []
+      }
+    }
+  ],
+  "world": {
+    "settlements": [
+      {
+        "id": "ashford",
+        "name": "Ashford",
+        "type": "hill_town",
+        "tags": [
+          "mill",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hill town of mills, cisterns, yards, and a ferry slip."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_patch": null,
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "starting_context": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a hill town."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace, yard, or slip in Ashford.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "rope_walk",
+    "visited_scene_ids": [
+      "rope_walk"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "interaction_context": null,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "case_id": "s16q4",
+  "family": "s16",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "ced312e56c69b32edd0da1568e8d5fe4d7d464f44da30e6340b2dae56ff35882",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "The dune patrol reports to Quartermaster Olan during winter"
+    ],
+    "qualifiers": [
+      "during winter",
+      "npc_knowledge",
+      "world_source"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s16"
+    ],
+    "answered_arguments": [
+      "Who receives the reports"
+    ],
+    "missing_arguments": [
+      "what happens in summer"
+    ],
+    "conflict": false,
+    "reason": "The facts specify who receives the reports during winter but do not provide information about what happens in summer."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier",
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

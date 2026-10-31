@@ -1,0 +1,318 @@
+[
+  {
+    "turn": 1,
+    "player_text": "I approach the tavern runner first, hoping to buy some hot stew and listen carefully to the whispered rumors he’s offering, trying to learn more about the missing patrol and the overall mood among the crowd.",
+    "extracted_referential_candidates": [],
+    "candidate_phrase": "Tavern Runner",
+    "resolved_referential_head": "runner",
+    "resolved_entity_type": "person",
+    "personhood_result": "person",
+    "operation": "perceive",
+    "dimension": "sound",
+    "dimensions": [
+      "sound"
+    ],
+    "target": {
+      "type": "interlocutor",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "tavern_runner",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "candidate_incidental_entities": [],
+    "candidate_spans": [],
+    "candidate_semantic_heads": [
+      "runner"
+    ],
+    "personhood_verdict": "person",
+    "binding_result": "bound_canonical",
+    "instantiated_incidental_entities": [],
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "tavern_runner",
+      "entity_id": null,
+      "label": "Tavern Runner",
+      "explicit_new_interlocutor": false,
+      "authority_reasons": [
+        "identity:established"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "The tavern runner wipes his hands on his stained apron before ladling a thick, steaming stew into a chipped wooden bowl. His voice lowers to a whisper as he glances around the crowded gate area. \"Word is the missing patrol encountered something unexpected beyond the northwest mud track,\" he says cautiously. \"No one's sure what, but it's got the guard captain worried enough to tighten the curfew and post warnings on that notice board over there.\" He jerks a thumb toward the board listing the new taxes, curfew rules, and the patrol's disappearance. \"Crowd's tense, talking in hushed tones. Rumors fly, but most stick to what the guard serjeant lets slip when he thinks no one's listening.\"",
+    "generation_attempt_count": 2,
+    "retry_invoked": true,
+    "accepted_text": "The inspection establishes no further reliable detail about the sound.",
+    "accepted_provenance": "safe_nonresolution",
+    "final_emitted_response": "The inspection establishes no further reliable detail about the sound.",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": false,
+      "reasons": [
+        "consequential_invention"
+      ],
+      "soft_flags": [],
+      "text": "The tavern runner wipes his hands on his stained apron before ladling a thick, steaming stew into a chipped wooden bowl. His voice lowers to a whisper as he glances around the crowded gate area. \"Word is the missing patrol encountered something unexpected beyond the northwest mud track,\" he says cautiously. \"No one's sure what, but it's got the guard captain worried enough to tighten the curfew and post warnings on that notice board over there.\" He jerks a thumb toward the board listing the new taxes, curfew rules, and the patrol's disappearance. \"Crowd's tense, talking in hushed tones. Rumors fly, but most stick to what the guard serjeant lets slip when he thinks no one's listening.\""
+    },
+    "regeneration_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "authority_emitted": [],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "speaker_conflict": false,
+    "rejected_label_persisted": false,
+    "offline_evaluator": {
+      "semantic_result": "FAIL",
+      "score": 72
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "tavern_runner",
+        "label": "tavern_runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_73f80a8d4ab4"
+    }
+  },
+  {
+    "turn": 2,
+    "player_text": "I approach the tavern runner, offering a few coins for a bowl of hot stew. While he serves the stew, I ask quietly, \"What are people saying about this missing patrol? Is it tied to the rising tension here?\" I try to catch any nuances or fear in his voice and observe if he seems willing to share more.",
+    "extracted_referential_candidates": [],
+    "candidate_phrase": "Tavern Runner",
+    "resolved_referential_head": "runner",
+    "resolved_entity_type": "person",
+    "personhood_result": "person",
+    "operation": "ask",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "target": {
+      "type": "object",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": "tavern_runner",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "tavern_runner",
+      "label": "Tavern Runner",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "tavern_runner",
+      "source": "explicit_player"
+    },
+    "candidate_incidental_entities": [],
+    "candidate_spans": [],
+    "candidate_semantic_heads": [
+      "runner"
+    ],
+    "personhood_verdict": "person",
+    "binding_result": "bound_canonical",
+    "instantiated_incidental_entities": [],
+    "entity_binding": {
+      "status": "bound_canonical",
+      "entity_class": "canonical_established",
+      "proposed_interlocutor": null,
+      "proposed_span": null,
+      "bound_interlocutor_id": "tavern_runner",
+      "entity_id": null,
+      "label": "Tavern Runner",
+      "explicit_new_interlocutor": false,
+      "authority_reasons": [
+        "identity:established"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "The tavern runner's voice lowers slightly as he ladles the hot stew into a bowl, fingers trembling just a little from the chill. \"I can't say much for certain about this missing patrol,\" he confesses cautiously. \"People whisper, but no one's seen or heard anything solid. Some say it might be tied to the rising tension, maybe someone wanting to stir trouble—but that's just idle talk around here. If you want answers, the gate serjeant tends to keep better records and watch the notices.\"\n\nHe glances nervously toward the gate serjeant managing the crowd while lowering his voice, signaling his hesitance to share more openly.",
+    "generation_attempt_count": 2,
+    "retry_invoked": true,
+    "accepted_text": "\"Honestly, I don't have much more than what's on that notice board,\" the tavern runner says quietly, ladling stew into a rough bowl. \"People are uneasy, sure, but most talk is just whispers and worries—not much solid news. As for the patrol, no one's come back with answers, and that only stokes the tension. You'd best keep close to those with official word—like the guard serjeant by the roster. They might know more, but it's all quiet on my end.\"",
+    "accepted_provenance": "regeneration",
+    "final_emitted_response": "\"Honestly, I don't have much more than what's on that notice board,\" the tavern runner says quietly, ladling stew into a rough bowl. \"People are uneasy, sure, but most talk is just whispers and worries—not much solid news. As for the patrol, no one's come back with answers, and that only stokes the tension. You'd best keep close to those with official word—like the guard serjeant by the roster. They might know more, but it's all quiet on my end.\"",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": false,
+      "reasons": [
+        "wrong_interlocutor"
+      ],
+      "soft_flags": [],
+      "text": "The tavern runner's voice lowers slightly as he ladles the hot stew into a bowl, fingers trembling just a little from the chill. \"I can't say much for certain about this missing patrol,\" he confesses cautiously. \"People whisper, but no one's seen or heard anything solid. Some say it might be tied to the rising tension, maybe someone wanting to stir trouble—but that's just idle talk around here. If you want answers, the gate serjeant tends to keep better records and watch the notices.\"\n\nHe glances nervously toward the gate serjeant managing the crowd while lowering his voice, signaling his hesitance to share more openly."
+    },
+    "regeneration_feedback": "The previous attempt was rejected for: wrong_interlocutor. The response assigns the answer to the wrong speaker. Preserve the bound interlocutor. Do not answer as a different person, and do not turn an observation into unrelated NPC speech. Keep the same resolution contract, operation, target, and dimension. Answer again. Do not rewrite a name into the previous sentence.",
+    "authority_emitted": [
+      {
+        "text": "They might know more, but it's all quiet on my end.",
+        "kind": "npc_claim",
+        "epistemic_status": "uncertain",
+        "grounded": false,
+        "consequential": false,
+        "family": "none"
+      }
+    ],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 0,
+    "speaker_conflict": false,
+    "rejected_label_persisted": false,
+    "offline_evaluator": {
+      "semantic_result": "PASS",
+      "score": 87
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "tavern_runner",
+        "label": "Tavern Runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "tavern_runner",
+        "label": "tavern_runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_fad00c0f698b"
+    }
+  },
+  {
+    "turn": 3,
+    "player_text": "I thank the tavern runner quietly, then turn toward the guard serjeant near the roster to ask about the missing patrol and the current state of affairs inside the gate. I observe the serjeant’s demeanor carefully, looking for signs of stress or secrecy.",
+    "extracted_referential_candidates": [
+      "the guard serjeant near the roster to ask"
+    ],
+    "candidate_phrase": "the guard serjeant near the roster to ask",
+    "resolved_referential_head": "serjeant",
+    "resolved_entity_type": "unknown",
+    "personhood_result": "not_person",
+    "operation": "ask",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "target": {
+      "type": "interlocutor",
+      "id_or_text": "Gate Serjeant",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": null,
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Gate Serjeant",
+      "source": "explicit_player"
+    },
+    "candidate_incidental_entities": [],
+    "candidate_spans": [
+      "the guard serjeant near the roster to ask"
+    ],
+    "candidate_semantic_heads": [
+      "serjeant"
+    ],
+    "personhood_verdict": "not_person",
+    "binding_result": "ambiguous",
+    "instantiated_incidental_entities": [],
+    "entity_binding": {
+      "status": "ambiguous",
+      "entity_class": "ambiguous_unresolved",
+      "proposed_interlocutor": "guard serjeant near roster to ask",
+      "proposed_span": "the guard serjeant near the roster to ask",
+      "bound_interlocutor_id": null,
+      "entity_id": null,
+      "label": null,
+      "explicit_new_interlocutor": true,
+      "authority_reasons": [
+        "proposal:ambiguous"
+      ],
+      "claim_binding": "none"
+    },
+    "contract_expected": "answer",
+    "initial_generation": "\"I'm afraid I have no new information on the missing patrol,\" the guard captain replies in a steady voice, his gaze unwavering yet distant. \"The roster near the serjeant holds what has been posted; beyond that, we await word like everyone else.\" He pauses briefly, then adds quietly, \"The gate remains on edge, but we remain vigilant.\"\n\nThe guard captain's expression is controlled but carries a shadow of weariness. His shoulders are squared, though you catch a fleeting tightening of his jaw when you press for more. There is no overt secrecy, only a guarded professionalism shaped by uncertain times.",
+    "generation_attempt_count": 1,
+    "retry_invoked": false,
+    "accepted_text": "\"I'm afraid I have no new information on the missing patrol,\" the guard captain replies in a steady voice, his gaze unwavering yet distant. \"The roster near the serjeant holds what has been posted; beyond that, we await word like everyone else.\" He pauses briefly, then adds quietly, \"The gate remains on edge, but we remain vigilant.\"\n\nThe guard captain's expression is controlled but carries a shadow of weariness. His shoulders are squared, though you catch a fleeting tightening of his jaw when you press for more. There is no overt secrecy, only a guarded professionalism shaped by uncertain times.",
+    "accepted_provenance": "initial_generation",
+    "final_emitted_response": "\"I'm afraid I have no new information on the missing patrol,\" the guard captain replies in a steady voice, his gaze unwavering yet distant. \"The roster near the serjeant holds what has been posted; beyond that, we await word like everyone else.\" He pauses briefly, then adds quietly, \"The gate remains on edge, but we remain vigilant.\"\n\nThe guard captain's expression is controlled but carries a shadow of weariness. His shoulders are squared, though you catch a fleeting tightening of his jaw when you press for more. There is no overt secrecy, only a guarded professionalism shaped by uncertain times.",
+    "accepted_emitted_semantic_match": true,
+    "hard_validation_attempt_1": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "text": "\"I'm afraid I have no new information on the missing patrol,\" the guard captain replies in a steady voice, his gaze unwavering yet distant. \"The roster near the serjeant holds what has been posted; beyond that, we await word like everyone else.\" He pauses briefly, then adds quietly, \"The gate remains on edge, but we remain vigilant.\"\n\nThe guard captain's expression is controlled but carries a shadow of weariness. His shoulders are squared, though you catch a fleeting tightening of his jaw when you press for more. There is no overt secrecy, only a guarded professionalism shaped by uncertain times."
+    },
+    "regeneration_feedback": null,
+    "authority_emitted": [],
+    "unauthorized_emitted": [],
+    "interpretation_calls": 1,
+    "speaker_conflict": false,
+    "rejected_label_persisted": false,
+    "offline_evaluator": {
+      "semantic_result": "PASS",
+      "score": 88
+    },
+    "discourse_after": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "tavern_runner",
+        "label": "tavern_runner",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_a1524a52524c"
+    }
+  }
+]

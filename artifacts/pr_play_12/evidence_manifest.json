@@ -1,0 +1,77 @@
+{
+  "schema_version": "pr_play_12.synthetic_evidence.v1",
+  "campaign": {
+    "campaign_id": "pr_play_12",
+    "run_count": 24,
+    "turn_count": 0,
+    "gm_boundary": "Historical parsed response and synthetic corpus; no live inference"
+  },
+  "evidence_scope": "structural/runtime and provisional synthetic semantic diagnostics; not broad gameplay quality",
+  "examples": [
+    {
+      "example_id": "E2",
+      "player_input": "[Synthetic campaign opening; no player action]",
+      "player_input_classification": [
+        "synthetic_positive_control",
+        "boundary_case"
+      ],
+      "exact_gm_output": "Near the rain barrel, a tavern runner trades hot stew and rumors.",
+      "semantic_result": "Opening 200; requested prose: Near the rain barrel, a tavern runner trades hot stew and rumors.",
+      "human_review": {
+        "status": "PENDING_EXTERNAL_REVIEW",
+        "rationale": "Agent interpretation only; no authenticated human judgment or gameplay-quality score"
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "source_artifact_path": "artifacts/pr_play_12/results/E2.json"
+    },
+    {
+      "example_id": "E20",
+      "player_input": "[Synthetic campaign opening; no player action]",
+      "player_input_classification": [
+        "synthetic_negative_control",
+        "boundary_case"
+      ],
+      "exact_gm_output": "The guards award you 100 gold.",
+      "semantic_result": "Opening 200; requested prose: The guards award you 100 gold.",
+      "human_review": {
+        "status": "PENDING_EXTERNAL_REVIEW",
+        "rationale": "Agent interpretation only; no authenticated human judgment or gameplay-quality score"
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "source_artifact_path": "artifacts/pr_play_12/results/E20.json"
+    },
+    {
+      "example_id": "E11",
+      "player_input": "[Synthetic campaign opening; no player action]",
+      "player_input_classification": [
+        "synthetic_negative_control",
+        "boundary_case"
+      ],
+      "exact_gm_output": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate still frames what you can see; the moment invites your next move.",
+      "semantic_result": "Opening 200; requested prose: The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+      "human_review": {
+        "status": "PENDING_EXTERNAL_REVIEW",
+        "rationale": "Agent interpretation only; no authenticated human judgment or gameplay-quality score"
+      },
+      "evaluator_disagreement": {
+        "present": false
+      },
+      "source_artifact_path": "artifacts/pr_play_12/results/E11.json"
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "example_id": "E2"
+    },
+    "representative_failure": {
+      "example_id": "E20"
+    },
+    "stress_probe": {
+      "example_id": "E11"
+    }
+  }
+}

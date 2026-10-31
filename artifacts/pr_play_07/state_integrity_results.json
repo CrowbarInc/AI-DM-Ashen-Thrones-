@@ -1,0 +1,760 @@
+{
+  "matrix": [
+    {
+      "fixture": "S1",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S10",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S11",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S12",
+      "expected_commit": false,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S2",
+      "expected_commit": false,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S3",
+      "expected_commit": false,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S4",
+      "expected_commit": false,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S5",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S6",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S7",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S8",
+      "expected_commit": true,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": true,
+        "turn_counter": 1,
+        "time_pressure": 1,
+        "log_length": 1,
+        "can_start": false,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 3,
+            "agenda_progress": 1
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 2,
+            "agenda_progress": 1
+          }
+        ],
+        "event_types": [
+          "faction_pressure",
+          "faction_pressure"
+        ]
+      },
+      "pass": true
+    },
+    {
+      "fixture": "S9",
+      "expected_commit": false,
+      "before": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "after": {
+        "campaign_started": false,
+        "turn_counter": 0,
+        "time_pressure": 0,
+        "log_length": 0,
+        "can_start": true,
+        "factions": [
+          {
+            "id": "house_verevin",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ash_cowl",
+            "pressure": 2,
+            "agenda_progress": 0
+          },
+          {
+            "id": "ordo_pyric",
+            "pressure": 1,
+            "agenda_progress": 0
+          }
+        ],
+        "event_types": []
+      },
+      "pass": true
+    }
+  ],
+  "pr04_controls": [
+    {
+      "name": "test_valid_opening_commits_once_and_repeat_does_not",
+      "passed": true
+    },
+    {
+      "name": "test_invalid_provider_output_fails_without_progression[missing_envelope-You stand beside the gate in the rain.]",
+      "passed": true
+    },
+    {
+      "name": "test_invalid_provider_output_fails_without_progression[malformed_json-{not json]",
+      "passed": true
+    },
+    {
+      "name": "test_invalid_provider_output_fails_without_progression[incomplete_envelope-{\"declared_claims\": []]",
+      "passed": true
+    },
+    {
+      "name": "test_invalid_provider_output_fails_without_progression[truncated_json-{\"declared_claims\": [], \"narration\": \"You stand at the gate]",
+      "passed": true
+    },
+    {
+      "name": "test_invalid_provider_output_fails_without_progression[empty_response-]",
+      "passed": true
+    },
+    {
+      "name": "test_provider_exception_does_not_commit",
+      "passed": true
+    },
+    {
+      "name": "test_failure_then_failure_then_success_commits_once",
+      "passed": true
+    },
+    {
+      "name": "test_provider_exception_then_success_commits_once",
+      "passed": true
+    },
+    {
+      "name": "test_pipeline_exception_restores_world_and_session",
+      "passed": true
+    },
+    {
+      "name": "test_exception_before_provider_dispatch_restores_state",
+      "passed": true
+    },
+    {
+      "name": "test_persistence_failure_before_commit_restores_baseline",
+      "passed": true
+    },
+    {
+      "name": "test_budget_rejection_is_before_dispatch",
+      "passed": true
+    },
+    {
+      "name": "test_dispatched_failure_consumes_admission_and_blocks_the_next_start",
+      "passed": true
+    },
+    {
+      "name": "test_market_quarter_opening_is_independent_of_cinderwatch_text",
+      "passed": true
+    },
+    {
+      "name": "test_concurrent_starts_commit_one_opening",
+      "passed": true
+    },
+    {
+      "name": "test_ordinary_information_fallback_is_not_treated_as_an_opening",
+      "passed": true
+    },
+    {
+      "name": "test_chat_campaign_start_failure_then_success",
+      "passed": true
+    }
+  ],
+  "notes": "Saved timestamps/debug/empty-log initialization are bookkeeping. Full persisted-value checks also run in PR05 diagnostic matrix."
+}

@@ -1,0 +1,113 @@
+{
+  "scene": {
+    "scene": {
+      "id": "salt_pans",
+      "location": "Brineward salt pans",
+      "summary": "White salt crusts the nearest pan. Pell stands in it with a wooden rake, working the crust loose.",
+      "mode": "social",
+      "visible_facts": [
+        "White salt crusts the nearest pan.",
+        "Pell stands in the pan with a wooden rake."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "pell",
+          "name": "Pell",
+          "scene_id": "salt_pans",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "salt-raker",
+            "salt-raker",
+            "salt raker"
+          ],
+          "aliases": [
+            "salt-raker",
+            "salt raker"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "brineward",
+        "name": "Brineward",
+        "type": "riverside_ward",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A riverside ward of workshops, stalls, and work yards."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "pell",
+        "name": "Pell",
+        "location": "salt_pans",
+        "role": "salt-raker",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "salt-raker",
+          "salt raker"
+        ],
+        "topics": [
+          {
+            "id": "work",
+            "text": "Pell rakes salt from the pans when the crust is ready."
+          }
+        ]
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "starting_context": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a riverside craft ward."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace or stall in Brineward.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "salt_pans",
+    "visited_scene_ids": [
+      "salt_pans"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

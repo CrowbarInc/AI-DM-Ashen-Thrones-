@@ -1,0 +1,324 @@
+{
+  "live": true,
+  "model": {
+    "default": "gpt-4.1-mini",
+    "high_precision": "gpt-4.1-mini",
+    "routing_enabled": true
+  },
+  "retry_ceiling": 2,
+  "manual_play_gpt_ceiling": 6,
+  "narration_timeout": "openai_sdk_default",
+  "provider_budget_defaults": {
+    "request_limit_env": "ASHEN_PROVIDER_REQUEST_LIMIT",
+    "input_default_when_limit_set": 8000,
+    "output_default_when_limit_set": 2000,
+    "total_default_when_limit_set": 10000,
+    "narration_max_output_tokens_env": "ASHEN_NARRATION_MAX_OUTPUT_TOKENS",
+    "narration_max_output_default": 600,
+    "interpretation_max_output": 320
+  },
+  "caching": "No application-level prompt cache. Provider prompt caching is not configured in call sites.",
+  "instrumentation": "External wrappers around call_gpt, save_session, and save_world. No production edit.",
+  "seed_ids": {
+    "courtyard": "waystation_courtyard",
+    "street": "waystation_street",
+    "npc": "sergeant_mara"
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "npc_dialogue_initiation",
+      "player_text": "I ask Sergeant Mara about the road beyond the gate.",
+      "elapsed_ms": 2777,
+      "latency_ms": {},
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 23010,
+      "persistence_ms": {
+        "save_session": 19,
+        "save_world": 2
+      },
+      "usage_delta_requests": 1,
+      "usage_delta_input_tokens": 23035,
+      "usage_delta_output_tokens": 73,
+      "resolution_kind": "question",
+      "scene_after": "waystation_courtyard",
+      "active_target": "sergeant_mara",
+      "successful": true,
+      "response_excerpt": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+      "calls": [
+        {
+          "purpose": "strict_social",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 4166,
+          "system_estimated_tokens": 1041,
+          "user_chars": 87876,
+          "user_estimated_tokens": 21969,
+          "contract": "narration_only",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21794,
+              "estimated_tokens": 5448
+            },
+            {
+              "key": "instructions",
+              "chars": 15959,
+              "estimated_tokens": 3989
+            },
+            {
+              "key": "turn_packet",
+              "chars": 9069,
+              "estimated_tokens": 2267
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 6132,
+              "estimated_tokens": 1533
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 5291,
+              "estimated_tokens": 1322
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 3243,
+              "estimated_tokens": 810
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2954,
+              "estimated_tokens": 738
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2265,
+              "estimated_tokens": 566
+            },
+            {
+              "key": "lead_context",
+              "chars": 1987,
+              "estimated_tokens": 496
+            },
+            {
+              "key": "opening_scene_realization",
+              "chars": 1933,
+              "estimated_tokens": 483
+            },
+            {
+              "key": "scene",
+              "chars": 1925,
+              "estimated_tokens": 481
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1453,
+              "estimated_tokens": 363
+            }
+          ],
+          "instruction_count": 88,
+          "unique_instruction_count": 88,
+          "instruction_chars": 15593,
+          "longest_instructions": [
+            {
+              "chars": 745,
+              "prefix": "INCIDENTAL SOCIAL REPLY AUTHORITY: If dialogue_social_plan.reply_plan_kind is harmless_subjective_response_permitted, lack of an authored pr"
+            },
+            {
+              "chars": 611,
+              "prefix": "OPENING SCENE PROHIBITED CONTENT: Do not open with backstage plot summaries, faction strategy briefings, or omniscient knowledge claims. | D"
+            },
+            {
+              "chars": 606,
+              "prefix": "OPENING SCENE COMPOSITION CONTRACT: Do not list facts. Do not compress facts into clauses. Expand each fact into a natural sentence or phras"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 432,
+              "prefix": "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this tu"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 392,
+              "prefix": "OPENING SCENE EXAMPLE: BAD: \"Rain spatters... Refugees... Guards...\" GOOD: \"You stand in the churned mud before Cinderwatch's eastern gate a"
+            },
+            {
+              "chars": 377,
+              "prefix": "OPENING SCENE (STRUCTURED COMPOSITION): Start from the player's anchored perspective: where the player is positioned and what immediately su"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3471,
+              "estimated_tokens": 867
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2363,
+              "estimated_tokens": 590
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 2179,
+              "estimated_tokens": 544
+            },
+            {
+              "key": "response_delta",
+              "chars": 1747,
+              "estimated_tokens": 436
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1629,
+              "estimated_tokens": 407
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1539,
+              "estimated_tokens": 384
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1506,
+              "estimated_tokens": 376
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1472,
+              "estimated_tokens": 368
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 6098,
+              "estimated_tokens": 1524
+            },
+            {
+              "key": "contracts",
+              "chars": 2060,
+              "estimated_tokens": 515
+            },
+            {
+              "key": "debug",
+              "chars": 287,
+              "estimated_tokens": 71
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 138,
+              "estimated_tokens": 34
+            },
+            {
+              "key": "route",
+              "chars": 130,
+              "estimated_tokens": 32
+            },
+            {
+              "key": "player_text",
+              "chars": 53,
+              "estimated_tokens": 13
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1415,
+              "estimated_tokens": 353
+            },
+            {
+              "key": "scene_opening",
+              "chars": 995,
+              "estimated_tokens": 248
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 844,
+              "estimated_tokens": 211
+            },
+            {
+              "key": "action_outcome",
+              "chars": 650,
+              "estimated_tokens": 162
+            },
+            {
+              "key": "transition_node",
+              "chars": 556,
+              "estimated_tokens": 139
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 458,
+              "estimated_tokens": 114
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 294,
+              "estimated_tokens": 73
+            },
+            {
+              "key": "required_new_information",
+              "chars": 264,
+              "estimated_tokens": 66
+            }
+          ],
+          "latency_ms": 2617,
+          "result_chars": 320
+        }
+      ]
+    }
+  ],
+  "provider_snapshot": {
+    "requests": 1,
+    "input_tokens": 23035,
+    "output_tokens": 73,
+    "total_tokens": 23108,
+    "stopped": false,
+    "stop_reason": "",
+    "records": [
+      {
+        "purpose": "strict_social",
+        "sent": true,
+        "configured_model": "gpt-4.1-mini",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "request_id": "resp_06c26458676e1faa006acc06acbe8c87d28866ecb3dd4bdae9",
+        "input_tokens": 23035,
+        "output_tokens": 73,
+        "total_tokens": 23108,
+        "max_output_tokens": 1600,
+        "model_mismatch": false,
+        "usage_consistent": true
+      }
+    ]
+  },
+  "persist_totals": {
+    "save_session": 19,
+    "save_world": 2,
+    "save_session_count": 2,
+    "save_world_count": 2
+  }
+}

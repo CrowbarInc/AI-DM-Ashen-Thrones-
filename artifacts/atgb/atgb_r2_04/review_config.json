@@ -1,0 +1,383 @@
+{
+  "campaign_id": "atgb_r2_04",
+  "campaign_name": "ATGB-R2-04 — Question-to-Evidence Interpretation Contract Repair",
+  "campaign_date": "2026-10-19",
+  "purpose": "External review of bounded existing instruction replacement; no live-provider authority",
+  "executive_summary": "B — Conditional. Instruction and deterministic host compatibility pass; 39 explicitly blocked HTTP tests leave a regression coverage gap. 198 focused / 332 broader non-HTTP passed. No live inference or behavioral improvement claim. Historical evidence packet below is R2-03 provenance, not a new R2-04 performance result.",
+  "objective_status": "B — Conditional",
+  "primary_report": "development/reports/atgb_r2_04/08_final_verdict_and_handoff.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/atgb_r2_03"
+  ],
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_r2_04/after_nonhttp.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/after_nonhttp.xml",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/baseline.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/baseline_bundled.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/baseline_nonhttp.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/baseline_nonhttp.xml",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/baseline_regression.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/baseline_regression_retry.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/contract_preservation.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/effective_after.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/effective_before.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/entry_hashes.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/focused.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/focused.xml",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/focused_final.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/focused_final.xml",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/focused_verified.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/focused_verified.xml",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/historical_compatibility.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/historical_provenance_verification.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/http_after_inventory.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/http_baseline_inventory.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/instruction_after.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/instruction_before.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/integrity.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/live_chat_interpretation.py.before",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/NEXT_SESSION.md.before",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/orientation.diff",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/prompt_sizes.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/regression_summary.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/repository_status_after.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/repository_status_before.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/review_config.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/schema_after.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/schema_before.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/schema_inventory.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/sensitive_payload_check.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_04/source.diff",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/01_baseline_and_contract_inventory.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/02_instruction_change_analysis.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/03_implementation_diff.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/04_deterministic_contract_validation.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/05_historical_compatibility.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/06_authority_and_regression.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/reports/atgb_r2_04/07_prompt_size_and_performance.md",
+      "role": "report",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "tests/test_atgb_r2_04_question_evidence_contract.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "tests/test_atgb_r1_07_correction_contract.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "tests/test_atgb_r1_04_readiness.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/tmp/atgb_r2_04_baseline.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/tmp/atgb_r2_04_capture.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/tmp/atgb_r2_04_evidence.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/tmp/atgb_r2_04_nonhttp.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "development/tmp/atgb_r2_04_package.py",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_03/adapter_controls.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_03/context_and_original_logs.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_03/historical_trace_excerpts.json",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_r2_02/regression_slice.txt",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+      "role": "qualification_evidence",
+      "why": "Explicit source/test, baseline, captured request, deterministic compatibility or validation evidence needed for external review."
+    }
+  ],
+  "changes": {
+    "production": [
+      "One existing system instruction literal in game/live_chat_interpretation.py."
+    ],
+    "validation": [
+      "18 new tests of effective request and R2-03 controlled host inputs."
+    ],
+    "tooling": [
+      "Disposable offline scripts packaged as reproducibility evidence; no runtime/tool owner changes."
+    ],
+    "documentation": [
+      "Eight reports and concise canonical session orientation."
+    ],
+    "generated_artifacts": [
+      "Captured requests/schema, source diff, compatibility/authority, size and regression evidence."
+    ]
+  },
+  "testing": {
+    "focused": "198 passed; no HTTP transport.",
+    "broader": "332 passed, 39 explicitly deselected HTTP cases; entry comparison 314/39.",
+    "full_suite": "Not run; full broader HTTP attempts interrupted before completion.",
+    "runtime_validation": "Four controlled substitutions pass current adapter + unchanged host record reconsideration, all in memory; original semantic failures remain historical.",
+    "model_runtime_boundary": "Offline only. Provider dispatch replaced; network forbidden in captures/controls; pytest live-model guard active. No live inference or connectivity diagnostic.",
+    "new_regressions": "None demonstrated in completed scope; HTTP result unknown.",
+    "pre_existing_failures": "No failed case in completed entry slice; two historically known HTTP failures not reproduced in current environment. Initial partial error/failure log remains indeterminate."
+  },
+  "decisions_requiring_human_review": [
+    "Review bounded wording and whether HTTP coverage gap permits retention; no next action or provider trial executed."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "39 HTTP tests could not complete on entry; B verdict.",
+      "No new model selection/repair-effect result."
+    ],
+    "pre_existing": [
+      "Semantic failures retained in original ATGB logs; R1-07 live acceptance pending."
+    ]
+  },
+  "missing_concepts": [
+    "No new architecture requirement established."
+  ],
+  "does_not_prove": [
+    "Improved live evidence selection or subject continuity.",
+    "Live authority preservation, broad conversational competence, benchmark or independent generalization.",
+    "Complete HTTP or full-suite regression."
+  ],
+  "recommended_next_step": "External review of this ZIP and HTTP coverage limitation; stop before further implementation or live work.",
+  "self_contained_review_test": "All eight reports, exact instruction before/after, working-entry diff, source/test snapshots, requests/schema, exact host controls, XML/logs and excluded node inventory are included; ZIP hashes verified after construction.",
+  "configuration_source": "artifacts/atgb/atgb_r2_04/review_config.json"
+}

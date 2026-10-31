@@ -1,0 +1,72 @@
+{
+  "stamp": "20260928T002628Z",
+  "isolated_storage": "C:\\Users\\MASTER~1\\AppData\\Local\\Temp\\prbr_l2_6m5jhfo4",
+  "gameplay_turns": 7,
+  "model_calls": 9,
+  "semantic_failures": [],
+  "turns": [
+    {
+      "probe_id": "establish_inspected",
+      "semantic_result": "PASS",
+      "contract_id": "rc_ac1cd45c2d47",
+      "dimension": null,
+      "operation": "inspect",
+      "referent_provenance": "explicit_player",
+      "assessment": "unchecked"
+    },
+    {
+      "probe_id": "perception_smell_referent",
+      "semantic_result": "PASS",
+      "contract_id": "rc_d86535730220",
+      "dimension": "smell",
+      "operation": "perceive",
+      "referent_provenance": "explicit_player",
+      "assessment": "satisfied"
+    },
+    {
+      "probe_id": "perception_wear_referent",
+      "semantic_result": "PASS",
+      "contract_id": "rc_6503cc18e4dc",
+      "dimension": "wear",
+      "operation": "perceive",
+      "referent_provenance": "explicit_player",
+      "assessment": "satisfied"
+    },
+    {
+      "probe_id": "establish_claim",
+      "semantic_result": "PASS",
+      "contract_id": "rc_53ac763498a4",
+      "dimension": null,
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment": "unchecked"
+    },
+    {
+      "probe_id": "claim_source",
+      "semantic_result": "PASS",
+      "contract_id": "rc_38cd3b07eb90",
+      "dimension": "location",
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment": "partial"
+    },
+    {
+      "probe_id": "claim_confidence",
+      "semantic_result": "PASS",
+      "contract_id": "rc_355092ece732",
+      "dimension": "confidence",
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment": "satisfied"
+    },
+    {
+      "probe_id": "follow_lead",
+      "semantic_result": "PASS",
+      "contract_id": "rc_a4faf5579192",
+      "dimension": null,
+      "operation": "follow",
+      "referent_provenance": "unresolved",
+      "assessment": "legitimate_nonresolution"
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+FFFFFFFFFF..FFF..FF.F..............                                      [100%]
+================================== FAILURES ===================================
+_________________________ test_H1_successful_opening __________________________
+tests\test_automated_playtest.py:30: in test_H1_successful_opening
+    assert result['verdict'] == 'PASS'
+E   AssertionError: assert 'BLOCKED' == 'PASS'
+E     
+E     - PASS
+E     + BLOCKED
+---------------------------- Captured stdout setup ----------------------------
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 1, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+_____ test_failure_matrix[H2-truncation-provider_output_limit_exhaustion] _____
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174710Z-b636e9e26695', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174710Z-b636e9e26695\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+__________ test_failure_matrix[H3-invalid_json-json_parsing_failure] __________
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174721Z-be21d3016d59', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174721Z-be21d3016d59\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+________ test_failure_matrix[H4-envelope-structured_envelope_failure] _________
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174731Z-0f60a582f923', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174731Z-0f60a582f923\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+________ test_failure_matrix[H5-semantic-semantic_validation_failure] _________
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174742Z-959da105e6e5', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174742Z-959da105e6e5\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+____ test_failure_matrix[H6-safe_nonresolution-opening_acceptance_failure] ____
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174752Z-b1e49f6c35e9', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174752Z-b1e49f6c35e9\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+____________ test_failure_matrix[H7-exception-provider_exception] _____________
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174803Z-049350f5a550', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174803Z-049350f5a550\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+_______ test_failure_matrix[H8-admission-provider_admission_rejection] ________
+tests\test_automated_playtest.py:46: in test_failure_matrix
+    assert result['verdict'] == 'FAIL', result
+E   AssertionError: {'correlation': {'harness_run_id': '20261031T174813Z-e92e9809a798', 'limitation': 'Missing native identifiers remain u...pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174813Z-e92e9809a798\\evidence\\evidence.zip', ...}
+E   assert 'BLOCKED' == 'FAIL'
+E     
+E     - FAIL
+E     + BLOCKED
+___________________ test_H9_failed_opening_preserves_state ____________________
+tests\test_automated_playtest.py:58: in test_H9_failed_opening_preserves_state
+    assert result['state_comparison']['integrity'] is True
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'integrity'
+____________________________ test_H10_commits_once ____________________________
+tests\test_automated_playtest.py:64: in test_H10_commits_once
+    assert result['state_comparison']['turn_delta'] == result['state_comparison']['log_delta'] == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'turn_delta'
+____________________________ test_H13_interruption ____________________________
+tests\test_automated_playtest.py:96: in test_H13_interruption
+    assert result['verdict'] == 'INCONCLUSIVE'
+E   AssertionError: assert 'BLOCKED' == 'INCONCLUSIVE'
+E     
+E     - INCONCLUSIVE
+E     + BLOCKED
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+_________________________ test_H14_missing_diagnostic _________________________
+tests\test_automated_playtest.py:113: in test_H14_missing_diagnostic
+    assert result['verdict'] == 'INCONCLUSIVE'
+E   AssertionError: assert 'BLOCKED' == 'INCONCLUSIVE'
+E     
+E     - INCONCLUSIVE
+E     + BLOCKED
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+______________________ test_H15_deterministic_transport _______________________
+tests\test_automated_playtest.py:120: in test_H15_deterministic_transport
+    assert result['environment_verification']['application']['sdk_retries'] == 0
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'application'
+__________________________ test_H18_archive_manifest __________________________
+tests\test_automated_playtest.py:158: in test_H18_archive_manifest
+    assert {'baseline/documents.json', 'after/documents.json', 'reports/result.json', 'reports/SUMMARY.md'} <= set(z.namelist())
+E   AssertionError: assert {'after/docum.../result.json'} <= {'configurati...dy.json', ...}
+E     
+E     Extra items in the left set:
+E     'baseline/documents.json'
+E     'after/documents.json'
+______________________ test_H19_gameplay_vs_bookkeeping _______________________
+tests\test_automated_playtest.py:164: in test_H19_gameplay_vs_bookkeeping
+    before = json.loads((run/'baseline/documents.json').read_text())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1028: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+..\..\..\..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1014: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\pr_play_12\\sandbox\\artifacts\\atgb\\automated_playtests\\20261031T174721Z-be21d3016d59\\baseline\\documents.json'
+_______________ test_scripted_observation_and_no_live_multiturn _______________
+tests\test_automated_playtest.py:184: in test_scripted_observation_and_no_live_multiturn
+    assert result['verdict'] == 'PASS'
+E   AssertionError: assert 'BLOCKED' == 'PASS'
+E     
+E     - PASS
+E     + BLOCKED
+---------------------------- Captured stdout call -----------------------------
+Configured ceilings: 1 requests; {'input': 200000, 'output': 20000, 'total': 220000} tokens; retries=0
+=========================== short test summary info ===========================
+FAILED tests/test_automated_playtest.py::test_H1_successful_opening - Asserti...
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H2-truncation-provider_output_limit_exhaustion]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H3-invalid_json-json_parsing_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H4-envelope-structured_envelope_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H5-semantic-semantic_validation_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H6-safe_nonresolution-opening_acceptance_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H7-exception-provider_exception]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H8-admission-provider_admission_rejection]
+FAILED tests/test_automated_playtest.py::test_H9_failed_opening_preserves_state
+FAILED tests/test_automated_playtest.py::test_H10_commits_once - KeyError: 't...
+FAILED tests/test_automated_playtest.py::test_H13_interruption - AssertionErr...
+FAILED tests/test_automated_playtest.py::test_H14_missing_diagnostic - Assert...
+FAILED tests/test_automated_playtest.py::test_H15_deterministic_transport - K...
+FAILED tests/test_automated_playtest.py::test_H18_archive_manifest - Assertio...
+FAILED tests/test_automated_playtest.py::test_H19_gameplay_vs_bookkeeping - F...
+FAILED tests/test_automated_playtest.py::test_scripted_observation_and_no_live_multiturn

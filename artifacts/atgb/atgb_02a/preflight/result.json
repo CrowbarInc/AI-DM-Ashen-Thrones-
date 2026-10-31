@@ -1,0 +1,1970 @@
+{
+  "result_schema_version": 1,
+  "gameplay_performance_claim": false,
+  "human_review_complete": false,
+  "compatibility": {
+    "historical_adapter": false,
+    "limitations": [
+      "No historical compatibility adapter is implemented.",
+      "An older build is comparable only when it can boot the same isolated data directory, accept the same player lines through chat, and emit player-facing text plus state evidence.",
+      "A model change is a comparability limitation, not automatically a product regression.",
+      "S07 is held-out in ATGB-02. The ATGB-01 catalog table still lists it as development-visible. Compare S07 by the partition stored in the result.",
+      "Held-out scenarios in this corpus were exposed in the ATGB-01 review package."
+    ]
+  },
+  "benchmark_version": "ATGB-02",
+  "scenario_version": "ATGB-01",
+  "rubric_version": "atgb-rubric-01",
+  "partition_revision": "ATGB-02-s07-held-out",
+  "repository_revision": "b012c3d7e5887fdfb09d10bb9cc0f0220de09df9",
+  "worktree_dirty": true,
+  "revision_note": "HEAD identifies the commit. A dirty worktree means the running files can differ from that commit.",
+  "execution_mode": "provider_disabled_host",
+  "baseline": {
+    "version": "frontier-gate-v1",
+    "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+    "source": "data/validation/atgb/baselines/frontier-gate-v1"
+  },
+  "preflight_only": true,
+  "evidence_distinction": "host_deterministic",
+  "trial_number": 1,
+  "trial_count": 1,
+  "generated_at": "2026-10-18T20:46:06Z",
+  "run_id": "632e6acabfa941e5af92c16919662c81",
+  "model_configuration": {
+    "sampling": "uncontrolled",
+    "api_key_recorded": false,
+    "provider_calls": "disabled",
+    "live_interpretation": "disabled",
+    "default_model_name": "unavailable"
+  },
+  "execution_environment": {
+    "python": "3.12.0",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "sampling": "uncontrolled"
+  },
+  "budget": {
+    "max_provider_calls": null,
+    "max_tokens": null,
+    "max_estimated_cost": null,
+    "max_elapsed_seconds": null,
+    "price_per_million_input_tokens": null,
+    "price_per_million_output_tokens": null,
+    "default_dollar_budget": null,
+    "cost_note": "Cost is unavailable unless both token counts are recorded and both prices were supplied."
+  },
+  "stop_reason": null,
+  "scenario_ids": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05",
+    "S06",
+    "S07",
+    "S08",
+    "S09",
+    "S10"
+  ],
+  "scenario_records": [
+    {
+      "scenario_id": "S01",
+      "title": "Gate small talk",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. No interlocutor selected. No clue discovered.",
+        "authoritative_facts": [
+          "The shared visible list applies. Thoran's sentence belongs to gate_guard.",
+          "Stew quality and price are unauthored. The offer of hot stew and rumor is visible.",
+          "Scene remains frontier_gate. Discovering notice_patrol_route on the look, without a board investigation, is an authority failure."
+        ],
+        "npc_knowledge": [
+          "Nobody has spoken. Hidden facts stay hidden.",
+          "A speaker who does not own watch_command does not know a commander beyond what the visible watch presence supports, and does not invent a name."
+        ],
+        "unacceptable_behaviors": [
+          "A journey, a new location, a hidden fact, a price, a commander other than Thoran stated as fact, or a command menu in place of a reply."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S02",
+      "title": "The notices",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. The board has not been read.",
+        "authoritative_facts": [
+          "The board lists taxes, curfew rules, and a missing-patrol warning. Hours are not authored.",
+          "Investigating the notice board may reveal notice_patrol_route.",
+          "S02.2 is the distinction between a true nearby fact and an answer."
+        ],
+        "npc_knowledge": [
+          "The board is an object. An NPC who has not been given the clue does not gain it by standing nearby.",
+          "The runner's rumor is a different sentence and is not a substitute for the posted warning."
+        ],
+        "unacceptable_behaviors": [
+          "Dusk-until-dawn, a fine, bandits, a statute number, or answering S02.2 or S02.3 with the crate track."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S03",
+      "title": "The runner's account",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. No active interlocutor.",
+        "authoritative_facts": [
+          "The runner's only owned topic is the footprint rumor, as hearsay.",
+          "The notice's track sentence is not this NPC's topic unless the player introduces it, as S03.4 does."
+        ],
+        "npc_knowledge": [
+          "Tavern Runner may say the heard rumor.",
+          "The runner does not have an authored source, an authored price, or an authored promise of a second rumor.",
+          "A commitment to repeat this same rumor is compatible with current_agenda sell_rumors. A commitment to a new secret is not."
+        ],
+        "unacceptable_behaviors": [
+          "Gate Guard or Gate Serjeant delivering this rumor as their own knowledge.",
+          "A named informant, a coin price, a new faction, the Thoran sentence, or the route-change sentence spoken as the runner's rumor."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S04",
+      "title": "The serjeant",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. No interlocutor.",
+        "authoritative_facts": [
+          "gate_serjeant owns the route-change sentence.",
+          "The eastern choke from census delays is a visible fact. The route change is a consequence of that choke worsening.",
+          "The catalog does not authorize the route change is why the wagons are stuck.",
+          "Thoran's sentence is a different NPC's fact."
+        ],
+        "npc_knowledge": [
+          "The serjeant may report the route change.",
+          "The serjeant has no authored knowledge of Thoran's private awareness and does not know who gave the order."
+        ],
+        "unacceptable_behaviors": [
+          "Binding gate_guard or guard_captain after the player says Gate Serjeant.",
+          "Inventing an order, a meeting, or a clock.",
+          "Answering the wagon question with only the route changed and never mentioning the choke or the wagons."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S05",
+      "title": "Two accounts",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate.",
+        "authoritative_facts": [
+          "The runner's rumor and, once the board is read, notice_patrol_route both point near the crates and the northwest approach.",
+          "They are different sentences and different sources."
+        ],
+        "npc_knowledge": [
+          "The runner knows the rumor as hearsay. The board holds the posted warning. Neither may absorb the other's wording."
+        ],
+        "unacceptable_behaviors": [
+          "The same paragraph presented as both the notice and the rumor.",
+          "A third story.",
+          "The guard answering S05.4."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S06",
+      "title": "Beside the table",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. No purchase system is in play.",
+        "authoritative_facts": [
+          "Talking does not itself change scene or discover the route clue.",
+          "Hot stew is a visible offer. The rumor is the runner's owned hearsay.",
+          "There is no price and no inventory transaction."
+        ],
+        "npc_knowledge": [
+          "OOC turns are answered by the GM or session voice. They are not answered by the runner.",
+          "IC turns return to the runner when the player addresses the runner."
+        ],
+        "unacceptable_behaviors": [
+          "Validator phrases such as based on what's established are a response defect under the AI GM contract, scored minor if the answer is otherwise present and major if they replace the answer.",
+          "A narrated purchase, a coin change, or a scene move is critical.",
+          "An OOC lecture that continues after the player has said IC: fails the IC turn."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S07",
+      "title": "In the queue",
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate, opening description available, including rain and frayed banners. The runner is visibly hawking.",
+        "authoritative_facts": [
+          "Rain, queue, frayed banners, stew, and rumor.",
+          "No patrol question has been asked."
+        ],
+        "npc_knowledge": [
+          "No one is required to volunteer the route clue, Thoran, or the route change."
+        ],
+        "unacceptable_behaviors": [
+          "An unprompted patrol report.",
+          "A three-item command menu.",
+          "Anti-echo that consumes the whole reply.",
+          "Invented crowd dialogue about why refugees fled."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S08",
+      "title": "Same gate, other words",
+      "partition": "related_variation",
+      "evidence_status": "related_variation",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. This is a related variation, not a held-out scenario. The requirements match S01, S02, and S04. The words do not.",
+        "authoritative_facts": [
+          "The same visible list and the serjeant's route-change sentence.",
+          "Who issued the change is unauthored."
+        ],
+        "npc_knowledge": [
+          "The serjeant, once addressed by the conversation, knows the route change and the census choke as the setting of that change.",
+          "The serjeant does not know the official who ordered it."
+        ],
+        "unacceptable_behaviors": [
+          "Treating S08.1 as travel.",
+          "Describing only the rain after the player asks for the people.",
+          "Naming an official.",
+          "Answering who handles the crowd with the runner."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S09",
+      "title": "The quiet pair",
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. Held-out. Not a tuning set.",
+        "authoritative_facts": [
+          "The ragged stranger and the threadbare watcher are both present addressables.",
+          "Neither has an owned topic in world.json.",
+          "The stranger hangs back and watches the crowd. The watcher stands still, gaze moving to packs and faces.",
+          "Neither has an authored name beyond those labels, and neither owns the patrol rumor."
+        ],
+        "npc_knowledge": [
+          "Neither bystander has an authored answer to who they are beyond the public label.",
+          "Delivering the runner's rumor in either voice is an authority failure. Delivering a hidden fact is critical."
+        ],
+        "unacceptable_behaviors": [
+          "Answering as the tavern runner.",
+          "Inventing personal names.",
+          "Stating how long either has stood there.",
+          "Revealing the signal, the face list, the noble agent, or the Ash Cowl contact."
+        ]
+      }
+    },
+    {
+      "scenario_id": "S10",
+      "title": "The barrel",
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": true,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "preflight_passed",
+      "context_limitation": null,
+      "preflight": {
+        "ok": true,
+        "baseline": {
+          "version": "frontier-gate-v1",
+          "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+          "source": "data/validation/atgb/baselines/frontier-gate-v1"
+        },
+        "checks": [
+          {
+            "check": "isolated_data_dir",
+            "ok": true
+          },
+          {
+            "check": "baseline_version",
+            "ok": true
+          },
+          {
+            "check": "starting_location",
+            "ok": true
+          },
+          {
+            "check": "starting_scene_present",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:campaign.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:character.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:conditions.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/frontier_gate.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/market_quarter.json",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:scenes/old_milestone.json",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_guard:topic:watch_command",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:location",
+            "ok": true
+          },
+          {
+            "check": "npc:gate_serjeant:topic:route_change",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:location",
+            "ok": true
+          },
+          {
+            "check": "npc:tavern_runner:topic:patrol_rumor",
+            "ok": true
+          },
+          {
+            "check": "authored_baseline:world.json",
+            "ok": true
+          },
+          {
+            "check": "fresh_runtime_and_empty_history",
+            "ok": true
+          }
+        ],
+        "critical_failures": [],
+        "runtime_violations": [],
+        "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+        "unverified_conditions": [
+          "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+          "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+          "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+          "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+        ]
+      },
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate. Held-out. The rain barrel and the runner's offer are visible. Nothing has been said yet.",
+        "authoritative_facts": [
+          "The runner trades hot stew and rumors beside the rain barrel.",
+          "The non-food half of that offer is the rumor, whose content is the footprint hearsay once the runner is actually asked.",
+          "The barrel is not an interactable with a clue."
+        ],
+        "npc_knowledge": [
+          "The runner knows the owned rumor when the rumor is requested. The barrel has no knowledge."
+        ],
+        "unacceptable_behaviors": [
+          "Taking the missing-patrol exit.",
+          "Investigating a new object called the thing.",
+          "Serving stew.",
+          "Quoting the notice clue as what the runner sells."
+        ]
+      }
+    }
+  ],
+  "conversations": [
+    {
+      "scenario_id": "S01",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S02",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S03",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S04",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S05",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S06",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S07",
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S08",
+      "partition": "related_variation",
+      "evidence_status": "related_variation",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S09",
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    },
+    {
+      "scenario_id": "S10",
+      "partition": "held_out",
+      "evidence_status": "held_out_previously_exposed",
+      "turn_ids": [],
+      "qualitative_observations": [],
+      "qualitative_notes": "",
+      "qualitative_is_a_score": false
+    }
+  ],
+  "turns": [],
+  "limitations": [
+    "Frontier Gate is the initial environment. The runner does not hard-code that location; each fixture names its own environment.",
+    "No additional environments are implemented in this pass.",
+    "Held-out scenarios were visible in the ATGB-01 review. Their partition is held-out. Their evidence status is previously exposed.",
+    "evaluate_playability is not called and is not the ATGB verdict.",
+    "Historical builds are not executed and no compatibility adapter is installed.",
+    "Token totals that the host reports as null stay null. Cost is not invented.",
+    "Host responses with providers disabled show host behavior. They are not natural conversational competence and are not a gameplay benchmark result.",
+    "The host performance counter can include a provider-disabled narration fallback. That count is preserved. It is not treated as a sent provider request when the reply is stamped provider-disabled and no token usage was recorded."
+  ],
+  "report": "ATGB REPORT\nBenchmark: ATGB-02\nScenario version: ATGB-01\nRubric: atgb-rubric-01\nPartition revision: ATGB-02-s07-held-out\nRevision: b012c3d7e5887fdfb09d10bb9cc0f0220de09df9\nExecution mode: provider_disabled_host\nEvidence distinction: host_deterministic\nTrial: 1\nGameplay performance claim: false\n\nThis package is not an Ashen Thrones Gameplay Benchmark performance result.\nProvider-disabled and unscored transcripts do not measure conversational competence.\n\n## Starting-state preflight\n\n- S01: verified machine prerequisites.\n- S02: verified machine prerequisites.\n- S03: verified machine prerequisites.\n- S04: verified machine prerequisites.\n- S05: verified machine prerequisites.\n- S06: verified machine prerequisites.\n- S07: verified machine prerequisites.\n- S08: verified machine prerequisites.\n- S09: verified machine prerequisites.\n- S10: verified machine prerequisites.\n\nNarrative assumptions remain unverified; see each scenario's preflight record. Prerequisite failures are not conversational failures.\n\n## Critical failures\n\nNot established. Failure severity is unscored or this lane cannot carry a gameplay claim.\n\n## Major conversational failures\n\nNot established.\n\n## Capability counts\n\nCounts are response judgments by primary capability and partition. They are not a gameplay score.\n\n\n## Clarification and continuity\n\n- Unnecessary clarifications: 0 (none)\n- Missing clarifications: 0 (none)\n- Continuity failures: 0 (none)\n\n## Conversation-level qualitative findings\n\nThese notes are not a second score. A conversation can be technically successful and still feel unnatural.\n\nNo qualitative notes have been entered.\n\n## Latency, provider usage, and cost\n\n- Response latency: unavailable.\n- Provider calls: 0.\n- Cost per successful turn: unavailable (acceptable turns with a gameplay judgment: 0).\n\n## Held-out evidence\n\nHeld-out turns keep that partition. In this corpus they were already visible in the ATGB-01 review, so they are not fully independent unseen evaluation data.\n\n"
+}

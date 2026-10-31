@@ -1,0 +1,29 @@
+{
+  "evidence_scope": "structural_only",
+  "classification": "validation_setup_failure",
+  "failed_assertions": [
+    "admission_limit",
+    "token_limits"
+  ],
+  "requested_live": true,
+  "effective_live": true,
+  "provider_configured": true,
+  "provider_reachability": "unprobed",
+  "model": "gpt-4.1-mini",
+  "flags": {
+    "ASHEN_DISABLE_LIVE_INTERPRETATION": "0",
+    "ASHEN_DISABLE_PROVIDER_CALLS": "0",
+    "ASHEN_DISABLE_PROVIDER_RETRIES": "1",
+    "ASHEN_DISABLE_EXPRESSION_GENERATION": "1",
+    "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT": "1"
+  },
+  "admission_limit": null,
+  "model_routing_enabled": true,
+  "routing_models": [
+    "gpt-4.1-mini",
+    "gpt-4.1-mini",
+    "gpt-4.1-mini"
+  ],
+  "provider_admissions": 0,
+  "gameplay_state_changed": false
+}

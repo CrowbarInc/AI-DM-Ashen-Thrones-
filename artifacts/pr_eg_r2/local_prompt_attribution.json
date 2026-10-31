@@ -1,0 +1,1635 @@
+[
+  {
+    "question": "I ask Sergeant Mara what the street beyond the gate is called.",
+    "encoding": "o200k_base",
+    "tokenizer_version": "0.14.0",
+    "evidence": "measured local content tokens; not fresh provider usage; framing excluded",
+    "system_content_tokens": 893,
+    "user_content_tokens": 23211,
+    "system_characters": 4166,
+    "user_characters": 91984,
+    "groups": {
+      "B_dialogue_instructions": {
+        "keys": [
+          "instructions",
+          "dialogue_social_plan",
+          "bounded_improvisation",
+          "narration_obligations",
+          "interlocutor_lead_behavior_hints"
+        ],
+        "characters": 18135,
+        "content_tokens": 3809
+      },
+      "D_identity": {
+        "keys": [
+          "speaker_selection",
+          "active_interlocutor",
+          "social_context"
+        ],
+        "characters": 2600,
+        "content_tokens": 635
+      },
+      "E_knowledge": {
+        "keys": [
+          "clues"
+        ],
+        "characters": 410,
+        "content_tokens": 114
+      },
+      "F_history": {
+        "keys": [
+          "recent_log",
+          "selected_conversational_memory",
+          "interaction_continuity",
+          "turn_summary",
+          "active_topic_anchor",
+          "follow_up_pressure",
+          "lead_context",
+          "interlocutor_lead_context"
+        ],
+        "characters": 5010,
+        "content_tokens": 1381
+      },
+      "G_resolver": {
+        "keys": [
+          "mechanical_resolution",
+          "resolution_contract",
+          "gm_resolution_decision",
+          "decision_facing_answer_recipe",
+          "turn_packet"
+        ],
+        "characters": 23395,
+        "content_tokens": 6138
+      },
+      "H_validation": {
+        "keys": [
+          "response_policy",
+          "narration_visibility",
+          "scene_state_anchor_contract",
+          "first_mention_contract",
+          "discoverable_hinting",
+          "player_expression_contract",
+          "referent_tracking",
+          "referent_clause_prompt_hints",
+          "uncertainty_hint"
+        ],
+        "characters": 28132,
+        "content_tokens": 7245
+      },
+      "C_simulation": {
+        "keys": [
+          "transition",
+          "narrative_plan",
+          "opening_narration_obligations",
+          "opening_scene_realization",
+          "opening_inputs_are_curated",
+          "opening_selector_source_used",
+          "opening_selector_selected_facts",
+          "opening_curated_facts",
+          "scene_advancement",
+          "session",
+          "character",
+          "combat",
+          "world_state",
+          "world",
+          "world_progression_summary",
+          "campaign",
+          "scene"
+        ],
+        "characters": 14220,
+        "content_tokens": 3875
+      },
+      "K_other": {
+        "keys": [
+          "player_input"
+        ],
+        "characters": 82,
+        "content_tokens": 19
+      }
+    },
+    "group_wrapper_boundary_residual": -5,
+    "I_tools_schema": {
+      "tools": 0,
+      "tool_schema": 0,
+      "note": "No tools or text JSON schema passed; format guidance is in system/user instructions."
+    },
+    "J_duplicates_nonadditive": [
+      {
+        "paths": [
+          "payload.response_policy.answer_completeness.trace",
+          "payload.turn_packet.response_policy.answer_completeness.trace",
+          "payload.turn_packet.contracts.answer_completeness.trace"
+        ],
+        "characters": 1039,
+        "tokens_each": 248,
+        "sha256": "f5ec618f7744b468d4159d68270e511d6a0fe50d3f5df80e9b6e7a0c11337fa2"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta",
+          "payload.turn_packet.response_policy.response_delta"
+        ],
+        "characters": 1747,
+        "tokens_each": 432,
+        "sha256": "9bdc6c3acf70640f6c845714304ed944ca043dce80426c36741f589565bc3cd1"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation",
+          "payload.response_policy.context_separation.tone_escalation_contract"
+        ],
+        "characters": 1539,
+        "tokens_each": 407,
+        "sha256": "30adaf30385498ab873b74ecd30d78a6abcb8eba59e3d00e10f4802d641f13ee"
+      },
+      {
+        "paths": [
+          "payload.turn_packet.response_policy.answer_completeness",
+          "payload.turn_packet.contracts.answer_completeness"
+        ],
+        "characters": 1491,
+        "tokens_each": 369,
+        "sha256": "d334dba2e3a08bdad3a1d7b1798244e354d1a9342d18ad79bf5c61fb3282fa38"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta.trace",
+          "payload.turn_packet.response_policy.response_delta.trace"
+        ],
+        "characters": 1288,
+        "tokens_each": 312,
+        "sha256": "a6ffef2545ff341692f91f7f63f7fa0b9b4d24d6fc035befdeeb5da8ac94a79f"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan",
+          "payload.response_policy.answer_completeness.answer_exposition_plan"
+        ],
+        "characters": 844,
+        "tokens_each": 226,
+        "sha256": "69b3efd8f4b57116acaee42a03bcd89413499a321ac4b12558316364686bd330"
+      },
+      {
+        "paths": [
+          "payload.lead_context.top_active_leads",
+          "payload.lead_context.recent_lead_changes"
+        ],
+        "characters": 827,
+        "tokens_each": 233,
+        "sha256": "cf2d4d3bbec383c3671b3b1e4f092976c412af07f0aceb70380f16e651cc7614"
+      },
+      {
+        "paths": [
+          "payload.lead_context.top_active_leads[0]",
+          "payload.lead_context.recent_lead_changes[0]"
+        ],
+        "characters": 825,
+        "tokens_each": 232,
+        "sha256": "3cc85a8fcf88a261f52397062c4b6af28dd3b6ec2575501013ea8be8386aad60"
+      },
+      {
+        "paths": [
+          "payload.response_policy.rule_priority_order",
+          "payload.turn_packet.response_policy.rule_priority_order"
+        ],
+        "characters": 743,
+        "tokens_each": 224,
+        "sha256": "878c1bf803d3fc2b1be2630bd6a7d729fe6e4441d8c920f8361f2670c7e5d131"
+      },
+      {
+        "paths": [
+          "payload.interlocutor_lead_context.introduced_by_npc",
+          "payload.interlocutor_lead_context.unacknowledged_from_npc",
+          "payload.interlocutor_lead_context.recently_discussed_with_npc"
+        ],
+        "characters": 370,
+        "tokens_each": 109,
+        "sha256": "8ffce54eae67c95476cb91119d207f55b87c9b5bdee0194aff23bc27e15de467"
+      },
+      {
+        "paths": [
+          "payload.interlocutor_lead_context.introduced_by_npc[0]",
+          "payload.interlocutor_lead_context.unacknowledged_from_npc[0]",
+          "payload.interlocutor_lead_context.recently_discussed_with_npc[0]"
+        ],
+        "characters": 368,
+        "tokens_each": 107,
+        "sha256": "fcd14d3e658e5b02e67857a5c1ee794741f969d7f276d58681bdf5d5c5357cdb"
+      },
+      {
+        "paths": [
+          "payload.response_policy.no_validator_voice",
+          "payload.turn_packet.response_policy.no_validator_voice"
+        ],
+        "characters": 633,
+        "tokens_each": 148,
+        "sha256": "8570eb8fe788e7534217b4c48a685552fa19edcd6b1f91c4d374b3b606be592b"
+      },
+      {
+        "paths": [
+          "payload.transition",
+          "payload.narrative_plan.transition_node"
+        ],
+        "characters": 556,
+        "tokens_each": 140,
+        "sha256": "a56dead29a4d9942f9d15f85bdaf71606f8b1c87fc69959dc40dc07ab0478b66"
+      },
+      {
+        "paths": [
+          "payload.opening_narration_obligations",
+          "payload.opening_scene_realization.opening_narration_obligations"
+        ],
+        "characters": 451,
+        "tokens_each": 121,
+        "sha256": "01958dedb2a487393ab06518e7a5bad6f4dbede2b1e7026d9a317fc3297b7b8d"
+      },
+      {
+        "paths": [
+          "payload.turn_packet.response_policy.response_type_contract",
+          "payload.turn_packet.contracts.response_type"
+        ],
+        "characters": 419,
+        "tokens_each": 107,
+        "sha256": "16a15bb8464d18440d3a9507bfea4d9e962873e48a5f71300a4936ed609f6816"
+      },
+      {
+        "paths": [
+          "payload.response_policy.uncertainty",
+          "payload.turn_packet.response_policy.uncertainty"
+        ],
+        "characters": 356,
+        "tokens_each": 90,
+        "sha256": "5ff3941bd4adde459303845cd5860518f89e814c9ab799e59ac66be60acf8c92"
+      },
+      {
+        "paths": [
+          "payload.response_policy.no_validator_voice.rule",
+          "payload.turn_packet.response_policy.no_validator_voice.rule"
+        ],
+        "characters": 347,
+        "tokens_each": 72,
+        "sha256": "a1b1da005c40aa81c367959eab539213ba9a747cad19ace5f4f858f5c93f80bd"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.justification_flags",
+          "payload.response_policy.context_separation.tone_escalation_contract.justification_flags"
+        ],
+        "characters": 333,
+        "tokens_each": 84,
+        "sha256": "57d248c3b83fe2a20c60d8c675b69ff8210ac7c39d2518d0904b992451b87b5b"
+      },
+      {
+        "paths": [
+          "payload.response_policy.narrative_authority.visible_fact_strings",
+          "payload.narration_visibility.visible_facts",
+          "payload.scene.public.visible_facts"
+        ],
+        "characters": 163,
+        "tokens_each": 36,
+        "sha256": "27e37d2647114fbb9b43344fab7b59d9a645bdd663e1c35f2d803d15c592131e"
+      },
+      {
+        "paths": [
+          "payload.instructions[68]",
+          "payload.social_context.answer_style_hints[0]"
+        ],
+        "characters": 255,
+        "tokens_each": 59,
+        "sha256": "d8b28625845c66158293de4e0e060bff74ac45f91d2d6a45134cd05b519f8feb"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.debug_inputs",
+          "payload.response_policy.context_separation.tone_escalation_contract.debug_inputs"
+        ],
+        "characters": 236,
+        "tokens_each": 64,
+        "sha256": "ba356d3640863bb43012c882b01112415a938a10c52af0e64f9afe898113a9ab"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan.delivery",
+          "payload.response_policy.answer_completeness.answer_exposition_plan.delivery"
+        ],
+        "characters": 227,
+        "tokens_each": 63,
+        "sha256": "7bc3fc365dcb84ca1f8f97eea56395b49b355896832f7823485bde8608847e10"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.debug_flags",
+          "payload.response_policy.context_separation.tone_escalation_contract.debug_flags"
+        ],
+        "characters": 220,
+        "tokens_each": 63,
+        "sha256": "8d0f499fb8a587061ca19b93586f5aa6d9d822b85c3ff370127001346ea4aac1"
+      },
+      {
+        "paths": [
+          "payload.opening_narration_obligations.preferred_diction",
+          "payload.opening_scene_realization.opening_narration_obligations.preferred_diction"
+        ],
+        "characters": 195,
+        "tokens_each": 45,
+        "sha256": "69884df57a74ad17a16cc5c1ae516f92c7e32e4c5243b003d5c0ba9802b686bd"
+      },
+      {
+        "paths": [
+          "payload.instructions[70]",
+          "payload.social_context.answer_style_hints[2]"
+        ],
+        "characters": 188,
+        "tokens_each": 37,
+        "sha256": "61fc062e6cc41eb89b2ece72861c0db892ad9614bdff5c05940dd60f0ce0d66b"
+      }
+    ],
+    "top_level": {
+      "instructions": {
+        "characters": 16415,
+        "content_tokens": 3392
+      },
+      "bounded_improvisation": {
+        "characters": 386,
+        "content_tokens": 77
+      },
+      "dialogue_social_plan": {
+        "characters": 599,
+        "content_tokens": 157
+      },
+      "transition": {
+        "characters": 572,
+        "content_tokens": 143
+      },
+      "narrative_plan": {
+        "characters": 6205,
+        "content_tokens": 1681
+      },
+      "speaker_selection": {
+        "characters": 1475,
+        "content_tokens": 366
+      },
+      "active_topic_anchor": {
+        "characters": 100,
+        "content_tokens": 25
+      },
+      "interaction_continuity": {
+        "characters": 289,
+        "content_tokens": 70
+      },
+      "active_interlocutor": {
+        "characters": 326,
+        "content_tokens": 91
+      },
+      "social_context": {
+        "characters": 799,
+        "content_tokens": 178
+      },
+      "turn_summary": {
+        "characters": 440,
+        "content_tokens": 97
+      },
+      "recent_log": {
+        "characters": 129,
+        "content_tokens": 35
+      },
+      "selected_conversational_memory": {
+        "characters": 417,
+        "content_tokens": 118
+      },
+      "player_input": {
+        "characters": 82,
+        "content_tokens": 19
+      },
+      "follow_up_pressure": {
+        "characters": 204,
+        "content_tokens": 62
+      },
+      "lead_context": {
+        "characters": 2005,
+        "content_tokens": 567
+      },
+      "interlocutor_lead_context": {
+        "characters": 1426,
+        "content_tokens": 410
+      },
+      "interlocutor_lead_behavior_hints": {
+        "characters": 306,
+        "content_tokens": 67
+      },
+      "response_policy": {
+        "characters": 22319,
+        "content_tokens": 5724
+      },
+      "referent_tracking": {
+        "characters": 3266,
+        "content_tokens": 863
+      },
+      "referent_clause_prompt_hints": {
+        "characters": 552,
+        "content_tokens": 153
+      },
+      "turn_packet": {
+        "characters": 9097,
+        "content_tokens": 2321
+      },
+      "uncertainty_hint": {
+        "characters": 26,
+        "content_tokens": 8
+      },
+      "narration_obligations": {
+        "characters": 429,
+        "content_tokens": 117
+      },
+      "opening_narration_obligations": {
+        "characters": 486,
+        "content_tokens": 131
+      },
+      "opening_scene_realization": {
+        "characters": 1964,
+        "content_tokens": 478
+      },
+      "opening_inputs_are_curated": {
+        "characters": 36,
+        "content_tokens": 9
+      },
+      "opening_selector_source_used": {
+        "characters": 40,
+        "content_tokens": 9
+      },
+      "opening_selector_selected_facts": {
+        "characters": 39,
+        "content_tokens": 9
+      },
+      "opening_curated_facts": {
+        "characters": 29,
+        "content_tokens": 9
+      },
+      "narration_visibility": {
+        "characters": 385,
+        "content_tokens": 100
+      },
+      "scene_state_anchor_contract": {
+        "characters": 1125,
+        "content_tokens": 289
+      },
+      "first_mention_contract": {
+        "characters": 187,
+        "content_tokens": 48
+      },
+      "discoverable_hinting": {
+        "characters": 30,
+        "content_tokens": 8
+      },
+      "mechanical_resolution": {
+        "characters": 6959,
+        "content_tokens": 1845
+      },
+      "scene_advancement": {
+        "characters": 124,
+        "content_tokens": 30
+      },
+      "session": {
+        "characters": 391,
+        "content_tokens": 101
+      },
+      "character": {
+        "characters": 979,
+        "content_tokens": 378
+      },
+      "combat": {
+        "characters": 32,
+        "content_tokens": 10
+      },
+      "world_state": {
+        "characters": 68,
+        "content_tokens": 20
+      },
+      "world": {
+        "characters": 360,
+        "content_tokens": 112
+      },
+      "world_progression_summary": {
+        "characters": 231,
+        "content_tokens": 71
+      },
+      "campaign": {
+        "characters": 142,
+        "content_tokens": 43
+      },
+      "scene": {
+        "characters": 2522,
+        "content_tokens": 646
+      },
+      "player_expression_contract": {
+        "characters": 242,
+        "content_tokens": 56
+      },
+      "resolution_contract": {
+        "characters": 788,
+        "content_tokens": 192
+      },
+      "gm_resolution_decision": {
+        "characters": 3097,
+        "content_tokens": 897
+      },
+      "decision_facing_answer_recipe": {
+        "characters": 3454,
+        "content_tokens": 884
+      },
+      "clues": {
+        "characters": 410,
+        "content_tokens": 114
+      }
+    }
+  },
+  {
+    "question": "Do you prefer the morning or the evening?",
+    "encoding": "o200k_base",
+    "tokenizer_version": "0.14.0",
+    "evidence": "measured local content tokens; not fresh provider usage; framing excluded",
+    "system_content_tokens": 893,
+    "user_content_tokens": 22718,
+    "system_characters": 4166,
+    "user_characters": 89741,
+    "groups": {
+      "B_dialogue_instructions": {
+        "keys": [
+          "instructions",
+          "dialogue_social_plan",
+          "bounded_improvisation",
+          "narration_obligations",
+          "interlocutor_lead_behavior_hints"
+        ],
+        "characters": 16807,
+        "content_tokens": 3551
+      },
+      "D_identity": {
+        "keys": [
+          "speaker_selection",
+          "active_interlocutor",
+          "social_context"
+        ],
+        "characters": 2625,
+        "content_tokens": 637
+      },
+      "E_knowledge": {
+        "keys": [
+          "clues"
+        ],
+        "characters": 410,
+        "content_tokens": 114
+      },
+      "F_history": {
+        "keys": [
+          "recent_log",
+          "selected_conversational_memory",
+          "interaction_continuity",
+          "turn_summary",
+          "active_topic_anchor",
+          "follow_up_pressure",
+          "lead_context",
+          "interlocutor_lead_context"
+        ],
+        "characters": 6080,
+        "content_tokens": 1695
+      },
+      "G_resolver": {
+        "keys": [
+          "mechanical_resolution",
+          "resolution_contract",
+          "gm_resolution_decision",
+          "decision_facing_answer_recipe",
+          "turn_packet"
+        ],
+        "characters": 24315,
+        "content_tokens": 6337
+      },
+      "H_validation": {
+        "keys": [
+          "response_policy",
+          "narration_visibility",
+          "scene_state_anchor_contract",
+          "first_mention_contract",
+          "discoverable_hinting",
+          "player_expression_contract",
+          "referent_tracking",
+          "referent_clause_prompt_hints",
+          "uncertainty_hint"
+        ],
+        "characters": 27911,
+        "content_tokens": 7172
+      },
+      "C_simulation": {
+        "keys": [
+          "transition",
+          "narrative_plan",
+          "opening_narration_obligations",
+          "opening_scene_realization",
+          "opening_inputs_are_curated",
+          "opening_selector_source_used",
+          "opening_selector_selected_facts",
+          "opening_curated_facts",
+          "scene_advancement",
+          "session",
+          "character",
+          "combat",
+          "world_state",
+          "world",
+          "world_progression_summary",
+          "campaign",
+          "scene"
+        ],
+        "characters": 11532,
+        "content_tokens": 3202
+      },
+      "K_other": {
+        "keys": [
+          "player_input"
+        ],
+        "characters": 61,
+        "content_tokens": 15
+      }
+    },
+    "group_wrapper_boundary_residual": -5,
+    "I_tools_schema": {
+      "tools": 0,
+      "tool_schema": 0,
+      "note": "No tools or text JSON schema passed; format guidance is in system/user instructions."
+    },
+    "J_duplicates_nonadditive": [
+      {
+        "paths": [
+          "payload.response_policy.answer_completeness.trace",
+          "payload.turn_packet.response_policy.answer_completeness.trace",
+          "payload.turn_packet.contracts.answer_completeness.trace"
+        ],
+        "characters": 1020,
+        "tokens_each": 245,
+        "sha256": "1e163935579f8ba890d8be67d5826812c455dda75688198466a768c8699b6b2c"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta",
+          "payload.turn_packet.response_policy.response_delta"
+        ],
+        "characters": 1717,
+        "tokens_each": 428,
+        "sha256": "32e40aca1fad0504e23e6a1643103d52ec1574f26d3e329736c2c725e9ab8dc2"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation",
+          "payload.response_policy.context_separation.tone_escalation_contract"
+        ],
+        "characters": 1540,
+        "tokens_each": 407,
+        "sha256": "0e04a14d177289e10be9eac9fd22fc7a6132dbcc93970df12eaabb0cf03d9ec7"
+      },
+      {
+        "paths": [
+          "payload.turn_packet.response_policy.answer_completeness",
+          "payload.turn_packet.contracts.answer_completeness"
+        ],
+        "characters": 1471,
+        "tokens_each": 366,
+        "sha256": "72fbbf5982cffd25b7033e2d1860e47e35b3f713ce21ca1789c1a53f8b75b0e7"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta.trace",
+          "payload.turn_packet.response_policy.response_delta.trace"
+        ],
+        "characters": 1258,
+        "tokens_each": 308,
+        "sha256": "2d2f5a3bfca8e585b23956cd91cc22d8d7fd1e34bdf2958f7af94a89db1c5dba"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan",
+          "payload.response_policy.answer_completeness.answer_exposition_plan"
+        ],
+        "characters": 853,
+        "tokens_each": 226,
+        "sha256": "5f2bf9e0630bcd2c7bb9c5dd4cc27c7a40759e2ae3eb916cff9b06d5328eaa4d"
+      },
+      {
+        "paths": [
+          "payload.lead_context.top_active_leads",
+          "payload.lead_context.recent_lead_changes"
+        ],
+        "characters": 827,
+        "tokens_each": 233,
+        "sha256": "cf2d4d3bbec383c3671b3b1e4f092976c412af07f0aceb70380f16e651cc7614"
+      },
+      {
+        "paths": [
+          "payload.lead_context.top_active_leads[0]",
+          "payload.lead_context.recent_lead_changes[0]"
+        ],
+        "characters": 825,
+        "tokens_each": 232,
+        "sha256": "3cc85a8fcf88a261f52397062c4b6af28dd3b6ec2575501013ea8be8386aad60"
+      },
+      {
+        "paths": [
+          "payload.response_policy.rule_priority_order",
+          "payload.turn_packet.response_policy.rule_priority_order"
+        ],
+        "characters": 743,
+        "tokens_each": 224,
+        "sha256": "878c1bf803d3fc2b1be2630bd6a7d729fe6e4441d8c920f8361f2670c7e5d131"
+      },
+      {
+        "paths": [
+          "payload.interlocutor_lead_context.introduced_by_npc",
+          "payload.interlocutor_lead_context.unacknowledged_from_npc",
+          "payload.interlocutor_lead_context.recently_discussed_with_npc"
+        ],
+        "characters": 370,
+        "tokens_each": 109,
+        "sha256": "8ffce54eae67c95476cb91119d207f55b87c9b5bdee0194aff23bc27e15de467"
+      },
+      {
+        "paths": [
+          "payload.interlocutor_lead_context.introduced_by_npc[0]",
+          "payload.interlocutor_lead_context.unacknowledged_from_npc[0]",
+          "payload.interlocutor_lead_context.recently_discussed_with_npc[0]"
+        ],
+        "characters": 368,
+        "tokens_each": 107,
+        "sha256": "fcd14d3e658e5b02e67857a5c1ee794741f969d7f276d58681bdf5d5c5357cdb"
+      },
+      {
+        "paths": [
+          "payload.response_policy.no_validator_voice",
+          "payload.turn_packet.response_policy.no_validator_voice"
+        ],
+        "characters": 633,
+        "tokens_each": 148,
+        "sha256": "8570eb8fe788e7534217b4c48a685552fa19edcd6b1f91c4d374b3b606be592b"
+      },
+      {
+        "paths": [
+          "payload.transition",
+          "payload.narrative_plan.transition_node"
+        ],
+        "characters": 556,
+        "tokens_each": 140,
+        "sha256": "a56dead29a4d9942f9d15f85bdaf71606f8b1c87fc69959dc40dc07ab0478b66"
+      },
+      {
+        "paths": [
+          "payload.turn_packet.response_policy.response_type_contract",
+          "payload.turn_packet.contracts.response_type"
+        ],
+        "characters": 419,
+        "tokens_each": 107,
+        "sha256": "16a15bb8464d18440d3a9507bfea4d9e962873e48a5f71300a4936ed609f6816"
+      },
+      {
+        "paths": [
+          "payload.response_policy.uncertainty",
+          "payload.turn_packet.response_policy.uncertainty"
+        ],
+        "characters": 356,
+        "tokens_each": 90,
+        "sha256": "5ff3941bd4adde459303845cd5860518f89e814c9ab799e59ac66be60acf8c92"
+      },
+      {
+        "paths": [
+          "payload.response_policy.no_validator_voice.rule",
+          "payload.turn_packet.response_policy.no_validator_voice.rule"
+        ],
+        "characters": 347,
+        "tokens_each": 72,
+        "sha256": "a1b1da005c40aa81c367959eab539213ba9a747cad19ace5f4f858f5c93f80bd"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.justification_flags",
+          "payload.response_policy.context_separation.tone_escalation_contract.justification_flags"
+        ],
+        "characters": 333,
+        "tokens_each": 84,
+        "sha256": "57d248c3b83fe2a20c60d8c675b69ff8210ac7c39d2518d0904b992451b87b5b"
+      },
+      {
+        "paths": [
+          "payload.instructions[64]",
+          "payload.social_context.answer_style_hints[0]"
+        ],
+        "characters": 255,
+        "tokens_each": 59,
+        "sha256": "d8b28625845c66158293de4e0e060bff74ac45f91d2d6a45134cd05b519f8feb"
+      },
+      {
+        "paths": [
+          "payload.instructions[84]",
+          "payload.mechanical_resolution.hint"
+        ],
+        "characters": 251,
+        "tokens_each": 46,
+        "sha256": "b401d081a55f65dd9a1f72da6cc2eb82a70beceb561c8ba899fa64a9d1b70da9"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan.delivery",
+          "payload.response_policy.answer_completeness.answer_exposition_plan.delivery"
+        ],
+        "characters": 236,
+        "tokens_each": 63,
+        "sha256": "7be1a233a819477d23c875ea1f78f24fc09ecf372894fc3d14248e597f9ce280"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.debug_inputs",
+          "payload.response_policy.context_separation.tone_escalation_contract.debug_inputs"
+        ],
+        "characters": 236,
+        "tokens_each": 64,
+        "sha256": "22190991e18fd8cc49ba6051c52546edaa069ae5e6e062b411e51457758ce224"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.debug_flags",
+          "payload.response_policy.context_separation.tone_escalation_contract.debug_flags"
+        ],
+        "characters": 221,
+        "tokens_each": 63,
+        "sha256": "9eff88ac6b8c2faa1e08b0f17eafd316bbf3d7b16ab2bd8a85be3d3641708ed4"
+      },
+      {
+        "paths": [
+          "payload.instructions[66]",
+          "payload.social_context.answer_style_hints[2]"
+        ],
+        "characters": 188,
+        "tokens_each": 37,
+        "sha256": "61fc062e6cc41eb89b2ece72861c0db892ad9614bdff5c05940dd60f0ce0d66b"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan.constraints",
+          "payload.response_policy.answer_completeness.answer_exposition_plan.constraints"
+        ],
+        "characters": 185,
+        "tokens_each": 51,
+        "sha256": "83d8a5d3f0832a84ddf3288a3597dc1ccf4d5975efa473aff59f53380b275359"
+      },
+      {
+        "paths": [
+          "payload.scene.clue_records.undiscovered",
+          "payload.scene.clue_visibility.implicit"
+        ],
+        "characters": 176,
+        "tokens_each": 47,
+        "sha256": "559be50c6508bcf64622193e42105b15e73e92e638af5b840614a443aac76b9a"
+      }
+    ],
+    "top_level": {
+      "instructions": {
+        "characters": 15086,
+        "content_tokens": 3134
+      },
+      "bounded_improvisation": {
+        "characters": 386,
+        "content_tokens": 77
+      },
+      "dialogue_social_plan": {
+        "characters": 599,
+        "content_tokens": 157
+      },
+      "transition": {
+        "characters": 572,
+        "content_tokens": 143
+      },
+      "narrative_plan": {
+        "characters": 5137,
+        "content_tokens": 1381
+      },
+      "speaker_selection": {
+        "characters": 1500,
+        "content_tokens": 368
+      },
+      "active_topic_anchor": {
+        "characters": 100,
+        "content_tokens": 25
+      },
+      "interaction_continuity": {
+        "characters": 289,
+        "content_tokens": 70
+      },
+      "active_interlocutor": {
+        "characters": 326,
+        "content_tokens": 91
+      },
+      "social_context": {
+        "characters": 799,
+        "content_tokens": 178
+      },
+      "turn_summary": {
+        "characters": 392,
+        "content_tokens": 86
+      },
+      "recent_log": {
+        "characters": 491,
+        "content_tokens": 130
+      },
+      "selected_conversational_memory": {
+        "characters": 1173,
+        "content_tokens": 348
+      },
+      "player_input": {
+        "characters": 61,
+        "content_tokens": 15
+      },
+      "follow_up_pressure": {
+        "characters": 204,
+        "content_tokens": 62
+      },
+      "lead_context": {
+        "characters": 2005,
+        "content_tokens": 567
+      },
+      "interlocutor_lead_context": {
+        "characters": 1426,
+        "content_tokens": 410
+      },
+      "interlocutor_lead_behavior_hints": {
+        "characters": 306,
+        "content_tokens": 67
+      },
+      "response_policy": {
+        "characters": 22186,
+        "content_tokens": 5676
+      },
+      "referent_tracking": {
+        "characters": 3266,
+        "content_tokens": 863
+      },
+      "referent_clause_prompt_hints": {
+        "characters": 552,
+        "content_tokens": 153
+      },
+      "turn_packet": {
+        "characters": 9186,
+        "content_tokens": 2365
+      },
+      "uncertainty_hint": {
+        "characters": 26,
+        "content_tokens": 8
+      },
+      "narration_obligations": {
+        "characters": 430,
+        "content_tokens": 117
+      },
+      "opening_narration_obligations": {
+        "characters": 136,
+        "content_tokens": 36
+      },
+      "opening_scene_realization": {
+        "characters": 208,
+        "content_tokens": 54
+      },
+      "opening_inputs_are_curated": {
+        "characters": 37,
+        "content_tokens": 9
+      },
+      "opening_selector_source_used": {
+        "characters": 40,
+        "content_tokens": 9
+      },
+      "opening_selector_selected_facts": {
+        "characters": 39,
+        "content_tokens": 9
+      },
+      "opening_curated_facts": {
+        "characters": 29,
+        "content_tokens": 9
+      },
+      "narration_visibility": {
+        "characters": 385,
+        "content_tokens": 100
+      },
+      "scene_state_anchor_contract": {
+        "characters": 1037,
+        "content_tokens": 264
+      },
+      "first_mention_contract": {
+        "characters": 187,
+        "content_tokens": 48
+      },
+      "discoverable_hinting": {
+        "characters": 30,
+        "content_tokens": 8
+      },
+      "mechanical_resolution": {
+        "characters": 7824,
+        "content_tokens": 2010
+      },
+      "scene_advancement": {
+        "characters": 124,
+        "content_tokens": 30
+      },
+      "session": {
+        "characters": 391,
+        "content_tokens": 101
+      },
+      "character": {
+        "characters": 979,
+        "content_tokens": 378
+      },
+      "combat": {
+        "characters": 32,
+        "content_tokens": 10
+      },
+      "world_state": {
+        "characters": 68,
+        "content_tokens": 20
+      },
+      "world": {
+        "characters": 393,
+        "content_tokens": 121
+      },
+      "world_progression_summary": {
+        "characters": 430,
+        "content_tokens": 123
+      },
+      "campaign": {
+        "characters": 142,
+        "content_tokens": 43
+      },
+      "scene": {
+        "characters": 2775,
+        "content_tokens": 732
+      },
+      "player_expression_contract": {
+        "characters": 242,
+        "content_tokens": 56
+      },
+      "resolution_contract": {
+        "characters": 775,
+        "content_tokens": 185
+      },
+      "gm_resolution_decision": {
+        "characters": 3097,
+        "content_tokens": 898
+      },
+      "decision_facing_answer_recipe": {
+        "characters": 3433,
+        "content_tokens": 880
+      },
+      "clues": {
+        "characters": 410,
+        "content_tokens": 114
+      }
+    }
+  },
+  {
+    "question": "Why do you prefer the evening?",
+    "encoding": "o200k_base",
+    "tokenizer_version": "0.14.0",
+    "evidence": "measured local content tokens; not fresh provider usage; framing excluded",
+    "system_content_tokens": 893,
+    "user_content_tokens": 23911,
+    "system_characters": 4166,
+    "user_characters": 94120,
+    "groups": {
+      "B_dialogue_instructions": {
+        "keys": [
+          "instructions",
+          "dialogue_social_plan",
+          "bounded_improvisation",
+          "narration_obligations",
+          "interlocutor_lead_behavior_hints"
+        ],
+        "characters": 18154,
+        "content_tokens": 3865
+      },
+      "D_identity": {
+        "keys": [
+          "speaker_selection",
+          "active_interlocutor",
+          "social_context"
+        ],
+        "characters": 2614,
+        "content_tokens": 635
+      },
+      "E_knowledge": {
+        "keys": [
+          "clues"
+        ],
+        "characters": 410,
+        "content_tokens": 114
+      },
+      "F_history": {
+        "keys": [
+          "recent_log",
+          "selected_conversational_memory",
+          "interaction_continuity",
+          "turn_summary",
+          "active_topic_anchor",
+          "follow_up_pressure",
+          "lead_context",
+          "interlocutor_lead_context"
+        ],
+        "characters": 6702,
+        "content_tokens": 1871
+      },
+      "G_resolver": {
+        "keys": [
+          "mechanical_resolution",
+          "resolution_contract",
+          "gm_resolution_decision",
+          "decision_facing_answer_recipe",
+          "turn_packet"
+        ],
+        "characters": 25820,
+        "content_tokens": 6779
+      },
+      "H_validation": {
+        "keys": [
+          "response_policy",
+          "narration_visibility",
+          "scene_state_anchor_contract",
+          "first_mention_contract",
+          "discoverable_hinting",
+          "player_expression_contract",
+          "referent_tracking",
+          "referent_clause_prompt_hints",
+          "uncertainty_hint"
+        ],
+        "characters": 28329,
+        "content_tokens": 7286
+      },
+      "C_simulation": {
+        "keys": [
+          "transition",
+          "narrative_plan",
+          "opening_narration_obligations",
+          "opening_scene_realization",
+          "opening_inputs_are_curated",
+          "opening_selector_source_used",
+          "opening_selector_selected_facts",
+          "opening_curated_facts",
+          "scene_advancement",
+          "session",
+          "character",
+          "combat",
+          "world_state",
+          "world",
+          "world_progression_summary",
+          "campaign",
+          "scene"
+        ],
+        "characters": 12041,
+        "content_tokens": 3353
+      },
+      "K_other": {
+        "keys": [
+          "player_input"
+        ],
+        "characters": 50,
+        "content_tokens": 13
+      }
+    },
+    "group_wrapper_boundary_residual": -5,
+    "I_tools_schema": {
+      "tools": 0,
+      "tool_schema": 0,
+      "note": "No tools or text JSON schema passed; format guidance is in system/user instructions."
+    },
+    "J_duplicates_nonadditive": [
+      {
+        "paths": [
+          "payload.response_policy.answer_completeness.trace",
+          "payload.turn_packet.response_policy.answer_completeness.trace",
+          "payload.turn_packet.contracts.answer_completeness.trace"
+        ],
+        "characters": 1136,
+        "tokens_each": 278,
+        "sha256": "7a7362ca0817948d562e7d7621d5c925e7d0ba64364801a0bdf65e14a2152705"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta",
+          "payload.turn_packet.response_policy.response_delta"
+        ],
+        "characters": 2014,
+        "tokens_each": 508,
+        "sha256": "f42c805ef9ea57d70c92387d50c7129afbfec5fcd0d70b521cdb8fb2893af54f"
+      },
+      {
+        "paths": [
+          "payload.turn_packet.response_policy.answer_completeness",
+          "payload.turn_packet.contracts.answer_completeness"
+        ],
+        "characters": 1587,
+        "tokens_each": 399,
+        "sha256": "9e004a779ea96c47c78837945f034be5940e8877879f06b82db6e2454e2b8561"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation",
+          "payload.response_policy.context_separation.tone_escalation_contract"
+        ],
+        "characters": 1540,
+        "tokens_each": 407,
+        "sha256": "65ff950d026d0453192e3f880380f3573c478115d46632c23a40a1bb81138c8a"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta.trace",
+          "payload.turn_packet.response_policy.response_delta.trace"
+        ],
+        "characters": 1358,
+        "tokens_each": 338,
+        "sha256": "d9615f409886d04e95d778fca3a21b1cef6e349f4805702632f7900191a18adf"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan",
+          "payload.response_policy.answer_completeness.answer_exposition_plan"
+        ],
+        "characters": 853,
+        "tokens_each": 226,
+        "sha256": "5f2bf9e0630bcd2c7bb9c5dd4cc27c7a40759e2ae3eb916cff9b06d5328eaa4d"
+      },
+      {
+        "paths": [
+          "payload.lead_context.top_active_leads",
+          "payload.lead_context.recent_lead_changes"
+        ],
+        "characters": 827,
+        "tokens_each": 233,
+        "sha256": "cf2d4d3bbec383c3671b3b1e4f092976c412af07f0aceb70380f16e651cc7614"
+      },
+      {
+        "paths": [
+          "payload.lead_context.top_active_leads[0]",
+          "payload.lead_context.recent_lead_changes[0]"
+        ],
+        "characters": 825,
+        "tokens_each": 232,
+        "sha256": "3cc85a8fcf88a261f52397062c4b6af28dd3b6ec2575501013ea8be8386aad60"
+      },
+      {
+        "paths": [
+          "payload.response_policy.rule_priority_order",
+          "payload.turn_packet.response_policy.rule_priority_order"
+        ],
+        "characters": 743,
+        "tokens_each": 224,
+        "sha256": "878c1bf803d3fc2b1be2630bd6a7d729fe6e4441d8c920f8361f2670c7e5d131"
+      },
+      {
+        "paths": [
+          "payload.interlocutor_lead_context.introduced_by_npc",
+          "payload.interlocutor_lead_context.unacknowledged_from_npc",
+          "payload.interlocutor_lead_context.recently_discussed_with_npc"
+        ],
+        "characters": 370,
+        "tokens_each": 109,
+        "sha256": "8ffce54eae67c95476cb91119d207f55b87c9b5bdee0194aff23bc27e15de467"
+      },
+      {
+        "paths": [
+          "payload.interlocutor_lead_context.introduced_by_npc[0]",
+          "payload.interlocutor_lead_context.unacknowledged_from_npc[0]",
+          "payload.interlocutor_lead_context.recently_discussed_with_npc[0]"
+        ],
+        "characters": 368,
+        "tokens_each": 107,
+        "sha256": "fcd14d3e658e5b02e67857a5c1ee794741f969d7f276d58681bdf5d5c5357cdb"
+      },
+      {
+        "paths": [
+          "payload.response_policy.no_validator_voice",
+          "payload.turn_packet.response_policy.no_validator_voice"
+        ],
+        "characters": 633,
+        "tokens_each": 148,
+        "sha256": "8570eb8fe788e7534217b4c48a685552fa19edcd6b1f91c4d374b3b606be592b"
+      },
+      {
+        "paths": [
+          "payload.transition",
+          "payload.narrative_plan.transition_node"
+        ],
+        "characters": 556,
+        "tokens_each": 140,
+        "sha256": "a56dead29a4d9942f9d15f85bdaf71606f8b1c87fc69959dc40dc07ab0478b66"
+      },
+      {
+        "paths": [
+          "payload.response_policy.response_delta.trace.answer_pressure_reasons",
+          "payload.response_policy.answer_completeness.trace.answer_pressure_reasons",
+          "payload.turn_packet.response_policy.response_delta.trace.answer_pressure_reasons",
+          "payload.turn_packet.response_policy.answer_completeness.trace.answer_pressure_reasons",
+          "payload.turn_packet.contracts.answer_completeness.trace.answer_pressure_reasons"
+        ],
+        "characters": 121,
+        "tokens_each": 31,
+        "sha256": "c71e675735b3b8c50633a50ff4285af5e36af13a991c1474adc00e2c0773d7a3"
+      },
+      {
+        "paths": [
+          "payload.turn_packet.response_policy.response_type_contract",
+          "payload.turn_packet.contracts.response_type"
+        ],
+        "characters": 419,
+        "tokens_each": 107,
+        "sha256": "16a15bb8464d18440d3a9507bfea4d9e962873e48a5f71300a4936ed609f6816"
+      },
+      {
+        "paths": [
+          "payload.response_policy.uncertainty",
+          "payload.turn_packet.response_policy.uncertainty"
+        ],
+        "characters": 356,
+        "tokens_each": 90,
+        "sha256": "5ff3941bd4adde459303845cd5860518f89e814c9ab799e59ac66be60acf8c92"
+      },
+      {
+        "paths": [
+          "payload.response_policy.no_validator_voice.rule",
+          "payload.turn_packet.response_policy.no_validator_voice.rule"
+        ],
+        "characters": 347,
+        "tokens_each": 72,
+        "sha256": "a1b1da005c40aa81c367959eab539213ba9a747cad19ace5f4f858f5c93f80bd"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.justification_flags",
+          "payload.response_policy.context_separation.tone_escalation_contract.justification_flags"
+        ],
+        "characters": 333,
+        "tokens_each": 84,
+        "sha256": "57d248c3b83fe2a20c60d8c675b69ff8210ac7c39d2518d0904b992451b87b5b"
+      },
+      {
+        "paths": [
+          "payload.instructions[66]",
+          "payload.social_context.answer_style_hints[0]"
+        ],
+        "characters": 255,
+        "tokens_each": 59,
+        "sha256": "d8b28625845c66158293de4e0e060bff74ac45f91d2d6a45134cd05b519f8feb"
+      },
+      {
+        "paths": [
+          "payload.instructions[87]",
+          "payload.mechanical_resolution.hint"
+        ],
+        "characters": 251,
+        "tokens_each": 46,
+        "sha256": "b401d081a55f65dd9a1f72da6cc2eb82a70beceb561c8ba899fa64a9d1b70da9"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan.delivery",
+          "payload.response_policy.answer_completeness.answer_exposition_plan.delivery"
+        ],
+        "characters": 236,
+        "tokens_each": 63,
+        "sha256": "7be1a233a819477d23c875ea1f78f24fc09ecf372894fc3d14248e597f9ce280"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.debug_inputs",
+          "payload.response_policy.context_separation.tone_escalation_contract.debug_inputs"
+        ],
+        "characters": 236,
+        "tokens_each": 64,
+        "sha256": "a26f0e788fbb2aa75b223a7c18440729a22b6431737af6908de9070b089c13b2"
+      },
+      {
+        "paths": [
+          "payload.response_policy.tone_escalation.debug_flags",
+          "payload.response_policy.context_separation.tone_escalation_contract.debug_flags"
+        ],
+        "characters": 221,
+        "tokens_each": 63,
+        "sha256": "d472420da1e52537238dcccb0a70b8014506885171b1a5eddce76bd6bde52418"
+      },
+      {
+        "paths": [
+          "payload.instructions[68]",
+          "payload.social_context.answer_style_hints[2]"
+        ],
+        "characters": 188,
+        "tokens_each": 37,
+        "sha256": "61fc062e6cc41eb89b2ece72861c0db892ad9614bdff5c05940dd60f0ce0d66b"
+      },
+      {
+        "paths": [
+          "payload.narrative_plan.answer_exposition_plan.constraints",
+          "payload.response_policy.answer_completeness.answer_exposition_plan.constraints"
+        ],
+        "characters": 185,
+        "tokens_each": 51,
+        "sha256": "83d8a5d3f0832a84ddf3288a3597dc1ccf4d5975efa473aff59f53380b275359"
+      }
+    ],
+    "top_level": {
+      "instructions": {
+        "characters": 16433,
+        "content_tokens": 3448
+      },
+      "bounded_improvisation": {
+        "characters": 386,
+        "content_tokens": 77
+      },
+      "dialogue_social_plan": {
+        "characters": 599,
+        "content_tokens": 157
+      },
+      "transition": {
+        "characters": 572,
+        "content_tokens": 143
+      },
+      "narrative_plan": {
+        "characters": 5137,
+        "content_tokens": 1381
+      },
+      "speaker_selection": {
+        "characters": 1489,
+        "content_tokens": 366
+      },
+      "active_topic_anchor": {
+        "characters": 100,
+        "content_tokens": 25
+      },
+      "interaction_continuity": {
+        "characters": 289,
+        "content_tokens": 70
+      },
+      "active_interlocutor": {
+        "characters": 326,
+        "content_tokens": 91
+      },
+      "social_context": {
+        "characters": 799,
+        "content_tokens": 178
+      },
+      "turn_summary": {
+        "characters": 381,
+        "content_tokens": 84
+      },
+      "recent_log": {
+        "characters": 617,
+        "content_tokens": 162
+      },
+      "selected_conversational_memory": {
+        "characters": 1438,
+        "content_tokens": 427
+      },
+      "player_input": {
+        "characters": 50,
+        "content_tokens": 13
+      },
+      "follow_up_pressure": {
+        "characters": 446,
+        "content_tokens": 129
+      },
+      "lead_context": {
+        "characters": 2005,
+        "content_tokens": 567
+      },
+      "interlocutor_lead_context": {
+        "characters": 1426,
+        "content_tokens": 410
+      },
+      "interlocutor_lead_behavior_hints": {
+        "characters": 306,
+        "content_tokens": 67
+      },
+      "response_policy": {
+        "characters": 22615,
+        "content_tokens": 5794
+      },
+      "referent_tracking": {
+        "characters": 3266,
+        "content_tokens": 863
+      },
+      "referent_clause_prompt_hints": {
+        "characters": 552,
+        "content_tokens": 153
+      },
+      "turn_packet": {
+        "characters": 9803,
+        "content_tokens": 2537
+      },
+      "uncertainty_hint": {
+        "characters": 26,
+        "content_tokens": 8
+      },
+      "narration_obligations": {
+        "characters": 430,
+        "content_tokens": 117
+      },
+      "opening_narration_obligations": {
+        "characters": 136,
+        "content_tokens": 36
+      },
+      "opening_scene_realization": {
+        "characters": 208,
+        "content_tokens": 54
+      },
+      "opening_inputs_are_curated": {
+        "characters": 37,
+        "content_tokens": 9
+      },
+      "opening_selector_source_used": {
+        "characters": 40,
+        "content_tokens": 9
+      },
+      "opening_selector_selected_facts": {
+        "characters": 39,
+        "content_tokens": 9
+      },
+      "opening_curated_facts": {
+        "characters": 29,
+        "content_tokens": 9
+      },
+      "narration_visibility": {
+        "characters": 385,
+        "content_tokens": 100
+      },
+      "scene_state_anchor_contract": {
+        "characters": 1026,
+        "content_tokens": 260
+      },
+      "first_mention_contract": {
+        "characters": 187,
+        "content_tokens": 48
+      },
+      "discoverable_hinting": {
+        "characters": 30,
+        "content_tokens": 8
+      },
+      "mechanical_resolution": {
+        "characters": 7905,
+        "content_tokens": 2038
+      },
+      "scene_advancement": {
+        "characters": 124,
+        "content_tokens": 30
+      },
+      "session": {
+        "characters": 391,
+        "content_tokens": 101
+      },
+      "character": {
+        "characters": 979,
+        "content_tokens": 378
+      },
+      "combat": {
+        "characters": 32,
+        "content_tokens": 10
+      },
+      "world_state": {
+        "characters": 199,
+        "content_tokens": 61
+      },
+      "world": {
+        "characters": 524,
+        "content_tokens": 162
+      },
+      "world_progression_summary": {
+        "characters": 688,
+        "content_tokens": 194
+      },
+      "campaign": {
+        "characters": 142,
+        "content_tokens": 43
+      },
+      "scene": {
+        "characters": 2764,
+        "content_tokens": 730
+      },
+      "player_expression_contract": {
+        "characters": 242,
+        "content_tokens": 56
+      },
+      "resolution_contract": {
+        "characters": 753,
+        "content_tokens": 184
+      },
+      "gm_resolution_decision": {
+        "characters": 3644,
+        "content_tokens": 1061
+      },
+      "decision_facing_answer_recipe": {
+        "characters": 3715,
+        "content_tokens": 960
+      },
+      "clues": {
+        "characters": 410,
+        "content_tokens": 114
+      }
+    }
+  }
+]

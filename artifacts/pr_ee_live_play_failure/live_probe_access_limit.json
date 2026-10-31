@@ -1,0 +1,11 @@
+{
+  "fresh_live_run_executed": false,
+  "new_external_provider_requests": 0,
+  "rejection_source": "automatic approval review",
+  "attempted_command": ".venv/Scripts/python.exe artifacts/pr_ee_live_play_failure/investigate.py --live",
+  "reason": "Live run may send private campaign/world prompts and related data to an external provider up to 16 times; payload and destination need specific user authorization.",
+  "destination_if_approved": "OpenAI Responses API via game/live_chat_interpretation.py; configured model gpt-4.1-mini",
+  "payload_if_approved": "Player utterance, active scene public summary, visible entity labels/ids/aliases, last two player-visible exchanges (240 chars per field), interpretation instructions and schema. If routed to narration, campaign/character/world narrative context may also be sent.",
+  "alternative_evidence": "Original logged live provider completions + no-network HTTP replay + deterministic semantic probes",
+  "bypassed": false
+}

@@ -1,0 +1,1242 @@
+{
+  "campaign_id": "pr_eg_r2c_r2_reference_eligibility_20261017",
+  "campaign_name": "PR-EG-R2C-R2 \u2014 Reference Eligibility & Resolver Handoff",
+  "campaign_date": "2026-10-17",
+  "purpose": "Focused repair and qualification; stop after R2C-R2 and await external review.",
+  "objective_status": "B \u2014 REPAIR QUALIFIED WITH LIMITATIONS; R2C CLOSURE RECOMMENDED",
+  "executive_summary": "**B \u2014 REPAIR QUALIFIED WITH LIMITATIONS; R2C CLOSURE RECOMMENDED.** Engine grounding now reconciles provider unresolved-reference annotations before interpretation eligibility and at the stored-record bridge. Existing addressee grounding and authored topic selection determine eligibility; the existing social resolver retains disclosure and immutable speech adoption. Bare repetition after an unresolved clarification repeats the actual GM question and preserves pending intent.\n\n\n\nRelevant regression: {'passed': 584, 'failed': 25} before \u2192 {'passed': 650, 'failed': 25} after; no new failure identities or lost baseline passes. All 66 focused checks pass. All 15 unchanged R1 holdouts pass. Final independent N01\u2013N05 pass, as do C01\u2013C03, S01\u2013S05 and L01\u2013L02. The initial F07 retention expectation is preserved as failed and superseded; it is not counted as passing independent final evidence.\n\n\n\nFinal fresh production /api/chat: 16 primary + 13 secondary turns; 29/29 provenance/relevance/state audits pass. 18 interpretation calls, 0 narration calls, 0 retries; 34,351 input / 3,412 output tokens; mean 1.68s, maximum 3.34s per turn.\n\n\n\nQualification is bounded to the recorded scenes and configured route. Unclassified unsupported annotations remain conservative; arbitrary semantic grounding and unlimited memory are not established. Stop after R2C-R2 and await external review. Do not begin R3.",
+  "changes": {
+    "production": [
+      "Reference reconciliation using existing grounding/selector and unresolved clarification continuity."
+    ],
+    "validation": [
+      "T01\u2013T28, adversarial/status controls and frozen expectations; retain failed evidence."
+    ],
+    "tooling": [
+      "Production HTTP runner, exact baseline/final comparison and provenance/state/cost audits."
+    ],
+    "documentation": [
+      "All 25 requested numbered reports."
+    ],
+    "generated_artifacts": [
+      "Provider journals, full transcripts/states, source hashes/diffs, JUnit identities and failed-attempt archives."
+    ]
+  },
+  "testing": {
+    "focused": "66 focused tests pass; R1 15/15; final independent N01\u2013N05 5/5.",
+    "broader": "{'passed': 584, 'failed': 25} \u2192 {'passed': 650, 'failed': 25}",
+    "full_suite": "Not run; relevant family only.",
+    "runtime_validation": "16 primary + 13 secondary fresh-provider production HTTP turns; 29/29 audits pass.",
+    "model_runtime_boundary": "Configured gpt-4.1-mini; actual Responses interpretation, no live doubles/replay.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "25 unchanged identities; report 16/final.xml."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Bounded lexical/symbolic grounding; unsupported unclassified annotations remain conservative.",
+      "F07 old retention expectation is superseded and preserved as failed; new independent N01\u2013N05 qualify final behavior."
+    ],
+    "pre_existing": [
+      "25 inherited relevant-family failures remain outside scope."
+    ]
+  },
+  "missing_concepts": [
+    "Arbitrary semantic entity grounding and unlimited conversation memory were not added."
+  ],
+  "decisions_requiring_human_review": [
+    "External review of R2C-R2 repair, evidence and closure recommendation."
+  ],
+  "does_not_prove": [
+    "All repository tests passing, arbitrary annotation understanding, unrestricted generated-speech safety, unlimited memory or process-restart persistence."
+  ],
+  "recommended_next_step": "Recommend R2C closure with documented limitations after external review. Stop after R2C-R2; do not proceed to R3.",
+  "primary_report": "artifacts/pr_eg_r2c_r2/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 134217728,
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r2c_r2/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/03_HISTORICAL_FAILURE_REPRODUCTION.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/04_REFERENCE_AUTHORITY_CONTRACT.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/05_ANNOTATION_RECONCILIATION.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/06_ADDRESSEE_AND_SUBJECT_GROUNDING.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/07_RESOLVER_HANDOFF.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/08_KNOWLEDGE_VS_REFERENCE.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/09_CONVERSATIONAL_CONTINUITY.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/10_INFORMATION_INTEGRITY_PRESERVATION.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/11_CROSS_DOMAIN_SAFETY.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/12_SOURCE_CHANGE_INVENTORY.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/13_TARGETED_TESTS.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/14_ADVERSARIAL_ANNOTATIONS.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/15_FROZEN_HOLDOUTS.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/16_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/17_PRIMARY_FRESH_PROVIDER_CONVERSATION.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/18_SECONDARY_FRESH_PROVIDER_CONVERSATION.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/19_PROVIDER_PERFORMANCE.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/20_STATE_INTEGRITY_AUDIT.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/21_REMAINING_LIMITATIONS.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/22_R2C_CLOSURE_ASSESSMENT.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/23_NEXT_CYCLE_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/24_FINAL_VERDICT.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/25_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/acceptance_gates.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/adversarial.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/adversarial_annotations.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/after_reproduction.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/audit_evidence.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/baseline.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/baseline_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/before_reproduction.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/build_review.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/clarification_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/clarification_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/clarification_probe.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/development_provider_cost.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/environment.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/evaluate_predecessor_holdouts.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_annotation_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_annotation_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_literal_qualified_live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_provider_usage.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/final_qualified_live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/frozen_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/grounding_trace.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/historical_interpretation.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/intermediate_failure_audit.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/literal_role_before.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/literal_role_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/literal_role_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_plan.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_qualification.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_semantic_audit.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_status.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/original_holdout_final_attempt.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/performance.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/predecessor_holdout_results.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/primary_transcript.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/probe_clarification.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_source_hashes.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/regression_comparison.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/regression_selection.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/reproduce.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/run_final.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/secondary_transcript.md",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/source_changes.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/state_audit.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/status_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/status_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_final.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_final_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_qualified.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_qualified_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_results.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_status.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/targeted_status_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/working_tree_before.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/diffs/conversational_continuity.py.diff",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/diffs/live_chat_interpretation.py.diff",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/diffs/player_interpretation_bridge.py.diff",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/diffs/test_pr_ef_r2_social_authority.py.diff",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/clarification_probe.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/final.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/final_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/live_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/live_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/live_plan.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/live_qualification.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/live_status.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_clarification_fix/source_hashes.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/acceptance_gates.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/adversarial_annotations.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/final.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/final_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/live_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/live_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/live_plan.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/live_qualification.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/live_semantic_audit.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/live_status.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/performance.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/qualification_live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/qualification_source_hashes.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/targeted_results.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/test_pr_eg_r2c_r2_reference_eligibility.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/final.xml",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/final_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/final_live_usage.jsonl",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/live_console.txt",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/live_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/live_plan.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/live_qualification.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/live_status.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/source_hashes.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/before_sources/game/conversational_continuity.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/before_sources/game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/before_sources/game/player_interpretation_bridge.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/before_sources/tests/test_pr_ef_r2_social_authority.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/sources/game/conversational_continuity.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/sources/game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_irrelevant_annotation_fix/sources/game/player_interpretation_bridge.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/sources/game/conversational_continuity.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/sources/game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/qualification_before_status_fix/sources/game/player_interpretation_bridge.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/api.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/conversational_continuity.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/conversational_orchestration.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/dialogue_authority.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/immutable_valid_response.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/live_chat_interpretation.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/ordinary_semantic_ownership.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/player_interpretation_bridge.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/provider_budget.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/social.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/game/storage.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tests/test_pr_du_player_pipeline.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tests/test_pr_ef_gm_authority.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tests/test_pr_ef_r2_social_authority.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tests/test_pr_ef_r4_authorization.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tests/test_pr_eg_r2c_r2_reference_eligibility.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tests/test_pr_eg_r2c_speech_adoption.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tools/build_review_handoff.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/tools/validate_pr_eg_r2c_r2.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/experiments/pr_do/adapter.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/experiments/pr_do/eligibility.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/sources/experiments/pr_do/schema.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/frozen_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/final_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/final_holdouts_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/qualification_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r1/qualification_holdouts_freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/frozen_holdouts.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/freeze.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/run_r2c_r2_baseline.py",
+      "role": "source",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c_r2/artifact_inventory.json",
+      "role": "evidence",
+      "why": "Requested report, exact source/diff, frozen expectation, actual transcript/provider journal, state audit or retained failure.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    }
+  ],
+  "self_contained_review_test": "Verify all 25 reports, source hashes, baseline/final identities, retained failures, frozen expectations and full fresh-provider transcripts/states/usage; no credentials or active campaign saves."
+}

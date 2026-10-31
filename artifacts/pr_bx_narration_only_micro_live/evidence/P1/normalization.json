@@ -1,0 +1,74 @@
+{
+  "application_realization_envelope": {
+    "schema_version": 1,
+    "provider_response_contract": "structured_realization",
+    "declared_claims": [],
+    "narration": "The bell's wooden yoke is clearly split, and the leather hanger is torn. These signs mark significant wear or damage, though what exactly caused this damage remains uncertain.",
+    "structured_contract_present": true,
+    "legacy_fallback": false
+  },
+  "parser_attempts": [
+    {
+      "attempt": 1,
+      "provider_response_contract": "structured_realization",
+      "structural_shape": {
+        "json_object": true,
+        "keys": [
+          "activate_scene_id",
+          "debug_notes",
+          "declared_claims",
+          "improvisation_proposals",
+          "narration",
+          "new_scene_draft",
+          "player_facing_text",
+          "scene_update",
+          "suggested_action",
+          "tags",
+          "world_updates"
+        ]
+      },
+      "declared_claims": [
+        {
+          "declaration_id": "inference_1",
+          "declaration_mode": "propose",
+          "source_claim_id": null,
+          "premise_claim_ids": [
+            "rc_db5ec0aa65c3",
+            "rc_b31ecb1fd1c7"
+          ],
+          "semantic_identity": {},
+          "provenance_requested": "gm_inference",
+          "epistemic_status": "inferred",
+          "modality": "possible",
+          "realization_role": "MUST_STATE",
+          "relation_kind": "epistemic_status",
+          "text": "The damage to the bell's wooden yoke and leather hanger could suggest stress or strain, possibly from heavy use or sudden impact."
+        }
+      ],
+      "normalized_empty_declarations": null,
+      "declaration_authorship": null,
+      "structured_contract_failure": null,
+      "structured_contract_reason": null,
+      "player_facing_text": "The split wooden yoke and torn leather hanger on the bell might indicate that it has undergone significant stress or strain. This could be the result of prolonged heavy use or perhaps a sudden forceful impact. However, without additional evidence, the exact cause remains uncertain."
+    },
+    {
+      "attempt": 2,
+      "provider_response_contract": "structured_realization",
+      "structural_shape": {
+        "json_object": true,
+        "keys": [
+          "declared_claims",
+          "narration",
+          "player_facing_text",
+          "tags"
+        ]
+      },
+      "declared_claims": [],
+      "normalized_empty_declarations": null,
+      "declaration_authorship": null,
+      "structured_contract_failure": null,
+      "structured_contract_reason": null,
+      "player_facing_text": "The bell's wooden yoke is clearly split, and the leather hanger is torn. These signs mark significant wear or damage, though what exactly caused this damage remains uncertain."
+    }
+  ]
+}

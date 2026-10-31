@@ -1,0 +1,211 @@
+{
+  "campaign_id": "pr-br-continuation-20",
+  "campaign_name": "PR-BR Continuation 20 — Incidental Entity Binding and Intent-Preserving Abstention",
+  "campaign_date": "2026-10-01",
+  "purpose": "Bind ordinary plausible incidental people through PR-BN, and keep the player's operation and dimension when entity or claim binding fails. Four focused live turns. No independent smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "C18's seal-or-retry lifecycle and C19's hard-authority boundary are unchanged. A proposed ordinary person in a populated scene can become a minimal incidental entity under PR-BN. Consequential and implausible references are not instantiated, and a failed explicit addressee does not restore the previous NPC. Source inquiry stays source when no claim is bound. The 281-test band passed. Four live turns bound a canonical runner, then the same porter, kept a source follow-up, and inspected the notice. Exact accepted text 4/4. READY FOR ANOTHER INDEPENDENT 10-TURN SMOKE: YES. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/incidental_entity.py classifies canonical, incidental, consequential, and unresolved references and persists a minimal incidental record through PR-BN.",
+      "game/resolution_contract.py keeps operation and dimension independent of binding success and records entity_binding.",
+      "game/interaction_completion.py treats an explicit new addressee as a proposal and does not fall back to the previous interlocutor.",
+      "game/discourse_state.py persists an accepted incidental entity and clears a rejected explicit addressee.",
+      "game/proposition_authority.py keeps non-operational hearsay as an NPC claim."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation20_incidental_entity.py covers cloth merchant, source without a claim, variants, implausible and consequential controls, stable identity, minimality, claim and authority, the C19 replay, and stubbed /api/chat.",
+      "Broader band: 281 passed, 0 failed. Continuations 12-16, 18, 19, and 20 included."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation20_live.py runs at most four focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md Continuation 20 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation20/20261002T010416Z live transcript, turns, manual review, and cost summary."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 20 incidental binding, source preservation, controls, C19 replay, and stubbed /api/chat passed.",
+    "broader": "281 passed, 0 failed. Full suite not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "4 completed live turns. 1 interpretation call. 4 gameplay-generation calls. 0 regenerations. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "1 interpretation call. 4 gameplay-generation calls. 0 evaluator model calls. 0 regenerations. 0 aborted.",
+    "new_regressions": "None in the deterministic band. Live turn 4 inspect did not fill an object target; the narration stayed on the notice board.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "An independent 10-turn smoke is the next evidence step. Do not run it from this cycle.",
+    "Do not open Continuation 21 for the empty inspect target on 'look over the notice board' without a posted-reading clause.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "A bare 'look over the notice board' inspect does not fill the object target. The C19 wording that also reads what is posted still binds the board."
+    ],
+    "pre_existing": [
+      "Scene openings and turns without a contract operation still use the legacy emission path."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health. The smoke was not run.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest.",
+    "Does not prove every live observation becomes an active claim."
+  ],
+  "recommended_next_step": "External review, then an independent 10-turn smoke outside this cycle. Do not close PR-BR. Do not start PR-BS. Do not run the 4x10 gate.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "role": "audit",
+      "why": "Continuation 19 residual and Continuation 20 closeout.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/incidental_entity.py",
+      "role": "authority",
+      "why": "PR-BN incidental entity classification, minimal record, and persistence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "contract",
+      "why": "Operation and dimension preserved independently of binding, with entity_binding on the contract.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interaction_completion.py",
+      "role": "contract",
+      "why": "Explicit addressee precedence and stale-interlocutor suppression.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "discourse",
+      "why": "Accepted incidental persistence and rejected-addressee clearing.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_resolution.py",
+      "role": "lifecycle",
+      "why": "Applies the validated binding before generation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/scene_referent_catalog.py",
+      "role": "catalog",
+      "why": "Established incidental entities re-enter the referent catalog.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "lifecycle",
+      "why": "C18 seal retained. Speaker constraint uses the incidental or proposed label.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/proposition_authority.py",
+      "role": "authority",
+      "why": "C19 boundary retained. Non-operational hearsay stays an NPC claim.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/bounded_improvisation.py",
+      "role": "authority",
+      "why": "PR-BN validator reused for incidental people.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_br_continuation20_incidental_entity.py",
+      "role": "tests",
+      "why": "Cloth merchant, source, variants, controls, stable identity, claims, C19 replay, and stubbed /api/chat.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation19_hard_authority.py",
+      "role": "tests",
+      "why": "C19 third-bell, grounded, and rumor regressions.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation18_immutable_boundary.py",
+      "role": "tests",
+      "why": "C18 immutability, 16-turn replay, and the seven downstream failures.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation20_live.py",
+      "role": "runner",
+      "why": "Four-turn focused live session.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation20/20261002T010416Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation20/20261002T010416Z/turns.json",
+      "role": "turns",
+      "why": "Contracts, binding, authority review, and accepted versus emitted text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation20/20261002T010416Z/summary.json",
+      "role": "cost",
+      "why": "Generation, interpretation, and regeneration counts. Provenance HEAD.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation20/20261002T010416Z/manual_review.md",
+      "role": "review",
+      "why": "Manual pass and evaluator comparison.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation20/20261002T010416Z/generation_calls.json",
+      "role": "calls",
+      "why": "Per-call generation excerpts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation20/20261002T010416Z/interpretation_calls.json",
+      "role": "calls",
+      "why": "The live source follow-up proposal that did not replace source.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation19/20261002T002239Z/transcript.md",
+      "role": "transcript",
+      "why": "C19 residual live evidence: content dimension and unbound cloth merchant.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

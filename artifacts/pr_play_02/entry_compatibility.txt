@@ -1,0 +1,68 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_____ test_call_gpt_attaches_route_metadata_and_merges_existing_metadata ______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000193D3214C20>
+
+    def test_call_gpt_attaches_route_metadata_and_merges_existing_metadata(
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        _install_openai_recorder(monkeypatch, response_text='{"ignored":true}')
+        monkeypatch.setattr(
+            gm_mod,
+            "_safe_json",
+            lambda _text, **_kwargs: {
+                "player_facing_text": "ok",
+                "tags": [],
+                "scene_update": None,
+                "activate_scene_id": None,
+                "new_scene_draft": None,
+                "world_updates": None,
+                "suggested_action": None,
+                "debug_notes": "existing-debug",
+                "metadata": {"existing": "keep"},
+            },
+        )
+        monkeypatch.setattr(
+            gm_mod,
+            "resolve_model_route",
+            lambda **_kwargs: routing_mod.ModelRouteDecision(
+                selected_model="metadata-route-model",
+                route_reason="metadata_reason",
+                route_family="metadata_family",
+                escalation_allowed=True,
+            ),
+        )
+    
+        out = gm_mod.call_gpt(
+            [{"role": "user", "content": "Hello"}],
+            purpose="primary_turn",
+            retry_attempt=2,
+        )
+    
+>       assert out["metadata"] == {
+            "existing": "keep",
+            "selected_model": "metadata-route-model",
+            "model_route_reason": "metadata_reason",
+            "model_route_family": "metadata_family",
+            "model_route_purpose": "primary_turn",
+            "model_retry_attempt": 2,
+            "model_escalated": False,
+            "model_escalation_trigger": None,
+        }
+E       AssertionError: assert {'existing': ..._family', ...} == {'existing': ..._family', ...}
+E         
+E         Omitting 8 identical items, use -vv to show
+E         Left contains 1 more item:
+E         {'provider_call': {'input_tokens': None,
+E                            'latency_ms': 0,
+E                            'output_tokens': None,
+E                            'purpose': 'primary_turn',
+E                            'sent': True}}
+E         Use -v to get more diff
+
+tests\test_model_routing_runtime.py:120: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[MODEL ROUTE] purpose=primary_turn selected=metadata-route-model family=metadata_family retry=2 escalated=false
+=========================== short test summary info ===========================
+FAILED tests/test_model_routing_runtime.py::test_call_gpt_attaches_route_metadata_and_merges_existing_metadata

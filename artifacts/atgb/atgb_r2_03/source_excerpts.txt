@@ -1,0 +1,2303 @@
+## game/live_chat_interpretation.py::production_interpretation_schema lines 34-66; sha256=ea88d3317df13001ca328487eaf94a26a8e29246e09c893f55f6d460832f2eba
+34: def production_interpretation_schema() -> dict[str, Any]:
+35:     """Extend the existing interpretation envelope, without granting outcomes."""
+36:     import copy
+37:     schema = copy.deepcopy(_contract()[5]())
+38:     schema["properties"]["communication"] = {
+39:         "type": "object", "additionalProperties": False,
+40:         "properties": {
+41:             "recipient": {"type": "string", "enum": list(RECIPIENTS)},
+42:             "purpose": {"type": "string", "enum": list(PURPOSES)},
+43:             "subject": {"type": "string"},
+44:             "evidence_refs": {"type": "array", "items": {"type": "string"}},
+45:         },
+46:         "required": ["recipient", "purpose", "subject", "evidence_refs"],
+47:     }
+48:     schema["required"].append("communication")
+49:     # Structured generation follows property order. Choose the speech act
+50:     # before the operation-shaped legacy fields can bias the recipient.
+51:     schema["properties"] = {"communication": schema["properties"].pop("communication"), **schema["properties"]}
+52:     schema["properties"]["communication"]["properties"]["recipient"]["description"] = (
+53:         "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, "
+54:         "including interpreting another person's behavior. NPC: the character actually speaks to that person. "
+55:         "SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. "
+56:         "MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+57:     )
+58:     schema["properties"]["communication"]["properties"]["purpose"]["description"] = (
+59:         "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects "
+60:         "conversational meaning, subject, referent or description, or revises an actual unexecuted intention. "
+61:         "Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's "
+62:         "request for explanation; it does not by itself mean the AI-DM needs more information. "
+63:         "WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. "
+64:         "These control acts are never ACTION, even when mentioning a physical operation."
+65:     )
+66:     return schema
+
+## game/live_chat_interpretation.py::valid_communication lines 69-78; sha256=ea88d3317df13001ca328487eaf94a26a8e29246e09c893f55f6d460832f2eba
+69: def valid_communication(value: Any, evidence: dict[str, str]) -> bool:
+70:     return (
+71:         isinstance(value, dict)
+72:         and set(value) == {"recipient", "purpose", "subject", "evidence_refs"}
+73:         and value.get("recipient") in RECIPIENTS
+74:         and value.get("purpose") in PURPOSES
+75:         and isinstance(value.get("subject"), str)
+76:         and isinstance(value.get("evidence_refs"), list)
+77:         and all(isinstance(ref, str) and ref in evidence for ref in value["evidence_refs"])
+78:     )
+
+## game/live_chat_interpretation.py::interpret_production_turn lines 300-559; sha256=ea88d3317df13001ca328487eaf94a26a8e29246e09c893f55f6d460832f2eba
+300: def interpret_production_turn(
+301:     *,
+302:     player_text: str,
+303:     mode: str,
+304:     scene: dict | None,
+305:     world: dict | None,
+306:     log: list | None,
+307:     session: dict | None = None,
+308: ) -> dict[str, Any]:
+309:     """Return skipped, blocked, or accepted. Accepted carries a bridge record."""
+310:     if not production_live_interpretation_enabled():
+311:         reason = "provider_calls_disabled" if provider_calls_disabled() else "live_interpretation_disabled"
+312:         return {"status": "skipped", "reason": reason, "record": None, "provider_requests": []}
+313: 
+314:     adapt_interpretation, build_messages_for_catalog, context_leaks, preflight_tokens, _model, _schema = _contract()
+315:     catalog = _catalog_rows(scene, world)
+316:     recent = player_visible_turns(log or [], limit=2)
+317:     messages = build_messages_for_catalog(
+318:         player_text,
+319:         scene_summary=_scene_summary(scene),
+320:         catalog=catalog,
+321:         recent_visible=recent or None,
+322:     )
+323:     # Specialize the legacy mode guidance on the production request only.
+324:     messages[1]["content"] = "\n".join(
+325:         "Communication modes: IN_WORLD_ACTION=character action or NPC speech; "
+326:         "OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; "
+327:         "RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; "
+328:         "OTHER for resolved GM conversation, including ordinary conversational correction."
+329:         if line.startswith("Communication modes:") else line
+330:         for line in messages[1]["content"].splitlines()
+331:     )
+332:     from game.conversational_orchestration import public_conversation_evidence
+333:     evidence = public_conversation_evidence(scene, log)
+334:     messages[0]["content"] += (
+335:         " Establish communication.recipient and purpose BEFORE describing operations. "
+336:         "GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, "
+337:         "third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. "
+338:         "A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. "
+339:         "SESSION owns rules and interface questions. CHARACTER owns committed attempts only. "
+340:         "MIXED owns question plus conditional or independent action; preserve all components, never authorize them. "
+341:         "CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. "
+342:         "For GM/session communication leave action_components empty unless a NEW observation is requested; "
+343:         "use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. "
+344:         "Ordinary conversational correction supplies corrected meaning, subject, referent or description. "
+345:         "Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. "
+346:         "When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; "
+347:         "continue the corrected conversation without asking confirmation merely because it is corrective. "
+348:         "Use correction.subject REFERENT for a conversational subject, referent or description correction. "
+349:         "This does not itself revise a gameplay action; leave action_components empty. "
+350:         "Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; "
+351:         "never invent pending work, revise executed actions or execute from a correction alone. "
+352:         "Recover the underlying question or request from available conversation context using the corrected meaning. "
+353:         "Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; "
+354:         "prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. "
+355:         "Restricted or unestablished information in internal world state is not disclosure authority; "
+356:         "do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. "
+357:         "With insufficient evidence, state the limitation or continue with established information only. "
+358:         "Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing "
+359:         "interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. "
+360:         "Acknowledgments asserting no world facts may use empty evidence_refs. "
+361:         "Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation."
+362:         " A declaration of what I/we do is CHARACTER/ACTION, including inspection; "
+363:         "a request to describe already visible information is GM/DESCRIPTION. "
+364:         "NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; "
+365:         "select its npc:<speaker>:<topic> evidence reference when supplied. "
+366:         "For GM recall of NPC speech, prefer that same established NPC answer passage."
+367:         " For clarification of the most recent NPC statement, npc_latest_reply is the actual latest "
+368:         "utterance, including inability or refusal. Do not substitute an earlier topic for it. "
+369:         " Communication is the primary contract; legacy communication_mode describes execution disposition. "
+370:         "A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. "
+371:         "Third-person description of a person does not speak to them. A question about what their expression "
+372:         "implies is GM/EXPLANATION; do not ask the person on the player's behalf. "
+373:         "A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. "
+374:         "Cancellation, revision and assent describe control of pending intent, never a new world attempt. "
+375:         "Use AMBIGUOUS when a demonstrative has no unique context referent. "
+376:         "For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. "
+377:         "For mixed observation and speech preserve both components under MIXED; the engine controls their order. "
+378:         "Keep descriptions concise so the complete schema fits the output budget."
+379:         " SESSION does NOT mean every instruction submitted to the engine: describing a character's physical "
+380:         "movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal "
+381:         "(then the engine will clarify); revising a proposed attempt is GM/CORRECTION. "
+382:         "Conditional commitments are MIXED, even without a question mark. "
+383:         "Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate "
+384:         "SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing "
+385:         "action targets or referents, never merely an unknown subject of a question."
+386:     )
+387:     messages[1]["content"] += "\nPUBLIC answer evidence: " + json.dumps(evidence, ensure_ascii=False)
+388:     interaction = (session or {}).get("interaction_context") or {}
+389:     context = (session or {}).get("conversational_context") or {}
+390:     exchange = context.get("last_gm_exchange") or {}
+391:     messages[1]["content"] += "\nConversation ownership context: " + json.dumps({
+392:         "active_npc_id": interaction.get("active_interaction_target_id"),
+393:         "last_response_category": exchange.get("category"),
+394:         "last_response_owner": exchange.get("owner"),
+395:         "last_subject": exchange.get("subject"),
+396:         "pending_kind": (context.get("pending_clarification") or {}).get("kind"),
+397:         "pending_scene_id": (context.get("pending_clarification") or {}).get("scene_id"),
+398:         "pending_steps": [
+399:             {key: step.get(key) for key in ("operation", "target_id", "text", "supported")}
+400:             for step in (context.get("pending_clarification") or {}).get("steps", [])[:4]
+401:             if isinstance(step, dict)
+402:         ],
+403:         "pending_choices": (context.get("pending_clarification") or {}).get("choices", [])[:4],
+404:     }, ensure_ascii=False)
+405:     leaks = context_leaks(messages, player_text)
+406:     for turn in recent:
+407:         for value in turn.values():
+408:             for leak in list(leaks):
+409:                 if leak.casefold() in str(value or "").casefold():
+410:                     leaks = [item for item in leaks if item != leak]
+411:     if leaks:
+412:         return _blocked(
+413:             "context_leak",
+414:             "I can't interpret that from the current scene without using information you have not been shown.",
+415:             tags=["interpretation_rejected", "non_mutating"],
+416:         )
+417: 
+418:     from experiments.pr_dp.prompt import estimate_input_tokens
+419:     estimated = estimate_input_tokens(messages, production_interpretation_schema())
+420:     if accounting_active() and estimated <= 0:
+421:         return _blocked(
+422:             "token_estimate_unavailable",
+423:             "I can't send that for interpretation because the token estimate is unavailable.",
+424:             tags=["interpretation_rejected", "non_mutating"],
+425:         )
+426:     call = request_interpretation(messages, estimated_input=estimated)
+427:     provider_requests = [call.get("usage")] if isinstance(call.get("usage"), dict) else []
+428:     if not call.get("ok"):
+429:         reason = str(call.get("reason") or "provider_failure")
+430:         return _blocked(
+431:             reason,
+432:             "I couldn't interpret that just now, so no gameplay action was taken.",
+433:             tags=["interpretation_rejected", "non_mutating"],
+434:             extra={"provider_requests": provider_requests, "provider_error": call.get("error")},
+435:         )
+436: 
+437:     raw = redact(str(call.get("text") or ""))
+438:     try:
+439:         parsed = json.loads(call.get("text") or "")
+440:     except json.JSONDecodeError:
+441:         return _blocked(
+442:             "malformed_interpretation",
+443:             "I couldn't read that as a gameplay action. Please say it again in plain words.",
+444:             tags=["interpretation_rejected", "non_mutating", "malformed_interpretation"],
+445:             extra={"raw_interpretation": raw, "provider_requests": provider_requests},
+446:         )
+447:     if not isinstance(parsed, dict):
+448:         return _blocked(
+449:             "malformed_interpretation",
+450:             "I couldn't read that as a gameplay action. Please say it again in plain words.",
+451:             tags=["interpretation_rejected", "non_mutating", "malformed_interpretation"],
+452:             extra={"raw_interpretation": raw, "provider_requests": provider_requests},
+453:         )
+454: 
+455:     payload = dict(parsed)
+456:     communication = payload.pop("communication", None)
+457:     # Old recorded records remain replayable; the live provider schema requires ownership.
+458:     if communication is not None and not valid_communication(communication, evidence):
+459:         return _blocked("malformed_communication", "I need you to clarify who you are addressing.",
+460:                         tags=["interpretation_rejected", "non_mutating"],
+461:                         extra={"provider_requests": provider_requests})
+462:     if mode == "IC":
+463:         payload["communication_mode"] = "IN_WORLD_ACTION"
+464:     if communication and payload.get("action_components") and (
+465:         communication["recipient"] in {"CHARACTER", "NPC"}
+466:         or (communication["recipient"] == "GM" and communication["purpose"] == "OBSERVATION")
+467:     ):
+468:         payload["communication_mode"] = "IN_WORLD_ACTION"
+469:     if communication and communication["recipient"] in {"GM", "SESSION"} and communication["purpose"] == "ACTION" and payload.get("communication_mode") == "IN_WORLD_ACTION":
+470:         # Recipient is where the player speaks; ACTION purpose is a declared
+471:         # character attempt. Preserve that commitment rather than swallowing it
+472:         # as a description request when the two model labels disagree.
+473:         components = payload.get("action_components") or []
+474:         if len(components) == 1 and components[0].get("operation_class") in {"MOVE", "INSPECT", "PERCEIVE"}:
+475:             communication["recipient"] = "CHARACTER"
+476:         elif len(components) > 1:
+477:             communication["recipient"] = "MIXED"
+478:     payload, incidental = normalize_social_scope(payload, communication)
+479:     adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+480:     reconciliation = None
+481:     if adapted.get("structurally_valid"):
+482:         from game.player_interpretation_bridge import reconcile_reference_annotations
+483:         payload, reconciliation = reconcile_reference_annotations(
+484:             payload, player_text=player_text, scene=scene, world=world, session=session)
+485:         if communication:
+486:             # Reuse the established ownership correction before eligibility can
+487:             # reject a grounded direct address on a stale GM/clarification label.
+488:             from game.conversational_orchestration import _reclassify_direct_npc_address
+489:             prepared = _reclassify_direct_npc_address(
+490:                 {**payload, "communication": communication}, player_text,
+491:                 scene=scene, world=world, session=session)
+492:             communication = prepared.get("communication", communication)
+493:             payload = {key: prepared[key] for key in payload}
+494:         adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+495:     record = adapted.get("record") if isinstance(adapted.get("record"), dict) else None
+496:     if record is not None and communication is not None:
+497:         record["communication"] = communication
+498:         record["incidental_context"] = incidental
+499:         record["reference_reconciliation"] = reconciliation
+500:         # Only passages selected from the engine's public projection can reach emission.
+501:         record["public_evidence"] = {ref: evidence[ref] for ref in communication["evidence_refs"]}
+502:     eligibility = adapted.get("eligibility") if isinstance(adapted.get("eligibility"), dict) else {}
+503:     disposition = str(eligibility.get("disposition") or "")
+504:     common = {
+505:         "raw_interpretation": raw,
+506:         "reference_reconciliation": reconciliation,
+507:         "provider_requests": provider_requests,
+508:         "eligibility_disposition": disposition,
+509:         "model_communication_mode": parsed.get("communication_mode"),
+510:         "interpretation_status": None if record is None else record.get("interpretation_status"),
+511:     }
+512:     if not adapted.get("structurally_valid") or record is None:
+513:         return _blocked(
+514:             "malformed_interpretation",
+515:             "I couldn't read that as a gameplay action. Please say it again in plain words.",
+516:             tags=["interpretation_rejected", "non_mutating", "malformed_interpretation"],
+517:             extra=common,
+518:         )
+519:     if disposition == "OUT_OF_CHARACTER" and mode != "IC":
+520:         return _blocked(
+521:             "automatic_ooc",
+522:             "Understood. I'll treat that as out of character. No gameplay action is executed, "
+523:             "no game time advances, and committed state is unchanged.",
+524:             tags=["ooc_correction", "non_mutating", "automatic_ooc"],
+525:             extra={**common, "record": record},
+526:         )
+527:     if disposition in {"NEEDS_CLARIFICATION", "SAFE_ABSTENTION"}:
+528:         question = str(record.get("clarification_question") or "").strip()
+529:         text = question or "I need a clearer action or target before I change anything in the scene."
+530:         return _blocked(
+531:             "clarification_required",
+532:             text,
+533:             tags=["interpretation_clarification", "non_mutating"],
+534:             extra={**common, "record": record},
+535:         )
+536:     if disposition != "ELIGIBLE_FOR_VALIDATION":
+537:         return _blocked(
+538:             "interpretation_rejected",
+539:             "I can't carry that out from the available interpretation. Tell me the action and who or what it concerns.",
+540:             tags=["interpretation_rejected", "non_mutating"],
+541:             extra={**common, "record": record},
+542:         )
+543:     components = record.get("action_components") if isinstance(record.get("action_components"), list) else []
+544:     if len(components) != 1:
+545:         return _blocked(
+546:             "clarification_required",
+547:             "Which single action should I resolve first?",
+548:             tags=["interpretation_clarification", "non_mutating"],
+549:             extra={**common, "record": record},
+550:         )
+551:     mark_live_interpretation_consumed()
+552:     return {
+553:         "status": "accepted",
+554:         "reason": "eligible_for_bridge",
+555:         "record": record,
+556:         "player_facing_text": "",
+557:         "tags": ["live_interpretation"],
+558:         **common,
+559:     }
+
+## game/conversational_orchestration.py::decision_from_delivered_exchange lines 235-300; sha256=d3b4f1a077bfb0dbd6454ad61a899fdfc3cbc32e987a051832498b6c92517e9c
+235: def decision_from_delivered_exchange(
+236:     player_text: str,
+237:     *,
+238:     session: Mapping[str, Any] | None = None,
+239:     scene: Mapping[str, Any] | None = None,
+240:     world: Mapping[str, Any] | None = None,
+241: ) -> ConversationalDecision | None:
+242:     """Use the last delivered exchange before a provider guess can discard it."""
+243:     from game.conversational_continuity import continuity_directive
+244: 
+245:     directive = continuity_directive(player_text, session=session, scene=scene, world=world)
+246:     if not directive:
+247:         return None
+248:     text = _clean_text(player_text)
+249:     action = str(directive.get("action") or "")
+250:     npc_id = str(directive.get("npc_id") or "")
+251:     name = str(directive.get("npc_name") or "")
+252:     reason = str(directive.get("reason") or "delivered_exchange")
+253:     if action == "ask" and npc_id:
+254:         record = _operation_record(
+255:             operation="ASK",
+256:             target_id=npc_id,
+257:             player_text=text,
+258:             summary=f"Ask {name or npc_id}: {text}",
+259:             references={
+260:                 "resolved_references": [{"text": "delivered exchange", "entity_id": npc_id}],
+261:                 "unresolved_references": [],
+262:             },
+263:         )
+264:         return ConversationalDecision(
+265:             category=ConversationalDecisionCategory.EXECUTE,
+266:             primary_intention=text,
+267:             intent_family="world_operation",
+268:             proposed_operation="ASK",
+269:             proposed_target=npc_id,
+270:             proposed_record=record,
+271:             requires_authoritative_execution=True,
+272:             reason=reason,
+273:             confidence=0.84,
+274:             context_references=[f"delivered_exchange:{npc_id}"],
+275:         )
+276:     category = ConversationalDecisionCategory.CLARIFY if action == "clarify" else ConversationalDecisionCategory.ANSWER
+277:     owner = "NPC" if directive.get("owner") == "npc" else "GM"
+278:     references = [f"npc:{npc_id}", f"name:{name}"] if npc_id else []
+279:     prop = str(directive.get("proposition_id") or "")
+280:     if not prop and action != "clarify":
+281:         from game.conversational_continuity import _best_exchange, delivered_exchanges
+282: 
+283:         found = _best_exchange(text, delivered_exchanges(session), npc_id)
+284:         if isinstance(found, dict):
+285:             prop = str(found.get("proposition_id") or "")
+286:     if prop:
+287:         references.append("proposition_id=" + prop)
+288:     return ConversationalDecision(
+289:         category=category,
+290:         primary_intention=text,
+291:         intent_family="dialogue_continuity",
+292:         communication_owner=owner,
+293:         communication_purpose="EXPLANATION" if category == ConversationalDecisionCategory.ANSWER else "CLARIFICATION",
+294:         reason=reason,
+295:         player_facing_text=str(directive.get("line") or ""),
+296:         proposed_target=npc_id or None,
+297:         execution_policy="answer_only",
+298:         intent_modality="informational",
+299:         context_references=references,
+300:     )
+
+## game/conversational_orchestration.py::public_conversation_evidence lines 308-341; sha256=d3b4f1a077bfb0dbd6454ad61a899fdfc3cbc32e987a051832498b6c92517e9c
+308: def public_conversation_evidence(scene: Mapping[str, Any] | None, log: list | None) -> dict[str, str]:
+309:     """Public summaries and previously emitted text only; no clue/NPC/private data."""
+310:     evidence: dict[str, str] = {}
+311:     summary = _visible_scene_summary(scene)
+312:     if summary:
+313:         evidence["scene"] = summary
+314:     for index, fact in enumerate(_scene_obj(scene).get("visible_facts") or []):
+315:         if isinstance(fact, str) and fact.strip():
+316:             evidence[f"visible:{index}"] = fact.strip()
+317:     for index, row in enumerate((log or [])[-4:]):
+318:         if not isinstance(row, Mapping):
+319:             continue
+320:         gm = row.get("gm_output") or {}
+321:         visible = row.get("player_facing_text") or (gm.get("player_facing_text") if isinstance(gm, Mapping) else "")
+322:         if isinstance(visible, str) and visible.strip():
+323:             evidence[f"reply:{index}"] = visible.strip()[:1200]
+324:         resolution = row.get("resolution") or {}
+325:         if isinstance(resolution, Mapping) and resolution.get("success") is True and resolution.get("kind") in {"investigate", "discover_clue"}:
+326:             action_id = str(resolution.get("action_id") or "")
+327:             if action_id and visible:
+328:                 evidence[f"cause:reply:{index}"] = (
+329:                     f"Your inspection of {action_id.replace('_', ' ')} revealed the detail. "
+330:                     "That explains how you found it; its origin or purpose has not been established by that discovery."
+331:                 )
+332:         social = resolution.get("social") if isinstance(resolution, Mapping) else None
+333:         if isinstance(social, Mapping) and social.get("target_resolved") and visible:
+334:             # Latest spoken inability/refusal is conversation evidence too;
+335:             # older revealed topics must not stand in for a newer reply.
+336:             evidence["npc_latest_reply"] = str(visible).strip()[:1200]
+337:         if isinstance(social, Mapping) and isinstance(social.get("topic_revealed"), Mapping):
+338:             topic = social["topic_revealed"]
+339:             if social.get("npc_id") and topic.get("id") and topic.get("text"):
+340:                 evidence[f"npc:{social['npc_id']}:{topic['id']}"] = str(topic["text"])
+341:     return evidence
+
+## game/conversational_orchestration.py::_communication_decision lines 461-631; sha256=d3b4f1a077bfb0dbd6454ad61a899fdfc3cbc32e987a051832498b6c92517e9c
+461: def _communication_decision(record: Mapping[str, Any], text: str, *, session=None, scene=None, world=None) -> ConversationalDecision | None:
+462:     communication = record.get("communication")
+463:     if not isinstance(communication, Mapping):
+464:         return None
+465:     owner = str(communication.get("recipient") or "AMBIGUOUS")
+466:     purpose = str(communication.get("purpose") or "CLARIFICATION")
+467:     if record.get("communication_mode") == "RULES_QUESTION" and owner in {"GM", "SESSION"}:
+468:         owner, purpose = "SESSION", "RULES"
+469:     components = record.get("action_components") or []
+470:     status = str(record.get("interpretation_status") or "")
+471:     evidence_refs = list(communication.get("evidence_refs") or [])
+472:     if status and status != "INTERPRETED":
+473:         evidence = record.get("public_evidence") if isinstance(record.get("public_evidence"), Mapping) else {}
+474:         selected = bool(evidence_refs) and all(ref in evidence for ref in evidence_refs)
+475:         if not (selected and owner == "GM" and purpose in {"QUESTION", "DESCRIPTION", "EXPLANATION", "RECALL", "RULES"}):
+476:             return None
+477:     ask_targets = [
+478:         str(component.get("target_ref") or "")
+479:         for component in components
+480:         if isinstance(component, Mapping) and component.get("operation_class") == "ASK" and component.get("target_ref")
+481:     ]
+482:     from game.ordinary_semantic_ownership import (
+483:         assess_addressee_grounding,
+484:         conversational_authorization_record,
+485:         pending_addressee_clarification,
+486:     )
+487: 
+488:     grounding = assess_addressee_grounding(
+489:         text,
+490:         scene=scene,
+491:         world=world,
+492:         session=session,
+493:         proposed_target_id=ask_targets[0] if len(ask_targets) == 1 else None,
+494:     )
+495:     if grounding.get("direct_address") and grounding.get("operation_eligibility") == "requires_clarification":
+496:         pending = pending_addressee_clarification(grounding, text, scene)
+497:         return ConversationalDecision(
+498:             category=ConversationalDecisionCategory.CLARIFY,
+499:             primary_intention=text,
+500:             intent_family="clarification",
+501:             communication_owner="GM",
+502:             communication_purpose="CLARIFICATION",
+503:             reason="unresolved_addressee",
+504:             player_facing_text=str(grounding.get("clarification") or "Which person do you mean? Nothing has been attempted."),
+505:             context_update=_context_update(pending=pending, pending_set=True, intention=pending, intention_set=True),
+506:             execution_policy="answer_only",
+507:             intent_modality="informational",
+508:             proposed_operation="ASK",
+509:             proposed_target=ask_targets[0] if ask_targets else None,
+510:             missing_information=["interlocutor"],
+511:             authorization=conversational_authorization_record(
+512:                 grounding,
+513:                 player_text=text,
+514:                 authority_provenance="communication_decision",
+515:             ),
+516:         )
+517:     if purpose == "CONFIRMATION":
+518:         # The semantic call identifies assent; the existing continuation owner
+519:         # supplies and revalidates the actual pending operation.
+520:         resumed = _resume_pending_clarification(player_text="Yes.", scene=scene, session=session)
+521:         if resumed is not None:
+522:             return resumed
+523:     if purpose == "CORRECTION":
+524:         pending = _conversation_context(session).get("pending_clarification") or {}
+525:         if pending.get("kind") == "compound_sequence" and pending.get("scene_id") == _scene_id(scene) and len(components) == 1:
+526:             component = components[0]
+527:             operation = component.get("operation_class")
+528:             if operation in _CONNECTED_OPERATIONS and component.get("target_ref"):
+529:                 steps = [{"operation": operation, "target_id": component["target_ref"],
+530:                           "text": component.get("description") or text, "supported": True},
+531:                          *[dict(s) for s in pending.get("steps", [])[1:] if isinstance(s, Mapping)]]
+532:                 revised = _compound_clarification(text, steps, scene=scene, world=world, clear=False, incidental=[])
+533:                 return ConversationalDecision(**{**revised.__dict__, "communication_owner": "GM", "communication_purpose": purpose})
+534:     if owner == "GM" and purpose in {"QUESTION", "DESCRIPTION", "EXPLANATION", "RECALL", "RULES"} and any(
+535:         isinstance(c, Mapping) and (c.get("operation_class") in {"MOVE", "ATTACK", "USE_VISIBLE_OBJECT", "FOLLOW"}
+536:                                     or (len(components) > 1 and c.get("operation_class") == "ASK" and c.get("target_ref")))
+537:         for c in components
+538:     ):
+539:         owner = "MIXED"
+540:     if owner in {"CHARACTER", "NPC"} and purpose in {"ACTION", "OBSERVATION", "QUESTION", "CLARIFICATION", "RECALL"} and record.get("action_components"):
+541:         # A provider ASK does not turn a third-person question into NPC dialogue.
+542:         ungrounded_gm_question = (
+543:             any(isinstance(c, Mapping) and c.get("operation_class") == "ASK" for c in components)
+544:             and grounding.get("operation_eligibility") != "executable"
+545:             and _QUESTION_START_RE.search(text)
+546:             and not re.search(r"\b(?:you|your|you're|youre)\b", text, re.IGNORECASE)
+547:         )
+548:         if ungrounded_gm_question:
+549:             owner = "GM"
+550:             if purpose not in {"EXPLANATION", "RECALL", "RULES", "DESCRIPTION"}:
+551:                 purpose = "QUESTION"
+552:         else:
+553:             return None
+554:     if owner == "GM" and purpose == "OBSERVATION" and components:
+555:         if all(isinstance(c, Mapping) and c.get("operation_class") in {"PERCEIVE", "INSPECT"} for c in components):
+556:             return None
+557:     revision = _pending_revision_decision(text, session=session, scene=scene, purpose=purpose, components=components)
+558:     if revision is not None:
+559:         return revision
+560:     category = ConversationalDecisionCategory.ANSWER
+561:     update = None
+562:     if purpose == "WITHDRAWAL":
+563:         answer = "I've set aside the unexecuted intention. Anything already resolved still stands."
+564:         update = _context_update(pending=None, pending_set=True, intention=None, intention_set=True, clear_interlocutor=False)
+565:     elif owner == "MIXED":
+566:         category = ConversationalDecisionCategory.CLARIFY
+567:         answer = "Let's settle the question before attempting the action. "
+568:         evidence = record.get("public_evidence") or {}
+569:         answer += " ".join(str(v) for v in evidence.values()) if evidence else "That condition is not established yet."
+570:         answer += " No part of the action has been attempted."
+571:     elif purpose == "TENTATIVE":
+572:         answer = "We can consider that before committing. Nothing has been attempted."
+573:     elif owner == "AMBIGUOUS" or purpose == "CONFIRMATION" or (
+574:         purpose == "CLARIFICATION" and (
+575:             not record.get("public_evidence")
+576:             or record.get("interpretation_status") != "INTERPRETED"
+577:             or (record.get("references") or {}).get("unresolved_references")
+578:         )
+579:     ) or (owner == "CHARACTER" and not components):
+580:         category = ConversationalDecisionCategory.CLARIFY
+581:         answer = str(record.get("clarification_question") or "").strip() or "Which person, object, or pending action do you mean?"
+582:     else:
+583:         evidence = record.get("public_evidence") if isinstance(record.get("public_evidence"), Mapping) else {}
+584:         if evidence_refs:
+585:             evidence = {key: evidence[key] for key in evidence_refs if key in evidence}
+586:         answer = " ".join(dict.fromkeys(str(value) for value in evidence.values()))
+587:         # Receipt only for a resolved conversational correction with a grounded
+588:         # answer. Mechanical revisions returned above; no semantic reclassification.
+589:         if (answer and owner == "GM" and purpose == "CORRECTION"
+590:                 and status == "INTERPRETED" and not components
+591:                 and not (record.get("references") or {}).get("unresolved_references")
+592:                 and (record.get("correction") or {}).get("subject") == "REFERENT"
+593:                 and evidence_refs and all(ref in evidence for ref in evidence_refs)):
+594:             answer = "Understood. " + answer
+595:         if purpose == "EXPLANATION" and answer and _CAUSE_QUESTION_RE.search(text) and not any(str(ref).startswith("cause:") for ref in evidence):
+596:             answer += " That establishes the observation or result; its cause has not been established."
+597:         if not answer:
+598:             from game.conversational_continuity import active_followup_target
+599: 
+600:             follow = active_followup_target(text, session=session, scene=scene, world=world)
+601:             if follow:
+602:                 record = _operation_record(
+603:                     operation="ASK",
+604:                     target_id=follow,
+605:                     player_text=text,
+606:                     summary=text,
+607:                     references={"resolved_references": [{"text": "active interlocutor", "entity_id": follow}], "unresolved_references": []},
+608:                 )
+609:                 return ConversationalDecision(
+610:                     category=ConversationalDecisionCategory.EXECUTE,
+611:                     primary_intention=text,
+612:                     intent_family="world_operation",
+613:                     proposed_operation="ASK",
+614:                     proposed_target=follow,
+615:                     proposed_record=record,
+616:                     requires_authoritative_execution=True,
+617:                     reason="active_conversation_followup",
+618:                     player_facing_text="",
+619:                     execution_policy="",
+620:                 )
+621:             answer = "That has not been established in the information available to you."
+622:             if purpose == "RULES" or owner == "SESSION":
+623:                 answer = "I don't have an established ruling for that question. No action or roll has been made."
+624:     return ConversationalDecision(
+625:         category=category, primary_intention=text, intent_family="gm_communication" if owner == "GM" else "communication",
+626:         communication_owner=owner, communication_purpose=purpose,
+627:         reason="communication_before_execution", player_facing_text=answer,
+628:         context_references=list((record.get("public_evidence") or {}).keys()),
+629:         context_update=update, execution_policy="answer_only", intent_modality="informational",
+630:         secondary_intentions=[dict(c) for c in components if isinstance(c, Mapping)] if owner == "MIXED" or category == ConversationalDecisionCategory.CLARIFY else [],
+631:     )
+
+## game/conversational_orchestration.py::decision_from_interpretation_record lines 2195-2317; sha256=d3b4f1a077bfb0dbd6454ad61a899fdfc3cbc32e987a051832498b6c92517e9c
+2195: def decision_from_interpretation_record(
+2196:     record: Mapping[str, Any] | None,
+2197:     *,
+2198:     bridge_meta: Mapping[str, Any] | None = None,
+2199:     player_text: str = "",
+2200:     scene: Mapping[str, Any] | None = None,
+2201:     world: Mapping[str, Any] | None = None,
+2202:     session: Mapping[str, Any] | None = None,
+2203: ) -> ConversationalDecision:
+2204:     """Build a decision envelope from an existing interpretation/bridge result."""
+2205:     text = _clean_text(player_text)
+2206:     grounded = decision_from_delivered_exchange(
+2207:         text, session=session, scene=scene, world=world,
+2208:     )
+2209:     if grounded is not None:
+2210:         return grounded
+2211:     if isinstance(record, Mapping):
+2212:         record = _reclassify_direct_npc_address(record, text, scene=scene, world=world, session=session)
+2213:     if not isinstance(record, Mapping):
+2214:         reason = _clean_text((bridge_meta or {}).get("reason") if isinstance(bridge_meta, Mapping) else "") or "missing_record"
+2215:         message, missing = _focused_bridge_clarification(reason)
+2216:         return ConversationalDecision(
+2217:             category=ConversationalDecisionCategory.CLARIFY,
+2218:             primary_intention=text or "Unclear player intention.",
+2219:             intent_family="clarification",
+2220:             missing_information=missing,
+2221:             reason=reason,
+2222:             confidence=0.4,
+2223:             player_facing_text=message,
+2224:         )
+2225:     communication_decision = _communication_decision(record, text, session=session, scene=scene, world=world)
+2226:     if communication_decision is not None:
+2227:         return communication_decision
+2228:     mode = _clean_text(record.get("communication_mode"))
+2229:     status = _clean_text(record.get("interpretation_status"))
+2230:     summary = _clean_text((record.get("player_intent") or {}).get("summary") if isinstance(record.get("player_intent"), Mapping) else "")
+2231:     components = record.get("action_components") if isinstance(record.get("action_components"), list) else []
+2232:     if mode == "RULES_QUESTION":
+2233:         return _communication_decision({"communication": {"recipient": "SESSION", "purpose": "RULES"}}, text)
+2234:     if mode in {"OUT_OF_CHARACTER", "OUT_OF_CHARACTER_CORRECTION"}:
+2235:         return ConversationalDecision(
+2236:             category=ConversationalDecisionCategory.ANSWER,
+2237:             primary_intention=summary or text or "Out-of-character communication.",
+2238:             intent_family="ooc_help",
+2239:             reason="interpretation_out_of_character",
+2240:             confidence=0.8,
+2241:             player_facing_text=(
+2242:                 "Understood. I will treat that as out of character. No gameplay action is executed, "
+2243:                 "no game time advances, and committed state is unchanged."
+2244:             ),
+2245:         )
+2246:     if status == "UNSUPPORTED_REQUEST":
+2247:         return ConversationalDecision(
+2248:             category=ConversationalDecisionCategory.DECLINE, primary_intention=summary or text,
+2249:             intent_family="unsupported_world_operation", reason="unsupported_request",
+2250:             player_facing_text=f"I cannot carry out {summary or text or 'that request'} with the available actions. No action has been attempted.",
+2251:             context_update=_context_update_clear_pending(),
+2252:         )
+2253:     if status and status != "INTERPRETED":
+2254:         question = _clean_text(record.get("clarification_question"))
+2255:         return ConversationalDecision(
+2256:             category=ConversationalDecisionCategory.CLARIFY,
+2257:             primary_intention=summary or text or "Complete the intended action.",
+2258:             intent_family="clarification",
+2259:             missing_information=["interpretable_action"],
+2260:             reason="interpretation_not_interpreted",
+2261:             confidence=0.5,
+2262:             player_facing_text=question or "What are you trying to accomplish?",
+2263:         )
+2264:     connected: list[Mapping[str, Any]] = []
+2265:     incidental: list[str] = list(record.get("incidental_context") or [])
+2266:     unsupported: list[str] = []
+2267:     for component in components:
+2268:         if not isinstance(component, Mapping):
+2269:             continue
+2270:         op = _clean_text(component.get("operation_class")).upper()
+2271:         desc = _clean_text(component.get("description"))
+2272:         if op in _CONNECTED_OPERATIONS:
+2273:             connected.append(component)
+2274:         elif op in _INCIDENTAL_OPERATIONS:
+2275:             incidental.append(desc or op)
+2276:         else:
+2277:             unsupported.append(desc or op or "unsupported component")
+2278:     if len(connected) == 1 and not unsupported:
+2279:         primary = dict(connected[0])
+2280:         proposed = dict(record)
+2281:         proposed["action_components"] = [primary]
+2282:         return ConversationalDecision(
+2283:             category=ConversationalDecisionCategory.EXECUTE,
+2284:             primary_intention=_clean_text(primary.get("description")) or summary or text,
+2285:             intent_family="world_operation",
+2286:             incidental_context=incidental,
+2287:             proposed_operation=_clean_text(primary.get("operation_class")).upper(),
+2288:             proposed_target=_clean_text(primary.get("target_ref")) or None,
+2289:             proposed_record=proposed,
+2290:             requires_authoritative_execution=True,
+2291:             reason="single_authoritative_component",
+2292:             confidence=0.78 if incidental else 0.9,
+2293:         )
+2294:     if len(connected) + len(unsupported) > 1:
+2295:         return _compound_from_record_parts(text, summary, connected, unsupported, incidental, scene=scene, world=world,
+2296:                                            ordered_components=[c for c in components if isinstance(c, Mapping)])
+2297:     if unsupported:
+2298:         return ConversationalDecision(
+2299:             category=ConversationalDecisionCategory.DECLINE, primary_intention=summary or text,
+2300:             intent_family="unsupported_world_operation", reason="unsupported_single_intention",
+2301:             proposed_operation=_clean_text(components[0].get("operation_class")) if components else None,
+2302:             player_facing_text=f"I cannot carry out {unsupported[0]} with the available actions. No action has been attempted.",
+2303:             context_update=_context_update_clear_pending(),
+2304:         )
+2305:     reason = _clean_text((bridge_meta or {}).get("reason") if isinstance(bridge_meta, Mapping) else "") or "no_executable_component"
+2306:     operation = _clean_text((bridge_meta or {}).get("operation") if isinstance(bridge_meta, Mapping) else "")
+2307:     message, missing = _focused_bridge_clarification(reason, operation=operation)
+2308:     return ConversationalDecision(
+2309:         category=ConversationalDecisionCategory.CLARIFY,
+2310:         primary_intention=summary or text or "Complete the intended action.",
+2311:         intent_family="clarification",
+2312:         incidental_context=incidental,
+2313:         missing_information=missing,
+2314:         reason=reason,
+2315:         confidence=0.55,
+2316:         player_facing_text=message,
+2317:     )
+
+## game/player_interpretation_bridge.py::reconcile_reference_annotations lines 85-194; sha256=5487fb6cca637267dc5fee009f8605d537659d9eb54c178a8c3344150bc9d495
+85: def reconcile_reference_annotations(record: dict, *, player_text: str, scene: dict | None,
+86:                                     world: dict | None, session: dict | None = None) -> tuple[dict, dict]:
+87:     """Reconcile proposals against existing grounding; never select facts or effects.
+88: 
+89:     Subject presence is independent of knowledge/disclosure eligibility. Authored
+90:     topics establish vocabulary only; the social resolver still owns disclosure.
+91:     Unidentified annotations stay unresolved, including provider/player conflicts.
+92:     """
+93:     import copy
+94:     import re
+95:     from game.ordinary_semantic_ownership import assess_addressee_grounding
+96:     from game.conversational_orchestration import _place_match
+97: 
+98:     result = copy.deepcopy(record)
+99:     refs = result.get("references") or {}
+100:     unresolved = refs.get("unresolved_references") or []
+101:     evidence = {"annotations": [], "addressee": None, "operation": None}
+102:     operation, target_id = _single_component(result)
+103:     evidence["operation"] = operation
+104:     if (result.get("interpretation_status") not in {"INTERPRETED", "CLARIFICATION_REQUIRED"}
+105:             or operation not in CONNECTED_OPERATIONS
+106:             or (not unresolved and result.get("interpretation_status") == "INTERPRETED")):
+107:         return result, evidence
+108:     catalog = visible_catalog(scene, world)
+109:     grounding = None
+110:     if operation == "ASK":
+111:         grounding = assess_addressee_grounding(player_text, scene=scene, world=world,
+112:                                                session=session, proposed_target_id=target_id)
+113:         evidence["addressee"] = grounding
+114:     grounded_id = str((grounding or {}).get("target_id") or "")
+115:     addressee_ok = bool(grounding and grounding.get("operation_eligibility") == "executable")
+116:     if operation == "ASK" and addressee_ok and grounding.get("direct_address") and not target_id:
+117:         # Reuse the existing addressee resolver for a missing proposed target.
+118:         result["action_components"][0]["target_ref"] = grounded_id
+119:         if grounded_id not in refs.get("permitted_entity_ids", []):
+120:             refs.setdefault("permitted_entity_ids", []).append(grounded_id)
+121:         evidence["target_handoff"] = {"status": "RESOLVABLE", "target_id": grounded_id}
+122:     speaker = (catalog.get(grounded_id) or {}).get("row") or {}
+123:     current = _scene_obj(scene)
+124:     # Engine-owned authored/visible passages, never provider subject/summary.
+125:     passages = [("scene", str(current.get("summary") or ""))]
+126:     passages += [("scene.visible_fact", str(v)) for v in current.get("visible_facts") or []]
+127:     from game.dialogue_authority import npc_source_permitted
+128:     if addressee_ok:
+129:         passages += [("npc.authored_subject", str(t.get("text") or ""))
+130:                      for t in speaker.get("topics") or [] if isinstance(t, dict) and npc_source_permitted(speaker, t)]
+131:     def mentioned(phrase, text):
+132:         return bool(phrase and re.search(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", text, re.I))
+133:     remaining = []
+134:     for annotation in unresolved:
+135:         phrase = str(annotation).strip()
+136:         explicit = mentioned(phrase, player_text)
+137:         candidates = [entity_id for entity_id, info in catalog.items()
+138:                       if any(_place_match(phrase, str(label)) for label in
+139:                              [info["row"].get("name"), info["row"].get("label"),
+140:                               *info["row"].get("aliases", [])] if label)]
+141:         status, source, role = "MISSING", None, "subject" if operation == "ASK" else "target"
+142:         # These are role identifiers, not entity names or free-text matches.
+143:         # Their proposed role grants nothing: the existing engine resolver must
+144:         # independently confirm the player-addressed person.
+145:         if operation == "ASK" and not explicit and phrase in {"npc_to_ask", "addressee", "interlocutor"}:
+146:             role = "addressee"
+147:             if addressee_ok and grounding.get("direct_address"):
+148:                 status, source = "GROUNDED", grounding.get("target_provenance")
+149:         if operation == "ASK" and not addressee_ok and grounding.get("target_resolution") == "ambiguous":
+150:             from game.interaction_completion import addressed_person_nominal
+151:             nominal = addressed_person_nominal(player_text)
+152:             if mentioned(phrase, nominal):
+153:                 status, role = "AMBIGUOUS", "addressee"
+154:         if operation == "ASK" and grounded_id in candidates:
+155:             role = "addressee"
+156:             if addressee_ok and explicit and len(candidates) == 1:
+157:                 status, source = "GROUNDED", grounding.get("target_provenance")
+158:         elif explicit and len(candidates) == 1 and (operation == "ASK" or candidates[0] == target_id):
+159:             status, source = "GROUNDED", "visible_catalog:" + candidates[0]
+160:         elif len(candidates) > 1:
+161:             status = "AMBIGUOUS"
+162:         elif operation == "ASK" and addressee_ok and explicit:
+163:             source = next((owner for owner, text in passages if mentioned(phrase, text)), None)
+164:             if source:
+165:                 status = "GROUNDED"
+166:         if status == "MISSING" and operation == "ASK" and addressee_ok and not explicit and not candidates:
+167:             from game.conversational_continuity import _DEICTIC
+168:             from game.social import _next_topic_to_reveal
+169:             # An unmentioned noun cannot veto a uniquely supported explicit
+170:             # question. Ask the existing read-only selector for eligibility;
+171:             # no fact is adopted here and disclosure still runs in the resolver.
+172:             if not _DEICTIC.search(player_text):
+173:                 selection = {}
+174:                 supported = _next_topic_to_reveal(
+175:                     speaker, ((session or {}).get("npc_runtime") or {}).get(grounded_id) or {},
+176:                     player_text=player_text, allow_revealed=True, selection=selection)
+177:                 if supported and not selection.get("ambiguous"):
+178:                     status, source = "NOT_APPLICABLE", selection.get("selected_source")
+179:         if status not in {"GROUNDED", "NOT_APPLICABLE"}:
+180:             remaining.append(annotation)
+181:         evidence["annotations"].append(dict(annotation=annotation, role=role, status=status,
+182:                                               explicit=explicit, candidates=candidates, source=source))
+183:     result["references"]["unresolved_references"] = remaining
+184:     if (operation == "ASK" and addressee_ok and grounding.get("direct_address")
+185:             and not remaining and result.get("interpretation_status") == "CLARIFICATION_REQUIRED"):
+186:         from game.conversational_continuity import _DEICTIC
+187:         # Do not override a potentially unresolved deictic subject merely
+188:         # because the person addressed is known.
+189:         if not _DEICTIC.search(player_text):
+190:             result["interpretation_status"] = "INTERPRETED"
+191:             result["clarification_question"] = ""
+192:             result["communication_mode"] = "IN_WORLD_ACTION"
+193:             evidence["status_reconciled"] = "explicit_addressee_no_remaining_reference"
+194:     return result, evidence
+
+## game/player_interpretation_bridge.py::normalized_action_from_interpretation lines 197-368; sha256=5487fb6cca637267dc5fee009f8605d537659d9eb54c178a8c3344150bc9d495
+197: def normalized_action_from_interpretation(
+198:     interpretation: dict[str, Any] | None,
+199:     *,
+200:     scene: dict,
+201:     world: dict,
+202:     player_text: str,
+203:     known_scene_ids: Callable[[], list[str]] | None = None,
+204:     session: dict | None = None,
+205:     authorized_target_id: str | None = None,
+206: ) -> tuple[dict[str, Any] | None, dict[str, Any]]:
+207:     """Validate a stored interpretation and return a production normalized action.
+208: 
+209:     The metadata return value is intended for traces and failure reports.
+210:     """
+211:     record = _record_from_interpretation(interpretation)
+212:     if not isinstance(record, dict):
+213:         return None, {"source": "stored_interpretation", "accepted": False, "reason": "missing_record"}
+214:     if str(record.get("communication_mode") or "").strip() != "IN_WORLD_ACTION":
+215:         return None, {
+216:             "source": "stored_interpretation",
+217:             "accepted": False,
+218:             "reason": "not_in_world_action",
+219:             "communication_mode": record.get("communication_mode"),
+220:         }
+221:     if str(record.get("interpretation_status") or "").strip() != "INTERPRETED":
+222:         return None, {
+223:             "source": "stored_interpretation",
+224:             "accepted": False,
+225:             "reason": "not_interpreted",
+226:             "interpretation_status": record.get("interpretation_status"),
+227:         }
+228:     record, reconciliation = reconcile_reference_annotations(
+229:         record, player_text=player_text, scene=scene, world=world, session=session)
+230:     refs = record.get("references") if isinstance(record.get("references"), dict) else {}
+231:     unresolved = refs.get("unresolved_references") if isinstance(refs, dict) else []
+232:     if unresolved:
+233:         return None, {
+234:             "source": "stored_interpretation",
+235:             "accepted": False,
+236:             "reason": "unresolved_references",
+237:             "unresolved_references": list(unresolved),
+238:             "reference_reconciliation": reconciliation,
+239:         }
+240:     operation, target_ref = _single_component(record)
+241:     if operation not in CONNECTED_OPERATIONS:
+242:         return None, {
+243:             "source": "stored_interpretation",
+244:             "accepted": False,
+245:             "reason": "unsupported_operation",
+246:             "operation": operation,
+247:         }
+248:     target_id = str(target_ref or "").strip()
+249:     if not target_id:
+250:         return None, {
+251:             "source": "stored_interpretation",
+252:             "accepted": False,
+253:             "reason": "missing_target",
+254:             "operation": operation,
+255:         }
+256: 
+257:     confirmed = str(authorized_target_id or "").strip()
+258:     if operation == "ASK" and confirmed != target_id:
+259:         from game.ordinary_semantic_ownership import assess_addressee_grounding, pending_addressee_clarification
+260: 
+261:         grounding = assess_addressee_grounding(
+262:             player_text,
+263:             scene=scene,
+264:             world=world,
+265:             session=session,
+266:             proposed_target_id=target_id,
+267:         )
+268:         eligibility = str(grounding.get("operation_eligibility") or "")
+269:         grounded_id = str(grounding.get("target_id") or "").strip()
+270:         if eligibility == "executable" and grounded_id:
+271:             target_id = grounded_id
+272:         else:
+273:             reason = "ambiguous_addressee" if eligibility == "requires_clarification" or grounding.get("direct_address") else "ungrounded_provider_target"
+274:             pending = pending_addressee_clarification(grounding, player_text, scene)
+275:             clarification = str(grounding.get("clarification") or "").strip()
+276:             if not clarification:
+277:                 clarification = "Which person do you mean? Nothing has been attempted." if reason == "ambiguous_addressee" else "I cannot tell who that is addressed to. Nothing has been attempted."
+278:             return None, {
+279:                 "source": "stored_interpretation",
+280:                 "accepted": False,
+281:                 "reason": reason,
+282:                 "operation": operation,
+283:                 "target_ref": target_id,
+284:                 "candidate_target_ids": list(grounding.get("candidate_target_ids") or []),
+285:                 "clarification": clarification,
+286:                 "authorization": grounding,
+287:                 "pending_intention": pending,
+288:             }
+289:     catalog = visible_catalog(scene, world)
+290:     target = catalog.get(target_id)
+291:     if not target:
+292:         return None, {
+293:             "source": "stored_interpretation",
+294:             "accepted": False,
+295:             "reason": "target_not_visible",
+296:             "operation": operation,
+297:             "target_ref": target_id,
+298:         }
+299:     expected_kind = _EXPECTED_VISIBLE_KIND[operation]
+300:     target_kind = str(target.get("kind") or "")
+301:     visible_surface_inspection = False
+302:     if operation == "INSPECT" and target_kind == "perceive_target":
+303:         visible_surface_inspection = True
+304:     elif target_kind != expected_kind:
+305:         return None, {
+306:             "source": "stored_interpretation",
+307:             "accepted": False,
+308:             "reason": "operation_incompatible_with_entity_kind",
+309:             "operation": operation,
+310:             "target_ref": target_id,
+311:             "target_kind": target_kind,
+312:         }
+313: 
+314:     normalized: dict[str, Any] = {
+315:         "id": target_id,
+316:         "label": str((target.get("row") or {}).get("label") or (target.get("row") or {}).get("name") or target_id),
+317:         "type": CONNECTED_OPERATIONS[operation],
+318:         "prompt": player_text,
+319:         "target_id": target_id,
+320:         "targetEntityId": target_id,
+321:         "metadata": {
+322:             "stored_interpretation": {
+323:                 "operation": operation,
+324:                 "target_ref": target_id,
+325:                 "visible_surface_inspection": visible_surface_inspection,
+326:                 "reference_reconciliation": record.get("reference_reconciliation") or reconciliation,
+327:             }
+328:         },
+329:     }
+330:     semantic_plan = record.get("unified_semantic_plan")
+331:     if isinstance(semantic_plan, dict) and semantic_plan.get("locked"):
+332:         normalized["metadata"]["unified_semantic_plan"] = dict(semantic_plan)
+333:     communication = record.get("communication")
+334:     if isinstance(communication, dict):
+335:         normalized["metadata"]["communication"] = dict(communication)
+336:         normalized["metadata"]["public_conversation_evidence"] = dict(record.get("public_evidence") or {})
+337:     if visible_surface_inspection:
+338:         normalized["metadata"]["stored_interpretation"]["compatibility"] = "visible_surface_inspection"
+339:     if operation == "MOVE":
+340:         row = target.get("row") if isinstance(target.get("row"), dict) else {}
+341:         destination = str(row.get("target_scene_id") or "").strip()
+342:         if not destination:
+343:             return None, {
+344:                 "source": "stored_interpretation",
+345:                 "accepted": False,
+346:                 "reason": "exit_has_no_authored_destination",
+347:                 "operation": operation,
+348:                 "target_ref": target_id,
+349:             }
+350:         if known_scene_ids is not None and destination not in set(known_scene_ids()):
+351:             return None, {
+352:                 "source": "stored_interpretation",
+353:                 "accepted": False,
+354:                 "reason": "unknown_destination_scene",
+355:                 "operation": operation,
+356:                 "target_ref": target_id,
+357:                 "target_scene_id": destination,
+358:             }
+359:         normalized["targetSceneId"] = destination
+360:         normalized["target_scene_id"] = destination
+361:     return normalized, {
+362:         "source": "stored_interpretation",
+363:         "accepted": True,
+364:         "operation": operation,
+365:         "target_ref": target_id,
+366:         "engine_type": normalized["type"],
+367:         "visible_surface_inspection": visible_surface_inspection,
+368:     }
+
+## game/ordinary_semantic_ownership.py::assess_addressee_grounding lines 651-864; sha256=fec56e852b2920bc103fb47c4f34f5080f6262fd12164079a8fe6b5b466d08c8
+651: def assess_addressee_grounding(
+652:     player_text: str,
+653:     *,
+654:     scene: Mapping[str, Any] | None = None,
+655:     world: Mapping[str, Any] | None = None,
+656:     session: Mapping[str, Any] | None = None,
+657:     proposed_target_id: str | None = None,
+658: ) -> dict[str, Any]:
+659:     """Decide whether a person reference is grounded enough to attempt.
+660: 
+661:     A provider id is a candidate. It authorizes nothing by itself. Explicit
+662:     names and unique contextual referents resolve. A first- or second-person
+663:     speech role uses the established, present interlocutor and is not an NPC
+664:     name. Quantified or unmatched references stay unresolved even when one
+665:     visible person would be convenient.
+666:     """
+667:     from game.interaction_completion import addressed_person_nominal
+668: 
+669:     text = " ".join(str(player_text or "").split())
+670:     npcs = _visible_npcs(scene, world)
+671:     proposed = str(proposed_target_id or "").strip() or None
+672:     nominal = addressed_person_nominal(text)
+673:     direct = bool(nominal) or bool(_ASK_VERB_RE.search(text) and nominal)
+674:     words = _content_words(nominal)
+675:     base = {
+676:         "communication_ownership": "npc_directed" if direct else "gm_directed",
+677:         "intent_purpose": "address_npc" if direct else "request_information",
+678:         "target_resolution": "none_required",
+679:         "target_provenance": "none",
+680:         "target_id": None,
+681:         "candidate_target_ids": [proposed] if proposed else [],
+682:         "operation_eligibility": "not_assessed",
+683:         "mutation_eligibility": True,
+684:         "conflict_status": "none",
+685:         "conflict_details": {},
+686:         "pending_intention_relationship": "none",
+687:         "allowed_operation": None,
+688:         "clarification": "",
+689:         "choices": [_choice(npc) for npc in npcs],
+690:         "direct_address": bool(nominal),
+691:     }
+692:     if not npcs or not nominal:
+693:         if nominal and not npcs:
+694:             return base
+695:         third_person_about_npc = bool(_THIRD_PERSON_RE.search(text)) and not _SECOND_PERSON_RE.search(text)
+696:         if not nominal and proposed and _active_npc_id(session, npcs) == proposed and not third_person_about_npc:
+697:             return {
+698:                 **base,
+699:                 "communication_ownership": "npc_directed",
+700:                 "intent_purpose": "address_npc",
+701:                 "target_resolution": "contextual",
+702:                 "target_provenance": "established_interlocutor",
+703:                 "target_id": proposed,
+704:                 "operation_eligibility": "executable",
+705:                 "mutation_eligibility": True,
+706:                 "allowed_operation": "ask",
+707:                 "pending_intention_relationship": "continues",
+708:                 "direct_address": False,
+709:             }
+710:         if not nominal and proposed and _ASK_VERB_RE.search(text):
+711:             mentioned = [
+712:                 npc for npc in npcs
+713:                 if _npc_words(npc) & set(_content_words(text)) and any(len(word) > 2 and word in text.lower() for word in _npc_words(npc))
+714:             ]
+715:             if len(mentioned) == 1:
+716:                 npc = mentioned[0]
+717:                 target_id = str(npc.get("id") or "")
+718:                 provenance = "explicit_canonical" if str(npc.get("name") or "").lower() in text.lower() else "unique_contextual"
+719:                 return {
+720:                     **base,
+721:                     "communication_ownership": "npc_directed",
+722:                     "direct_address": True,
+723:                     "target_resolution": "explicit" if provenance == "explicit_canonical" else "contextual",
+724:                     "target_provenance": provenance,
+725:                     "target_id": target_id,
+726:                     "operation_eligibility": "executable",
+727:                     "mutation_eligibility": True,
+728:                     "allowed_operation": "ask",
+729:                     "pending_intention_relationship": "starts_new",
+730:                     "conflict_status": "resolved_by_explicit_wording" if proposed and proposed != target_id else "none",
+731:                     "conflict_details": {"provider_target": proposed, "grounded_target": target_id} if proposed and proposed != target_id else {},
+732:                 }
+733:             # An ask that names nobody is not an unresolved person reference.
+734:             # Continuation, mixed intent, and the bridge decide it.
+735:         return base
+736: 
+737:     nonunique = bool(_NONUNIQUE_ADDRESSEE_RE.search(nominal)) or bool(
+738:         re.search(r"\b(?:either|any|another)\s+(?!of\b)", nominal, re.IGNORECASE)
+739:     )
+740:     if any(word in _PLURAL_PRONOUNS for word in words) or nonunique or _NONUNIQUE_ADDRESSEE_RE.search(nominal):
+741:         return {
+742:             **base,
+743:             "direct_address": True,
+744:             "communication_ownership": "ambiguous_unresolved",
+745:             "target_resolution": "ambiguous",
+746:             "target_provenance": "provider_candidate_only" if proposed else "none",
+747:             "operation_eligibility": "requires_clarification",
+748:             "mutation_eligibility": False,
+749:             "allowed_operation": None,
+750:             "pending_intention_relationship": "requires_clarification",
+751:             "clarification": _clarification_for(npcs, single_offer=len(npcs) == 1),
+752:             "conflict_status": "unresolved" if proposed else "none",
+753:             "conflict_details": {"provider_target": proposed} if proposed else {},
+754:         }
+755: 
+756:     if len(words) == 1 and words[0] in _CONTEXTUAL_ADDRESSEE_PRONOUNS:
+757:         active = _active_npc_id(session, npcs)
+758:         chosen = ""
+759:         provenance = ""
+760:         if active and (not proposed or proposed == active):
+761:             chosen, provenance = active, "established_interlocutor"
+762:         elif len(npcs) == 1 and (not proposed or proposed == str(npcs[0].get("id") or "")):
+763:             chosen, provenance = str(npcs[0].get("id") or ""), "unique_contextual"
+764:         elif active and proposed and proposed != active:
+765:             return {
+766:                 **base,
+767:                 "direct_address": True,
+768:                 "communication_ownership": "ambiguous_unresolved",
+769:                 "target_resolution": "ambiguous",
+770:                 "target_provenance": "provider_candidate_only",
+771:                 "operation_eligibility": "requires_clarification",
+772:                 "mutation_eligibility": False,
+773:                 "clarification": _clarification_for(npcs, single_offer=False),
+774:                 "conflict_status": "unresolved",
+775:                 "conflict_details": {"established_interlocutor": active, "provider_target": proposed},
+776:                 "pending_intention_relationship": "requires_clarification",
+777:             }
+778:         elif len(npcs) != 1:
+779:             return {
+780:                 **base,
+781:                 "direct_address": True,
+782:                 "communication_ownership": "ambiguous_unresolved",
+783:                 "target_resolution": "ambiguous",
+784:                 "target_provenance": "none",
+785:                 "operation_eligibility": "requires_clarification",
+786:                 "mutation_eligibility": False,
+787:                 "clarification": _clarification_for(npcs, single_offer=False),
+788:                 "pending_intention_relationship": "requires_clarification",
+789:                 "conflict_status": "unresolved" if proposed else "none",
+790:             }
+791:         if chosen:
+792:             return {
+793:                 **base,
+794:                 "direct_address": True,
+795:                 "communication_ownership": "npc_directed",
+796:                 "target_resolution": "contextual",
+797:                 "target_provenance": provenance,
+798:                 "target_id": chosen,
+799:                 "operation_eligibility": "executable",
+800:                 "mutation_eligibility": True,
+801:                 "allowed_operation": "ask",
+802:                 "pending_intention_relationship": "continues" if provenance == "established_interlocutor" else "starts_new",
+803:             }
+804: 
+805:     hits = [npc for npc in npcs if set(words) & _npc_words(npc)]
+806:     extras = [word for word in words if not any(word in _npc_words(npc) for npc in hits)]
+807:     ambiguous_extras = False
+808:     else_provenance = ""
+809:     if len(hits) > 1 and extras:
+810:         narrowed = [npc for npc in hits if all(extra in _npc_public_blob(npc, scene) for extra in extras)]
+811:         if len(narrowed) == 1:
+812:             hits = narrowed
+813:             else_provenance = "authoritative_world_state"
+814:         else:
+815:             hits = []
+816:             ambiguous_extras = True
+817:     elif len(hits) > 1:
+818:         ambiguous_extras = True
+819:     if len(hits) == 1:
+820:         npc = hits[0]
+821:         target_id = str(npc.get("id") or "")
+822:         proper = str(npc.get("name") or "").lower() in text.lower() or target_id.replace("_", " ") in text.lower()
+823:         provenance = else_provenance or ("explicit_canonical" if proper else "unique_contextual")
+824:         conflict = "resolved_by_explicit_wording" if proposed and proposed != target_id else "none"
+825:         return {
+826:             **base,
+827:             "direct_address": True,
+828:             "communication_ownership": "npc_directed",
+829:             "target_resolution": "explicit" if provenance == "explicit_canonical" else "contextual",
+830:             "target_provenance": provenance,
+831:             "target_id": target_id,
+832:             "operation_eligibility": "executable",
+833:             "mutation_eligibility": True,
+834:             "allowed_operation": "ask",
+835:             "pending_intention_relationship": "starts_new",
+836:             "conflict_status": conflict,
+837:             "conflict_details": {"provider_target": proposed, "grounded_target": target_id} if conflict != "none" else {},
+838:         }
+839:     if ambiguous_extras or hits:
+840:         return {
+841:             **base,
+842:             "direct_address": True,
+843:             "communication_ownership": "ambiguous_unresolved",
+844:             "target_resolution": "ambiguous",
+845:             "target_provenance": "provider_candidate_only" if proposed else "none",
+846:             "operation_eligibility": "requires_clarification",
+847:             "mutation_eligibility": False,
+848:             "clarification": _clarification_for(hits or npcs, single_offer=False),
+849:             "choices": [_choice(npc) for npc in (hits or npcs)],
+850:             "pending_intention_relationship": "requires_clarification",
+851:             "conflict_status": "unresolved" if proposed else "none",
+852:         }
+853:     return {
+854:         **base,
+855:         "direct_address": True,
+856:         "communication_ownership": "ambiguous_unresolved",
+857:         "target_resolution": "unresolved",
+858:         "target_provenance": "provider_candidate_only" if proposed else "none",
+859:         "operation_eligibility": "requires_clarification",
+860:         "mutation_eligibility": False,
+861:         "clarification": _clarification_for(npcs, single_offer=len(npcs) == 1),
+862:         "pending_intention_relationship": "requires_clarification",
+863:         "conflict_status": "unresolved" if proposed else "none",
+864:     }
+
+## game/conversational_continuity.py::record_delivered_exchange lines 171-285; sha256=b08b968c59d52cdc351e97209d73176a1c5e3f091f8fe413e2854088e474badd
+171: def record_delivered_exchange(
+172:     session: dict[str, Any] | None,
+173:     *,
+174:     player_text: str,
+175:     delivered_text: str,
+176:     scene_id: str = "",
+177:     turn: int = 0,
+178:     social: Mapping[str, Any] | None = None,
+179:     ownership: str = "",
+180:     adoption: Mapping[str, Any] | None = None,
+181: ) -> dict[str, Any] | None:
+182:     """Store the line the player was given. Rejected candidates are not accepted here."""
+183:     if not isinstance(session, dict):
+184:         return None
+185:     delivered = str(delivered_text or "")
+186:     if not delivered.strip():
+187:         return None
+188:     if adoption is not None:
+189:         from game.immutable_valid_response import verify_delivery_record
+190: 
+191:         if (not adoption.get("immutable") or delivered != str(adoption.get("text") or "")
+192:                 or (adoption.get("integrity_digest") and not verify_delivery_record(adoption))):
+193:             raise ValueError("Delivered speech does not match the accepted response")
+194:     payload = social if isinstance(social, Mapping) else {}
+195:     if adoption is not None and adoption.get("authorization_source") in {"host_terminal_safety", "dialogue_authority.disclosure_denied"}:
+196:         payload = {}
+197:         ownership = "gm"
+198:     authority = payload.get("dialogue_authority") if isinstance(payload.get("dialogue_authority"), Mapping) else {}
+199:     speaker_id = str((authority or {}).get("npc_id") or payload.get("npc_id") or "")
+200:     speaker_name = str((authority or {}).get("npc_name") or payload.get("npc_name") or "")
+201:     topic_row = payload.get("topic_revealed") if isinstance(payload.get("topic_revealed"), Mapping) else {}
+202:     own = ownership or ("npc" if speaker_id and speaker_name and speaker_name.lower() in delivered.lower() else "gm")
+203:     if _INTERNAL.search(delivered):
+204:         own = "gm"
+205:     supplied = _quote_span(delivered)
+206:     row = {
+207:         "speaker_id": speaker_id if own == "npc" else "",
+208:         "speaker_name": speaker_name if own == "npc" else "",
+209:         "addressee": "player",
+210:         "ownership": own,
+211:         "player_text": str(player_text or "")[:400],
+212:         "delivered_text": delivered,
+213:         "subject": str((authority or {}).get("subject") or "")[:80],
+214:         "topic_id": str(topic_row.get("id") or ""),
+215:         "requested_information": str((authority or {}).get("requested_information") or ""),
+216:         "supplied_text": supplied,
+217:         "uncertain": bool(_UNCERTAIN.search(supplied or delivered)),
+218:         "commitment": bool(authority) and str((authority or {}).get("knowledge_posture") or "") not in {"", "established"},
+219:         "scene_id": str(scene_id or ""),
+220:         "turn": int(turn or 0),
+221:         "active": True,
+222:     }
+223:     from game.expressive_dialogue import proposition_identity
+224: 
+225:     adoption_map = adoption if isinstance(adoption, Mapping) else {}
+226:     topic_text = str(topic_row.get("text") or topic_row.get("clue_text") or "")
+227:     authorized = str(
+228:         adoption_map.get("authorized_proposition")
+229:         or authority.get("authorized_proposition")
+230:         or topic_text
+231:         or supplied
+232:     )
+233:     explicit = str(adoption_map.get("proposition_id") or authority.get("proposition_id") or payload.get("proposition_id") or "")
+234:     row["authorized_proposition"] = authorized
+235:     row["answer_sufficiency"] = str(adoption_map.get("answer_sufficiency") or authority.get("answer_sufficiency") or "")
+236:     semantic_plan = authority.get("unified_semantic_plan") if isinstance(authority.get("unified_semantic_plan"), Mapping) else payload.get("unified_semantic_plan")
+237:     if not (isinstance(semantic_plan, Mapping) and semantic_plan.get("locked")):
+238:         from game.unified_semantic_planning import take_staged_plan
+239: 
+240:         semantic_plan = take_staged_plan(session, player_text)
+241:     else:
+242:         from game.unified_semantic_planning import take_staged_plan
+243: 
+244:         take_staged_plan(session, player_text)
+245:     if isinstance(semantic_plan, Mapping) and semantic_plan.get("locked"):
+246:         from game.unified_semantic_planning import delivered_plan_fields
+247: 
+248:         stored_plan = delivered_plan_fields(semantic_plan)
+249:         if stored_plan:
+250:             row["unified_semantic_plan"] = stored_plan
+251:     row["proposition_id"] = proposition_identity(
+252:         speaker_id=speaker_id if own == "npc" else "",
+253:         topic_id="" if explicit else str(topic_row.get("id") or ""),
+254:         text=authorized,
+255:         explicit=explicit,
+256:     )
+257:     if adoption is not None:
+258:         row["response_integrity_digest"] = str(adoption.get("integrity_digest") or "")
+259:         row["authorization_source"] = str(adoption.get("authorization_source") or adoption.get("provenance") or "")
+260:         row["adoption_turn_identity"] = str(adoption.get("turn_identity") or "")
+261:         # Disclosure refusals are stored as GM-owned rows with no NPC speaker.
+262:         # A different non-empty speaker is still a mismatch.
+263:         if speaker_id and adoption.get("speaker_id") and str(adoption["speaker_id"]) != speaker_id:
+264:             raise ValueError("Delivered speech speaker does not match adoption")
+265:     ctx = session.setdefault("conversational_context", {})
+266:     if not isinstance(ctx, dict):
+267:         return None
+268:     rows = ctx.get(DELIVERED_KEY)
+269:     if not isinstance(rows, list):
+270:         rows = []
+271:         ctx[DELIVERED_KEY] = rows
+272:     if rows and isinstance(rows[-1], dict):
+273:         last = rows[-1]
+274:         if last.get("turn") == row["turn"] and last.get("delivered_text") == row["delivered_text"] and last.get("player_text") == row["player_text"]:
+275:             return last
+276:         last["active"] = False
+277:     rows.append(row)
+278:     if isinstance(semantic_plan, Mapping) and semantic_plan.get('locked'):
+279:         from game.conversational_referents import commit
+280: 
+281:         commit(session, row, semantic_plan, adoption)
+282:     while len(rows) > MAX_DELIVERED:
+283:         disposable = next((index for index, item in enumerate(rows) if item.get("ownership") != "npc"), None)
+284:         del rows[0 if disposable is None else disposable]
+285:     return row
+
+## game/conversational_continuity.py::continuity_directive lines 611-896; sha256=b08b968c59d52cdc351e97209d73176a1c5e3f091f8fe413e2854088e474badd
+611: def continuity_directive(
+612:     player_text: str,
+613:     *,
+614:     session: Mapping[str, Any] | None = None,
+615:     scene: Mapping[str, Any] | None = None,
+616:     world: Mapping[str, Any] | None = None,
+617: ) -> dict[str, Any] | None:
+618:     """Return a grounding directive, or None to leave the existing decision path alone."""
+619:     text = " ".join(str(player_text or "").split())
+620:     from game.unified_semantic_planning import migrated_turn_should_abstain_legacy
+621: 
+622:     if migrated_turn_should_abstain_legacy(text, session=session, scene=scene, world=world):
+623:         return None
+624:     if (
+625:         not text
+626:         or _UNDO.search(text)
+627:         or _SCENE.search(text)
+628:         or _EXPLICIT_ASK.search(text)
+629:         or _RULES.search(text)
+630:         or _HIDDEN.search(text)
+631:         or _CONDITIONAL_ACTION.search(text)
+632:     ):
+633:         return None
+634:     if _WORLD.search(text) and not _REPEAT.search(text) and not _NEGOTIATION.search(text):
+635:         return None
+636:     if _pending_blocks(session, text):
+637:         return None
+638:     present = _present(scene, world)
+639:     active = _active_id(session, present)
+640:     from game.dialogue_authority import historical_disclosure_permitted
+641:     people = {str(n.get("id") or ""): n for n in (world or {}).get("npcs") or [] if isinstance(n, Mapping)}
+642:     rows = [r for r in delivered_exchanges(session)
+643:             if historical_disclosure_permitted(r, people.get(str(r.get("speaker_id") or "")))]
+644:     ctx = (session or {}).get("conversational_context") or {}
+645:     last_gm = ctx.get("last_gm_exchange") or {}
+646:     latest = rows[-1] if rows else {}
+647:     scene_id = str(((scene or {}).get("scene") or scene or {}).get("id") or "")
+648:     # A bare request to repeat/clarify refers to the latest delivered question,
+649:     # not an older NPC disclosure. Explicit speaker/subject recall still uses
+650:     # the existing historical selector below. Keep the pending intent intact.
+651:     if (( _REPEAT.search(text) or _MEANING.search(text))
+652:             and latest.get("ownership") == "gm"
+653:             and last_gm.get("category") == "CLARIFY"
+654:             and last_gm.get("scene_id") == scene_id
+655:             and latest.get("delivered_text") == last_gm.get("response")
+656:             and not _unique_named(text, present)
+657:             and not reference_subject_tokens(text, " ".join(str(n.get("name") or "") for n in present.values()))):
+658:         return {"action": "clarify", "owner": "gm", "npc_id": "", "npc_name": "",
+659:                 "line": str(last_gm["response"]), "reason": "repeat_pending_clarification"}
+660:     if _names_other(text, present, active):
+661:         return None
+662:     found = _best_exchange(text, rows, "" if _GM.search(text) else active)
+663:     if found == "ambiguous" and (_GM.search(text) or _MEANING.search(text) or _REPEAT.search(text) or _DEICTIC.search(text)):
+664:         return {
+665:             "action": "clarify",
+666:             "owner": "gm",
+667:             "npc_id": "",
+668:             "npc_name": "",
+669:             "line": _ambiguous_line(rows),
+670:             "reason": "ambiguous_delivered_reference",
+671:         }
+672:     exchange = found if isinstance(found, dict) else None
+673:     named = _unique_named(text, present)
+674:     speaker_id = named or active or (str(exchange.get("speaker_id") or "") if exchange else "")
+675:     if not speaker_id and len(present) == 1:
+676:         speaker_id = next(iter(present))
+677:     speaker_present = bool(speaker_id and speaker_id in present)
+678:     speaker_name = _named(present, speaker_id) if speaker_present else str((exchange or {}).get("speaker_name") or "")
+679: 
+680:     def _ask() -> dict[str, Any]:
+681:         return {
+682:             "action": "ask",
+683:             "owner": "npc",
+684:             "npc_id": speaker_id,
+685:             "npc_name": speaker_name,
+686:             "line": "",
+687:             "reason": "conversational_continuity_ask",
+688:         }
+689: 
+690:     gm_about_speech = bool(
+691:         (_GM.search(text) and re.search(r"\b(?:said|say|mean|meant|repeat|recall|earlier)\b", text, re.I))
+692:         or (_THIRD.search(text) and not _YOU.search(text) and (_MEANING.search(text) or _EARLIER.search(text)))
+693:     )
+694:     if gm_about_speech:
+695:         if not exchange:
+696:             if not _GM.search(text) or not re.search(r"\b(?:say|said|repeat|recall)\b", text, re.I):
+697:                 return None
+698:             return {"action": "clarify", "owner": "gm", "npc_id": "", "npc_name": "",
+699:                     "line": "Which earlier statement do you mean?", "reason": "missing_delivered_reference"}
+700:         recalled = _gm_quote(exchange)
+701:         if recall_kind(text) in {"exact", "subject", "explanation"}:
+702:             many = _quote_many(exchange, rows)
+703:             if many:
+704:                 recalled = many
+705:         return {
+706:             "action": "answer",
+707:             "owner": "gm",
+708:             "npc_id": str(exchange.get("speaker_id") or ""),
+709:             "npc_name": str(exchange.get("speaker_name") or ""),
+710:             "line": recalled,
+711:             "reason": "gm_recall_of_npc_statement",
+712:             "proposition_id": str(exchange.get("proposition_id") or ""),
+713:             "topic_grounding": {
+714:                 "speaker_id": exchange.get("speaker_id"), "ownership": "gm",
+715:                 "reference": "delivered_speech", "topic_id": exchange.get("topic_id"),
+716:                 "proposition_id": exchange.get("proposition_id"),
+717:                 "selected_source": exchange.get("authorization_source"),
+718:                 "delivered_turn": exchange.get("turn"), "canonical": False,
+719:             },
+720:         }
+721:     if _FEELING.search(text):
+722:         if exchange and speaker_present:
+723:             return {
+724:                 "action": "answer",
+725:                 "owner": "npc",
+726:                 "npc_id": speaker_id,
+727:                 "npc_name": speaker_name,
+728:                 "line": _npc_quote(speaker_name, exchange),
+729:                 "reason": "conversational_topic_correction",
+730:             }
+731:         if exchange and not speaker_present:
+732:             return {
+733:                 "action": "clarify",
+734:                 "owner": "gm",
+735:                 "npc_id": str(exchange.get("speaker_id") or ""),
+736:                 "npc_name": str(exchange.get("speaker_name") or ""),
+737:                 "line": _absent_line(exchange),
+738:                 "reason": "absent_npc_reference",
+739:             }
+740:     if _NEGOTIATION.search(text):
+741:         if not speaker_present:
+742:             if exchange:
+743:                 return {
+744:                     "action": "clarify",
+745:                     "owner": "gm",
+746:                     "npc_id": str(exchange.get("speaker_id") or ""),
+747:                     "npc_name": str(exchange.get("speaker_name") or ""),
+748:                     "line": _absent_line(exchange),
+749:                     "reason": "absent_npc_reference",
+750:                 }
+751:             return {
+752:                 "action": "clarify",
+753:                 "owner": "gm",
+754:                 "npc_id": "",
+755:                 "npc_name": "",
+756:                 "line": "Who are you asking that of? Nothing has been promised.",
+757:                 "reason": "unresolved_request_addressee",
+758:             }
+759:         return {
+760:             "action": "answer",
+761:             "owner": "npc",
+762:             "npc_id": speaker_id,
+763:             "npc_name": speaker_name,
+764:             "line": f'{speaker_name} says, "I can\'t promise you a reward for that."',
+765:             "reason": "npc_request_declined",
+766:         }
+767:     if _REPEAT.search(text) and exchange:
+768:         if speaker_present:
+769:             return {
+770:                 "action": "answer",
+771:                 "owner": "npc",
+772:                 "npc_id": speaker_id,
+773:                 "npc_name": speaker_name,
+774:                 "line": _npc_quote(speaker_name, exchange),
+775:                 "reason": "repeat_delivered_statement",
+776:             }
+777:         return {
+778:             "action": "clarify",
+779:             "owner": "gm",
+780:             "npc_id": str(exchange.get("speaker_id") or ""),
+781:             "npc_name": str(exchange.get("speaker_name") or ""),
+782:             "line": _absent_line(exchange),
+783:             "reason": "absent_npc_reference",
+784:         }
+785:     if _EARLIER.search(text):
+786:         if not exchange and not speaker_present:
+787:             speakers = {str(row.get("speaker_id") or ""): str(row.get("speaker_name") or "")
+788:                         for row in rows if row.get("ownership") == "npc"}
+789:             if len(speakers) == 1:
+790:                 old_id, old_name = next(iter(speakers.items()))
+791:                 return {"action": "clarify", "owner": "gm", "npc_id": old_id,
+792:                         "npc_name": old_name, "line": f"{old_name} is not here. Which earlier statement do you mean?",
+793:                         "reason": "missing_absent_reference"}
+794:         if exchange and not speaker_present:
+795:             return {
+796:                 "action": "clarify",
+797:                 "owner": "gm",
+798:                 "npc_id": str(exchange.get("speaker_id") or ""),
+799:                 "npc_name": str(exchange.get("speaker_name") or ""),
+800:                 "line": _absent_line(exchange),
+801:                 "reason": "absent_npc_reference",
+802:             }
+803:         if speaker_present:
+804:             return _ask()
+805:         return None
+806:     if _MEANING.search(text):
+807:         if re.search(r"\b(?:what was that|that name)\b", text, re.IGNORECASE):
+808:             chosen = exchange if isinstance(exchange, dict) and not exchange.get("uncertain") else None
+809:             if chosen is None:
+810:                 certain = [
+811:                     row for row in rows
+812:                     if row.get("ownership") == "npc" and not row.get("uncertain")
+813:                     and (not active or str(row.get("speaker_id") or "") == active)
+814:                 ]
+815:                 chosen = certain[-1] if certain else None
+816:             if isinstance(chosen, dict):
+817:                 chosen_name = speaker_name or str(chosen.get("speaker_name") or "They")
+818:                 if speaker_present:
+819:                     return {
+820:                         "action": "answer",
+821:                         "owner": "npc",
+822:                         "npc_id": speaker_id or str(chosen.get("speaker_id") or ""),
+823:                         "npc_name": chosen_name,
+824:                         "line": _npc_quote(chosen_name, chosen),
+825:                         "reason": "repeat_delivered_statement",
+826:                     }
+827:                 return {
+828:                     "action": "clarify",
+829:                     "owner": "gm",
+830:                     "npc_id": str(chosen.get("speaker_id") or ""),
+831:                     "npc_name": str(chosen.get("speaker_name") or ""),
+832:                     "line": _absent_line(chosen),
+833:                     "reason": "absent_npc_reference",
+834:                 }
+835:         if speaker_present:
+836:             return _ask()
+837:         if exchange:
+838:             return {
+839:                 "action": "clarify",
+840:                 "owner": "gm",
+841:                 "npc_id": str(exchange.get("speaker_id") or ""),
+842:                 "npc_name": str(exchange.get("speaker_name") or ""),
+843:                 "line": _absent_line(exchange),
+844:                 "reason": "absent_npc_reference",
+845:             }
+846:         return None
+847:     if is_incidental_personal(text) and speaker_present:
+848:         return _ask()
+849:     if (_DEICTIC.search(text) and _QUESTION.search(text) and speaker_present
+850:             and (exchange or any(row.get("ownership") == "npc" and row.get("speaker_id") == speaker_id for row in rows))):
+851:         if exchange and str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
+852:             return {
+853:                 "action": "answer",
+854:                 "owner": "npc",
+855:                 "npc_id": speaker_id,
+856:                 "npc_name": speaker_name,
+857:                 "line": _npc_quote(speaker_name, exchange),
+858:                 "reason": "repeat_delivered_statement",
+859:             }
+860:         return _ask()
+861:     if _vocative(text, present) and speaker_present and _QUESTION.search(text) and not gm_about_speech:
+862:         return _ask()
+863:     if _AGAIN.search(text) and speaker_present and exchange and str(exchange.get("requested_information") or "") in {"opinion", "personal_state"}:
+864:         return {
+865:             "action": "answer",
+866:             "owner": "npc",
+867:             "npc_id": speaker_id,
+868:             "npc_name": speaker_name,
+869:             "line": _npc_quote(speaker_name, exchange),
+870:             "reason": "repeat_delivered_statement",
+871:         }
+872:     if _supplied_overlap(text, exchange) and not re.search(r"\bwhich\b.+\bmean\b", text, re.IGNORECASE):
+873:         if isinstance(exchange, dict):
+874:             from game.dialogue_authority import classify_answer_sufficiency
+875: 
+876:             supplied = str(exchange.get("authorized_proposition") or exchange.get("supplied_text") or "")
+877:             if classify_answer_sufficiency(text, supplied) == "partially_informs":
+878:                 return None
+879:         if speaker_present:
+880:             return {
+881:                 "action": "answer",
+882:                 "owner": "npc",
+883:                 "npc_id": speaker_id,
+884:                 "npc_name": speaker_name,
+885:                 "line": _npc_quote(speaker_name, exchange),
+886:                 "reason": "repeat_delivered_statement",
+887:             }
+888:         return {
+889:             "action": "clarify",
+890:             "owner": "gm",
+891:             "npc_id": str(exchange.get("speaker_id") or ""),
+892:             "npc_name": str(exchange.get("speaker_name") or ""),
+893:             "line": _absent_line(exchange),
+894:             "reason": "absent_npc_reference",
+895:         }
+896:     return None
+
+## game/semantic_interpreter.py::player_visible_turns lines 127-141; sha256=59265aa840a7cb579a325ceb2775df94ceb49de2f8bb25773d632c4450493830
+127: def player_visible_turns(log: Sequence[Mapping[str, Any]] | None, *, limit: int = 2) -> list[dict[str, str]]:
+128:     """Last player-visible lines only. Resolution metadata stays out."""
+129:     found: list[dict[str, str]] = []
+130:     for entry in reversed(list(log or [])):
+131:         if not isinstance(entry, Mapping):
+132:             continue
+133:         player = " ".join(str(entry.get("player_input") or "").split())[:240]
+134:         gm = " ".join(str(entry.get("player_facing_text") or "").split())[:240]
+135:         if not player and not gm:
+136:             continue
+137:         found.append({"player": player, "gm": gm})
+138:         if len(found) >= limit:
+139:             break
+140:     found.reverse()
+141:     return found
+
+## game/social.py::authored_topic_relevant_to_question lines 1564-1584; sha256=13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a
+1564: def authored_topic_relevant_to_question(
+1565:     player_text: str,
+1566:     rec: Any,
+1567:     *,
+1568:     npc: Dict[str, Any] | None = None,
+1569:     speaker_id: str | None = None,
+1570:     speaker_name: str | None = None,
+1571: ) -> bool:
+1572:     """Whether an owned topic concerns the asked subject.
+1573: 
+1574:     Authorization and answer sufficiency are separate predicates. Subject
+1575:     overlap does not mean the topic answers the requested information.
+1576:     Generic asks with no remaining subject tokens keep first-available
+1577:     behavior. Existing ellipsis follow-ups do not mint a different topic.
+1578:     """
+1579:     speaker_tokens = _speaker_tokens_for_question_relevance(npc, speaker_id, speaker_name)
+1580:     subject = _question_subject_tokens(player_text, speaker_tokens)
+1581:     if not subject:
+1582:         return not is_valid_followup_question(player_text)
+1583:     hay = _authored_topic_hay(rec).lower()
+1584:     return any(tok in hay for tok in subject)
+
+## game/social.py::authored_answer_sufficient_for_question lines 1587-1608; sha256=13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a
+1587: def authored_answer_sufficient_for_question(player_text: str, rec: Any) -> bool:
+1588:     """Whether a subject-relevant candidate can satisfy the requested information.
+1589: 
+1590:     Knowing something about a subject is not the same as answering every
+1591:     question about that subject. General and clarification asks keep the
+1592:     existing first-available / any-authored-text behavior.
+1593:     """
+1594:     dim = classify_social_question_dimension(player_text)
+1595:     text = ""
+1596:     if isinstance(rec, dict):
+1597:         text = str(rec.get("clue_text") or rec.get("text") or rec.get("label") or "").strip()
+1598:     else:
+1599:         text = str(rec or "").strip()
+1600:     if not text:
+1601:         return False
+1602:     from game.dialogue_authority import topic_supports_requested_information
+1603: 
+1604:     if not topic_supports_requested_information(player_text, text):
+1605:         return False
+1606:     if dim in ("general", "clarification"):
+1607:         return True
+1608:     return _stored_text_supports_dimension(text, dim)
+
+## game/social.py::_next_topic_to_reveal lines 1611-1686; sha256=13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a
+1611: def _next_topic_to_reveal(
+1612:     npc: Dict[str, Any],
+1613:     runtime: Dict[str, Any],
+1614:     topic_hint: Optional[str] = None,
+1615:     player_text: Optional[str] = None,
+1616:     *, allow_revealed: bool = False, selection: dict | None = None,
+1617: ) -> Optional[Dict[str, Any]]:
+1618:     """Return next unrevealed topic that matches hint, relevance, and sufficiency.
+1619: 
+1620:     Topic: {id, text, clue_id?, clue_text?}. A speaker owning a topic does not
+1621:     make that topic an answer to an unrelated question. A subject-relevant
+1622:     topic still must contain the requested information.
+1623:     """
+1624:     topics = npc.get("topics") or npc.get("knowledge") or []
+1625:     if not isinstance(topics, list):
+1626:         return None
+1627:     revealed = set(runtime.get("revealed_topics") or [])
+1628:     hint_slug = slugify(topic_hint) if topic_hint else None
+1629:     text_in = str(player_text or "").strip()
+1630: 
+1631:     candidates = []
+1632:     for t in topics:
+1633:         from game.dialogue_authority import npc_source_permitted
+1634:         if not npc_source_permitted(npc, t):
+1635:             continue
+1636:         if not isinstance(t, dict):
+1637:             rec = {"id": str(t)[:40], "text": str(t)} if t else None
+1638:             if not rec:
+1639:                 continue
+1640:         else:
+1641:             rec = t
+1642:         tid = str(rec.get("id") or "").strip()
+1643:         if not tid:
+1644:             tid = slugify(rec.get("text", ""))[:40] or "topic"
+1645:         if tid in revealed and not (text_in and allow_revealed):
+1646:             continue
+1647:         if hint_slug and hint_slug not in slugify(tid) and hint_slug not in slugify(rec.get("text", "")):
+1648:             continue
+1649:         if text_in and not authored_topic_relevant_to_question(
+1650:             text_in,
+1651:             rec,
+1652:             npc=npc,
+1653:             speaker_id=str(npc.get("id") or "").strip() or None,
+1654:             speaker_name=str(npc.get("name") or "").strip() or None,
+1655:         ):
+1656:             continue
+1657:         if text_in and not authored_answer_sufficient_for_question(text_in, rec):
+1658:             continue
+1659:         out: Dict[str, Any] = {
+1660:             "id": tid,
+1661:             "text": str(rec.get("text") or rec.get("label") or "").strip() or "Unknown.",
+1662:             "clue_id": rec.get("clue_id") or rec.get("reveals_clue"),
+1663:             "clue_text": rec.get("clue_text"),
+1664:         }
+1665:         for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
+1666:             v = rec.get(key)
+1667:             if isinstance(v, str) and v.strip():
+1668:                 out[key] = v.strip()
+1669:         from game.conversational_continuity import reference_subject_tokens
+1670:         words = reference_subject_tokens(text_in, str(npc.get("name") or ""))
+1671:         score = len(words & reference_subject_tokens(_authored_topic_hay(rec)))
+1672:         candidates.append((score, out))
+1673:     if selection is not None:
+1674:         selection.update(candidate_sources=["npc:" + str(npc.get("id") or "") + ":" + row["id"] for _, row in candidates],
+1675:                          selected_source="", ambiguous=False)
+1676:     if not candidates:
+1677:         return None
+1678:     best = max(score for score, _ in candidates)
+1679:     winners = [row for score, row in candidates if score == best]
+1680:     if text_in and best > 0 and len(winners) > 1:
+1681:         if selection is not None:
+1682:             selection["ambiguous"] = True
+1683:         return None
+1684:     if selection is not None:
+1685:         selection["selected_source"] = "npc:" + str(npc.get("id") or "") + ":" + winners[0]["id"]
+1686:     return winners[0]
+
+## game/social.py::resolve_social_action lines 3895-3935; sha256=13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a
+3895: def resolve_social_action(
+3896:     scene_envelope: Dict[str, Any],
+3897:     session: Dict[str, Any],
+3898:     world: Dict[str, Any],
+3899:     normalized_action: Dict[str, Any],
+3900:     raw_player_text: Optional[str] = None,
+3901:     character: Optional[Dict[str, Any]] = None,
+3902:     turn_counter: int = 0,
+3903: ) -> Dict[str, Any]:
+3904:     """Produce a structured SocialEngineResult for the GM prompt. Deterministic, engine-first.
+3905: 
+3906:     Mutates session.npc_runtime (deltas, revealed_topics) when an NPC is found and resolved.
+3907: 
+3908:     Returns:
+3909:         kind, action_id, label, prompt, success, hint, social {npc_id, npc_name, skill_check?, topic_revealed?, ...}
+3910:     """
+3911:     incoming_action_meta = (
+3912:         dict(normalized_action["metadata"]) if isinstance(normalized_action.get("metadata"), dict) else {}
+3913:     )
+3914: 
+3915:     scene = (scene_envelope or {}).get("scene", {}) if isinstance(scene_envelope, dict) else {}
+3916:     scene_id = str(scene.get("id") or "").strip()
+3917:     env_for_ground = scene_envelope if isinstance(scene_envelope, dict) else None
+3918: 
+3919:     action_type = (normalized_action.get("type") or "social_probe").strip().lower()
+3920:     if action_type not in SOCIAL_KINDS:
+3921:         action_type = "social_probe"
+3922:     intent_class = social_intent_class(action_type)
+3923: 
+3924:     label = str(normalized_action.get("label") or "").strip() or "Social action"
+3925:     prompt = str(normalized_action.get("prompt") or raw_player_text or label).strip() or label
+3926:     action_id = str(normalized_action.get("id") or "").strip() or "social"
+3927:     target_id = normalized_action.get("target_id") or normalized_action.get("targetEntityId") or raw_player_text
+3928: 
+3929:     sync_meta = synchronize_scene_addressability(
+3930:         session, scene_envelope if isinstance(scene_envelope, dict) else None, world
+3931:     )
+3932: 
+3933:     # Authoritative social target selection happens here. After this point, emission/validation may reject
+3934:     # output text, but may not null the selected target unless it is invalidated by scene scope.
+3935:     seg_for_auth: Dict[str, Any] | None = None
+
+## game/social.py::resolve_social_action lines 4250-4340; sha256=13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a
+4250:     set_active_interaction_target(session, npc_id, kind="social")
+4251: 
+4252:     # Initialize from NPC baseline
+4253:     base_attitude = npc.get("disposition") or npc.get("attitude") or "neutral"
+4254:     if isinstance(base_attitude, str):
+4255:         attitude_map = {"friendly": 2, "helpful": 1, "neutral": 0, "unfriendly": -1, "hostile": -2}
+4256:         runtime.setdefault("attitude", attitude_map.get(base_attitude.lower(), 0))
+4257:     runtime.setdefault("trust", 0)
+4258:     runtime.setdefault("fear", 0)
+4259:     runtime.setdefault("suspicion", 0)
+4260:     runtime.setdefault("known_topics", [])
+4261:     runtime.setdefault("revealed_topics", [])
+4262: 
+4263:     # Question/social_probe: no skill check by default; may reveal topic
+4264:     if action_type in ("question", "social_probe"):
+4265:         # Migrated information questions bind one semantic plan. Legacy topic
+4266:         # selection does not run once that plan is accepted.
+4267:         from game.unified_semantic_planning import locked_plan_for_social_turn
+4268: 
+4269:         semantic_lock = locked_plan_for_social_turn(
+4270:             player_text=str(raw_player_text or prompt or ""),
+4271:             session=session,
+4272:             world=world,
+4273:             scene=scene_envelope if isinstance(scene_envelope, dict) else None,
+4274:             npc=npc,
+4275:             npc_id=npc_id,
+4276:             npc_name=npc_name,
+4277:             action_metadata=incoming_action_meta,
+4278:         )
+4279:         if semantic_lock is not None:
+4280:             topic_hint = None
+4281:             topic_selection = dict(semantic_lock.get("topic_selection") or {})
+4282:             topic_rec = semantic_lock.get("topic_rec")
+4283:             recalled_topic = False
+4284:             speech_reference = ""
+4285:         else:
+4286:             # Only use topic hint when explicitly provided; otherwise reveal first available topic
+4287:             topic_hint = normalized_action.get("topic") if normalized_action.get("topic") else None
+4288:             topic_selection = {}
+4289:             topic_rec = _next_topic_to_reveal(
+4290:                 npc,
+4291:                 runtime,
+4292:                 topic_hint,
+4293:                 player_text=str(raw_player_text or prompt or ""),
+4294:                 allow_revealed=bool(raw_player_text), selection=topic_selection,
+4295:             )
+4296:             recalled_topic = bool(topic_rec and topic_rec["id"] in runtime.get("revealed_topics", []))
+4297: 
+4298:             # Historical restatement is speech authority, not a new topic reveal.
+4299:             from game.conversational_continuity import supplied_clarification
+4300:             speech_reference = supplied_clarification(str(raw_player_text or prompt or ""), session, npc_id, npc_name, npc=npc)
+4301:             if speech_reference:
+4302:                 topic_rec = None
+4303:                 topic_selection = {"candidate_sources": [], "selected_source": "", "ambiguous": False}
+4304:                 recalled_topic = False
+4305: 
+4306:         # Communication ownership may resolve an anaphoric clarification to an
+4307:         # already revealed topic. The social owner rechecks speaker, authored
+4308:         # payload and disclosure state; provider text cannot grant knowledge.
+4309:         communication = incoming_action_meta.get("communication") or {}
+4310:         evidence = incoming_action_meta.get("public_conversation_evidence") or {}
+4311:         if semantic_lock is None and not speech_reference and not topic_rec and communication.get("recipient") == "NPC" and communication.get("purpose") in {"QUESTION", "CLARIFICATION", "RECALL"}:
+4312:             for topic in npc.get("topics") or npc.get("knowledge") or []:
+4313:                 if not isinstance(topic, dict):
+4314:                     continue
+4315:                 topic_id = str(topic.get("id") or "")
+4316:                 ref = f"npc:{npc_id}:{topic_id}"
+4317:                 if (topic_id in runtime.get("revealed_topics", [])
+4318:                         and evidence.get(ref) == topic.get("text")
+4319:                         and ref in communication.get("evidence_refs", [])
+4320:                         and authored_topic_relevant_to_question(str(raw_player_text or prompt or ""), topic, npc=npc)
+4321:                         and authored_answer_sufficient_for_question(str(raw_player_text or prompt or ""), topic)):
+4322:                     topic_rec = dict(topic)
+4323:                     recalled_topic = True
+4324:                     break
+4325: 
+4326:         from game.dialogue_authority import authorize_npc_disclosure
+4327:         disclosure = authorize_npc_disclosure(npc, topic_rec)
+4328:         if topic_rec and not disclosure["permission"]:
+4329:             topic_rec = None
+4330:             recalled_topic = False
+4331: 
+4332:         if topic_rec:
+4333:             topic_rec["disclosure_authorization"] = disclosure
+4334:             revealed_ids = runtime.get("revealed_topics") or []
+4335:             if topic_rec["id"] not in revealed_ids:
+4336:                 revealed_ids.append(topic_rec["id"])
+4337:                 runtime["revealed_topics"] = revealed_ids
+4338: 
+4339:             clue_text = topic_rec.get("clue_text") or topic_rec.get("text")
+4340:             clue_id = topic_rec.get("clue_id")
+
+## game/social.py::resolve_social_action lines 4450-4515; sha256=13cbc7960f0aa95867882d3f8ea9c0648ef2484430748de8cf98bdb69eb7426a
+4450:                     hint=str(contract["hint"] or ""),
+4451:                     social=social_payload,
+4452:                     requires_check=False,
+4453:                 )
+4454:                 return _social_result_dict_with_incoming_metadata(result, incoming_action_meta, session=session)
+4455: 
+4456:         apply_npc_runtime_deltas(session, npc_id, action_type, None, turn_counter)
+4457:         revealed_list = runtime.get("revealed_topics") or []
+4458:         prior_thread = bool(
+4459:             isinstance(revealed_list, list) and any(str(x).strip() for x in revealed_list)
+4460:         )
+4461:         social_payload = _social_payload_with_reply_expectation(
+4462:             {
+4463:                 "social_intent_class": intent_class,
+4464:                 "npc_id": npc_id,
+4465:                 "npc_name": npc_name,
+4466:                 "target_resolved": True,
+4467:                 "topic_revealed": None,
+4468:                 "skill_check": None,
+4469:                 "topic_selection": topic_selection,
+4470:             },
+4471:             action_type=action_type,
+4472:             prompt=prompt,
+4473:             raw_player_text=raw_player_text,
+4474:             topic_revealed=prior_thread,
+4475:             requires_check=False,
+4476:             debug_fields=dbg,
+4477:         )
+4478:         reply_plan = _bounded_social_reply_plan_for_missing_topic(
+4479:             action_type=action_type,
+4480:             player_text=str(raw_player_text or prompt or ""),
+4481:             npc=npc,
+4482:             topic_revealed=False,
+4483:         )
+4484:         _apply_social_reply_plan(social_payload, reply_plan)
+4485:         if semantic_lock is not None:
+4486:             social_payload["unified_semantic_plan"] = semantic_lock["plan"]
+4487:         from game.dialogue_authority import attach_dialogue_authority
+4488: 
+4489:         attach_dialogue_authority(
+4490:             social_payload,
+4491:             str(raw_player_text or prompt or ""),
+4492:             npc,
+4493:             session,
+4494:             scene_envelope if isinstance(scene_envelope, dict) else None,
+4495:         )
+4496:         apply_social_reply_speaker_grounding(social_payload, session, world, scene_id, env_for_ground, auth)
+4497:         if reply_plan.get("reply_plan_kind") == "harmless_subjective_response_permitted":
+4498:             fallback_hint = (
+4499:                 f"Player asked {npc_name} for a harmless subjective response. "
+4500:                 "The NPC may answer as bounded personal speech or admit uncertainty. "
+4501:                 "Do not treat the reply as authored world truth, durable preference, inventory fact, "
+4502:                 "declared claim, or state mutation."
+4503:             )
+4504:         elif reply_plan.get("reply_plan_kind") == "consequential_information_request":
+4505:             fallback_hint = (
+4506:                 f"Player asked {npc_name} for consequential information with no authored answer available. "
+4507:                 "Keep the reply to honest uncertainty, bounded hearsay, or a refusal if appropriate; "
+4508:                 "answer without inventing it or establishing the requested fact."
+4509:             )
+4510:         elif reply_plan.get("reply_plan_kind") == "genuine_refusal":
+4511:             fallback_hint = (
+4512:                 f"Player asked {npc_name} for information the NPC should decline or withhold. "
+4513:                 "Narrate a concise refusal or boundary without inventing the restricted answer."
+4514:             )
+4515:         else:
+
+## game/dialogue_authority.py::authorize_npc_disclosure lines 123-160; sha256=f2a8c3f4fca505e9fb845fa643f88dc79ab51a83f098e141f314f3ac57a491cb
+123: def authorize_npc_disclosure(npc: Mapping[str, Any] | None, topic: Any) -> dict[str, Any]:
+124:     """Resolve a proposition against its host-owned NPC source, on every route.
+125: 
+126:     Legacy authored rows without disclosure metadata mean public knowledge.
+127:     Unrecognized policy/knowledge values fail closed; runtime revealed flags
+128:     and provider-selected identifiers never override the authored policy.
+129:     """
+130:     person = npc if isinstance(npc, Mapping) else {}
+131:     raw = person.get("topics") or person.get("knowledge") or []
+132:     candidate = topic if isinstance(topic, Mapping) else {"text": str(topic or "")}
+133:     text = str(candidate.get("text") or candidate.get("clue_text") or candidate.get("label") or "").strip()
+134:     ident = str(candidate.get("id") or "")
+135:     matches = []
+136:     for item in raw if isinstance(raw, list) else []:
+137:         row = item if isinstance(item, Mapping) else {"text": str(item)}
+138:         source_text = str(row.get("text") or row.get("clue_text") or row.get("label") or "").strip()
+139:         clue_matches = (not candidate.get("clue_text") or str(candidate["clue_text"]) in
+140:                         {source_text, str(row.get("clue_text") or "")})
+141:         if text and source_text == text and clue_matches and (not ident or not row.get("id") or str(row.get("id")) == ident):
+142:             matches.append(row)
+143:     source = matches[0] if len(matches) == 1 else {}
+144:     policy = str(source.get("disclosure", "public")).lower().strip()
+145:     knowledge = str(source.get("knowledge_status", "known")).lower().strip()
+146:     known = knowledge in {"known", "npc_knowledge", "belief", "rumor"} and source.get("known") is not False
+147:     permitted = bool(source and person.get("id") and known and policy in {"public", "allowed", "authorized"}
+148:                      and not source.get("hidden") and not source.get("secret"))
+149:     epistemic = str(source.get("epistemic") or source.get("epistemic_status") or "npc_knowledge")
+150:     classification = "unknown" if not source or not known else "public" if permitted else "known_restricted"
+151:     if permitted and epistemic.lower() in {"rumor", "belief", "false", "disputed", "claim"}:
+152:         classification = "false_or_disputed"
+153:     return {"speaker_id": str(person.get("id") or ""), "addressee": "player",
+154:             "source_id": "npc:" + str(person.get("id") or "") + ":" + str(source.get("id") or ident),
+155:             "classification": classification, "knowledge_status": knowledge if source else "unknown",
+156:             "permission": permitted, "epistemic_status": epistemic, "operation": "disclose",
+157:             "authorized_proposition": text if permitted else "", "canonical": False,
+158:             "authorized_clue_text": str(source.get("clue_text") or text) if permitted else "",
+159:             "authorized_clue_id": source.get("clue_id") or source.get("reveals_clue"),
+160:             "provenance": "authored_npc_source", "validation": "authorized" if permitted else "source_or_policy_denied"}
+
+## game/dialogue_authority.py::topic_supports_requested_information lines 438-450; sha256=f2a8c3f4fca505e9fb845fa643f88dc79ab51a83f098e141f314f3ac57a491cb
+438: def topic_supports_requested_information(player_text: str, topic_text: str) -> bool:
+439:     """A subject mention is not an answer to a more specific request."""
+440:     kind = requested_information(player_text)
+441:     # A positive watch assertion does not establish the time of an absence.
+442:     absence = re.compile(r"\b(?:unattended|unguarded|unwatched)\b", re.I)
+443:     if absence.search(player_text) and not absence.search(topic_text):
+444:         return False
+445:     if kind == "general":
+446:         return True
+447:     pattern = _SUPPORT.get(kind)
+448:     if pattern is None:
+449:         return True
+450:     return bool(pattern.search(str(topic_text or "")))
+
+## game/api.py::_nonmutating_conversational_decision_response lines 773-921; sha256=e705b1516eae4aab4a2d5f90e9df36ccc913d6360e2a7cdebd56b9fc123f0367
+773: def _nonmutating_conversational_decision_response(
+774:     req: ChatRequest,
+775:     mode_decision: _CommunicationModeDecision,
+776:     decision: ConversationalDecision,
+777:     *,
+778:     live_outcome: dict | None = None,
+779:     bridge_meta: dict | None = None,
+780: ) -> dict:
+781:     original_text = mode_decision.original_text or req.text or ""
+782:     public_live = _public_live_interpretation(live_outcome) if isinstance(live_outcome, dict) else None
+783:     decision_public = decision.to_public_dict()
+784:     category = decision.category.value
+785:     provider_requests = []
+786:     if isinstance(public_live, dict):
+787:         provider_requests = list(public_live.get("provider_requests") or [])
+788:     gm = {
+789:         "player_facing_text": decision.player_facing_text or "No gameplay action was taken.",
+790:         "tags": ["conversational_orchestration", category.lower(), "non_mutating"],
+791:         "scene_update": None,
+792:         "activate_scene_id": None,
+793:         "new_scene_draft": None,
+794:         "world_updates": None,
+795:         "suggested_action": None,
+796:         "debug_notes": f"conversational_orchestration:{decision.reason}",
+797:     }
+798:     resolution = {
+799:         "kind": f"conversational_{category.lower()}",
+800:         "action_id": f"conversational_{category.lower()}",
+801:         "label": original_text,
+802:         "prompt": original_text,
+803:         "success": None if decision.category != ConversationalDecisionCategory.DECLINE else False,
+804:         "resolved_transition": False,
+805:         "target_scene_id": None,
+806:         "discovered_clues": [],
+807:         "world_updates": None,
+808:         "state_changes": {},
+809:         "metadata": {
+810:             "communication_mode": mode_decision.mode,
+811:             "mode_source": mode_decision.source,
+812:             "authoritative_mutation": False,
+813:             "resolver_invoked": False,
+814:             "gameplay_parser_invoked": False,
+815:             "narration_invoked": False,
+816:             "processing_outcome": f"conversational_{category.lower()}",
+817:             "conversational_decision": decision_public,
+818:             "live_chat_interpretation": public_live,
+819:             "stored_interpretation_bridge": dict(bridge_meta or {}) if isinstance(bridge_meta, dict) else None,
+820:             "provider_calls": {
+821:                 "interpretation_requests": len(provider_requests),
+822:                 "narration_requests": 0,
+823:                 "ooc_assistance_requests": 0,
+824:                 "retries": 0,
+825:             },
+826:             "performance": _performance_record(
+827:                 latency={"total_turn": _turn_elapsed_ms()},
+828:                 gm=gm,
+829:                 provider_requests=len(provider_requests),
+830:                 interpretation_usage=provider_requests,
+831:                 successful=decision.category in {ConversationalDecisionCategory.ANSWER, ConversationalDecisionCategory.PLAN},
+832:                 disposition=f"conversational_{category.lower()}",
+833:             ),
+834:         },
+835:     }
+836:     session = load_session()
+837:     context_changed = _apply_conversational_context_update(session, decision)
+838:     if decision.intent_family != "ooc_help":
+839:         from game.expressive_dialogue import attach_expression_audit, maybe_reword_continuity_line
+840:         from game.immutable_valid_response import seal_host_speech
+841: 
+842:         rewritten, expression_audit = maybe_reword_continuity_line(
+843:             gm, decision, player_text=original_text,
+844:         )
+845:         gm["player_facing_text"] = rewritten
+846:         seal_host_speech(
+847:             gm, text=gm["player_facing_text"],
+848:             source="conversational_decision:" + str(decision.reason),
+849:             speaker_id=str(decision.proposed_target or "") if decision.communication_owner == "NPC" else "",
+850:             speaker_name=next((ref.split(":", 1)[1] for ref in decision.context_references if ref.startswith("name:")), "") if decision.communication_owner == "NPC" else "GM",
+851:             resolution=resolution, player_text=original_text,
+852:             world=load_world(),
+853:         )
+854:         attach_expression_audit(gm, expression_audit)
+855:     if decision.reason == "npc_request_declined" and decision.proposed_target:
+856:         from game.dialogue_authority import remember_dialogue_commitment
+857: 
+858:         remembered = remember_dialogue_commitment(
+859:             session,
+860:             social={
+861:                 "npc_id": decision.proposed_target,
+862:                 "dialogue_authority": {
+863:                     "knowledge_posture": "withheld",
+864:                     "npc_id": decision.proposed_target,
+865:                     "subject": "reward",
+866:                     "requested_information": "promise",
+867:                 },
+868:             },
+869:             player_text=original_text,
+870:             line=gm["player_facing_text"],
+871:             turn=int(session.get("turn_counter") or 0),
+872:         )
+873:         context_changed = context_changed or remembered is not None
+874:     from game.conversational_continuity import record_delivered_exchange
+875: 
+876:     if decision.intent_family != "ooc_help" and record_delivered_exchange(
+877:         session,
+878:         player_text=original_text,
+879:         delivered_text=gm["player_facing_text"],
+880:         scene_id=str(session.get("active_scene_id") or ""),
+881:         turn=int(session.get("turn_counter") or 0),
+882:         ownership="npc" if decision.communication_owner == "NPC" else "gm",
+883:         adoption=(gm.get("metadata") or {}).get("accepted_response"),
+884:         social=_semantic_decision_social(decision),
+885:     ):
+886:         context_changed = True
+887:     if decision.intent_family != "ooc_help":
+888:         context = session.setdefault("conversational_context", {})
+889:         context["last_gm_exchange"] = {
+890:             "category": category, "owner": decision.communication_owner,
+891:             "purpose": decision.communication_purpose,
+892:             "subject": decision.primary_intention[:240],
+893:             "response": gm["player_facing_text"][:1200],
+894:             "refusal_reason": decision.reason if category == "DECLINE" else None,
+895:             "scene_id": session.get("active_scene_id"),
+896:         }
+897:         context_changed = True
+898:     if context_changed:
+899:         save_session(session)
+900:     append_log(
+901:         {
+902:             "timestamp": utc_iso_now(),
+903:             "player_input": original_text,
+904:             "player_facing_text": gm["player_facing_text"],
+905:             "request": {"chat": original_text},
+906:             "resolution": resolution,
+907:             "gm_output": gm,
+908:             "log_meta": {
+909:                 "player_input": original_text,
+910:                 "communication_mode": mode_decision.mode,
+911:                 "mode_source": mode_decision.source,
+912:                 "processing_outcome": f"conversational_{category.lower()}",
+913:                 "authoritative_mutation": False,
+914:                 "resolver_invoked": False,
+915:             },
+916:         }
+917:     )
+918:     from game.immutable_valid_response import restore_accepted_text
+919: 
+920:     restore_accepted_text(gm)
+921:     return {"ok": True, "gm_output": _strip_internal_gm_keys(gm), "resolution": resolution}
+
+## game/immutable_valid_response.py::seal_host_speech lines 1475-1606; sha256=2d45706d3778c94ba0abc8c3ab57760ccbcc089384ac4718fda785e6a8a5afdc
+1475: def seal_host_speech(
+1476:     gm: dict[str, Any], *, text: str, source: str, speaker_id: str,
+1477:     speaker_name: str, resolution: Mapping[str, Any] | None, player_text: str,
+1478:     world: Mapping[str, Any] | None = None,
+1479: ) -> dict[str, Any]:
+1480:     """Use one final-response representation for resolver and continuity speech."""
+1481:     from game.dialogue_authority import (
+1482:         CATEGORY_BOUNDED,
+1483:         CATEGORY_HISTORY,
+1484:         CATEGORY_HOST,
+1485:         CATEGORY_WORLD,
+1486:         authorize_npc_disclosure,
+1487:         consequential_addition,
+1488:         contains_protected_disclosure,
+1489:         is_bounded_expression,
+1490:         is_host_operation,
+1491:         provenance_record,
+1492:     )
+1493: 
+1494:     line = text
+1495:     social = (resolution or {}).get("social") or {}
+1496:     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), Mapping) else None
+1497:     plan = social.get("unified_semantic_plan") or {}
+1498:     if not topic and plan.get("authorized_text"):
+1499:         topic = {"id": next(iter(plan.get("selected_source_ids") or []), ""),
+1500:                  "text": str(plan["authorized_text"])}
+1501:     authority = social.get("dialogue_authority") if isinstance(social.get("dialogue_authority"), Mapping) else {}
+1502:     reuse = bool(authority.get("reuse_prior_speech") or str(source).startswith("dialogue_authority.reuse_prior_speech"))
+1503:     category = CATEGORY_HOST
+1504:     validation = "host_operation"
+1505:     proposition = ""
+1506:     source_identity = ""
+1507:     epistemic = "none"
+1508: 
+1509:     def _deny() -> None:
+1510:         nonlocal line, source, category, validation, proposition
+1511:         line = f'{speaker_name or "They"} says, "I cannot share that information."'
+1512:         source = "dialogue_authority.disclosure_denied"
+1513:         category = CATEGORY_WORLD
+1514:         validation = "source_or_policy_denied"
+1515:         proposition = ""
+1516: 
+1517:     if reuse:
+1518:         category = CATEGORY_HISTORY
+1519:         proposition = str(authority.get("authorized_proposition") or "")
+1520:         validation = "verified_history"
+1521:         if contains_protected_disclosure(line) or consequential_addition(line, proposition):
+1522:             _deny()
+1523:     else:
+1524:         topic_text = str((topic or {}).get("text") or (topic or {}).get("clue_text") or "")
+1525:         states_topic = bool(topic_text) and topic_text.lower().rstrip(".") in line.lower()
+1526:         hostish = is_host_operation(line) or is_bounded_expression(line)
+1527:         if isinstance(topic, Mapping) and topic_text and (states_topic or not hostish):
+1528:             person = next((n for n in (world or {}).get("npcs") or []
+1529:                            if isinstance(n, Mapping) and n.get("id") == speaker_id), None)
+1530:             grant = authorize_npc_disclosure(person, topic)
+1531:             if world is None:
+1532:                 # Production always passes world and re-resolves above. A pure
+1533:                 # caller must carry the host receipt, and that receipt cannot
+1534:                 # authorize protected wording.
+1535:                 receipt = topic.get("disclosure_authorization") if isinstance(topic.get("disclosure_authorization"), Mapping) else {}
+1536:                 receipt_ok = bool(
+1537:                     receipt.get("permission")
+1538:                     and receipt.get("validation") == "authorized"
+1539:                     and receipt.get("provenance") == "authored_npc_source"
+1540:                     and receipt.get("speaker_id") == speaker_id
+1541:                     and receipt.get("authorized_proposition") == topic_text
+1542:                     and not contains_protected_disclosure(topic_text)
+1543:                     and not contains_protected_disclosure(line)
+1544:                 )
+1545:                 grant = {
+1546:                     "permission": receipt_ok,
+1547:                     "source_id": receipt.get("source_id") or "",
+1548:                     "epistemic_status": receipt.get("epistemic_status") or "npc_knowledge",
+1549:                 }
+1550:             if not grant["permission"] or consequential_addition(line, topic_text):
+1551:                 _deny()
+1552:             else:
+1553:                 category = CATEGORY_WORLD
+1554:                 validation = "authorized"
+1555:                 proposition = topic_text
+1556:                 source_identity = str(grant.get("source_id") or "")
+1557:                 epistemic = str(grant.get("epistemic_status") or "npc_knowledge")
+1558:         elif is_bounded_expression(line):
+1559:             category = CATEGORY_BOUNDED
+1560:             validation = "bounded_expression"
+1561:             proposition = line
+1562:             if consequential_addition(line):
+1563:                 _deny()
+1564:         elif is_host_operation(line):
+1565:             category = CATEGORY_HOST
+1566:             validation = "host_operation"
+1567:             if contains_protected_disclosure(line) or consequential_addition(line):
+1568:                 _deny()
+1569:         elif contains_protected_disclosure(line) or consequential_addition(line):
+1570:             _deny()
+1571:         else:
+1572:             # Expression may reword an already selected host sentence. Protected
+1573:             # and consequential additions are rejected above; this is not a
+1574:             # source-less grant for a new topic.
+1575:             category = CATEGORY_HOST
+1576:             validation = "host_operation"
+1577:     candidate = str(gm.get("player_facing_text") or "")
+1578:     # A discarded draft cannot supply state effects alongside the host answer.
+1579:     for key in ("scene_update", "world_updates", "activate_scene_id", "new_scene_draft", "suggested_action"):
+1580:         gm[key] = None
+1581:     gm.pop("improvisation_proposals", None)
+1582:     gm.pop("bounded_improvisation_authority", None)
+1583:     sealed = seal_accepted_response(
+1584:         gm, text=line, provenance="authorized_host_speech", attempt=0,
+1585:         validation={"hard_valid": True, "reasons": [], "soft_flags": [],
+1586:                     "speaker": speaker_name, "addressee": "player",
+1587:                     "operation": "ask", "interaction_complete": True,
+1588:                     "contract_satisfying": True, "authority": [source]},
+1589:         contract=_contract_from_resolution(resolution), player_text=player_text,
+1590:         resolution=resolution,
+1591:     )
+1592:     record = sealed["metadata"][ACCEPTED_KEY]
+1593:     record.update(speech_adoption="AUTHORIZED_HOST_SPEECH", authorization_source=source,
+1594:                   speaker_id=speaker_id, canonical=False,
+1595:                   candidate_disposition="UNAUTHORIZED_GENERATED_CANDIDATE" if candidate and not semantic_equal(candidate, line) else "host_selected",
+1596:                   authorization_provenance=provenance_record(
+1597:                       category=category,
+1598:                       speaker_id=speaker_id,
+1599:                       operation=str(record.get("operation") or "ask"),
+1600:                       proposition=proposition,
+1601:                       source_id=source_identity,
+1602:                       epistemic_status=epistemic,
+1603:                       validation=validation,
+1604:                   ))
+1605:     seal_delivery_contract(sealed)
+1606:     return sealed

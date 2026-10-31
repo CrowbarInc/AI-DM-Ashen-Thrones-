@@ -1,0 +1,838 @@
+{
+  "campaign_id": "atgb_r1_05_controlled_live_validation",
+  "campaign_name": "ATGB-R1-05 Controlled Live Validation Continuation",
+  "campaign_date": "2026-10-19",
+  "purpose": "Three authorized live trials only; no production implementation authority.",
+  "objective_status": "B — PARTIAL; EXTERNAL REVIEW REQUIRED",
+  "executive_summary": "Two exact S08.2 trials avoid mechanical misrouting but still ask redundant confirmation with empty evidence. L4 preserves legitimate pending revision. Three successful responses, 3/6 admissions, zero retries, 6475 tokens; gameplay unchanged.",
+  "changes": {
+    "production": [
+      "None; all production entry hashes unchanged."
+    ],
+    "validation": [
+      "Three specified live trials; ten current import/mode safety tests."
+    ],
+    "tooling": [
+      "Evidence-local isolated runner using unchanged R1-04 gate/control; offline packaging script."
+    ],
+    "documentation": [
+      "Eight reports, index, canonical NEXT_SESSION."
+    ],
+    "generated_artifacts": [
+      "Complete snapshots, raw/normalized traces, transcripts, ledger/accounting, behavioral packet, verified review ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "10 import/mode safety tests passed; three live preflights ready.",
+    "broader": "Not rerun; prior 167-test R1-04 evidence preserved.",
+    "full_suite": "Not run.",
+    "runtime_validation": "L1/L2/L4 direct production chat; live interpretation in each measured step; L4 initial setup stub only.",
+    "model_runtime_boundary": "OpenAI Responses gpt-4.1-mini -> gpt-4.1-mini-2025-04-14; temperature 0/output cap 320; no SDK retries.",
+    "new_regressions": "No observed authority or revision-routing regression in these three trials.",
+    "pre_existing_failures": "L1/L2 semantic failure matches R1-03 L3; global accounting manifest stale; HTTP not covered."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "L1/L2 subject recognized but evidence empty and response redundant.",
+      "L4 model topic/recipient conflation retained; later execution untested."
+    ],
+    "pre_existing": [
+      "Dirty worktree, unattested human assessment, stale global accounting manifest and historical HTTP coverage limitations."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Review provisional B verdict and authorize only the proposed bounded offline ATGB-R1-06 investigation if desired. No follow-on work begins automatically."
+  ],
+  "missing_concepts": [
+    "No new gameplay owner or binding architecture proposed."
+  ],
+  "does_not_prove": [
+    "Broad conversational reliability, independent generalization, full ATGB benchmark score, full-suite green, later L4 execution correctness, price/billing or performance improvement."
+  ],
+  "recommended_next_step": "External review, then separately authorized offline causal investigation/contract proposal for saved L1/L2 interpretation/evidence defect against R1-03 L3. No implementation or further live calls now.",
+  "primary_report": "development/reports/atgb_r1_05_controlled_live_validation.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/atgb_r1_05"
+  ],
+  "self_contained_review_test": "All eight reports, exact transcripts, raw/normalized traces, snapshots, provider ledgers, source references and integrity hashes; ZIP CRC/source-hash/secret scan.",
+  "configuration_source": "artifacts/atgb/atgb_r1_05/review_config.json",
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/provider_usage.jsonl",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_03c/S08/transcript.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/setup.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_03/L3/trace.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/authorization_and_launches.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/baseline_comparison.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/commands.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/entry_hashes.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/integrity.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/accounting.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/after.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/before.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/configuration.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/inherited_environment_names.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/normalized.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/preflight.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/provider_usage.jsonl",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/setup.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/state_integrity.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/timing.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/traces.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L1/transcript.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/accounting.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/after.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/before.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/configuration.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/inherited_environment_names.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/normalized.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/preflight.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/provider_usage.jsonl",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/setup.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/state_integrity.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/timing.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/traces.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L2/transcript.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/accounting.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/after.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/before.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/configuration.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/inherited_environment_names.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/normalized.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/preflight.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/provider_usage.jsonl",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/setup_before.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/setup_response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/state_integrity.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/timing.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/traces.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/L4/transcript.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/NEXT_SESSION_before.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/normalized_results.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/package_review.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/accounting.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/after.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/before.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/configuration.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/inherited_environment_names.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/preflight.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/provider_usage.jsonl",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/setup.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/state_integrity.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/timing.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview/traces.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/accounting.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/after.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/before.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/configuration.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/inherited_environment_names.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/preflight.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/provider_usage.jsonl",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/request_payload.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/response.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/setup.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/state_integrity.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/timing.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/payload_preview_corrected/traces.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/provider_accounting.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/readiness_tests.xml",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/repository_status_after.txt",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/repository_status_before.txt",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/atgb/atgb_r1_05/run_trial.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_01_s08_2_causal_trace.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_02/08_final_verdict.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_03/05_failure_localization.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_04/08_final_verdict.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/01_execution_readiness.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/02_live_trial_results.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/03_execution_traces.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/04_historical_comparison.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/05_failure_localization.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/06_authority_and_state_integrity.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/07_provider_accounting.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "development/reports/atgb_r1_05/08_final_verdict.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/live_chat_interpretation.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/provider_budget.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/fixtures/pr_ef_r4_holdouts.json",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_atgb_r1_04_readiness.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/atgb/readiness.py",
+      "role": "execution_evidence",
+      "why": "R1-05 direct execution or read-only comparison provenance.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

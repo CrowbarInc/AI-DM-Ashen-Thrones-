@@ -1,0 +1,73 @@
+{
+  "family": "s10",
+  "architecture": "C",
+  "source_ids": [
+    "s10"
+  ],
+  "records": [
+    {
+      "fact": {
+        "fact_id": "f1",
+        "source_id": "s10",
+        "relationship": "guard",
+        "roles": [
+          {
+            "name": "agent",
+            "value": "Two sentries",
+            "evidence": "Two sentries guard the eastern bridge"
+          },
+          {
+            "name": "object",
+            "value": "the eastern bridge",
+            "evidence": "Two sentries guard the eastern bridge"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Two sentries guard the eastern bridge"
+      },
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    },
+    {
+      "fact": {
+        "fact_id": "f2",
+        "source_id": "s10",
+        "relationship": "post_status",
+        "roles": [
+          {
+            "name": "object",
+            "value": "Their shift schedule",
+            "evidence": "Their shift schedule is not posted"
+          }
+        ],
+        "unknown_roles": [],
+        "qualifiers": [
+          "not posted"
+        ],
+        "negated": false,
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "evidence_span": "Their shift schedule is not posted"
+      },
+      "validation": {
+        "level": "SOURCE_ANCHORED",
+        "reasons": [],
+        "semantic_support": "unestablished"
+      }
+    }
+  ],
+  "provider_call": true,
+  "error": null,
+  "semantic_support": "unestablished"
+}

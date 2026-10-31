@@ -1,0 +1,104 @@
+{
+  "evidence_scope": "structural_only",
+  "semantic_behavioral_evidence": false,
+  "baseline_nonhttp": {
+    "tests": 314,
+    "passed": 314,
+    "failures": [],
+    "errors": [],
+    "skipped": []
+  },
+  "after_nonhttp": {
+    "tests": 332,
+    "passed": 332,
+    "failures": [],
+    "errors": [],
+    "skipped": []
+  },
+  "focused": {
+    "tests": 198,
+    "passed": 198,
+    "failures": [],
+    "errors": [],
+    "skipped": []
+  },
+  "environment_blocked_HTTP": [
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[explicit_named_ask]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[explicit_role_ask]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[unique_pronoun]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[ambiguous_one_of_them_two_npcs]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[ambiguous_one_of_them_one_npc]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[ambiguous_either_guard]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[unresolved_someone]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[distinguishing_fact]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[no_invented_distinction]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[gm_about_npc]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[direct_ask_conflicting_owner]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[npc_followup]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[gm_clarification_of_npc]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[correction_pending]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[correction_already_executed]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[correction_nothing_pending]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[confirm_single_candidate]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[confirm_without_proposal]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[confirm_among_many]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[withdrawal]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[mixed_ask_then_leave]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[conditional_gate]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[incidental_glance]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[provider_no_target]",
+    "tests/test_pr_ef_r4_authorization.py::test_frozen_authorization_holdout[save_load_pending]",
+    "tests/test_pr_ef_r4_authorization.py::test_third_person_question_is_not_an_active_npc_continuation",
+    "tests/test_pr_ef_r4_authorization.py::test_provider_id_does_not_override_unresolved_lexical_addressee",
+    "tests/test_pr_br_continuation16_interaction_completion.py::test_raw_chat_stub_covers_completion_switch_and_leakage",
+    "tests/test_pr_br_continuation22_commitment.py::test_raw_chat_stub_covers_commitment_and_addressee",
+    "tests/test_pr_ck_ordinary_resolver_selection.py::test_chat_search_can_discover_the_authored_desk_clue",
+    "tests/test_pr_ck_ordinary_resolver_selection.py::test_chat_investigation_of_an_unclued_object_discovers_nothing",
+    "tests/test_pr_ck_ordinary_resolver_selection.py::test_action_and_chat_observation_are_not_social",
+    "tests/test_pr_ef_r2_social_authority.py::test_original_captured_failures_preserve_authority[2]",
+    "tests/test_pr_ef_r2_social_authority.py::test_original_captured_failures_preserve_authority[10]",
+    "tests/test_pr_ef_r2_social_authority.py::test_original_captured_failures_preserve_authority[14]",
+    "tests/test_directed_social_routing.py::test_chat_hailing_runner_with_can_you_question_routes_social",
+    "tests/test_directed_social_routing.py::test_chat_runner_binding_followup_can_you_stays_social",
+    "tests/test_directed_social_routing.py::test_chat_quoted_role_address_question_routes_social",
+    "tests/test_pr_br_continuation25_semantic_ownership.py::test_chat_turns_keep_one_contract_and_do_not_execute_uncommitted_travel"
+  ],
+  "new_product_regressions_observed": [],
+  "preexisting_product_failures_reproduced_in_completed_slice": [],
+  "historically_reported_not_reproduced_here": [
+    "test_pr_br_continuation22_commitment.py::test_raw_chat_stub_covers_commitment_and_addressee",
+    "test_directed_social_routing.py::test_chat_hailing_runner_with_can_you_question_routes_social"
+  ],
+  "incomplete_attempts": [
+    {
+      "log": "baseline_regression.txt",
+      "classification": "indeterminate",
+      "detail": "Interrupted before traceback/summary; default temp-root run showed setup errors and failures. No failure-node/root-cause classification possible from partial log."
+    },
+    {
+      "log": "baseline_regression_retry.txt",
+      "classification": "environment-blocked",
+      "detail": "Local-temp .venv 3.12.0 execution stalled after collection before first TestClient case completed; interrupted."
+    },
+    {
+      "log": "baseline_bundled.txt",
+      "classification": "environment-blocked",
+      "detail": "Bundled 3.12.14 reproduced the same pre-change stall with local temp; interrupted."
+    }
+  ],
+  "harness_corrections": [
+    {
+      "logs": [
+        "focused.txt",
+        "focused_final.txt"
+      ],
+      "classification": "implementation: new test fixture errors, corrected",
+      "detail": "S05 minimal session omitted active_interaction_kind; adding it to S02 as well caused unintended NPC routing. Final fixture matches R2-03 per scenario; no production change or weakened expected output."
+    }
+  ],
+  "limitations": [
+    "No full-suite result",
+    "No completed HTTP transport result",
+    "No live model selection or authority result"
+  ]
+}

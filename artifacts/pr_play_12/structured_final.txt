@@ -1,0 +1,12 @@
+.......................................................F.....            [100%]
+================================== FAILURES ===================================
+___________ test_raw_chat_stub_preserves_valid_and_contains_invalid ___________
+tests\test_pr_br_continuation18_immutable_boundary.py:561: in test_raw_chat_stub_preserves_valid_and_contains_invalid
+    assert "can't say what the stew costs" in visible
+E   assert "can't say what the stew costs" in 'Tavern Runner mutters, "Word is, hot stew and rumors for coin."'
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] social_frontier_gate_tavern_runner_stew
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] lead_frontier_gate_old_trading_crossroads
+=========================== short test summary info ===========================
+FAILED tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid

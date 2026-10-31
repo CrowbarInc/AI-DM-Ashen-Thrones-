@@ -2,7 +2,7 @@
   "advisory_only": true,
   "recommended_investigation_order": [
     {
-      "item": "selected_speaker_id",
+      "item": "game/output_sanitizer.py",
       "rank": 1,
       "risk": "medium"
     }
@@ -10,58 +10,83 @@
   "report_only": true,
   "risk_by_level": {
     "high": [],
-    "low": [],
-    "medium": [
+    "low": [
       {
-        "category": "",
-        "field_path": "selected_speaker_id",
-        "field_source": "protected",
-        "item": "selected_speaker_id",
-        "item_kind": "field",
-        "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
-        "risk_level": "medium",
-        "severity": "low",
-        "trend_direction": "up"
-      },
-      {
-        "category": "",
-        "field_path": "selected_speaker_id",
-        "field_source": "protected",
-        "item": "speaker_drift",
+        "category": "sanitizer",
+        "field_path": "scaffold_leakage",
+        "field_source": "supporting",
+        "item": "semantic_drift",
         "item_kind": "owner",
         "longitudinal_frequency": 1,
-        "owner_drift_bucket": "speaker_drift",
+        "owner_drift_bucket": "semantic_drift",
+        "risk_level": "low",
+        "severity": "critical",
+        "trend_direction": "stable"
+      }
+    ],
+    "medium": [
+      {
+        "category": "sanitizer",
+        "field_path": "scaffold_leakage",
+        "field_source": "protected",
+        "item": "game/output_sanitizer.py",
+        "item_kind": "investigation_target",
+        "longitudinal_frequency": 1,
+        "owner_drift_bucket": "semantic_drift",
         "risk_level": "medium",
-        "severity": "low",
-        "trend_direction": "up"
+        "severity": "critical",
+        "trend_direction": "stable"
+      },
+      {
+        "category": "sanitizer",
+        "field_path": "scaffold_leakage",
+        "field_source": "protected",
+        "item": "scaffold_leakage",
+        "item_kind": "field",
+        "longitudinal_frequency": 1,
+        "owner_drift_bucket": "semantic_drift",
+        "risk_level": "medium",
+        "severity": "critical",
+        "trend_direction": "stable"
       }
     ]
   },
   "risk_signals": [
     {
-      "category": "",
-      "field_path": "selected_speaker_id",
+      "category": "sanitizer",
+      "field_path": "scaffold_leakage",
       "field_source": "protected",
-      "item": "selected_speaker_id",
+      "item": "scaffold_leakage",
       "item_kind": "field",
       "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
+      "owner_drift_bucket": "semantic_drift",
       "risk_level": "medium",
-      "severity": "low",
-      "trend_direction": "up"
+      "severity": "critical",
+      "trend_direction": "stable"
     },
     {
-      "category": "",
-      "field_path": "selected_speaker_id",
-      "field_source": "protected",
-      "item": "speaker_drift",
+      "category": "sanitizer",
+      "field_path": "scaffold_leakage",
+      "field_source": "supporting",
+      "item": "semantic_drift",
       "item_kind": "owner",
       "longitudinal_frequency": 1,
-      "owner_drift_bucket": "speaker_drift",
+      "owner_drift_bucket": "semantic_drift",
+      "risk_level": "low",
+      "severity": "critical",
+      "trend_direction": "stable"
+    },
+    {
+      "category": "sanitizer",
+      "field_path": "scaffold_leakage",
+      "field_source": "protected",
+      "item": "game/output_sanitizer.py",
+      "item_kind": "investigation_target",
+      "longitudinal_frequency": 1,
+      "owner_drift_bucket": "semantic_drift",
       "risk_level": "medium",
-      "severity": "low",
-      "trend_direction": "up"
+      "severity": "critical",
+      "trend_direction": "stable"
     }
   ],
   "schema_version": 1,
@@ -212,18 +237,24 @@
   },
   "top_risk_fields": [
     {
-      "item": "selected_speaker_id",
+      "item": "scaffold_leakage",
       "rank": 1,
       "risk": "medium"
     }
   ],
-  "top_risk_investigation_targets": [],
+  "top_risk_investigation_targets": [
+    {
+      "item": "game/output_sanitizer.py",
+      "rank": 1,
+      "risk": "medium"
+    }
+  ],
   "top_risk_owners": [
     {
-      "item": "speaker_drift",
+      "item": "semantic_drift",
       "rank": 1,
-      "risk": "medium"
+      "risk": "low"
     }
   ],
-  "total_signals": 2
+  "total_signals": 3
 }

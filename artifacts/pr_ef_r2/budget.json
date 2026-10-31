@@ -1,0 +1,14 @@
+{
+  "maximum_requests": 140,
+  "maximum_input_tokens": 1100000,
+  "maximum_output_tokens": 50000,
+  "diagnosis_availability_reserve": 2,
+  "final_validation_reserved_requests": 65,
+  "original_ceiling": {
+    "requests": 110,
+    "input_tokens": 650000,
+    "output_tokens": 40000
+  },
+  "reason": "Measured strict social prompts consume about 24k tokens each. Reserve final-code continuous run and independent fresh production semantic evaluation; request budget remains bounded.",
+  "final_reservation_note": "129 calls used after 33 fresh production holdouts. Reserve at most 11 additional calls to repeat the three original expressions on exact-final code; no further production edits."
+}

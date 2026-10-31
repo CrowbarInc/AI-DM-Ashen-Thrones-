@@ -1,0 +1,136 @@
+{
+  "campaign_id": "review_handoff_automation_20260918",
+  "campaign_name": "Review Handoff Automation",
+  "campaign_date": "2026-09-18",
+  "purpose": "Centralize campaign review into one predictable Markdown surface and one portable provenance-preserving ZIP.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "Codex added an explicit-source review-handoff generator, stable CURRENT_REVIEW files, provenance and omission manifests, sensitive-file and size safeguards, deterministic ZIP output, history copies, and bundle-only review verification. It demonstrates the workflow by consuming the existing Validation Evidence Standard packets without changing their canonical evidence.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "No validator, evaluator authority, semantic gate, threshold, or calibration case changed.",
+      "Consumed standardized behavioral evidence without rewriting it."
+    ],
+    "tooling": [
+      "Added config-driven CURRENT_REVIEW.md, REVIEW_MANIFEST.json, and CURRENT_REVIEW.zip generation.",
+      "Added provenance hashes, deduplication, explicit omission reasons, size warnings, sensitive-path safeguards, deterministic ZIP construction, and optional handoff history."
+    ],
+    "documentation": [
+      "Added the permanent Review Handoff Standard and pre-implementation handoff inventory."
+    ],
+    "generated_artifacts": [
+      "Generated the stable current review summary, manifest, ZIP, and campaign history copy."
+    ]
+  },
+  "testing": {
+    "focused": "11 review-handoff tests passed.",
+    "broader": "70 review-handoff/evidence/reactive/calibration/playability tests passed; one existing Starlette TestClient deprecation warning.",
+    "full_suite": "49 failures, matching the known pre-existing red baseline count and unrelated failure families.",
+    "runtime_validation": "No gameplay rerun was performed. The campaign consumed preserved runtime evidence.",
+    "model_runtime_boundary": "Packaged behavioral evidence came from prior in-process POST /api/chat runs using the configured live AI-GM runtime.",
+    "new_regressions": "No campaign-specific regression was found in focused or broader verification.",
+    "pre_existing_failures": "Attribution, BW/BZ closeout, replay/projection, ownership/import governance, final-emission, social-lead, scene-fallback, and validation-layer separation failures remain."
+  },
+  "decisions_requiring_human_review": [
+    "Decide in a later calibration campaign whether the concise refusal 'Not something I can say here.' should become an accepted calibration boundary.",
+    "Decide in a later calibration campaign whether visible-notice clarification redirected through NPC ignorance should become a negative calibration case.",
+    "Keep the grammatically degraded notice response ambiguous unless further evidence supports a stable policy."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "The evidence packet exposes one probable evaluator miss, one probable false positive, and one ambiguous generated response. They were preserved, not repaired."
+    ],
+    "pre_existing": [
+      "The repository full suite remains red with 49 failures in previously known unrelated families."
+    ]
+  },
+  "missing_concepts": [
+    "Player-to-GM communication versus character speech/action authority.",
+    "Generalized ambiguity and clarification behavior."
+  ],
+  "does_not_prove": [
+    "Broad gameplay quality or that the AI-GM generally works.",
+    "Rendered UI usability or browser gameplay.",
+    "Long-session coherence, hidden-state consistency, or broad human realism.",
+    "That human review has resolved either evaluator disagreement."
+  ],
+  "recommended_next_step": "Conduct a separate human-reviewed calibration campaign for the two preserved evaluator disagreements. Do not begin gameplay repair before that decision.",
+  "primary_report": "docs/review_handoff_standard.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/reactive_adversarial",
+    "artifacts/validation_evidence/retrospective_playability"
+  ],
+  "supporting_files": [
+    {
+      "path": "docs/review_handoff_inventory.md",
+      "role": "inventory",
+      "why": "Documents existing campaign output conventions and the canonical/generated boundary.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "consumed_standard",
+      "why": "Defines the behavioral evidence contract consumed by the handoff demonstration.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "docs/validation_evidence_producer_inventory.md",
+      "role": "inventory",
+      "why": "Documents existing evidence producers and their actual guarantees.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/reactive_adversarial_simulated_players.md",
+      "role": "source_campaign_report",
+      "why": "Explains the source reactive campaign architecture, findings, and limits.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/reactive_adversarial_players/human_review.json",
+      "role": "human_review_record",
+      "why": "Preserves human classifications behind evaluator disagreements and ambiguity.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/validation_evidence.py",
+      "role": "implementation",
+      "why": "Defines the shared evidence-packet contract and deterministic selection behavior.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/build_validation_evidence_packets.py",
+      "role": "implementation",
+      "why": "Shows canonical evidence adapters and generation workflow.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_validation_evidence_standard.py",
+      "role": "focused_tests",
+      "why": "Defines the evidence-standard regression contract.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/build_review_handoff.py",
+      "role": "handoff_implementation",
+      "why": "Implements review selection, safeguards, summary rendering, manifest provenance, and ZIP generation.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_review_handoff.py",
+      "role": "handoff_tests",
+      "why": "Defines the review-handoff safety, provenance, determinism, and self-contained-review contract.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "PASS: using only an extracted CURRENT_REVIEW.zip, the focused test answered campaign, change, non-change, tests, baseline, exact player/GM evidence, disagreements, ambiguity, decisions, limits, provenance, and next-step questions."
+}

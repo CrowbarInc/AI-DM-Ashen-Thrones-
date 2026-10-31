@@ -1,0 +1,52 @@
+{
+  "case_id": "s11q4",
+  "family": "s11",
+  "partition": "holdout",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "4f4a85e1d22ba150f4f3913a9539399ed6fbab868f2035a5c1f684e044a31eed",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "the north road"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s11"
+    ],
+    "answered_arguments": [
+      "What is it called"
+    ],
+    "missing_arguments": [
+      "Who named it"
+    ],
+    "conflict": false,
+    "reason": "The name of the road is provided as 'the north road' according to NPC knowledge, but there is no information about who named it."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

@@ -1,0 +1,637 @@
+{
+  "ok": true,
+  "preflight": {
+    "ok": true,
+    "baseline": {
+      "version": "frontier-gate-v1",
+      "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+      "source": "data/validation/atgb/baselines/frontier-gate-v1"
+    },
+    "checks": [
+      {
+        "check": "isolated_data_dir",
+        "ok": true
+      },
+      {
+        "check": "baseline_version",
+        "ok": true
+      },
+      {
+        "check": "starting_location",
+        "ok": true
+      },
+      {
+        "check": "starting_scene_present",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:campaign.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:character.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:conditions.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/frontier_gate.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/market_quarter.json",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:scenes/old_milestone.json",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_guard:location",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_guard:topic:watch_command",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_serjeant:location",
+        "ok": true
+      },
+      {
+        "check": "npc:gate_serjeant:topic:route_change",
+        "ok": true
+      },
+      {
+        "check": "npc:tavern_runner:location",
+        "ok": true
+      },
+      {
+        "check": "npc:tavern_runner:topic:patrol_rumor",
+        "ok": true
+      },
+      {
+        "check": "authored_baseline:world.json",
+        "ok": true
+      },
+      {
+        "check": "fresh_runtime_and_empty_history",
+        "ok": true
+      }
+    ],
+    "critical_failures": [],
+    "runtime_violations": [],
+    "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+    "unverified_conditions": [
+      "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+      "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+      "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+      "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+    ]
+  },
+  "reset_invoked": true,
+  "reset": {
+    "campaign_run_id": "bb4f3ec20d0fc1a69a73a2d7",
+    "session_id": "bb4f3ec20d0fc1a69a73a2d7"
+  },
+  "context_establishment": "fresh_campaign_reset",
+  "context_limitation": null,
+  "scene_after_reset": {
+    "scene_id": "frontier_gate",
+    "discovered_clues": [],
+    "world_flag_names": [],
+    "world_state_flag_names": [],
+    "interlocutor": null,
+    "transcript_entries": 0
+  },
+  "model_configuration": {
+    "default_model_name": "gpt-4.1-mini",
+    "high_precision_model_name": "gpt-4.1-mini",
+    "retry_escalation_model_name": "gpt-4.1-mini",
+    "model_routing_enabled": true,
+    "sampling": "uncontrolled",
+    "api_key_recorded": false
+  },
+  "turns": [
+    {
+      "response_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 104
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": false,
+      "resolution_kind": "question",
+      "communication_mode": "unavailable",
+      "conversational_decision": "unavailable",
+      "addressee": "unavailable",
+      "authoritative_mutation": "unavailable",
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S03.1",
+      "request": {
+        "text": "Tavern runner, what's the rumor you're selling?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": null,
+          "transcript_entries": 0
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 1
+        }
+      }
+    },
+    {
+      "response_text": "Tavern Runner says, \"I don't know who told me that.\"",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1489
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": false,
+      "resolution_kind": "question",
+      "communication_mode": "unavailable",
+      "conversational_decision": "unavailable",
+      "addressee": "unavailable",
+      "authoritative_mutation": "unavailable",
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S03.2",
+      "request": {
+        "text": "Who told you that?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 1
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 2
+        }
+      }
+    },
+    {
+      "response_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 1957
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 1954
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 200
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_clarify",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "CLARIFY",
+        "primary_intention": "If I ask you again later, will you still tell me that same thing?",
+        "intent_family": "clarification",
+        "incidental_context": [],
+        "proposed_operation": "ASK",
+        "proposed_target": "tavern_runner",
+        "proposed_record": null,
+        "missing_information": [
+          "interlocutor"
+        ],
+        "context_references": [],
+        "requires_authoritative_execution": false,
+        "reason": "unresolved_addressee",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "context_update": {
+          "conversational_context": {
+            "pending_clarification": {
+              "kind": "ambiguous_addressee",
+              "operation": "ASK",
+              "status": "pending",
+              "scene_id": "frontier_gate",
+              "original_text": "If I ask you again later, will you still tell me that same thing?",
+              "choices": [
+                {
+                  "entity_id": "gate_guard",
+                  "label": "Gate Guard"
+                },
+                {
+                  "entity_id": "gate_serjeant",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "entity_id": "tavern_runner",
+                  "label": "Tavern Runner"
+                }
+              ],
+              "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+              "target_resolution": "unresolved"
+            },
+            "pending_intention": {
+              "kind": "ambiguous_addressee",
+              "operation": "ASK",
+              "status": "pending",
+              "scene_id": "frontier_gate",
+              "original_text": "If I ask you again later, will you still tell me that same thing?",
+              "choices": [
+                {
+                  "entity_id": "gate_guard",
+                  "label": "Gate Guard"
+                },
+                {
+                  "entity_id": "gate_serjeant",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "entity_id": "tavern_runner",
+                  "label": "Tavern Runner"
+                }
+              ],
+              "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+              "target_resolution": "unresolved"
+            }
+          }
+        },
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION",
+        "authorization": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "unresolved",
+          "target_provenance": "provider_candidate_only",
+          "target_id": null,
+          "candidate_target_ids": [
+            "tavern_runner"
+          ],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "authority_provenance": "communication_decision",
+          "conflict_status": "unresolved",
+          "conflict_details": {},
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "gate_guard",
+              "label": "Gate Guard"
+            },
+            {
+              "entity_id": "gate_serjeant",
+              "label": "Gate Serjeant"
+            },
+            {
+              "entity_id": "tavern_runner",
+              "label": "Tavern Runner"
+            }
+          ],
+          "direct_address": true,
+          "player_text": "If I ask you again later, will you still tell me that same thing?"
+        }
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S03.3",
+      "request": {
+        "text": "If I ask you again later, will you still tell me that same thing?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 2
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 3
+        }
+      }
+    },
+    {
+      "response_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 89
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "input_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "output_tokens": {
+          "status": "host_reported_null",
+          "value": null
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": "unavailable",
+          "narration_requests": "unavailable",
+          "retries": "unavailable"
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": false,
+      "resolution_kind": "question",
+      "communication_mode": "unavailable",
+      "conversational_decision": "unavailable",
+      "addressee": "unavailable",
+      "authoritative_mutation": "unavailable",
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S03.4",
+      "request": {
+        "text": "Earlier the notice said they took a track past the crates. Is that the same story you heard?",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 3
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [
+            "faction_house_verevin_agenda_advanced",
+            "faction_ash_cowl_agenda_advanced",
+            "faction_ordo_pyric_agenda_advanced"
+          ],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 4
+        }
+      }
+    },
+    {
+      "response_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "response_origin": "live_provider",
+      "simulated": false,
+      "telemetry": {
+        "elapsed_ms": {
+          "status": "recorded",
+          "value": 2532
+        },
+        "provider_call_count": {
+          "status": "recorded",
+          "value": 1
+        },
+        "input_tokens": {
+          "status": "recorded",
+          "value": 2144
+        },
+        "output_tokens": {
+          "status": "recorded",
+          "value": 233
+        },
+        "retry_count": {
+          "status": "recorded",
+          "value": 0
+        },
+        "estimated_cost": {
+          "status": "unavailable",
+          "value": null
+        },
+        "provider_call_detail": {
+          "interpretation_requests": 1,
+          "narration_requests": 0,
+          "retries": 0
+        }
+      },
+      "provider_calls_disabled": false,
+      "provider_request_sent": true,
+      "resolution_kind": "conversational_answer",
+      "communication_mode": "AUTO",
+      "conversational_decision": {
+        "category": "ANSWER",
+        "primary_intention": "No, I don't want a new rumor. I want to know if those two accounts match.",
+        "intent_family": "gm_communication",
+        "incidental_context": [],
+        "proposed_operation": null,
+        "proposed_target": null,
+        "proposed_record": null,
+        "missing_information": [],
+        "context_references": [
+          "npc:tavern_runner:patrol_rumor",
+          "visible:0",
+          "visible:1"
+        ],
+        "requires_authoritative_execution": false,
+        "reason": "communication_before_execution",
+        "confidence": null,
+        "ambiguity": null,
+        "player_facing_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+        "context_update": null,
+        "intent_modality": "informational",
+        "secondary_intentions": [],
+        "execution_policy": "answer_only",
+        "communication_owner": "GM",
+        "communication_purpose": "CLARIFICATION",
+        "authorization": null
+      },
+      "addressee": "unavailable",
+      "authoritative_mutation": false,
+      "capture_status": "captured",
+      "error": null,
+      "turn_id": "S03.5",
+      "request": {
+        "text": "No, I don't want a new rumor. I want to know if those two accounts match.",
+        "ui_mode": "player"
+      },
+      "http_status": 200,
+      "state_evidence": {
+        "before": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [
+            "faction_house_verevin_agenda_advanced",
+            "faction_ash_cowl_agenda_advanced",
+            "faction_ordo_pyric_agenda_advanced"
+          ],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 4
+        },
+        "after": {
+          "scene_id": "frontier_gate",
+          "discovered_clues": [
+            "The runner heard the patrol vanished near muddy footprints northwest of the crates.",
+            "Follow the missing patrol rumor"
+          ],
+          "world_flag_names": [],
+          "world_state_flag_names": [
+            "faction_house_verevin_agenda_advanced",
+            "faction_ash_cowl_agenda_advanced",
+            "faction_ordo_pyric_agenda_advanced"
+          ],
+          "interlocutor": "tavern_runner",
+          "transcript_entries": 5
+        }
+      }
+    }
+  ],
+  "stop_reason": null,
+  "unexpected_provider_activity": false
+}

@@ -1,0 +1,2887 @@
+[
+  {
+    "source": "artifacts/atgb/atgb_r1_05/L1",
+    "player_input": "I meant the people, not the weather.",
+    "prior_context": [
+      {
+        "timestamp": "2026-10-18T22:32:28.398987Z",
+        "player_input": "What's in front of me right now?",
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "request": {
+          "chat": "What's in front of me right now?"
+        },
+        "resolution": {
+          "kind": "conversational_answer",
+          "action_id": "conversational_answer",
+          "label": "What's in front of me right now?",
+          "prompt": "What's in front of me right now?",
+          "success": null,
+          "resolved_transition": false,
+          "target_scene_id": null,
+          "discovered_clues": [],
+          "world_updates": null,
+          "state_changes": {},
+          "metadata": {
+            "communication_mode": "AUTO",
+            "mode_source": "automatic",
+            "authoritative_mutation": false,
+            "resolver_invoked": false,
+            "gameplay_parser_invoked": false,
+            "narration_invoked": false,
+            "processing_outcome": "conversational_answer",
+            "conversational_decision": {
+              "category": "ANSWER",
+              "primary_intention": "What's in front of me right now?",
+              "intent_family": "gm_communication",
+              "incidental_context": [],
+              "proposed_operation": null,
+              "proposed_target": null,
+              "proposed_record": null,
+              "missing_information": [],
+              "context_references": [
+                "scene",
+                "visible:0",
+                "visible:1",
+                "visible:2",
+                "visible:3",
+                "visible:4"
+              ],
+              "requires_authoritative_execution": false,
+              "reason": "communication_before_execution",
+              "confidence": null,
+              "ambiguity": null,
+              "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+              "context_update": null,
+              "intent_modality": "informational",
+              "secondary_intentions": [],
+              "execution_policy": "answer_only",
+              "communication_owner": "GM",
+              "communication_purpose": "QUESTION",
+              "authorization": null
+            },
+            "live_chat_interpretation": {
+              "status": "accepted",
+              "reason": "eligible_for_bridge",
+              "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+              "model_communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Description of what is in front of the character right now\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\",\"visible:3\",\"visible:4\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Request a description of the immediate surroundings in front of the character.\"},\"asserted_premises\":[{\"text\":\"The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"A detailed description of what is directly in front of the character.\"}],\"action_components\":[{\"order\":1,\"description\":\"Perceive the scene in front of the character to identify visible elements.\",\"target_ref\":null,\"operation_class\":\"PERCEIVE\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+              "provider_requests": [
+                {
+                  "event": "completed",
+                  "version": "ATGB-03B-1",
+                  "run_id": "d169c2b5ce82427588985d937db29973",
+                  "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+                  "purpose": "interpretation",
+                  "owner": "live_chat_interpretation.request_interpretation",
+                  "configured_model": "gpt-4.1-mini",
+                  "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+                  "time": "2026-10-18T22:32:28.371928+00:00",
+                  "sent": true,
+                  "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+                  "model": "gpt-4.1-mini-2025-04-14",
+                  "input_tokens": 1793,
+                  "output_tokens": 234,
+                  "total_tokens": 2027,
+                  "usage_consistent": true,
+                  "refusal": null,
+                  "completion_status": "completed",
+                  "dispatch_attempted": true,
+                  "latency_ms": 2315.867
+                }
+              ],
+              "record": {
+                "communication_mode": "IN_WORLD_ACTION",
+                "interpretation_status": "INTERPRETED",
+                "player_intent": {
+                  "summary": "Request a description of the immediate surroundings in front of the character."
+                },
+                "asserted_premises": [
+                  {
+                    "text": "The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.",
+                    "canon_status": "PLAYER_CLAIM"
+                  }
+                ],
+                "requested_outcomes": [
+                  {
+                    "text": "A detailed description of what is directly in front of the character.",
+                    "adjudication_status": "UNADJUDICATED"
+                  }
+                ],
+                "action_components": [
+                  {
+                    "order": 1,
+                    "description": "Perceive the scene in front of the character to identify visible elements.",
+                    "target_ref": null,
+                    "operation_class": "PERCEIVE"
+                  }
+                ],
+                "references": {
+                  "permitted_entity_ids": [
+                    "gate_guard",
+                    "gate_serjeant",
+                    "notice_board",
+                    "tavern_runner"
+                  ],
+                  "unresolved_references": []
+                },
+                "clarification_question": "",
+                "correction": {
+                  "subject": "NONE",
+                  "note": ""
+                },
+                "communication": {
+                  "recipient": "GM",
+                  "purpose": "QUESTION",
+                  "subject": "Description of what is in front of the character right now",
+                  "evidence_refs": [
+                    "scene",
+                    "visible:0",
+                    "visible:1",
+                    "visible:2",
+                    "visible:3",
+                    "visible:4"
+                  ]
+                },
+                "incidental_context": [],
+                "reference_reconciliation": {
+                  "annotations": [],
+                  "addressee": null,
+                  "operation": "PERCEIVE"
+                },
+                "public_evidence": {
+                  "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+                  "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                  "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                  "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+                  "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+                  "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+                }
+              }
+            },
+            "stored_interpretation_bridge": null,
+            "provider_calls": {
+              "interpretation_requests": 1,
+              "narration_requests": 0,
+              "ooc_assistance_requests": 0,
+              "retries": 0
+            },
+            "performance": {
+              "elapsed_ms": 3254,
+              "interpretation_ms": null,
+              "resolution_ms": null,
+              "narration_ms": null,
+              "validation_ms": null,
+              "retry_ms": null,
+              "provider_call_count": 1,
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "retry_count": 0,
+              "retry_reason": null,
+              "disposition": "conversational_answer",
+              "successful": true,
+              "provider_narration_skipped": false
+            }
+          }
+        },
+        "gm_output": {
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "tags": [
+            "conversational_orchestration",
+            "answer",
+            "non_mutating"
+          ],
+          "scene_update": null,
+          "activate_scene_id": null,
+          "new_scene_draft": null,
+          "world_updates": null,
+          "suggested_action": null,
+          "debug_notes": "conversational_orchestration:communication_before_execution",
+          "metadata": {
+            "accepted_response": {
+              "immutable": true,
+              "text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+              "provenance": "authorized_host_speech",
+              "attempt": 0,
+              "player_input": "What's in front of me right now?",
+              "turn_identity": "",
+              "speaker": "GM",
+              "addressee": "player",
+              "target": "",
+              "operation": "ask",
+              "authority_result": "accepted",
+              "grounding_result": "not_a_replacement_trigger",
+              "hard_validation": {
+                "hard_valid": true,
+                "reasons": [],
+                "soft_flags": [],
+                "authority": [
+                  "conversational_decision:communication_before_execution"
+                ],
+                "gm_resolution_decision_audit": null
+              },
+              "interaction_completion": true,
+              "contract_satisfying": true,
+              "contract": {
+                "contract_id": "",
+                "operation": "",
+                "interlocutor_id": "",
+                "expected_resolution": ""
+              },
+              "resolution_kind": "conversational_answer",
+              "generation_attempts": 0,
+              "skipped_mutators": [],
+              "subject": "",
+              "authorization_source": "conversational_decision:communication_before_execution",
+              "adoption_status": "candidate_accepted",
+              "integrity_digest": "10097d3d980b2b8b6ae85129f20125cd2636adca07cb862a81fec50c6a0fa5fb",
+              "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+              "speaker_id": "",
+              "canonical": false,
+              "candidate_disposition": "host_selected",
+              "authorization_provenance": {
+                "authority_category": "host_operation",
+                "speaker_id": "",
+                "addressee": "player",
+                "operation": "ask",
+                "authorized_proposition": "",
+                "source_id": "",
+                "epistemic_status": "none",
+                "validation": "host_operation",
+                "provenance_id": "2608602d877553f8",
+                "policy_version": "pr-eg-r6-r1-r1"
+              }
+            },
+            "emission_debug": {
+              "accepted_response_provenance": "authorized_host_speech",
+              "generation_attempts": 0,
+              "legacy_emission_authority": false,
+              "semantic_degradation": false,
+              "semantic_degradation_reasons": [],
+              "resolution_contract_semantic": {
+                "status": "satisfied",
+                "reasons": [],
+                "preserved": true
+              }
+            }
+          },
+          "_final_delivery_seal": "{\"addressee\":\"player\",\"adoption_status\":\"candidate_accepted\",\"attempt\":0,\"authority_result\":\"accepted\",\"authorization_provenance\":{\"addressee\":\"player\",\"authority_category\":\"host_operation\",\"authorized_proposition\":\"\",\"epistemic_status\":\"none\",\"operation\":\"ask\",\"policy_version\":\"pr-eg-r6-r1-r1\",\"provenance_id\":\"2608602d877553f8\",\"source_id\":\"\",\"speaker_id\":\"\",\"validation\":\"host_operation\"},\"authorization_source\":\"conversational_decision:communication_before_execution\",\"candidate_disposition\":\"host_selected\",\"canonical\":false,\"contract\":{\"contract_id\":\"\",\"expected_resolution\":\"\",\"interlocutor_id\":\"\",\"operation\":\"\"},\"contract_satisfying\":true,\"generation_attempts\":0,\"grounding_result\":\"not_a_replacement_trigger\",\"hard_validation\":{\"authority\":[\"conversational_decision:communication_before_execution\"],\"gm_resolution_decision_audit\":null,\"hard_valid\":true,\"reasons\":[],\"soft_flags\":[]},\"immutable\":true,\"interaction_completion\":true,\"operation\":\"ask\",\"player_input\":\"What's in front of me right now?\",\"provenance\":\"authorized_host_speech\",\"resolution_kind\":\"conversational_answer\",\"speaker\":\"GM\",\"speaker_id\":\"\",\"speech_adoption\":\"AUTHORIZED_HOST_SPEECH\",\"subject\":\"\",\"target\":\"\",\"text\":\"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\",\"turn_identity\":\"\"}"
+        },
+        "log_meta": {
+          "player_input": "What's in front of me right now?",
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "processing_outcome": "conversational_answer",
+          "authoritative_mutation": false,
+          "resolver_invoked": false
+        }
+      }
+    ],
+    "evidence_candidates": {
+      "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+      "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+    },
+    "arms": {
+      "recorded_output": {
+        "generated_request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question or request from available conversation context using the corrected meaning. Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. With insufficient evidence, state the limitation or continue with established information only. Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+            },
+            {
+              "role": "user",
+              "content": "Utterance: I meant the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+            }
+          ],
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "communication": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "recipient": {
+                    "type": "string",
+                    "enum": [
+                      "GM",
+                      "NPC",
+                      "CHARACTER",
+                      "SESSION",
+                      "MIXED",
+                      "AMBIGUOUS"
+                    ],
+                    "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "QUESTION",
+                      "DESCRIPTION",
+                      "EXPLANATION",
+                      "RECALL",
+                      "RULES",
+                      "ACTION",
+                      "OBSERVATION",
+                      "CORRECTION",
+                      "WITHDRAWAL",
+                      "CONFIRMATION",
+                      "TENTATIVE",
+                      "CLARIFICATION"
+                    ],
+                    "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "recipient",
+                  "purpose",
+                  "subject",
+                  "evidence_refs"
+                ]
+              },
+              "communication_mode": {
+                "enum": [
+                  "CLARIFICATION",
+                  "IN_WORLD_ACTION",
+                  "OTHER",
+                  "OUT_OF_CHARACTER_CORRECTION",
+                  "RULES_QUESTION"
+                ]
+              },
+              "interpretation_status": {
+                "enum": [
+                  "ABSTAIN",
+                  "CLARIFICATION_REQUIRED",
+                  "INTERPRETED",
+                  "UNSUPPORTED_REQUEST"
+                ]
+              },
+              "player_intent": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "summary"
+                ]
+              },
+              "asserted_premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "requested_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "action_components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "target_ref": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "operation_class": {
+                      "enum": [
+                        "ASK",
+                        "ATTACK",
+                        "CANON_DECLARATION",
+                        "DICE_OVERRIDE",
+                        "FOLLOW",
+                        "HIDDEN_INFORMATION_REQUEST",
+                        "HP_ASSIGNMENT",
+                        "INSPECT",
+                        "INVENTORY_GRANT",
+                        "MOVE",
+                        "NPC_COMMITMENT",
+                        "PERCEIVE",
+                        "RETCON",
+                        "SOCIAL_SIGNAL",
+                        "STEALTH_MODE_TOGGLE",
+                        "TIME_CONTROL",
+                        "UNSUPPORTED_MECHANIC",
+                        "USE_VISIBLE_OBJECT"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "order",
+                    "description",
+                    "target_ref",
+                    "operation_class"
+                  ]
+                }
+              },
+              "references": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "permitted_entity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "unresolved_references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_entity_ids",
+                  "unresolved_references"
+                ]
+              },
+              "clarification_question": {
+                "type": "string"
+              },
+              "correction": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "COMMITTED_ACTION",
+                      "INTENTION",
+                      "NONE",
+                      "REFERENT"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "note"
+                ]
+              }
+            },
+            "required": [
+              "action_components",
+              "asserted_premises",
+              "clarification_question",
+              "communication_mode",
+              "correction",
+              "interpretation_status",
+              "player_intent",
+              "references",
+              "requested_outcomes",
+              "communication"
+            ]
+          }
+        },
+        "interpretation_result": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "player_facing_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+          "tags": [
+            "interpretation_clarification",
+            "non_mutating"
+          ],
+          "record": {
+            "communication_mode": "CLARIFICATION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Clarify that 'the people' were meant, not 'the weather'."
+            },
+            "asserted_premises": [
+              {
+                "text": "Previous mention or confusion about 'the weather'.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "Current utterance corrects that to mean 'the people'.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [],
+              "unresolved_references": []
+            },
+            "clarification_question": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+            "correction": {
+              "subject": "INTENTION",
+              "note": "Correcting referent from 'weather' to 'people'."
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CLARIFICATION",
+              "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+              "evidence_refs": []
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {}
+          },
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"GM\", \"purpose\": \"CLARIFICATION\", \"subject\": \"Clarification of referent 'the people' versus 'the weather' in previous utterance\", \"evidence_refs\": []}, \"communication_mode\": \"CLARIFICATION\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Clarify that 'the people' were meant, not 'the weather'.\"}, \"asserted_premises\": [{\"text\": \"Previous mention or confusion about 'the weather'.\"}, {\"text\": \"Current utterance corrects that to mean 'the people'.\"}], \"requested_outcomes\": [{\"text\": \"GM understands that the player refers to 'the people' rather than 'the weather'.\"}], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?\", \"correction\": {\"subject\": \"INTENTION\", \"note\": \"Correcting referent from 'weather' to 'people'.\"}}",
+          "provider_requests": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "eligibility_disposition": "NEEDS_CLARIFICATION",
+          "model_communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED"
+        },
+        "decision": {
+          "category": "CLARIFY",
+          "primary_intention": "I meant the people, not the weather.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Do you mean to clarify that your previous reference was to the people present rather than the weather conditions?",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        }
+      },
+      "substituted_interpretation": {
+        "generated_request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question or request from available conversation context using the corrected meaning. Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. With insufficient evidence, state the limitation or continue with established information only. Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+            },
+            {
+              "role": "user",
+              "content": "Utterance: I meant the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+            }
+          ],
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "communication": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "recipient": {
+                    "type": "string",
+                    "enum": [
+                      "GM",
+                      "NPC",
+                      "CHARACTER",
+                      "SESSION",
+                      "MIXED",
+                      "AMBIGUOUS"
+                    ],
+                    "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "QUESTION",
+                      "DESCRIPTION",
+                      "EXPLANATION",
+                      "RECALL",
+                      "RULES",
+                      "ACTION",
+                      "OBSERVATION",
+                      "CORRECTION",
+                      "WITHDRAWAL",
+                      "CONFIRMATION",
+                      "TENTATIVE",
+                      "CLARIFICATION"
+                    ],
+                    "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "recipient",
+                  "purpose",
+                  "subject",
+                  "evidence_refs"
+                ]
+              },
+              "communication_mode": {
+                "enum": [
+                  "CLARIFICATION",
+                  "IN_WORLD_ACTION",
+                  "OTHER",
+                  "OUT_OF_CHARACTER_CORRECTION",
+                  "RULES_QUESTION"
+                ]
+              },
+              "interpretation_status": {
+                "enum": [
+                  "ABSTAIN",
+                  "CLARIFICATION_REQUIRED",
+                  "INTERPRETED",
+                  "UNSUPPORTED_REQUEST"
+                ]
+              },
+              "player_intent": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "summary"
+                ]
+              },
+              "asserted_premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "requested_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "action_components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "target_ref": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "operation_class": {
+                      "enum": [
+                        "ASK",
+                        "ATTACK",
+                        "CANON_DECLARATION",
+                        "DICE_OVERRIDE",
+                        "FOLLOW",
+                        "HIDDEN_INFORMATION_REQUEST",
+                        "HP_ASSIGNMENT",
+                        "INSPECT",
+                        "INVENTORY_GRANT",
+                        "MOVE",
+                        "NPC_COMMITMENT",
+                        "PERCEIVE",
+                        "RETCON",
+                        "SOCIAL_SIGNAL",
+                        "STEALTH_MODE_TOGGLE",
+                        "TIME_CONTROL",
+                        "UNSUPPORTED_MECHANIC",
+                        "USE_VISIBLE_OBJECT"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "order",
+                    "description",
+                    "target_ref",
+                    "operation_class"
+                  ]
+                }
+              },
+              "references": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "permitted_entity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "unresolved_references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_entity_ids",
+                  "unresolved_references"
+                ]
+              },
+              "clarification_question": {
+                "type": "string"
+              },
+              "correction": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "COMMITTED_ACTION",
+                      "INTENTION",
+                      "NONE",
+                      "REFERENT"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "note"
+                ]
+              }
+            },
+            "required": [
+              "action_components",
+              "asserted_premises",
+              "clarification_question",
+              "communication_mode",
+              "correction",
+              "interpretation_status",
+              "player_intent",
+              "references",
+              "requested_outcomes",
+              "communication"
+            ]
+          }
+        },
+        "interpretation_result": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "player_facing_text": "I need a clearer action or target before I change anything in the scene.",
+          "tags": [
+            "interpretation_clarification",
+            "non_mutating"
+          ],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Clarify that 'the people' were meant, not 'the weather'."
+            },
+            "asserted_premises": [
+              {
+                "text": "Previous mention or confusion about 'the weather'.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "Current utterance corrects that to mean 'the people'.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "GM understands that the player refers to 'the people' rather than 'the weather'.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "REFERENT",
+              "note": "Resolved conversational subject"
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CORRECTION",
+              "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+              "evidence_refs": [
+                "visible:1",
+                "visible:2",
+                "visible:3"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {
+              "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+              "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+              "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line."
+            }
+          },
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"GM\", \"purpose\": \"CORRECTION\", \"subject\": \"Clarification of referent 'the people' versus 'the weather' in previous utterance\", \"evidence_refs\": [\"visible:1\", \"visible:2\", \"visible:3\"]}, \"communication_mode\": \"OTHER\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Clarify that 'the people' were meant, not 'the weather'.\"}, \"asserted_premises\": [{\"text\": \"Previous mention or confusion about 'the weather'.\"}, {\"text\": \"Current utterance corrects that to mean 'the people'.\"}], \"requested_outcomes\": [{\"text\": \"GM understands that the player refers to 'the people' rather than 'the weather'.\"}], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"REFERENT\", \"note\": \"Resolved conversational subject\"}}",
+          "provider_requests": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED"
+        },
+        "decision": {
+          "category": "ANSWER",
+          "primary_intention": "I meant the people, not the weather.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:1",
+            "visible:2",
+            "visible:3"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Understood. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CORRECTION",
+          "authorization": null
+        }
+      }
+    },
+    "input_state_unchanged": true
+  },
+  {
+    "source": "artifacts/atgb/atgb_r1_05/L2",
+    "player_input": "I meant the people, not the weather.",
+    "prior_context": [
+      {
+        "timestamp": "2026-10-18T22:32:28.398987Z",
+        "player_input": "What's in front of me right now?",
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "request": {
+          "chat": "What's in front of me right now?"
+        },
+        "resolution": {
+          "kind": "conversational_answer",
+          "action_id": "conversational_answer",
+          "label": "What's in front of me right now?",
+          "prompt": "What's in front of me right now?",
+          "success": null,
+          "resolved_transition": false,
+          "target_scene_id": null,
+          "discovered_clues": [],
+          "world_updates": null,
+          "state_changes": {},
+          "metadata": {
+            "communication_mode": "AUTO",
+            "mode_source": "automatic",
+            "authoritative_mutation": false,
+            "resolver_invoked": false,
+            "gameplay_parser_invoked": false,
+            "narration_invoked": false,
+            "processing_outcome": "conversational_answer",
+            "conversational_decision": {
+              "category": "ANSWER",
+              "primary_intention": "What's in front of me right now?",
+              "intent_family": "gm_communication",
+              "incidental_context": [],
+              "proposed_operation": null,
+              "proposed_target": null,
+              "proposed_record": null,
+              "missing_information": [],
+              "context_references": [
+                "scene",
+                "visible:0",
+                "visible:1",
+                "visible:2",
+                "visible:3",
+                "visible:4"
+              ],
+              "requires_authoritative_execution": false,
+              "reason": "communication_before_execution",
+              "confidence": null,
+              "ambiguity": null,
+              "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+              "context_update": null,
+              "intent_modality": "informational",
+              "secondary_intentions": [],
+              "execution_policy": "answer_only",
+              "communication_owner": "GM",
+              "communication_purpose": "QUESTION",
+              "authorization": null
+            },
+            "live_chat_interpretation": {
+              "status": "accepted",
+              "reason": "eligible_for_bridge",
+              "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+              "model_communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Description of what is in front of the character right now\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\",\"visible:3\",\"visible:4\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Request a description of the immediate surroundings in front of the character.\"},\"asserted_premises\":[{\"text\":\"The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"A detailed description of what is directly in front of the character.\"}],\"action_components\":[{\"order\":1,\"description\":\"Perceive the scene in front of the character to identify visible elements.\",\"target_ref\":null,\"operation_class\":\"PERCEIVE\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+              "provider_requests": [
+                {
+                  "event": "completed",
+                  "version": "ATGB-03B-1",
+                  "run_id": "d169c2b5ce82427588985d937db29973",
+                  "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+                  "purpose": "interpretation",
+                  "owner": "live_chat_interpretation.request_interpretation",
+                  "configured_model": "gpt-4.1-mini",
+                  "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+                  "time": "2026-10-18T22:32:28.371928+00:00",
+                  "sent": true,
+                  "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+                  "model": "gpt-4.1-mini-2025-04-14",
+                  "input_tokens": 1793,
+                  "output_tokens": 234,
+                  "total_tokens": 2027,
+                  "usage_consistent": true,
+                  "refusal": null,
+                  "completion_status": "completed",
+                  "dispatch_attempted": true,
+                  "latency_ms": 2315.867
+                }
+              ],
+              "record": {
+                "communication_mode": "IN_WORLD_ACTION",
+                "interpretation_status": "INTERPRETED",
+                "player_intent": {
+                  "summary": "Request a description of the immediate surroundings in front of the character."
+                },
+                "asserted_premises": [
+                  {
+                    "text": "The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.",
+                    "canon_status": "PLAYER_CLAIM"
+                  }
+                ],
+                "requested_outcomes": [
+                  {
+                    "text": "A detailed description of what is directly in front of the character.",
+                    "adjudication_status": "UNADJUDICATED"
+                  }
+                ],
+                "action_components": [
+                  {
+                    "order": 1,
+                    "description": "Perceive the scene in front of the character to identify visible elements.",
+                    "target_ref": null,
+                    "operation_class": "PERCEIVE"
+                  }
+                ],
+                "references": {
+                  "permitted_entity_ids": [
+                    "gate_guard",
+                    "gate_serjeant",
+                    "notice_board",
+                    "tavern_runner"
+                  ],
+                  "unresolved_references": []
+                },
+                "clarification_question": "",
+                "correction": {
+                  "subject": "NONE",
+                  "note": ""
+                },
+                "communication": {
+                  "recipient": "GM",
+                  "purpose": "QUESTION",
+                  "subject": "Description of what is in front of the character right now",
+                  "evidence_refs": [
+                    "scene",
+                    "visible:0",
+                    "visible:1",
+                    "visible:2",
+                    "visible:3",
+                    "visible:4"
+                  ]
+                },
+                "incidental_context": [],
+                "reference_reconciliation": {
+                  "annotations": [],
+                  "addressee": null,
+                  "operation": "PERCEIVE"
+                },
+                "public_evidence": {
+                  "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+                  "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                  "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                  "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+                  "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+                  "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+                }
+              }
+            },
+            "stored_interpretation_bridge": null,
+            "provider_calls": {
+              "interpretation_requests": 1,
+              "narration_requests": 0,
+              "ooc_assistance_requests": 0,
+              "retries": 0
+            },
+            "performance": {
+              "elapsed_ms": 3254,
+              "interpretation_ms": null,
+              "resolution_ms": null,
+              "narration_ms": null,
+              "validation_ms": null,
+              "retry_ms": null,
+              "provider_call_count": 1,
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "retry_count": 0,
+              "retry_reason": null,
+              "disposition": "conversational_answer",
+              "successful": true,
+              "provider_narration_skipped": false
+            }
+          }
+        },
+        "gm_output": {
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "tags": [
+            "conversational_orchestration",
+            "answer",
+            "non_mutating"
+          ],
+          "scene_update": null,
+          "activate_scene_id": null,
+          "new_scene_draft": null,
+          "world_updates": null,
+          "suggested_action": null,
+          "debug_notes": "conversational_orchestration:communication_before_execution",
+          "metadata": {
+            "accepted_response": {
+              "immutable": true,
+              "text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+              "provenance": "authorized_host_speech",
+              "attempt": 0,
+              "player_input": "What's in front of me right now?",
+              "turn_identity": "",
+              "speaker": "GM",
+              "addressee": "player",
+              "target": "",
+              "operation": "ask",
+              "authority_result": "accepted",
+              "grounding_result": "not_a_replacement_trigger",
+              "hard_validation": {
+                "hard_valid": true,
+                "reasons": [],
+                "soft_flags": [],
+                "authority": [
+                  "conversational_decision:communication_before_execution"
+                ],
+                "gm_resolution_decision_audit": null
+              },
+              "interaction_completion": true,
+              "contract_satisfying": true,
+              "contract": {
+                "contract_id": "",
+                "operation": "",
+                "interlocutor_id": "",
+                "expected_resolution": ""
+              },
+              "resolution_kind": "conversational_answer",
+              "generation_attempts": 0,
+              "skipped_mutators": [],
+              "subject": "",
+              "authorization_source": "conversational_decision:communication_before_execution",
+              "adoption_status": "candidate_accepted",
+              "integrity_digest": "10097d3d980b2b8b6ae85129f20125cd2636adca07cb862a81fec50c6a0fa5fb",
+              "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+              "speaker_id": "",
+              "canonical": false,
+              "candidate_disposition": "host_selected",
+              "authorization_provenance": {
+                "authority_category": "host_operation",
+                "speaker_id": "",
+                "addressee": "player",
+                "operation": "ask",
+                "authorized_proposition": "",
+                "source_id": "",
+                "epistemic_status": "none",
+                "validation": "host_operation",
+                "provenance_id": "2608602d877553f8",
+                "policy_version": "pr-eg-r6-r1-r1"
+              }
+            },
+            "emission_debug": {
+              "accepted_response_provenance": "authorized_host_speech",
+              "generation_attempts": 0,
+              "legacy_emission_authority": false,
+              "semantic_degradation": false,
+              "semantic_degradation_reasons": [],
+              "resolution_contract_semantic": {
+                "status": "satisfied",
+                "reasons": [],
+                "preserved": true
+              }
+            }
+          },
+          "_final_delivery_seal": "{\"addressee\":\"player\",\"adoption_status\":\"candidate_accepted\",\"attempt\":0,\"authority_result\":\"accepted\",\"authorization_provenance\":{\"addressee\":\"player\",\"authority_category\":\"host_operation\",\"authorized_proposition\":\"\",\"epistemic_status\":\"none\",\"operation\":\"ask\",\"policy_version\":\"pr-eg-r6-r1-r1\",\"provenance_id\":\"2608602d877553f8\",\"source_id\":\"\",\"speaker_id\":\"\",\"validation\":\"host_operation\"},\"authorization_source\":\"conversational_decision:communication_before_execution\",\"candidate_disposition\":\"host_selected\",\"canonical\":false,\"contract\":{\"contract_id\":\"\",\"expected_resolution\":\"\",\"interlocutor_id\":\"\",\"operation\":\"\"},\"contract_satisfying\":true,\"generation_attempts\":0,\"grounding_result\":\"not_a_replacement_trigger\",\"hard_validation\":{\"authority\":[\"conversational_decision:communication_before_execution\"],\"gm_resolution_decision_audit\":null,\"hard_valid\":true,\"reasons\":[],\"soft_flags\":[]},\"immutable\":true,\"interaction_completion\":true,\"operation\":\"ask\",\"player_input\":\"What's in front of me right now?\",\"provenance\":\"authorized_host_speech\",\"resolution_kind\":\"conversational_answer\",\"speaker\":\"GM\",\"speaker_id\":\"\",\"speech_adoption\":\"AUTHORIZED_HOST_SPEECH\",\"subject\":\"\",\"target\":\"\",\"text\":\"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\",\"turn_identity\":\"\"}"
+        },
+        "log_meta": {
+          "player_input": "What's in front of me right now?",
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "processing_outcome": "conversational_answer",
+          "authoritative_mutation": false,
+          "resolver_invoked": false
+        }
+      }
+    ],
+    "evidence_candidates": {
+      "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+      "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+    },
+    "arms": {
+      "recorded_output": {
+        "generated_request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question or request from available conversation context using the corrected meaning. Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. With insufficient evidence, state the limitation or continue with established information only. Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+            },
+            {
+              "role": "user",
+              "content": "Utterance: I meant the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+            }
+          ],
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "communication": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "recipient": {
+                    "type": "string",
+                    "enum": [
+                      "GM",
+                      "NPC",
+                      "CHARACTER",
+                      "SESSION",
+                      "MIXED",
+                      "AMBIGUOUS"
+                    ],
+                    "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "QUESTION",
+                      "DESCRIPTION",
+                      "EXPLANATION",
+                      "RECALL",
+                      "RULES",
+                      "ACTION",
+                      "OBSERVATION",
+                      "CORRECTION",
+                      "WITHDRAWAL",
+                      "CONFIRMATION",
+                      "TENTATIVE",
+                      "CLARIFICATION"
+                    ],
+                    "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "recipient",
+                  "purpose",
+                  "subject",
+                  "evidence_refs"
+                ]
+              },
+              "communication_mode": {
+                "enum": [
+                  "CLARIFICATION",
+                  "IN_WORLD_ACTION",
+                  "OTHER",
+                  "OUT_OF_CHARACTER_CORRECTION",
+                  "RULES_QUESTION"
+                ]
+              },
+              "interpretation_status": {
+                "enum": [
+                  "ABSTAIN",
+                  "CLARIFICATION_REQUIRED",
+                  "INTERPRETED",
+                  "UNSUPPORTED_REQUEST"
+                ]
+              },
+              "player_intent": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "summary"
+                ]
+              },
+              "asserted_premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "requested_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "action_components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "target_ref": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "operation_class": {
+                      "enum": [
+                        "ASK",
+                        "ATTACK",
+                        "CANON_DECLARATION",
+                        "DICE_OVERRIDE",
+                        "FOLLOW",
+                        "HIDDEN_INFORMATION_REQUEST",
+                        "HP_ASSIGNMENT",
+                        "INSPECT",
+                        "INVENTORY_GRANT",
+                        "MOVE",
+                        "NPC_COMMITMENT",
+                        "PERCEIVE",
+                        "RETCON",
+                        "SOCIAL_SIGNAL",
+                        "STEALTH_MODE_TOGGLE",
+                        "TIME_CONTROL",
+                        "UNSUPPORTED_MECHANIC",
+                        "USE_VISIBLE_OBJECT"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "order",
+                    "description",
+                    "target_ref",
+                    "operation_class"
+                  ]
+                }
+              },
+              "references": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "permitted_entity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "unresolved_references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_entity_ids",
+                  "unresolved_references"
+                ]
+              },
+              "clarification_question": {
+                "type": "string"
+              },
+              "correction": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "COMMITTED_ACTION",
+                      "INTENTION",
+                      "NONE",
+                      "REFERENT"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "note"
+                ]
+              }
+            },
+            "required": [
+              "action_components",
+              "asserted_premises",
+              "clarification_question",
+              "communication_mode",
+              "correction",
+              "interpretation_status",
+              "player_intent",
+              "references",
+              "requested_outcomes",
+              "communication"
+            ]
+          }
+        },
+        "interpretation_result": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "player_facing_text": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+          "tags": [
+            "interpretation_clarification",
+            "non_mutating"
+          ],
+          "record": {
+            "communication_mode": "CLARIFICATION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Clarify that 'the people' were meant, not 'the weather'."
+            },
+            "asserted_premises": [
+              {
+                "text": "Previous mention or implication involved 'the weather'.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "Speaker now corrects to mean 'the people'.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "GM understands that the speaker refers to 'the people' rather than 'the weather'.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [],
+              "unresolved_references": []
+            },
+            "clarification_question": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+            "correction": {
+              "subject": "INTENTION",
+              "note": "Correcting referent from 'weather' to 'people'."
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CLARIFICATION",
+              "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+              "evidence_refs": []
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {}
+          },
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"GM\", \"purpose\": \"CLARIFICATION\", \"subject\": \"Clarification of referent 'the people' versus 'the weather' in previous utterance\", \"evidence_refs\": []}, \"communication_mode\": \"CLARIFICATION\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Clarify that 'the people' were meant, not 'the weather'.\"}, \"asserted_premises\": [{\"text\": \"Previous mention or implication involved 'the weather'.\"}, {\"text\": \"Speaker now corrects to mean 'the people'.\"}], \"requested_outcomes\": [{\"text\": \"GM understands that the speaker refers to 'the people' rather than 'the weather'.\"}], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?\", \"correction\": {\"subject\": \"INTENTION\", \"note\": \"Correcting referent from 'weather' to 'people'.\"}}",
+          "provider_requests": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "eligibility_disposition": "NEEDS_CLARIFICATION",
+          "model_communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED"
+        },
+        "decision": {
+          "category": "CLARIFY",
+          "primary_intention": "I meant the people, not the weather.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Do you mean to clarify that your previous statement referred to the people present rather than the weather conditions?",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        }
+      },
+      "substituted_interpretation": {
+        "generated_request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question or request from available conversation context using the corrected meaning. Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. With insufficient evidence, state the limitation or continue with established information only. Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+            },
+            {
+              "role": "user",
+              "content": "Utterance: I meant the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+            }
+          ],
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "communication": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "recipient": {
+                    "type": "string",
+                    "enum": [
+                      "GM",
+                      "NPC",
+                      "CHARACTER",
+                      "SESSION",
+                      "MIXED",
+                      "AMBIGUOUS"
+                    ],
+                    "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "QUESTION",
+                      "DESCRIPTION",
+                      "EXPLANATION",
+                      "RECALL",
+                      "RULES",
+                      "ACTION",
+                      "OBSERVATION",
+                      "CORRECTION",
+                      "WITHDRAWAL",
+                      "CONFIRMATION",
+                      "TENTATIVE",
+                      "CLARIFICATION"
+                    ],
+                    "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "recipient",
+                  "purpose",
+                  "subject",
+                  "evidence_refs"
+                ]
+              },
+              "communication_mode": {
+                "enum": [
+                  "CLARIFICATION",
+                  "IN_WORLD_ACTION",
+                  "OTHER",
+                  "OUT_OF_CHARACTER_CORRECTION",
+                  "RULES_QUESTION"
+                ]
+              },
+              "interpretation_status": {
+                "enum": [
+                  "ABSTAIN",
+                  "CLARIFICATION_REQUIRED",
+                  "INTERPRETED",
+                  "UNSUPPORTED_REQUEST"
+                ]
+              },
+              "player_intent": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "summary"
+                ]
+              },
+              "asserted_premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "requested_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "action_components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "target_ref": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "operation_class": {
+                      "enum": [
+                        "ASK",
+                        "ATTACK",
+                        "CANON_DECLARATION",
+                        "DICE_OVERRIDE",
+                        "FOLLOW",
+                        "HIDDEN_INFORMATION_REQUEST",
+                        "HP_ASSIGNMENT",
+                        "INSPECT",
+                        "INVENTORY_GRANT",
+                        "MOVE",
+                        "NPC_COMMITMENT",
+                        "PERCEIVE",
+                        "RETCON",
+                        "SOCIAL_SIGNAL",
+                        "STEALTH_MODE_TOGGLE",
+                        "TIME_CONTROL",
+                        "UNSUPPORTED_MECHANIC",
+                        "USE_VISIBLE_OBJECT"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "order",
+                    "description",
+                    "target_ref",
+                    "operation_class"
+                  ]
+                }
+              },
+              "references": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "permitted_entity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "unresolved_references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_entity_ids",
+                  "unresolved_references"
+                ]
+              },
+              "clarification_question": {
+                "type": "string"
+              },
+              "correction": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "COMMITTED_ACTION",
+                      "INTENTION",
+                      "NONE",
+                      "REFERENT"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "note"
+                ]
+              }
+            },
+            "required": [
+              "action_components",
+              "asserted_premises",
+              "clarification_question",
+              "communication_mode",
+              "correction",
+              "interpretation_status",
+              "player_intent",
+              "references",
+              "requested_outcomes",
+              "communication"
+            ]
+          }
+        },
+        "interpretation_result": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "player_facing_text": "I need a clearer action or target before I change anything in the scene.",
+          "tags": [
+            "interpretation_clarification",
+            "non_mutating"
+          ],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Clarify that 'the people' were meant, not 'the weather'."
+            },
+            "asserted_premises": [
+              {
+                "text": "Previous mention or implication involved 'the weather'.",
+                "canon_status": "PLAYER_CLAIM"
+              },
+              {
+                "text": "Speaker now corrects to mean 'the people'.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "GM understands that the speaker refers to 'the people' rather than 'the weather'.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "REFERENT",
+              "note": "Resolved conversational subject"
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CORRECTION",
+              "subject": "Clarification of referent 'the people' versus 'the weather' in previous utterance",
+              "evidence_refs": [
+                "visible:1",
+                "visible:2",
+                "visible:3"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {
+              "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+              "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+              "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line."
+            }
+          },
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"GM\", \"purpose\": \"CORRECTION\", \"subject\": \"Clarification of referent 'the people' versus 'the weather' in previous utterance\", \"evidence_refs\": [\"visible:1\", \"visible:2\", \"visible:3\"]}, \"communication_mode\": \"OTHER\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Clarify that 'the people' were meant, not 'the weather'.\"}, \"asserted_premises\": [{\"text\": \"Previous mention or implication involved 'the weather'.\"}, {\"text\": \"Speaker now corrects to mean 'the people'.\"}], \"requested_outcomes\": [{\"text\": \"GM understands that the speaker refers to 'the people' rather than 'the weather'.\"}], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"REFERENT\", \"note\": \"Resolved conversational subject\"}}",
+          "provider_requests": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED"
+        },
+        "decision": {
+          "category": "ANSWER",
+          "primary_intention": "I meant the people, not the weather.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:1",
+            "visible:2",
+            "visible:3"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Understood. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CORRECTION",
+          "authorization": null
+        }
+      }
+    },
+    "input_state_unchanged": true
+  },
+  {
+    "source": "artifacts/atgb/atgb_r1_03/L3",
+    "player_input": "No, I was asking about the people, not the weather.",
+    "prior_context": [
+      {
+        "timestamp": "2026-10-18T22:32:28.398987Z",
+        "player_input": "What's in front of me right now?",
+        "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "request": {
+          "chat": "What's in front of me right now?"
+        },
+        "resolution": {
+          "kind": "conversational_answer",
+          "action_id": "conversational_answer",
+          "label": "What's in front of me right now?",
+          "prompt": "What's in front of me right now?",
+          "success": null,
+          "resolved_transition": false,
+          "target_scene_id": null,
+          "discovered_clues": [],
+          "world_updates": null,
+          "state_changes": {},
+          "metadata": {
+            "communication_mode": "AUTO",
+            "mode_source": "automatic",
+            "authoritative_mutation": false,
+            "resolver_invoked": false,
+            "gameplay_parser_invoked": false,
+            "narration_invoked": false,
+            "processing_outcome": "conversational_answer",
+            "conversational_decision": {
+              "category": "ANSWER",
+              "primary_intention": "What's in front of me right now?",
+              "intent_family": "gm_communication",
+              "incidental_context": [],
+              "proposed_operation": null,
+              "proposed_target": null,
+              "proposed_record": null,
+              "missing_information": [],
+              "context_references": [
+                "scene",
+                "visible:0",
+                "visible:1",
+                "visible:2",
+                "visible:3",
+                "visible:4"
+              ],
+              "requires_authoritative_execution": false,
+              "reason": "communication_before_execution",
+              "confidence": null,
+              "ambiguity": null,
+              "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+              "context_update": null,
+              "intent_modality": "informational",
+              "secondary_intentions": [],
+              "execution_policy": "answer_only",
+              "communication_owner": "GM",
+              "communication_purpose": "QUESTION",
+              "authorization": null
+            },
+            "live_chat_interpretation": {
+              "status": "accepted",
+              "reason": "eligible_for_bridge",
+              "eligibility_disposition": "ELIGIBLE_FOR_VALIDATION",
+              "model_communication_mode": "IN_WORLD_ACTION",
+              "interpretation_status": "INTERPRETED",
+              "raw_interpretation": "{\"communication\":{\"recipient\":\"GM\",\"purpose\":\"QUESTION\",\"subject\":\"Description of what is in front of the character right now\",\"evidence_refs\":[\"scene\",\"visible:0\",\"visible:1\",\"visible:2\",\"visible:3\",\"visible:4\"]},\"communication_mode\":\"IN_WORLD_ACTION\",\"interpretation_status\":\"INTERPRETED\",\"player_intent\":{\"summary\":\"Request a description of the immediate surroundings in front of the character.\"},\"asserted_premises\":[{\"text\":\"The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.\"}],\"requested_outcomes\":[{\"text\":\"A detailed description of what is directly in front of the character.\"}],\"action_components\":[{\"order\":1,\"description\":\"Perceive the scene in front of the character to identify visible elements.\",\"target_ref\":null,\"operation_class\":\"PERCEIVE\"}],\"references\":{\"permitted_entity_ids\":[\"gate_guard\",\"gate_serjeant\",\"notice_board\",\"tavern_runner\"],\"unresolved_references\":[]},\"clarification_question\":\"\",\"correction\":{\"subject\":\"NONE\",\"note\":\"\"}}",
+              "provider_requests": [
+                {
+                  "event": "completed",
+                  "version": "ATGB-03B-1",
+                  "run_id": "d169c2b5ce82427588985d937db29973",
+                  "attempt_id": "e1fd40e6a51b462f9f4b6bf4ca183f64",
+                  "purpose": "interpretation",
+                  "owner": "live_chat_interpretation.request_interpretation",
+                  "configured_model": "gpt-4.1-mini",
+                  "admitted_at": "2026-10-18T22:32:25.174794+00:00",
+                  "time": "2026-10-18T22:32:28.371928+00:00",
+                  "sent": true,
+                  "request_id": "resp_0813c15dfd6bc218006ad548fa82c487d2aedbf8bb3b8843d4",
+                  "model": "gpt-4.1-mini-2025-04-14",
+                  "input_tokens": 1793,
+                  "output_tokens": 234,
+                  "total_tokens": 2027,
+                  "usage_consistent": true,
+                  "refusal": null,
+                  "completion_status": "completed",
+                  "dispatch_attempted": true,
+                  "latency_ms": 2315.867
+                }
+              ],
+              "record": {
+                "communication_mode": "IN_WORLD_ACTION",
+                "interpretation_status": "INTERPRETED",
+                "player_intent": {
+                  "summary": "Request a description of the immediate surroundings in front of the character."
+                },
+                "asserted_premises": [
+                  {
+                    "text": "The character is at Cinderwatch Gate District with rain, choke traffic, a notice board, and gate watch pressure framing the missing patrol inquiry.",
+                    "canon_status": "PLAYER_CLAIM"
+                  }
+                ],
+                "requested_outcomes": [
+                  {
+                    "text": "A detailed description of what is directly in front of the character.",
+                    "adjudication_status": "UNADJUDICATED"
+                  }
+                ],
+                "action_components": [
+                  {
+                    "order": 1,
+                    "description": "Perceive the scene in front of the character to identify visible elements.",
+                    "target_ref": null,
+                    "operation_class": "PERCEIVE"
+                  }
+                ],
+                "references": {
+                  "permitted_entity_ids": [
+                    "gate_guard",
+                    "gate_serjeant",
+                    "notice_board",
+                    "tavern_runner"
+                  ],
+                  "unresolved_references": []
+                },
+                "clarification_question": "",
+                "correction": {
+                  "subject": "NONE",
+                  "note": ""
+                },
+                "communication": {
+                  "recipient": "GM",
+                  "purpose": "QUESTION",
+                  "subject": "Description of what is in front of the character right now",
+                  "evidence_refs": [
+                    "scene",
+                    "visible:0",
+                    "visible:1",
+                    "visible:2",
+                    "visible:3",
+                    "visible:4"
+                  ]
+                },
+                "incidental_context": [],
+                "reference_reconciliation": {
+                  "annotations": [],
+                  "addressee": null,
+                  "operation": "PERCEIVE"
+                },
+                "public_evidence": {
+                  "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+                  "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+                  "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+                  "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+                  "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+                  "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point."
+                }
+              }
+            },
+            "stored_interpretation_bridge": null,
+            "provider_calls": {
+              "interpretation_requests": 1,
+              "narration_requests": 0,
+              "ooc_assistance_requests": 0,
+              "retries": 0
+            },
+            "performance": {
+              "elapsed_ms": 3254,
+              "interpretation_ms": null,
+              "resolution_ms": null,
+              "narration_ms": null,
+              "validation_ms": null,
+              "retry_ms": null,
+              "provider_call_count": 1,
+              "input_tokens": 1793,
+              "output_tokens": 234,
+              "retry_count": 0,
+              "retry_reason": null,
+              "disposition": "conversational_answer",
+              "successful": true,
+              "provider_narration_skipped": false
+            }
+          }
+        },
+        "gm_output": {
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "tags": [
+            "conversational_orchestration",
+            "answer",
+            "non_mutating"
+          ],
+          "scene_update": null,
+          "activate_scene_id": null,
+          "new_scene_draft": null,
+          "world_updates": null,
+          "suggested_action": null,
+          "debug_notes": "conversational_orchestration:communication_before_execution",
+          "metadata": {
+            "accepted_response": {
+              "immutable": true,
+              "text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+              "provenance": "authorized_host_speech",
+              "attempt": 0,
+              "player_input": "What's in front of me right now?",
+              "turn_identity": "",
+              "speaker": "GM",
+              "addressee": "player",
+              "target": "",
+              "operation": "ask",
+              "authority_result": "accepted",
+              "grounding_result": "not_a_replacement_trigger",
+              "hard_validation": {
+                "hard_valid": true,
+                "reasons": [],
+                "soft_flags": [],
+                "authority": [
+                  "conversational_decision:communication_before_execution"
+                ],
+                "gm_resolution_decision_audit": null
+              },
+              "interaction_completion": true,
+              "contract_satisfying": true,
+              "contract": {
+                "contract_id": "",
+                "operation": "",
+                "interlocutor_id": "",
+                "expected_resolution": ""
+              },
+              "resolution_kind": "conversational_answer",
+              "generation_attempts": 0,
+              "skipped_mutators": [],
+              "subject": "",
+              "authorization_source": "conversational_decision:communication_before_execution",
+              "adoption_status": "candidate_accepted",
+              "integrity_digest": "10097d3d980b2b8b6ae85129f20125cd2636adca07cb862a81fec50c6a0fa5fb",
+              "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+              "speaker_id": "",
+              "canonical": false,
+              "candidate_disposition": "host_selected",
+              "authorization_provenance": {
+                "authority_category": "host_operation",
+                "speaker_id": "",
+                "addressee": "player",
+                "operation": "ask",
+                "authorized_proposition": "",
+                "source_id": "",
+                "epistemic_status": "none",
+                "validation": "host_operation",
+                "provenance_id": "2608602d877553f8",
+                "policy_version": "pr-eg-r6-r1-r1"
+              }
+            },
+            "emission_debug": {
+              "accepted_response_provenance": "authorized_host_speech",
+              "generation_attempts": 0,
+              "legacy_emission_authority": false,
+              "semantic_degradation": false,
+              "semantic_degradation_reasons": [],
+              "resolution_contract_semantic": {
+                "status": "satisfied",
+                "reasons": [],
+                "preserved": true
+              }
+            }
+          },
+          "_final_delivery_seal": "{\"addressee\":\"player\",\"adoption_status\":\"candidate_accepted\",\"attempt\":0,\"authority_result\":\"accepted\",\"authorization_provenance\":{\"addressee\":\"player\",\"authority_category\":\"host_operation\",\"authorized_proposition\":\"\",\"epistemic_status\":\"none\",\"operation\":\"ask\",\"policy_version\":\"pr-eg-r6-r1-r1\",\"provenance_id\":\"2608602d877553f8\",\"source_id\":\"\",\"speaker_id\":\"\",\"validation\":\"host_operation\"},\"authorization_source\":\"conversational_decision:communication_before_execution\",\"candidate_disposition\":\"host_selected\",\"canonical\":false,\"contract\":{\"contract_id\":\"\",\"expected_resolution\":\"\",\"interlocutor_id\":\"\",\"operation\":\"\"},\"contract_satisfying\":true,\"generation_attempts\":0,\"grounding_result\":\"not_a_replacement_trigger\",\"hard_validation\":{\"authority\":[\"conversational_decision:communication_before_execution\"],\"gm_resolution_decision_audit\":null,\"hard_valid\":true,\"reasons\":[],\"soft_flags\":[]},\"immutable\":true,\"interaction_completion\":true,\"operation\":\"ask\",\"player_input\":\"What's in front of me right now?\",\"provenance\":\"authorized_host_speech\",\"resolution_kind\":\"conversational_answer\",\"speaker\":\"GM\",\"speaker_id\":\"\",\"speech_adoption\":\"AUTHORIZED_HOST_SPEECH\",\"subject\":\"\",\"target\":\"\",\"text\":\"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\",\"turn_identity\":\"\"}"
+        },
+        "log_meta": {
+          "player_input": "What's in front of me right now?",
+          "communication_mode": "AUTO",
+          "mode_source": "automatic",
+          "processing_outcome": "conversational_answer",
+          "authoritative_mutation": false,
+          "resolver_invoked": false
+        }
+      }
+    ],
+    "evidence_candidates": {
+      "scene": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "visible:0": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "visible:4": "Ash Compact census delays have tightened the eastern caravan choke point.",
+      "reply:0": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+    },
+    "arms": {
+      "recorded_output": {
+        "generated_request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question or request from available conversation context using the corrected meaning. Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. With insufficient evidence, state the limitation or continue with established information only. Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+            },
+            {
+              "role": "user",
+              "content": "Utterance: No, I was asking about the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+            }
+          ],
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "communication": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "recipient": {
+                    "type": "string",
+                    "enum": [
+                      "GM",
+                      "NPC",
+                      "CHARACTER",
+                      "SESSION",
+                      "MIXED",
+                      "AMBIGUOUS"
+                    ],
+                    "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "QUESTION",
+                      "DESCRIPTION",
+                      "EXPLANATION",
+                      "RECALL",
+                      "RULES",
+                      "ACTION",
+                      "OBSERVATION",
+                      "CORRECTION",
+                      "WITHDRAWAL",
+                      "CONFIRMATION",
+                      "TENTATIVE",
+                      "CLARIFICATION"
+                    ],
+                    "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "recipient",
+                  "purpose",
+                  "subject",
+                  "evidence_refs"
+                ]
+              },
+              "communication_mode": {
+                "enum": [
+                  "CLARIFICATION",
+                  "IN_WORLD_ACTION",
+                  "OTHER",
+                  "OUT_OF_CHARACTER_CORRECTION",
+                  "RULES_QUESTION"
+                ]
+              },
+              "interpretation_status": {
+                "enum": [
+                  "ABSTAIN",
+                  "CLARIFICATION_REQUIRED",
+                  "INTERPRETED",
+                  "UNSUPPORTED_REQUEST"
+                ]
+              },
+              "player_intent": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "summary"
+                ]
+              },
+              "asserted_premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "requested_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "action_components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "target_ref": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "operation_class": {
+                      "enum": [
+                        "ASK",
+                        "ATTACK",
+                        "CANON_DECLARATION",
+                        "DICE_OVERRIDE",
+                        "FOLLOW",
+                        "HIDDEN_INFORMATION_REQUEST",
+                        "HP_ASSIGNMENT",
+                        "INSPECT",
+                        "INVENTORY_GRANT",
+                        "MOVE",
+                        "NPC_COMMITMENT",
+                        "PERCEIVE",
+                        "RETCON",
+                        "SOCIAL_SIGNAL",
+                        "STEALTH_MODE_TOGGLE",
+                        "TIME_CONTROL",
+                        "UNSUPPORTED_MECHANIC",
+                        "USE_VISIBLE_OBJECT"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "order",
+                    "description",
+                    "target_ref",
+                    "operation_class"
+                  ]
+                }
+              },
+              "references": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "permitted_entity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "unresolved_references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_entity_ids",
+                  "unresolved_references"
+                ]
+              },
+              "clarification_question": {
+                "type": "string"
+              },
+              "correction": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "COMMITTED_ACTION",
+                      "INTENTION",
+                      "NONE",
+                      "REFERENT"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "note"
+                ]
+              }
+            },
+            "required": [
+              "action_components",
+              "asserted_premises",
+              "clarification_question",
+              "communication_mode",
+              "correction",
+              "interpretation_status",
+              "player_intent",
+              "references",
+              "requested_outcomes",
+              "communication"
+            ]
+          }
+        },
+        "interpretation_result": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+          "tags": [
+            "interpretation_clarification",
+            "non_mutating"
+          ],
+          "record": {
+            "communication_mode": "CLARIFICATION",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Clarify that the question is about the people present, not the weather."
+            },
+            "asserted_premises": [
+              {
+                "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "Do you want a description of the people present at the gate district instead of the weather?",
+            "correction": {
+              "subject": "NONE",
+              "note": "Clarifying the intended subject of inquiry from weather to people."
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CLARIFICATION",
+              "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+              "evidence_refs": []
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {}
+          },
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"GM\", \"purpose\": \"CLARIFICATION\", \"subject\": \"Clarification about the intended topic of inquiry (people vs. weather)\", \"evidence_refs\": []}, \"communication_mode\": \"CLARIFICATION\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Clarify that the question is about the people present, not the weather.\"}, \"asserted_premises\": [{\"text\": \"The previous question was about the weather, but the player wants to clarify they meant the people.\"}], \"requested_outcomes\": [{\"text\": \"The GM understands the player is asking about the people in the scene, not the weather.\"}], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [\"gate_guard\", \"gate_serjeant\", \"notice_board\", \"tavern_runner\"], \"unresolved_references\": []}, \"clarification_question\": \"Do you want a description of the people present at the gate district instead of the weather?\", \"correction\": {\"subject\": \"NONE\", \"note\": \"Clarifying the intended subject of inquiry from weather to people.\"}}",
+          "provider_requests": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "eligibility_disposition": "NEEDS_CLARIFICATION",
+          "model_communication_mode": "CLARIFICATION",
+          "interpretation_status": "INTERPRETED"
+        },
+        "decision": {
+          "category": "CLARIFY",
+          "primary_intention": "No, I was asking about the people, not the weather.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Do you want a description of the people present at the gate district instead of the weather?",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        }
+      },
+      "substituted_interpretation": {
+        "generated_request": {
+          "messages": [
+            {
+              "role": "system",
+              "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Ordinary conversational correction supplies corrected meaning, subject, referent or description. Distinguish the player clarifying their own meaning from the AI-DM requesting clarification. When that meaning is established, use INTERPRETED, GM/CORRECTION and legacy OTHER; continue the corrected conversation without asking confirmation merely because it is corrective. Use correction.subject REFERENT for a conversational subject, referent or description correction. This does not itself revise a gameplay action; leave action_components empty. Mechanical revision modifies an actual eligible pending intention and remains subject to host checks; never invent pending work, revise executed actions or execute from a correction alone. Recover the underlying question or request from available conversation context using the corrected meaning. Select relevant authorized PUBLIC evidence_refs that support answering that corrected question; prefer a supported answer over redundant clarification. Subject describes the question, never a new fact. Restricted or unestablished information in internal world state is not disclosure authority; do not select it or infer unsupported facts. Select only supplied PUBLIC passages that support the answer. With insufficient evidence, state the limitation or continue with established information only. Ask a targeted question when meaningful ambiguity remains (such as competing people, a missing interlocutor or action parameter, or conflicting intentions); never guess to avoid clarification. Acknowledgments asserting no world facts may use empty evidence_refs. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes execution disposition. A player's answerable request for clarification or supplied correction need not use legacy CLARIFICATION. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+            },
+            {
+              "role": "user",
+              "content": "Utterance: No, I was asking about the people, not the weather.\nVisible scene: Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry.\nPermitted entity references: gate_guard=Gate Guard [guard | watch | watch guard] (npc); gate_serjeant=Gate Serjeant [serjeant | watch serjeant | gate serjeant] (npc); notice_board=Notice board [notice | board | curfew notice | missing patrol warning] (inspect_target); tavern_runner=Tavern Runner [runner | tavern runner] (npc).\nCommunication modes: IN_WORLD_ACTION=character action or NPC speech; OUT_OF_CHARACTER_CORRECTION=explicit out-of-character correction; RULES_QUESTION=play procedure; CLARIFICATION=the AI-DM needs additional information; OTHER for resolved GM conversation, including ordinary conversational correction.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"What's in front of me right now?\", \"gm\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. \"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.\", \"visible:0\": \"The notice board lists taxes, curfew rules, and a warning about a missing patrol.\", \"visible:1\": \"A gate serjeant manages the crowd and keeps one eye on the roster board.\", \"visible:2\": \"A tavern runner trades hot stew and rumors near the rain barrel.\", \"visible:3\": \"Threadbare watchers and refugees cluster along the muddy gate line.\", \"visible:4\": \"Ash Compact census delays have tightened the eastern caravan choke point.\", \"reply:0\": \"You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.\"}\nConversation ownership context: {\"active_npc_id\": null, \"last_response_category\": \"ANSWER\", \"last_response_owner\": \"GM\", \"last_subject\": \"What's in front of me right now?\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+            }
+          ],
+          "schema": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "communication": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "recipient": {
+                    "type": "string",
+                    "enum": [
+                      "GM",
+                      "NPC",
+                      "CHARACTER",
+                      "SESSION",
+                      "MIXED",
+                      "AMBIGUOUS"
+                    ],
+                    "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+                  },
+                  "purpose": {
+                    "type": "string",
+                    "enum": [
+                      "QUESTION",
+                      "DESCRIPTION",
+                      "EXPLANATION",
+                      "RECALL",
+                      "RULES",
+                      "ACTION",
+                      "OBSERVATION",
+                      "CORRECTION",
+                      "WITHDRAWAL",
+                      "CONFIRMATION",
+                      "TENTATIVE",
+                      "CLARIFICATION"
+                    ],
+                    "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION corrects conversational meaning, subject, referent or description, or revises an actual unexecuted intention. Conversational correction does not itself revise a gameplay action. CLARIFICATION can describe a player's request for explanation; it does not by itself mean the AI-DM needs more information. WITHDRAWAL cancels pending intent; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+                  },
+                  "subject": {
+                    "type": "string"
+                  },
+                  "evidence_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "recipient",
+                  "purpose",
+                  "subject",
+                  "evidence_refs"
+                ]
+              },
+              "communication_mode": {
+                "enum": [
+                  "CLARIFICATION",
+                  "IN_WORLD_ACTION",
+                  "OTHER",
+                  "OUT_OF_CHARACTER_CORRECTION",
+                  "RULES_QUESTION"
+                ]
+              },
+              "interpretation_status": {
+                "enum": [
+                  "ABSTAIN",
+                  "CLARIFICATION_REQUIRED",
+                  "INTERPRETED",
+                  "UNSUPPORTED_REQUEST"
+                ]
+              },
+              "player_intent": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "summary": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "summary"
+                ]
+              },
+              "asserted_premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "requested_outcomes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              },
+              "action_components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "order": {
+                      "type": "integer"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "target_ref": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "operation_class": {
+                      "enum": [
+                        "ASK",
+                        "ATTACK",
+                        "CANON_DECLARATION",
+                        "DICE_OVERRIDE",
+                        "FOLLOW",
+                        "HIDDEN_INFORMATION_REQUEST",
+                        "HP_ASSIGNMENT",
+                        "INSPECT",
+                        "INVENTORY_GRANT",
+                        "MOVE",
+                        "NPC_COMMITMENT",
+                        "PERCEIVE",
+                        "RETCON",
+                        "SOCIAL_SIGNAL",
+                        "STEALTH_MODE_TOGGLE",
+                        "TIME_CONTROL",
+                        "UNSUPPORTED_MECHANIC",
+                        "USE_VISIBLE_OBJECT"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "order",
+                    "description",
+                    "target_ref",
+                    "operation_class"
+                  ]
+                }
+              },
+              "references": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "permitted_entity_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "unresolved_references": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "permitted_entity_ids",
+                  "unresolved_references"
+                ]
+              },
+              "clarification_question": {
+                "type": "string"
+              },
+              "correction": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "subject": {
+                    "enum": [
+                      "COMMITTED_ACTION",
+                      "INTENTION",
+                      "NONE",
+                      "REFERENT"
+                    ]
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "subject",
+                  "note"
+                ]
+              }
+            },
+            "required": [
+              "action_components",
+              "asserted_premises",
+              "clarification_question",
+              "communication_mode",
+              "correction",
+              "interpretation_status",
+              "player_intent",
+              "references",
+              "requested_outcomes",
+              "communication"
+            ]
+          }
+        },
+        "interpretation_result": {
+          "status": "blocked",
+          "reason": "clarification_required",
+          "player_facing_text": "I need a clearer action or target before I change anything in the scene.",
+          "tags": [
+            "interpretation_clarification",
+            "non_mutating"
+          ],
+          "record": {
+            "communication_mode": "OTHER",
+            "interpretation_status": "INTERPRETED",
+            "player_intent": {
+              "summary": "Clarify that the question is about the people present, not the weather."
+            },
+            "asserted_premises": [
+              {
+                "text": "The previous question was about the weather, but the player wants to clarify they meant the people.",
+                "canon_status": "PLAYER_CLAIM"
+              }
+            ],
+            "requested_outcomes": [
+              {
+                "text": "The GM understands the player is asking about the people in the scene, not the weather.",
+                "adjudication_status": "UNADJUDICATED"
+              }
+            ],
+            "action_components": [],
+            "references": {
+              "permitted_entity_ids": [
+                "gate_guard",
+                "gate_serjeant",
+                "notice_board",
+                "tavern_runner"
+              ],
+              "unresolved_references": []
+            },
+            "clarification_question": "",
+            "correction": {
+              "subject": "REFERENT",
+              "note": "Resolved conversational subject"
+            },
+            "communication": {
+              "recipient": "GM",
+              "purpose": "CORRECTION",
+              "subject": "Clarification about the intended topic of inquiry (people vs. weather)",
+              "evidence_refs": [
+                "visible:1",
+                "visible:2",
+                "visible:3"
+              ]
+            },
+            "incidental_context": [],
+            "reference_reconciliation": {
+              "annotations": [],
+              "addressee": null,
+              "operation": ""
+            },
+            "public_evidence": {
+              "visible:1": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+              "visible:2": "A tavern runner trades hot stew and rumors near the rain barrel.",
+              "visible:3": "Threadbare watchers and refugees cluster along the muddy gate line."
+            }
+          },
+          "raw_interpretation": "{\"communication\": {\"recipient\": \"GM\", \"purpose\": \"CORRECTION\", \"subject\": \"Clarification about the intended topic of inquiry (people vs. weather)\", \"evidence_refs\": [\"visible:1\", \"visible:2\", \"visible:3\"]}, \"communication_mode\": \"OTHER\", \"interpretation_status\": \"INTERPRETED\", \"player_intent\": {\"summary\": \"Clarify that the question is about the people present, not the weather.\"}, \"asserted_premises\": [{\"text\": \"The previous question was about the weather, but the player wants to clarify they meant the people.\"}], \"requested_outcomes\": [{\"text\": \"The GM understands the player is asking about the people in the scene, not the weather.\"}], \"action_components\": [], \"references\": {\"permitted_entity_ids\": [\"gate_guard\", \"gate_serjeant\", \"notice_board\", \"tavern_runner\"], \"unresolved_references\": []}, \"clarification_question\": \"\", \"correction\": {\"subject\": \"REFERENT\", \"note\": \"Resolved conversational subject\"}}",
+          "provider_requests": [],
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": ""
+          },
+          "eligibility_disposition": "SAFE_ABSTENTION",
+          "model_communication_mode": "OTHER",
+          "interpretation_status": "INTERPRETED"
+        },
+        "decision": {
+          "category": "ANSWER",
+          "primary_intention": "No, I was asking about the people, not the weather.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:1",
+            "visible:2",
+            "visible:3"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Understood. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CORRECTION",
+          "authorization": null
+        }
+      }
+    },
+    "input_state_unchanged": true
+  }
+]

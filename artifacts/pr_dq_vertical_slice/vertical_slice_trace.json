@@ -1,0 +1,150 @@
+{
+  "steps": [
+    {
+      "message_id": "msg_001",
+      "text": "I look at the lantern by the gate.",
+      "mode": "IC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "ACTION",
+      "status": "PROCESSED",
+      "destination": "IC_ACTION",
+      "committed": true,
+      "executed": true,
+      "resolver_invoked": true,
+      "mutated_state": true,
+      "new_resolver_calls": [
+        "game.exploration.resolve_exploration_action"
+      ],
+      "resolution_kind": "observe",
+      "resolution_success": null,
+      "rolls_dice": false,
+      "response": "A soot-streaked lantern burns beside the courtyard gate.",
+      "reason": "accepted_by_engine",
+      "scene": "waystation_courtyard",
+      "time_pressure": 0,
+      "turn_counter": 1
+    },
+    {
+      "message_id": "msg_002",
+      "text": "Wait, which street did Mara mention?",
+      "mode": "OOC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "QUESTION",
+      "status": "PROCESSED",
+      "destination": "OOC_QUESTION",
+      "committed": false,
+      "executed": false,
+      "resolver_invoked": false,
+      "mutated_state": false,
+      "new_resolver_calls": [],
+      "resolution_kind": null,
+      "resolution_success": null,
+      "rolls_dice": false,
+      "response": "Out-of-character question noted. No gameplay action was executed.",
+      "reason": "ooc_cannot_execute_authoritative_gameplay",
+      "scene": "waystation_courtyard",
+      "time_pressure": 0,
+      "turn_counter": 1
+    },
+    {
+      "message_id": "msg_003",
+      "text": "I ask Sergeant Mara whether the street is beyond the gate.",
+      "mode": "IC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "DIALOGUE",
+      "status": "PROCESSED",
+      "destination": "IC_DIALOGUE",
+      "committed": true,
+      "executed": true,
+      "resolver_invoked": true,
+      "mutated_state": true,
+      "new_resolver_calls": [
+        "game.social.resolve_social_action"
+      ],
+      "resolution_kind": "question",
+      "resolution_success": true,
+      "rolls_dice": false,
+      "response": "The street beyond the gate is the north road.",
+      "reason": "accepted_by_engine",
+      "scene": "waystation_courtyard",
+      "time_pressure": 0,
+      "turn_counter": 2
+    },
+    {
+      "message_id": "msg_004",
+      "text": "I go through the courtyard gate.",
+      "mode": "IC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "ACTION",
+      "status": "PROCESSED",
+      "destination": "IC_ACTION",
+      "committed": true,
+      "executed": true,
+      "resolver_invoked": true,
+      "mutated_state": true,
+      "new_resolver_calls": [
+        "game.exploration.resolve_exploration_action"
+      ],
+      "resolution_kind": "scene_transition",
+      "resolution_success": true,
+      "rolls_dice": false,
+      "response": "The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "reason": "accepted_by_engine",
+      "scene": "waystation_street",
+      "time_pressure": 1,
+      "turn_counter": 3
+    },
+    {
+      "message_id": "msg_005",
+      "text": "I read the notice board.",
+      "mode": "IC",
+      "mode_source": "USER_OVERRIDE",
+      "intent": "ACTION",
+      "status": "PROCESSED",
+      "destination": "IC_ACTION",
+      "committed": true,
+      "executed": true,
+      "resolver_invoked": true,
+      "mutated_state": true,
+      "new_resolver_calls": [
+        "game.exploration.resolve_exploration_action"
+      ],
+      "resolution_kind": "discover_clue",
+      "resolution_success": true,
+      "rolls_dice": false,
+      "response": "The board names the north road past the waystation.",
+      "reason": "accepted_by_engine",
+      "scene": "waystation_street",
+      "time_pressure": 1,
+      "turn_counter": 4
+    }
+  ],
+  "history_ids": [
+    "msg_001",
+    "msg_002",
+    "msg_003",
+    "msg_004",
+    "msg_005"
+  ],
+  "history_length": 5,
+  "final_scene": "waystation_street",
+  "time_pressure": 1,
+  "turn_counter": 4,
+  "hp": {
+    "current": 8,
+    "max": 8,
+    "nonlethal": 0
+  },
+  "inventory": [],
+  "combat_action_used": false,
+  "resolver_calls": [
+    "game.exploration.resolve_exploration_action",
+    "game.social.resolve_social_action",
+    "game.exploration.resolve_exploration_action",
+    "game.exploration.resolve_exploration_action"
+  ],
+  "notice_resolved": true,
+  "npc_ids": [
+    "sergeant_mara"
+  ]
+}

@@ -1,0 +1,410 @@
+{
+  "turns": [
+    {
+      "text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+      "entry_reason": "spoken_vocative_address",
+      "entry_target": "guard_captain",
+      "should_route_social": true,
+      "parsed_type": "question",
+      "resolver": "social",
+      "contract_interlocutor": "guard_captain",
+      "contract_operation": "ask",
+      "social_npc_id": "guard_captain",
+      "social_target_resolved": true,
+      "reply_plan_kind": "harmless_subjective_response_permitted",
+      "obligation_interlocutor": "guard_captain",
+      "obligation_mode": "grounded_information_request",
+      "allowed_speaker_ids": [
+        "guard_captain"
+      ],
+      "speaker_reason": "normalized target_id matches scene-addressable roster",
+      "active_interaction_target_id": "guard_captain",
+      "interaction_mode": "social",
+      "interaction_kind": "social",
+      "discourse_interlocutor": "guard_captain"
+    },
+    {
+      "text": "Does the rain make it harder to keep watch?",
+      "entry_reason": "active_interlocutor_followup",
+      "entry_target": "guard_captain",
+      "should_route_social": true,
+      "parsed_type": "question",
+      "resolver": "social",
+      "contract_interlocutor": "guard_captain",
+      "contract_operation": "ask",
+      "social_npc_id": "guard_captain",
+      "social_target_resolved": true,
+      "reply_plan_kind": "genuine_uncertainty",
+      "obligation_interlocutor": "guard_captain",
+      "obligation_mode": "grounded_information_request",
+      "allowed_speaker_ids": [
+        "guard_captain"
+      ],
+      "speaker_reason": "normalized target_id matches scene-addressable roster",
+      "active_interaction_target_id": "guard_captain",
+      "interaction_mode": "social",
+      "interaction_kind": "social",
+      "discourse_interlocutor": "guard_captain"
+    },
+    {
+      "text": "Does it get any easier after a while?",
+      "entry_reason": "active_interlocutor_followup",
+      "entry_target": "guard_captain",
+      "should_route_social": true,
+      "parsed_type": "question",
+      "resolver": "social",
+      "contract_interlocutor": "guard_captain",
+      "contract_operation": "ask",
+      "social_npc_id": "guard_captain",
+      "social_target_resolved": true,
+      "reply_plan_kind": "genuine_uncertainty",
+      "obligation_interlocutor": "guard_captain",
+      "obligation_mode": "grounded_information_request",
+      "allowed_speaker_ids": [
+        "guard_captain"
+      ],
+      "speaker_reason": "normalized target_id matches scene-addressable roster",
+      "active_interaction_target_id": "guard_captain",
+      "interaction_mode": "social",
+      "interaction_kind": "social",
+      "discourse_interlocutor": "guard_captain"
+    }
+  ],
+  "followup_reply_plan_kind": "genuine_uncertainty",
+  "serialized_chars": 108212,
+  "serialized_bytes": 108254,
+  "sha256": "847effffa05e1ce47f510dc406ea302ff70d92c0e3c69b47338d50487304edb7",
+  "envelope_marker": "unknown",
+  "payload_found": true,
+  "projection_selected": false,
+  "projection_mode": null,
+  "first_failing_predicate": {
+    "predicate": "reply_plan_kind",
+    "required": "harmless_subjective_response_permitted",
+    "actual": "genuine_uncertainty",
+    "pass": false,
+    "authority_source": "social.reply_plan_kind"
+  },
+  "predicates": [
+    {
+      "predicate": "payload_is_dict",
+      "required": "dict",
+      "actual": "dict",
+      "pass": true,
+      "authority_source": "projector payload argument"
+    },
+    {
+      "predicate": "provider_response_contract",
+      "required": "narration_only",
+      "actual": "narration_only",
+      "pass": true,
+      "authority_source": "build_messages selected envelope"
+    },
+    {
+      "predicate": "recipe_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "payload.decision_facing_answer_recipe"
+    },
+    {
+      "predicate": "turn_operation_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "turn_operation"
+    },
+    {
+      "predicate": "response_operation",
+      "required": "incidental_dialogue",
+      "actual": "incidental_dialogue",
+      "pass": true,
+      "authority_source": "turn_operation.response_operation"
+    },
+    {
+      "predicate": "declaration_expectation",
+      "required": "reply_not_required",
+      "actual": "reply_not_required",
+      "pass": true,
+      "authority_source": "turn_operation.declaration_expectation"
+    },
+    {
+      "predicate": "decision_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "gm_resolution_decision"
+    },
+    {
+      "predicate": "permitted_state_mutations",
+      "required": [],
+      "actual": [],
+      "pass": true,
+      "authority_source": "permitted_state_mutations"
+    },
+    {
+      "predicate": "unresolved_qualifiers",
+      "required": [],
+      "actual": [],
+      "pass": true,
+      "authority_source": "unresolved_qualifiers"
+    },
+    {
+      "predicate": "unresolved_content_absent",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "unresolved_content"
+    },
+    {
+      "predicate": "permitted_inference_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "permitted_inference"
+    },
+    {
+      "predicate": "permitted_inference_allowed",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "permitted_inference.allowed"
+    },
+    {
+      "predicate": "contract_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "resolution_contract"
+    },
+    {
+      "predicate": "contract_operation",
+      "required": "ask",
+      "actual": "ask",
+      "pass": true,
+      "authority_source": "resolution_contract.operation"
+    },
+    {
+      "predicate": "contract_target_nonempty",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "resolution_contract.target"
+    },
+    {
+      "predicate": "response_policy_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "response_policy"
+    },
+    {
+      "predicate": "scene_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "scene"
+    },
+    {
+      "predicate": "dialogue_plan_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "dialogue_social_plan"
+    },
+    {
+      "predicate": "speaker_selection_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "speaker_selection"
+    },
+    {
+      "predicate": "allowed_speaker_ids_is_list",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "allowed_speaker_ids"
+    },
+    {
+      "predicate": "exactly_one_allowed_speaker",
+      "required": 1,
+      "actual": 1,
+      "pass": true,
+      "authority_source": "allowed_speaker_ids length"
+    },
+    {
+      "predicate": "active_interlocutor_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "active_interlocutor"
+    },
+    {
+      "predicate": "active_interlocutor_npc_id",
+      "required": "nonempty",
+      "actual": "guard_captain",
+      "pass": true,
+      "authority_source": "active_interlocutor.npc_id"
+    },
+    {
+      "predicate": "speaker_matches_active_interlocutor",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "speaker_selection vs active_interlocutor"
+    },
+    {
+      "predicate": "contract_matches_active_interlocutor",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "resolution_contract.interlocutor"
+    },
+    {
+      "predicate": "selected_resolver_social",
+      "required": "social",
+      "actual": "social",
+      "pass": true,
+      "authority_source": "mechanical_resolution.metadata.selected_resolver"
+    },
+    {
+      "predicate": "ordinary_contract_established",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "ordinary_contract_established"
+    },
+    {
+      "predicate": "social_is_dict",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "mechanical_resolution.social"
+    },
+    {
+      "predicate": "social_npc_matches",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "social.npc_id"
+    },
+    {
+      "predicate": "social_target_resolved",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "social.target_resolved"
+    },
+    {
+      "predicate": "reply_plan_kind",
+      "required": "harmless_subjective_response_permitted",
+      "actual": "genuine_uncertainty",
+      "pass": false,
+      "authority_source": "social.reply_plan_kind"
+    },
+    {
+      "predicate": "incidental_subjective_allowed",
+      "required": true,
+      "actual": false,
+      "pass": false,
+      "authority_source": "social.incidental_subjective_allowed"
+    },
+    {
+      "predicate": "objective_world_fact_authority",
+      "required": "none",
+      "actual": "none",
+      "pass": true,
+      "authority_source": "social.objective_world_fact_authority"
+    },
+    {
+      "predicate": "npc_speech_authority",
+      "required": "claim_only",
+      "actual": "none",
+      "pass": false,
+      "authority_source": "social.npc_speech_authority"
+    },
+    {
+      "predicate": "durable_state_mutation_allowed",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "social.durable_state_mutation_allowed"
+    },
+    {
+      "predicate": "topic_revealed_absent",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "social.topic_revealed"
+    },
+    {
+      "predicate": "skill_check_absent",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "social.skill_check"
+    },
+    {
+      "predicate": "requires_check",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "requires_check"
+    },
+    {
+      "predicate": "state_changes_absent",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "state_changes"
+    },
+    {
+      "predicate": "world_updates_absent",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "world_updates"
+    },
+    {
+      "predicate": "discovered_clues_absent",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "discovered_clues"
+    },
+    {
+      "predicate": "resolved_transition_absent",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "resolved_transition"
+    },
+    {
+      "predicate": "combat_not_active",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "combat.in_combat"
+    },
+    {
+      "predicate": "opening_mode_false",
+      "required": false,
+      "actual": false,
+      "pass": true,
+      "authority_source": "opening_narration_obligations.opening_mode"
+    },
+    {
+      "predicate": "scene_advancement_empty",
+      "required": true,
+      "actual": true,
+      "pass": true,
+      "authority_source": "scene_advancement"
+    }
+  ],
+  "speaker_allowed": [
+    "guard_captain"
+  ],
+  "social_npc_id": "guard_captain",
+  "active_target_after": "guard_captain"
+}

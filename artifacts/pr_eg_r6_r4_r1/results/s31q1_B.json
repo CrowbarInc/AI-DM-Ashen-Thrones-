@@ -1,0 +1,51 @@
+{
+  "case_id": "s31q1",
+  "family": "s31",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "c53899ea6a73bb4a4874aa095a5d9b1b786c84b820fc2e535da8bf3bb4704523",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "the upper loft"
+    ],
+    "qualifiers": [
+      "winter",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s31"
+    ],
+    "answered_arguments": [
+      "part of the mill"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that the miller stores winter flour in the upper loft, directly answering which part of the mill holds the winter flour."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

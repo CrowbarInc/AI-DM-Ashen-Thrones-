@@ -1,0 +1,94 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T09:59:18.893267Z",
+  "payload": {
+    "active_scene_id": "ferry_landing",
+    "visited_scene_ids": [
+      "ferry_landing"
+    ],
+    "current_date": "Day 1",
+    "turn_counter": 0,
+    "response_mode": "standard",
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "interaction_context": {
+      "active_interaction_target_id": null,
+      "active_interaction_kind": null,
+      "interaction_mode": "none",
+      "engagement_level": "none",
+      "conversation_privacy": null,
+      "player_position_context": null
+    },
+    "scene_state": {
+      "active_scene_id": "frontier_gate",
+      "active_entities": [],
+      "entity_presence": {},
+      "current_interlocutor": null,
+      "emergent_addressables": [],
+      "promoted_actor_npc_map": {}
+    },
+    "runtime_scene_overlays": {},
+    "scene_runtime": {},
+    "clue_knowledge": {},
+    "lead_registry": {},
+    "npc_runtime": {},
+    "last_action_debug": null,
+    "debug_traces": [],
+    "flags": {},
+    "chat_history": [],
+    "character_name": null,
+    "campaign_run_id": "65a86ce0b3a616233df26d04",
+    "session_id": "65a86ce0b3a616233df26d04",
+    "campaign_started": false,
+    "last_saved_at": "2026-10-17T09:59:18.893267Z",
+    "conversational_context": {
+      "pending_clarification": {
+        "kind": "missing_destination",
+        "operation": "MOVE",
+        "original_text": "I proceed north.",
+        "choices": [],
+        "scene_id": "ferry_landing"
+      },
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I proceed north.",
+          "delivered_text": "Where are you trying to go?",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "ferry_landing",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:movement_destination_missing",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "GM",
+        "purpose": "CLARIFICATION",
+        "subject": "Move or leave the current situation.",
+        "response": "Where are you trying to go?",
+        "refusal_reason": null,
+        "scene_id": "ferry_landing"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "f81c36337a30a18ac55eb5e734d6ece72f5c8773b76b76d9a75afa9592312b83",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

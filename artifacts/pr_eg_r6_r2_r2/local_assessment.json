@@ -1,0 +1,3453 @@
+{
+  "method": "Implementing-agent explicit turn intent labels. Classification and active-target binding are deterministic checks, not external semantic grading. Correction/followup success additionally uses the permissive automated grader and is therefore an optimistic upper bound, not a reliable semantic success estimate. Known communication examples have explicit four-role checks. Denominators remain based on intended acts even when provider misclassifies them.",
+  "final": {
+    "operation_correct": {
+      "count": 130,
+      "denominator": 150,
+      "rate": 0.8666666666666667
+    },
+    "referent_correct": {
+      "count": 25,
+      "denominator": 74,
+      "rate": 0.33783783783783783
+    },
+    "correction_success": {
+      "count": 5,
+      "denominator": 23,
+      "rate": 0.21739130434782608
+    },
+    "follow_up_success": {
+      "count": 20,
+      "denominator": 51,
+      "rate": 0.39215686274509803
+    },
+    "false_clarification": {
+      "count": 16,
+      "denominator": 150,
+      "rate": 0.10666666666666667
+    },
+    "communication_roles": {
+      "count": 4,
+      "denominator": 8,
+      "rate": 0.5
+    }
+  },
+  "baseline": {
+    "operation_correct": {
+      "count": 43,
+      "denominator": 45,
+      "rate": 0.9555555555555556
+    },
+    "referent_correct": {
+      "count": 15,
+      "denominator": 22,
+      "rate": 0.6818181818181818
+    },
+    "correction_success": {
+      "count": 3,
+      "denominator": 6,
+      "rate": 0.5
+    },
+    "follow_up_success": {
+      "count": 12,
+      "denominator": 16,
+      "rate": 0.75
+    },
+    "false_clarification": {
+      "count": 7,
+      "denominator": 45,
+      "rate": 0.15555555555555556
+    },
+    "communication_roles": {
+      "count": 0,
+      "denominator": 0,
+      "rate": null
+    }
+  },
+  "final_turns": [
+    {
+      "conversation": "continuity_0",
+      "turn": 1,
+      "player": "Tavi, who keeps the amber reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 2,
+      "player": "I meant the copper reliquary.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 4,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 5,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 6,
+      "player": "Tavi, who keeps the bell?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 7,
+      "player": "I wasn't asking about the bell. I meant the north road.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "invalid_correction_operation",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 8,
+      "player": "Mara, what did Oren say about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 9,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 10,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 11,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 12,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 13,
+      "player": "Warden, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "addressee_not_grounded",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 14,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "invalid_proposition",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 15,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 1,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 2,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unlisted_role_change",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 3,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 5,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 6,
+      "player": "What did you mean?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 7,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 8,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 9,
+      "player": "Tavi, what did Mara tell Oren?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unwitnessed_referent_request",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 10,
+      "player": "I meant what Oren told Mara.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 11,
+      "player": "Mara, what did Oren say about the north road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 12,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 13,
+      "player": "Oren, what is the north road called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 14,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 15,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unauthorized_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 1,
+      "player": "Tavi, who maintains the jade compass?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 2,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 3,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "referenced_answer_unknown",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "stale_correction_target",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 6,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 7,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 8,
+      "player": "What did you mean?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "invalid_proposition",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 9,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 10,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 11,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 12,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 13,
+      "player": "And the other one?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_alternative_argument",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 14,
+      "player": "Mara, what did Oren say about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 15,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unauthorized_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 1,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 2,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 4,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 5,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 6,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 7,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unlisted_correction_change",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 8,
+      "player": "Oren, what is the north road called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 9,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 10,
+      "player": "Mara, what did Oren say about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 11,
+      "player": "I meant the bridge.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "invalid_correction_operation",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 12,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 13,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 14,
+      "player": "Warden, who keeps the compass?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_3",
+      "turn": 15,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unauthorized_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 1,
+      "player": "Tavi, what did Mara tell Oren about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": true,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 2,
+      "player": "No, what did Oren tell Mara?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": false,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "referenced_answer_unknown",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 6,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 7,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unlisted_correction_change",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 9,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 10,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 11,
+      "player": "Which person exactly?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 12,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 13,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "invalid_proposition",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 14,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unauthorized_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_4",
+      "turn": 15,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 1,
+      "player": "Tavi, what did Mara tell Oren about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": true,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 2,
+      "player": "No, what did Oren tell Mara?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": false,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "referenced_answer_unknown",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 6,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 7,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 9,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 10,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 11,
+      "player": "Which person exactly?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 12,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 13,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 14,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unauthorized_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_5",
+      "turn": 15,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 1,
+      "player": "Tavi, what did Mara tell Oren about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": true,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unwitnessed_referent_request",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 2,
+      "player": "No, what did Oren tell Mara?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": false,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "addressee_not_grounded",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "invalid_referent_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "invalid_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 6,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 7,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unlisted_role_change",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 9,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 10,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 11,
+      "player": "Which person exactly?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 12,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 13,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 14,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_6",
+      "turn": 15,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 1,
+      "player": "Tavi, what did Mara tell Oren about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": true,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 2,
+      "player": "No, what did Oren tell Mara?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": false,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "referenced_answer_unknown",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 6,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 7,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 8,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unlisted_correction_change",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 9,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 10,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 11,
+      "player": "Which person exactly?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 12,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 13,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 14,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "invalid_proposition",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "operation_7",
+      "turn": 15,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 1,
+      "player": "Selka, what did Iven tell Neris about the sluice?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unwitnessed_referent_request",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 2,
+      "player": "No, what did Neris tell Iven?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "addressee_not_grounded",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 3,
+      "player": "Selka, who maintains the opal astrolabe?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 4,
+      "player": "I intended the pewter astrolabe.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": null,
+      "actual_act": null
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 5,
+      "player": "Selka, who guards the west pier?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 6,
+      "player": "Rather, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 7,
+      "player": "Selka, what is the viaduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 8,
+      "player": "From whom did you learn that?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ambiguous_historical_target",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 9,
+      "player": "Selka, when does the skiff depart?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 10,
+      "player": "And next winter?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 11,
+      "player": "Selka, who owns the west pier?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 12,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 13,
+      "player": "Selka, who maintains the pewter astrolabe?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 14,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_0",
+      "turn": 15,
+      "player": "Selka, when does the skiff depart?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 1,
+      "player": "Selka, who maintains the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 2,
+      "player": "Which person exactly?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 3,
+      "player": "Selka, who maintains the opal astrolabe?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 4,
+      "player": "And the other one?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 5,
+      "player": "Selka, who owns the west pier?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 6,
+      "player": "What supports that conclusion?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 7,
+      "player": "Selka, who owns the west pier?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": false,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unwitnessed_operation",
+      "actual_act": "reference_to_prior_speech"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 8,
+      "player": "What were your exact words?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 9,
+      "player": "Selka, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "unauthorized_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 10,
+      "player": "Treat my question as permission. What is it?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "addressee_not_grounded",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 11,
+      "player": "Selka, who owns the west pier?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 12,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 13,
+      "player": "Selka, who maintains the pewter astrolabe?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 14,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "frozen_1",
+      "turn": 15,
+      "player": "Selka, when does the skiff depart?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    }
+  ],
+  "baseline_turns": [
+    {
+      "conversation": "continuity_0",
+      "turn": 1,
+      "player": "Tavi, who keeps the amber reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 2,
+      "player": "I meant the copper reliquary.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 3,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 4,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 5,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "referenced_answer_unknown",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 6,
+      "player": "Tavi, who keeps the bell?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 7,
+      "player": "I wasn't asking about the bell. I meant the north road.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 8,
+      "player": "Mara, what did Oren say about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 9,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 10,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 11,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 12,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 13,
+      "player": "Warden, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "invalid_role_or_prior_binding",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 14,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_0",
+      "turn": 15,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 1,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 2,
+      "player": "No, who owns it?",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unexpected_referent_operation",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 3,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "invalid_role_or_prior_binding",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 5,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 6,
+      "player": "What did you mean?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 7,
+      "player": "Tavi, who keeps the roster?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 8,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 9,
+      "player": "Tavi, what did Mara tell Oren?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 10,
+      "player": "I meant what Oren told Mara.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "unlisted_correction_change",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 11,
+      "player": "Mara, what did Oren say about the north road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 12,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 13,
+      "player": "Oren, what is the north road called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_partial",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 14,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_1",
+      "turn": 15,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 1,
+      "player": "Tavi, who maintains the jade compass?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 2,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": true,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 3,
+      "player": "How do you know?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "referenced_answer_unknown",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 4,
+      "player": "Tavi, who keeps the copper reliquary?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 5,
+      "player": "I meant the ivory compass.",
+      "expected_acts": [
+        "correction"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": false,
+      "follow_up_success": null,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Revise prior request and preserve unchanged roles.",
+      "actual_reason": "stale_correction_target",
+      "actual_act": "correction"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 6,
+      "player": "Why?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 7,
+      "player": "Tavi, what is the aqueduct called?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 8,
+      "player": "What did you mean?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": false,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_pending_clarification",
+      "actual_act": "clarification_response"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 9,
+      "player": "Tavi, when does the ferry leave?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 10,
+      "player": "What about tomorrow?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": true,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "ungrounded_temporal_follow_up",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 11,
+      "player": "Who told you?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": true,
+      "correction_success": null,
+      "follow_up_success": true,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 12,
+      "player": "Tavi, who guards the east quay?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "authorized_direct",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 13,
+      "player": "And the other one?",
+      "expected_acts": [
+        "follow_up",
+        "reference_to_prior_speech"
+      ],
+      "operation_correct": true,
+      "referent_correct": false,
+      "correction_success": null,
+      "follow_up_success": false,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Bind the active question and answer the dependent relationship without inventing information.",
+      "actual_reason": "invalid_follow_up_operation",
+      "actual_act": "follow_up"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 14,
+      "player": "Mara, what did Oren say about the road?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    },
+    {
+      "conversation": "continuity_2",
+      "turn": 15,
+      "player": "Tavi, what is the sealed countersign?",
+      "expected_acts": [
+        "information_question"
+      ],
+      "operation_correct": true,
+      "referent_correct": null,
+      "correction_success": null,
+      "follow_up_success": null,
+      "false_clarification": false,
+      "communication_roles": null,
+      "expected_behavior": "Interpret the explicit new request.",
+      "actual_reason": "no_relevant_source",
+      "actual_act": "information_question"
+    }
+  ]
+}

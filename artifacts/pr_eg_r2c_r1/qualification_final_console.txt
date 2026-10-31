@@ -1,0 +1,327 @@
+........................F..F.....F..F................................... [ 11%]
+........................................................................ [ 23%]
+........................................................................ [ 35%]
+........................................................................ [ 47%]
+.......................................F.....F.FFFFF.................... [ 59%]
+FF..............F.....F..F......FF.F.................................... [ 70%]
+..........................................................F............. [ 82%]
+........................................................................ [ 94%]
+...........................FF.FFF                                        [100%]
+================================== FAILURES ===================================
+_________ test_chat_quarterstaff_attack_mechanical_resolution_absent __________
+tests\test_exploration_resolution.py:449: in test_chat_quarterstaff_attack_mechanical_resolution_absent
+    assert any(gpt_called_with_none_resolution)
+E   assert False
+E    +  where False = any([False])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_chat_observe_area_resolution_kwarg_to_build_messages __________
+tests\test_exploration_resolution.py:497: in test_chat_observe_area_resolution_kwarg_to_build_messages
+    assert resolution.get("kind") == "observe"
+E   assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x00000215A93E1100>('kind')
+E    +    where <built-in method get of dict object at 0x00000215A93E1100> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__ test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution __
+tests\test_exploration_resolution.py:609: in test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+    assert build_messages_resolution[0].get("kind") == "observe"
+E   assert None == 'observe'
+E    +  where None = <built-in method get of dict object at 0x00000215A5C0E940>('kind')
+E    +    where <built-in method get of dict object at 0x00000215A5C0E940> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+___________ test_chat_exploration_parsed_routes_through_exploration ___________
+tests\test_exploration_resolution.py:666: in test_chat_exploration_parsed_routes_through_exploration
+    assert "resolved_exploration_action" in last_payload
+E   AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____ test_chat_fallback_preserves_endpoint_specific_no_resolution_shape ______
+tests\test_turn_pipeline_shared.py:293: in test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+    assert data.get("resolution") is None
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+E    +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x00000215A9402E80>('resolution')
+E    +    where <built-in method get of dict object at 0x00000215A9402E80> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback _
+tests\test_turn_pipeline_shared.py:470: in test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+    assert captured_inputs
+E   assert []
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________ test_chat_known_follow_up_bypasses_uncertainty_fallback ___________
+tests\test_turn_pipeline_shared.py:577: in test_chat_known_follow_up_bypasses_uncertainty_fallback
+    assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
+E   assert 'retry_strategy:selected=unresolved_question' in ''
+E    +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, "Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________ test_chat_targeted_retry_unresolved_question_only ______________
+tests\test_turn_pipeline_shared.py:606: in test_chat_targeted_retry_unresolved_question_only
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+_______ test_chat_targeted_retry_prefers_highest_priority_failure_first _______
+tests\test_turn_pipeline_shared.py:646: in test_chat_targeted_retry_prefers_highest_priority_failure_first
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+__ test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback __
+tests\test_turn_pipeline_shared.py:676: in test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+_ test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback _
+tests\test_turn_pipeline_shared.py:714: in test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+    assert len(captured_inputs) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_social_pressure_line_prefers_dialogue_over_adjudication ______
+tests\test_turn_pipeline_shared.py:1248: in test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+    assert data.get("resolution") is None
+E   assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+E    +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x00000215A5D0A680>('resolution')
+E    +    where <built-in method get of dict object at 0x00000215A5D0A680> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_active_target_direct_command_routes_to_social_exchange _______
+tests\test_turn_pipeline_shared.py:1285: in test_chat_active_target_direct_command_routes_to_social_exchange
+    assert_dialogue_lock_social_route_smoke(
+tests\helpers\emission_smoke_assertions.py:377: in assert_dialogue_lock_social_route_smoke
+    assert kind in allowed, (
+           ^^^^^^^^^^^^^^^
+E   AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'
+________ test_chat_mixed_turn_preserves_embedded_adjudication_metadata ________
+tests\test_turn_pipeline_shared.py:1514: in test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+    assert embedded.get("category") == "roll_requirement_query"
+E   AssertionError: assert None == 'roll_requirement_query'
+E    +  where None = <built-in method get of dict object at 0x00000215A5A0D540>('category')
+E    +    where <built-in method get of dict object at 0x00000215A5A0D540> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+___ test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane ___
+tests\test_turn_pipeline_shared.py:1695: in test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+    assert embedded.get("category") == "roll_requirement_query"
+E   AssertionError: assert None == 'roll_requirement_query'
+E    +  where None = <built-in method get of dict object at 0x00000215A93DFF40>('category')
+E    +    where <built-in method get of dict object at 0x00000215A93DFF40> = {}.get
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_final_output_sanitizer_blocks_internal_scaffold_labels _______
+tests\test_turn_pipeline_shared.py:1788: in test_chat_final_output_sanitizer_blocks_internal_scaffold_labels
+    assert_no_internal_scaffold_labels(text)
+tests\helpers\emission_smoke_assertions.py:313: in assert_no_internal_scaffold_labels
+    _assert_phrases_absent(
+tests\helpers\emission_smoke_assertions.py:228: in _assert_phrases_absent
+    assert phrase not in low, f"{label}: unexpected player-facing phrase {phrase!r}"
+           ^^^^^^^^^^^^^^^^^
+E   AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______ test_chat_social_exchange_invalid_blob_is_repaired_before_emit ________
+tests\test_turn_pipeline_shared.py:2006: in test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+    assert_emission_repair_evidence(
+tests\helpers\emission_smoke_assertions.py:356: in assert_emission_repair_evidence
+    assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_chat_social_exchange_blocks_advisory_prose_before_emit _________
+tests\test_turn_pipeline_shared.py:2034: in test_chat_social_exchange_blocks_advisory_prose_before_emit
+    assert_emission_repair_evidence(
+tests\helpers\emission_smoke_assertions.py:356: in assert_emission_repair_evidence
+    assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_chat_repeated_interruption_progresses_without_losing_dialogue_contract _
+tests\test_turn_pipeline_shared.py:2110: in test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+    assert second_text != first_text
+E   assert 'Tavern Runner says, "I couldn\'t tell you."' != 'Tavern Runner says, "I couldn\'t tell you."'
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__ test_immutable_preseal_preserves_selected_authored_answer_over_ignorance ___
+tests\test_social_question_relevance_answer_selection.py:428: in test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+    assert record.get("provenance") == "initial_generation"
+E   AssertionError: assert 'authorized_host_speech' == 'initial_generation'
+E     
+E     - initial_generation
+E     + authorized_host_speech
+_______________ test_by3_strict_social_hidden_mutation_detected _______________
+tests\test_by3_strict_social_semantic_mutation.py:50: in test_by3_strict_social_hidden_mutation_detected
+    assert target["post_gate_mutation_detected"] is True
+E   assert None is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+____________ test_by3_wrong_speaker_fixture_has_attributable_trace ____________
+tests\test_by3_strict_social_semantic_mutation.py:72: in test_by3_wrong_speaker_fixture_has_attributable_trace
+    assert str(target.get("first_semantic_mutation_source") or "").strip()
+E   AssertionError: assert ''
+E    +  where '' = <built-in method strip of str object at 0x00007FFE847D1D00>()
+E    +    where <built-in method strip of str object at 0x00007FFE847D1D00> = ''.strip
+E    +      where '' = str((None or ''))
+E    +        where None = <built-in method get of dict object at 0x00000215A925D200>('first_semantic_mutation_source')
+E    +          where <built-in method get of dict object at 0x00000215A925D200> = {'turn_identity': 'wrong_speaker_strict_social_emission|idx:0', 'scenario_id': 'wrong_speaker_strict_social_emission', 'turn_index': 0, 'turn_id': None, ...}.get
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+___________________ test_by3_report_schema_and_gap_closure ____________________
+tests\test_by3_strict_social_semantic_mutation.py:103: in test_by3_report_schema_and_gap_closure
+    assert coverage["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+________ test_by3_writer_raw_checkpoint_present_on_strict_social_turn _________
+tests\test_by3_strict_social_semantic_mutation.py:131: in test_by3_writer_raw_checkpoint_present_on_strict_social_turn
+    assert CHECKPOINT_NORMALIZED_SOCIAL_CANDIDATE in checkpoint_ids
+E   AssertionError: assert 'normalized_social_candidate' in {'policy_output', 'replay_final_text', 'writer_raw_candidate'}
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+______________________ test_by3_generate_repo_artifacts _______________________
+tests\test_by3_strict_social_semantic_mutation.py:152: in test_by3_generate_repo_artifacts
+    assert by3_report["before_after_coverage"]["gap_closed"] is True
+E   assert False is True
+---------------------------- Captured stdout call -----------------------------
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[CLUE DISCOVERED] c_patrol_milestone
+[CLUE DUPLICATE IGNORED] c_patrol_milestone
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+[CLUE DISCOVERED] north_arch_mud
+[SESSION RESET] runtime state cleared
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_exploration_resolution.py::test_chat_quarterstaff_attack_mechanical_resolution_absent
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_resolution_kwarg_to_build_messages
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+FAILED tests/test_exploration_resolution.py::test_chat_exploration_parsed_routes_through_exploration
+FAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+FAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+FAILED tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+FAILED tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+FAILED tests/test_social_question_relevance_answer_selection.py::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_strict_social_hidden_mutation_detected
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_wrong_speaker_fixture_has_attributable_trace
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_report_schema_and_gap_closure
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_writer_raw_checkpoint_present_on_strict_social_turn
+FAILED tests/test_by3_strict_social_semantic_mutation.py::test_by3_generate_repo_artifacts

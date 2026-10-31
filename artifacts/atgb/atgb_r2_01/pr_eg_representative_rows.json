@@ -1,0 +1,1213 @@
+[
+  {
+    "arm": "baseline",
+    "turn_id": "c01t14",
+    "conversation": "c01",
+    "partition": "development",
+    "index": 14,
+    "player": "Nara, when does the ferry depart, and who rings the bell?",
+    "answer_class": "PARTIAL",
+    "tags": [
+      "partial"
+    ],
+    "text": "Nara says, \"Which do you mean? I cannot tell which one that refers to.\"",
+    "plan": {
+      "request_proposition": {
+        "predicate": "depart",
+        "predicate_evidence": "does the ferry depart",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [],
+        "requested_role": "time",
+        "object_evidence": "",
+        "subject_evidence": "",
+        "object": "",
+        "missing_argument": "",
+        "subject": ""
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "depart",
+          "proposition": {
+            "predicate": "depart",
+            "predicate_evidence": "departs at dawn",
+            "temporal": "dawn",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [],
+            "requested_role": "",
+            "object_evidence": "",
+            "subject_evidence": "",
+            "object": "",
+            "missing_argument": "",
+            "subject": ""
+          }
+        },
+        {
+          "source_id": "bell",
+          "proposition": {
+            "predicate": "call",
+            "predicate_evidence": "called the harbor bell",
+            "temporal": "",
+            "spatial": "beside the ferry",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "object",
+                "value": "bell",
+                "entity_id": "",
+                "evidence": "bell beside the ferry"
+              },
+              {
+                "name": "name",
+                "value": "harbor bell",
+                "entity_id": "",
+                "evidence": "called the harbor bell"
+              }
+            ],
+            "requested_role": "",
+            "object_evidence": "",
+            "subject_evidence": "",
+            "object": "",
+            "missing_argument": "",
+            "subject": ""
+          }
+        }
+      ],
+      "source_relevance": [
+        {
+          "source_id": "bell",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "depart",
+          "coverage": "partial"
+        },
+        {
+          "source_id": "watch",
+          "coverage": "unknown"
+        },
+        {
+          "source_id": "flood",
+          "coverage": "unknown"
+        }
+      ],
+      "provider_proposal": {
+        "conversational_act": "information_question",
+        "addressee_id": "nara",
+        "referent_operation": {
+          "target_referent_id": "",
+          "operation": "",
+          "changed_fields": [],
+          "follow_up_relationship": "",
+          "changed_roles": [],
+          "evidence": "",
+          "target_evidence": ""
+        },
+        "request_proposition": {
+          "predicate": "depart",
+          "predicate_evidence": "does the ferry depart",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false,
+          "roles": [],
+          "requested_role": "time"
+        },
+        "source_propositions": [
+          {
+            "source_id": "depart",
+            "proposition": {
+              "predicate": "depart",
+              "predicate_evidence": "departs at dawn",
+              "temporal": "dawn",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [],
+              "requested_role": ""
+            }
+          },
+          {
+            "source_id": "bell",
+            "proposition": {
+              "predicate": "call",
+              "predicate_evidence": "called the harbor bell",
+              "temporal": "",
+              "spatial": "beside the ferry",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [
+                {
+                  "name": "object",
+                  "value": "bell",
+                  "entity_id": "",
+                  "evidence": "bell beside the ferry"
+                },
+                {
+                  "name": "name",
+                  "value": "harbor bell",
+                  "entity_id": "",
+                  "evidence": "called the harbor bell"
+                }
+              ],
+              "requested_role": ""
+            }
+          }
+        ],
+        "ambiguity_type": "",
+        "clarification_needed": false
+      },
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "",
+        "changed_roles": [],
+        "evidence": "",
+        "target_evidence": ""
+      },
+      "answer_status": "partial_answer",
+      "validation_failure": "",
+      "referent_eligible": true,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "information_question",
+      "addressee_id": "nara",
+      "addressee_reference": "Nara",
+      "requested_subject": "that",
+      "requested_relationship": "depart(that)",
+      "question_text": "Nara, when does the ferry depart, and who rings the bell?",
+      "correction_of_prior_question": false,
+      "correction_target": "gate countersign     gate",
+      "referenced_prior_proposition": "have_countersign(gate)",
+      "selected_source_ids": [
+        "depart"
+      ],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [
+        "depart"
+      ],
+      "answer_sufficiency": "partial",
+      "response_kind": "partial",
+      "ambiguity_type": "",
+      "authorized_text": "The ferry departs at dawn.",
+      "epistemic_status": "npc_knowledge",
+      "canonical": false,
+      "host_line": "Nara says, \"The ferry departs at dawn. I couldn't say more than that.\"",
+      "reason": "authorized_partial",
+      "provider_calls": 1,
+      "provider_usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "5248266f30c94c70990f8a521d50d295",
+        "attempt_id": "ac7b5ab6cc964be0aee99ffe49854281",
+        "purpose": "semantic_plan",
+        "owner": "unified_semantic_planning._invoke_provider",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T00:36:50.339325+00:00",
+        "time": "2026-10-19T00:36:53.029094+00:00",
+        "sent": true,
+        "request_id": "resp_0a657d65fc5d8df0006ad566231c6087d281a23b2e53d082b6",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 3786,
+        "output_tokens": 267,
+        "total_tokens": 4053,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2275.241
+      },
+      "latency_ms": 2696.078
+    },
+    "expression": null,
+    "sealed_text": "Nara says, \"Which do you mean? I cannot tell which one that refers to.\"",
+    "checks": {
+      "http": true,
+      "exact": true,
+      "sealed": true,
+      "history_exact": true,
+      "topics_unchanged": true,
+      "no_restricted_disclosure": true,
+      "gold_fact_permitted": true
+    },
+    "restricted_hits": [],
+    "score": {
+      "player_facing_success": false,
+      "allowed_hits": [],
+      "forbidden_hits": [],
+      "distractor_hits": [],
+      "hedge_ok": true,
+      "ignorance": false,
+      "clarification": true,
+      "false_uncertainty": false,
+      "false_clarification": true,
+      "naturalness": 0,
+      "correct_interpretation": false,
+      "factual_content": false,
+      "appropriate_uncertainty": true,
+      "appropriate_clarification": false
+    },
+    "latency_ms": 4916.042,
+    "provider_calls": [
+      {
+        "purpose": "semantic_plan",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "configured_model": "gpt-4.1-mini",
+        "request_id": "resp_0a657d65fc5d8df0006ad566231c6087d281a23b2e53d082b6",
+        "input_tokens": 3786,
+        "output_tokens": 267,
+        "latency_ms": 2275.241,
+        "sent": true,
+        "refusal": null
+      },
+      {
+        "purpose": "contract_interpretation",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "configured_model": "gpt-4.1-mini",
+        "request_id": "resp_0d1207f3ca617ae6006ad56625d67887d286d4b05547f4208e",
+        "input_tokens": 848,
+        "output_tokens": 126,
+        "latency_ms": 1542.646,
+        "sent": true,
+        "refusal": null
+      }
+    ],
+    "semantic_trace_count": 1,
+    "raw_plan": {
+      "conversational_act": "information_question",
+      "addressee_id": "nara",
+      "referent_operation": {
+        "target_referent_id": "",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "",
+        "changed_roles": [],
+        "evidence": "",
+        "target_evidence": ""
+      },
+      "request_proposition": {
+        "predicate": "depart",
+        "predicate_evidence": "does the ferry depart",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [],
+        "requested_role": "time"
+      },
+      "source_propositions": [
+        {
+          "source_id": "depart",
+          "proposition": {
+            "predicate": "depart",
+            "predicate_evidence": "departs at dawn",
+            "temporal": "dawn",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [],
+            "requested_role": ""
+          }
+        },
+        {
+          "source_id": "bell",
+          "proposition": {
+            "predicate": "call",
+            "predicate_evidence": "called the harbor bell",
+            "temporal": "",
+            "spatial": "beside the ferry",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "object",
+                "value": "bell",
+                "entity_id": "",
+                "evidence": "bell beside the ferry"
+              },
+              {
+                "name": "name",
+                "value": "harbor bell",
+                "entity_id": "",
+                "evidence": "called the harbor bell"
+              }
+            ],
+            "requested_role": ""
+          }
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false
+    },
+    "intervention": {
+      "arm": "baseline"
+    },
+    "reason": "authorized_partial",
+    "response_kind": "partial",
+    "addressee_id": "nara",
+    "selected_source_ids": [
+      "depart"
+    ],
+    "host_line": "Nara says, \"The ferry departs at dawn. I couldn't say more than that.\""
+  },
+  {
+    "arm": "baseline",
+    "turn_id": "c06t03",
+    "conversation": "c06",
+    "partition": "validation",
+    "index": 3,
+    "player": "No, I meant the map Brin copied.",
+    "answer_class": "DIRECT",
+    "tags": [
+      "correction",
+      "multi_role"
+    ],
+    "text": "I can't reliably answer that revision just now.",
+    "plan": {
+      "request_proposition": {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [
+          {
+            "name": "item",
+            "value": "map Brin copied",
+            "entity_id": "",
+            "evidence": "map Brin copied"
+          }
+        ],
+        "requested_role": "keeper",
+        "object_evidence": "",
+        "subject_evidence": "",
+        "object": "",
+        "missing_argument": "",
+        "subject": ""
+      },
+      "entity_roles": [],
+      "source_propositions": [],
+      "provider_proposal": {
+        "conversational_act": "correction",
+        "addressee_id": "vesper",
+        "referent_operation": {
+          "target_referent_id": "a3f1e4f485b442799fbe5bb1fd3f7b17:1",
+          "operation": "replace_object",
+          "changed_fields": [
+            "roles"
+          ],
+          "follow_up_relationship": "",
+          "changed_roles": [
+            "item"
+          ],
+          "evidence": "No, I meant the map Brin copied.",
+          "target_evidence": "night roster"
+        },
+        "request_proposition": {
+          "predicate": "keep",
+          "predicate_evidence": "keeps",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false,
+          "roles": [
+            {
+              "name": "item",
+              "value": "map Brin copied",
+              "entity_id": "",
+              "evidence": "map Brin copied"
+            }
+          ],
+          "requested_role": "keeper"
+        },
+        "source_propositions": [],
+        "ambiguity_type": "",
+        "clarification_needed": false
+      },
+      "referent_operation": {
+        "target_referent_id": "a3f1e4f485b442799fbe5bb1fd3f7b17:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "roles"
+        ],
+        "follow_up_relationship": "",
+        "changed_roles": [
+          "item"
+        ],
+        "evidence": "No, I meant the map Brin copied.",
+        "target_evidence": "night roster"
+      },
+      "answer_status": "unknown",
+      "validation_failure": "invalid_correction_operation",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [
+        "brin"
+      ],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "map Brin copied",
+      "requested_relationship": "keep(map_brin_copied)",
+      "question_text": "No, I meant the map Brin copied.",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps     night roster",
+      "referenced_prior_proposition": "keep(night_roster)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "invalid_correction_operation",
+      "provider_calls": 1,
+      "provider_usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "5248266f30c94c70990f8a521d50d295",
+        "attempt_id": "2d15c442a8674952a2c909cc618338af",
+        "purpose": "semantic_plan",
+        "owner": "unified_semantic_planning._invoke_provider",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T00:39:26.056913+00:00",
+        "time": "2026-10-19T00:39:28.019202+00:00",
+        "sent": true,
+        "request_id": "resp_072cd78eb4828f61006ad566bea34887d287df998fb4c5566c",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 2147,
+        "output_tokens": 181,
+        "total_tokens": 2328,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 1727.159
+      },
+      "latency_ms": 1965.688
+    },
+    "expression": null,
+    "sealed_text": "I can't reliably answer that revision just now.",
+    "checks": {
+      "http": true,
+      "exact": true,
+      "sealed": true,
+      "history_exact": true,
+      "topics_unchanged": true,
+      "no_restricted_disclosure": true,
+      "gold_fact_permitted": true
+    },
+    "restricted_hits": [],
+    "score": {
+      "player_facing_success": false,
+      "allowed_hits": [],
+      "forbidden_hits": [],
+      "distractor_hits": [],
+      "hedge_ok": true,
+      "ignorance": false,
+      "clarification": false,
+      "false_uncertainty": false,
+      "false_clarification": false,
+      "naturalness": 0,
+      "correct_interpretation": false,
+      "factual_content": false,
+      "appropriate_uncertainty": true,
+      "appropriate_clarification": true
+    },
+    "latency_ms": 1993.467,
+    "provider_calls": [
+      {
+        "purpose": "semantic_plan",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "configured_model": "gpt-4.1-mini",
+        "request_id": "resp_072cd78eb4828f61006ad566bea34887d287df998fb4c5566c",
+        "input_tokens": 2147,
+        "output_tokens": 181,
+        "latency_ms": 1727.159,
+        "sent": true,
+        "refusal": null
+      }
+    ],
+    "semantic_trace_count": 1,
+    "raw_plan": {
+      "conversational_act": "correction",
+      "addressee_id": "vesper",
+      "referent_operation": {
+        "target_referent_id": "a3f1e4f485b442799fbe5bb1fd3f7b17:1",
+        "operation": "replace_object",
+        "changed_fields": [
+          "roles"
+        ],
+        "follow_up_relationship": "",
+        "changed_roles": [
+          "item"
+        ],
+        "evidence": "No, I meant the map Brin copied.",
+        "target_evidence": "night roster"
+      },
+      "request_proposition": {
+        "predicate": "keep",
+        "predicate_evidence": "keeps",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [
+          {
+            "name": "item",
+            "value": "map Brin copied",
+            "entity_id": "",
+            "evidence": "map Brin copied"
+          }
+        ],
+        "requested_role": "keeper"
+      },
+      "source_propositions": [],
+      "ambiguity_type": "",
+      "clarification_needed": false
+    },
+    "intervention": {
+      "arm": "baseline"
+    },
+    "reason": "invalid_correction_operation",
+    "response_kind": "unknown",
+    "addressee_id": "",
+    "selected_source_ids": [],
+    "host_line": "I can't reliably answer that revision just now."
+  },
+  {
+    "arm": "baseline",
+    "turn_id": "c06t07",
+    "conversation": "c06",
+    "partition": "validation",
+    "index": 7,
+    "player": "Who told you Tamsin keeps it?",
+    "answer_class": "UNKNOWN",
+    "tags": [
+      "follow_up"
+    ],
+    "text": "I can't reliably answer that just now.",
+    "plan": {
+      "answer_status": "unknown",
+      "validation_failure": "invalid_proposition",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "information_question",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "",
+      "requested_relationship": "",
+      "question_text": "Who told you Tamsin keeps it?",
+      "correction_of_prior_question": false,
+      "correction_target": "keeps     roster",
+      "referenced_prior_proposition": "keep(roster)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that just now.",
+      "reason": "invalid_proposition",
+      "provider_calls": 1,
+      "provider_usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "5248266f30c94c70990f8a521d50d295",
+        "attempt_id": "66c2889bedef4d84855ee34f7c1c1f53",
+        "purpose": "semantic_plan",
+        "owner": "unified_semantic_planning._invoke_provider",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T00:39:37.733482+00:00",
+        "time": "2026-10-19T00:39:40.393004+00:00",
+        "sent": true,
+        "request_id": "resp_0350d22737d46223006ad566ca5de487d2b10e97e0e357ddb7",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 2854,
+        "output_tokens": 303,
+        "total_tokens": 3157,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2440.001
+      },
+      "latency_ms": 2663.533
+    },
+    "expression": null,
+    "sealed_text": "I can't reliably answer that just now.",
+    "checks": {
+      "http": true,
+      "exact": true,
+      "sealed": true,
+      "history_exact": true,
+      "topics_unchanged": true,
+      "no_restricted_disclosure": true,
+      "gold_fact_permitted": true
+    },
+    "restricted_hits": [],
+    "score": {
+      "player_facing_success": false,
+      "allowed_hits": [],
+      "forbidden_hits": [],
+      "distractor_hits": [],
+      "hedge_ok": true,
+      "ignorance": false,
+      "clarification": false,
+      "false_uncertainty": false,
+      "false_clarification": false,
+      "naturalness": 0,
+      "correct_interpretation": false,
+      "factual_content": true,
+      "appropriate_uncertainty": false,
+      "appropriate_clarification": true
+    },
+    "latency_ms": 2690.733,
+    "provider_calls": [
+      {
+        "purpose": "semantic_plan",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "configured_model": "gpt-4.1-mini",
+        "request_id": "resp_0350d22737d46223006ad566ca5de487d2b10e97e0e357ddb7",
+        "input_tokens": 2854,
+        "output_tokens": 303,
+        "latency_ms": 2440.001,
+        "sent": true,
+        "refusal": null
+      }
+    ],
+    "semantic_trace_count": 1,
+    "raw_plan": {
+      "conversational_act": "information_question",
+      "addressee_id": "vesper",
+      "referent_operation": {
+        "target_referent_id": "a3f1e4f485b442799fbe5bb1fd3f7b17:1",
+        "operation": "",
+        "changed_fields": [],
+        "follow_up_relationship": "",
+        "changed_roles": [],
+        "evidence": "Who told you Tamsin keeps it?",
+        "target_evidence": ""
+      },
+      "request_proposition": {
+        "predicate": "tell",
+        "predicate_evidence": "told you",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [
+          {
+            "name": "informant",
+            "value": "?",
+            "entity_id": "",
+            "evidence": "/"
+          },
+          {
+            "name": "recipient",
+            "value": "vesper",
+            "entity_id": "vesper",
+            "evidence": "you"
+          },
+          {
+            "name": "content",
+            "value": "Tamsin keeps the night roster",
+            "entity_id": "",
+            "evidence": "Tamsin keeps it"
+          }
+        ],
+        "requested_role": "informant"
+      },
+      "source_propositions": [
+        {
+          "source_id": "roster",
+          "proposition": {
+            "predicate": "keep",
+            "predicate_evidence": "keeps",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "keeper",
+                "value": "Tamsin",
+                "entity_id": "",
+                "evidence": "Tamsin"
+              },
+              {
+                "name": "item",
+                "value": "night roster",
+                "entity_id": "",
+                "evidence": "night roster"
+              }
+            ],
+            "requested_role": ""
+          }
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false
+    },
+    "intervention": {
+      "arm": "baseline"
+    },
+    "reason": "invalid_proposition",
+    "response_kind": "unknown",
+    "addressee_id": "",
+    "selected_source_ids": [],
+    "host_line": "I can't reliably answer that just now."
+  },
+  {
+    "arm": "baseline",
+    "turn_id": "c07t02",
+    "conversation": "c07",
+    "partition": "validation",
+    "index": 2,
+    "player": "No, I meant whose horse Cala saddled.",
+    "answer_class": "DIRECT",
+    "tags": [
+      "correction",
+      "multi_role"
+    ],
+    "text": "I can't reliably answer that revision just now.",
+    "plan": {
+      "request_proposition": {
+        "predicate": "saddle",
+        "predicate_evidence": "saddled",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [
+          {
+            "name": "agent",
+            "value": "Cala",
+            "entity_id": "cala",
+            "evidence": "Cala"
+          },
+          {
+            "name": "object",
+            "value": "horse",
+            "entity_id": "",
+            "evidence": "horse"
+          }
+        ],
+        "requested_role": "owner",
+        "object_evidence": "",
+        "subject_evidence": "",
+        "object": "",
+        "missing_argument": "",
+        "subject": ""
+      },
+      "entity_roles": [],
+      "source_propositions": [
+        {
+          "source_id": "gelding",
+          "proposition": {
+            "predicate": "saddle",
+            "predicate_evidence": "saddled",
+            "temporal": "at noon",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "agent",
+                "value": "Cala",
+                "entity_id": "cala",
+                "evidence": "Cala"
+              },
+              {
+                "name": "object",
+                "value": "Wren's gelding",
+                "entity_id": "",
+                "evidence": "Wren's gelding"
+              }
+            ],
+            "requested_role": "",
+            "object_evidence": "",
+            "subject_evidence": "",
+            "object": "",
+            "missing_argument": "",
+            "subject": ""
+          }
+        },
+        {
+          "source_id": "road",
+          "proposition": {
+            "predicate": "join",
+            "predicate_evidence": "joins",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "object",
+                "value": "quarry lane",
+                "entity_id": "",
+                "evidence": "quarry lane"
+              },
+              {
+                "name": "subject",
+                "value": "stable road",
+                "entity_id": "",
+                "evidence": "stable road"
+              }
+            ],
+            "requested_role": "",
+            "object_evidence": "",
+            "subject_evidence": "",
+            "object": "",
+            "missing_argument": "",
+            "subject": ""
+          }
+        }
+      ],
+      "provider_proposal": {
+        "conversational_act": "correction",
+        "addressee_id": "wren",
+        "referent_operation": {
+          "target_referent_id": "e3ac25948d194658a61832facddd1546:1",
+          "operation": "replace_requested_argument",
+          "changed_fields": [
+            "requested_role"
+          ],
+          "follow_up_relationship": "",
+          "changed_roles": [],
+          "evidence": "No, I meant whose horse Cala saddled.",
+          "target_evidence": ""
+        },
+        "request_proposition": {
+          "predicate": "saddle",
+          "predicate_evidence": "saddled",
+          "temporal": "",
+          "spatial": "",
+          "epistemic": "npc_knowledge",
+          "prior_reference": "",
+          "negated": false,
+          "roles": [
+            {
+              "name": "agent",
+              "value": "Cala",
+              "entity_id": "cala",
+              "evidence": "Cala"
+            },
+            {
+              "name": "object",
+              "value": "horse",
+              "entity_id": "",
+              "evidence": "horse"
+            }
+          ],
+          "requested_role": "owner"
+        },
+        "source_propositions": [
+          {
+            "source_id": "gelding",
+            "proposition": {
+              "predicate": "saddle",
+              "predicate_evidence": "saddled",
+              "temporal": "at noon",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [
+                {
+                  "name": "agent",
+                  "value": "Cala",
+                  "entity_id": "cala",
+                  "evidence": "Cala"
+                },
+                {
+                  "name": "object",
+                  "value": "Wren's gelding",
+                  "entity_id": "",
+                  "evidence": "Wren's gelding"
+                }
+              ],
+              "requested_role": ""
+            }
+          },
+          {
+            "source_id": "road",
+            "proposition": {
+              "predicate": "join",
+              "predicate_evidence": "joins",
+              "temporal": "",
+              "spatial": "",
+              "epistemic": "npc_knowledge",
+              "prior_reference": "",
+              "negated": false,
+              "roles": [
+                {
+                  "name": "object",
+                  "value": "quarry lane",
+                  "entity_id": "",
+                  "evidence": "quarry lane"
+                },
+                {
+                  "name": "subject",
+                  "value": "stable road",
+                  "entity_id": "",
+                  "evidence": "stable road"
+                }
+              ],
+              "requested_role": ""
+            }
+          }
+        ],
+        "ambiguity_type": "",
+        "clarification_needed": false
+      },
+      "referent_operation": {
+        "target_referent_id": "e3ac25948d194658a61832facddd1546:1",
+        "operation": "replace_requested_argument",
+        "changed_fields": [
+          "requested_role"
+        ],
+        "follow_up_relationship": "",
+        "changed_roles": [],
+        "evidence": "No, I meant whose horse Cala saddled.",
+        "target_evidence": ""
+      },
+      "answer_status": "unknown",
+      "validation_failure": "unlisted_role_change",
+      "referent_eligible": false,
+      "mentioned_entity_ids": [
+        "cala"
+      ],
+      "locked": true,
+      "plan_version": "pr-eg-r6-r2-r2.1",
+      "conversational_act": "correction",
+      "addressee_id": "",
+      "addressee_reference": "",
+      "requested_subject": "Cala",
+      "requested_relationship": "saddle(cala)",
+      "question_text": "No, I meant whose horse Cala saddled.",
+      "correction_of_prior_question": false,
+      "correction_target": "did you saddle     Wren mare",
+      "referenced_prior_proposition": "saddle(wren)",
+      "selected_source_ids": [],
+      "rejected_source_ids": [],
+      "candidate_source_ids": [],
+      "answer_sufficiency": "unknown",
+      "response_kind": "unknown",
+      "ambiguity_type": "",
+      "authorized_text": "",
+      "epistemic_status": "none",
+      "canonical": false,
+      "host_line": "I can't reliably answer that revision just now.",
+      "reason": "unlisted_role_change",
+      "provider_calls": 1,
+      "provider_usage": {
+        "event": "completed",
+        "version": "ATGB-03B-1",
+        "run_id": "5248266f30c94c70990f8a521d50d295",
+        "attempt_id": "d794c36ed0fa465c8d5dd68b5735ce0e",
+        "purpose": "semantic_plan",
+        "owner": "unified_semantic_planning._invoke_provider",
+        "configured_model": "gpt-4.1-mini",
+        "admitted_at": "2026-10-19T00:40:00.888458+00:00",
+        "time": "2026-10-19T00:40:04.025597+00:00",
+        "sent": true,
+        "request_id": "resp_0db3ea8c874f1406006ad566e16fcc87d2b97334d72c861ec6",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "input_tokens": 2123,
+        "output_tokens": 377,
+        "total_tokens": 2500,
+        "usage_consistent": true,
+        "refusal": null,
+        "completion_status": "completed",
+        "dispatch_attempted": true,
+        "latency_ms": 2934.117
+      },
+      "latency_ms": 3140.263
+    },
+    "expression": null,
+    "sealed_text": "I can't reliably answer that revision just now.",
+    "checks": {
+      "http": true,
+      "exact": true,
+      "sealed": true,
+      "history_exact": true,
+      "topics_unchanged": true,
+      "no_restricted_disclosure": true,
+      "gold_fact_permitted": true
+    },
+    "restricted_hits": [],
+    "score": {
+      "player_facing_success": false,
+      "allowed_hits": [],
+      "forbidden_hits": [],
+      "distractor_hits": [],
+      "hedge_ok": true,
+      "ignorance": false,
+      "clarification": false,
+      "false_uncertainty": false,
+      "false_clarification": false,
+      "naturalness": 0,
+      "correct_interpretation": false,
+      "factual_content": false,
+      "appropriate_uncertainty": true,
+      "appropriate_clarification": true
+    },
+    "latency_ms": 3163.089,
+    "provider_calls": [
+      {
+        "purpose": "semantic_plan",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "configured_model": "gpt-4.1-mini",
+        "request_id": "resp_0db3ea8c874f1406006ad566e16fcc87d2b97334d72c861ec6",
+        "input_tokens": 2123,
+        "output_tokens": 377,
+        "latency_ms": 2934.117,
+        "sent": true,
+        "refusal": null
+      }
+    ],
+    "semantic_trace_count": 1,
+    "raw_plan": {
+      "conversational_act": "correction",
+      "addressee_id": "wren",
+      "referent_operation": {
+        "target_referent_id": "e3ac25948d194658a61832facddd1546:1",
+        "operation": "replace_requested_argument",
+        "changed_fields": [
+          "requested_role"
+        ],
+        "follow_up_relationship": "",
+        "changed_roles": [],
+        "evidence": "No, I meant whose horse Cala saddled.",
+        "target_evidence": ""
+      },
+      "request_proposition": {
+        "predicate": "saddle",
+        "predicate_evidence": "saddled",
+        "temporal": "",
+        "spatial": "",
+        "epistemic": "npc_knowledge",
+        "prior_reference": "",
+        "negated": false,
+        "roles": [
+          {
+            "name": "agent",
+            "value": "Cala",
+            "entity_id": "cala",
+            "evidence": "Cala"
+          },
+          {
+            "name": "object",
+            "value": "horse",
+            "entity_id": "",
+            "evidence": "horse"
+          }
+        ],
+        "requested_role": "owner"
+      },
+      "source_propositions": [
+        {
+          "source_id": "gelding",
+          "proposition": {
+            "predicate": "saddle",
+            "predicate_evidence": "saddled",
+            "temporal": "at noon",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "agent",
+                "value": "Cala",
+                "entity_id": "cala",
+                "evidence": "Cala"
+              },
+              {
+                "name": "object",
+                "value": "Wren's gelding",
+                "entity_id": "",
+                "evidence": "Wren's gelding"
+              }
+            ],
+            "requested_role": ""
+          }
+        },
+        {
+          "source_id": "road",
+          "proposition": {
+            "predicate": "join",
+            "predicate_evidence": "joins",
+            "temporal": "",
+            "spatial": "",
+            "epistemic": "npc_knowledge",
+            "prior_reference": "",
+            "negated": false,
+            "roles": [
+              {
+                "name": "object",
+                "value": "quarry lane",
+                "entity_id": "",
+                "evidence": "quarry lane"
+              },
+              {
+                "name": "subject",
+                "value": "stable road",
+                "entity_id": "",
+                "evidence": "stable road"
+              }
+            ],
+            "requested_role": ""
+          }
+        }
+      ],
+      "ambiguity_type": "",
+      "clarification_needed": false
+    },
+    "intervention": {
+      "arm": "baseline"
+    },
+    "reason": "unlisted_role_change",
+    "response_kind": "unknown",
+    "addressee_id": "",
+    "selected_source_ids": [],
+    "host_line": "I can't reliably answer that revision just now."
+  }
+]

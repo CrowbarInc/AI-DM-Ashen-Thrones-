@@ -1,0 +1,1423 @@
+{
+  "campaign_id": "pr_play_10",
+  "campaign_name": "PR-PLAY-10 \u2014 Runtime Scene Overlay State-Authority Reconciliation",
+  "campaign_date": "2026-10-30",
+  "purpose": "Offline evidence-driven bounded harness repair",
+  "objective_status": "B \u2014 Conditionally ready; external review only",
+  "executive_summary": "Historical harness false positive reconciled; exact parsed response replay passes. 752 passing checks; 6 preexisting failures. No live calls.",
+  "primary_report": "development/campaigns/product_realization/pr_play_10/09_FINAL_VERDICT_AND_HANDOFF.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_play_10/concurrent_overlay.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/conversation_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/conversation_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/diagnostics_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/diagnostics_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/entry_status.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/entry_to_exit_integrity.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/exact_historical_overlay_diff.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/example_improved_state_difference.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/exit_status.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/export_atgb_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/export_atgb_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/failed_overlay_rollback.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/failure_classification.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/focused.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/focused.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/gameplay_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/gameplay_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/harness_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/harness_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/hidden_faction_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/hidden_faction_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical/baseline/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical/diagnostics/provider_usage.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical/opening/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical/opening_response_evidence/eea42395cc4a47a6b5d6ed286f046436-1.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical/provenance.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical/reports/result.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/historical_reclassified.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/after/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/baseline/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/configuration/run.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/configuration/scenario.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/diagnostics/application.log",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/diagnostics/budget_snapshot.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/diagnostics/d6fe087e37844f71bd4fdae4be88110d-1.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/diagnostics/execution_log.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/diagnostics/provider_usage.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/diagnostics/ready.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/evidence/evidence.zip",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/evidence/manifest.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/opening/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/reports/GAMEPLAY_REPORT.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/reports/result.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/reports/SUMMARY.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/after/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/api_response.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/before/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T1/evaluation.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/after/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/api_response.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/before/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T2/evaluation.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/after/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/api_response.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/before/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T3/evaluation.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/after/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/api_response.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/api_state.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/documents.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/campaign.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/character.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/combat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/conditions.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/scenes/frontier_gate.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/scenes/market_quarter.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/scenes/old_milestone.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/session.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/session_log.jsonl",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/before/persistent/world.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_evidence/turns/T4/evaluation.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_replay.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_replay_localhost.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_run.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/http_summary.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/live_test_instructions.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O1.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O10.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O11.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O12.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O13.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O14.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O15.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O2.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O3.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O4.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O5.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O6.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O7.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O8.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/O9.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/opening_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/opening_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/overlay_authority_matrix.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/overlay_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/overlay_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/production_source_map.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/protected_before.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/provider_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/provider_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/budget.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/concurrent.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D1.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D10.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D2.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D3.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D4.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D5.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D6.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D7.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D8.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/D9.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/extraction.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/placeholder.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/placeholder_http.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/repeat.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/retry.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_diagnostics/validation.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/regression_runs.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/replay.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/revision.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/rules_persistence_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/rules_persistence_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_diff.patch",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/docs/AUTOMATED_PLAYTEST_GUIDE.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/docs/NEXT_SESSION.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tests/fixtures/pr_play_10/historical_opening.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tests/test_pr_play_10_overlays.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tests/validation_coverage_registry.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/playtest/analysis.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/playtest/gameplay.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/playtest/overlays.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/playtest/runner.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/playtest/worker.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/report_pr_play_10.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/source_snapshots/tools/validate_pr_play_10.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/structured_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/structured_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/test_summary.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/validation_protected_integrity.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/world_regression.txt",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "artifacts/pr_play_10/world_regression.xml",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/01_BASELINE_AND_HISTORICAL_EVIDENCE.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/02_EXACT_OVERLAY_MUTATION.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/03_PRODUCTION_OVERLAY_AUTHORITY.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/04_HARNESS_STATE_COMPARISON_ANALYSIS.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/05_ROOT_CAUSE_AND_IMPLEMENTATION.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/06_OVERLAY_AUTHORITY_MATRIX.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/07_DETERMINISTIC_REPLAY_AND_REGRESSION.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/08_LIVE_TEST_READINESS.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_10/09_FINAL_VERDICT_AND_HANDOFF.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "docs/AUTOMATED_PLAYTEST_GUIDE.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tests/fixtures/pr_play_10/historical_opening.json",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tests/test_pr_play_10_overlays.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tests/validation_coverage_registry.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/playtest/analysis.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/playtest/gameplay.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/playtest/overlays.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/playtest/runner.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/playtest/worker.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/report_pr_play_10.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    },
+    {
+      "path": "tools/validate_pr_play_10.py",
+      "role": "evidence",
+      "why": "Explicit PR-PLAY-10 source, report or deterministic evidence"
+    }
+  ],
+  "changes": {
+    "production": [],
+    "tooling": [
+      "Exact evidence-gated overlay comparison and bounded diagnostics"
+    ],
+    "validation": [
+      "O1\u2013O15, historical production replay, rollback/concurrency and regression lanes"
+    ],
+    "documentation": [
+      "Nine reports, guide and session handoff"
+    ]
+  },
+  "testing": {
+    "focused": "Overlay and opening/harness controls pass",
+    "broader": "752 passed; 6 inherited failures",
+    "full_suite": "Not run",
+    "runtime_validation": "Production API and owned HTTP with SDK stub",
+    "model_runtime_boundary": "Zero live provider or connectivity operations",
+    "new_regressions": "None demonstrated",
+    "pre_existing_failures": "Exact preserved baseline IDs in failure_classification.json"
+  },
+  "decisions_requiring_human_review": [
+    "External review before any separately authorized live command"
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Six-request limit can skip T5; unsupported overlay authority remains a stop condition"
+    ],
+    "pre_existing": [
+      "Stale source attestations and existing opening/conversation test failures"
+    ]
+  },
+  "does_not_prove": [
+    "Live play quality, all five turns within six requests, general semantic authority, ATGB scores"
+  ],
+  "recommended_next_step": "External review only; do not execute live test",
+  "deferred_work": [
+    "Broader legacy semantic policy and larger-budget feasibility are not authorized"
+  ],
+  "validation_evidence": {
+    "evidence_scope": "structural_only"
+  }
+}

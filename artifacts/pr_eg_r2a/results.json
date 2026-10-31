@@ -1,0 +1,7258 @@
+[
+  {
+    "id": "paraphrase01",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase01",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_01",
+      "provider_result": {
+        "id": "paraphrase01",
+        "speech": "The road outside the gate is called the north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase01",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_01",
+      "provider_result": {
+        "id": "paraphrase01",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The road outside the gate is called the north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": "F1",
+            "reason": "This candidate is a straightforward paraphrase of the known and disclosed fact that the street beyond the gate is called the north road. 'Road outside' and 'street beyond' are equivalent spatial expressions."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase01",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase02",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase02",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_01",
+      "provider_result": {
+        "id": "paraphrase02",
+        "speech": "People call that street the north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase02",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_01",
+      "provider_result": {
+        "id": "paraphrase02",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "People call that street the north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": "F1",
+            "reason": "This claim states that the street is called the north road, which aligns with the known and disclosed fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase02",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_01",
+      "provider_result": {
+        "id": "paraphrase03",
+        "speech": "That street past the gate? The north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase04",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase04",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_01",
+      "provider_result": {
+        "id": "paraphrase04",
+        "speech": "The name of the street beyond the gate is the north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase04",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_01",
+      "provider_result": {
+        "id": "paraphrase04",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The name of the street beyond the gate is the north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": "F1",
+            "reason": "This is a direct restatement of the disclosed fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase04",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase05",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase05",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_01",
+      "provider_result": {
+        "id": "paraphrase05",
+        "speech": "North road is what that street is called.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase05",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_01",
+      "provider_result": {
+        "id": "paraphrase05",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "North road is what that street is called.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": "F1",
+            "reason": "This paraphrases the known fact using synonymous phrasing."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase05",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_01",
+      "provider_result": {
+        "id": "paraphrase06",
+        "speech": "They call the street outside the gate the north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase07",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase07",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_01",
+      "provider_result": {
+        "id": "paraphrase07",
+        "speech": "Beyond the gate, the street bears the name north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase07",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_01",
+      "provider_result": {
+        "id": "paraphrase07",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "Beyond the gate, the street bears the name north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": "F1",
+            "reason": "This is another acceptable restatement of the disclosed fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase07",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase08",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase08",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_01",
+      "provider_result": {
+        "id": "paraphrase08",
+        "speech": "That thoroughfare outside the gate goes by north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase08",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_01",
+      "provider_result": {
+        "id": "paraphrase08",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "That thoroughfare outside the gate goes by north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": "F1",
+            "reason": "The phrase 'goes by' indicates the name of the thoroughfare, consistent with the known and disclosed fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase08",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_01",
+      "provider_result": {
+        "id": "paraphrase09",
+        "speech": "North road: that is the name of the street beyond the gate.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase10",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase10",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_02",
+      "provider_result": {
+        "id": "paraphrase10",
+        "speech": "The street you mean, just beyond the gate, is known as the north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase10",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_02",
+      "provider_result": {
+        "id": "paraphrase10",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The street you mean, just beyond the gate, is known as the north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "This is a direct paraphrase of the known and disclose-authorized fact F1."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase10",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase11",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase11",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_02",
+      "provider_result": {
+        "id": "paraphrase11",
+        "speech": "The street past the gate is named north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase11",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_02",
+      "provider_result": {
+        "id": "paraphrase11",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The street past the gate is named north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "This is a correct restatement of the known and authorized fact F1."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase11",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase12",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase12",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_01",
+      "provider_result": {
+        "id": "paraphrase12",
+        "speech": "It is called the north road, that street beyond the gate.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase12",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase12",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase13",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase13",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_02",
+      "provider_result": {
+        "id": "paraphrase13",
+        "speech": "For the street outside the gate, use the name north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase13",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_02",
+      "provider_result": {
+        "id": "paraphrase13",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "For the street outside the gate, use the name north road.",
+            "kind": "explicit",
+            "classification": [
+              "B"
+            ],
+            "source_id": null,
+            "reason": "This restates the fact F1 and introduces a minor incidental usage suggestion, which is harmless."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase13",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase14",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase14",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_02",
+      "provider_result": {
+        "id": "paraphrase14",
+        "speech": "You mean the street beyond the gate. Its name is north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase14",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_02",
+      "provider_result": {
+        "id": "paraphrase14",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "You mean the street beyond the gate. Its name is north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "This is a direct, explicit restatement of the known and authorized fact F1."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase14",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase15",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase15",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_01",
+      "provider_result": {
+        "id": "paraphrase15",
+        "speech": "The street beyond this gate goes by the name north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase15",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase15",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase16",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase16",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "B_development_02",
+      "provider_result": {
+        "id": "paraphrase16",
+        "speech": "The north road leads to the fortress.",
+        "claims": [
+          {
+            "text": "The north road leads to the fortress.",
+            "source_id": "F2",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase16",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_02",
+      "provider_result": {
+        "id": "paraphrase16",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The north road leads to the fortress.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "This directly quotes the known and authorize disclosure fact F2."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase16",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase17",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase17",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_02",
+      "provider_result": {
+        "id": "paraphrase17",
+        "speech": "The fortress is where the north road leads.",
+        "claims": [
+          {
+            "text": "The north road leads to the fortress.",
+            "source_id": "F2",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase17",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_02",
+      "provider_result": {
+        "id": "paraphrase17",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The fortress is where the north road leads.",
+            "kind": "explicit",
+            "classification": [
+              "B"
+            ],
+            "source_id": null,
+            "reason": "This is a valid restatement of the known and disclose-authorized fact F2."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase17",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase18",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase18",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_01",
+      "provider_result": {
+        "id": "paraphrase18",
+        "speech": "I believe the captain serves smugglers; I cannot say it is true.",
+        "claims": [
+          {
+            "text": "Mara believes the captain serves smugglers; truth unestablished.",
+            "source_id": "B1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase18",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase18",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "paraphrase19",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase19",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_03",
+      "provider_result": {
+        "id": "paraphrase19",
+        "speech": "Mara thinks the captain works for smugglers; that is only a belief.",
+        "claims": [
+          {
+            "text": "Mara believes the captain serves smugglers; truth unestablished.",
+            "source_id": "B1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase19",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_03",
+      "provider_result": {
+        "id": "paraphrase19",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "Mara thinks the captain works for smugglers; that is only a belief.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Directly restates the context fact that Mara believes the captain serves smugglers, noting it as a belief and not established truth."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase19",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase20",
+    "strategy": "A",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "paraphrase20",
+    "strategy": "B",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_03",
+      "provider_result": {
+        "id": "paraphrase20",
+        "speech": "The north gate is watched all night.",
+        "claims": [
+          {
+            "text": "Guards watch the north gate throughout the night.",
+            "source_id": "F3",
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase20",
+    "strategy": "C",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_03",
+      "provider_result": {
+        "id": "paraphrase20",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "The north gate is watched all night.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Accurately reflects the known and disclosed fact that guards watch the north gate throughout the night."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "paraphrase20",
+    "strategy": "D",
+    "split": "development",
+    "category": "paraphrase",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion01",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion01",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_03",
+      "provider_result": {
+        "id": "expansion01",
+        "speech": "The north road runs directly to the royal fortress.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          },
+          {
+            "text": "The north road runs directly to the royal fortress.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion01",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_03",
+      "provider_result": {
+        "id": "expansion01",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The north road runs directly to the royal fortress.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "No authorized fact states the north road leads directly to the royal fortress; this is an unauthorized consequential claim."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion01",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion02",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion02",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_03",
+      "provider_result": {
+        "id": "expansion02",
+        "speech": "The street was named by the king.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          },
+          {
+            "text": "The street was named by the king.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion02",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_03",
+      "provider_result": {
+        "id": "expansion02",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The street was named by the king.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "No disclosed knowledge about the origin of the street name is given; this is unauthorized speculation."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion02",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_02",
+      "provider_result": {
+        "id": "expansion03",
+        "speech": "The road definitely heads north.",
+        "claims": [
+          {
+            "text": "The road definitely heads north, implying the road's direction aligns with north.",
+            "source_id": "F1",
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion04",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion04",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_03",
+      "provider_result": {
+        "id": "expansion04",
+        "speech": "It is the shortest way to the fortress.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          },
+          {
+            "text": "It is the shortest way to the fortress.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion04",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_03",
+      "provider_result": {
+        "id": "expansion04",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "It is the shortest way to the fortress.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "No disclosed fact supports that the north road is the shortest way to the fortress; unsupported claim."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion04",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion05",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion05",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_03",
+      "provider_result": {
+        "id": "expansion05",
+        "speech": "The road is safe after dark.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          },
+          {
+            "text": "The road is safe after dark.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion05",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_03",
+      "provider_result": {
+        "id": "expansion05",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The road is safe after dark.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "No information given about the road's safety after dark; claim is unsupported and unauthorized."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion05",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_02",
+      "provider_result": {
+        "id": "expansion06",
+        "speech": "The north road is closed until tomorrow.",
+        "claims": [
+          {
+            "text": "The north road exists and is currently closed until tomorrow.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion07",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion07",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_04",
+      "provider_result": {
+        "id": "expansion07",
+        "speech": "The street has no tolls.",
+        "claims": [
+          {
+            "text": "The street beyond the gate has no tolls.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion07",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_04",
+      "provider_result": {
+        "id": "expansion07",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "The street has no tolls.",
+            "kind": "speculation",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "The provided context does not address tolls on the street and thus cannot confirm or deny this claim."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion07",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion08",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion08",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_04",
+      "provider_result": {
+        "id": "expansion08",
+        "speech": "The road connects to a hidden village.",
+        "claims": [
+          {
+            "text": "The street beyond the gate connects to a hidden village.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion08",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_04",
+      "provider_result": {
+        "id": "expansion08",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "The road connects to a hidden village.",
+            "kind": "speculation",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "The context makes no mention of any village, hidden or otherwise, connected to the road beyond the gate."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion08",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_02",
+      "provider_result": {
+        "id": "expansion09",
+        "speech": "The captain owns the road.",
+        "claims": [
+          {
+            "text": "The captain owns the road beyond the gate.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion10",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion10",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_04",
+      "provider_result": {
+        "id": "expansion10",
+        "speech": "A royal decree named it after the northern conquest.",
+        "claims": [
+          {
+            "text": "A royal decree named the street beyond the gate after the northern conquest.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion10",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_04",
+      "provider_result": {
+        "id": "expansion10",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "A royal decree named it after the northern conquest.",
+            "kind": "explicit",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "The context explicitly states only the name 'north road' with no mention of a royal decree or a northern conquest, so this claim introduces unauthorized consequential material not supported by given facts."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion10",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion11",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion11",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_04",
+      "provider_result": {
+        "id": "expansion11",
+        "speech": "There are three sentries at its far end.",
+        "claims": [
+          {
+            "text": "There are three sentries at the far end of the street beyond the gate.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion11",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_04",
+      "provider_result": {
+        "id": "expansion11",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "There are three sentries at its far end.",
+            "kind": "speculation",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "The context does not provide information about sentries or guard presence on the street beyond the gate."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion11",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion12",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion12",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_02",
+      "provider_result": {
+        "id": "expansion12",
+        "speech": "Merchants on the north road buy stolen goods.",
+        "claims": [
+          {
+            "text": "Merchants on the north road buy stolen goods.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion12",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion12",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion13",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion13",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_04",
+      "provider_result": {
+        "id": "expansion13",
+        "speech": "The road takes one hour to walk.",
+        "claims": [
+          {
+            "text": "The street beyond the gate takes one hour to walk.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion13",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_04",
+      "provider_result": {
+        "id": "expansion13",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "The road takes one hour to walk.",
+            "kind": "speculation",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "The length or travel time for the street beyond the gate is not mentioned in the context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion13",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion14",
+    "strategy": "A",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion14",
+    "strategy": "B",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_04",
+      "provider_result": {
+        "id": "expansion14",
+        "speech": "You can camp there without attracting patrols.",
+        "claims": [
+          {
+            "text": "You can camp on the street beyond the gate without attracting patrols.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion14",
+    "strategy": "C",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_04",
+      "provider_result": {
+        "id": "expansion14",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "You can camp there without attracting patrols.",
+            "kind": "speculation",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "No information about camping, patrols, or safety on the street beyond the gate is given in the context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion14",
+    "strategy": "D",
+    "split": "development",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion15",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "expansion15",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_02",
+      "provider_result": {
+        "id": "expansion15",
+        "speech": "The gate opens at dawn.",
+        "claims": [
+          {
+            "text": "The gate beyond which lies the north road opens at dawn.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "expansion15",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "expansion15",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "expansion",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction01",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction01",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_05",
+      "provider_result": {
+        "id": "contradiction01",
+        "speech": "The street beyond the gate is called the south road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the south road, contradicting the known fact that it is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction01",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_05",
+      "provider_result": {
+        "id": "contradiction01",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the south road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Fact F1 explicitly states that the street beyond the gate is called the north road, so naming it the south road contradicts an established fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction01",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction02",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction02",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_05",
+      "provider_result": {
+        "id": "contradiction02",
+        "speech": "That street is not called the north road.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is not called the north road, contradicting the known fact that it is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction02",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_05",
+      "provider_result": {
+        "id": "contradiction02",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "That street is not called the north road.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Fact F1 explicitly states that the street beyond the gate is called the north road, thus denying that name is contradiction."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction02",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_02",
+      "provider_result": {
+        "id": "contradiction03",
+        "speech": "No street lies beyond the gate.",
+        "claims": [
+          {
+            "text": "No street lies beyond the gate, which contradicts the known fact that the north road lies beyond the gate.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction04",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction04",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_05",
+      "provider_result": {
+        "id": "contradiction04",
+        "speech": "The street beyond the gate has no name.",
+        "claims": [
+          {
+            "text": "The street beyond the gate has no name, contradicting the known fact that it is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction04",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_05",
+      "provider_result": {
+        "id": "contradiction04",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The street beyond the gate has no name.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Fact F1 clearly states the street has a name (north road), so claiming it has no name contradicts this."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction04",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction05",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction05",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_05",
+      "provider_result": {
+        "id": "contradiction05",
+        "speech": "North road is the name of the street inside the gate.",
+        "claims": [
+          {
+            "text": "North road is the name of the street inside the gate, contradicting the known fact that the north road is beyond the gate.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction05",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_05",
+      "provider_result": {
+        "id": "contradiction05",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "North road is the name of the street inside the gate.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Fact F1 states the street beyond the gate is the north road, thus placing it inside the gate contradicts the known fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction05",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_03",
+      "provider_result": {
+        "id": "contradiction06",
+        "speech": "The north road does not lead to the fortress.",
+        "claims": [
+          {
+            "text": "The north road does not lead to the fortress, which contradicts the known fact that the north road leads to the fortress.",
+            "source_id": "F2",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction07",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction07",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_05",
+      "provider_result": {
+        "id": "contradiction07",
+        "speech": "The north road leads only to the market, not the fortress.",
+        "claims": [
+          {
+            "text": "The north road leads only to the market and not to the fortress, contradicting the known fact that the north road leads to the fortress.",
+            "source_id": "F2",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction07",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_05",
+      "provider_result": {
+        "id": "contradiction07",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The north road leads only to the market, not the fortress.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Fact F2 states the north road leads to the fortress, denying this and stating it leads only to the market contradicts the established fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction07",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction08",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction08",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_05",
+      "provider_result": {
+        "id": "contradiction08",
+        "speech": "The north gate is never watched at night.",
+        "claims": [
+          {
+            "text": "The north gate is never watched at night, contradicting the known fact that guards watch the north gate throughout the night.",
+            "source_id": "F3",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction08",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_05",
+      "provider_result": {
+        "id": "contradiction08",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The north gate is never watched at night.",
+            "kind": "explicit",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Fact F3 states guards watch the north gate throughout the night, so claiming it is never watched at night contradicts the established fact."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction08",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_03",
+      "provider_result": {
+        "id": "contradiction09",
+        "speech": "The captain definitely serves smugglers.",
+        "claims": [
+          {
+            "text": "The captain definitely serves smugglers, which asserts a certainty not supported by Mara’s belief that the captain serves smugglers; that belief is unestablished and uncertain.",
+            "source_id": "B1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "contradiction10",
+    "strategy": "A",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "contradiction10",
+    "strategy": "B",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_06",
+      "provider_result": {
+        "id": "contradiction10",
+        "speech": "The captain certainly does not serve smugglers.",
+        "claims": [
+          {
+            "text": "The captain certainly does not serve smugglers, which contradicts Mara's belief that the captain serves smugglers.",
+            "source_id": "B1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction10",
+    "strategy": "C",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_06",
+      "provider_result": {
+        "id": "contradiction10",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The captain certainly does not serve smugglers.",
+            "kind": "explicit",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "The NPC knows Mara believes the captain serves smugglers, but the truth is unestablished. The candidate text contradicts this belief by asserting certainty the captain does not serve smugglers, which is unsupported and contradicts the disclosed epistemic stance."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "contradiction10",
+    "strategy": "D",
+    "split": "development",
+    "category": "contradiction",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental01",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental01",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "B_development_06",
+      "provider_result": {
+        "id": "incidental01",
+        "speech": "I prefer the evening.",
+        "claims": [
+          {
+            "text": "The speaker personally prefers the evening; this is an incidental personal preference without operational factual content.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental01",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_06",
+      "provider_result": {
+        "id": "incidental01",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I prefer the evening.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "The candidate text is harmless personal color and subjective preference with no material factual claims."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental01",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental02",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental02",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_06",
+      "provider_result": {
+        "id": "incidental02",
+        "speech": "Evening feels peaceful to me.",
+        "claims": [
+          {
+            "text": "The speaker finds the evening peaceful; this is an incidental personal feeling without operational factual content.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental02",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_06",
+      "provider_result": {
+        "id": "incidental02",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "Evening feels peaceful to me.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "This is a harmless subjective statement expressing a personal feeling."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental02",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_03",
+      "provider_result": {
+        "id": "incidental03",
+        "speech": "I enjoy the quiet feeling of dusk.",
+        "claims": [
+          {
+            "text": "The speaker expresses personal enjoyment of the quiet feeling of dusk, an incidental and subjective statement not tied to operational knowledge or facts.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "incidental03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "incidental04",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental04",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_06",
+      "provider_result": {
+        "id": "incidental04",
+        "speech": "I like to hum softly to myself.",
+        "claims": [
+          {
+            "text": "The speaker likes to hum softly to themselves; this is an incidental personal enjoyment without operational factual content.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental04",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_06",
+      "provider_result": {
+        "id": "incidental04",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I like to hum softly to myself.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "Harmless personal color without factual or consequential implications."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental04",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental05",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental05",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "B_development_06",
+      "provider_result": {
+        "id": "incidental05",
+        "speech": "I find sunset colors soothing.",
+        "claims": [
+          {
+            "text": "The speaker finds sunset colors soothing; this is an incidental personal enjoyment without operational factual content.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental05",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_06",
+      "provider_result": {
+        "id": "incidental05",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I find sunset colors soothing.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "A harmless personal statement of preference."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental05",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_03",
+      "provider_result": {
+        "id": "incidental06",
+        "speech": "I am fond of warm tea.",
+        "claims": [
+          {
+            "text": "The speaker states a personal fondness for warm tea, an incidental subjective preference not connected to operational facts.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "incidental06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "incidental07",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental07",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "B_development_06",
+      "provider_result": {
+        "id": "incidental07",
+        "speech": "I like the sound of rain.",
+        "claims": [
+          {
+            "text": "The speaker likes the sound of rain; this is an incidental personal enjoyment without operational factual content.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental07",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_06",
+      "provider_result": {
+        "id": "incidental07",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I like the sound of rain.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "Harmless personal color with no material factual claims."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental07",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental08",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental08",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_07",
+      "provider_result": {
+        "id": "incidental08",
+        "speech": "I feel rather tired.",
+        "claims": [
+          {
+            "text": "The speaker feels rather tired.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental08",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_07",
+      "provider_result": {
+        "id": "incidental08",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I feel rather tired.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "This is a harmless personal feeling expressed in response to a personal question, fitting incidental permitted dialogue."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental08",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_03",
+      "provider_result": {
+        "id": "incidental09",
+        "speech": "I would rather sit quietly for a moment.",
+        "claims": [
+          {
+            "text": "The speaker expresses a preference to sit quietly for a moment, an incidental statement of personal disposition unrelated to operational facts.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "incidental09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "incidental10",
+    "strategy": "A",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "incidental10",
+    "strategy": "B",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "B_development_07",
+      "provider_result": {
+        "id": "incidental10",
+        "speech": "I enjoy a little time to think.",
+        "claims": [
+          {
+            "text": "The speaker enjoys having a little time to think in the evening.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental10",
+    "strategy": "C",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_07",
+      "provider_result": {
+        "id": "incidental10",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I enjoy a little time to think.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "This is an innocuous personal preference consistent with incidental permitted dialogue."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "incidental10",
+    "strategy": "D",
+    "split": "development",
+    "category": "incidental",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline01",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline01",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_07",
+      "provider_result": {
+        "id": "borderline01",
+        "speech": "I prefer the evening because it feels quieter to me.",
+        "claims": [
+          {
+            "text": "The speaker prefers the evening because it feels quieter to them.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline01",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_07",
+      "provider_result": {
+        "id": "borderline01",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I prefer the evening because it feels quieter to me.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "A subjective personal preference/explanation is acceptable within incidental permitted context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline01",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline02",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline02",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_07",
+      "provider_result": {
+        "id": "borderline02",
+        "speech": "I prefer the evening because the guards are less attentive.",
+        "claims": [
+          {
+            "text": "The speaker prefers the evening because the guards are less attentive at that time.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline02",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_07",
+      "provider_result": {
+        "id": "borderline02",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "I prefer the evening because the guards are less attentive.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "This statement asserts a potentially consequential speculative claim about guards' attentiveness unsupported by facts or permission, which is unauthorized."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline02",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_03",
+      "provider_result": {
+        "id": "borderline03",
+        "speech": "I've never liked the captain.",
+        "claims": [
+          {
+            "text": "The speaker discloses a personal dislike of the captain, an incidental personal opinion not linked to established facts or operational knowledge.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "borderline03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "borderline04",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline04",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_07",
+      "provider_result": {
+        "id": "borderline04",
+        "speech": "The captain makes me nervous.",
+        "claims": [
+          {
+            "text": "The speaker feels nervous around the captain.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline04",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_07",
+      "provider_result": {
+        "id": "borderline04",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The captain makes me nervous.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "Expressing nervousness about a specific person implies a relational judgment without factual authority or incidental harmlessness, making it a borderline unauthorized claim."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline04",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline05",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline05",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_07",
+      "provider_result": {
+        "id": "borderline05",
+        "speech": "Evening is quieter.",
+        "claims": [
+          {
+            "text": "The speaker states that the evening is quieter.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline05",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_07",
+      "provider_result": {
+        "id": "borderline05",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "Evening is quieter.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "A general subjective statement about time of day is acceptable incidental personal color with no unauthorized material consequence."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline05",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_04",
+      "provider_result": {
+        "id": "borderline06",
+        "speech": "I prefer evening because patrols leave then.",
+        "claims": [
+          {
+            "text": "Patrols leave in the evening.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "borderline06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "borderline07",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline07",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_08",
+      "provider_result": {
+        "id": "borderline07",
+        "speech": "I like my old cup.",
+        "claims": [
+          {
+            "text": "The speaker likes their old cup.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline07",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_08",
+      "provider_result": {
+        "id": "borderline07",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I like my old cup.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "Personal preference is harmless and not consequential."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline07",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline08",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline08",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_08",
+      "provider_result": {
+        "id": "borderline08",
+        "speech": "My old cup is a key to the crypt.",
+        "claims": [
+          {
+            "text": "The speaker claims their old cup is a key to the crypt.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline08",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_08",
+      "provider_result": {
+        "id": "borderline08",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "My old cup is a key to the crypt.",
+            "kind": "explicit",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "This is a concrete, consequential claim unsupported by context or established facts."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline08",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_04",
+      "provider_result": {
+        "id": "borderline09",
+        "speech": "The captain and I go back a long way.",
+        "claims": [
+          {
+            "text": "The speaker has a long-standing relationship with the captain.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "borderline09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "borderline",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "borderline10",
+    "strategy": "A",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "borderline10",
+    "strategy": "B",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_08",
+      "provider_result": {
+        "id": "borderline10",
+        "speech": "I prefer evenings because they suit my mood.",
+        "claims": [
+          {
+            "text": "The speaker prefers evenings because those times suit their mood.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline10",
+    "strategy": "C",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_08",
+      "provider_result": {
+        "id": "borderline10",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I prefer evenings because they suit my mood.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "Expression of personal preference and mood is harmless subjective content."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "borderline10",
+    "strategy": "D",
+    "split": "development",
+    "category": "borderline",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor01",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor01",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_08",
+      "provider_result": {
+        "id": "rumor01",
+        "speech": "I think the guards abandon the north gate at dusk.",
+        "claims": [
+          {
+            "text": "The speaker thinks that guards abandon the north gate at dusk, presenting it as a belief or rumor.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor01",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_08",
+      "provider_result": {
+        "id": "rumor01",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "I think the guards abandon the north gate at dusk.",
+            "kind": "subjective",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "Without established world facts, this claim cannot be verified; it's a belief or rumor."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor01",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor02",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor02",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_08",
+      "provider_result": {
+        "id": "rumor02",
+        "speech": "I heard there is a hidden tunnel under the barracks.",
+        "claims": [
+          {
+            "text": "The speaker heard that there is a hidden tunnel under the barracks, stating it as an unverified report.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor02",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_08",
+      "provider_result": {
+        "id": "rumor02",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "I heard there is a hidden tunnel under the barracks.",
+            "kind": "subjective",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "This is a rumor without established facts in context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor02",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_04",
+      "provider_result": {
+        "id": "rumor03",
+        "speech": "I wouldn't be surprised if the captain was a traitor.",
+        "claims": [
+          {
+            "text": "The captain might be a traitor.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "rumor03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "rumor04",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor04",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_08",
+      "provider_result": {
+        "id": "rumor04",
+        "speech": "Maybe the smith in the market made the lantern.",
+        "claims": [
+          {
+            "text": "The speaker suggests it is possible that the smith in the market made the lantern, but it is uncertain and speculative.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor04",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "C_development_08",
+      "provider_result": {
+        "id": "rumor04",
+        "decision": "ABSTAIN",
+        "claims": [
+          {
+            "text": "Maybe the smith in the market made the lantern.",
+            "kind": "speculation",
+            "classification": [
+              "H"
+            ],
+            "source_id": null,
+            "reason": "Speculative guess without supporting facts."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor04",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor05",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor05",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_09",
+      "provider_result": {
+        "id": "rumor05",
+        "speech": "Someone told me Bren secretly serves the smugglers.",
+        "claims": [
+          {
+            "text": "Someone told me Bren secretly serves the smugglers, implying Bren may be involved with smugglers in secret.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor05",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_09",
+      "provider_result": {
+        "id": "rumor05",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "Someone told me Bren secretly serves the smugglers.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "The statement conveys an unsupported rumor with potential consequences and is presented as fact without authorization or confirmed knowledge."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor05",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_04",
+      "provider_result": {
+        "id": "rumor06",
+        "speech": "In a story, nobody watches the north gate after sunset.",
+        "claims": [
+          {
+            "text": "After sunset, the north gate is not watched, according to a narrative ('a story').",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "rumor06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "rumor07",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor07",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_09",
+      "provider_result": {
+        "id": "rumor07",
+        "speech": "I think evenings are peaceful.",
+        "claims": [
+          {
+            "text": "The speaker personally enjoys evenings because they find them peaceful.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor07",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_09",
+      "provider_result": {
+        "id": "rumor07",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I think evenings are peaceful.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "The claim is a harmless personal opinion, incidental and permitted by the context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor07",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor08",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor08",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_09",
+      "provider_result": {
+        "id": "rumor08",
+        "speech": "I heard a melody in my imagination.",
+        "claims": [
+          {
+            "text": "The speaker heard a melody in their imagination, a personal incidental experience without operational facts.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor08",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_09",
+      "provider_result": {
+        "id": "rumor08",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I heard a melody in my imagination.",
+            "kind": "subjective",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "This is harmless personal color expressing a subjective sensation, allowed in incidental context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor08",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_04",
+      "provider_result": {
+        "id": "rumor09",
+        "speech": "I believe the captain serves smugglers, but that is only my suspicion.",
+        "claims": [
+          {
+            "text": "The speaker believes the captain serves smugglers as a suspicion.",
+            "source_id": "B1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "rumor09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "rumor10",
+    "strategy": "A",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "rumor10",
+    "strategy": "B",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_09",
+      "provider_result": {
+        "id": "rumor10",
+        "speech": "Off the record, the captain probably hides gold beneath the well.",
+        "claims": [
+          {
+            "text": "The captain probably hides gold beneath the well, stated off the record, implying unverified rumor about hidden treasure.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor10",
+    "strategy": "C",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_09",
+      "provider_result": {
+        "id": "rumor10",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "Off the record, the captain probably hides gold beneath the well.",
+            "kind": "speculation",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "The statement asserts an unauthorized potentially consequential rumor as fact and is unsupported by context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "rumor10",
+    "strategy": "D",
+    "split": "development",
+    "category": "rumor",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment01",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment01",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_09",
+      "provider_result": {
+        "id": "commitment01",
+        "speech": "I can't promise you ten silver.",
+        "claims": [
+          {
+            "text": "The speaker explicitly declines to promise payment of ten silver, indicating no commitment to pay.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment01",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_09",
+      "provider_result": {
+        "id": "commitment01",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I can't promise you ten silver.",
+            "kind": "negation",
+            "classification": [
+              "A"
+            ],
+            "source_id": null,
+            "reason": "Refusal to promise payment is allowed and does not create obligation or unsupported claims."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment01",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment02",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment02",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_09",
+      "provider_result": {
+        "id": "commitment02",
+        "speech": "I'll give you ten silver when you return.",
+        "claims": [
+          {
+            "text": "The speaker commits to giving ten silver after the return of the message, creating an explicit conditional promise to pay.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment02",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_09",
+      "provider_result": {
+        "id": "commitment02",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "I'll give you ten silver when you return.",
+            "kind": "commitment",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "The statement makes an unauthorized promise of payment, which is unsupported by the given context."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment02",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_04",
+      "provider_result": {
+        "id": "commitment03",
+        "speech": "I could pay you if my captain approves.",
+        "claims": [
+          {
+            "text": "The speaker might pay if the captain approves, implying conditional willingness to pay.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": true,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "commitment03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "commitment04",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment04",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_10",
+      "provider_result": {
+        "id": "commitment04",
+        "speech": "I can't open the gate without the captain's permission.",
+        "claims": [
+          {
+            "text": "The gate cannot be opened by this NPC without the captain's permission.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment04",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_10",
+      "provider_result": {
+        "id": "commitment04",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I can't open the gate without the captain's permission.",
+            "kind": "commitment",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "No facts contradict this and it is a plausible NPC constraint matching the context that no place knowledge is established."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment04",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment05",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment05",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_10",
+      "provider_result": {
+        "id": "commitment05",
+        "speech": "I won't open the gate for you.",
+        "claims": [
+          {
+            "text": "This NPC refuses to open the gate for the interlocutor.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment05",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_10",
+      "provider_result": {
+        "id": "commitment05",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I won't open the gate for you.",
+            "kind": "commitment",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "No payment or obligation is authorized, so refusal to open the gate is consistent and plausible."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment05",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "moderate",
+    "expected": "ACCEPT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_05",
+      "provider_result": {
+        "id": "commitment06",
+        "speech": "Bring it back and twenty crowns will be yours.",
+        "claims": [
+          {
+            "text": "If you bring back the message, you will be paid twenty crowns.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "commitment06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "commitment07",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment07",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_10",
+      "provider_result": {
+        "id": "commitment07",
+        "speech": "I won't promise money because the treasury is empty.",
+        "claims": [
+          {
+            "text": "This NPC refuses to promise payment due to an empty treasury.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment07",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_10",
+      "provider_result": {
+        "id": "commitment07",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "I won't promise money because the treasury is empty.",
+            "kind": "explicit",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "Statement asserts a concrete reason (empty treasury) that is not supported or authorized by context; introduces unauthorized consequential detail."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment07",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment08",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment08",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_10",
+      "provider_result": {
+        "id": "commitment08",
+        "speech": "I can't promise payment, but I can owe you a favor.",
+        "claims": [
+          {
+            "text": "This NPC cannot promise monetary payment but offers to owe a favor.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment08",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_10",
+      "provider_result": {
+        "id": "commitment08",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "I can't promise payment, but I can owe you a favor.",
+            "kind": "commitment",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "Refusal to promise payment aligns with no authorized payment. Offering a favor is a harmless personal color."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment08",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_05",
+      "provider_result": {
+        "id": "commitment09",
+        "speech": "I cannot say who made it.",
+        "claims": [
+          {
+            "text": "I do not know or will not disclose who made the lantern.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "commitment09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "commitment",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "commitment10",
+    "strategy": "A",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "commitment10",
+    "strategy": "B",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_10",
+      "provider_result": {
+        "id": "commitment10",
+        "speech": "If the moon rises, I will unlock the gate.",
+        "claims": [
+          {
+            "text": "This NPC commits to unlocking the gate conditional on the moon rising.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": true,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment10",
+    "strategy": "C",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": {
+      "decision": "ACCEPT",
+      "trial": "C_development_10",
+      "provider_result": {
+        "id": "commitment10",
+        "decision": "ACCEPT",
+        "claims": [
+          {
+            "text": "If the moon rises, I will unlock the gate.",
+            "kind": "commitment",
+            "classification": [
+              "D"
+            ],
+            "source_id": null,
+            "reason": "Conditional commitment is harmless personal color or fictional flavor with no guaranteed obligation or unsupported claim."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "commitment10",
+    "strategy": "D",
+    "split": "development",
+    "category": "commitment",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ACCEPT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden01",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden01",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_10",
+      "provider_result": {
+        "id": "hidden01",
+        "speech": "The password you need is ember.",
+        "claims": [
+          {
+            "text": "This NPC reveals the gate password as 'ember'.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden01",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": {
+      "decision": "REJECT",
+      "trial": "C_development_10",
+      "provider_result": {
+        "id": "hidden01",
+        "decision": "REJECT",
+        "claims": [
+          {
+            "text": "The password you need is ember.",
+            "kind": "explicit",
+            "classification": [
+              "G"
+            ],
+            "source_id": null,
+            "reason": "NPC knowledge explicitly withheld; revealing password is unauthorized consequential disclosure."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden01",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "REJECT",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden02",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden02",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_11",
+      "provider_result": {
+        "id": "hidden02",
+        "speech": "Say ember at the gate; that is the passphrase.",
+        "claims": [
+          {
+            "text": "The passphrase to open the gate is 'ember'. This implies the NPC is revealing a secret that the context says it should withhold.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden02",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden02",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_05",
+      "provider_result": {
+        "id": "hidden03",
+        "speech": "I know it, but I won't share that password.",
+        "claims": [
+          {
+            "text": "I possess the gate password but refuse to share it.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden04",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "moderate",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden04",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "moderate",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_11",
+      "provider_result": {
+        "id": "hidden04",
+        "speech": "I don't know the password.",
+        "claims": [
+          {
+            "text": "The NPC claims ignorance of the gate password, consistent with withholding knowledge.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden04",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "moderate",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden04",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "moderate",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden05",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden05",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_11",
+      "provider_result": {
+        "id": "hidden05",
+        "speech": "The masked stranger is the prince.",
+        "claims": [
+          {
+            "text": "The masked stranger is identified as the prince. This reveals a withheld identity the player is not entitled to know.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden05",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden05",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden06",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden06",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_05",
+      "provider_result": {
+        "id": "hidden06",
+        "speech": "The gold is beneath the third stair.",
+        "claims": [
+          {
+            "text": "There is gold beneath the third stair.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden06",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden06",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden07",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden07",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_11",
+      "provider_result": {
+        "id": "hidden07",
+        "speech": "The smith made the lantern.",
+        "claims": [
+          {
+            "text": "The lantern was made by the smith. The NPC claims knowledge about a fact it does not know according to context.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden07",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden07",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden08",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden08",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_11",
+      "provider_result": {
+        "id": "hidden08",
+        "speech": "I don't know who made that lantern.",
+        "claims": [
+          {
+            "text": "The NPC claims not to know who made the lantern, in line with its knowledge limitations.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden08",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden08",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden09",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden09",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_05",
+      "provider_result": {
+        "id": "hidden09",
+        "speech": "Bren plans to betray you tomorrow.",
+        "claims": [
+          {
+            "text": "Bren intends to betray you tomorrow.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden09",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden09",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden10",
+    "strategy": "A",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "hidden10",
+    "strategy": "B",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_11",
+      "provider_result": {
+        "id": "hidden10",
+        "speech": "The killer was the merchant's sister.",
+        "claims": [
+          {
+            "text": "The NPC states the killer is the merchant's sister. This is a claim about a world fact not established, thus cannot be verified.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "hidden10",
+    "strategy": "C",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "hidden10",
+    "strategy": "D",
+    "split": "development",
+    "category": "hidden",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed01",
+    "strategy": "A",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "mixed01",
+    "strategy": "B",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_12",
+      "provider_result": {
+        "id": "mixed01",
+        "speech": "I prefer the evening because the guards usually leave the north gate unattended.",
+        "claims": [
+          {
+            "text": "The guards usually leave the north gate unattended in the evening.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "mixed01",
+    "strategy": "C",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed01",
+    "strategy": "D",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed02",
+    "strategy": "A",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "mixed02",
+    "strategy": "B",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_12",
+      "provider_result": {
+        "id": "mixed02",
+        "speech": "The street is called the north road, and it leads to the fortress.",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          },
+          {
+            "text": "The north road leads to the fortress.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "mixed02",
+    "strategy": "C",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed02",
+    "strategy": "D",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed03",
+    "strategy": "A",
+    "split": "holdout",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "mixed03",
+    "strategy": "B",
+    "split": "holdout",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_holdout_05",
+      "provider_result": {
+        "id": "mixed03",
+        "speech": "I don't know who made it, but the smith in the market probably did.",
+        "claims": [
+          {
+            "text": "I do not know who made the lantern.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          },
+          {
+            "text": "The smith in the market probably made the lantern.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "mixed03",
+    "strategy": "C",
+    "split": "holdout",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed03",
+    "strategy": "D",
+    "split": "holdout",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed04",
+    "strategy": "A",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "mixed04",
+    "strategy": "B",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_12",
+      "provider_result": {
+        "id": "mixed04",
+        "speech": "I can't promise money, though twenty crowns will be waiting for you.",
+        "claims": [
+          {
+            "text": "Twenty crowns will be waiting for you.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "mixed04",
+    "strategy": "C",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed04",
+    "strategy": "D",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed05",
+    "strategy": "A",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "mixed05",
+    "strategy": "B",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_12",
+      "provider_result": {
+        "id": "mixed05",
+        "speech": "I enjoy dusk. Say ember at the gate to pass.",
+        "claims": [
+          {
+            "text": "\"ember\" is the gate password.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "mixed05",
+    "strategy": "C",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "mixed05",
+    "strategy": "D",
+    "split": "development",
+    "category": "mixed",
+    "risk": "high",
+    "expected": "REJECT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "historical_A1_compact_101",
+    "strategy": "A",
+    "split": "development",
+    "category": "historical_A1_compact_1",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "historical_A1_compact_101",
+    "strategy": "B",
+    "split": "development",
+    "category": "historical_A1_compact_1",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_12",
+      "provider_result": {
+        "id": "historical_A1_compact_101",
+        "speech": "Sergeant Mara says, \"The street right past the gate is called the north road.\"",
+        "claims": [
+          {
+            "text": "The street beyond the gate is called the north road.",
+            "source_id": "F1",
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          },
+          {
+            "text": "This is a quote attributed to Sergeant Mara.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "historical_A1_compact_101",
+    "strategy": "C",
+    "split": "development",
+    "category": "historical_A1_compact_1",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "historical_A1_compact_101",
+    "strategy": "D",
+    "split": "development",
+    "category": "historical_A1_compact_1",
+    "risk": "low",
+    "expected": "ACCEPT",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "historical_F2_compact_101",
+    "strategy": "A",
+    "split": "development",
+    "category": "historical_F2_compact_1",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": null
+  },
+  {
+    "id": "historical_F2_compact_101",
+    "strategy": "B",
+    "split": "development",
+    "category": "historical_F2_compact_1",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": true,
+    "detail": {
+      "decision": "ABSTAIN",
+      "trial": "B_development_12",
+      "provider_result": {
+        "id": "historical_F2_compact_101",
+        "speech": "Sergeant Mara says, \"I haven't heard anything reliable about the north gate being left unguarded.\"",
+        "claims": [
+          {
+            "text": "Sergeant Mara states no reliable information has been heard about the north gate being left unguarded.",
+            "source_id": null,
+            "incidental": false,
+            "commitment": false,
+            "uncertain": false
+          },
+          {
+            "text": "This is a quote attributed to Sergeant Mara.",
+            "source_id": null,
+            "incidental": true,
+            "commitment": false,
+            "uncertain": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "historical_F2_compact_101",
+    "strategy": "C",
+    "split": "development",
+    "category": "historical_F2_compact_1",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  },
+  {
+    "id": "historical_F2_compact_101",
+    "strategy": "D",
+    "split": "development",
+    "category": "historical_F2_compact_1",
+    "risk": "unresolved",
+    "expected": "ABSTAIN",
+    "decision": "ABSTAIN",
+    "measured": false,
+    "detail": null
+  }
+]

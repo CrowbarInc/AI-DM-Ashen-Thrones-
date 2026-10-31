@@ -1,0 +1,581 @@
+[
+  {
+    "id": "factual",
+    "evidence": "controlled adoption + actual storage",
+    "candidate": "The north road has a secret tunnel.",
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "What road?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "context_after_load": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "What road?",
+          "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+          "subject": "road",
+          "requested_information": "general",
+          "supplied_text": "Word is, the street beyond the gate is called the north road.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "social.topic_revealed:fact",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    },
+    "canonical_world_unchanged": true,
+    "continuation": [],
+    "passed": true
+  },
+  {
+    "id": "preference",
+    "evidence": "controlled adoption + actual storage",
+    "candidate": "I prefer evening because guards leave the north gate unattended.",
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara says, \"I prefer the evening.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "Do you prefer morning or evening?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "conversational_continuity.bounded_personal_line"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "conversational_continuity.bounded_personal_line",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "context_after_load": {
+      "dialogue_commitments": [
+        {
+          "npc_id": "sergeant_mara",
+          "kind": "opinion",
+          "subject": "morning evening",
+          "text": "Sergeant Mara says, \"I prefer the evening.\"",
+          "canonical": false,
+          "turn": 0,
+          "status": "active",
+          "requested_information": "opinion"
+        }
+      ],
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Do you prefer morning or evening?",
+          "delivered_text": "Sergeant Mara says, \"I prefer the evening.\"",
+          "subject": "morning evening",
+          "requested_information": "opinion",
+          "supplied_text": "I prefer the evening.",
+          "uncertain": false,
+          "commitment": true,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_continuity.bounded_personal_line",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    },
+    "canonical_world_unchanged": true,
+    "continuation": [],
+    "passed": true
+  },
+  {
+    "id": "consequential",
+    "evidence": "controlled adoption + actual storage",
+    "candidate": "The guards abandon it at midnight.",
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "Do guards watch the north gate?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "context_after_load": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Do guards watch the north gate?",
+          "delivered_text": "Sergeant Mara mutters, \"Word is, guards watch the north gate throughout the night.\"",
+          "subject": "guards north gate",
+          "requested_information": "general",
+          "supplied_text": "Word is, guards watch the north gate throughout the night.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "social.topic_revealed:fact",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    },
+    "canonical_world_unchanged": true,
+    "continuation": [],
+    "passed": true
+  },
+  {
+    "id": "rejected_security",
+    "evidence": "controlled adoption + actual storage",
+    "candidate": "The gate is never guarded.",
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara says, \"I prefer the evening.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "What do you personally enjoy about evening?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "conversational_continuity.bounded_personal_line"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "conversational_continuity.bounded_personal_line",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "context_after_load": {
+      "dialogue_commitments": [
+        {
+          "npc_id": "sergeant_mara",
+          "kind": "opinion",
+          "subject": "personally enjoy evening",
+          "text": "Sergeant Mara says, \"I prefer the evening.\"",
+          "canonical": false,
+          "turn": 0,
+          "status": "active",
+          "requested_information": "opinion"
+        }
+      ],
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "What do you personally enjoy about evening?",
+          "delivered_text": "Sergeant Mara says, \"I prefer the evening.\"",
+          "subject": "personally enjoy evening",
+          "requested_information": "opinion",
+          "supplied_text": "I prefer the evening.",
+          "uncertain": false,
+          "commitment": true,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_continuity.bounded_personal_line",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    },
+    "canonical_world_unchanged": true,
+    "continuation": [],
+    "passed": true
+  },
+  {
+    "id": "superseded",
+    "evidence": "controlled adoption + actual storage",
+    "candidate": "Stranger says, \"I promise you a reward.\"",
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "Which road?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "context_after_load": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Which road?",
+          "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+          "subject": "which road",
+          "requested_information": "general",
+          "supplied_text": "Word is, the street beyond the gate is called the north road.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "social.topic_revealed:fact",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    },
+    "canonical_world_unchanged": true,
+    "continuation": [],
+    "passed": true
+  },
+  {
+    "id": "clarification_resolution",
+    "evidence": "controlled adoption + actual storage",
+    "candidate": "The road leads to a secret vault.",
+    "adoption": {
+      "immutable": true,
+      "text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+      "provenance": "authorized_host_speech",
+      "attempt": 0,
+      "player_input": "What is the road called?",
+      "turn_identity": "r2c",
+      "speaker": "Sergeant Mara",
+      "addressee": "player",
+      "target": "sergeant mara",
+      "operation": "ask",
+      "authority_result": "accepted",
+      "grounding_result": "not_a_replacement_trigger",
+      "hard_validation": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "authority": [
+          "social.topic_revealed:fact"
+        ],
+        "gm_resolution_decision_audit": null
+      },
+      "interaction_completion": true,
+      "contract_satisfying": true,
+      "contract": {
+        "contract_id": "r2c",
+        "operation": "ask",
+        "interlocutor_id": "sergeant_mara",
+        "expected_resolution": ""
+      },
+      "resolution_kind": "social_exchange",
+      "generation_attempts": 0,
+      "skipped_mutators": [],
+      "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+      "authorization_source": "social.topic_revealed:fact",
+      "speaker_id": "sergeant_mara",
+      "canonical": false,
+      "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+    },
+    "context_after_load": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "What is the road called?",
+          "delivered_text": "Sergeant Mara mutters, \"Word is, the street beyond the gate is called the north road.\"",
+          "subject": "the road called",
+          "requested_information": "general",
+          "supplied_text": "Word is, the street beyond the gate is called the north road.",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "",
+          "turn": 0,
+          "active": false,
+          "authorization_source": "social.topic_revealed:fact",
+          "adoption_turn_identity": "r2c"
+        },
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "What did you mean by that?",
+          "delivered_text": "Sergeant Mara says, \"I meant this: Word is, the street beyond the gate is called the north road.\"",
+          "subject": "mean",
+          "requested_information": "general",
+          "supplied_text": "Word is, the street beyond the gate is called the north road.",
+          "uncertain": false,
+          "commitment": true,
+          "scene_id": "",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "dialogue_authority.reuse_prior_speech",
+          "adoption_turn_identity": "r2c"
+        }
+      ]
+    },
+    "canonical_world_unchanged": true,
+    "continuation": [
+      {
+        "player_facing_text": "Sergeant Mara says, \"I meant this: Word is, the street beyond the gate is called the north road.\"",
+        "world_updates": null,
+        "scene_update": null,
+        "activate_scene_id": null,
+        "new_scene_draft": null,
+        "suggested_action": null,
+        "metadata": {
+          "accepted_response": {
+            "immutable": true,
+            "text": "Sergeant Mara says, \"I meant this: Word is, the street beyond the gate is called the north road.\"",
+            "provenance": "authorized_host_speech",
+            "attempt": 0,
+            "player_input": "What did you mean by that?",
+            "turn_identity": "r2c",
+            "speaker": "Sergeant Mara",
+            "addressee": "player",
+            "target": "sergeant mara",
+            "operation": "ask",
+            "authority_result": "accepted",
+            "grounding_result": "not_a_replacement_trigger",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [
+                "dialogue_authority.reuse_prior_speech"
+              ],
+              "gm_resolution_decision_audit": null
+            },
+            "interaction_completion": true,
+            "contract_satisfying": true,
+            "contract": {
+              "contract_id": "r2c",
+              "operation": "ask",
+              "interlocutor_id": "sergeant_mara",
+              "expected_resolution": ""
+            },
+            "resolution_kind": "social_exchange",
+            "generation_attempts": 0,
+            "skipped_mutators": [],
+            "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "speaker_id": "sergeant_mara",
+            "canonical": false,
+            "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+          },
+          "emission_debug": {
+            "accepted_response_provenance": "authorized_host_speech",
+            "generation_attempts": 0,
+            "legacy_emission_authority": false,
+            "semantic_degradation": false,
+            "semantic_degradation_reasons": [],
+            "resolution_contract_semantic": {
+              "status": "satisfied",
+              "reasons": [],
+              "preserved": true
+            }
+          }
+        }
+      },
+      {
+        "player_facing_text": "Sergeant Mara says, \"I meant this: Word is, the street beyond the gate is called the north road.\"",
+        "world_updates": null,
+        "scene_update": null,
+        "activate_scene_id": null,
+        "new_scene_draft": null,
+        "suggested_action": null,
+        "metadata": {
+          "accepted_response": {
+            "immutable": true,
+            "text": "Sergeant Mara says, \"I meant this: Word is, the street beyond the gate is called the north road.\"",
+            "provenance": "authorized_host_speech",
+            "attempt": 0,
+            "player_input": "What did you mean by that?",
+            "turn_identity": "r2c",
+            "speaker": "Sergeant Mara",
+            "addressee": "player",
+            "target": "sergeant mara",
+            "operation": "ask",
+            "authority_result": "accepted",
+            "grounding_result": "not_a_replacement_trigger",
+            "hard_validation": {
+              "hard_valid": true,
+              "reasons": [],
+              "soft_flags": [],
+              "authority": [
+                "dialogue_authority.reuse_prior_speech"
+              ],
+              "gm_resolution_decision_audit": null
+            },
+            "interaction_completion": true,
+            "contract_satisfying": true,
+            "contract": {
+              "contract_id": "r2c",
+              "operation": "ask",
+              "interlocutor_id": "sergeant_mara",
+              "expected_resolution": ""
+            },
+            "resolution_kind": "social_exchange",
+            "generation_attempts": 0,
+            "skipped_mutators": [],
+            "speech_adoption": "AUTHORIZED_HOST_SPEECH",
+            "authorization_source": "dialogue_authority.reuse_prior_speech",
+            "speaker_id": "sergeant_mara",
+            "canonical": false,
+            "candidate_disposition": "UNAUTHORIZED_GENERATED_CANDIDATE"
+          },
+          "emission_debug": {
+            "accepted_response_provenance": "authorized_host_speech",
+            "generation_attempts": 0,
+            "legacy_emission_authority": false,
+            "semantic_degradation": false,
+            "semantic_degradation_reasons": [],
+            "resolution_contract_semantic": {
+              "status": "satisfied",
+              "reasons": [],
+              "preserved": true
+            }
+          }
+        }
+      }
+    ],
+    "passed": true
+  }
+]

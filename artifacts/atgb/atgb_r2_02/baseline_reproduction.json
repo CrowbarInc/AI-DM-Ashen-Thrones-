@@ -1,0 +1,80 @@
+{
+  "stage": "historical_reproduction_before_repair",
+  "sources": {
+    "interaction_completion.py": "39d63fa6069354c817d45952a80f6e56c258b412f5c4d742d37ab7bd749d57f7",
+    "ordinary_semantic_ownership.py": "273fba46a2b39d5ae9f5343280c2ce3ed2b85f82c1273334de3feef890aba75b"
+  },
+  "session_reconstructed_from": "captured interaction focus tavern_runner social; visible frontier_gate roster from data/world.json",
+  "turns": {
+    "S03.3": {
+      "player_input": "If I ask you again later, will you still tell me that same thing?",
+      "established_conversational_participant": "tavern_runner",
+      "model_selected_addressee": "tavern_runner",
+      "model_purpose": "QUESTION",
+      "model_subject": "Whether the Tavern Runner will repeat the same information if asked again later",
+      "host_extracted_addressee_candidate": "you again later",
+      "grounding": {
+        "target_resolution": "unresolved",
+        "target_provenance": "provider_candidate_only",
+        "target_id": null,
+        "candidate_target_ids": [
+          "tavern_runner"
+        ],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "direct_address": true,
+        "conflict_status": "unresolved",
+        "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "communication_ownership": "ambiguous_unresolved"
+      },
+      "downstream": {
+        "category": "CLARIFY",
+        "reason": "unresolved_addressee",
+        "missing_information": [
+          "interlocutor"
+        ],
+        "proposed_operation": "ASK",
+        "proposed_target": "tavern_runner",
+        "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "pending_kind": "ambiguous_addressee"
+      },
+      "historical_player_facing": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "matches_historical_unresolved_addressee": true
+    },
+    "S05.3": {
+      "player_input": "Tell me more about that.",
+      "established_conversational_participant": "tavern_runner",
+      "model_selected_addressee": "tavern_runner",
+      "model_purpose": "CLARIFICATION",
+      "model_subject": "More information about the patrol rumor from the Tavern Runner",
+      "host_extracted_addressee_candidate": "me more",
+      "grounding": {
+        "target_resolution": "unresolved",
+        "target_provenance": "provider_candidate_only",
+        "target_id": null,
+        "candidate_target_ids": [
+          "tavern_runner"
+        ],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "direct_address": true,
+        "conflict_status": "unresolved",
+        "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "communication_ownership": "ambiguous_unresolved"
+      },
+      "downstream": {
+        "category": "CLARIFY",
+        "reason": "unresolved_addressee",
+        "missing_information": [
+          "interlocutor"
+        ],
+        "proposed_operation": "ASK",
+        "proposed_target": "tavern_runner",
+        "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "pending_kind": "ambiguous_addressee"
+      },
+      "historical_player_facing": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "matches_historical_unresolved_addressee": true
+    }
+  }
+}

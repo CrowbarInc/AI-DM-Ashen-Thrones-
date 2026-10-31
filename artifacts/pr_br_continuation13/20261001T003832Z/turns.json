@@ -1,0 +1,820 @@
+[
+  {
+    "turn_number": 1,
+    "shape": "direct npc inquiry",
+    "intended_meaning": "Ask the canonical gate guard what is required to pass through tonight.",
+    "player_text": "I walk up to the gate guard and ask him what I have to do before I can pass through tonight.",
+    "generated_candidate": "\"Captain Thoran is the one in charge of the gate watch tonight,\" the gate guard says crisply. \"You'll need to report to him for clearance before passing through.\" They glance toward the line of guards clustered near the watch captain's post, a sharp reminder of the strict order maintained despite the pressing crowd.",
+    "gm_text": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "best_safe_candidate": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\"",
+    "satisfied_candidate": "\"Captain Thoran is the one in charge of the gate watch tonight,\" the gate guard says crisply. \"You'll need to report to him for clearance before passing through.\" They glance toward the line of guards clustered near the watch captain's post, a sharp reminder of the strict order maintained despite the pressing crowd.",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "resolution:topic_revealed",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "satisfied",
+        "rank_before": 2,
+        "rank_after": 4,
+        "selected_preview": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\""
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "selected_preview": "Gate Guard mutters, \"Word is, captain Thoran commands the gate watch tonight.\""
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "fast_path_used": true,
+    "semantic_completeness": "sufficient",
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "ask",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "I walk up to the gate guard and ask him what I have to do before I can pass through tonight.",
+    "dimension": null,
+    "dimensions": [],
+    "ambiguous": false,
+    "contract_id": "rc_cf9ac1a6e99c",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "PASS",
+    "premise_contradicted": false,
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "emitted_npc_claim"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_cf9ac1a6e99c"
+    }
+  },
+  {
+    "turn_number": 2,
+    "shape": "temporal follow-up",
+    "intended_meaning": "Ask how long the thing just said has been true.",
+    "player_text": "And how long has that been the case?",
+    "generated_candidate": "\"I can't say exactly how long,\" the gate guard replies, voice low but steady. \"Captain Thoran only took command tonight, as far as I know. Before that, it was someone else—changes come fast these days. You'd do well to speak with the captain directly if you want the full story.\"",
+    "gm_text": "Gate Guard says, \"I cannot say how recently that was.\"",
+    "best_safe_candidate": "\"I can't say exactly how long,\" the gate guard replies, voice low but steady. \"Captain Thoran only took command tonight, as far as I know. Before that, it was someone else—changes come fast these days. You'd do well to speak with the captain directly if you want the full story.\".",
+    "satisfied_candidate": "\"I can't say exactly how long,\" the gate guard replies, voice low but steady. \"Captain Thoran only took command tonight, as far as I know. Before that, it was someone else—changes come fast these days. You'd do well to speak with the captain directly if you want the full story.\"",
+    "candidate_transitions": [
+      {
+        "stage": "final_emission",
+        "reason": "no_valid_answer",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "selected_preview": "Gate Guard says, \"I cannot say how recently that was.\""
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": true,
+      "downgrade_rejected": false,
+      "downgrade_reason": "no_valid_answer",
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": true,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "inability",
+      "final_satisfaction": "legitimate_nonresolution"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "covered:time"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "final_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "valid_inability"
+      ],
+      "resolution_kind": "inability",
+      "dimension_compatible": null,
+      "keeps_answer": false
+    },
+    "fast_path_used": false,
+    "semantic_completeness": "not_applied",
+    "fast_path_abstained": true,
+    "abstention_reason": "ambiguous_referent",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "proposed_operation": "ask",
+    "proposed_target": "emitted_5d3beeb7c6",
+    "proposed_subject": "captain Thoran commands the gate watch tonight",
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": "time",
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Word is, captain Thoran commands the gate watch tonight.",
+    "discourse_ref": {
+      "type": "claim",
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "source_turn": null
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "captain Thoran commands the gate watch tonight",
+    "dimension": "time",
+    "dimensions": [
+      "time"
+    ],
+    "ambiguous": false,
+    "contract_id": "rc_07889f8bfb79",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": null,
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "FAIL",
+    "premise_contradicted": false,
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": null,
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_07889f8bfb79"
+    }
+  },
+  {
+    "turn_number": 3,
+    "shape": "object inspection",
+    "intended_meaning": "Read what is posted on the canonical notice board.",
+    "player_text": "I read the notice board from top to bottom.",
+    "generated_candidate": "The notice board bears a series of official postings. At the top, new taxes impose added levies on caravan trade, reflecting recent Ash Compact census delays that have tightened the eastern caravan choke point. Below are curfew rules enforcing strict quiet hours after dusk, signaling heightened security concerns. Most eye-catching is a warning about a missing patrol—their last known route was along the northwest mud track past the crates, a detail scrawled in hurried, slightly faded ink. Nearby, the roster indicates Captain Thoran commands tonight’s gate watch, a fact murmured among the guards clustered near the captain’s post. These details hang like a weight over the gate district’s muddy, rain-slicked air.",
+    "gm_text": "The notice board bears a series of official postings. At the top, new taxes impose added levies on caravan trade, reflecting recent Ash Compact census delays that have tightened the eastern caravan choke point. Below are curfew rules enforcing strict quiet hours after dusk, signaling heightened security concerns. Most eye-catching is a warning about a missing patrol—their last known route was along the northwest mud track past the crates, a detail scrawled in hurried, slightly faded ink. Nearby, the roster indicates Captain Thoran commands tonight’s gate watch, a fact murmured among the guards clustered near the captain’s post. These details hang like a weight over the gate district’s muddy, rain-slicked air.",
+    "best_safe_candidate": "The notice board bears a series of official postings. At the top, new taxes impose added levies on caravan trade, reflecting recent Ash Compact census delays that have tightened the eastern caravan choke point. Below are curfew rules enforcing strict quiet hours after dusk, signaling heightened security concerns. Most eye-catching is a warning about a missing patrol—their last known route was along the northwest mud track past the crates, a detail scrawled in hurried, slightly faded ink. Nearby, the roster indicates Captain Thoran commands tonight’s gate watch, a fact murmured among the guards clustered near the captain’s post. These details hang like a weight over the gate district’s muddy, rain-slicked air.",
+    "satisfied_candidate": "The notice board bears a series of official postings. At the top, new taxes impose added levies on caravan trade, reflecting recent Ash Compact census delays that have tightened the eastern caravan choke point. Below are curfew rules enforcing strict quiet hours after dusk, signaling heightened security concerns. Most eye-catching is a warning about a missing patrol—their last known route was along the northwest mud track past the crates, a detail scrawled in hurried, slightly faded ink. Nearby, the roster indicates Captain Thoran commands tonight’s gate watch, a fact murmured among the guards clustered near the captain’s post. These details hang like a weight over the gate district’s muddy, rain-slicked air.",
+    "candidate_transitions": [
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "selected_preview": "The notice board bears a series of official postings. At the top, new taxes impose added levies on caravan trade, reflecting recent Ash Compact census delays that have tightened th"
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "target_observation"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "target_observation"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "fast_path_used": true,
+    "semantic_completeness": "sufficient",
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "inspect",
+    "proposed_target": "notice board from top to bottom",
+    "proposed_subject": null,
+    "proposed_interlocutor": null,
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "inspect",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Notice board",
+    "dimension": null,
+    "dimensions": [],
+    "ambiguous": false,
+    "contract_id": "rc_09d8f8a4fe97",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object"
+    },
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "PASS",
+    "premise_contradicted": false,
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_09d8f8a4fe97"
+    }
+  },
+  {
+    "turn_number": 4,
+    "shape": "inspection dimension follow-up",
+    "intended_meaning": "Ask what people use that board for.",
+    "player_text": "What do people come to that board for?",
+    "generated_candidate": "People come to the notice board at Cinderwatch Gate District primarily to see official postings—currently, it displays new taxes affecting caravan trade, curfew rules, and a warning about a missing patrol. These notices keep travelers, guards, and locals informed about changes in law, enforcement, and safety concerns in the region. While you can clearly observe the recent additions and changes related to the missing patrol, the full circumstances behind these notices remain fragmented and tangled in overlapping rumors. A promising next step might be to shadow Captain Thoran, who commands the gate watch tonight, and learn whom he meets or what decisions he makes regarding these matters.",
+    "gm_text": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "best_safe_candidate": "The missing patrol was last seen taking the northwest mud track past the crates.",
+    "satisfied_candidate": "People come to the notice board at Cinderwatch Gate District primarily to see official postings—currently, it displays new taxes affecting caravan trade, curfew rules, and a warning about a missing patrol. These notices keep travelers, guards, and locals informed about changes in law, enforcement, and safety concerns in the region. While you can clearly observe the recent additions and changes related to the missing patrol, the full circumstances behind these notices remain fragmented and tangled in overlapping rumors. A promising next step might be to shadow Captain Thoran, who commands the gate watch tonight, and learn whom he meets or what decisions he makes regarding these matters.",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "interactable:notice_board",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "selected_preview": "The missing patrol was last seen taking the northwest mud track past the crates."
+      },
+      {
+        "stage": "clue_frame",
+        "reason": "interactable:notice_board",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "selected_preview": "The missing patrol was last seen taking the northwest mud track past the crates."
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "satisfaction_before": "satisfied",
+        "satisfaction_after": "satisfied",
+        "rank_before": 4,
+        "rank_after": 4,
+        "selected_preview": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": "answer",
+      "final_satisfaction": "satisfied"
+    },
+    "initial_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "final_satisfaction": {
+      "status": "satisfied",
+      "reasons": [
+        "inquiry_answered"
+      ],
+      "resolution_kind": "answer",
+      "dimension_compatible": true,
+      "keeps_answer": true
+    },
+    "fast_path_used": false,
+    "semantic_completeness": "not_applied",
+    "fast_path_abstained": true,
+    "abstention_reason": "ambiguous_referent",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "proposed_operation": "ask",
+    "proposed_target": "notice_board",
+    "proposed_subject": "notice board",
+    "proposed_interlocutor": null,
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Notice board",
+    "discourse_ref": {
+      "type": "object",
+      "id": "notice_board",
+      "label": "Notice board",
+      "source_turn": null
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "notice board",
+    "dimension": null,
+    "dimensions": [],
+    "ambiguous": false,
+    "contract_id": "rc_4cbf626ec0c8",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object"
+    },
+    "actionable_lead": null,
+    "previous_action": null,
+    "semantic_result": "PASS",
+    "premise_contradicted": false,
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 4,
+      "last_committed_contract_id": "rc_4cbf626ec0c8"
+    }
+  },
+  {
+    "turn_number": 5,
+    "shape": "referential action",
+    "intended_meaning": "Carry out the concrete thing just suggested, without treating it as a physical step.",
+    "player_text": "Then I'll do the thing he said.",
+    "generated_candidate": "Galinor moves past the muddy crowd, turning toward the northwest mud track where the missing patrol was last seen. The rain skitters off his cloak as he prepares to follow the trail, the shadow of Captain Thoran's watch still lingering behind the gate. Ahead, crates block the path’s edge, muddy and slick, marking the border between the gate district and the unsettled wilderness beyond.",
+    "gm_text": "The requested action cannot be completed here; another route is needed.",
+    "best_safe_candidate": "The requested action cannot be completed here; another route is needed.",
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "clue_frame_would_reduce_contract",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "selected_preview": "The requested action cannot be completed here; another route is needed."
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "satisfaction_before": "legitimate_nonresolution",
+        "satisfaction_after": "legitimate_nonresolution",
+        "rank_before": 2,
+        "rank_after": 2,
+        "selected_preview": "The requested action cannot be completed here; another route is needed."
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": null,
+      "final_satisfaction": "legitimate_nonresolution"
+    },
+    "initial_satisfaction": {
+      "status": "unsatisfied",
+      "reasons": [
+        "action_outcome_missing",
+        "generic_scene_replaced_action"
+      ],
+      "resolution_kind": "unrelated",
+      "dimension_compatible": null,
+      "keeps_answer": false
+    },
+    "final_satisfaction": {
+      "status": "legitimate_nonresolution",
+      "reasons": [
+        "action_nonresolution"
+      ],
+      "resolution_kind": null,
+      "dimension_compatible": null,
+      "keeps_answer": false
+    },
+    "fast_path_used": true,
+    "semantic_completeness": "sufficient",
+    "fast_path_abstained": false,
+    "abstention_reason": null,
+    "interpreter_invoked": false,
+    "proposal_source": "deterministic_fast_path",
+    "proposed_operation": "act",
+    "proposed_target": null,
+    "proposed_subject": null,
+    "proposed_interlocutor": null,
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "act",
+    "canonical_target": null,
+    "discourse_ref": null,
+    "interlocutor_id": null,
+    "conversational_subject": "Then I'll do the thing he said.",
+    "dimension": null,
+    "dimensions": [],
+    "ambiguous": false,
+    "contract_id": "rc_fcbdae68d9ef",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object"
+    },
+    "actionable_lead": null,
+    "previous_action": {
+      "id": "rc_fcbdae68d9ef",
+      "label": "Then I'll do the thing he said.",
+      "kind": "act"
+    },
+    "semantic_result": "PASS",
+    "premise_contradicted": false,
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 0,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "Gate Guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": {
+        "id": "rc_fcbdae68d9ef",
+        "label": "Then I'll do the thing he said.",
+        "kind": "act",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 5,
+      "last_committed_contract_id": "rc_fcbdae68d9ef"
+    }
+  },
+  {
+    "turn_number": 6,
+    "shape": "second social interaction",
+    "intended_meaning": "Ask the same person how sure he is.",
+    "player_text": "I ask him whether he's sure about that.",
+    "generated_candidate": "The gate guard glances around cautiously before muttering, \"I heard Captain Thoran’s orders came down firm. That man doesn’t give second thoughts lightly. If you want to pass tonight, it's best to take that as certain.\" His tone suggests he trusts the report but offers no further reassurance.",
+    "gm_text": "Captain Thoran commands the gate watch tonight.",
+    "best_safe_candidate": "",
+    "satisfied_candidate": "",
+    "candidate_transitions": [
+      {
+        "stage": "clue_frame",
+        "reason": "topic_pressure:last_answer",
+        "satisfaction_before": "unchecked",
+        "satisfaction_after": "unchecked",
+        "rank_before": 1,
+        "rank_after": 1,
+        "selected_preview": "Captain Thoran commands the gate watch tonight."
+      },
+      {
+        "stage": "final_emission",
+        "reason": "compared",
+        "satisfaction_before": "unchecked",
+        "satisfaction_after": "unchecked",
+        "rank_before": 1,
+        "rank_after": 1,
+        "selected_preview": "Captain Thoran commands the gate watch tonight."
+      }
+    ],
+    "outcome_precedence": {
+      "downgrade_attempted": false,
+      "downgrade_rejected": false,
+      "downgrade_reason": null,
+      "recovery_used": false,
+      "recovery_source": null,
+      "destroyed": false,
+      "scene_momentum_appended": false,
+      "final_outcome_kind": null,
+      "final_satisfaction": "unchecked"
+    },
+    "initial_satisfaction": {
+      "status": "unchecked",
+      "reasons": [
+        "no_dimension"
+      ],
+      "resolution_kind": null,
+      "dimension_compatible": null,
+      "keeps_answer": false
+    },
+    "final_satisfaction": {
+      "status": "unchecked",
+      "reasons": [
+        "no_dimension"
+      ],
+      "resolution_kind": null,
+      "dimension_compatible": null,
+      "keeps_answer": false
+    },
+    "fast_path_used": false,
+    "semantic_completeness": "not_applied",
+    "fast_path_abstained": true,
+    "abstention_reason": "insufficient_discourse_context",
+    "interpreter_invoked": true,
+    "proposal_source": "model_assisted",
+    "proposed_operation": "ask",
+    "proposed_target": "gate_guard",
+    "proposed_subject": "certainty of claim about captain Thoran commanding the gate watch tonight",
+    "proposed_interlocutor": "gate_guard",
+    "proposed_dimension": null,
+    "validator_status": "validated",
+    "validator_reason": null,
+    "operation": "ask",
+    "canonical_target": "Gate Guard",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "gate_guard",
+      "label": "Gate Guard",
+      "source_turn": null
+    },
+    "interlocutor_id": "gate_guard",
+    "conversational_subject": "certainty of claim about captain Thoran commanding the gate watch tonight",
+    "dimension": null,
+    "dimensions": [],
+    "ambiguous": false,
+    "contract_id": "rc_0ce2da7826b4",
+    "active_interlocutor": {
+      "id": "gate_guard",
+      "label": "gate_guard",
+      "kind": "interlocutor"
+    },
+    "active_claim": {
+      "id": "emitted_5d3beeb7c6",
+      "label": "Word is, captain Thoran commands the gate watch tonight.",
+      "kind": "claim"
+    },
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object"
+    },
+    "actionable_lead": null,
+    "previous_action": {
+      "id": "rc_fcbdae68d9ef",
+      "label": "Then I'll do the thing he said.",
+      "kind": "act"
+    },
+    "semantic_result": "FAIL",
+    "premise_contradicted": false,
+    "generation_calls_this_turn": 1,
+    "interpretation_calls_this_turn": 1,
+    "focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_guard",
+        "label": "gate_guard",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 6,
+        "source": "resolution_contract"
+      },
+      "active_claim": {
+        "id": "emitted_5d3beeb7c6",
+        "label": "Word is, captain Thoran commands the gate watch tonight.",
+        "kind": "claim",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 3,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": {
+        "id": "rc_fcbdae68d9ef",
+        "label": "Then I'll do the thing he said.",
+        "kind": "act",
+        "scene_id": "frontier_gate",
+        "turn_index": 5,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 6,
+      "last_committed_contract_id": "rc_0ce2da7826b4"
+    }
+  }
+]

@@ -1,0 +1,579 @@
+[
+  {
+    "probe_id": "dimensionless_rumor",
+    "player_text": "What rumor are travelers repeating?",
+    "gm_text": "No one at hand answers that directly—the question hangs in the noise.",
+    "model_excerpt": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full details of what happened remain scattered and uncertain among those passing through. Watching closely, you notice threadbare watchers and ragged refugees clustered near the muddy gate line, exchanging hushed conversations—shadowing them might lead you to more concrete information about these rumors.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full details of what happened remain scattered and uncertain among those passing through. Watching closely, you notice threadbare watchers and ragged refugees clustered near the muddy gate line, exchanging hushed conversations—shadowing them might lead you to more concrete information about these rumors."
+      }
+    ],
+    "contract_id": "rc_18b15776d6dc",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "target_ref": null,
+    "ambiguous": false,
+    "epistemic_mode": "npc_claim",
+    "model_contract_status": "unsatisfied",
+    "model_resolution_kind": "unrelated",
+    "model_target_compatible": false,
+    "model_operation_compatible": false,
+    "model_keeps_answer": false,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "inquiry_answered"
+    ],
+    "final_target_compatible": true,
+    "final_operation_compatible": true,
+    "final_candidate_answer_target": null,
+    "final_keeps_answer": true,
+    "payload_preserved": false,
+    "semantic_destruction": false,
+    "semantic_preservation": {
+      "contract_id": "rc_18b15776d6dc",
+      "requested_dimension": null,
+      "candidate_contract_status": "satisfied",
+      "semantic_payload_preserved": true,
+      "replacement_selected": false,
+      "replacement_contract_compatible": true,
+      "rejection_reason": "candidate_already_resolved_contract"
+    },
+    "resolution_contract_semantic": {
+      "status": "satisfied",
+      "contract_id": "rc_18b15776d6dc",
+      "operation": "ask",
+      "target": null,
+      "dimension": null,
+      "discourse_referent": null,
+      "candidate_answer_target": null,
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": true,
+      "resolution_kind": "answer",
+      "valid_inability": false,
+      "valid_refusal": false,
+      "valid_clarification": false
+    },
+    "final_emission": {},
+    "active_claim": null,
+    "active_inspected": null,
+    "assessment": {
+      "contract_id": "rc_18b15776d6dc",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "ask",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "inquiry_answered"
+      ],
+      "target": null,
+      "candidate_answer_target": null,
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": true,
+      "resolution_kind": "answer",
+      "echo_detected": false,
+      "construction": {
+        "cues": [],
+        "referent_slot": null,
+        "referent_reason": "no_anaphor",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "question"
+  },
+  {
+    "probe_id": "repeat_rumor",
+    "player_text": "Repeat that rumor.",
+    "gm_text": "A warning about the missing patrol has been added to the notice board sharpens when you look again, and ash compact census delays have tightened the eastern caravan choke point still competes for notice.",
+    "model_excerpt": "The notice board at Cinderwatch Gate has recently been updated with a warning about a missing patrol. Travelers passing through whisper about the disappearance, though the details remain vague and scattered. Near the muddy gate line, ragged refugees and threadbare watchers cluster, exchanging hushed rumors—following them closely might uncover more concrete information about what happened.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": false,
+        "model_player_facing_excerpt": "The notice board at Cinderwatch Gate has recently been updated with a warning about a missing patrol. Travelers passing through whisper about the disappearance, though the details remain vague and scattered. Near the muddy gate line, ragged refugees and threadbare watchers cluster, exchanging hushed rumors—following them closely might uncover more concrete information about what happened."
+      }
+    ],
+    "contract_id": "rc_c4e8dac0a5b1",
+    "operation": "repeat",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "claim",
+      "id": "bi_e9b90fae0634",
+      "label": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "source_turn": null
+    },
+    "target_ref": {
+      "type": "claim",
+      "id_or_text": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "source": "inherited_discourse"
+    },
+    "ambiguous": false,
+    "epistemic_mode": "npc_claim",
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_target_compatible": true,
+    "model_operation_compatible": true,
+    "model_keeps_answer": true,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "repeat_restated"
+    ],
+    "final_target_compatible": true,
+    "final_operation_compatible": true,
+    "final_candidate_answer_target": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which traveler",
+    "final_keeps_answer": true,
+    "payload_preserved": true,
+    "semantic_destruction": false,
+    "semantic_preservation": {
+      "contract_id": "rc_c4e8dac0a5b1",
+      "requested_dimension": null,
+      "candidate_contract_status": "satisfied",
+      "semantic_payload_preserved": true,
+      "replacement_selected": false,
+      "replacement_contract_compatible": false,
+      "rejection_reason": "authored_fact_incompatible_with_contract"
+    },
+    "resolution_contract_semantic": {
+      "status": "satisfied",
+      "contract_id": "rc_c4e8dac0a5b1",
+      "operation": "repeat",
+      "target": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "dimension": null,
+      "discourse_referent": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which traveler",
+      "candidate_answer_target": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which traveler",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": true,
+      "resolution_kind": "answer",
+      "valid_inability": false,
+      "valid_refusal": false,
+      "valid_clarification": false
+    },
+    "final_emission": {},
+    "active_claim": {
+      "id": "bi_e9b90fae0634",
+      "label": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": null,
+    "assessment": {
+      "contract_id": "rc_c4e8dac0a5b1",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "repeat",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "repeat_restated"
+      ],
+      "target": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "candidate_answer_target": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which traveler",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": true,
+      "resolution_kind": "answer",
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "pronoun"
+        ],
+        "referent_slot": "active_claim",
+        "referent_reason": "unique_active_claim",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": true
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": null
+  },
+  {
+    "probe_id": "inspect_sheet",
+    "player_text": "Look the posted sheet over.",
+    "gm_text": "You look again. Nothing new resolves into evidence. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "model_excerpt": "The posted sheet on the notice board at Cinderwatch Gate lists updated taxes, strict curfew rules, and, most prominently, a warning about a missing patrol. It states that the patrol was last seen taking the northwest mud track past the crates—a route now muddied and difficult to pass. The announcement urges travelers and locals to report any sightings or information to the guard captain stationed nearby. Around you, the muddy gate line is crowded with ragged refugees and threadbare watchers exchanging quiet whispers, their wary glances flickering toward the gate and the posted sheet alike.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": false,
+        "model_player_facing_excerpt": "The posted sheet on the notice board at Cinderwatch Gate lists updated taxes, strict curfew rules, and, most prominently, a warning about a missing patrol. It states that the patrol was last seen taking the northwest mud track past the crates—a route now muddied and difficult to pass. The announcement urges travelers and locals to report any sightings or information to the guard captain stationed nearby. Around you, the muddy gate line is crowded with ragged refugees and threadbare watchers exchanging quiet whispers, their wary glances flickering toward the gate and the posted sheet alike."
+      }
+    ],
+    "contract_id": "rc_78d898207cb7",
+    "operation": "inspect",
+    "request_kind": "inquiry",
+    "dimension": null,
+    "dimensions": [],
+    "referent_provenance": "explicit_player",
+    "discourse_ref": null,
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "explicit_player"
+    },
+    "ambiguous": false,
+    "epistemic_mode": "unknown_allowed",
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_target_compatible": true,
+    "model_operation_compatible": true,
+    "model_keeps_answer": true,
+    "final_contract_status": "satisfied",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "target_observation"
+    ],
+    "final_target_compatible": true,
+    "final_operation_compatible": true,
+    "final_candidate_answer_target": "missing patrol",
+    "final_keeps_answer": true,
+    "payload_preserved": true,
+    "semantic_destruction": false,
+    "semantic_preservation": null,
+    "resolution_contract_semantic": {
+      "status": "satisfied",
+      "contract_id": "rc_78d898207cb7",
+      "operation": "inspect",
+      "target": "posted sheet",
+      "dimension": null,
+      "discourse_referent": null,
+      "candidate_answer_target": "missing patrol",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": true,
+      "resolution_kind": "answer",
+      "valid_inability": false,
+      "valid_refusal": false,
+      "valid_clarification": false,
+      "replaced": true,
+      "replaced_preview": "You Look the posted sheet over, and you get an immediate read on what is there.",
+      "keeps_answer": true,
+      "compatible": true,
+      "restored_satisfying_candidate": true
+    },
+    "final_emission": {},
+    "active_claim": {
+      "id": "bi_e9b90fae0634",
+      "label": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "assessment": {
+      "contract_id": "rc_78d898207cb7",
+      "dimension": null,
+      "dimensions": [],
+      "operation": "inspect",
+      "referent_provenance": "explicit_player",
+      "assessment_status": "satisfied",
+      "assessment_reasons": [
+        "target_observation"
+      ],
+      "target": "posted sheet",
+      "candidate_answer_target": "missing patrol",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": true,
+      "resolution_kind": "answer",
+      "echo_detected": false,
+      "construction": {
+        "cues": [],
+        "referent_slot": "explicit_target",
+        "referent_reason": "explicit_current_turn_target",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "investigate"
+  },
+  {
+    "probe_id": "sheet_content",
+    "player_text": "What does it actually say?",
+    "gm_text": "The inspection establishes no further reliable detail about posted sheet.",
+    "model_excerpt": "The notice board at Cinderwatch Gate displays several official announcements: a list of new taxes, updated curfew rules, and notably, a posted warning about a missing patrol. This notice urges anyone who has seen the patrol, which was last observed taking the northwest mud track past the crates, to report such sightings directly to the guard captain. While these facts are clear, the deeper reasons behind the patrol’s disappearance and the full details remain unclear amid scattered rumors. Watching the cluster of threadbare watchers and ragged refugees near the muddy gate line, who exchange hushed whispers, might be your best way to uncover more concrete information.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "primary_turn",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": false,
+        "model_player_facing_excerpt": "The notice board at Cinderwatch Gate displays several official announcements: a list of new taxes, updated curfew rules, and notably, a posted warning about a missing patrol. This notice urges anyone who has seen the patrol, which was last observed taking the northwest mud track past the crates, to report such sightings directly to the guard captain. While these facts are clear, the deeper reasons behind the patrol’s disappearance and the full details remain unclear amid scattered rumors. Watching the cluster of threadbare watchers and ragged refugees near the muddy gate line, who exchange hushed whispers, might be your best way to uncover more concrete information."
+      }
+    ],
+    "contract_id": "rc_14eb18c5b9c8",
+    "operation": "ask",
+    "request_kind": "inquiry",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "object",
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "source_turn": 3
+    },
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "inherited_discourse"
+    },
+    "ambiguous": false,
+    "epistemic_mode": "unknown_allowed",
+    "model_contract_status": "satisfied",
+    "model_resolution_kind": "answer",
+    "model_target_compatible": true,
+    "model_operation_compatible": true,
+    "model_keeps_answer": true,
+    "final_contract_status": "legitimate_nonresolution",
+    "final_resolution_kind": "inability",
+    "final_reasons": [
+      "valid_inability"
+    ],
+    "final_target_compatible": true,
+    "final_operation_compatible": true,
+    "final_candidate_answer_target": "posted sheet",
+    "final_keeps_answer": false,
+    "payload_preserved": false,
+    "semantic_destruction": true,
+    "semantic_preservation": null,
+    "resolution_contract_semantic": {
+      "status": "legitimate_nonresolution",
+      "contract_id": "rc_14eb18c5b9c8",
+      "operation": "ask",
+      "target": "posted sheet",
+      "dimension": "content",
+      "discourse_referent": "posted sheet",
+      "candidate_answer_target": "posted sheet",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": null,
+      "resolution_kind": "inability",
+      "valid_inability": true,
+      "valid_refusal": false,
+      "valid_clarification": false
+    },
+    "final_emission": {},
+    "active_claim": {
+      "id": "bi_e9b90fae0634",
+      "label": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "assessment": {
+      "contract_id": "rc_14eb18c5b9c8",
+      "dimension": "content",
+      "dimensions": [
+        "content"
+      ],
+      "operation": "ask",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "legitimate_nonresolution",
+      "assessment_reasons": [
+        "valid_inability"
+      ],
+      "target": "posted sheet",
+      "candidate_answer_target": "posted sheet",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": null,
+      "resolution_kind": "inability",
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "content",
+          "pronoun"
+        ],
+        "referent_slot": "active_inspected",
+        "referent_reason": "unique_inspected_object",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "question"
+  },
+  {
+    "probe_id": "sheet_use",
+    "player_text": "Does it look like people use this often?",
+    "gm_text": "The notice board at Cinderwatch Gate shows clear signs of frequent use despite the soggy weather. The papers are worn at the edges, and faded smudges mark where many hands have brushed or pressed against them. Travelers and refugees alike pause to glance at the lists — taxes, curfew rules, and prominently, the fresh warning about the missing patrol. From what you observe, this board remains a vital source for the crowd, especially as whispers ripple among the threadbare watchers and ragged refug",
+    "model_excerpt": "The notice board at Cinderwatch Gate shows clear signs of frequent use despite the soggy weather. The papers are worn at the edges, and faded smudges mark where many hands have brushed or pressed against them. Travelers and refugees alike pause to glance at the lists — taxes, curfew rules, and prominently, the fresh warning about the missing patrol. From what you observe, this board remains a vital source for the crowd, especially as whispers ripple among the threadbare watchers and ragged refugees clustered nearby. To gain deeper insight, you might follow these figures as they exchange their hushed updates among themselves.",
+    "model_calls": 1,
+    "generation_calls": [
+      {
+        "purpose": "strict_social",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "strict_social": true,
+        "model_player_facing_excerpt": "The notice board at Cinderwatch Gate shows clear signs of frequent use despite the soggy weather. The papers are worn at the edges, and faded smudges mark where many hands have brushed or pressed against them. Travelers and refugees alike pause to glance at the lists — taxes, curfew rules, and prominently, the fresh warning about the missing patrol. From what you observe, this board remains a vital source for the crowd, especially as whispers ripple among the threadbare watchers and ragged refugees clustered nearby. To gain deeper insight, you might follow these figures as they exchange their hushed updates among themselves."
+      }
+    ],
+    "contract_id": "rc_1990fda80379",
+    "operation": "perceive",
+    "request_kind": "inquiry",
+    "dimension": "use",
+    "dimensions": [
+      "use",
+      "appearance"
+    ],
+    "referent_provenance": "inherited_discourse",
+    "discourse_ref": {
+      "type": "object",
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "source_turn": 3
+    },
+    "target_ref": {
+      "type": "object",
+      "id_or_text": "posted sheet",
+      "source": "inherited_discourse"
+    },
+    "ambiguous": false,
+    "epistemic_mode": "bounded_incidental",
+    "model_contract_status": "partial",
+    "model_resolution_kind": "answer",
+    "model_target_compatible": true,
+    "model_operation_compatible": true,
+    "model_keeps_answer": false,
+    "final_contract_status": "partial",
+    "final_resolution_kind": "answer",
+    "final_reasons": [
+      "covered:use",
+      "missing:appearance"
+    ],
+    "final_target_compatible": true,
+    "final_operation_compatible": true,
+    "final_candidate_answer_target": "missing patrol",
+    "final_keeps_answer": false,
+    "payload_preserved": false,
+    "semantic_destruction": false,
+    "semantic_preservation": null,
+    "resolution_contract_semantic": {
+      "status": "partial",
+      "contract_id": "rc_1990fda80379",
+      "operation": "perceive",
+      "target": "posted sheet",
+      "dimension": "use",
+      "discourse_referent": "posted sheet",
+      "candidate_answer_target": "missing patrol",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": false,
+      "resolution_kind": "answer",
+      "valid_inability": false,
+      "valid_refusal": false,
+      "valid_clarification": false
+    },
+    "final_emission": {},
+    "active_claim": {
+      "id": "bi_e9b90fae0634",
+      "label": "I can tell that the notice board at Cinderwatch Gate has recently added a warning about a missing patrol, which travelers are murmuring about. However, the full",
+      "kind": "claim",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_inspected": {
+      "id": "posted sheet",
+      "label": "posted sheet",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "assessment": {
+      "contract_id": "rc_1990fda80379",
+      "dimension": "use",
+      "dimensions": [
+        "use",
+        "appearance"
+      ],
+      "operation": "perceive",
+      "referent_provenance": "inherited_discourse",
+      "assessment_status": "partial",
+      "assessment_reasons": [
+        "covered:use",
+        "missing:appearance"
+      ],
+      "target": "posted sheet",
+      "candidate_answer_target": "missing patrol",
+      "target_compatible": true,
+      "operation_compatible": true,
+      "dimension_compatible": false,
+      "resolution_kind": "answer",
+      "echo_detected": false,
+      "construction": {
+        "cues": [
+          "use",
+          "appearance",
+          "pronoun"
+        ],
+        "referent_slot": "active_inspected",
+        "referent_reason": "unique_inspected_object",
+        "ambiguity_detected": false,
+        "actionable_inherited": false,
+        "active_claim_inherited": false
+      },
+      "failure_locus": "response_met_contract"
+    },
+    "semantic_result": "PASS",
+    "resolution_kind": "question"
+  }
+]

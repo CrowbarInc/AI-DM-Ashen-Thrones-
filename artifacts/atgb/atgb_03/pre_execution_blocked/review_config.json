@@ -1,0 +1,510 @@
+{
+  "changes": {
+    "production": [
+      "None; execution sources and canonical campaign data preserved."
+    ],
+    "validation": [
+      "{'tests': 24, 'failures': 0, 'errors': 0, 'skipped': 0}"
+    ],
+    "tooling": [
+      "Campaign wrapper and provenance/blocked-package scripts only; approved harness unchanged."
+    ],
+    "documentation": [
+      "Blocked execution report and concise NEXT_SESSION orientation."
+    ],
+    "generated_artifacts": [
+      "Preflight, source/configuration hashes, all-scenario status, unexecuted scoring templates and approval blocker."
+    ]
+  },
+  "testing": {
+    "focused": "{'tests': 24, 'failures': 0, 'errors': 0, 'skipped': 0}",
+    "broader": "Separate existing provider-disabled chat regression passed.",
+    "full_suite": "Not run.",
+    "runtime_validation": "All ten preflights pass; hash matches readiness.",
+    "model_runtime_boundary": "No live model invocation; automatic approval rejection before execution.",
+    "new_regressions": "None observed in focused checks.",
+    "pre_existing_failures": "Sandbox host-chat boundary; initial missing pytest basetemp parent preserved."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Automatic approval review rejected S01 live export; no live baseline exists.",
+      "All 37 conversational turns not evaluated; S07/S09 opening delivery not evaluated."
+    ],
+    "pre_existing": [
+      "Previously exposed held-out content.",
+      "Dirty worktree; source hashes required.",
+      "Sandbox host-chat limitation."
+    ]
+  },
+  "campaign_id": "atgb_03_initial_live_baseline",
+  "campaign_name": "ATGB-03 Initial Live Conversational Baseline",
+  "campaign_date": "2026-10-18",
+  "purpose": "Observe existing behavior with the approved live benchmark; blocked before first provider call.",
+  "objective_status": "BLOCKED BEFORE LIVE EXECUTION; NO GAMEPLAY SCORE",
+  "executive_summary": "S01 live execution was rejected by automatic approval review before process creation because explicit benchmark data-export approval to OpenAI is required. All ten preflights and approved-source checks pass; existing chat works with providers disabled. All 37 live turns are not evaluated. No live transcripts or human judgments exist. No production changes.",
+  "decisions_requiring_human_review": [
+    "Approve transmitting the frozen benchmark/gameplay payloads and isolated history to OpenAI (https://api.openai.com/v1), using unchanged gpt-4.1-mini configuration, at most 80 application requests and 30 minutes; S01 at most 12 requests and 5 minutes. Human gameplay scoring follows actual execution."
+  ],
+  "missing_concepts": [
+    "Actual live transcripts and authorized human scoring."
+  ],
+  "does_not_prove": [
+    "Any gameplay performance, improvement, authority compliance or conversational competence.",
+    "S07/S09 opening delivery.",
+    "Independent generalization or full-suite safety."
+  ],
+  "recommended_next_step": "Obtain explicit OpenAI benchmark payload-export approval, recheck configuration/provenance, run S01, validate infrastructure, then remaining scenarios and human review. No gameplay repairs.",
+  "primary_report": "development/reports/atgb_03_initial_live_baseline.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/atgb/atgb_02a/validation_results.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/configuration_and_provenance.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execute.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/execution_blocker.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused.txt",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused.xml",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_host.txt",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_host.xml",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/focused_retry.txt",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/host_check.txt",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/host_check.xml",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/initial_git_status.txt",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/package_blocked.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/report.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/result.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/worksheet.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preflight/worksheet.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/prepare.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/preservation_checks.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/scenario_status.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/stage_a_acceptance.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/validation_results.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/verify_bundle.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/worksheet_template.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/atgb/atgb_03/worksheet_template.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/campaign.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/character.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/conditions.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/manifest.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/frontier_gate.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/market_quarter.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/scenes/old_milestone.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/baselines/frontier-gate-v1/world.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/corpus.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S07.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S09.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/held_out/S10.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S01.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S02.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S03.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S04.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S05.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S06.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "data/validation/atgb/visible/S08.json",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_conversational_benchmark_design.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_01_scenario_catalog.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_benchmark_specification.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02_execution.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "development/reports/atgb_02a_readiness.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/__init__.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/baseline.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/budget.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/chat_worker.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/driver.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/fixtures.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/isolation.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/preflight.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/results.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/atgb/worksheet.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tools/run_atgb.py",
+      "role": "blocked_execution_support",
+      "why": "Independent review of blocker, unchanged setup, intended execution and pending scoring.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "Bundle includes blocker, configuration/provenance, all-scenario statuses, preflight, unexecuted worksheet templates, approved baseline/corpus/rubric and execution code. No live exchanges or gameplay judgments exist."
+}

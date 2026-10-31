@@ -1,0 +1,885 @@
+--- entry/game/gm.py
++++ current/game/gm.py
+@@ -5146,7 +5146,14 @@
+         category = "accepted_structured_response"
+     def safe_identifier(value):
+         return value if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,200}", value) else None
++    semantic_fields = value if isinstance(value, dict) else {}
+     return {**extraction, **counts,
++            "narration_present": isinstance(semantic_fields.get("narration"), str),
++            "narration_length": len(semantic_fields["narration"]) if isinstance(semantic_fields.get("narration"), str) else None,
++            "player_facing_text_present": isinstance(semantic_fields.get("player_facing_text"), str),
++            "player_facing_text_length": len(semantic_fields["player_facing_text"]) if isinstance(semantic_fields.get("player_facing_text"), str) else None,
++            "declarations_present": isinstance(semantic_fields.get("declared_claims"), list),
++            "declaration_count": len(semantic_fields["declared_claims"]) if isinstance(semantic_fields.get("declared_claims"), list) else None,
+             "provider_request_id": safe_identifier(getattr(response, "_request_id", None)),
+             "provider_response_id": safe_identifier(getattr(response, "id", None)),
+             "provider_status": status, "provider_finish_reason": incomplete,
+@@ -5380,6 +5387,9 @@
+                 resp, text, extraction, parsed_response,
+                 maximum=create_kwargs.get("max_output_tokens"), contract=provider_response_contract,
+             )}, attempt)
++            if is_opening:
++                from game.provider_budget import capture_opening_response
++                capture_opening_response(text, attempt)
+         if is_opening and getattr(resp, "status", None) in {
+             "incomplete", "failed", "cancelled", "queued", "in_progress"
+         }:
+--- entry/game/provider_budget.py
++++ current/game/provider_budget.py
+@@ -50,6 +50,13 @@
+         try:
+             _initialize_locked()
+             scope = _OPENING_DIAGNOSTIC.get()
++            if scope is not None and fields.get("stage") == "provider_response":
++                scope.update(provider_attempt_id=attempt.attempt_id if attempt else None,
++                             provider_status=fields.get("provider_status"),
++                             structured_validation_result=fields.get("structured_validation_result"))
++                scope.update({key: fields.get(key) for key in (
++                    "narration_present", "narration_length", "player_facing_text_present",
++                    "player_facing_text_length", "declarations_present", "declaration_count")})
+             _append({"event": "generation_diagnostic", "version": ACCOUNTING_VERSION,
+                      "run_id": _RUN_ID, "time": _now(),
+                      "attempt_id": attempt.attempt_id if attempt else None,
+@@ -64,11 +71,85 @@
+     return _OPENING_DIAGNOSTIC.set({"id": uuid.uuid4().hex})
+ 
+ 
++def observe_opening_semantics(fields: dict[str, Any]) -> None:
++    """Content-free observations from the existing semantic decision boundary."""
++    scope = _OPENING_DIAGNOSTIC.get()
++    if scope is not None:
++        scope.update(fields)
++        record_generation_diagnostic({"stage": "opening_semantics",
++            "logical_operation": "scene_opening", "requested_response_type": "scene_opening",
++            **fields})
++
++
++def capture_opening_response(text: str, attempt=None) -> None:
++    """Explicit controlled-playtest evidence only; never prompts or SDK objects.
++
++    A separate opt-in is required in addition to diagnostics, accounting, isolated
++    storage and both retry controls. At most six 64-KiB artifacts per scope.
++    """
++    from pathlib import Path
++
++    scope = _OPENING_DIAGNOSTIC.get()
++    if not (scope is not None and generation_diagnostics_enabled() and accounting_active()
++            and _truthy("ASHEN_OPENING_RESPONSE_CAPTURE")
++            and _truthy("ASHEN_PLAYTEST_DISABLE_SDK_RETRIES")
++            and _truthy("ASHEN_DISABLE_PROVIDER_RETRIES")):
++        return
++    result = "capture_failed"
++    try:
++        configured = os.environ.get("ASHEN_DATA_DIR", "")
++        if not configured or not Path(configured).is_absolute():
++            raise ValueError("isolated data required")
++        data = Path(configured).resolve(strict=True)
++        from game.storage import DATA_DIR
++        if data != Path(DATA_DIR).resolve():
++            raise ValueError("capture must use active storage")
++        if data == (Path(__file__).resolve().parents[1] / "data").resolve():
++            raise ValueError("normal data forbidden")
++        count = scope.get("capture_count", 0)
++        if count >= 6:
++            raise ValueError("capture count bound")
++        scope["capture_count"] = count + 1
++        # Parse the original string, independently of the normalized parser output.
++        import re
++        raw = text.strip()
++        fence = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", raw, re.DOTALL | re.IGNORECASE)
++        value = json.loads(fence.group(1).strip() if fence else raw)
++        artifact = {"sensitive_game_content": True, "opening_attempt_id": scope["id"],
++                    "provider_attempt_id": attempt.attempt_id if attempt else None,
++                    "parsed_response": value, "truncated": False}
++        encoded = json.dumps(artifact, ensure_ascii=True).encode("utf-8")
++        if len(encoded) > 65536:
++            artifact.pop("parsed_response")
++            artifact.update(truncated=True, original_serialized_bytes=len(encoded),
++                            response_prefix=json.dumps(value, ensure_ascii=True)[:8000])
++            encoded = json.dumps(artifact, ensure_ascii=True).encode("utf-8")
++        folder = data.parent / "opening_response_evidence"
++        if folder.resolve().parent != data.parent:
++            raise ValueError("capture directory escapes isolated playtest")
++        folder.mkdir(exist_ok=True)
++        # Exclusive files prevent accidental replacement; paths never use model data.
++        with (folder / f"{scope['id']}-{count + 1}.json").open("xb") as handle:
++            handle.write(encoded)
++        result = "captured"
++    except (OSError, ValueError, TypeError, RecursionError):
++        pass  # Optional evidence must not change acceptance or dispatch behavior.
++    record_generation_diagnostic({"stage": "opening_response_capture",
++        "logical_operation": "scene_opening", "classification": result,
++        "sensitive_game_content": True}, attempt)
++
++
+ def observe_opening_validation(*, rejection: str | None, recovery: str | None) -> None:
+     scope = _OPENING_DIAGNOSTIC.get()
+     if scope is not None:
+         scope.update(rejection_reason=rejection, recovery_classification=recovery,
+                      final_validation_passed=rejection is None)
++        record_generation_diagnostic({"stage": "opening_validation",
++            "logical_operation": "scene_opening", "requested_response_type": "scene_opening",
++            "classification_source": "game.api._opening_response_rejection",
++            "classification_reason": rejection or "opening_contract_passed",
++            "opening_accepted": rejection is None,
++            "semantic_classification": "rejected" if rejection else "accepted"})
+ 
+ 
+ def end_opening_diagnostic(token, *, committed: bool, tracked: bool) -> None:
+@@ -82,7 +163,15 @@
+                 "requested_response_type": "scene_opening",
+                 "opening_accepted": committed, "gameplay_committed": committed,
+                 "classification": "accepted_structured_opening" if committed else "opening_rejected",
+-                "structured_validation_result": scope.get("final_validation_passed"),
++                **{key: scope.get(key) for key in ("provider_attempt_id", "provider_status",
++                    "structured_validation_result", "semantic_classification", "classification_source",
++                    "classification_reason", "semantic_reasons", "narration_present", "narration_length",
++                    "player_facing_text_present", "player_facing_text_length", "declarations_present", "declaration_count")},
++                "final_validation_passed": scope.get("final_validation_passed"),
++                "rejection_stage": None if committed else "game.api._opening_response_rejection",
++                "nonresolution_origin": scope.get("nonresolution_origin") or (
++                    "model" if scope.get("rejection_reason") == "generic_information_request_fallback"
++                    and scope.get("recovery_classification") == "initial_generation" else None),
+                 "rejection_reason": scope.get("rejection_reason") or (None if committed else "pipeline_exception"),
+                 "recovery_classification": scope.get("recovery_classification"),
+             })
+--- entry/game/immutable_valid_response.py
++++ current/game/immutable_valid_response.py
+@@ -1737,6 +1737,21 @@
+         return verdict
+ 
+     first = _check(gm)
++    if isinstance(resolution, Mapping) and resolution.get("kind") == "scene_opening":
++        from game.provider_budget import observe_opening_semantics
++
++        envelope = (gm.get("metadata") or {}).get("realization_envelope") or {}
++        declarations = envelope.get("declared_claims")
++        observe_opening_semantics({
++            "semantic_classification": "candidate_valid" if first["hard_valid"] else "candidate_rejected",
++            "classification_source": "game.immutable_valid_response.run_preserve_if_valid._check",
++            "classification_reason": "hard_validation_passed" if first["hard_valid"] else "hard_validation_failed",
++            "semantic_reasons": list(first.get("reasons") or []),
++            "narration_present": bool(gm.get("player_facing_text")),
++            "narration_length": len(str(gm.get("player_facing_text") or "")),
++            "declarations_present": isinstance(declarations, list),
++            "declaration_count": len(declarations) if isinstance(declarations, list) else None,
++        })
+     metadata = gm.setdefault("metadata", {})
+     if isinstance(metadata, dict):
+         metadata["hard_validation_attempt_1"] = {
+@@ -1795,6 +1810,16 @@
+                         }
+                     hard["decision_acceptance_why"] = why
+         seal_delivery_contract(sealed)
++        if isinstance(resolution, Mapping) and resolution.get("kind") == "scene_opening":
++            from game.provider_budget import observe_opening_semantics
++
++            record = (sealed.get("metadata") or {}).get(ACCEPTED_KEY) or {}
++            observe_opening_semantics({
++                "semantic_classification": record.get("provenance"),
++                "classification_source": "game.immutable_valid_response.run_preserve_if_valid._finish",
++                "classification_reason": why,
++                "nonresolution_origin": "application" if record.get("provenance") == PROVENANCE_SAFE else None,
++            })
+         return sealed
+ 
+     if first["hard_valid"]:
+--- entry/static/app.js
++++ current/static/app.js
+@@ -655,6 +655,7 @@
+     startCampaignBusy = true;
+     startCampaignBtn.disabled = true;
+     const thinking = addMessage('system','System','Preparing opening…');
++    const openingFailure = 'Campaign opening could not be completed. Your campaign has not started, and no gameplay progress was committed. You can try again.';
+     try {
+       const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST'});
+       const data = await res.json();
+@@ -662,17 +663,22 @@
+         replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));
+         return;
+       }
+-      if(res.status === 409 || data.ok === false){
+-        replaceMessage(thinking,'error','System', data.error || 'Could not start campaign.');
+-        await reloadAll();
++      if(!res.ok || res.status === 422 || res.status === 409 || data.ok === false){
++        // Loading the persisted log replaces chat nodes, including this error.
++        // Refresh state only so failure feedback remains visible and retryable.
++        replaceMessage(thinking,'error','System', data.status === 'already_started' ? 'Your campaign has already started.' : openingFailure);
++        try { await loadState(); } catch (_refreshError) { /* Keep opening failure visible. */ }
+         return;
+       }
+       if(!data.ok){
+-        replaceMessage(thinking,'error','System', data.error || 'Unknown error');
++        replaceMessage(thinking,'error','System', openingFailure);
+         return;
+       }
+       replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);
+       await reloadAll();
++    } catch (_error) {
++      replaceMessage(thinking,'error','System', 'The opening request could not be confirmed. Refresh campaign state before trying again.');
++      try { await loadState(); } catch (_refreshError) { /* Keep visible feedback. */ }
+     } finally {
+       startCampaignBusy = false;
+       if(state) updateCampaignBootstrapUI(state);
+--- entry/tools/atgb/accounting.py
++++ current/tools/atgb/accounting.py
+@@ -76,7 +76,8 @@
+             kind = event.get("event")
+             if kind == "generation_diagnostic":
+                 # Observations neither admit requests nor change lifecycle state.
+-                if event.get("stage") not in {"provider_response", "opening_outcome", "opening_admission"}:
++                if event.get("stage") not in {"provider_response", "opening_outcome", "opening_admission",
++                                             "opening_semantics", "opening_validation", "opening_response_capture"}:
+                     raise ValueError("invalid_generation_diagnostic_stage")
+                 if aid is not None and aid not in states:
+                     raise ValueError("diagnostic_without_admitted_attempt")
+--- entry/tests/test_pr_play_07_semantic_acceptance.py
++++ current/tests/test_pr_play_07_semantic_acceptance.py
+@@ -0,0 +1,121 @@
++"""PR-PLAY-07 synthetic opening semantics and optional evidence, no providers."""
++import json
++from pathlib import Path
++import pytest
++import game.api as api
++from game import provider_budget as budget
++from tests.test_pr_play_04_opening_integrity import opening_world, _start, _snap, _envelope, VALID_NARRATION
++from tests.test_pr_play_05_diagnostics import diagnostic_world
++
++OUT=Path('artifacts/pr_play_07/matrix')
++
++@pytest.mark.parametrize('case,accepted', [('S1',True),('S2',False),('S3',False),('S4',False),('S5',True),('S6',True),('S7',True),('S8',True),('S9',False),('S10',True),('S11',True),('S12',False)])
++def test_semantic_matrix(diagnostic_world,monkeypatch,case,accepted):
++    from tests.test_start_campaign_api import RICH_OPENING_GPT_RESPONSE
++    import game.gm as gm
++    text=_envelope(VALID_NARRATION)
++    if case=='S2': text=_envelope('No one here can answer that from what is settled here.')
++    if case=='S3': text=_envelope('')
++    if case=='S4': text=json.dumps({'narration': VALID_NARRATION})
++    if case=='S6': text=json.dumps({'declared_claims':[], 'narration':VALID_NARRATION, 'metadata':{'fallback':True}})
++    if case=='S7':
++        from game.response_type_gating import derive_response_type_contract
++        routed=derive_response_type_contract(segmented_turn=None, normalized_action={'type':'scene_opening'},resolution={'kind':'scene_opening'},interaction_context=None,raw_player_text='What is here?')
++        assert routed.required_response_type=='scene_opening'
++    if case=='S9': text=_envelope(VALID_NARRATION+' The guards give you a brass key and you gain 100 gold.')
++    if case=='S12': text=_envelope(RICH_OPENING_GPT_RESPONSE['player_facing_text'])
++    diagnostic_world['state']['text']=text
++    if case=='S11':
++        diagnostic_world['state']['text']=_envelope('No one here can answer that from what is settled here.')
++        before=_snap();failed,code=_start()
++        assert code==422 and _snap()==before
++        diagnostic_world['state']['text']=text
++    before=_snap();body,status=_start();after=_snap()
++    assert status==(200 if accepted else 422),body
++    assert after['turn_counter']==before['turn_counter']+(1 if accepted else 0)
++    if not accepted: assert after==before
++    if case=='S10':
++        again,code=_start();assert code==409 and _snap()==after
++    events=budget.snapshot()['events']
++    provider=[r for r in events if r.get('stage')=='provider_response'][-1]
++    outcome=[r for r in events if r.get('stage')=='opening_outcome' and r.get('opening_attempt_id')==provider['opening_attempt_id']][-1]
++    assert outcome['gameplay_committed'] is accepted
++    assert outcome['provider_attempt_id']==provider['attempt_id']
++    assert outcome['structured_validation_result']==provider['structured_validation_result']
++    if case=='S12':
++        assert provider['classification']=='accepted_structured_response'
++        assert body['opening_failure_reason']=='safe_nonresolution'
++        assert outcome['semantic_reasons'] and outcome['classification_source'].endswith('._finish')
++    expected_calls=2 if case=='S11' else 1
++    assert len(diagnostic_world['calls'])==expected_calls
++    OUT.mkdir(parents=True,exist_ok=True)
++    (OUT/(case+'.json')).write_text(json.dumps({'fixture':json.loads(text),'expected_accepted':accepted,'status':status,'before':before,'after':after,'provider':provider,'outcome':outcome,'events':events,'pass':True},indent=2),encoding='utf-8')
++
++@pytest.mark.parametrize('mode',['default','enabled','write_failure','oversize'])
++def test_bounded_capture(diagnostic_world,monkeypatch,tmp_path,mode):
++    import game.storage as storage
++    monkeypatch.setenv('ASHEN_DATA_DIR',str(storage.DATA_DIR))
++    monkeypatch.delenv('ASHEN_OPENING_RESPONSE_CAPTURE',raising=False)
++    if mode!='default':monkeypatch.setenv('ASHEN_OPENING_RESPONSE_CAPTURE','1')
++    folder=storage.DATA_DIR.parent/'opening_response_evidence'
++    if mode=='write_failure':folder.write_text('blocked directory')
++    if mode=='oversize':
++        value=json.loads(diagnostic_world['state']['text']);value['debug_notes']='x'*100000
++        diagnostic_world['state']['text']=json.dumps(value)
++    body,status=_start()
++    assert status==200 and _snap()['turn_counter']==1 and len(diagnostic_world['calls'])==1
++    records=list(folder.glob('*.json')) if folder.is_dir() else []
++    if mode in {'enabled','oversize'}:
++        assert len(records)==1 and records[0].stat().st_size<=65536
++        value=json.loads(records[0].read_text())
++        assert value['sensitive_game_content'] and value['truncated']==(mode=='oversize')
++        if mode=='enabled': assert value['parsed_response']==json.loads(diagnostic_world['state']['text'])
++    else:assert not records
++    if mode=='write_failure':assert any(r.get('classification')=='capture_failed' for r in budget.snapshot()['events'])
++    ledger=Path(__import__('os').environ['ASHEN_PROVIDER_USAGE_PATH'])
++    assert VALID_NARRATION not in ledger.read_text()
++    from tools.atgb.accounting import inspect_ledger
++    assert inspect_ledger(ledger,budget.snapshot())['status']=='recorded'
++
++
++def test_authoritative_safe_metadata_remains_disqualifying():
++    assert api._opening_response_rejection({'player_facing_text':VALID_NARRATION,'metadata':{'accepted_response':{'provenance':'safe_nonresolution'}}},{'kind':'scene_opening'},None)=='safe_nonresolution'
++
++
++@pytest.mark.parametrize('gate',['diagnostics','sdk_retry','host_retry','data'])
++def test_capture_requires_controlled_scope(diagnostic_world,monkeypatch,gate):
++    import game.storage as storage
++    monkeypatch.setenv('ASHEN_DATA_DIR',str(storage.DATA_DIR))
++    monkeypatch.setenv('ASHEN_OPENING_RESPONSE_CAPTURE','1')
++    if gate=='diagnostics':monkeypatch.delenv('ASHEN_GENERATION_DIAGNOSTICS')
++    if gate=='sdk_retry':monkeypatch.delenv('ASHEN_PLAYTEST_DISABLE_SDK_RETRIES')
++    if gate=='host_retry':monkeypatch.delenv('ASHEN_DISABLE_PROVIDER_RETRIES')
++    if gate=='data':monkeypatch.delenv('ASHEN_DATA_DIR')
++    # Exercise evidence collection directly so removing retry guards cannot dispatch.
++    token=budget.begin_opening_diagnostic()
++    try:budget.capture_opening_response(_envelope(VALID_NARRATION))
++    finally:
++        if token is not None:budget._OPENING_DIAGNOSTIC.reset(token)
++    assert not (storage.DATA_DIR.parent/'opening_response_evidence').exists()
++
++def test_optional_diagnostic_ledger_failure_does_not_reject_valid_opening(diagnostic_world,monkeypatch):
++    append=budget._append
++    def fail_observation(row):
++        if row.get('event')=='generation_diagnostic':raise OSError('synthetic evidence write failure')
++        return append(row)
++    monkeypatch.setattr(budget,'_append',fail_observation)
++    body,status=_start()
++    assert status==200 and _snap()['turn_counter']==1 and len(diagnostic_world['calls'])==1
++
++
++def test_capture_count_is_bounded(diagnostic_world,monkeypatch):
++    import game.storage as storage
++    monkeypatch.setenv('ASHEN_DATA_DIR',str(storage.DATA_DIR))
++    monkeypatch.setenv('ASHEN_OPENING_RESPONSE_CAPTURE','1')
++    token=budget.begin_opening_diagnostic()
++    try:
++        for _ in range(7):budget.capture_opening_response(_envelope(VALID_NARRATION))
++    finally:budget._OPENING_DIAGNOSTIC.reset(token)
++    files=list((storage.DATA_DIR.parent/'opening_response_evidence').glob('*.json'))
++    assert len(files)==6 and all(p.stat().st_size<=65536 for p in files)
++    assert budget.snapshot()['request_upper_bound']==0
+--- entry/tests/helpers/pr_play_07_ui.cjs
++++ current/tests/helpers/pr_play_07_ui.cjs
+@@ -0,0 +1,43 @@
++// Execute the actual localized handler with browser-boundary stubs.
++const fs=require('fs'),vm=require('vm'),assert=require('assert');
++const js=fs.readFileSync('static/app.js','utf8');
++const start=js.indexOf('const startCampaignBtn =');
++const code=js.slice(start,js.indexOf("$('saveCampaignBtn')",start));
++async function run(name,status,body,options={}) {
++ let handler,calls=0,refreshes=0,reloads=0,messages=[];
++ const button={disabled:false,addEventListener:(_event,fn)=>handler=fn};
++ const context={currentUIMode:'player',startCampaignBusy:false,state:{ui:{campaign_can_start:true}},
++  $:()=>button,apiUrl:()=>'/start_campaign',
++  addMessage:(_role,_who,text)=>{messages.push(text);return 0},
++  replaceMessage:(_id,_role,_who,text)=>{messages[0]=text},
++  fetch:async()=>{calls++;if(options.transport)throw Error('PRIVATE');if(options.retry && calls===2)return {status:200,ok:true,json:async()=>({ok:true,gm_output:{player_facing_text:'Retry opening'}})};return {status,ok:status<400,json:async()=>{if(options.badJSON)throw Error('PRIVATE');return body}}},
++  loadState:async()=>{refreshes++;if(options.refreshFailure)throw Error('PRIVATE');context.state.ui.campaign_can_start=!body.ok},
++  reloadAll:async()=>{reloads++;messages=['persisted narration'];context.state.ui.campaign_can_start=false},
++  updateCampaignBootstrapUI:s=>button.disabled=!s.ui.campaign_can_start,
++  formatBlockedNewCampaignMessage:()=> 'Blocked',newCampaignBlockedDetails:()=>null};
++ vm.createContext(context);vm.runInContext(code,context);await handler();
++ if(options.success){assert.equal(reloads,1);assert.equal(messages[0],'persisted narration');assert(button.disabled)}
++ else {assert.equal(reloads,0);assert(messages[0] && !messages[0].includes('PRIVATE'));assert(!button.disabled)}
++ assert.equal(calls,1);assert.equal(context.startCampaignBusy,false);
++ if(options.retry){await handler();assert.equal(calls,2);assert.equal(reloads,1);assert(button.disabled)}
++ if(options.success){await handler();assert.equal(calls,1)}
++ return {name,pass:true,message:messages[0],calls,refreshes,reloads};
++}
++(async()=>{
++const results=[];
++results.push(await run('U1',200,{ok:true,gm_output:{player_facing_text:'Scene opening'}},{success:true}));
++results.push(await run('U2',422,{ok:false,status:'opening_failed',error:'PRIVATE'}));
++results.push(await run('U3',500,{ok:false,error:'PRIVATE'}));
++results.push(await run('U4',422,{ok:false,error:'PRIVATE'}));
++results.push(await run('U5',422,{ok:false},{retry:true}));
++// U6: disabled authoritative state prevents a second submission.
++// Test by replacing the run success handler's state guard with initial false.
++let calls=0;const ctx={currentUIMode:'player',startCampaignBusy:false,state:{ui:{campaign_can_start:false}},$ :()=>({addEventListener:(_e,fn)=>ctx.handler=fn}),fetch:()=>calls++};
++vm.createContext(ctx);vm.runInContext(code,ctx);await ctx.handler();assert.equal(calls,0);
++results.push({name:'U6',pass:true,calls});
++results.push(await run('U7',422,{ok:false},{refreshFailure:true}));
++results.push(await run('transport',0,{}, {transport:true}));
++results.push(await run('badJSON',500,{}, {badJSON:true}));
++fs.writeFileSync('artifacts/pr_play_07/ui_results.json',JSON.stringify(results,null,2));
++console.log(`${results.length} campaign-start UI boundary checks passed`);
++})().catch(e=>{console.error(e);process.exitCode=1});
+--- entry/tests/helpers/pr_play_07_entry_source.py
++++ current/tests/helpers/pr_play_07_entry_source.py
+@@ -0,0 +1,11 @@
++"""Run known failures against the saved, dirty entry production source."""
++from pathlib import Path
++
++def pytest_configure(config):
++    import game.gm as gm
++    import game.immutable_valid_response as immutable
++    import game.provider_budget as budget
++    import game.api as api
++    for mod,path in [(budget,'provider_budget.py'),(gm,'gm.py'),(immutable,'immutable_valid_response.py'),(api,'api.py')]:
++        p=Path('artifacts/pr_play_07/entry/game')/path
++        exec(compile(p.read_text(encoding='utf-8-sig'),str(p),'exec'),mod.__dict__)
+--- entry/tools/validate_pr_play_07.py
++++ current/tools/validate_pr_play_07.py
+@@ -0,0 +1,32 @@
++"""Bounded offline regression; no live authority. Reuses established lane selection."""
++from pathlib import Path
++import subprocess,sys,json,time,os,concurrent.futures
++from tools.validate_pr_play_06 import GROUPS
++O=Path('artifacts/pr_play_07')
++GROUPS['entry_accounting']=['test_provider_accounting_integrity.py::test_readiness_acceptance_is_not_live_execution']
++def run(name):
++ Path('development/tmp/pr_play_07').mkdir(parents=True,exist_ok=True)
++ group=name.removesuffix('_direct').removesuffix('_final')
++ paths=GROUPS[group] if group!='focused' else ['test_pr_play_07_semantic_acceptance','test_pr_play_04_opening_integrity','test_pr_play_05_diagnostics','test_pr_play_06_opening_budget','test_frontend_ui_mode_hardening_objective15']
++ if name=='ordinary_direct': paths=['test_gm_retry','test_social_interaction_authority','test_pr_ef_r2_social_authority']
++ if name=='opening_direct': paths=['test_scene_canon_hygiene']
++ command=[sys.executable,'-m','pytest',*['tests/'+p+('' if '::' in p else '.py') for p in paths],'-q','--tb=short','--basetemp=development/tmp/pr_play_07/'+name,'--junitxml='+str(O/(name+'.xml'))]
++ if name in {'focused_direct','focused_final'}:command+=['-k','not invalid_placeholder_over_http']
++ if name=='structured_direct':command+=['-k','not raw_chat_stub']
++ if name=='ordinary_direct':command+=['-k','not original_captured_failures and not possessive_body_part']
++ if name in {'entry_failures','entry_accounting'}:command+=['-p','tests.helpers.pr_play_07_entry_source']
++ env=dict(os.environ,PR_PLAY_DIAGNOSTIC_OUT='artifacts/pr_play_07/diagnostics')
++ start=time.monotonic()
++ with (O/(name+'.txt')).open('w',encoding='utf-8') as log:
++  try:r=subprocess.run(command,stdout=log,stderr=subprocess.STDOUT,timeout=90,env=env);code=r.returncode
++  except subprocess.TimeoutExpired:code='timeout'
++ (O/(name+'_run.json')).write_text(json.dumps({'command':command,'exit':code,'seconds':time.monotonic()-start},indent=2))
++ print(name,code,flush=True)
++if __name__=='__main__':
++ # Existing tests have fixed historical evidence sinks. Preserve those artifacts.
++ backup={p:p.read_bytes() for root in ['artifacts/pr_play_05','artifacts/pr_play_06'] for p in Path(root).rglob('*') if p.is_file()}
++ try:
++  with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:list(pool.map(run,sys.argv[1:] or ['focused','provider','structured','ordinary','opening','world','export']))
++ finally:
++  for p,data in backup.items():
++   if p.read_bytes()!=data:p.write_bytes(data)
+--- entry/tools/report_pr_play_07.py
++++ current/tools/report_pr_play_07.py
+@@ -0,0 +1,389 @@
++"""Generate bounded PR-PLAY-07 reports and explicit review selection; offline only."""
++from pathlib import Path
++import json
++import subprocess
++import hashlib
++import difflib
++import xml.etree.ElementTree as ET
++
++ROOT = Path(__file__).resolve().parents[1]
++O = ROOT / 'artifacts/pr_play_07'
++R = ROOT / 'development/campaigns/product_realization/pr_play_07'
++
++
++def write(name, value):
++    (O / name).write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding='utf-8')
++
++
++def report(name, title, body):
++    (R / name).write_text('# ' + title + '\n\nPR-PLAY-07 · 2026-10-29 America/New_York. Synthetic-provider evidence only.\n\n' + body.strip() + '\n', encoding='utf-8')
++
++
++def main():
++    results = {}
++    for group in ['focused_final', 'provider_final', 'entry_accounting', 'structured_direct', 'ordinary_direct', 'world', 'export']:
++        suite = next(ET.parse(O / (group + '.xml')).getroot().iter('testsuite'))
++        row = {k: int(suite.attrib[k]) for k in ['tests', 'failures', 'errors', 'skipped']}
++        row['passed'] = row['tests'] - row['failures'] - row['errors'] - row['skipped']
++        row['failing_cases'] = [c.attrib['classname'] + '::' + c.attrib['name'] for c in suite if c.find('failure') is not None]
++        results[group] = row
++    assert results['focused_final']['failures'] == 0
++    assert results['entry_accounting']['failures'] == 1
++    passes = sum(v['passed'] for k, v in results.items() if k != 'entry_accounting')
++    write('test_summary.json', results)
++    matrix = []
++    table = '| Fixture | Structural | Semantic / opening reason | Expected / actual acceptance | Commit | Result |\n|---|---|---|---|---|---|\n'
++    for n in range(1, 13):
++        value = json.loads((O / f'matrix/S{n}.json').read_text())
++        provider, outcome = value['provider'], value['outcome']
++        row = {'fixture': f'S{n}', 'structural': provider['classification'], 'semantic': outcome.get('semantic_classification'), 'reason': outcome.get('rejection_reason'), 'semantic_reasons': outcome.get('semantic_reasons'), 'acceptance': outcome['opening_accepted'], 'gameplay_commit': outcome['gameplay_committed'], 'expected': value['expected_accepted'], 'actual_http': value['status'], 'pass': value['pass']}
++        matrix.append(row)
++        table += f"| S{n} | {row['structural']} | {row['reason'] or 'valid opening'} | {row['expected']} / {row['acceptance']} | {row['gameplay_commit']} | PASS |\n"
++    write('semantic_acceptance_matrix.json', matrix)
++    (O / 'semantic_acceptance_matrix.md').write_text(table, encoding='utf-8')
++    decisions = '''| Condition | Boundary / classification | Evidence category |
++|---|---|---|
++| Bad JSON, missing required claims list, empty narration, nested envelope | gm._safe_json -> structured_contract_failure -> API rejection | A: correct structural rejection, S3/S4 |
++| Complete JSON with explicit provider incomplete/failed status | gm.call_gpt -> provider_opening_not_completed | A: incomplete operation, PR06 controls |
++| Grounded valid opening; optional proposal/NPC fields absent | hard valid -> initial_generation; opening predicate passes | Accepted, S1/S5/S8 |
++| Provider metadata says fallback but actual content satisfies contract | Unknown metadata discarded by parser; no host safe provenance | Accepted, S6; arbitrary metadata grants no authority |
++| Host accepted_response provenance or authorization is safe_nonresolution | API rejects before persistence even with plausible prose | A: actual host safety result is disqualifying; separate metadata control |
++| Model emits literal generic answer inside valid JSON | May seal initial_generation; API text-marker check rejects | A: model nonresolution, S2 |
++| Unauthorized state changes, hidden disclosure or invalid consequential realization | immutable _check fails; no valid recovery -> _terminal_after_fidelity -> safe provenance | A when audit is correct; S9 proves unauthorized change case |
++| Missing consequential declaration or unmatched source claim | Decision/claim audit can fail despite a structurally valid list | A if obligation applies; empty list alone is legal. S12 audit rejects rich text |
++| Alleged valid opening rejected by unrelated ordinary-action rule | Could produce same terminal provenance | B only if content satisfies opening authority; not established historically |
++| scene_opening response type alongside unresolved/answer/referent-ambiguity contract | Conflicting guidance in projected resolution contract/answer recipe | C: residual conflict observed; historical influence unknown |
++| Historical structural success then safe_nonresolution without original output/reasons | Same sequence compatible with correct rejection, incorrect rejection or guidance conflict | D: insufficient evidence; no cause selected |
++| Empty, generic, question-only or non-scene final text | candidate_satisfies_scene_opening_contract rejects | A: opening-specific failure |
++| Budget refusal, disabled provider, fast fallback | API failure, no successful opening commit | A: generation unavailable, no retry |
++| Repeated Start after successful opening | already_started 409 before provider dispatch | Correct duplicate prevention, S10 |
++'''
++    (O / 'classification_decision_table.md').write_text(decisions, encoding='utf-8')
++    head = (O / 'entry_head.txt').read_text().strip()
++    report('01_historical_evidence_and_baseline.md', '01 — Historical Evidence and Baseline', f'''
++Baseline HEAD `{head}`. Extensive dirty/untracked production, normal gameplay,
++governance and historical evidence predates this pass; see entry_status.txt.
++Task-relative source diff uses saved dirty entry bytes, not HEAD alone. No commit/push.
++Read Constitution, NEXT_SESSION, validation evidence, Product Realization validation,
++review-handoff, state authority/feature-lane guidance and relevant PR-PLAY-02–06
++reports/source/tests. No applicable AGENTS.md was discovered.
++
++Historical ZIP exists: artifacts/pr_play_06/manual-20261029-201037-EVIDENCE.zip.
++Its hash, inventory, ledger and normalized state comparison are in this pass's artifacts.
++One admitted/dispatched request; SDK retries 0, host retries disabled. Returned model
++gpt-4.1-mini-2025-04-14; input 26,593, output 1,370, total 27,963, ceiling 3,000.
++Provider status completed, extracted length 5,570, JSON true, envelope true, structured
++validation true; recognized declared_claims, narration, player_facing_text. Provider
++classification accepted_structured_response; opening_outcome opening_rejected,
++reason/recovery safe_nonresolution, gameplay_committed false.
++
++The old opening_outcome structured_validation_result=false represented final acceptance,
++not the earlier parser result. This diagnostic conflation is repaired. Before/after
++persistent payloads show campaign_started false, turn 0, all clocks 0, active scene
++frontier_gate. World including factions, character, combat, campaign, conditions and
++transcript compare equal. Timestamps/debug bookkeeping are separate from gameplay.
++ZIP screenshots folder is empty, notes are empty, after_state.json is absent; persisted
++before/after copies exist. Task screenshot observations were not independently inspected.
++
++Complete generated text and first semantic-rejection reasons are absent. Exact semantic
++reproduction is impossible. No content was invented and no provider/connectivity call
++was made. Historical primary failure class stays unresolved. UI erasure and diagnostic
++gaps are separately confirmed implementation defects, not proof of historical cause.
++''')
++    lifecycle = '''| Stage | Module / function | Input -> output | Contract / failure behavior | Tests |
++|---|---|---|---|---|
++| 1 POST admission | game/api.py start_campaign, _start_campaign_after_admission | Request/ui_mode + saved state -> opening scope or 409/503 | Mode, preflight, budget, empty transcript/latch; one persistence lock; refusal before dispatch | PR04 admission/repeat/concurrency |
++| 2 Opening bundle | game/api.py _opening_scene_normalized_action_and_resolution, _build_opening_scene_resolution | Active scene + internal bootstrap -> normalized type/kind scene_opening | Engine opening flags; no fabricated player action; tracked exceptions rollback | PR04, start_campaign_api |
++| 3 Response type | game/api.py _run_resolved_turn_pipeline; game/response_type_gating.py derive_response_type_contract | Action/resolution -> scene_opening, decision/recipe/policy | Opening overrides question heuristics; strict_answer_expected false; failure grants no commit | S7, response-type tests |
++| 4 Presentation plan | game/opening_scene_realization.py build_opening_scene_realization, merge_opening_instructions; game/api.py _build_gpt_narration_from_authoritative_state | Visible facts/scene/decision -> grounded plan/prompt | Authorized presentation, hidden/consequential authority retained; no synthetic opening success | opening_scene_realization, scene_opening_narrative_plan |
++| 5 Request/envelope | game/gm.py build_messages, _provider_response_contract_from_payload, call_gpt | Payload -> structured_realization messages + 3000 request | Model/schema unchanged; narration_only only for eligible incidental dialogue | PR06 and structured suites |
++| 6 Dispatch/completion | game/provider_budget.py admit_request, RequestAttempt; game/gm.py call_gpt | One Responses request -> metered SDK response/exception | Atomic admission, controlled zero retries, aggregate budgets; failure accounted without added requests | PR02, provider accounting |
++| 7 Extraction | game/gm.py _extract_provider_response_text | SDK response -> output_text or message segments | No object repr; empty/extraction failures distinguished | PR05 extraction/native SDK |
++| 8 JSON/envelope | game/gm.py _safe_json; game/structured_player_output.py classify_model_output | Text -> normalized GM/realization_envelope or rejection | Claims list + nonempty narration; no nested envelope; rejection flags survive | PR05, structured direct |
++| 9 Structural observation | game/gm.py _generation_response_diagnostic; game/provider_budget.py record_generation_diagnostic, capture_opening_response | Text/parser/SDK status -> shape classification + opt-in parsed evidence | accepted_structured_response grants no semantic authority; explicit unfinished status fails; capture failure cannot change acceptance | Capture controls, PR06 |
++| 10 Semantic interpretation | game/api.py narration catch-all -> game/immutable_valid_response.py run_preserve_if_valid._check, validate_generated_response | Text/claims + decision/authored corpus -> hard validity/reasons | Decision facts, disclosure, attribution and realization authority enforced | S9/S12, immutable/social regression |
++| 11 Nonresolution selection | game/immutable_valid_response.py _terminal_after_fidelity, safe_nonresolution, seal_accepted_response, _finish | Rejected candidate/no authorized recovery -> sealed host fallback | regenerate=None here; fallback never grants opening success; original reasons retained | S9/S12, immutable boundary |
++| 12 Opening acceptance | game/api.py _complete_opening_turn_persistence_like_chat, _opening_response_rejection; game/final_emission_validators.py candidate_satisfies_scene_opening_contract | Final GM/meta/text/required type -> None or reason | Reject structured/provider/safe/generic/inadequate scene; 422 failure, budget 409, no gm_output | S1–S12, PR04 |
++| 13 Commit/rollback | game/api.py persistence completion, _OpeningScope.close, _restore_opening_baseline | Eligible result + baseline -> one turn/log/start latch or restored gameplay | Engine owns world/factions; restore session/world/combat/transcript on failure; diagnostics outside saves | PR04 persistence/retry/concurrent, world |
++| 14 API/UI | game/api.py _opening_failure_response; static/app.js Start handler, loadState/loadLog | 200/422/provider/transport failure -> narration or visible feedback | No auto-retry; failure state-only refresh; safe catches; state controls button | U1–U7, network/JSON controls |
++'''
++    (O / 'opening_source_map.md').write_text(lifecycle, encoding='utf-8')
++    report('02_opening_execution_and_classification_map.md', '02 — Opening Execution and Classification Map', lifecycle + '''
++The exact transition is AFTER parsing/structural diagnostics: API's unresolved/no-
++interlocutor catch-all invokes run_preserve_if_valid; _check can reject structured
++content. With regenerate=None and no authorized recovery, _terminal_after_fidelity
++calls safe_nonresolution, seal_accepted_response stores PROVENANCE_SAFE, _finish seals
++delivery. API reads provenance and rejects. This is application-assigned provenance,
++not an enum emitted by the provider. S9/S12 reproduce that path. S2 instead retains
++initial_generation for the provider's literal fallback and fails the API marker check.
++
++Producer/consumer inventory: artifacts/pr_play_07/classification_inventory.txt.
++Producers include safe_nonresolution and host terminal safety/sealing; consumers include
++API rejection/recovery, immutable final-delivery enforcement, emission/provenance audits
++and ordinary unresolved handling. lifecycle_applies excludes scene_opening; the API
++catch-all still explicitly preserves valid structured openings. PR04 blocks it only
++when structured failure is already set. The semantic validator receives resolution kind
++and decision authority but no required_response_type parameter. It inspects content,
++claims, disclosure and attribution; the opening predicate is separate. Empty narration
++fails earlier in parsing. Missing authoritative answers, unsupported actions, unresolved
++interpretation and invalid realization are distinct causes that safe provenance can hide.
++
++''' + decisions)
++    report('03_semantic_contract_analysis.md', '03 — Semantic Contract Analysis', '''
++Structural validity: structured_realization JSON, declared_claims list, nonempty narration,
++supported envelope, no nested wrapper. Temporary player_facing_text compatibility grants
++no authority. Empty declarations are legal when no declaration-requiring claim is made.
++
++Semantic validity: narration survives decision/claim/proposition, authored world truth,
++hidden-disclosure and attribution checks, then satisfies the existing opening predicate:
++nonempty, scene-establishing, no generic fallback/filler, no question-only ending. Plans
++request grounded player placement, observable context, sensory detail, pressure and
++actionable affordances. Those are presentation obligations, not additional mandatory
++JSON fields. Active scene supplies identity/character placement; model prose cannot
++relocate the character. Authorized visible NPC introductions are allowed (S8 runner/
++guards); new NPC IDs/records are not prerequisites. Optional scene/world proposals grant
++no persistent mutation authority. No new paragraph, length, NPC-count or action-count
++acceptance gate was invented; validate_opening_output was not substituted as stricter gate.
++
++Commit eligibility: structural validity AND completed generation AND semantic/opening
++acceptance AND no provider/fallback/budget failure, under locked first-start scope, then
++normal persistence. Engine owns turn/time/faction progression. Failed opening restores
++gameplay; save timestamps/debug/lazy initialization are bookkeeping, not progression.
++
++Response type is scene_opening through bootstrap, derivation and provider observation;
++structured_realization is its envelope, not an information-answer type. S7 shows explicit
++opening identity overrides question-shaped input. Residual guidance conflict remains:
++generic resolution projection says operation unresolved, expected_resolution answer and
++'referent is not unambiguous'; recipe says 'Answer the unresolved about the current
++subject', alongside authorized consequential scene realization. Existing saved PR06
++request confirms this C conflict. Its influence on October 29 is a hypothesis, not a
++causal finding. System/opening instructions also permit authored scene presentation and
++harmless sensory texture while forbidding arbitrary consequential invention/hidden facts.
++
++S4 omits required declared_claims entirely and fails structurally; S1/S5 empty lists are
++valid. S12 rich text with an empty list fails the existing decision-fact audit; missing
++declarations alone does not prove every rich opening invalid. Prior declared-rich PR06
++controls still pass. Existing scene-establishing checks are heuristic, not a comprehensive
++natural-language meaning proof. B incorrect rejection is unestablished historically;
++C guidance conflict is observed, causality unknown; D missing text/reasons prevents a
++historical choice. No speculative prompt, parser, authority or acceptance change.
++''')
++    report('04_root_cause_and_implementation.md', '04 — Root Cause and Implementation', '''
++Historical semantic cause UNRESOLVED. Completed JSON/envelope does not establish semantic
++validity. S9/S12 demonstrate unauthorized_resolution_decision_fact can correctly produce
++the observed sequence. Hidden disclosure, invalid declaration/realization or attribution
++could select the same fallback. An acceptable opening rejected by an unrelated generic
++rule or a guidance-induced model fallback remains possible, not selected without evidence.
++
++Confirmed defects repaired: diagnostic loss of first semantic reasons/provenance;
++mislabeling final acceptance as structural validation; absence of bounded opt-in response
++evidence; UI error erased by reloadAll -> loadLog -> chatLog.innerHTML=''; no fetch/JSON catch.
++
++Modified functions: gm._generation_response_diagnostic adds presence/length/counts;
++gm.call_gpt invokes opening-only capture after parsing. provider_budget existing record/
++observe/end opening diagnostics retain independent provider/parser/semantic/final outcomes;
++observe_opening_semantics and capture_opening_response are helpers in that existing owner.
++immutable_valid_response.run_preserve_if_valid observes first _check and final _finish
++without changing decisions/text. tools.atgb.accounting.inspect_ledger recognizes three new
++observation stages while retaining request-lifecycle/token rules. static/app.js campaign-
++start handler preserves failure feedback via state-only refresh and safe error handling.
++
++No new logger/gameplay authority. No semantic/prompt/schema/model/output-limit changes,
++extra provider requests/retries, state structures, gameplay mechanics, PR-EG integration
++or unrelated refactoring. API acceptance/rollback/lock and progression contracts unchanged.
++Existing PR05 tests caught a development-only accounting-consumer stage mismatch; fixed
++before final validation. This does not explain the historical rejection.
++''')
++    example = json.loads((O / 'matrix/S12.json').read_text())
++    write('diagnostic_examples.json', {'provider_response': example['provider'], 'opening_outcome': example['outcome'], 'semantic_events': [r for r in example['events'] if r.get('stage') in {'opening_semantics', 'opening_validation'}], 'capture_schema': {'sensitive_game_content': True, 'opening_attempt_id': 'synthetic-id', 'provider_attempt_id': 'synthetic-attempt', 'parsed_response': {'declared_claims': [], 'narration': 'You stand beside the gate.'}, 'truncated': False}})
++    report('05_diagnostic_improvements.md', '05 — Diagnostic Improvements', '''
++The existing generation_diagnostic ledger remains the event infrastructure. Opening ID
++correlates provider_response, opening_semantics, opening_validation, opening_response_capture
++and opening_outcome. Provider attempt/status, logical operation/type, parser validity,
++independent final validation, semantic reasons/source/reason, field presence/length/claim
++count, rejection stage and actual commit are separate. Outcome runs after commit/rollback.
++Old structured_validation_result conflation is removed; final_validation_passed is separate.
++
++First semantics event identifies _check and actual hard reasons; second identifies _finish,
++adoption provenance/reason. API opening_validation identifies independent final predicate.
++Outcome retains semantic source and rejection_stage=API acceptance. nonresolution_origin
++application means host selected safety fallback; model means unchanged initial_generation
++plus the exact generic fallback marker. This does not infer intent for every refusal;
++inspect preserved response content for other cases. Actual stub records/schema examples:
++artifacts/pr_play_07/diagnostic_examples.json.
++
++ASHEN_OPENING_RESPONSE_CAPTURE=1 is separate, disabled by default. Requires generation
++diagnostics, active accounting/opening scope, both explicit retry-disable flags, absolute
++isolated ASHEN_DATA_DIR matching active storage and a noncanonical data directory. Only
++opening GM output is collected: no prompts, SDK object dumps, credentials, headers or
++unrelated request/configuration. JSON is parsed independently from original text before
++application normalization/recovery; whole JSON fences supported. All original JSON fields
++and values, including differing narration/player_facing_text, declarations and proposals,
++remain preserved. No silent rewrite/redaction.
++
++Files: <isolated-root>/opening_response_evidence/<opening-ID>-N.json; sensitive_game_content
++marker and provider linkage. Six artifacts per scope maximum; each <=65,536 bytes.
++Oversize explicitly marks truncated and preserves an 8,000-character serialized prefix
++and original serialized length. Malformed JSON yields capture_failed because a parsed
++object is unavailable; normal parser diagnostics remain. Exclusive writes avoid replacement;
++resolved capture directory must remain within isolated parent. Normal production logging
++and campaign saves never receive these files. Manual evidence export includes them only
++when explicitly enabled; share sensitive game content with intended reviewers only.
++
++Capture errors are caught, emit content-free capture_failed where possible, and cannot
++change acceptance, gameplay or retries. Existing ledger write failure policy stops future
++admissions but a current valid opening still completes, verified by synthetic failure.
++Capture count/size, enabled/default/off gates, exact parsed content, oversize, filesystem
++failure, ledger failure and metering reconciliation are tested. This review includes
++synthetic schema/examples, not nonexistent original October 29 output.
++''')
++    report('06_ui_failure_feedback.md', '06 — UI Failure Feedback', '''
++The old handler indirectly recognized HTTP 422 via ok=false and read data.error, then
++called reloadAll. loadLog erased chatLog and rebuilt from saved entries. Failed opening
++has no narration/log entry, so its error disappeared. State refresh caused silent failure;
++422 recognition itself existed. Fetch/JSON exceptions escaped with no useful feedback.
++
++Localized handler now explicitly recognizes HTTP errors/422/ok=false and shows safe text:
++campaign did not start, no gameplay commit, retry available. Failure refresh calls loadState
++only; refresh failure keeps feedback visible. Already-started 409 gets truthful separate
++feedback. Existing upstream/budget blocked presentation remains. Provider internal error
++text is not exposed in the new player failure path. Network/JSON errors instead say the
++request could not be confirmed and require state refresh, because transport loss cannot
++prove the server did not commit. Finally restores busy/button state from authoritative UI.
++Success retains normal narration and log reload. No fabricated narration, auto-retry,
++false success, duplicate initialization or backend gameplay change.
++
++U1 success/log/started state; U2 semantic rejection visible; U3 HTTP provider exception
++without raw detail; U4 explicit 422; U5 same handler failure->successful manual retry;
++U6 repeated Start after success/initial started state sends no duplicate; U7 failed state
++refresh retains feedback. Transport and invalid JSON controls also pass. Nine cases in
++artifacts/pr_play_07/ui_results.json. tests/helpers/pr_play_07_ui.cjs executes the actual
++localized handler in Node vm with browser-boundary stubs; existing frontend source-contract
++tests also pass. This is not rendered-browser/screenshots evidence. Backend tests separately
++prove rollback for rejected opening and exactly one commit on valid retry.
++''')
++    report('07_deterministic_validation.md', '07 — Deterministic Validation', table + f'''
++S1–S12 use existing schema and real endpoint/pipeline with synthetic SDK responses.
++Exact fixture, before/after, expected/actual, structural/semantic/outcome events are in
++matrix/S*.json. S5 lacks optional proposals; S6 ignores unknown provider fallback metadata,
++while actual host safe-provenance separately rejects. S7 confirms type derivation despite
++question-shaped input, followed by normal endpoint start; not an intentionally broken router.
++S8 reuses authored guards/runner introduction, creates no NPC record. S9 appends unauthorized
++key/gold acquisition and rejects. S10 repeats Start, one dispatch/commit. S11 first fails
++without progression then succeeds once, two attempts total. S12 existing rich fixture gives
++structural success then safe provenance with unauthorized_resolution_decision_fact.
++These are related synthetic controls, not exact historical or held-out reproduction.
++
++Focused {results['focused_final']['passed']} pass/0 failure: matrix, optional capture/default/
++oversize/count/control/write failures, ledger failure, PR04 integrity, PR05 diagnostics,
++PR06 budgets and frontend source checks. Broader: provider {results['provider_final']['passed']}
++pass/1 failure; structured {results['structured_direct']['passed']} pass; ordinary/NPC direct
++{results['ordinary_direct']['passed']} pass; world/factions/opening planning/ATGB interpretation
++{results['world']['passed']} pass; review/export {results['export']['passed']} pass.
++Total completed nonduplicate current-source checks: {passes} pass / 1 failure, plus 9 Node
++UI cases. Entry-source comparator separately reproduces the same one failure. Full suite,
++live behavior, ATGB performance and independent generalization not run/claimed.
++
++State regressions: invalid/nonresolution no commit; valid once; repeated/concurrent Start;
++failure->success; persistence exception rollback; world/faction consistency and ordinary
++fallback intact. PR05 compares full persisted JSON values/inventory allowing documented
++save/debug/empty-log bookkeeping. Diagnostics live outside gameplay state. Provider controls
++verify atomic admission, no extra request/retry, unchanged 3000 opening/600 ordinary limits,
++aggregate accounting and explicit incomplete-status rejection. New stages reconcile without
++double counting diagnostic usage copies. See XML, command/duration manifests, UI JSON and
++test_summary.json; integrity.json verifies protected normal/frozen/experiment hashes.
++
++Failure classes:
++- Preexisting: test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution
++  asserts current frozen source attestation, which is stale. Reproduced using saved dirty
++  entry GM/API/immutable/budget source via pr_play_07_entry_source. Not repaired.
++- Environment-blocked/unresolved transport coverage: bounded 90-second HTTP-bearing focused,
++  structured raw_chat_stub, ordinary, opening and scene-canon attempts timed out. Partial dots
++  are not counted. Completed direct slices exclude blocking HTTP cases. Prior PR06 rich
++  emission/conversation assertion failures are documented history, not newly reproduced here.
++- Tool setup: initial missing --basetemp parent caused FileNotFoundError; driver now creates
++  parent. Initial logs retained, not counted as product failures.
++- Development-only regression: new diagnostic stages initially rejected by accounting reader;
++  fixed and PR05 reconciliation/final focused checks pass. No relevant new completed-scope failure.
++
++Rendered UI, full HTTP transport and live provider semantic adequacy remain unproven.
++''')
++    manual_archive = 'support/development/campaigns/product_realization/pr_play_07/PR_PLAY_07_LIVE_OPENING_TEST.txt'
++    report('08_live_test_readiness.md', '08 — Live-Test Readiness', f'''
++B — Conditionally ready for external reviewer consideration, not live success. Deterministic
++acceptance/state/budget/capture/UI-handler checks pass. Historical content/rejection cause
++remains unknown; new evidence makes a later result diagnosable. HTTP/browser transport remains
++environment-blocked here and is not green. Stale source attestation is preserved.
++
++Complete procedure: PR_PLAY_07_LIVE_OPENING_TEST.txt beside these reports; supersedes PR06 for
++a FUTURE reviewed one-Start test. Fresh isolated frontier-gate-v1 authoritative fixture;
++one Uvicorn worker; zero SDK/host retries; six requests; unchanged 200000/20000/220000 aggregate
++ceilings; verified 3000 opening/600 ordinary; generation diagnostics + bounded response capture;
++usage journal; before/after state/data; screenshots/notes; 15-second local HTTP snapshots;
++stopped-server evidence ZIP. Each terminal sets location and discovers root through pointer
++file; no long-path reconstruction/cross-window variable assumptions or provider preflight.
++
++Stop after success OR failure of one manual Start. No gameplay action, automatic retry,
++resend, restart, model/cap change or connectivity probe. Also stop after 60 seconds without
++reply, unexpected retry, budget refusal or state anomaly. Retain partial/missing evidence
++honestly; capture failure never authorizes another request. Success requires completed
++provider/JSON/envelope/semantic acceptance, visible narration, started latch, one engine commit
++and zero unexpected retry. Failure requires explicit UI rejection, rollback, semantic reasons/
++origin, bounded parsed evidence, completion/accounting and export. No statistical claim.
++
++Manual exact review archive-relative path: `{manual_archive}`.
++Next action: external review. Operator should consider the procedure only after conditional
++acceptance. This pass does not perform it or implement a follow-on repair.
++''')
++    confirmations = 'No live provider calls; no provider connectivity diagnostics; no model changes; no output-budget increases; no automatic retries; no additional provider operations; no unauthorized gameplay-state mutations; no new persistent gameplay structures; no experimental PR-EG integration; frozen ATGB baseline unchanged; no secrets included; no commit or push performed.'
++    report('09_final_verdict_and_handoff.md', '09 — Final Verdict and Handoff', f'''
++**B — Conditionally ready.** Historical semantic cause stays unresolved; no speculative
++semantic or prompt repair. Confirmed diagnostics/capture/UI visibility gaps repaired.
++S1–S12 pass; {passes} completed current checks pass / one entry-reproduced stale-attestation
++assertion fails; 9 UI boundary cases pass. HTTP-bearing suites timed out; rendered/live
++success unclaimed. Exact October 29 output cannot be recovered. Residual unresolved-answer
++guidance conflict is documented without causal attribution.
++
++Changes: first semantic reasons/final provenance, independent parser/final outcome, bounded
++explicit original parsed-response evidence, compatible accounting observation stages,
++state-refresh-safe player feedback and safe network/JSON errors. Authority/budgets/model/
++schema/retries/rollback/world/faction progression unchanged. Remaining risks: model may
++again fail semantic requirements; valid and invalid audit decisions can share safe provenance;
++guidance conflict influence unknown; HTTP/browser integration unvalidated in this environment.
++No broad conversation-quality, benchmark, reliability or held-out generalization claim.
++
++Should user run live test? Not before external review. After conditional acceptance, one
++operator opening would provide inspectable evidence for either result. One recommended next
++action: external review of this ZIP and task-relative diff. Do not implement a further
++semantic/prompt repair or perform an opening in this pass.
++
++Manual exact archive-relative path: `{manual_archive}`.
++Standard review: handoff/CURRENT_REVIEW.md, REVIEW_MANIFEST.json, CURRENT_REVIEW.zip;
++timestamped CURRENT_REVIEW(YYYYMMDD-HHMMSS).zip is the same package. Bundle includes nine
++reports, source diff/snapshots, tests, matrix, decision/source maps, diagnostic examples,
++UI/state results, status/integrity and complete manual. Sources selected explicitly.
++
++{confirmations}
++
++Stop after generating review ZIP and await external review.
++''')
++    paths = ['game/gm.py', 'game/provider_budget.py', 'game/immutable_valid_response.py', 'static/app.js', 'tools/atgb/accounting.py', 'tests/test_pr_play_07_semantic_acceptance.py', 'tests/helpers/pr_play_07_ui.cjs', 'tests/helpers/pr_play_07_entry_source.py', 'tools/validate_pr_play_07.py', 'tools/report_pr_play_07.py', 'docs/NEXT_SESSION.md']
++    diff = []
++    for path in paths:
++        old = O / 'entry' / path
++        diff.extend(difflib.unified_diff(old.read_text(encoding='utf-8-sig').splitlines(True) if old.exists() else [], (ROOT / path).read_text(encoding='utf-8-sig').splitlines(True), fromfile='entry/' + path, tofile='current/' + path))
++    (O / 'source_diff.patch').write_text(''.join(diff), encoding='utf-8')
++    (O / 'final_status.txt').write_bytes(subprocess.check_output(['git', 'status', '--short']))
++    protected = json.loads((O / 'protected.json').read_text())
++    current = {str(p): hashlib.sha256(p.read_bytes()).hexdigest() for root in ['data', 'experiments'] for p in Path(root).rglob('*') if p.is_file()}
++    write('integrity.json', {'count': len(protected), 'changed': [p for p, h in protected.items() if current.get(p) != h], 'added': sorted(set(current) - set(protected))})
++    assert protected == current, 'Protected state/inventory changed'
++    support = paths + [p.relative_to(ROOT).as_posix() for p in R.glob('*') if p.is_file()]
++    support += [p.relative_to(ROOT).as_posix() for p in O.rglob('*') if p.is_file() and p.name not in {'review_config.json', 'package_verification.json'} and p.suffix in {'.md', '.txt', '.json', '.jsonl', '.xml', '.patch', '.py', '.cjs'}]
++    config = {'campaign_id': 'pr_play_07', 'campaign_name': 'PR-PLAY-07 — Opening Semantic Acceptance and Safe-Nonresolution Investigation', 'campaign_date': '2026-10-29', 'purpose': 'Offline investigation and bounded diagnostics/UI repair; stop after review ZIP.', 'objective_status': 'B — Conditionally ready', 'executive_summary': f'Historical cause unresolved; no speculative semantic/prompt change. Repaired missing diagnostics/capture and erased UI failure feedback. S1–S12 pass; {passes} checks pass / one entry-reproduced preexisting failure; 9 UI boundary checks pass. HTTP coverage bounded timeout. ' + confirmations, 'primary_report': (R / '09_final_verdict_and_handoff.md').relative_to(ROOT).as_posix(), 'supporting_files': [{'path': p, 'role': 'source' if p in paths else 'evidence', 'why': 'Scoped PR-PLAY-07 source, reports, manual and deterministic validation.'} for p in dict.fromkeys(support)], 'changes': {'production': ['Opening diagnostics/capture and localized player failure feedback.'], 'validation': ['S1–S12, bounded capture/ledger controls and actual JS handler tests.'], 'tooling': ['Accounting observational stages; bounded driver/report generator.'], 'documentation': ['Nine reports, PowerShell manual, canonical session handoff.'], 'generated_artifacts': ['Explicit diff/matrices/source/decision maps, status/integrity and review.']}, 'testing': {'focused': f"{results['focused_final']['passed']} passed.", 'broader': f'{passes} total current checks pass / one preexisting failure; report 07 gives disjoint counts.', 'full_suite': 'Not run; bounded relevant slices.', 'runtime_validation': 'Synthetic SDK through actual endpoint/semantic/persistence owners; 9 Node boundary cases; HTTP suites timed out.', 'model_runtime_boundary': 'No live provider or connectivity calls.', 'new_regressions': 'None in completed scope. Development diagnostic-consumer mismatch fixed.', 'pre_existing_failures': 'Stale source attestation reproduced with saved dirty entry production sources.'}, 'decisions_requiring_human_review': ['Accept/redirect conditional readiness before any future one-Start operator test.'], 'known_problems': {'campaign_specific': ['Historical response/reasons absent; unresolved-answer guidance conflict; HTTP coverage timed out.'], 'pre_existing': ['Frozen attestation stale; historical rich-emission/conversation failures not newly reproduced.']}, 'does_not_prove': ['Exact historical semantic cause, live/rendered success, reliability, independent generalization or ATGB performance.'], 'recommended_next_step': 'External review; stop without further implementation or live opening.', 'configuration_source': 'artifacts/pr_play_07/review_config.json', 'self_contained_review_test': 'Verify nine reports, exact manual path, diff/matrices/status and ZIP manifest hashes.'}
++    write('review_config.json', config)
++    print('Reports ready:', passes, 'passing checks; protected files:', len(protected))
++
++
++if __name__ == '__main__':
++    main()
+--- entry/docs/NEXT_SESSION.md
++++ current/docs/NEXT_SESSION.md
+@@ -1,8 +1,34 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-28 / PR-PLAY-06.
++Ashen Thrones — Product Realization. Updated 2026-10-29 / PR-PLAY-07.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest semantic investigation and visibility repair — PR-PLAY-07
++
++2026-10-29: **B — Conditionally ready; external review required.** October 29
++ZIP confirms completed 26593/1370 provider response, structural acceptance, then
++safe_nonresolution rejection and unchanged gameplay. Original response/reasons
++absent; historical semantic cause unresolved. No speculative semantic/prompt repair.
++Added first hard-validation reasons/final provenance and independent parser/final
++outcome diagnostics in existing ledger; opt-in ASHEN_OPENING_RESPONSE_CAPTURE=1
++captures original parsed opening JSON in isolated playtest root (64 KiB/artifact,
++maximum six per scope, separate diagnostic/retry/storage gates). Diagnostic failures
++do not determine current gameplay acceptance. Existing accounting reader recognizes
++new observation stages without counting requests/usage twice. UI failure now survives
++state refresh; safe HTTP/network/JSON feedback and retry state preserved.
++S1–S12 and focused integrity/budget/capture controls pass; full counts and bounded
++HTTP timeout limitations in report 07. One stale source-attestation assertion
++reproduces on saved dirty entry sources. Nine Node UI boundary checks pass; no
++rendered/live success, benchmark or held-out generalization claim. Residual opening
++scene_opening versus unresolved/answer guidance conflict documented, causality unknown.
++Reports/manual: development/campaigns/product_realization/pr_play_07/.
++Evidence: artifacts/pr_play_07/. Standard review: handoff/CURRENT_REVIEW.md and ZIP.
++No model/schema/budget/retry/authority/state-structure change, live/connectivity call,
++PR-EG integration, frozen-baseline mutation, secrets, commit or push. Existing dirty
++work retained. Recommended next action: external review; no follow-on implementation
++or live opening in this pass. Stop after review ZIP. PR_PLAY_07_LIVE_OPENING_TEST.txt
++supersedes PR06 for a separately reviewed one-Start operator test.
+ 
+ ## Latest bounded opening budget repair — PR-PLAY-06
+ 

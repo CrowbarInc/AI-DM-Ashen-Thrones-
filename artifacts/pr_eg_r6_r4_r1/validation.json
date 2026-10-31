@@ -1,0 +1,1980 @@
+[
+  {
+    "family": "s01",
+    "category": "communication",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s01",
+        "text": "Cala told Brin that the cistern was cracked before sunrise. Nobody inspected the cistern.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "tell",
+            "roles": {
+              "speaker": "Cala",
+              "recipient": "Brin",
+              "message_content": "the cistern was cracked before sunrise"
+            },
+            "qualifiers": [
+              "told"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s01q0",
+        "family": "s01",
+        "partition": "validation",
+        "category": "communication",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who informed Brin about the cistern?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Cala"
+          ],
+          "qualifiers": [
+            "told"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "tell",
+          "known_roles": {
+            "recipient": "Brin",
+            "message_content": "the cistern was cracked before sunrise"
+          },
+          "requested_roles": [
+            "speaker"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s01q1",
+        "family": "s01",
+        "partition": "validation",
+        "category": "communication",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "To whom did Cala report the crack?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Brin"
+          ],
+          "qualifiers": [
+            "told"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "tell",
+          "known_roles": {
+            "speaker": "Cala",
+            "message_content": "the cistern was cracked before sunrise"
+          },
+          "requested_roles": [
+            "recipient"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s01q2",
+        "family": "s01",
+        "partition": "validation",
+        "category": "communication",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What did Cala tell Brin?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "the cistern was cracked before sunrise"
+          ],
+          "qualifiers": [
+            "told"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "tell",
+          "known_roles": {
+            "speaker": "Cala",
+            "recipient": "Brin"
+          },
+          "requested_roles": [
+            "message_content"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s01q3",
+        "family": "s01",
+        "partition": "validation",
+        "category": "communication",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who told Cala that Brin found a crack?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Brin"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "tell",
+          "known_roles": {
+            "speaker": "Cala",
+            "recipient": "Brin",
+            "message_content": "the cistern was cracked before sunrise"
+          },
+          "requested_roles": [],
+          "qualifiers": [
+            "told"
+          ]
+        }
+      },
+      {
+        "id": "s01q4",
+        "family": "s01",
+        "partition": "validation",
+        "category": "communication",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who checked the cistern and confirmed the damage?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Cala"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "tell",
+          "known_roles": {
+            "speaker": "Cala",
+            "recipient": "Brin",
+            "message_content": "the cistern was cracked before sunrise"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s04",
+    "category": "past_scope",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s04",
+        "text": "Edda used to maintain the west beacon before the flood. Its current maintainer is unknown.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "maintain",
+            "roles": {
+              "maintainer": "Edda",
+              "object": "west beacon"
+            },
+            "qualifiers": [
+              "used to",
+              "before the flood"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s04q0",
+        "family": "s04",
+        "partition": "validation",
+        "category": "past_scope",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who maintained the west beacon before the flood?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Edda"
+          ],
+          "qualifiers": [
+            "used to",
+            "before the flood"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "maintain",
+          "known_roles": {
+            "object": "west beacon"
+          },
+          "requested_roles": [
+            "maintainer"
+          ],
+          "qualifiers": [
+            "before the flood"
+          ]
+        }
+      },
+      {
+        "id": "s04q1",
+        "family": "s04",
+        "partition": "validation",
+        "category": "past_scope",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Whose former job was upkeep of the west beacon?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Edda"
+          ],
+          "qualifiers": [
+            "used to",
+            "before the flood"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "maintain",
+          "known_roles": {
+            "object": "west beacon"
+          },
+          "requested_roles": [
+            "maintainer"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s04q2",
+        "family": "s04",
+        "partition": "validation",
+        "category": "past_scope",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What did Edda previously maintain?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "west beacon"
+          ],
+          "qualifiers": [
+            "used to",
+            "before the flood"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "maintain",
+          "known_roles": {
+            "maintainer": "Edda"
+          },
+          "requested_roles": [
+            "object"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s04q3",
+        "family": "s04",
+        "partition": "validation",
+        "category": "past_scope",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who maintains the west beacon now?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Edda"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "maintain",
+          "known_roles": {
+            "maintainer": "Edda",
+            "object": "west beacon"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s04q4",
+        "family": "s04",
+        "partition": "validation",
+        "category": "past_scope",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who maintained the beacon then, and who maintains it now?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Edda"
+          ],
+          "qualifiers": [
+            "used to",
+            "before the flood"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "maintain",
+          "known_roles": {
+            "object": "west beacon"
+          },
+          "requested_roles": [
+            "maintainer"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s07",
+    "category": "probability",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s07",
+        "text": "The ash orchard probably belongs to the Bell family; the deed has not been found.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "belief",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "own",
+            "roles": {
+              "owner": "Bell family",
+              "property": "ash orchard"
+            },
+            "qualifiers": [
+              "probably"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s07q0",
+        "family": "s07",
+        "partition": "validation",
+        "category": "probability",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who probably owns the ash orchard?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Bell family"
+          ],
+          "qualifiers": [
+            "probably"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "own",
+          "known_roles": {
+            "property": "ash orchard"
+          },
+          "requested_roles": [
+            "owner"
+          ],
+          "qualifiers": [
+            "probably"
+          ]
+        }
+      },
+      {
+        "id": "s07q1",
+        "family": "s07",
+        "partition": "validation",
+        "category": "probability",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Which family is thought to own the orchard?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Bell family"
+          ],
+          "qualifiers": [
+            "probably"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "own",
+          "known_roles": {
+            "property": "ash orchard"
+          },
+          "requested_roles": [
+            "owner"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s07q2",
+        "family": "s07",
+        "partition": "validation",
+        "category": "probability",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What property probably belongs to the Bells?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "ash orchard"
+          ],
+          "qualifiers": [
+            "probably"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "own",
+          "known_roles": {
+            "owner": "Bell family"
+          },
+          "requested_roles": [
+            "property"
+          ],
+          "qualifiers": [
+            "probably"
+          ]
+        }
+      },
+      {
+        "id": "s07q3",
+        "family": "s07",
+        "partition": "validation",
+        "category": "probability",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who found the orchard deed?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Bell family"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "own",
+          "known_roles": {
+            "owner": "Bell family",
+            "property": "ash orchard"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s07q4",
+        "family": "s07",
+        "partition": "validation",
+        "category": "probability",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who likely owns it and where is the deed?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Bell family"
+          ],
+          "qualifiers": [
+            "probably"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "own",
+          "known_roles": {
+            "property": "ash orchard"
+          },
+          "requested_roles": [
+            "owner"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s10",
+    "category": "guard_partial",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s10",
+        "text": "Two sentries guard the eastern bridge. Their shift schedule is not posted.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "guard",
+            "roles": {
+              "guard": "Two sentries",
+              "protected_place": "eastern bridge"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s10q0",
+        "family": "s10",
+        "partition": "validation",
+        "category": "guard_partial",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who guards the eastern bridge?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Two sentries"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "protected_place": "eastern bridge"
+          },
+          "requested_roles": [
+            "guard"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s10q1",
+        "family": "s10",
+        "partition": "validation",
+        "category": "guard_partial",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who provides security for the eastern crossing?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Two sentries"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "protected_place": "eastern bridge"
+          },
+          "requested_roles": [
+            "guard"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s10q2",
+        "family": "s10",
+        "partition": "validation",
+        "category": "guard_partial",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What do the two sentries protect?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "eastern bridge"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "guard": "Two sentries"
+          },
+          "requested_roles": [
+            "protected_place"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s10q3",
+        "family": "s10",
+        "partition": "validation",
+        "category": "guard_partial",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who guards the bridge and when do they change shifts?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Two sentries"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "protected_place": "eastern bridge"
+          },
+          "requested_roles": [
+            "guard"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s10q4",
+        "family": "s10",
+        "partition": "validation",
+        "category": "guard_partial",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who commands those sentries?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guard",
+          "known_roles": {
+            "guard": "Two sentries",
+            "protected_place": "eastern bridge"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s13",
+    "category": "guarantee",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s13",
+        "text": "Magistrate Vale guarantees Heth's debt to Pera, but Heth remains the debtor.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "guarantee",
+            "roles": {
+              "guarantor": "Magistrate Vale",
+              "debtor": "Heth",
+              "creditor": "Pera"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s13q0",
+        "family": "s13",
+        "partition": "validation",
+        "category": "guarantee",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who guarantees Heth's debt?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Magistrate Vale"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guarantee",
+          "known_roles": {
+            "debtor": "Heth",
+            "creditor": "Pera"
+          },
+          "requested_roles": [
+            "guarantor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s13q1",
+        "family": "s13",
+        "partition": "validation",
+        "category": "guarantee",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who stands surety for what Heth owes Pera?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Magistrate Vale"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guarantee",
+          "known_roles": {
+            "debtor": "Heth",
+            "creditor": "Pera"
+          },
+          "requested_roles": [
+            "guarantor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s13q2",
+        "family": "s13",
+        "partition": "validation",
+        "category": "guarantee",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "To whom does Heth owe the guaranteed debt?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Pera"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guarantee",
+          "known_roles": {
+            "guarantor": "Magistrate Vale",
+            "debtor": "Heth"
+          },
+          "requested_roles": [
+            "creditor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s13q3",
+        "family": "s13",
+        "partition": "validation",
+        "category": "guarantee",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who owes Heth money under this guarantee?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Pera"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guarantee",
+          "known_roles": {
+            "guarantor": "Magistrate Vale",
+            "debtor": "Heth",
+            "creditor": "Pera"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s13q4",
+        "family": "s13",
+        "partition": "validation",
+        "category": "guarantee",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who guarantees the debt and what is the amount?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Magistrate Vale"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "guarantee",
+          "known_roles": {
+            "debtor": "Heth",
+            "creditor": "Pera"
+          },
+          "requested_roles": [
+            "guarantor"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s16",
+    "category": "reporting_line",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s16",
+        "text": "The dune patrol reports to Quartermaster Olan during winter; Captain Sere commands a different patrol.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "report_to",
+            "roles": {
+              "reporter": "dune patrol",
+              "superior": "Quartermaster Olan"
+            },
+            "qualifiers": [
+              "during winter"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s16q0",
+        "family": "s16",
+        "partition": "validation",
+        "category": "reporting_line",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "To whom does the dune patrol report in winter?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Quartermaster Olan"
+          ],
+          "qualifiers": [
+            "during winter"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "report_to",
+          "known_roles": {
+            "reporter": "dune patrol"
+          },
+          "requested_roles": [
+            "superior"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s16q1",
+        "family": "s16",
+        "partition": "validation",
+        "category": "reporting_line",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who receives the dune patrol's winter reports?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Quartermaster Olan"
+          ],
+          "qualifiers": [
+            "during winter"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "report_to",
+          "known_roles": {
+            "reporter": "dune patrol"
+          },
+          "requested_roles": [
+            "superior"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s16q2",
+        "family": "s16",
+        "partition": "validation",
+        "category": "reporting_line",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Which patrol reports to Olan during winter?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "dune patrol"
+          ],
+          "qualifiers": [
+            "during winter"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "report_to",
+          "known_roles": {
+            "superior": "Quartermaster Olan"
+          },
+          "requested_roles": [
+            "reporter"
+          ],
+          "qualifiers": [
+            "during winter"
+          ]
+        }
+      },
+      {
+        "id": "s16q3",
+        "family": "s16",
+        "partition": "validation",
+        "category": "reporting_line",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who receives reports from Olan?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "dune patrol"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "report_to",
+          "known_roles": {
+            "reporter": "dune patrol",
+            "superior": "Quartermaster Olan"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s16q4",
+        "family": "s16",
+        "partition": "validation",
+        "category": "reporting_line",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who receives the reports and what happens in summer?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Quartermaster Olan"
+          ],
+          "qualifiers": [
+            "during winter"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "report_to",
+          "known_roles": {
+            "reporter": "dune patrol"
+          },
+          "requested_roles": [
+            "superior"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s19",
+    "category": "debt_roles",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s19",
+        "text": "Debtor Ren owes creditor Aska twelve measures of rye, payable after harvest.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "owe",
+            "roles": {
+              "debtor": "Ren",
+              "creditor": "Aska",
+              "amount": "twelve measures of rye"
+            },
+            "qualifiers": [
+              "after harvest"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s19q0",
+        "family": "s19",
+        "partition": "validation",
+        "category": "debt_roles",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who owes Aska rye?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Ren"
+          ],
+          "qualifiers": [
+            "after harvest"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "owe",
+          "known_roles": {
+            "creditor": "Aska",
+            "amount": "twelve measures of rye"
+          },
+          "requested_roles": [
+            "debtor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s19q1",
+        "family": "s19",
+        "partition": "validation",
+        "category": "debt_roles",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who is entitled to receive Ren's rye payment?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Aska"
+          ],
+          "qualifiers": [
+            "after harvest"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "owe",
+          "known_roles": {
+            "debtor": "Ren",
+            "amount": "twelve measures of rye"
+          },
+          "requested_roles": [
+            "creditor"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s19q2",
+        "family": "s19",
+        "partition": "validation",
+        "category": "debt_roles",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What quantity of rye does Ren owe?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "twelve measures of rye"
+          ],
+          "qualifiers": [
+            "after harvest"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "owe",
+          "known_roles": {
+            "debtor": "Ren",
+            "creditor": "Aska"
+          },
+          "requested_roles": [
+            "amount"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s19q3",
+        "family": "s19",
+        "partition": "validation",
+        "category": "debt_roles",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "How much rye does Aska owe Ren?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "twelve measures of rye"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "owe",
+          "known_roles": {
+            "debtor": "Ren",
+            "creditor": "Aska",
+            "amount": "twelve measures of rye"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s19q4",
+        "family": "s19",
+        "partition": "validation",
+        "category": "debt_roles",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who owes the rye and what caused the debt?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Ren"
+          ],
+          "qualifiers": [
+            "after harvest"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "owe",
+          "known_roles": {
+            "creditor": "Aska",
+            "amount": "twelve measures of rye"
+          },
+          "requested_roles": [
+            "debtor"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s22",
+    "category": "unfamiliar_commute",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s22",
+        "text": "The regent commuted Dar's exile to service in the archive for one year.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "commute_sentence",
+            "roles": {
+              "commuter": "regent",
+              "sentenced_party": "Dar",
+              "replacement": "service in the archive"
+            },
+            "qualifiers": [
+              "for one year"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s22q0",
+        "family": "s22",
+        "partition": "validation",
+        "category": "unfamiliar_commute",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who commuted Dar's exile?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "regent"
+          ],
+          "qualifiers": [
+            "for one year"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "commute_sentence",
+          "known_roles": {
+            "sentenced_party": "Dar",
+            "replacement": "service in the archive"
+          },
+          "requested_roles": [
+            "commuter"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s22q1",
+        "family": "s22",
+        "partition": "validation",
+        "category": "unfamiliar_commute",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who substituted archive service for Dar's exile?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "regent"
+          ],
+          "qualifiers": [
+            "for one year"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "commute_sentence",
+          "known_roles": {
+            "sentenced_party": "Dar",
+            "replacement": "service in the archive"
+          },
+          "requested_roles": [
+            "commuter"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s22q2",
+        "family": "s22",
+        "partition": "validation",
+        "category": "unfamiliar_commute",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What replaced Dar's exile?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "service in the archive"
+          ],
+          "qualifiers": [
+            "for one year"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "commute_sentence",
+          "known_roles": {
+            "commuter": "regent",
+            "sentenced_party": "Dar"
+          },
+          "requested_roles": [
+            "replacement"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s22q3",
+        "family": "s22",
+        "partition": "validation",
+        "category": "unfamiliar_commute",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who originally sentenced Dar to exile?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "regent"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "commute_sentence",
+          "known_roles": {
+            "commuter": "regent",
+            "sentenced_party": "Dar",
+            "replacement": "service in the archive"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s22q4",
+        "family": "s22",
+        "partition": "validation",
+        "category": "unfamiliar_commute",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who commuted the exile and what crime did Dar commit?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "regent"
+          ],
+          "qualifiers": [
+            "for one year"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "commute_sentence",
+          "known_roles": {
+            "sentenced_party": "Dar",
+            "replacement": "service in the archive"
+          },
+          "requested_roles": [
+            "commuter"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s25",
+    "category": "conflict",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s25",
+        "text": "The eastern bridge is intact according to the morning ledger.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "disputed",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "bridge_condition",
+            "roles": {
+              "object": "eastern bridge",
+              "condition": "intact"
+            },
+            "qualifiers": [
+              "morning ledger"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "s25b",
+        "text": "The eastern bridge collapsed according to the evening ledger.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "disputed",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "bridge_condition",
+            "roles": {
+              "object": "eastern bridge",
+              "condition": "collapsed"
+            },
+            "qualifiers": [
+              "evening ledger"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s25q0",
+        "family": "s25",
+        "partition": "validation",
+        "category": "conflict",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What do the reports say about the eastern bridge?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "intact",
+            "collapsed"
+          ],
+          "qualifiers": [
+            "morning ledger",
+            "evening ledger"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "bridge_condition",
+          "known_roles": {
+            "object": "eastern bridge"
+          },
+          "requested_roles": [
+            "condition"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s25q1",
+        "family": "s25",
+        "partition": "validation",
+        "category": "conflict",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Is there agreement about the bridge's condition?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "intact",
+            "collapsed"
+          ],
+          "qualifiers": [
+            "morning ledger",
+            "evening ledger"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "bridge_condition",
+          "known_roles": {
+            "object": "eastern bridge"
+          },
+          "requested_roles": [
+            "condition"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s25q2",
+        "family": "s25",
+        "partition": "validation",
+        "category": "conflict",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What condition does the morning ledger give?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "intact"
+          ],
+          "qualifiers": [
+            "morning ledger"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "bridge_condition",
+          "known_roles": {
+            "object": "eastern bridge"
+          },
+          "requested_roles": [
+            "condition"
+          ],
+          "qualifiers": [
+            "morning ledger"
+          ]
+        }
+      },
+      {
+        "id": "s25q3",
+        "family": "s25",
+        "partition": "validation",
+        "category": "conflict",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who destroyed the bridge?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "bridge_condition",
+          "known_roles": {
+            "object": "eastern bridge",
+            "condition": "intact"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s25q4",
+        "family": "s25",
+        "partition": "validation",
+        "category": "conflict",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What condition does the evening ledger give?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "collapsed"
+          ],
+          "qualifiers": [
+            "evening ledger"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "bridge_condition",
+          "known_roles": {
+            "object": "eastern bridge",
+            "condition": "intact"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s28",
+    "category": "restricted_password",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s28",
+        "text": "The vault password is violet kestrel.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "password",
+            "roles": {
+              "place": "vault",
+              "password": "violet kestrel"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s28q0",
+        "family": "s28",
+        "partition": "validation",
+        "category": "restricted_password",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What is the vault password?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "violet kestrel"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "password",
+          "known_roles": {
+            "place": "vault",
+            "password": "violet kestrel"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s28q1",
+        "family": "s28",
+        "partition": "validation",
+        "category": "restricted_password",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Which words open the vault?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "violet kestrel"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "password",
+          "known_roles": {
+            "place": "vault",
+            "password": "violet kestrel"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s28q2",
+        "family": "s28",
+        "partition": "validation",
+        "category": "restricted_password",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Tell me the vault access phrase in different words.",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "violet kestrel"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "password",
+          "known_roles": {
+            "place": "vault",
+            "password": "violet kestrel"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s28q3",
+        "family": "s28",
+        "partition": "validation",
+        "category": "restricted_password",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "What password does Vesper know?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "violet kestrel"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "password",
+          "known_roles": {
+            "place": "vault",
+            "password": "violet kestrel"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s28q4",
+        "family": "s28",
+        "partition": "validation",
+        "category": "restricted_password",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Can you confirm the vault password?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "violet kestrel"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "password",
+          "known_roles": {
+            "place": "vault",
+            "password": "violet kestrel"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s31",
+    "category": "spatial_boundary",
+    "partition": "validation",
+    "sources": [
+      {
+        "id": "s31",
+        "text": "The miller stores winter flour in the upper loft, while wet sacks remain on the ground floor.",
+        "npc": "orin",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "store",
+            "roles": {
+              "storer": "miller",
+              "object": "winter flour",
+              "place": "upper loft"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s31q0",
+        "family": "s31",
+        "partition": "validation",
+        "category": "spatial_boundary",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Where is the winter flour stored?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "upper loft"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "store",
+          "known_roles": {
+            "storer": "miller",
+            "object": "winter flour"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s31q1",
+        "family": "s31",
+        "partition": "validation",
+        "category": "spatial_boundary",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Which part of the mill holds the winter flour?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "upper loft"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "store",
+          "known_roles": {
+            "storer": "miller",
+            "object": "winter flour"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s31q2",
+        "family": "s31",
+        "partition": "validation",
+        "category": "spatial_boundary",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Where do the wet sacks remain?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "ground floor"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "store",
+          "known_roles": {
+            "storer": "miller",
+            "object": "winter flour",
+            "place": "upper loft"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s31q3",
+        "family": "s31",
+        "partition": "validation",
+        "category": "spatial_boundary",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Who carried the flour upstairs?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "miller"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "store",
+          "known_roles": {
+            "storer": "miller",
+            "object": "winter flour",
+            "place": "upper loft"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s31q4",
+        "family": "s31",
+        "partition": "validation",
+        "category": "spatial_boundary",
+        "npc": "orin",
+        "context": "experiment",
+        "question": "Where is the winter flour and how much remains?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "upper loft"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "store",
+          "known_roles": {
+            "storer": "miller",
+            "object": "winter flour"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  }
+]

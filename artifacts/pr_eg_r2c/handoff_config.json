@@ -1,0 +1,615 @@
+{
+  "campaign_id": "pr_eg_r2c_host_owned_speech_20261017",
+  "campaign_name": "PR-EG-R2C \u2014 Host-Owned Speech Adoption & Information-Integrity Containment",
+  "campaign_date": "2026-10-17",
+  "purpose": "Bounded implementation and qualification; stop after R2C.",
+  "objective_status": "C \u2014 CONTAINMENT INCOMPLETE",
+  "executive_summary": "**C \u2014 CONTAINMENT INCOMPLETE.** A narrow host-owned adoption boundary is implemented using the existing accepted_response object, resolver-selected topics and conversational continuity. The historical unsupported north-gate claim no longer reaches delivery or NPC history; matched authorized security disclosure survives. Rejected/superseded draft text supplies neither speech nor proposed state effects.\n\nThe acceptance gates do not all pass. Frozen H6 fails to repeat an established archive statement. Fresh production HTTP conversations complete all 15 + 12 turns with real configured-provider interpretation, but both lose requested disclosures and earlier topics. Primary turns 3, 7, 8, 13, 14 and secondary turns 1, 2, 6, 7, 12 have content failures. Do not describe this as usable-dialogue qualification or proceed to R3.\n\nRegression: 393 baseline passes / 19 failures; final 421 passes / 20 failures including 28 new passes and H6. All baseline passes remain passing (one test renamed); six existing tests were deliberately updated to the new containment contract. The same 19 inherited failures remain. Six separate actual-storage persistence controls pass.\n\nEvidence classes: STATIC source inspection; UNIT deterministic test; CONTROLLED external-provider output injection or direct host-adoption seam; FRESH actual /api/chat with configured model and real provider interpretation; STATE storage/diff inspection; HISTORICAL retained predecessor measurement; INFERENCE limitations. No recorded replay is counted as FRESH. No active campaign data changed.",
+  "changes": {
+    "production": [
+      "Host-owned speech adopts through existing immutable response; explicit source, candidate exclusion, identity-checked retention."
+    ],
+    "validation": [
+      "29 new tests: 28 pass, H6 fails. Six existing tests updated to containment behavior."
+    ],
+    "tooling": [
+      "27-turn fresh production HTTP runner; controlled/persistence probes and review builder."
+    ],
+    "documentation": [
+      "20 review artifacts and exact failure inventories."
+    ],
+    "generated_artifacts": [
+      "Baselines, cycle-only diffs, source hashes, controlled traces, frozen holdouts, fresh HTTP transcripts and usage."
+    ]
+  },
+  "testing": {
+    "focused": "28 new passes / 1 frozen failure; six persistence controls pass.",
+    "broader": "Baseline 393 pass / 19 fail; final 421 pass / 20 fail with new tests. Same 19 inherited failures; H6 new.",
+    "full_suite": "Relevant historical family only; full repository suite not run.",
+    "runtime_validation": "Controlled synchronous production handler plus two fresh HTTP conversations (15+12 turns).",
+    "model_runtime_boundary": "Configured gpt-4.1-mini; real production interpretation; zero narration calls; no replay or live doubles.",
+    "new_regressions": "No lost baseline passes after six documented expectation updates; frozen H6 fails.",
+    "pre_existing_failures": "Exact 19 identities retained in report 12."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Live multi-topic disclosure, repetition and recall fail; adoption alone cannot qualify usable dialogue.",
+      "Frozen H6 fails; complete original results retained.",
+      "Topic discovery can disagree with the line actually delivered."
+    ],
+    "pre_existing": [
+      "19 relevant-suite failures.",
+      "Legacy accepted non-social response presentation is outside this bounded repair."
+    ]
+  },
+  "missing_concepts": [
+    "Reliable resolver/continuity topic synchronization; legacy history certification."
+  ],
+  "decisions_requiring_human_review": [
+    "Review incomplete R2C containment and failed qualification; do not proceed to R3."
+  ],
+  "does_not_prove": [
+    "Qualified usable dialogue, arbitrary generated-speech safety, or an overall quality/performance improvement.",
+    "All canonical session domains audited; all repository tests passing."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R2C. Await external review of resolver/continuity synchronization dependency.",
+  "primary_report": "artifacts/pr_eg_r2c/01_EXECUTIVE_SUMMARY.md",
+  "max_file_bytes": 20971520,
+  "evidence_packets": [],
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r2c/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/02_BASELINE_AND_ENVIRONMENT.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/03_ROOT_CAUSE_AND_REPAIR.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/04_SOURCE_CHANGE_INVENTORY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/05_SPEECH_ADOPTION_AUTHORITY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/06_INFORMATION_INTEGRITY_TESTS.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/07_CONVERSATIONAL_RELEVANCE.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/08_FINAL_RESPONSE_INTEGRITY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/09_PERSISTENCE_INTEGRITY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/10_ADVERSARIAL_QUALIFICATION.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/11_FROZEN_HOLDOUTS.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/12_REGRESSION_COMPARISON.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/13_FRESH_PROVIDER_PRIMARY_CONVERSATION.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/14_FRESH_PROVIDER_SECONDARY_CONVERSATION.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/15_PROVIDER_PERFORMANCE.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/16_STATE_INTEGRITY_AUDIT.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/17_REMAINING_LIMITATIONS.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/18_NEXT_CYCLE_RECOMMENDATION.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/19_FINAL_VERDICT.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/20_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/acceptance_gates.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/artifact_inventory.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/baseline_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/baseline_historical_reproduction.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/baseline_local_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/baseline_local_junit.xml",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/baseline_reproduction.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/before_hashes.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/before_sources/api.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/before_sources/conversational_continuity.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/before_sources/dialogue_authority.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/before_sources/immutable_valid_response.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/build_review.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/diffs/api.py.diff",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/diffs/conversational_continuity.py.diff",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/diffs/dialogue_authority.py.diff",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/diffs/immutable_valid_response.py.diff",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/environment.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/final_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/final_junit.xml",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/freeze.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/frozen_holdouts.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/historical/01_EXECUTIVE_SUMMARY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/historical/11_PROVIDER_EFFICIENCY.md",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/holdout_first_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/holdout_first_junit.xml",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_failure_audit.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_freeze.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_plan.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_qualification.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_status.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/live_usage.jsonl",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/performance.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/persistence_matrix.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/persistence_results.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/post_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/post_final_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/post_final_junit.xml",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/post_junit.xml",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/post_reproduction.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/regression_comparison.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/regression_selection.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/reproduce.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/setup_baseline.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/source_changes.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/game/api.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/game/conversational_continuity.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/game/dialogue_authority.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/game/immutable_valid_response.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/tests/test_pr_ed_provider_efficiency.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/tests/test_pr_eg_dialogue_quality.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/tests/test_pr_eg_r2c_speech_adoption.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/tests/test_turn_pipeline_shared.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/sources/tools/validate_pr_eg_r2c.py",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/state_audit.json",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/target_console.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/target_junit.xml",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r2c/working_tree_before.txt",
+      "role": "evidence",
+      "why": "R2C source, cycle-relative patch, original controlled/frozen/live result or derived review.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ],
+  "self_contained_review_test": "20 required reports, source snapshots/diffs/hashes, exact baseline/final failures, frozen H6 failure and complete 27-turn real-provider HTTP results; no active saves or credentials."
+}

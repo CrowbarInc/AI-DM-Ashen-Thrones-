@@ -1,0 +1,1576 @@
+{
+  "live": false,
+  "model": {
+    "default": "gpt-4.1-mini",
+    "high_precision": "gpt-4.1-mini",
+    "routing_enabled": true
+  },
+  "retry_ceiling": 2,
+  "manual_play_gpt_ceiling": 6,
+  "narration_timeout": "openai_sdk_default",
+  "provider_budget_defaults": {
+    "request_limit_env": "ASHEN_PROVIDER_REQUEST_LIMIT",
+    "input_default_when_limit_set": 8000,
+    "output_default_when_limit_set": 2000,
+    "total_default_when_limit_set": 10000,
+    "narration_max_output_tokens_env": "ASHEN_NARRATION_MAX_OUTPUT_TOKENS",
+    "narration_max_output_default": 600,
+    "interpretation_max_output": 320
+  },
+  "caching": "No application-level prompt cache. Provider prompt caching is not configured in call sites.",
+  "instrumentation": "External wrappers around call_gpt, save_session, and save_world. No production edit.",
+  "seed_ids": {
+    "courtyard": "waystation_courtyard",
+    "street": "waystation_street",
+    "npc": "sergeant_mara"
+  },
+  "turns": [
+    {
+      "turn_id": 1,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "simple_contextual_question",
+      "player_text": "Where are we?",
+      "elapsed_ms": 9,
+      "latency_ms": {},
+      "narration_provider_calls": 0,
+      "interpretation_requests": 0,
+      "narration_requests_meta": 0,
+      "retries_meta": 0,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 3,
+        "save_world": 0
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "conversational_answer",
+      "scene_after": "waystation_courtyard",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You are at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate. Visible points of interest: courtyard lantern. Known exits: courtyard gate.",
+      "calls": []
+    },
+    {
+      "turn_id": 2,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "ordinary_movement",
+      "player_text": "I go through the courtyard gate.",
+      "elapsed_ms": 130,
+      "latency_ms": {},
+      "narration_provider_calls": 0,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 20,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "scene_transition",
+      "scene_after": "waystation_street",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You arrive. The waystation street runs north from the courtyard gate. A notice board stands by the road.",
+      "calls": []
+    },
+    {
+      "turn_id": 3,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "movement_alternative_wording",
+      "player_text": "I make for the waystation courtyard.",
+      "elapsed_ms": 123,
+      "latency_ms": {
+        "intent_classification": 3,
+        "engine_resolution": 25,
+        "prompt_construction": 8,
+        "gpt_call": 0,
+        "retry_loop_total": 0,
+        "final_emission_gate": 9,
+        "fallback_repair": 2,
+        "total_turn": 76
+      },
+      "narration_provider_calls": 0,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 29,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "scene_transition",
+      "scene_after": "waystation_courtyard",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You arrive at Waystation courtyard. A walled courtyard. A lit lantern hangs beside the gate.",
+      "calls": []
+    },
+    {
+      "turn_id": 4,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "npc_dialogue_initiation",
+      "player_text": "I ask Sergeant Mara about the road beyond the gate.",
+      "elapsed_ms": 97,
+      "latency_ms": {
+        "intent_classification": 11,
+        "engine_resolution": 1,
+        "prompt_construction": 8,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 0,
+        "total_turn": 51
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 22524,
+      "persistence_ms": {
+        "save_session": 10,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "question",
+      "scene_after": "waystation_courtyard",
+      "active_target": "sergeant_mara",
+      "successful": true,
+      "response_excerpt": "Sergeant Mara mutters, \"Word is, the street beyond the gate is the north road.\"",
+      "calls": [
+        {
+          "purpose": "strict_social",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 4166,
+          "system_estimated_tokens": 1041,
+          "user_chars": 85935,
+          "user_estimated_tokens": 21483,
+          "contract": "narration_only",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21901,
+              "estimated_tokens": 5475
+            },
+            {
+              "key": "instructions",
+              "chars": 14251,
+              "estimated_tokens": 3562
+            },
+            {
+              "key": "turn_packet",
+              "chars": 9364,
+              "estimated_tokens": 2341
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 5316,
+              "estimated_tokens": 1329
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 5281,
+              "estimated_tokens": 1320
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 3243,
+              "estimated_tokens": 810
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2954,
+              "estimated_tokens": 738
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2265,
+              "estimated_tokens": 566
+            },
+            {
+              "key": "lead_context",
+              "chars": 1987,
+              "estimated_tokens": 496
+            },
+            {
+              "key": "scene",
+              "chars": 1926,
+              "estimated_tokens": 481
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1453,
+              "estimated_tokens": 363
+            },
+            {
+              "key": "interlocutor_lead_context",
+              "chars": 1395,
+              "estimated_tokens": 348
+            }
+          ],
+          "instruction_count": 84,
+          "unique_instruction_count": 84,
+          "instruction_chars": 13905,
+          "longest_instructions": [
+            {
+              "chars": 745,
+              "prefix": "INCIDENTAL SOCIAL REPLY AUTHORITY: If dialogue_social_plan.reply_plan_kind is harmless_subjective_response_permitted, lack of an authored pr"
+            },
+            {
+              "chars": 685,
+              "prefix": "WORLD SIMULATION (bounded engine slice): World progression touched: faction_agenda:ash_cowl, faction_agenda:house_verevin, faction_agenda:or"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 432,
+              "prefix": "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this tu"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 303,
+              "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a "
+            },
+            {
+              "chars": 289,
+              "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `speaker_switch_allowed` is false \u2014 do not move the substantive reply to a different NPC mid-turn. I"
+            },
+            {
+              "chars": 281,
+              "prefix": "NARRATIVE PLAN: Use narrative_plan only as bounded structural shaping. Its anchors, pressures, opening, roles, required_new_information, all"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3472,
+              "estimated_tokens": 868
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2383,
+              "estimated_tokens": 595
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 2179,
+              "estimated_tokens": 544
+            },
+            {
+              "key": "response_delta",
+              "chars": 1741,
+              "estimated_tokens": 435
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1719,
+              "estimated_tokens": 429
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1540,
+              "estimated_tokens": 385
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1507,
+              "estimated_tokens": 376
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1472,
+              "estimated_tokens": 368
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 6103,
+              "estimated_tokens": 1525
+            },
+            {
+              "key": "contracts",
+              "chars": 2071,
+              "estimated_tokens": 517
+            },
+            {
+              "key": "debug",
+              "chars": 566,
+              "estimated_tokens": 141
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 138,
+              "estimated_tokens": 34
+            },
+            {
+              "key": "route",
+              "chars": 130,
+              "estimated_tokens": 32
+            },
+            {
+              "key": "player_text",
+              "chars": 53,
+              "estimated_tokens": 13
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1371,
+              "estimated_tokens": 342
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 853,
+              "estimated_tokens": 213
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 656,
+              "estimated_tokens": 164
+            },
+            {
+              "key": "action_outcome",
+              "chars": 650,
+              "estimated_tokens": 162
+            },
+            {
+              "key": "transition_node",
+              "chars": 556,
+              "estimated_tokens": 139
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 294,
+              "estimated_tokens": 73
+            },
+            {
+              "key": "required_new_information",
+              "chars": 264,
+              "estimated_tokens": 66
+            },
+            {
+              "key": "active_pressures",
+              "chars": 212,
+              "estimated_tokens": 53
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 5,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "npc_followup",
+      "player_text": "Which road did you mean?",
+      "elapsed_ms": 25,
+      "latency_ms": {
+        "intent_classification": 11,
+        "engine_resolution": 1,
+        "prompt_construction": 8,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 0,
+        "total_turn": 51
+      },
+      "narration_provider_calls": 0,
+      "interpretation_requests": 0,
+      "narration_requests_meta": 0,
+      "retries_meta": 0,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 9,
+        "save_world": 0
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "conversational_answer",
+      "scene_after": "waystation_courtyard",
+      "active_target": "sergeant_mara",
+      "successful": true,
+      "response_excerpt": "The street beyond the gate is the north road. That establishes the observation or result; its cause has not been established.",
+      "calls": []
+    },
+    {
+      "turn_id": 6,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "ambiguous_inspection",
+      "player_text": "I look at it more closely.",
+      "elapsed_ms": 94,
+      "latency_ms": {
+        "intent_classification": 5,
+        "engine_resolution": 0,
+        "prompt_construction": 8,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 0,
+        "total_turn": 48
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 23909,
+      "persistence_ms": {
+        "save_session": 9,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "question",
+      "scene_after": "waystation_courtyard",
+      "active_target": "sergeant_mara",
+      "successful": true,
+      "response_excerpt": "Provider calls are disabled for this run, so no live narration was generated.",
+      "calls": [
+        {
+          "purpose": "strict_social",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 86073,
+          "user_estimated_tokens": 21518,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21655,
+              "estimated_tokens": 5413
+            },
+            {
+              "key": "instructions",
+              "chars": 14426,
+              "estimated_tokens": 3606
+            },
+            {
+              "key": "turn_packet",
+              "chars": 9129,
+              "estimated_tokens": 2282
+            },
+            {
+              "key": "mechanical_resolution",
+              "chars": 5255,
+              "estimated_tokens": 1313
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 5117,
+              "estimated_tokens": 1279
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 3243,
+              "estimated_tokens": 810
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 2435,
+              "estimated_tokens": 608
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2434,
+              "estimated_tokens": 608
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2266,
+              "estimated_tokens": 566
+            },
+            {
+              "key": "scene",
+              "chars": 2178,
+              "estimated_tokens": 544
+            },
+            {
+              "key": "lead_context",
+              "chars": 1987,
+              "estimated_tokens": 496
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1428,
+              "estimated_tokens": 357
+            }
+          ],
+          "instruction_count": 85,
+          "unique_instruction_count": 85,
+          "instruction_chars": 14076,
+          "longest_instructions": [
+            {
+              "chars": 745,
+              "prefix": "INCIDENTAL SOCIAL REPLY AUTHORITY: If dialogue_social_plan.reply_plan_kind is harmless_subjective_response_permitted, lack of an authored pr"
+            },
+            {
+              "chars": 590,
+              "prefix": "WORLD SIMULATION (bounded engine slice): World progression touched: faction_agenda:ash_cowl, faction_agenda:house_verevin, faction_agenda:or"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 432,
+              "prefix": "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this tu"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 303,
+              "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a "
+            },
+            {
+              "chars": 289,
+              "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `speaker_switch_allowed` is false \u2014 do not move the substantive reply to a different NPC mid-turn. I"
+            },
+            {
+              "chars": 281,
+              "prefix": "NARRATIVE PLAN: Use narrative_plan only as bounded structural shaping. Its anchors, pressures, opening, roles, required_new_information, all"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3361,
+              "estimated_tokens": 840
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2346,
+              "estimated_tokens": 586
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 2179,
+              "estimated_tokens": 544
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1752,
+              "estimated_tokens": 438
+            },
+            {
+              "key": "response_delta",
+              "chars": 1704,
+              "estimated_tokens": 426
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1540,
+              "estimated_tokens": 385
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1526,
+              "estimated_tokens": 381
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1510,
+              "estimated_tokens": 377
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 6029,
+              "estimated_tokens": 1507
+            },
+            {
+              "key": "contracts",
+              "chars": 2034,
+              "estimated_tokens": 508
+            },
+            {
+              "key": "debug",
+              "chars": 467,
+              "estimated_tokens": 116
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 138,
+              "estimated_tokens": 34
+            },
+            {
+              "key": "route",
+              "chars": 130,
+              "estimated_tokens": 32
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            },
+            {
+              "key": "player_text",
+              "chars": 28,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1316,
+              "estimated_tokens": 329
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 853,
+              "estimated_tokens": 213
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 656,
+              "estimated_tokens": 164
+            },
+            {
+              "key": "action_outcome",
+              "chars": 623,
+              "estimated_tokens": 155
+            },
+            {
+              "key": "transition_node",
+              "chars": 556,
+              "estimated_tokens": 139
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 294,
+              "estimated_tokens": 73
+            },
+            {
+              "key": "active_pressures",
+              "chars": 212,
+              "estimated_tokens": 53
+            },
+            {
+              "key": "required_new_information",
+              "chars": 182,
+              "estimated_tokens": 45
+            }
+          ],
+          "latency_ms": 2,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 7,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "clarification_continuation",
+      "player_text": "The lantern.",
+      "elapsed_ms": 116,
+      "latency_ms": {
+        "intent_classification": 6,
+        "engine_resolution": 0,
+        "prompt_construction": 7,
+        "gpt_call": 2,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 17,
+        "total_turn": 66
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 22214,
+      "persistence_ms": {
+        "save_session": 11,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": null,
+      "scene_after": "waystation_courtyard",
+      "active_target": "sergeant_mara",
+      "successful": true,
+      "response_excerpt": "Sergeant Mara mutters. \"Word is, it was messy\u2014but I won't swear to who.\" Sergeant Mara keeps their voice low. \"Hard to swear to anything in this crowd.\".",
+      "calls": [
+        {
+          "purpose": "strict_social",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 79294,
+          "user_estimated_tokens": 19823,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21003,
+              "estimated_tokens": 5250
+            },
+            {
+              "key": "instructions",
+              "chars": 13757,
+              "estimated_tokens": 3439
+            },
+            {
+              "key": "turn_packet",
+              "chars": 8903,
+              "estimated_tokens": 2225
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4446,
+              "estimated_tokens": 1111
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 3243,
+              "estimated_tokens": 810
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 2359,
+              "estimated_tokens": 589
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2330,
+              "estimated_tokens": 582
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2266,
+              "estimated_tokens": 566
+            },
+            {
+              "key": "scene",
+              "chars": 2131,
+              "estimated_tokens": 532
+            },
+            {
+              "key": "lead_context",
+              "chars": 1987,
+              "estimated_tokens": 496
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1414,
+              "estimated_tokens": 353
+            },
+            {
+              "key": "interlocutor_lead_context",
+              "chars": 1395,
+              "estimated_tokens": 348
+            }
+          ],
+          "instruction_count": 81,
+          "unique_instruction_count": 81,
+          "instruction_chars": 13423,
+          "longest_instructions": [
+            {
+              "chars": 745,
+              "prefix": "INCIDENTAL SOCIAL REPLY AUTHORITY: If dialogue_social_plan.reply_plan_kind is harmless_subjective_response_permitted, lack of an authored pr"
+            },
+            {
+              "chars": 590,
+              "prefix": "WORLD SIMULATION (bounded engine slice): World progression touched: faction_agenda:ash_cowl, faction_agenda:house_verevin, faction_agenda:or"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 432,
+              "prefix": "DIALOGUE SOCIAL PLAN (HARD RULE): When top-level dialogue_social_plan is present, it is the ONLY dialogue/social planning source for this tu"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 303,
+              "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a "
+            },
+            {
+              "chars": 289,
+              "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `speaker_switch_allowed` is false \u2014 do not move the substantive reply to a different NPC mid-turn. I"
+            },
+            {
+              "chars": 281,
+              "prefix": "NARRATIVE PLAN: Use narrative_plan only as bounded structural shaping. Its anchors, pressures, opening, roles, required_new_information, all"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3281,
+              "estimated_tokens": 820
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 2188,
+              "estimated_tokens": 547
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2065,
+              "estimated_tokens": 516
+            },
+            {
+              "key": "response_delta",
+              "chars": 1726,
+              "estimated_tokens": 431
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1682,
+              "estimated_tokens": 420
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1534,
+              "estimated_tokens": 383
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1510,
+              "estimated_tokens": 377
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1315,
+              "estimated_tokens": 328
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 5936,
+              "estimated_tokens": 1484
+            },
+            {
+              "key": "contracts",
+              "chars": 1919,
+              "estimated_tokens": 479
+            },
+            {
+              "key": "debug",
+              "chars": 467,
+              "estimated_tokens": 116
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 138,
+              "estimated_tokens": 34
+            },
+            {
+              "key": "route",
+              "chars": 132,
+              "estimated_tokens": 33
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            },
+            {
+              "key": "scene_id",
+              "chars": 22,
+              "estimated_tokens": 5
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1070,
+              "estimated_tokens": 267
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 689,
+              "estimated_tokens": 172
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 658,
+              "estimated_tokens": 164
+            },
+            {
+              "key": "action_outcome",
+              "chars": 601,
+              "estimated_tokens": 150
+            },
+            {
+              "key": "transition_node",
+              "chars": 556,
+              "estimated_tokens": 139
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 294,
+              "estimated_tokens": 73
+            },
+            {
+              "key": "active_pressures",
+              "chars": 151,
+              "estimated_tokens": 37
+            },
+            {
+              "key": "role_allocation",
+              "chars": 74,
+              "estimated_tokens": 18
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 8,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "straightforward_consequential",
+      "player_text": "I examine the courtyard lantern.",
+      "elapsed_ms": 96,
+      "latency_ms": {
+        "intent_classification": 4,
+        "engine_resolution": 1,
+        "prompt_construction": 9,
+        "gpt_call": 3,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 2,
+        "total_turn": 50
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 21793,
+      "persistence_ms": {
+        "save_session": 9,
+        "save_world": 3
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "investigate",
+      "scene_after": "waystation_courtyard",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "A soot-streaked lantern burns beside the courtyard gate.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 77611,
+          "user_estimated_tokens": 19402,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 21135,
+              "estimated_tokens": 5283
+            },
+            {
+              "key": "instructions",
+              "chars": 13316,
+              "estimated_tokens": 3329
+            },
+            {
+              "key": "turn_packet",
+              "chars": 9290,
+              "estimated_tokens": 2322
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4598,
+              "estimated_tokens": 1149
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2718,
+              "estimated_tokens": 679
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2434,
+              "estimated_tokens": 608
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "scene",
+              "chars": 2200,
+              "estimated_tokens": 550
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 2025,
+              "estimated_tokens": 506
+            },
+            {
+              "key": "lead_context",
+              "chars": 1987,
+              "estimated_tokens": 496
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1641,
+              "estimated_tokens": 410
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1174,
+              "estimated_tokens": 293
+            }
+          ],
+          "instruction_count": 79,
+          "unique_instruction_count": 79,
+          "instruction_chars": 12990,
+          "longest_instructions": [
+            {
+              "chars": 656,
+              "prefix": "FOLLOW-UP ESCALATION RULE (HARD RULE): The player is pressing the same topic again (see follow_up_pressure). Do NOT recycle the same core le"
+            },
+            {
+              "chars": 590,
+              "prefix": "WORLD SIMULATION (bounded engine slice): World progression touched: faction_agenda:ash_cowl, faction_agenda:house_verevin, faction_agenda:or"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 422,
+              "prefix": "SCENE MOMENTUM RULE (HARD RULE): Every 2\u20133 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 318,
+              "prefix": "UNCERTAINTY POLICY: response_policy.uncertainty.categories; response_policy.uncertainty.sources; response_policy.uncertainty.answer_shape; u"
+            },
+            {
+              "chars": 303,
+              "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a "
+            },
+            {
+              "chars": 285,
+              "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `generic_fallback_forbidden` is true \u2014 do not use generic unnamed stand-ins (for example 'ragged str"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3446,
+              "estimated_tokens": 861
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2100,
+              "estimated_tokens": 525
+            },
+            {
+              "key": "response_delta",
+              "chars": 1952,
+              "estimated_tokens": 488
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 1823,
+              "estimated_tokens": 455
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1762,
+              "estimated_tokens": 440
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1581,
+              "estimated_tokens": 395
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1509,
+              "estimated_tokens": 377
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1315,
+              "estimated_tokens": 328
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 6232,
+              "estimated_tokens": 1558
+            },
+            {
+              "key": "contracts",
+              "chars": 1992,
+              "estimated_tokens": 498
+            },
+            {
+              "key": "debug",
+              "chars": 467,
+              "estimated_tokens": 116
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 141,
+              "estimated_tokens": 35
+            },
+            {
+              "key": "route",
+              "chars": 118,
+              "estimated_tokens": 29
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "player_text",
+              "chars": 34,
+              "estimated_tokens": 8
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1232,
+              "estimated_tokens": 308
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 680,
+              "estimated_tokens": 170
+            },
+            {
+              "key": "action_outcome",
+              "chars": 629,
+              "estimated_tokens": 157
+            },
+            {
+              "key": "transition_node",
+              "chars": 556,
+              "estimated_tokens": 139
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 462,
+              "estimated_tokens": 115
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 272,
+              "estimated_tokens": 68
+            },
+            {
+              "key": "required_new_information",
+              "chars": 185,
+              "estimated_tokens": 46
+            },
+            {
+              "key": "active_pressures",
+              "chars": 151,
+              "estimated_tokens": 37
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    },
+    {
+      "turn_id": 9,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "compound_intention",
+      "player_text": "I examine the lantern and then go through the gate.",
+      "elapsed_ms": 26,
+      "latency_ms": {
+        "intent_classification": 4,
+        "engine_resolution": 1,
+        "prompt_construction": 9,
+        "gpt_call": 3,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 2,
+        "total_turn": 50
+      },
+      "narration_provider_calls": 0,
+      "interpretation_requests": 0,
+      "narration_requests_meta": 0,
+      "retries_meta": 0,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 0,
+      "persistence_ms": {
+        "save_session": 8,
+        "save_world": 0
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "conversational_clarify",
+      "scene_after": "waystation_courtyard",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "You asked to examine the lantern, then go through the gate. I can resolve one supported action at a time, and I have not done any of them yet. Should I start with the first one?",
+      "calls": []
+    },
+    {
+      "turn_id": 10,
+      "scenario_id": "pr_ed_courtyard",
+      "category": "conversation_exit_then_activity",
+      "player_text": "I leave this conversation and look around.",
+      "elapsed_ms": 98,
+      "latency_ms": {
+        "intent_classification": 7,
+        "engine_resolution": 0,
+        "prompt_construction": 8,
+        "gpt_call": 3,
+        "retry_loop_total": 0,
+        "final_emission_gate": 0,
+        "fallback_repair": 2,
+        "total_turn": 50
+      },
+      "narration_provider_calls": 1,
+      "interpretation_requests": null,
+      "narration_requests_meta": null,
+      "retries_meta": null,
+      "retry_reasons": [],
+      "prompt_estimated_input_tokens": 21541,
+      "persistence_ms": {
+        "save_session": 9,
+        "save_world": 2
+      },
+      "usage_delta_requests": 0,
+      "usage_delta_input_tokens": 0,
+      "usage_delta_output_tokens": 0,
+      "resolution_kind": "observe",
+      "scene_after": "waystation_courtyard",
+      "active_target": null,
+      "successful": true,
+      "response_excerpt": "Provider calls are disabled for this run, so no live narration was generated.",
+      "calls": [
+        {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null,
+          "message_count": 2,
+          "system_chars": 9564,
+          "system_estimated_tokens": 2391,
+          "user_chars": 76602,
+          "user_estimated_tokens": 19150,
+          "contract": "structured_realization",
+          "largest_payload_keys": [
+            {
+              "key": "response_policy",
+              "chars": 20877,
+              "estimated_tokens": 5219
+            },
+            {
+              "key": "instructions",
+              "chars": 12744,
+              "estimated_tokens": 3186
+            },
+            {
+              "key": "turn_packet",
+              "chars": 8985,
+              "estimated_tokens": 2246
+            },
+            {
+              "key": "narrative_plan",
+              "chars": 4613,
+              "estimated_tokens": 1153
+            },
+            {
+              "key": "gm_resolution_decision",
+              "chars": 2718,
+              "estimated_tokens": 679
+            },
+            {
+              "key": "decision_facing_answer_recipe",
+              "chars": 2447,
+              "estimated_tokens": 611
+            },
+            {
+              "key": "dialogue_social_plan",
+              "chars": 2261,
+              "estimated_tokens": 565
+            },
+            {
+              "key": "scene",
+              "chars": 2203,
+              "estimated_tokens": 550
+            },
+            {
+              "key": "selected_conversational_memory",
+              "chars": 2081,
+              "estimated_tokens": 520
+            },
+            {
+              "key": "lead_context",
+              "chars": 1987,
+              "estimated_tokens": 496
+            },
+            {
+              "key": "referent_tracking",
+              "chars": 1641,
+              "estimated_tokens": 410
+            },
+            {
+              "key": "speaker_selection",
+              "chars": 1184,
+              "estimated_tokens": 296
+            }
+          ],
+          "instruction_count": 79,
+          "unique_instruction_count": 79,
+          "instruction_chars": 12418,
+          "longest_instructions": [
+            {
+              "chars": 590,
+              "prefix": "WORLD SIMULATION (bounded engine slice): World progression touched: faction_agenda:ash_cowl, faction_agenda:house_verevin, faction_agenda:or"
+            },
+            {
+              "chars": 498,
+              "prefix": "POLICY BRIDGE: Obey the shipped response_policy objects as the canonical provider-facing policy surface (narrative_authority, fallback_behav"
+            },
+            {
+              "chars": 422,
+              "prefix": "SCENE MOMENTUM RULE (HARD RULE): Every 2\u20133 exchanges, you MUST introduce exactly one of: new_information, new_actor_entering, environmental_"
+            },
+            {
+              "chars": 396,
+              "prefix": "CONVERSATIONAL MEMORY WINDOW: Treat `selected_conversational_memory` as the bounded active conversational thread for this turn\u2014prioritize it"
+            },
+            {
+              "chars": 318,
+              "prefix": "UNCERTAINTY POLICY: response_policy.uncertainty.categories; response_policy.uncertainty.sources; response_policy.uncertainty.answer_shape; u"
+            },
+            {
+              "chars": 303,
+              "prefix": "SCENE STATE ANCHOR (MANDATORY): Every response must visibly ground itself in the present scene through at least one of: current location, a "
+            },
+            {
+              "chars": 285,
+              "prefix": "SPEAKER SELECTION CONTRACT (HARD RULE): `generic_fallback_forbidden` is true \u2014 do not use generic unnamed stand-ins (for example 'ragged str"
+            },
+            {
+              "chars": 281,
+              "prefix": "NARRATIVE PLAN: Use narrative_plan only as bounded structural shaping. Its anchors, pressures, opening, roles, required_new_information, all"
+            }
+          ],
+          "response_policy_children": [
+            {
+              "key": "context_separation",
+              "chars": 3491,
+              "estimated_tokens": 872
+            },
+            {
+              "key": "answer_completeness",
+              "chars": 2054,
+              "estimated_tokens": 513
+            },
+            {
+              "key": "interaction_continuity",
+              "chars": 1823,
+              "estimated_tokens": 455
+            },
+            {
+              "key": "narrative_authenticity",
+              "chars": 1783,
+              "estimated_tokens": 445
+            },
+            {
+              "key": "response_delta",
+              "chars": 1733,
+              "estimated_tokens": 433
+            },
+            {
+              "key": "tone_escalation",
+              "chars": 1528,
+              "estimated_tokens": 382
+            },
+            {
+              "key": "anti_railroading",
+              "chars": 1509,
+              "estimated_tokens": 377
+            },
+            {
+              "key": "fallback_behavior",
+              "chars": 1315,
+              "estimated_tokens": 328
+            }
+          ],
+          "turn_packet_children": [
+            {
+              "key": "response_policy",
+              "chars": 5967,
+              "estimated_tokens": 1491
+            },
+            {
+              "key": "contracts",
+              "chars": 1946,
+              "estimated_tokens": 486
+            },
+            {
+              "key": "debug",
+              "chars": 467,
+              "estimated_tokens": 116
+            },
+            {
+              "key": "referent_tracking_compact",
+              "chars": 141,
+              "estimated_tokens": 35
+            },
+            {
+              "key": "route",
+              "chars": 118,
+              "estimated_tokens": 29
+            },
+            {
+              "key": "player_text",
+              "chars": 44,
+              "estimated_tokens": 11
+            },
+            {
+              "key": "continuity",
+              "chars": 40,
+              "estimated_tokens": 10
+            },
+            {
+              "key": "fallback",
+              "chars": 29,
+              "estimated_tokens": 7
+            }
+          ],
+          "narrative_plan_children": [
+            {
+              "key": "narrative_roles",
+              "chars": 1232,
+              "estimated_tokens": 308
+            },
+            {
+              "key": "answer_exposition_plan",
+              "chars": 680,
+              "estimated_tokens": 170
+            },
+            {
+              "key": "action_outcome",
+              "chars": 648,
+              "estimated_tokens": 162
+            },
+            {
+              "key": "transition_node",
+              "chars": 556,
+              "estimated_tokens": 139
+            },
+            {
+              "key": "narrative_mode_contract",
+              "chars": 462,
+              "estimated_tokens": 115
+            },
+            {
+              "key": "scene_anchors",
+              "chars": 272,
+              "estimated_tokens": 68
+            },
+            {
+              "key": "required_new_information",
+              "chars": 181,
+              "estimated_tokens": 45
+            },
+            {
+              "key": "active_pressures",
+              "chars": 151,
+              "estimated_tokens": 37
+            }
+          ],
+          "latency_ms": 1,
+          "result_chars": 77
+        }
+      ]
+    }
+  ],
+  "provider_snapshot": {
+    "requests": 0,
+    "note": "provider calls disabled"
+  },
+  "persist_totals": {
+    "save_session": 117,
+    "save_world": 15,
+    "save_session_count": 15,
+    "save_world_count": 14
+  }
+}

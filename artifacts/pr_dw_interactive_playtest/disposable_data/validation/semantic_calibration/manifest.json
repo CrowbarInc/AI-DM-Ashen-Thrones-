@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "corpus_id": "ashen_thrones.semantic_calibration.v1",
+  "description": "Human-labeled semantic calibration corpus for player-facing playability validation.",
+  "case_directory": "cases",
+  "cases": [
+    "case_001_unanswered_direct_question.json",
+    "case_002_broken_refusal_non_answer.json",
+    "case_003_truncated_output.json",
+    "case_004_observation_not_fulfilled.json",
+    "case_005_valid_uncertainty.json",
+    "case_006_valid_npc_ignorance.json",
+    "case_007_valid_refusal.json",
+    "case_008_valid_terse_dialogue.json",
+    "case_009_valid_terse_observation.json",
+    "case_010_valid_ambiguity_clarification.json",
+    "case_011_valid_partial_answer.json",
+    "case_012_valid_diegetic_redirection.json",
+    "case_013_intentional_fragment.json"
+  ],
+  "result_states": [
+    "PASS",
+    "FAIL",
+    "UNCHECKED",
+    "NOT_APPLICABLE",
+    "INVALID_RUN"
+  ]
+}

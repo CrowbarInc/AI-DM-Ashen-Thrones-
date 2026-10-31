@@ -1,0 +1,1603 @@
+{
+  "schema_version": "validation_evidence_packet.v1",
+  "evidence_scope": "behavioral",
+  "campaign": {
+    "campaign_id": "ATGB-R2-01",
+    "what_was_tested": "Offline historical reconstruction and prioritization; no fresh gameplay",
+    "runtime_path": "Historical production API; this pass reads saved JSON/source only",
+    "gm_boundary": "Raw interpretation, adapted projection, host grounding/routing, final delivered reply",
+    "player_input_mode": "Authored frozen ATGB scenarios",
+    "run_count": 6,
+    "turn_count": 19,
+    "automated_conclusion": "No new automated semantic judgment; A prioritization verdict is agent analysis"
+  },
+  "claim_types": [
+    "runtime_evidence",
+    "semantic_behavioral_evidence"
+  ],
+  "examples": [
+    {
+      "example_id": "S01.4",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S01/result.json/trial-1",
+      "turn_index": 4,
+      "player_input": "Fair enough. I'm just getting a sense of the place.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "I look around the gate.",
+        "Who's running the watch tonight?",
+        "Is the stew any good, or are you just shouting?"
+      ],
+      "prior_gm_context": [
+        "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "That has not been established in the information available to you.",
+        "I cannot tell who that is addressed to. Nothing has been attempted."
+      ],
+      "exact_gm_output": "I don't have an established ruling for that question. No action or roll has been made.",
+      "historical_result": {
+        "review_id": "S01.4/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "preserved",
+        "reviewer_explanation": "Conversational acknowledgment/withdrawal incorrectly treated as an unestablished rules question."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "Fair enough. I'm just getting a sense of the place.",
+          "intent_family": "communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "I don't have an established ruling for that question. No action or roll has been made.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "SESSION",
+          "communication_purpose": "OBSERVATION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S01/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S01/stores/S01-a0517ef32bc3401ba41fcbcf915d82c0/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S02.1",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S02/result.json/trial-1",
+      "turn_index": 1,
+      "player_input": "I read the notices.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [],
+      "prior_gm_context": [],
+      "exact_gm_output": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "historical_result": {
+        "review_id": "S02.1/trial-1",
+        "interpretation": "pass",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "not_applicable",
+        "reviewer_explanation": "Reading notices produces only category list, not the available posted warning; notice-route clue remains undiscovered."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "I read the notices.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:0"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "DESCRIPTION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S02/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S02.2",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S02/result.json/trial-1",
+      "turn_index": 2,
+      "player_input": "When does the curfew start?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "I read the notices."
+      ],
+      "prior_gm_context": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      ],
+      "exact_gm_output": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "historical_result": {
+        "review_id": "S02.2/trial-1",
+        "interpretation": "pass",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "preserved",
+        "reviewer_explanation": "Curfew time not authored; should explicitly say exact hour is unknown, not repeat board categories."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "When does the curfew start?",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:0"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "QUESTION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S02/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S02.3",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S02/result.json/trial-1",
+      "turn_index": 3,
+      "player_input": "I wasn't asking where the patrol went. I asked when it starts.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "I read the notices.",
+        "When does the curfew start?"
+      ],
+      "prior_gm_context": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      ],
+      "exact_gm_output": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "historical_result": {
+        "review_id": "S02.3/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "lost",
+        "reviewer_explanation": "Player corrects time question; identical generic notice text fails to acknowledge correction."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "I wasn't asking where the patrol went. I asked when it starts.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "reply:1"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S02/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S02.4",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S02/result.json/trial-1",
+      "turn_index": 4,
+      "player_input": "All right. What did the warning say about where they were last seen?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "I read the notices.",
+        "When does the curfew start?",
+        "I wasn't asking where the patrol went. I asked when it starts."
+      ],
+      "prior_gm_context": [
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+        "The notice board lists taxes, curfew rules, and a warning about a missing patrol."
+      ],
+      "exact_gm_output": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "historical_result": {
+        "review_id": "S02.4/trial-1",
+        "interpretation": "pass",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "lost",
+        "reviewer_explanation": "Asks warning location, but response repeats notice headings and fails to deliver route detail or acknowledge unavailable text."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "All right. What did the warning say about where they were last seen?",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:0"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "QUESTION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S02/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S02/stores/S02-ae287e6dca444d4f88da672a81b41b87/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S03.1",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S03/result.json/trial-1",
+      "turn_index": 1,
+      "player_input": "Tavern runner, what's the rumor you're selling?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [],
+      "prior_gm_context": [],
+      "exact_gm_output": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "historical_result": {
+        "review_id": "S03.1/trial-1",
+        "interpretation": "pass",
+        "response": "pass",
+        "authority": "pass",
+        "failure_severity": "minor",
+        "clarification": "none",
+        "continuity": "not_applicable",
+        "reviewer_explanation": "Grounded runner hearsay supplied; slightly awkward third-person quotation is stylistic only."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": "unavailable",
+        "narration_invoked": null
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S03/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S03.2",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S03/result.json/trial-1",
+      "turn_index": 2,
+      "player_input": "Who told you that?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Tavern runner, what's the rumor you're selling?"
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\""
+      ],
+      "exact_gm_output": "Tavern Runner says, \"I don't know who told me that.\"",
+      "historical_result": {
+        "review_id": "S03.2/trial-1",
+        "interpretation": "pass",
+        "response": "pass",
+        "authority": "pass",
+        "failure_severity": "",
+        "clarification": "none",
+        "continuity": "preserved",
+        "reviewer_explanation": "Runner admits source is unknown without inventing informant."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": "unavailable",
+        "narration_invoked": null
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S03/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S03.3",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S03/result.json/trial-1",
+      "turn_index": 3,
+      "player_input": "If I ask you again later, will you still tell me that same thing?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Tavern runner, what's the rumor you're selling?",
+        "Who told you that?"
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "Tavern Runner says, \"I don't know who told me that.\""
+      ],
+      "exact_gm_output": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "historical_result": {
+        "review_id": "S03.3/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "unnecessary_fail",
+        "continuity": "lost",
+        "reviewer_explanation": "Active runner interlocutor is established; commitment question is misread as unresolved NPC addressee."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "If I ask you again later, will you still tell me that same thing?",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": "ASK",
+          "proposed_target": "tavern_runner",
+          "proposed_record": null,
+          "missing_information": [
+            "interlocutor"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "unresolved_addressee",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": {
+                "kind": "ambiguous_addressee",
+                "operation": "ASK",
+                "status": "pending",
+                "scene_id": "frontier_gate",
+                "original_text": "If I ask you again later, will you still tell me that same thing?",
+                "choices": [
+                  {
+                    "entity_id": "gate_guard",
+                    "label": "Gate Guard"
+                  },
+                  {
+                    "entity_id": "gate_serjeant",
+                    "label": "Gate Serjeant"
+                  },
+                  {
+                    "entity_id": "tavern_runner",
+                    "label": "Tavern Runner"
+                  }
+                ],
+                "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+                "target_resolution": "unresolved"
+              },
+              "pending_intention": {
+                "kind": "ambiguous_addressee",
+                "operation": "ASK",
+                "status": "pending",
+                "scene_id": "frontier_gate",
+                "original_text": "If I ask you again later, will you still tell me that same thing?",
+                "choices": [
+                  {
+                    "entity_id": "gate_guard",
+                    "label": "Gate Guard"
+                  },
+                  {
+                    "entity_id": "gate_serjeant",
+                    "label": "Gate Serjeant"
+                  },
+                  {
+                    "entity_id": "tavern_runner",
+                    "label": "Tavern Runner"
+                  }
+                ],
+                "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+                "target_resolution": "unresolved"
+              }
+            }
+          },
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": {
+            "communication_ownership": "ambiguous_unresolved",
+            "intent_purpose": "address_npc",
+            "target_resolution": "unresolved",
+            "target_provenance": "provider_candidate_only",
+            "target_id": null,
+            "candidate_target_ids": [
+              "tavern_runner"
+            ],
+            "operation_eligibility": "requires_clarification",
+            "mutation_eligibility": false,
+            "authority_provenance": "communication_decision",
+            "conflict_status": "unresolved",
+            "conflict_details": {},
+            "pending_intention_relationship": "requires_clarification",
+            "allowed_operation": null,
+            "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "choices": [
+              {
+                "entity_id": "gate_guard",
+                "label": "Gate Guard"
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "direct_address": true,
+            "player_text": "If I ask you again later, will you still tell me that same thing?"
+          }
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S03/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S03.4",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S03/result.json/trial-1",
+      "turn_index": 4,
+      "player_input": "Earlier the notice said they took a track past the crates. Is that the same story you heard?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Tavern runner, what's the rumor you're selling?",
+        "Who told you that?",
+        "If I ask you again later, will you still tell me that same thing?"
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "Tavern Runner says, \"I don't know who told me that.\"",
+        "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+      ],
+      "exact_gm_output": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "historical_result": {
+        "review_id": "S03.4/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "uncertain",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "lost",
+        "reviewer_explanation": "Repeats runner rumor without comparing accounts; posted route detail was never delivered. Three faction agenda flags advance on this turn; authorization cannot be resolved from bounded state alone."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": "unavailable",
+        "narration_invoked": null
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S03/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S03.5",
+      "scenario_run_id": "artifacts/atgb/atgb_03/S03/result.json/trial-1",
+      "turn_index": 5,
+      "player_input": "No, I don't want a new rumor. I want to know if those two accounts match.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Tavern runner, what's the rumor you're selling?",
+        "Who told you that?",
+        "If I ask you again later, will you still tell me that same thing?",
+        "Earlier the notice said they took a track past the crates. Is that the same story you heard?"
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "Tavern Runner says, \"I don't know who told me that.\"",
+        "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\""
+      ],
+      "exact_gm_output": "The runner heard the patrol vanished near muddy footprints northwest of the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "historical_result": {
+        "review_id": "S03.5/trial-1",
+        "interpretation": "pass",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "lost",
+        "reviewer_explanation": "Correction recognized at topic level but output lists unrelated facts instead of saying whether accounts match; notice detail not actually disclosed."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "No, I don't want a new rumor. I want to know if those two accounts match.",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "npc:tavern_runner:patrol_rumor",
+            "visible:0",
+            "visible:1"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "The runner heard the patrol vanished near muddy footprints northwest of the crates. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03/S03/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03/S03/stores/S03-c362fa85652f4ba0bc78f824299b0857/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S05.1",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S05/result.json/trial-1",
+      "turn_index": 1,
+      "player_input": "Runner, what did you hear about the patrol?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [],
+      "prior_gm_context": [],
+      "exact_gm_output": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+      "historical_result": {
+        "review_id": "S05.1/trial-1",
+        "interpretation": "pass",
+        "response": "pass",
+        "authority": "pass",
+        "failure_severity": "minor",
+        "clarification": "none",
+        "continuity": "not_applicable",
+        "reviewer_explanation": "Correct runner rumor, with stiff third-person hearsay phrasing."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": "unavailable",
+        "narration_invoked": null
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S05.2",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S05/result.json/trial-1",
+      "turn_index": 2,
+      "player_input": "And the board, what does it say about the same patrol?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Runner, what did you hear about the patrol?"
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\""
+      ],
+      "exact_gm_output": "I cannot provide a validated response to that request.",
+      "historical_result": {
+        "review_id": "S05.2/trial-1",
+        "interpretation": "pass",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "lost",
+        "reviewer_explanation": "Board question answered with validation error, not public notice content or qualified uncertainty."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": "unavailable",
+        "narration_invoked": null
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S05.3",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S05/result.json/trial-1",
+      "turn_index": 3,
+      "player_input": "Tell me more about that.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Runner, what did you hear about the patrol?",
+        "And the board, what does it say about the same patrol?"
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "I cannot provide a validated response to that request."
+      ],
+      "exact_gm_output": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+      "historical_result": {
+        "review_id": "S05.3/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "unnecessary_fail",
+        "continuity": "lost",
+        "reviewer_explanation": "Referent may be ambiguous between runner and board, but asks which person instead of which account; prior addressee remains runner."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "Tell me more about that.",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": "ASK",
+          "proposed_target": "tavern_runner",
+          "proposed_record": null,
+          "missing_information": [
+            "interlocutor"
+          ],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "unresolved_addressee",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+          "context_update": {
+            "conversational_context": {
+              "pending_clarification": {
+                "kind": "ambiguous_addressee",
+                "operation": "ASK",
+                "status": "pending",
+                "scene_id": "frontier_gate",
+                "original_text": "Tell me more about that.",
+                "choices": [
+                  {
+                    "entity_id": "gate_guard",
+                    "label": "Gate Guard"
+                  },
+                  {
+                    "entity_id": "gate_serjeant",
+                    "label": "Gate Serjeant"
+                  },
+                  {
+                    "entity_id": "tavern_runner",
+                    "label": "Tavern Runner"
+                  }
+                ],
+                "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+                "target_resolution": "unresolved"
+              },
+              "pending_intention": {
+                "kind": "ambiguous_addressee",
+                "operation": "ASK",
+                "status": "pending",
+                "scene_id": "frontier_gate",
+                "original_text": "Tell me more about that.",
+                "choices": [
+                  {
+                    "entity_id": "gate_guard",
+                    "label": "Gate Guard"
+                  },
+                  {
+                    "entity_id": "gate_serjeant",
+                    "label": "Gate Serjeant"
+                  },
+                  {
+                    "entity_id": "tavern_runner",
+                    "label": "Tavern Runner"
+                  }
+                ],
+                "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+                "target_resolution": "unresolved"
+              }
+            }
+          },
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CLARIFICATION",
+          "authorization": {
+            "communication_ownership": "ambiguous_unresolved",
+            "intent_purpose": "address_npc",
+            "target_resolution": "unresolved",
+            "target_provenance": "provider_candidate_only",
+            "target_id": null,
+            "candidate_target_ids": [
+              "tavern_runner"
+            ],
+            "operation_eligibility": "requires_clarification",
+            "mutation_eligibility": false,
+            "authority_provenance": "communication_decision",
+            "conflict_status": "unresolved",
+            "conflict_details": {},
+            "pending_intention_relationship": "requires_clarification",
+            "allowed_operation": null,
+            "clarification": "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted.",
+            "choices": [
+              {
+                "entity_id": "gate_guard",
+                "label": "Gate Guard"
+              },
+              {
+                "entity_id": "gate_serjeant",
+                "label": "Gate Serjeant"
+              },
+              {
+                "entity_id": "tavern_runner",
+                "label": "Tavern Runner"
+              }
+            ],
+            "direct_address": true,
+            "player_text": "Tell me more about that."
+          }
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S05.4",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S05/result.json/trial-1",
+      "turn_index": 4,
+      "player_input": "The runner's version, not the notice.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Runner, what did you hear about the patrol?",
+        "And the board, what does it say about the same patrol?",
+        "Tell me more about that."
+      ],
+      "prior_gm_context": [
+        "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+        "I cannot provide a validated response to that request.",
+        "Which person do you mean: Gate Guard or Gate Serjeant or Tavern Runner? Nothing has been attempted."
+      ],
+      "exact_gm_output": "Tavern Runner says, \"I couldn't tell you.\"",
+      "historical_result": {
+        "review_id": "S05.4/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "uncertain",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "lost",
+        "reviewer_explanation": "Player resolves referent to runner version; answer gives no elaboration. Faction agenda flags advance; authorization cannot be established from this packet."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": "unavailable",
+        "narration_invoked": null
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S05/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S07.1",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S07/result.json/trial-1",
+      "turn_index": 1,
+      "player_input": "Miserable rain for a queue this long.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [],
+      "prior_gm_context": [],
+      "exact_gm_output": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+      "historical_result": {
+        "review_id": "S07.1/trial-1",
+        "interpretation": "uncertain",
+        "response": "uncertain",
+        "authority": "pass",
+        "failure_severity": "",
+        "clarification": "none",
+        "continuity": "not_applicable",
+        "reviewer_explanation": "Opening not delivered. Player rain/queue remark is clear, but scene summary may be initial scene presentation; cannot confidently grade expected naturalness without delivered opening."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "Miserable rain for a queue this long.",
+          "intent_family": "communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "scene"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "SESSION",
+          "communication_purpose": "OBSERVATION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S07.2",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S07/result.json/trial-1",
+      "turn_index": 2,
+      "player_input": "The banners look about finished.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "Miserable rain for a queue this long."
+      ],
+      "prior_gm_context": [
+        "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor."
+      ],
+      "exact_gm_output": "I don't have an established ruling for that question. No action or roll has been made.",
+      "historical_result": {
+        "review_id": "S07.2/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "preserved",
+        "reviewer_explanation": "Regardless of missing banner opening, explicit observation is not a request for a rules ruling; mechanical fallback is nonresponsive. Opening-dependent continuity not judged."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "The banners look about finished.",
+          "intent_family": "communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "I don't have an established ruling for that question. No action or roll has been made.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "SESSION",
+          "communication_purpose": "OBSERVATION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S07/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S08.1",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S08/result.json/trial-1",
+      "turn_index": 1,
+      "player_input": "What's in front of me right now?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [],
+      "prior_gm_context": [],
+      "exact_gm_output": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+      "historical_result": {
+        "review_id": "S08.1/trial-1",
+        "interpretation": "pass",
+        "response": "pass",
+        "authority": "pass",
+        "failure_severity": "",
+        "clarification": "none",
+        "continuity": "not_applicable",
+        "reviewer_explanation": "Public scene description answers broad observation question."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "What's in front of me right now?",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "scene",
+            "visible:0",
+            "visible:1",
+            "visible:2",
+            "visible:3",
+            "visible:4"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "QUESTION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S08.2",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S08/result.json/trial-1",
+      "turn_index": 2,
+      "player_input": "I meant the people, not the weather.",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "What's in front of me right now?"
+      ],
+      "prior_gm_context": [
+        "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point."
+      ],
+      "exact_gm_output": "I don't have an unexecuted intention to revise. What do you want to change?",
+      "historical_result": {
+        "review_id": "S08.2/trial-1",
+        "interpretation": "fail",
+        "response": "fail",
+        "authority": "pass",
+        "failure_severity": "major",
+        "clarification": "none",
+        "continuity": "preserved",
+        "reviewer_explanation": "Correction to people is routed to pending-intention revision rather than refining scene description."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "CLARIFY",
+          "primary_intention": "I meant the people, not the weather.",
+          "intent_family": "clarification",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [],
+          "requires_authoritative_execution": false,
+          "reason": "no_pending_intention",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "I don't have an unexecuted intention to revise. What do you want to change?",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "CORRECTION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    },
+    {
+      "example_id": "S08.3",
+      "scenario_run_id": "artifacts/atgb/atgb_03c/S08/result.json/trial-1",
+      "turn_index": 3,
+      "player_input": "Which person looks like they handle the crowd?",
+      "player_input_classification": [
+        "representative_player_behavior"
+      ],
+      "simulated_player_rationale": "Authored ATGB fixed corpus; historical model execution, not human-captured play.",
+      "prior_player_context": [
+        "What's in front of me right now?",
+        "I meant the people, not the weather."
+      ],
+      "prior_gm_context": [
+        "You are at Cinderwatch Gate District. Rain, choke traffic, a notice board, and gate watch pressure frame the missing patrol inquiry. Visible points of interest: Notice board. Known exits: Enter Cinderwatch, Follow the missing patrol rumor. The notice board lists taxes, curfew rules, and a warning about a missing patrol. A gate serjeant manages the crowd and keeps one eye on the roster board. A tavern runner trades hot stew and rumors near the rain barrel. Threadbare watchers and refugees cluster along the muddy gate line. Ash Compact census delays have tightened the eastern caravan choke point.",
+        "I don't have an unexecuted intention to revise. What do you want to change?"
+      ],
+      "exact_gm_output": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "historical_result": {
+        "review_id": "S08.3/trial-1",
+        "interpretation": "pass",
+        "response": "pass",
+        "authority": "pass",
+        "failure_severity": "",
+        "clarification": "none",
+        "continuity": "preserved",
+        "reviewer_explanation": "Correctly identifies visible serjeant as crowd handler."
+      },
+      "semantic_result": null,
+      "mandatory_gates": {
+        "status": "Historical ATGB dimension rubric; no synthetic mandatory gates reconstructed."
+      },
+      "diagnostic_result": {
+        "scope": "Retrospective analysis; reports 02/04; not a new evaluator result"
+      },
+      "automated_evaluation": {
+        "status": "No automated semantic score; initial judgments unchecked, imported judgments AI-assisted and unattested."
+      },
+      "runtime_validity": {
+        "status": "captured",
+        "scope": "Historical captured live-enabled path; provider request status/telemetry in trace"
+      },
+      "final_emission_metadata": {
+        "host_decision": {
+          "category": "ANSWER",
+          "primary_intention": "Which person looks like they handle the crowd?",
+          "intent_family": "gm_communication",
+          "incidental_context": [],
+          "proposed_operation": null,
+          "proposed_target": null,
+          "proposed_record": null,
+          "missing_information": [],
+          "context_references": [
+            "visible:1"
+          ],
+          "requires_authoritative_execution": false,
+          "reason": "communication_before_execution",
+          "confidence": null,
+          "ambiguity": null,
+          "player_facing_text": "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+          "context_update": null,
+          "intent_modality": "informational",
+          "secondary_intentions": [],
+          "execution_policy": "answer_only",
+          "communication_owner": "GM",
+          "communication_purpose": "QUESTION",
+          "authorization": null
+        },
+        "narration_invoked": false
+      },
+      "continuation_action": "Historical next authored turn or scenario end; no continuation executed in this pass.",
+      "source_artifact_path": "artifacts/atgb/atgb_03c/S08/result.json",
+      "raw_log_source": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/session_log.jsonl",
+      "human_review": {
+        "status": "UNREVIEWED",
+        "rationale": "Historical assessment AI-assisted, human_review_attestation false; current causal analysis also AI-assisted."
+      },
+      "evaluator_disagreement_history": [],
+      "calibration_reference": null,
+      "analysis_reference": "development/reports/atgb_r2_01/02_failure_family_reconstruction.md"
+    }
+  ],
+  "selected_evidence": {
+    "representative_success": {
+      "selection_rule": "first automated PASS labeled representative_player_behavior and not HUMAN_REJECTED/HUMAN_AMBIGUOUS",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "boundary_success": {
+      "selection_rule": "first automated PASS or HUMAN_ACCEPTED example labeled boundary_case",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "representative_failure": {
+      "selection_rule": "first failure labeled representative_player_behavior",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "severe_worst_failure": {
+      "selection_rule": "maximum INVALID_RUN, mandatory-gate failure count, then lowest diagnostic score; source order breaks ties",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "evaluator_disagreement": {
+      "selection_rule": "first example with explicit evaluator_disagreement.present=true",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "unexpected_unclassified": {
+      "selection_rule": "first HUMAN_AMBIGUOUS or unexpected_behavior example",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    },
+    "stress_probe": {
+      "selection_rule": "first example labeled stress_probe",
+      "status": "NO_EXAMPLE_OBSERVED",
+      "example_id": null,
+      "statement": "No example observed in this campaign."
+    }
+  },
+  "missing_concepts_future_capabilities": [],
+  "limitations_and_unproven_claims": [
+    "Historical AI-assisted assessment is not human-attested. No post-repair performance measurement.",
+    "Original request messages unavailable for these initial captures; evaluation world facts are not proof of prompt inclusion.",
+    "No semantic_result is synthesized from provisional judgments. Automatic success/failure category selectors therefore have no scored examples; selected exact historical success/failure are described separately below.",
+    "S05 topic uncertainty and S07 missing opening remain. No unseen generalization or new authority guarantee."
+  ]
+}

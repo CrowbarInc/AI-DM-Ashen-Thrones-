@@ -1,0 +1,90 @@
+{
+  "properties": [
+    "communication",
+    "communication_mode",
+    "interpretation_status",
+    "player_intent",
+    "asserted_premises",
+    "requested_outcomes",
+    "action_components",
+    "references",
+    "clarification_question",
+    "correction"
+  ],
+  "required": [
+    "action_components",
+    "asserted_premises",
+    "clarification_question",
+    "communication_mode",
+    "correction",
+    "interpretation_status",
+    "player_intent",
+    "references",
+    "requested_outcomes",
+    "communication"
+  ],
+  "optional": [],
+  "enums": {
+    "/properties/communication/properties/recipient": [
+      "GM",
+      "NPC",
+      "CHARACTER",
+      "SESSION",
+      "MIXED",
+      "AMBIGUOUS"
+    ],
+    "/properties/communication/properties/purpose": [
+      "QUESTION",
+      "DESCRIPTION",
+      "EXPLANATION",
+      "RECALL",
+      "RULES",
+      "ACTION",
+      "OBSERVATION",
+      "CORRECTION",
+      "WITHDRAWAL",
+      "CONFIRMATION",
+      "TENTATIVE",
+      "CLARIFICATION"
+    ],
+    "/properties/communication_mode": [
+      "CLARIFICATION",
+      "IN_WORLD_ACTION",
+      "OTHER",
+      "OUT_OF_CHARACTER_CORRECTION",
+      "RULES_QUESTION"
+    ],
+    "/properties/interpretation_status": [
+      "ABSTAIN",
+      "CLARIFICATION_REQUIRED",
+      "INTERPRETED",
+      "UNSUPPORTED_REQUEST"
+    ],
+    "/properties/action_components/items/properties/operation_class": [
+      "ASK",
+      "ATTACK",
+      "CANON_DECLARATION",
+      "DICE_OVERRIDE",
+      "FOLLOW",
+      "HIDDEN_INFORMATION_REQUEST",
+      "HP_ASSIGNMENT",
+      "INSPECT",
+      "INVENTORY_GRANT",
+      "MOVE",
+      "NPC_COMMITMENT",
+      "PERCEIVE",
+      "RETCON",
+      "SOCIAL_SIGNAL",
+      "STEALTH_MODE_TOGGLE",
+      "TIME_CONTROL",
+      "UNSUPPORTED_MECHANIC",
+      "USE_VISIBLE_OBJECT"
+    ],
+    "/properties/correction/properties/subject": [
+      "COMMITTED_ACTION",
+      "INTENTION",
+      "NONE",
+      "REFERENT"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+PR-BX phase 0 deterministic confirmation. No model calls.
+
+Focused PR-BW slice, re-run 2026-10-06:
+command: .venv\Scripts\python.exe -m pytest tests/test_pr_bw_narration_only_envelope.py tests/test_pr_bv_turn_local_operation_projection.py tests/test_pr_br_structured_realization_envelope.py -q --tb=line
+result: PASS
+..........................                                               [100%]
+26 passed.
+
+Broad deterministic slice matching CURRENT_REVIEW PR-BW coverage, re-run 2026-10-06:
+command: .venv\Scripts\python.exe -m pytest tests/test_pr_bw_narration_only_envelope.py tests/test_pr_bv_turn_local_operation_projection.py tests/test_pr_bs_decision_facing_answer_recipe.py tests/test_pr_bu_narration_claim_composition.py tests/test_pr_bu_lexical_scope.py tests/test_pr_br_gm_resolution_decision.py tests/test_pr_br_structured_realization_envelope.py tests/test_gm_retry.py tests/test_gm_retry_context_separation.py -q --tb=line
+result: PASS
+........................................................................ [ 45%]
+........................................................................ [ 91%]
+..............                                                           [100%]
+158 passed.
+
+tests/test_pr_br_structured_chat_path.py was not re-run. CURRENT_REVIEW already recorded that file hanging after one dot and being interrupted separately. It is not a PR-BW narration-only assertion.

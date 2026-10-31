@@ -1,0 +1,89 @@
+{
+  "scene": {
+    "scene": {
+      "id": "chapel_close",
+      "location": "Brineward chapel close",
+      "summary": "A small chapel close holds a wooden bell frame. The chapel bell is cracked. Sparrows pick at the gravel.",
+      "mode": "exploration",
+      "visible_facts": [
+        {
+          "text": "The chapel bell is cracked.",
+          "semantic_identity": {
+            "kind": "world_fact",
+            "subject": "chapel_bell",
+            "subject_aliases": [
+              "chapel bell",
+              "bell"
+            ],
+            "relation": "condition",
+            "value": "cracked",
+            "value_aliases": [
+              "cracked"
+            ],
+            "polarity": "positive"
+          }
+        },
+        "Sparrows pick at the gravel."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "brineward",
+        "name": "Brineward",
+        "type": "riverside_ward",
+        "tags": [
+          "craft",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A riverside ward of workshops, stalls, and work yards."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "starting_context": "Galinor is spending the day in Brineward, a riverside ward of workshops, stalls, and work yards.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a riverside craft ward."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace or stall in Brineward.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "chapel_close",
+    "visited_scene_ids": [
+      "chapel_close"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "cycle": "PR-BR Continuation 17",
+  "kind": "offline counterfactual",
+  "gameplay_calls": 0,
+  "interpretation_calls": 0,
+  "synthetic_player_calls": 0,
+  "evaluator_model_calls": 0,
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "sources": {
+    "c16": "artifacts/pr_br_continuation16/20261001T113214Z",
+    "smoke": "artifacts/pr_br_independent_smoke/20261001T104551Z",
+    "c16_manual": "artifacts/pr_br_continuation16/manual_review.md",
+    "smoke_audit": "artifacts/pr_br_independent_smoke/20261001T104551Z/audit_section.md"
+  },
+  "rule": "Emit the initial model candidate unchanged when it is hard-valid. Hard-invalid candidates are not emitted. Smoke turn 10 is hard-valid and manual PASS while the recorded contract was still guard_captain. Counting that turn requires the current-turn addressee to override the stale contract before the contract-satisfying check. Without that correction the contract-gated count is 11/16. This file records the counterfactual. It does not change runtime behavior.",
+  "totals": {
+    "turns": 16,
+    "initial_manual_pass": 12,
+    "final_manual_pass": 5,
+    "preserve_first_manual_pass": 12,
+    "initial_hard_invalid": 4,
+    "downstream_created_failures": 7,
+    "downstream_prevented_failures": 0,
+    "partial_invalid_content_blocked": 1,
+    "rejection_necessary": 4,
+    "harmful_rewrites": 10,
+    "neutral_or_redundant": 6
+  },
+  "c16": {
+    "turns": 6,
+    "initial_manual_pass": 6,
+    "final_manual_pass": 2,
+    "preserve_first_manual_pass": 6,
+    "initial_hard_invalid": 0,
+    "downstream_created_failures": 4,
+    "downstream_prevented_failures": 0
+  },
+  "smoke": {
+    "turns": 10,
+    "initial_manual_pass": 6,
+    "final_manual_pass": 3,
+    "preserve_first_manual_pass": 6,
+    "initial_hard_invalid": 4,
+    "downstream_created_failures": 3,
+    "downstream_prevented_failures": 0
+  },
+  "primary_metric": {
+    "definition": "Initial manual PASS and hard-valid, and the downstream transformation caused the final manual FAIL.",
+    "count": 7,
+    "turns": ["c16:1", "c16:3", "c16:5", "c16:6", "smoke:1", "smoke:3", "smoke:10"]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "scope": "Offline package and evidence verification; not gameplay tests",
+  "reports": 8,
+  "historical_completed_turns": 3,
+  "new_provider_calls": 0,
+  "crc": "PASS",
+  "manifest_payload_and_source_hashes": "PASS; generated manifest has no circular self-hash by design",
+  "protected_hashes": {
+    "count": 3870,
+    "unchanged": true
+  },
+  "secret_content_pattern_scan": "PASS: no matching secret values; explicit allowlist excludes local config/environment files",
+  "sensitive_filename_policy": "Existing review generator; no omissions",
+  "trace_request_output_revision_and_state_assertions": "PASS",
+  "evidence_packet_validation": "PASS",
+  "bundle_only_review": "PASS: all eight reports, exact exchanges and requests, source excerpts/full selected source, comparison, candidate/validation plans, status/provenance and limits included.",
+  "human_review": "UNREVIEWED",
+  "limitations": "Pattern scanning and explicit selection do not prove absence of every conceivable sensitive string; no credentials/local config selected."
+}

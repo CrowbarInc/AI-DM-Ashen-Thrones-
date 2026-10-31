@@ -1,0 +1,119 @@
+{
+  "failures": [
+    {
+      "lane": "provider",
+      "test": "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "structured",
+      "test": "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "opening",
+      "test": "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "export_atgb",
+      "test": "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_pr_br_claim_control_slice2::test_false_positive_controls_remain_speakable",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_realization_provenance::test_call_gpt_provider_failure_metadata_has_provider_family",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_written_surface_question_discovers_authored_clue",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_visible_evidence_may_be_reported",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_valid_target_no_evidence_is_grounded_absence",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_requested_identity_absent_does_not_mint_person",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_general_observe_empty_target_does_not_invent",
+      "classification": "preexisting_failure"
+    },
+    {
+      "lane": "entry_claim_authority",
+      "test": "tests.test_investigation_result_provenance_non_invention::test_frontier_gate_t15_look_toward_does_not_mint_personnel_timing",
+      "classification": "preexisting_failure"
+    }
+  ],
+  "new_regressions": [],
+  "environment_blocked": [
+    "Two sandbox attempts interrupted before obtaining regression results; localhost-capable run is authoritative."
+  ],
+  "comparison": "Exact failure IDs against PR-PLAY-10; no frozen source attestation rewritten."
+}

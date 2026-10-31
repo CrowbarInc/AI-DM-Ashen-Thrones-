@@ -1,0 +1,21 @@
+PR-DE focused tests
+tests/test_pr_de_exact_contract_deduplication.py
+6 passed, 0 failed, 0 skipped
+
+Required regression, pre-change and post-change:
+353 tests, 326 passed, 27 failed, 0 skipped
+Failure set unchanged.
+
+Shared pipeline:
+41 passed, 24 failed, 0 skipped
+both before and after.
+
+PR-DE tests:
+test_equal_mirrors_are_omitted_and_unequal_values_stay
+test_unequal_top_level_contract_is_retained
+test_missing_policy_child_keeps_the_top_level_field
+test_s1_s2_s3_drop_exact_mirrors_and_keep_reduced_context
+test_full_context_classes_stay_unprojected_while_mirrors_drop
+test_in_memory_narration_context_keeps_authoritative_contracts
+
+No live provider calls.

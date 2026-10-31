@@ -1,0 +1,218 @@
+{
+  "probe_id": "08_valid_answer_consequential_temptation",
+  "probe_question": "Ink pot is empty. The college purchase is not established.",
+  "player_text": "Is there any ink left in the pot, and did the scribes' college buy the last of it?",
+  "http_status": 200,
+  "emitted_narration": "The ink pot on the counter is empty, and a trimmed quill lies beside it. There is no clear sign about who acquired the last of the ink, and no visible indication that the scribes' college was involved in the purchase. Inspecting the trimmed quill more closely might reveal some overlooked detail about the recent use of the ink.",
+  "raw_generations": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "The ink pot on the counter is empty, and a trimmed quill lies beside it. There is no clear sign about who acquired the last of the ink, and no visible indication that the scribes' college was involved in the purchase. Inspecting the trimmed quill more closely might reveal some overlooked detail about the recent use of the ink.",
+      "prompt_flags": {
+        "user_chars": 104824,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true,
+        "contains_authoritative_retry_context": false,
+        "contains_validation_failure": false
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "initial_generation_calls": 1,
+  "retry_generation_calls": 0,
+  "interpretation_call_count": 1,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": null,
+  "resolution_social": null,
+  "resolution_npc_id": null,
+  "target_scene_id": null,
+  "resolved_transition": null,
+  "selected_resolver": "social",
+  "interaction_obligation": {
+    "kind": "inspection",
+    "target": null,
+    "interlocutor_id": null,
+    "subject": "Is there any ink left in the pot, and did the scribes' college buy the last of i",
+    "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+    "claim_id": null,
+    "resolution_mode": "authoritative_mechanical_action",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_60b5c3e0c0a5"
+  },
+  "resolution_contract_id": "rc_60b5c3e0c0a5",
+  "resolution_contract_operation": "ask",
+  "resolution_contract_subject": "social",
+  "decision_present": true,
+  "decision_contract_id": "rc_60b5c3e0c0a5",
+  "decision_id_matches_contract": true,
+  "decision_outcome": "established_or_retrieved",
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+  ],
+  "permitted_mutations": null,
+  "proposed_facts": [
+    {
+      "text": "The ink pot on the counter is empty.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {
+        "kind": "world_fact",
+        "subject": "ink_pot",
+        "subject_aliases": [
+          "ink pot",
+          "pot",
+          "ink"
+        ],
+        "relation": "condition",
+        "value": "empty",
+        "value_aliases": [
+          "empty",
+          "no ink"
+        ],
+        "polarity": "positive"
+      },
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "A trimmed quill lies beside the ink pot.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    }
+  ],
+  "accepted_response": {
+    "immutable": true,
+    "text": "The ink pot on the counter is empty, and a trimmed quill lies beside it. There is no clear sign about who acquired the last of the ink, and no visible indication that the scribes' college was involved in the purchase. Inspecting the trimmed quill more closely might reveal some overlooked detail about the recent use of the ink.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "Is there any ink left in the pot, and did the scribes' college buy the last of it?",
+    "turn_identity": "rc_60b5c3e0c0a5",
+    "speaker": "",
+    "addressee": "",
+    "target": "Ashford ink stall",
+    "operation": "ask",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [
+        {
+          "text": "Inspecting the trimmed quill more closely might reveal some overlooked detail about the recent use of the ink.",
+          "kind": "npc_claim",
+          "epistemic_status": "uncertain",
+          "grounded": false,
+          "consequential": false,
+          "family": "none"
+        }
+      ],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_60b5c3e0c0a5",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "The ink pot on the counter is empty, and a trimmed quill lies beside it.",
+            "provenance": "authored_world_fact",
+            "consequence": "consequential",
+            "authorized": true,
+            "reason_codes": [
+              "authored_state_source"
+            ],
+            "authority": "world_truth",
+            "persistence": "world_truth",
+            "source_ref": "scene.visible_facts.0",
+            "outcome_classification": "established_or_retrieved",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "ink_pot",
+              "subject_aliases": [
+                "ink pot",
+                "pot",
+                "ink"
+              ],
+              "relation": "condition",
+              "value": "empty",
+              "value_aliases": [
+                "empty",
+                "no ink"
+              ],
+              "polarity": "positive"
+            }
+          },
+          {
+            "text": "Inspecting the trimmed quill more closely might reveal some overlooked detail about the recent use of the ink.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {}
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_60b5c3e0c0a5",
+      "operation": "ask",
+      "interlocutor_id": "",
+      "expected_resolution": "answer"
+    },
+    "resolution_kind": "",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "gm_metadata_validation_keys": [
+    "hard_validation_attempt_1"
+  ],
+  "committed_active_scene_id": "ink_stall",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "ink_stall",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_60b5c3e0c0a5"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [],
+    "rejected": [],
+    "incidental_entities": []
+  },
+  "committed_world_flags": [],
+  "committed_factions": [],
+  "committed_event_log": []
+}

@@ -1,0 +1,3 @@
+# 20 — Reuse Experiment
+
+60 eligible family-arm bundles each have five primary questions; 60/60 preserve the identical extraction file hash for every question and the final artifact. B and C each extract 31 source records through 30 family-batch calls. Re-extraction frequency is 0 after initial successful extraction; first question populates the cache, four later questions reuse it. Cache hits are 120/150 eligible question-arm requests for each arm. Denied families have empty facts and are not credited as useful extraction reuse. Per-family success, source IDs and hashes are in reuse_results.json. Failed network attempts are separately preserved and excluded from successful-call reuse claims.

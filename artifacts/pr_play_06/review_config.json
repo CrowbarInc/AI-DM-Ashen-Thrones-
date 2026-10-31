@@ -1,0 +1,625 @@
+{
+  "campaign_id": "pr_play_06",
+  "campaign_name": "PR-PLAY-06 — Structured Opening Output Budget and Contract Efficiency",
+  "campaign_date": "2026-10-28",
+  "purpose": "Bounded offline repair; no live/connectivity authority. Stop after ZIP.",
+  "objective_status": "B — Conditionally ready",
+  "executive_summary": "Opening-only 3000-token default (hard configurable bound 4096), explicit incomplete-status rejection. Ordinary controlled output 600; aggregate limits and retries unchanged. 58 focused pass; 361 broader pass / 5 entry-reproduced failures. No prompt reductions. Structural-only evidence; live adequacy unproven. No live provider calls. No provider connectivity diagnostics. No model changes.\nNo response-schema changes. No additional provider operations. No automatic retries.\nNo unauthorized gameplay-state mutations. No new persistent gameplay structures.\nNo experimental PR-EG integration. Frozen ATGB baseline unchanged. No secrets included.\nNo commit or push performed.",
+  "primary_report": "development/campaigns/product_realization/pr_play_06/08_final_verdict_and_handoff.md",
+  "supporting_files": [
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/01_baseline_and_historical_evidence.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/02_structured_output_requirements.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/03_output_budget_implementation.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/04_opening_prompt_inventory.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/05_deterministic_validation.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/06_regression_and_performance.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/07_live_test_readiness.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/08_final_verdict_and_handoff.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "development/campaigns/product_realization/pr_play_06/PR_PLAY_06_LIVE_OPENING_TEST.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "game/gm.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tests/test_pr_play_05_diagnostics.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tests/test_pr_play_06_opening_budget.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tests/helpers/pr_play_06_entry_source.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tools/analyze_pr_play_06.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tools/measure_pr_play_06.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tools/prepare_pr_play_06_manual.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tools/report_pr_play_06.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "tools/validate_pr_play_06.py",
+      "role": "source",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/aggregate_refusal.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/declarations.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/minimal.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/multiple_details.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/npc.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/over_600.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/rich.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/baseline_measurements/typical.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/budget.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/concurrent.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D1.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D10.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D2.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D3.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D4.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D5.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D6.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D7.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D8.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/D9.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/extraction.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/placeholder.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/placeholder_http.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/repeat.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/retry.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/diagnostics/validation.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry/gm.py",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry/test_pr_play_05_diagnostics.py",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry_failures.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry_failures.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry_failures_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry_head.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/entry_status.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/environment_attempts.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/export.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/export.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/export_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/final_status.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/focused.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/focused.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/focused_non_http.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/focused_non_http.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/focused_non_http_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/focused_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/historical_evidence.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/historical_rich_rejection.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/incomplete_content_filter.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/incomplete_max_output_tokens.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/manual_syntax.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/declarations.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/minimal.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/multiple_details.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/npc.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/over_600.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/rich.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/measurements/typical.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/new.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/opening.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/opening.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/opening_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/ordinary.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/ordinary.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/ordinary_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/performance.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/prompt_integrity.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/prompt_inventory.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/protected_entry.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/protected_integrity.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/provider.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/provider.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/provider_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/declarations.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/minimal.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/multiple_details.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/npc.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/over_600.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/rich.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests/typical.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/declarations.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/minimal.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/multiple_details.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/npc.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/over_600.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/rich.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/requests_before/typical.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/source_diff.patch",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/structured.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/structured.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/structured_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/test_summary.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/world.txt",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/world.xml",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    },
+    {
+      "path": "artifacts/pr_play_06/world_run.json",
+      "role": "evidence",
+      "why": "PR-PLAY-06 scoped source, report, manual or deterministic evidence."
+    }
+  ],
+  "changes": {
+    "production": [
+      "Opening-specific bounded setting and unfinished-opening status rejection in existing GM owner."
+    ],
+    "validation": [
+      "19 new deterministic tests; existing diagnostic fixture ceilings updated."
+    ],
+    "tooling": [
+      "Offline bounded test driver, measurement, inventory, manual/report preparation."
+    ],
+    "documentation": [
+      "Eight reports, executable operator procedure, canonical session handoff."
+    ],
+    "generated_artifacts": [
+      "Explicit review ZIP, provenance manifest, snapshots, source diff and measurements."
+    ]
+  },
+  "testing": {
+    "focused": "58 passed, zero live calls.",
+    "broader": "361 passed / 5 confirmed preexisting failures.",
+    "full_suite": "Not run; bounded relevant slices only.",
+    "runtime_validation": "Synthetic SDK responses through existing endpoint/acceptance/persistence path; local HTTP control passed.",
+    "model_runtime_boundary": "No provider generation. Token estimates; 3000 is a defensible trial allowance.",
+    "new_regressions": "None observed in completed scope.",
+    "pre_existing_failures": "Five matching IDs reproduced with saved entry GM source; see entry_failures.xml."
+  },
+  "self_contained_review_test": "ZIP entries/provenance hashes, eight reports, source diff, required manual and verdict checked by package finalizer.",
+  "decisions_requiring_human_review": [
+    "External reviewer to accept/redirect conditional readiness before any one-Start operator test."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Exact tokenizer unavailable; live structured generation remains unproven."
+    ],
+    "pre_existing": [
+      "Three verbose-rich emission assertions, stale source attestation and stew-price conversation assertion."
+    ]
+  },
+  "does_not_prove": [
+    "Live success, statistical reliability, independent generalization or gameplay benchmark improvement.",
+    "Cost neutrality: opening ceiling rises 600 to 3000 (+2400)."
+  ],
+  "recommended_next_step": "External review of this package. Do not run another live opening until accepted.",
+  "configuration_source": "artifacts/pr_play_06/review_config.json"
+}

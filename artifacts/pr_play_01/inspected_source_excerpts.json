@@ -1,0 +1,115 @@
+[
+  {
+    "path": "run.py",
+    "sha256": "cfa52142e466d717f50ed94d306f1351ed2445cfd30910fd6af9f1ffbee064f0",
+    "excerpts": [
+      {
+        "start_line": 39,
+        "end_line": 56,
+        "text": "        \"OpenAI API billing/health preflight runs during FastAPI worker startup; watch for [API preflight] lines \"\n        \"and the following [upstream_dependent_run_gate] summary (BHC3 operator surface).\",\n        flush=True,\n    )\n\n    uvicorn.run(\n        \"game.api:app\",\n        host=\"127.0.0.1\",\n        port=8000,\n        reload=reload_enabled,\n    )\n\n\nif __name__ == \"__main__\":\n    main()"
+      }
+    ]
+  },
+  {
+    "path": "game/storage.py",
+    "sha256": "58f0687b44caa9902a2c3f746a079dccfd00f8f80c69ac82a256d0da5d0a3716",
+    "excerpts": [
+      {
+        "start_line": 48,
+        "end_line": 74,
+        "text": ")\n\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\ndef _configured_data_dir() -> Path:\n    override = os.getenv(\"ASHEN_DATA_DIR\")\n    if override and override.strip():\n        return Path(override).expanduser().resolve()\n    return BASE_DIR / 'data'\n\n\nDATA_DIR = _configured_data_dir()\nSCENES_DIR = DATA_DIR / 'scenes'\n\nCHARACTER_PATH = DATA_DIR / 'character.json'\nCAMPAIGN_PATH = DATA_DIR / 'campaign.json'\nSESSION_PATH = DATA_DIR / 'session.json'\nWORLD_PATH = DATA_DIR / 'world.json'\nCOMBAT_PATH = DATA_DIR / 'combat.json'\nCONDITIONS_PATH = DATA_DIR / 'conditions.json'\nSESSION_LOG_PATH = DATA_DIR / 'session_log.jsonl'\nSNAPSHOTS_DIR = DATA_DIR / 'snapshots'\nSNAPSHOT_VERSION = 1\n\n\nclass RuntimePersistenceConcurrencyError(RuntimeError):"
+      }
+    ]
+  },
+  {
+    "path": "game/campaign_reset.py",
+    "sha256": "1010fd670209307dc9f178db372137d3fc47a28c96249631448c1b0e4b1c744c",
+    "excerpts": [
+      {
+        "start_line": 36,
+        "end_line": 82,
+        "text": "    or ``world.json`` would re-contaminate prompts (event log, faction ticks, flags).\n    \"\"\"\n    # Serialize against snapshot restore/save collisions: this flow rewrites runtime state.\n    from game.storage import _runtime_persistence_guard\n\n    with _runtime_persistence_guard(\"new_campaign_hard_reset\"):\n        session = load_session()\n        # Root replacement: stale keys from older engines cannot survive.\n        reset_session_state(session)\n        save_session(session)\n\n        world = load_world()\n        reset_world_playthrough_state(world)\n        save_world(world)\n\n        combat = load_combat()\n        combat.clear()\n        combat.update(create_fresh_combat_state())\n        save_combat(combat)\n\n        clear_log()\n    # Invariant (NC2): New Campaign is a silent reset — no persisted transcript rows until a turn runs.\n    tail = load_log()\n    if tail:\n        clear_log()\n        tail = load_log()\n    if tail:\n        raise RuntimeError(\n            \"New Campaign invariant violated: session transcript is non-empty immediately after clear_log().\"\n        )\n    meta: Dict[str, Any] = {\n        \"campaign_run_id\": session.get(\"campaign_run_id\"),\n        \"session_id\": session.get(\"session_id\"),\n        # Operator/debug only (HTTP JSON for /api/new_campaign); proves reset + empty transcript.\n        \"transcript_entry_count_after_reset\": 0,\n        \"silent_reset_no_implicit_transcript\": True,\n    }\n\n    # Development-only: reload persisted state and assert runtime residue is gone (see\n    # ``game.fresh_campaign_verify``). Bootstrap files are unchanged; session/world\n    # playthrough layers must be clean.\n    from game.fresh_campaign_verify import (\n        dev_verification_enabled,\n        dev_verification_strict,\n        summarize_post_reset_for_dev_log,\n        verify_fresh_campaign_runtime,\n    )"
+      }
+    ]
+  },
+  {
+    "path": "game/api.py",
+    "sha256": "e705b1516eae4aab4a2d5f90e9df36ccc913d6360e2a7cdebd56b9fc123f0367",
+    "excerpts": [
+      {
+        "start_line": 295,
+        "end_line": 311,
+        "text": "@asynccontextmanager\nasync def lifespan(app: FastAPI):\n    \"\"\"Lifespan context manager: startup (ensure data files) and optional shutdown.\"\"\"\n    ensure_data_files_exist()\n    log_upstream_api_preflight_at_startup()\n    print_upstream_gate_startup_operator_summary(compute_upstream_dependent_run_gate())\n    yield\n\n\napp = FastAPI(title='Ashen Thrones AI GM', lifespan=lifespan)  # noqa: E302\napp.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=False, allow_methods=['*'], allow_headers=['*'])\n\nSTATIC_DIR = BASE_DIR / 'static'\napp.mount('/static', StaticFiles(directory=STATIC_DIR), name='static')\n\n@app.get('/')\ndef index():"
+      },
+      {
+        "start_line": 5055,
+        "end_line": 5085,
+        "text": "@app.post('/api/new_campaign')\ndef new_campaign(request: Request):\n    \"\"\"Hard reset: new session graph, fresh combat, world playthrough cleared, transcript empty.\"\"\"\n    try:\n        ui_mode = resolve_requested_ui_mode(request)\n        assert_mode_allows_runtime_action(ui_mode)\n    except UiModePolicyError as e:\n        return _ui_mode_error_response(e)\n    gate, gate_operator = _compute_upstream_gate_for_live_gameplay()\n    if gate.get(\"manual_testing_blocked\"):\n        return JSONResponse(\n            status_code=503,\n            content={\n                \"ok\": False,\n                \"status\": \"blocked\",\n                \"error\": (\n                    \"Upstream API preflight indicates live narration is unhealthy; \"\n                    \"new campaign start is disabled until upstream recovers.\"\n                ),\n                \"upstream_dependent_run_gate\": gate,\n                \"upstream_dependent_run_gate_operator\": gate_operator,\n            },\n        )\n    meta = apply_new_campaign_hard_reset()\n    # When ASHEN_THRONES_DEV_VERIFY=1, ``campaign_reset`` prints a compact runtime-clean summary.\n    if \"dev_verify_ok\" not in meta:\n        print(\"[API] New campaign started\", meta.get(\"campaign_run_id\"))\n    return {\n        \"status\": \"ok\",\n        \"ok\": True,\n        \"ui_mode\": ui_mode,"
+      },
+      {
+        "start_line": 6139,
+        "end_line": 6165,
+        "text": "@app.post('/api/start_campaign')\ndef start_campaign(request: Request):\n    \"\"\"First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path).\"\"\"\n    try:\n        ui_mode = resolve_requested_ui_mode(request)\n        assert_mode_allows_runtime_action(ui_mode)\n    except UiModePolicyError as e:\n        return _ui_mode_error_response(e)\n    gate, gate_operator = _compute_upstream_gate_for_live_gameplay()\n    if gate.get(\"manual_testing_blocked\"):\n        return JSONResponse(\n            status_code=503,\n            content={\n                \"ok\": False,\n                \"status\": \"blocked\",\n                \"error\": (\n                    \"Upstream API preflight indicates live narration is unhealthy; \"\n                    \"starting the campaign is disabled until upstream recovers.\"\n                ),\n                \"upstream_dependent_run_gate\": gate,\n                \"upstream_dependent_run_gate_operator\": gate_operator,\n            },\n        )\n\n    campaign = load_campaign()\n    character = load_character()\n    session = load_session()"
+      },
+      {
+        "start_line": 6376,
+        "end_line": 6405,
+        "text": "@app.post('/api/chat')\ndef api_chat(request: Request, req: ChatRequest):\n    try:\n        ui_mode = resolve_requested_ui_mode(request, req.model_dump())\n        return chat(req, ui_mode=ui_mode)\n    except UiModePolicyError as e:\n        return _ui_mode_error_response(e)\n\n\ndef chat(req: ChatRequest, ui_mode: str = \"player\"):\n    assert_mode_allows_runtime_action(ui_mode)\n    _mark_turn_started()\n    reset_live_interpretation_consumed()\n    mode_decision = _resolve_communication_mode(req)\n    original_player_text = mode_decision.original_text\n    if mode_decision.conflict:\n        return _communication_mode_conflict_response(req, mode_decision)\n    if mode_decision.mode == \"OOC\":\n        return _nonmutating_ooc_response(req, mode_decision)\n    if mode_decision.mode == \"IC\" and mode_decision.processing_text != req.text:\n        req = ChatRequest(\n            text=mode_decision.processing_text,\n            ui_mode=req.ui_mode,\n            communication_mode=req.communication_mode,\n            mode_override=req.mode_override,\n        )\n    turn_started = _now_perf()\n    campaign = load_campaign()\n    character = load_character()\n    session = load_session()"
+      }
+    ]
+  },
+  {
+    "path": "game/live_chat_interpretation.py",
+    "sha256": "aa5c32ee4e837f2a372119da2f6cd029ad405165d6ecb1009d76c2bb93eb7adb",
+    "excerpts": [
+      {
+        "start_line": 234,
+        "end_line": 250,
+        "text": "        return {\"ok\": False, \"sent\": False, \"reason\": refusal, \"error\": refusal, \"usage\": usage}\n    from openai import OpenAI\n\n    from game.config import get_openai_api_key\n\n    started = time.perf_counter()\n    try:\n        from game.gm import provider_timeout_seconds\n\n        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())\n        response = attempt.dispatch(client.responses.create,\n            model=model_id,\n            input=messages,\n            temperature=0,\n            max_output_tokens=_OUTPUT_CAP,\n            text={\n                \"format\": {"
+      }
+    ]
+  },
+  {
+    "path": "game/gm.py",
+    "sha256": "02222a33892b3fcf9bf6b4ca4e916545532a4919c86b5970d3c3317c25917191",
+    "excerpts": [
+      {
+        "start_line": 5075,
+        "end_line": 5085,
+        "text": "    from game.provider_budget import (\n        accounting_active,\n        admit_request,\n        provider_retries_disabled,\n    )\n\n    if provider_retries_disabled() and int(retry_attempt or 0) > 0:\n        return _attach_model_route_metadata(\n            {\n                \"player_facing_text\": (\n                    \"The action stands, and no further narration request was sent.\""
+      },
+      {
+        "start_line": 5193,
+        "end_line": 5204,
+        "text": "        )\n    request_sent = False\n    try:\n        from openai import OpenAI\n        client = OpenAI(api_key=get_openai_api_key(), timeout=provider_timeout_seconds())\n        _log_model_route(\n            selected_model=selected_model,\n            route_family=route.route_family,\n            purpose=purpose,\n            retry_attempt=retry_attempt,\n            retry_reason=retry_reason,\n            strict_social=strict_social,"
+      }
+    ]
+  },
+  {
+    "path": "game/provider_budget.py",
+    "sha256": "6217bb1434b84bf88e0461e41d6c12ee5ac0fab8aba1801965646b8d15c3a825",
+    "excerpts": [
+      {
+        "start_line": 42,
+        "end_line": 71,
+        "text": "def _truthy(name: str) -> bool:\n    return os.environ.get(name, \"\").strip().lower() in {\"1\", \"true\", \"yes\", \"on\"}\n\n\ndef provider_calls_disabled() -> bool:\n    return _truthy(\"ASHEN_DISABLE_PROVIDER_CALLS\")\n\n\ndef provider_retries_disabled() -> bool:\n    return _truthy(\"ASHEN_DISABLE_PROVIDER_RETRIES\")\n\n\ndef accounting_active() -> bool:\n    return bool(os.environ.get(\"ASHEN_PROVIDER_REQUEST_LIMIT\", \"\").strip() or\n                os.environ.get(\"ASHEN_PROVIDER_USAGE_PATH\", \"\").strip())\n\n\ndef limits() -> tuple[int, int, int, int] | None:\n    raw = os.environ.get(\"ASHEN_PROVIDER_REQUEST_LIMIT\", \"\").strip()\n    if not raw:\n        return None\n    return (int(raw), int(os.environ.get(\"ASHEN_PROVIDER_INPUT_TOKEN_LIMIT\", \"8000\")),\n            int(os.environ.get(\"ASHEN_PROVIDER_OUTPUT_TOKEN_LIMIT\", \"2000\")),\n            int(os.environ.get(\"ASHEN_PROVIDER_TOTAL_TOKEN_LIMIT\", \"10000\")))\n\n\ndef _now() -> str:\n    return datetime.now(timezone.utc).isoformat()\n\n"
+      },
+      {
+        "start_line": 145,
+        "end_line": 170,
+        "text": "\n    def dispatch(self, invoke, **kwargs):\n        \"\"\"Exactly one dispatch; durable admission/dispatch markers precede it.\"\"\"\n        if self.refusal:\n            raise ProviderBudgetRefused(self.refusal)\n        with _LOCK:\n            if provider_calls_disabled() or accounting_active() != self.active:\n                raise ProviderAccountingError(\"provider accounting configuration changed before dispatch\")\n            if self.dispatched or self.completed is not None:\n                raise ProviderAccountingError(\"duplicate request dispatch\")\n            if self.active:\n                if _STOPPED:\n                    raise ProviderAccountingError(_STOP_REASON)\n                if os.environ.get(\"ASHEN_PROVIDER_USAGE_PATH\", \"\").strip() != _LEDGER_PATH:\n                    _stop(\"provider ledger changed within process\")\n                    raise ProviderAccountingError(_STOP_REASON)\n                try:\n                    _append(self._event(\"dispatch_attempted\"))\n                except OSError as exc:\n                    _stop(\"provider dispatch ledger write failed\")\n                    raise ProviderAccountingError(_STOP_REASON) from exc\n            self.dispatched = True\n            self.dispatch_started = time.perf_counter()\n        try:\n            response = invoke(**kwargs)\n        except BaseException as exc:"
+      }
+    ]
+  },
+  {
+    "path": "static/app.js",
+    "sha256": "4823fac95c01debf7709c57733c9ee9b657837784fa566e267b7d8377c5b18d6",
+    "excerpts": [
+      {
+        "start_line": 637,
+        "end_line": 677,
+        "text": "$('newCampaignBtn').addEventListener('click', async ()=>{\n  const data = await fetchJSON(apiUrl('/new_campaign', {ui_mode: currentUIMode}), {method:'POST'});\n  if (!data || data.ok === false || data.status === 'blocked' || data.status !== 'ok'){\n    const msg = formatBlockedNewCampaignMessage(data);\n    addMessage('error', 'System', msg, newCampaignBlockedDetails(data));\n    return;\n  }\n  console.log('Campaign reset complete', data.campaign_run_id || '');\n  state = null;\n  location.reload();\n});\n\nconst startCampaignBtn = $('startCampaignBtn');\nif(startCampaignBtn){\n  startCampaignBtn.addEventListener('click', async ()=>{\n    if(currentUIMode !== \"player\") return;\n    if(startCampaignBusy) return;\n    if(!state?.ui?.campaign_can_start) return;\n    startCampaignBusy = true;\n    startCampaignBtn.disabled = true;\n    const thinking = addMessage('system','System','Preparing opening…');\n    try {\n      const res = await fetch(apiUrl('/start_campaign', {ui_mode: currentUIMode}), {method:'POST'});\n      const data = await res.json();\n      if(res.status === 503 || data.status === 'blocked'){\n        replaceMessage(thinking,'error','System', formatBlockedNewCampaignMessage(data), newCampaignBlockedDetails(data));\n        return;\n      }\n      if(res.status === 409 || data.ok === false){\n        replaceMessage(thinking,'error','System', data.error || 'Could not start campaign.');\n        await reloadAll();\n        return;\n      }\n      if(!data.ok){\n        replaceMessage(thinking,'error','System', data.error || 'Unknown error');\n        return;\n      }\n      replaceMessage(thinking,'gm','GM', data.gm_output?.player_facing_text || '(no narration)', data.resolution);\n      await reloadAll();\n    } finally {\n      startCampaignBusy = false;"
+      }
+    ]
+  }
+]

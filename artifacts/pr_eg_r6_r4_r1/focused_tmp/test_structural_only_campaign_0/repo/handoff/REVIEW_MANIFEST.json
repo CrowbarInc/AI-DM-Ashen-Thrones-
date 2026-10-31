@@ -1,0 +1,62 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "structural_schema",
+  "campaign_name": "Structural schema check",
+  "generated_at": "2026-09-18T03:00:00+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 2142,
+      "sha256": "accee4b10194e2b33e3cff1158bfc6b54ba1acc524d6cd179e63a31de192a3f0"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "report.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "report.md",
+      "bundle_path": "support/report.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 46,
+      "sha256": "bc5053e69b9c6656ec354904dad2f2af9a9007e4a2c1463c8c532fe9f75160b2"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 3,
+    "zip_size_bytes": "000000004899",
+    "uncompressed_payload_bytes": 2188,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": null,
+    "canonical_repository_root": "."
+  }
+}

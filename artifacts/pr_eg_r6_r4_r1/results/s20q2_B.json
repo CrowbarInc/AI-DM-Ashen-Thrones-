@@ -1,0 +1,50 @@
+{
+  "case_id": "s20q2",
+  "family": "s20",
+  "partition": "holdout",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "36d6c369ea7b673ba783e54230db9144d6c06d5542bd64294eaab1798d556cff",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "lamp oil"
+    ],
+    "qualifiers": [
+      "at the winter fair"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s20"
+    ],
+    "answered_arguments": [
+      "redeemer",
+      "redeemed_item",
+      "reward"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that the glasswright redeems chipped trade beads for lamp oil at the winter fair."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

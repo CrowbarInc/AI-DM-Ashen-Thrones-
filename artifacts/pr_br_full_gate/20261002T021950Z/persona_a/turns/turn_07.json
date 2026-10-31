@@ -1,0 +1,833 @@
+{
+  "turn_number": 7,
+  "player_text": "I keep my hands in sight and let the guard finish the pack, then ask if I'm clear to go through.",
+  "visible_motivation": "The toll is paid and the guard is already going through the open pack.",
+  "intended_meaning": "I want the inspection closed and a clear yes to pass the gate.",
+  "generation_attempt_1": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods. \"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs. \"Keep to the main road and stay within curfew.\" The gate serjeant nearby stays alert, watching the shifting crowd as the muddy line inches forward past the gate.",
+  "generation_attempt_2": null,
+  "attempt_1_hard_valid": true,
+  "attempt_1_reasons": [],
+  "attempt_2_hard_valid": null,
+  "attempt_2_reasons": [],
+  "regeneration_invoked": false,
+  "regeneration_feedback": null,
+  "rejected_attempt_2_reasons": null,
+  "generation_attempt_count": 1,
+  "accepted_provenance": "initial_generation",
+  "accepted_response_text": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods. \"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs. \"Keep to the main road and stay within curfew.\" The gate serjeant nearby stays alert, watching the shifting crowd as the muddy line inches forward past the gate.",
+  "accepted_immutable": true,
+  "final_emitted_response": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods. \"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs. \"Keep to the main road and stay within curfew.\" The gate serjeant nearby stays alert, watching the shifting crowd as the muddy line inches forward past the gate.",
+  "gm_text": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods. \"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs. \"Keep to the main road and stay within curfew.\" The gate serjeant nearby stays alert, watching the shifting crowd as the muddy line inches forward past the gate.",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "scene_momentum:consequence_or_opportunity"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": true,
+  "fast_path_abstained": false,
+  "abstention_reason": null,
+  "interpreter_invoked": false,
+  "proposal_source": "deterministic_fast_path",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "I keep my hands in sight and let the guard finish the pack, then ask if I'm clear to go through.",
+    "source": "deterministic_fast_path",
+    "primary_operation": "ask",
+    "supporting_operations": [],
+    "raw_target_text": null,
+    "proposed_target_id": null,
+    "target_capture": "none",
+    "has_determiner": false,
+    "interlocutor_id": null,
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "ask",
+  "canonical_target": null,
+  "target_ref": {},
+  "discourse_ref": null,
+  "interlocutor_id": null,
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "binding_status": "unresolved",
+  "entity_class": "ambiguous_unresolved",
+  "proposed_interlocutor": null,
+  "bound_interlocutor": null,
+  "entity_id": null,
+  "authority_reasons": [],
+  "entity_binding": {
+    "status": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed_interlocutor": null,
+    "proposed_span": null,
+    "bound_interlocutor_id": null,
+    "entity_id": null,
+    "label": null,
+    "explicit_new_interlocutor": false,
+    "authority_reasons": [],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_cdfdd0ffd8dc",
+    "turn_index": 8,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": null,
+    "interlocutor_id": null,
+    "conversational_subject": "I keep my hands in sight and let the guard finish the pack, then ask if I'm clear to go through.",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": null,
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "I keep my hands in sight and let the guard finish the pack, then ask if I'm clear to go through.",
+    "construction": {
+      "cues": [],
+      "referent_slot": null,
+      "referent_reason": "no_anaphor",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "exact coin modest fee so i"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "rc_57c7afdc54d9",
+          "type": "action",
+          "label": "I count out three silver and hand them to the serjeant, then stand clear so the guard can finish inspecting the open pack."
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        },
+        {
+          "id": "inc_1eab6f051b",
+          "type": "interlocutor",
+          "label": "exact coin modest fee so i"
+        },
+        {
+          "id": "inc_1eab6f051b",
+          "type": "interlocutor",
+          "label": "exact coin modest fee so i"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": null,
+      "canonicalization_attempted": true,
+      "canonical_target_found": false,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I keep my hands in sight and let the guard finish the pack, then ask if I'm clear to go through.",
+        "source": "deterministic_fast_path",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "raw_target_text": null,
+        "proposed_target_id": null,
+        "target_capture": "none",
+        "has_determiner": false,
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": {
+    "id": "gate_serjeant",
+    "label": "exact coin modest fee so i",
+    "kind": "interlocutor",
+    "epistemic_status": null,
+    "turn_index": 7,
+    "source": "resolution_contract"
+  },
+  "active_claim": null,
+  "active_inspected": {
+    "id": "notice_board",
+    "label": "Notice board",
+    "kind": "object",
+    "epistemic_status": null,
+    "turn_index": 2,
+    "source": "resolution_contract"
+  },
+  "actionable_lead": null,
+  "previous_action": {
+    "id": "rc_57c7afdc54d9",
+    "label": "I count out three silver and hand them to the serjeant, then stand clear so the guard can finish inspecting the open pack.",
+    "kind": "act",
+    "epistemic_status": null,
+    "turn_index": 7,
+    "source": "resolution_contract"
+  },
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "exact coin modest fee so i",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": {
+      "id": "rc_57c7afdc54d9",
+      "label": "I count out three silver and hand them to the serjeant, then stand clear so the guard can finish inspecting the open pack.",
+      "kind": "act",
+      "scene_id": "frontier_gate",
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "last_committed_turn": 8,
+    "last_committed_contract_id": "rc_cdfdd0ffd8dc"
+  },
+  "authority_generated": [
+    {
+      "proposition": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "\"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "hearsay",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "authority_retry": [],
+  "authority_emitted": [
+    {
+      "proposition": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "\"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "hearsay",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "PASS",
+  "failing_gates": [],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 88,
+      "rating": "strong",
+      "passed": true,
+      "semantic_result": "PASS",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "PASS",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 72,
+          "text_preview": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods. \"You're clear to pass,\" they say shortly, though their eyes fli"
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "action_or_statement",
+          "player_terms": [
+            "clear",
+            "finish",
+            "guard",
+            "hands",
+            "keep",
+            "pack",
+            "sight",
+            "through"
+          ],
+          "gm_terms": [
+            "alert",
+            "board",
+            "carefully",
+            "clear",
+            "crowd",
+            "curfew",
+            "eyes",
+            "finishing",
+            "flick",
+            "forward",
+            "gate",
+            "guard",
+            "hangs",
+            "inches",
+            "inspection",
+            "keep",
+            "line",
+            "looks",
+            "main",
+            "missing"
+          ],
+          "direct_answer_score": 23,
+          "player_intent_score": 18,
+          "resolution_contract": {
+            "contract_id": "rc_cdfdd0ffd8dc",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "ask",
+            "referent_provenance": "explicit_player",
+            "assessment_status": "unchecked",
+            "assessment_reasons": [
+              "no_dimension"
+            ],
+            "target": null,
+            "candidate_answer_target": null,
+            "target_compatible": null,
+            "operation_compatible": null,
+            "dimension_compatible": null,
+            "resolution_kind": null,
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [],
+              "referent_slot": null,
+              "referent_reason": "no_anaphor",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "exact coin modest fee so i"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "rc_57c7afdc54d9",
+                  "type": "action",
+                  "label": "I count out three silver and hand them to the serjeant, then stand clear so the guard can finish inspecting the open pack."
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                },
+                {
+                  "id": "inc_1eab6f051b",
+                  "type": "interlocutor",
+                  "label": "exact coin modest fee so i"
+                },
+                {
+                  "id": "inc_1eab6f051b",
+                  "type": "interlocutor",
+                  "label": "exact coin modest fee so i"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "ask",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": null,
+              "canonicalization_attempted": true,
+              "canonical_target_found": false,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": null,
+                "canonical_target_label": null,
+                "canonical_target_type": null,
+                "canonical_basis": null,
+                "authoritative_operation": "ask",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "unresolved",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [],
+                "claim_binding": "none"
+              },
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I keep my hands in sight and let the guard finish the pack, then ask if I'm clear to go through.",
+                "source": "deterministic_fast_path",
+                "primary_operation": "ask",
+                "supporting_operations": [],
+                "raw_target_text": null,
+                "proposed_target_id": null,
+                "target_capture": "none",
+                "has_determiner": false,
+                "interlocutor_id": null,
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "contract_unchecked"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 88,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 23,
+        "player_intent": 18,
+        "logical_escalation": 23,
+        "immersion": 24
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "No explicit question detected; scored leniently for directness."
+        ],
+        "signals": {
+          "has_question": false,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.073,
+          "gm_word_count": 72,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 0
+        }
+      },
+      "player_intent": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 4,
+          "topic_overlap_ratio": 0.5,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.164,
+          "player_presses_thread": false,
+          "gm_word_count": 72,
+          "net_new_terms": 35
+        }
+      },
+      "immersion": {
+        "score": 24,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": true,
+          "scene_anchor_hits": 2
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (23/25).",
+        "player_intent: acceptable (18/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (24/25)."
+      ],
+      "failures": [],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 88,
+        "rating": "strong",
+        "passed": true,
+        "semantic_result": "PASS",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 0,
+  "turn_generation_calls": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "The gate guard, still carefully finishing their inspection of your open pack, looks up and nods. \"You're clear to pass,\" they say shortly, though their eyes flick to the snarled traffic and the notice board where the warning about the missing patrol still hangs. \"Keep to the main road and stay within curfew.\" The gate serjeant nearby stays alert, watching the shifting crowd as the muddy line inches forward past the gate."
+    }
+  ],
+  "turn_interpretation_calls": [],
+  "persistence": {
+    "session_id": "6c8d3781fdeb8d0cf7f9835f",
+    "campaign_run_id": "6c8d3781fdeb8d0cf7f9835f",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": {
+        "id": "gate_serjeant",
+        "label": "exact coin modest fee so i",
+        "kind": "interlocutor",
+        "scene_id": "frontier_gate",
+        "turn_index": 7,
+        "source": "resolution_contract"
+      },
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": {
+        "id": "rc_57c7afdc54d9",
+        "label": "I count out three silver and hand them to the serjeant, then stand clear so the guard can finish inspecting the open pack.",
+        "kind": "act",
+        "scene_id": "frontier_gate",
+        "turn_index": 7,
+        "source": "resolution_contract"
+      },
+      "last_committed_turn": 8,
+      "last_committed_contract_id": "rc_cdfdd0ffd8dc"
+    },
+    "incidental_entities": [
+      {
+        "entity_id": "inc_1eab6f051b",
+        "label": "exact coin modest fee so i",
+        "role": "exact coin modest fee so i",
+        "scene_id": "frontier_gate",
+        "provenance": "bounded_incidental",
+        "authority": "bounded_improvisation",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "truth_status": "runtime_incidental",
+        "consequence_level": "incidental"
+      }
+    ],
+    "ledger_entries": [
+      {
+        "id": "inc_1eab6f051b",
+        "kind": "incidental_fact",
+        "category": "background_npc_detail",
+        "content": "exact coin modest fee so i",
+        "scope": "scene",
+        "scene_id": "frontier_gate",
+        "consequence_level": "incidental",
+        "source": "player_proposed_interlocutor",
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental"
+      }
+    ],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 371807
+  },
+  "resolution_kind": "question",
+  "api_ok": true
+}

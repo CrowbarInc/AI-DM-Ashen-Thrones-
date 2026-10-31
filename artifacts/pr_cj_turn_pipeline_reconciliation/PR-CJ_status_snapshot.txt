@@ -1,0 +1,336 @@
+﻿ M artifacts/by2/protected_semantic_mutation_report.json
+ M artifacts/by2/protected_semantic_mutation_report.md
+ M artifacts/by3/strict_social_semantic_mutation_report.json
+ M artifacts/by3/strict_social_semantic_mutation_report.md
+ M artifacts/golden_replay/bug_recurrence_event_log.json
+ M artifacts/golden_replay/bug_recurrence_history.json
+ M artifacts/golden_replay/bug_recurrence_history.md
+ M artifacts/golden_replay/bug_recurrence_session_diagnostic_event_log.json
+ M artifacts/golden_replay/bug_recurrence_session_event_log.json
+ M artifacts/golden_replay/owner_drift_hotspots.json
+ M artifacts/golden_replay/owner_drift_hotspots.md
+ M artifacts/golden_replay/owner_drift_risk.json
+ M artifacts/golden_replay/owner_drift_risk.md
+ M artifacts/golden_replay/recurrence_trajectory_history.json
+ M artifacts/golden_replay/replay_failure_report.md
+ M data/combat.json
+ M data/session.json
+ M data/session_log.jsonl
+ M data/world.json
+ M docs/audits/BQ16_recurrence_graduation_audit.md
+ M docs/audits/BQC4_final_graduation_decision.md
+ M docs/audits/BQC5_effectiveness_validation.md
+ M game/adjudication.py
+ M game/anti_reset_emission_guard.py
+ M game/api.py
+ M game/api_turn_support.py
+ M game/bounded_improvisation.py
+ M game/dialogue_social_plan.py
+ M game/final_emission_gate.py
+ M game/final_emission_response_type.py
+ M game/final_emission_strict_social_stack.py
+ M game/final_emission_visibility_fallback.py
+ M game/gm.py
+ M game/gm_retry.py
+ M game/intent_parser.py
+ M game/interaction_context.py
+ M game/interaction_routing.py
+ M game/narration_state_consistency.py
+ M game/noncombat_resolution.py
+ M game/perception_grounding.py
+ M game/playability_eval.py
+ M game/prompt_context.py
+ M game/response_policy_enforcement.py
+ M game/scene_destination_binding.py
+ M game/social.py
+ M game/social_exchange_emission.py
+ M game/social_exchange_fallback_catalog.py
+ M game/social_exchange_policy.py
+ M game/speaker_contract_enforcement.py
+ M game/storage.py
+ M game/upstream_response_repairs.py
+ M handoff/CURRENT_REVIEW.md
+ M handoff/CURRENT_REVIEW.zip
+ M handoff/REVIEW_MANIFEST.json
+ M tests/conftest.py
+ M tests/helpers/reactive_player.py
+ M tests/helpers/turn_pipeline_http_fixtures.py
+ M tests/test_broad_address_social_bid.py
+ M tests/test_model_routing_escalation.py
+ M tests/test_model_routing_runtime.py
+ M tests/test_social.py
+ M tests/test_social_exchange_emission.py
+ M tests/test_social_question_relevance_answer_selection.py
+ M tests/test_transcript_regression.py
+ M tests/test_turn_pipeline_shared.py
+ M tests/test_upstream_dependent_run_bhc2.py
+ M tools/run_playability_validation.py
+?? PR-BS_cooperative_gm_micro_live_validation.md
+?? PR-BS_cooperative_realization_discovery.md
+?? PR-BS_decision_facing_answer_recipe_implementation.md
+?? PR-BT_epistemic_guidance_delta.json
+?? PR-BT_policy_instruction_deduplication_implementation.md
+?? PR-BT_policy_instruction_semantic_diff.md
+?? PR-BT_provider_context_canonicalization_discovery.md
+?? PR-BT_provider_deduplication_micro_live_validation.md
+?? PR-BT_provider_payload_inventory.json
+?? PR-BT_regression_completion_gate.md
+?? PR-BT_selective_epistemic_guidance_differential_discovery.md
+?? PR-BT_selective_epistemic_guidance_restoration_implementation.md
+?? PR-BT_selective_epistemic_protocol_diff.md
+?? PR-BT_selective_epistemic_restoration_final_micro_live.md
+?? PR-BU_PR-BT_final_repaired_chain_micro_live.md
+?? PR-BU_final_lexical_scope_false_rejection_repair.md
+?? PR-BU_lexical_scope_control_flow_after.md
+?? PR-BU_narration_claim_composition_repair.md
+?? PR-BU_narration_validator_control_flow.md
+?? PR-BU_narration_validator_control_flow_after.md
+?? PR-BU_qualified_inference_complement_authorization.md
+?? PR-BU_qualified_inference_control_flow_after.md
+?? PR-BU_validator_semantic_matrix.json
+?? PR-BU_validator_semantic_matrix_after.json
+?? PR-BU_validator_semantic_matrix_complement_after.json
+?? PR-BU_validator_semantic_matrix_lexical_scope_after.json
+?? PR-BU_validator_semantic_robustness_discovery.md
+?? PR-BV_PR-BS_vs_current_behavioral_guidance_diff.md
+?? PR-BV_first_pass_realization_competence_discovery.md
+?? PR-BV_micro_live_operation_results.json
+?? PR-BV_model_facing_operation_map.md
+?? PR-BV_operation_projection_derivation.md
+?? PR-BV_operation_projection_matrix.json
+?? PR-BV_operation_projection_snapshots.md
+?? PR-BV_realization_operation_analysis.json
+?? PR-BV_turn_local_realization_operation_projection.md
+?? PR-BV_turn_operation_projection_micro_live.md
+?? PR-BW_P1_declaration_narration_semantic_delta.md
+?? PR-BW_P2_declaration_affordance_analysis.md
+?? PR-BW_envelope_failure_matrix.json
+?? PR-BW_envelope_selection_matrix.json
+?? PR-BW_narration_only_envelope_implementation.md
+?? PR-BW_narration_only_envelope_snapshots.md
+?? PR-BW_narration_only_normalization_matrix.json
+?? PR-BW_provider_visible_schema_analysis.md
+?? PR-BW_structured_generation_envelope_map.md
+?? PR-BW_structured_realization_envelope_competence_discovery.md
+?? artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest.zip
+?? artifacts/human_playtests/20260926_post_pr_bk_latest_human_playtest/
+?? artifacts/human_playtests/post_pr_bk_state_narration_audit/
+?? artifacts/pr_bp_synthetic_gate/
+?? artifacts/pr_br/
+?? artifacts/pr_br_authority_reconciliation/
+?? artifacts/pr_br_claim_control_slice1/
+?? artifacts/pr_br_claim_control_slice2/
+?? artifacts/pr_br_claim_ownership_reassessment/
+?? artifacts/pr_br_closeout_live_revalidation/
+?? artifacts/pr_br_continuation10/
+?? artifacts/pr_br_continuation11/
+?? artifacts/pr_br_continuation12/
+?? artifacts/pr_br_continuation13/
+?? artifacts/pr_br_continuation14/
+?? artifacts/pr_br_continuation15/
+?? artifacts/pr_br_continuation16/
+?? artifacts/pr_br_continuation17/
+?? artifacts/pr_br_continuation18/
+?? artifacts/pr_br_continuation19/
+?? artifacts/pr_br_continuation20/
+?? artifacts/pr_br_continuation21/
+?? artifacts/pr_br_continuation21b/
+?? artifacts/pr_br_continuation21c/
+?? artifacts/pr_br_continuation22/
+?? artifacts/pr_br_continuation23/
+?? artifacts/pr_br_continuation24/
+?? artifacts/pr_br_continuation25/
+?? artifacts/pr_br_continuation26/
+?? artifacts/pr_br_continuation27/
+?? artifacts/pr_br_continuation4/
+?? artifacts/pr_br_continuation5/
+?? artifacts/pr_br_continuation6/
+?? artifacts/pr_br_continuation7/
+?? artifacts/pr_br_continuation8/
+?? artifacts/pr_br_continuation9/
+?? artifacts/pr_br_enforcement/
+?? artifacts/pr_br_enforcement_smoke/
+?? artifacts/pr_br_final_live_validation/
+?? artifacts/pr_br_followup/
+?? artifacts/pr_br_full_gate/
+?? artifacts/pr_br_independent_smoke/
+?? artifacts/pr_br_level2/
+?? artifacts/pr_br_live_validation_repair/
+?? artifacts/pr_br_localized_live_repair/
+?? artifacts/pr_br_multiturn_provenance/
+?? artifacts/pr_br_novel_authority_probe/
+?? artifacts/pr_br_proposition_authority_review/
+?? artifacts/pr_br_proposition_live_validation/
+?? artifacts/pr_br_regression_harness/
+?? artifacts/pr_br_resolution_decision_slice/
+?? artifacts/pr_br_resolution_decision_slice2/
+?? artifacts/pr_br_resolution_decision_slice3/
+?? artifacts/pr_br_resolution_reassessment/
+?? artifacts/pr_br_second_full_gate/
+?? artifacts/pr_br_second_live_validation/
+?? artifacts/pr_br_small_live_validation/
+?? artifacts/pr_br_smoke/
+?? artifacts/pr_br_structured_chat_slice3/
+?? artifacts/pr_br_targeted_repair/
+?? artifacts/pr_bs_cooperative_gm_micro_live/
+?? artifacts/pr_bs_cooperative_realization_discovery/
+?? artifacts/pr_bs_decision_facing_answer_recipe/
+?? artifacts/pr_bt_epistemic_guidance_differential/
+?? artifacts/pr_bt_policy_instruction_deduplication/
+?? artifacts/pr_bt_provider_context_canonicalization/
+?? artifacts/pr_bt_provider_deduplication_micro_live/
+?? artifacts/pr_bt_regression_completion_gate/
+?? artifacts/pr_bt_selective_epistemic_guidance/
+?? artifacts/pr_bt_selective_epistemic_guidance_tests/
+?? artifacts/pr_bt_selective_epistemic_restoration_final_micro_live/
+?? artifacts/pr_bu_lexical_scope_false_rejection/
+?? artifacts/pr_bu_pr_bt_final_repaired_chain_micro_live/
+?? artifacts/pr_bu_validator_semantic_robustness/
+?? artifacts/pr_bv_first_pass_realization_competence/
+?? artifacts/pr_bv_operation_projection/
+?? artifacts/pr_bv_turn_operation_projection_micro_live/
+?? artifacts/pr_bw_narration_only_envelope/
+?? artifacts/pr_bx_narration_only_micro_live/
+?? artifacts/pr_by_narration_only_retry_contract/
+?? artifacts/pr_bz_narration_only_retry_micro_live/
+?? artifacts/pr_ca_dialogue_continuity/
+?? artifacts/pr_cb_dialogue_helpfulness/
+?? artifacts/pr_cc_social_reply_reconciliation/
+?? artifacts/pr_cd_social_regression_closeout/
+?? artifacts/pr_ce_readiness_closeout/
+?? artifacts/pr_cf_regression_triage/
+?? artifacts/pr_cg_http_harness_stabilization/
+?? artifacts/pr_ch_social_answer_attribution/
+?? artifacts/pr_ci_social_answer_finalization/
+?? artifacts/pr_cj_turn_pipeline_reconciliation/
+?? data/scenes/market_yard.json
+?? data/validation/review_handoffs/pr_br_continuation6.json
+?? docs/audits/PR-BP_live_resolution_and_synthetic_gate.md
+?? docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md
+?? docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md
+?? docs/audits/discovery/PR-BM_dm_generative_authority_architecture_discovery.md
+?? docs/audits/discovery/PR-BM_supporting_trace_excerpt.md
+?? docs/audits/discovery/PR-BO_post_PR-BN_human_failure_and_simulated_player_audit.md
+?? docs/audits/discovery/PR-BQ_semantic_resolution_and_discourse_architecture.md
+?? game/contract_adjudication_bridge.py
+?? game/discourse_state.py
+?? game/gm_resolution_decision.py
+?? game/immutable_valid_response.py
+?? game/incidental_entity.py
+?? game/interaction_completion.py
+?? game/interpretation_proposal.py
+?? game/live_resolution.py
+?? game/ordinary_semantic_ownership.py
+?? game/player_commitment.py
+?? game/proposition_authority.py
+?? game/resolution_contract.py
+?? game/scene_referent_catalog.py
+?? game/semantic_interpreter.py
+?? game/structured_player_output.py
+?? handoff/CURRENT_REVIEW_PRBQ/
+?? handoff/CURRENT_REVIEW_PRBR/
+?? handoff/CURRENT_REVIEW_PRBR_DECISION_SLICE1/
+?? handoff/CURRENT_REVIEW_PRBR_REASSESSMENT/
+?? handoff/CURRENT_REVIEW_PRBS/
+?? handoff/CURRENT_REVIEW_PRBT/
+?? handoff/history/pr-br-before-closeout-live-revalidation/
+?? handoff/history/pr-br-before-small-structured-live-validation/
+?? handoff/history/pr-br-claim-ownership-reassessment/
+?? handoff/history/pr-br-continuation-13/
+?? handoff/history/pr-br-continuation-14/
+?? handoff/history/pr-br-continuation-15/
+?? handoff/history/pr-br-continuation-16/
+?? handoff/history/pr-br-continuation-18/
+?? handoff/history/pr-br-continuation-19/
+?? handoff/history/pr-br-continuation-20/
+?? handoff/history/pr-br-continuation-26/
+?? handoff/history/pr-br-final-four-turn-live-validation/
+?? handoff/history/pr-br-full-4x10-synthetic-gate/
+?? handoff/history/pr-br-independent-smoke-after-c20/
+?? handoff/history/pr-br-live-validation-repair/
+?? handoff/history/pr-br-localized-live-repair/
+?? handoff/history/pr-br-multiturn-provenance/
+?? handoff/history/pr-br-novel-authority-live-validation/
+?? handoff/history/pr-br-proposition-authority-review/
+?? handoff/history/pr-br-proposition-level-live-validation/
+?? handoff/history/pr-br-resolution-decision-slice3/
+?? handoff/history/pr-br-second-live-validation/
+?? handoff/history/pr-br-targeted-live-validation-repair/
+?? handoff/history/pr-bs-cooperative-gm-micro-live/
+?? handoff/payload_breakdown.json
+?? handoff/pr_br_enforcement_traces.md
+?? handoff/pr_br_semantic_traces.md
+?? scorecard.json
+?? scorecard.md
+?? tests/fixtures/pr_br_interpretation/
+?? tests/helpers/live_model_guard.py
+?? tests/test_live_model_guard.py
+?? tests/test_pr_bp_live_resolution_routing.py
+?? tests/test_pr_br_authority_reconciliation.py
+?? tests/test_pr_br_c19_free_text_authority.py
+?? tests/test_pr_br_claim_control_regex_bound.py
+?? tests/test_pr_br_claim_control_slice1.py
+?? tests/test_pr_br_claim_control_slice2.py
+?? tests/test_pr_br_continuation12_competence.py
+?? tests/test_pr_br_continuation13_semantic_preservation.py
+?? tests/test_pr_br_continuation14_resolution_content.py
+?? tests/test_pr_br_continuation15_content_clarification.py
+?? tests/test_pr_br_continuation16_interaction_completion.py
+?? tests/test_pr_br_continuation18_immutable_boundary.py
+?? tests/test_pr_br_continuation19_hard_authority.py
+?? tests/test_pr_br_continuation20_incidental_entity.py
+?? tests/test_pr_br_continuation21_subject_integrity.py
+?? tests/test_pr_br_continuation21b_referential_personhood.py
+?? tests/test_pr_br_continuation21c_referential_head.py
+?? tests/test_pr_br_continuation22_commitment.py
+?? tests/test_pr_br_continuation23_precontract_routes.py
+?? tests/test_pr_br_continuation24_contract_first_unparsed.py
+?? tests/test_pr_br_continuation25_semantic_ownership.py
+?? tests/test_pr_br_continuation26_semantic_closure.py
+?? tests/test_pr_br_continuation27_structural_subject.py
+?? tests/test_pr_br_decision_owned_realization_claims.py
+?? tests/test_pr_br_decision_ownership_slice2.py
+?? tests/test_pr_br_decision_semantic_fidelity_slice3.py
+?? tests/test_pr_br_gm_resolution_decision.py
+?? tests/test_pr_br_interpretation_proposal.py
+?? tests/test_pr_br_live_validation_attachment_repair.py
+?? tests/test_pr_br_localized_live_defects.py
+?? tests/test_pr_br_model_interpretation.py
+?? tests/test_pr_br_outcome_precedence.py
+?? tests/test_pr_br_qualifier_movement_mixed_intent.py
+?? tests/test_pr_br_resolution_contract.py
+?? tests/test_pr_br_structured_chat_path.py
+?? tests/test_pr_br_structured_realization_envelope.py
+?? tests/test_pr_bs_decision_facing_answer_recipe.py
+?? tests/test_pr_bt_policy_instruction_deduplication.py
+?? tests/test_pr_bt_selective_epistemic_guidance.py
+?? tests/test_pr_bu_lexical_scope.py
+?? tests/test_pr_bu_narration_claim_composition.py
+?? tests/test_pr_bv_turn_local_operation_projection.py
+?? tests/test_pr_bw_narration_only_envelope.py
+?? tests/test_pr_by_narration_only_retry_contract.py
+?? tests/test_pr_cc_social_reply_reconciliation.py
+?? tests/test_pr_ce_subjective_preference_classification.py
+?? tools/audit_gm_resolution_decisions.py
+?? tools/measure_pr_bt_policy_instruction_payloads.py
+?? tools/measure_pr_bt_selective_epistemic_restoration.py
+?? tools/run_pr_bp_synthetic_gate.py
+?? tools/run_pr_br_continuation11_live.py
+?? tools/run_pr_br_continuation12_live.py
+?? tools/run_pr_br_continuation13_live.py
+?? tools/run_pr_br_continuation14_live.py
+?? tools/run_pr_br_continuation15_live.py
+?? tools/run_pr_br_continuation16_live.py
+?? tools/run_pr_br_continuation18_live.py
+?? tools/run_pr_br_continuation19_live.py
+?? tools/run_pr_br_continuation20_live.py
+?? tools/run_pr_br_continuation4_probes.py
+?? tools/run_pr_br_continuation5_probes.py
+?? tools/run_pr_br_continuation6_probes.py
+?? tools/run_pr_br_continuation7_probes.py
+?? tools/run_pr_br_continuation8_smoke.py
+?? tools/run_pr_br_enforcement_probes.py
+?? tools/run_pr_br_enforcement_smoke.py
+?? tools/run_pr_br_followup_probes.py
+?? tools/run_pr_br_level2_probes.py
+?? tools/run_pr_br_smoke.py

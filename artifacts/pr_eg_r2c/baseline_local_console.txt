@@ -1,0 +1,828 @@
+........................F..F.....F..F................................... [ 17%]
+........................................................................ [ 34%]
+........................................................................ [ 52%]
+........................................................................ [ 69%]
+.......................................F.....F.FFFFF.................... [ 87%]
+FF..............F.....F..F......FF.F................                     [100%]
+================================== FAILURES ===================================
+_________ test_chat_quarterstaff_attack_mechanical_resolution_absent __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_quarterstaff_attack_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E843950>
+
+    def test_chat_quarterstaff_attack_mechanical_resolution_absent(tmp_path, monkeypatch):
+        """Chat with unrelated text goes to GPT without exploration resolution."""
+        _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
+        gpt_called_with_none_resolution = []
+    
+        def capture_gpt(messages):
+            import json
+            for m in messages:
+                if m.get("role") == "user" and "content" in m:
+                    try:
+                        payload = json.loads(m["content"])
+                        res = payload.get("mechanical_resolution")
+                        gpt_called_with_none_resolution.append(res is None)
+                    except Exception:
+                        pass
+            return {"player_facing_text": "The guard frowns.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", capture_gpt)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "I attack the guard with my quarterstaff"})
+        assert r.status_code == 200
+        assert r.json().get("ok") is True
+>       assert any(gpt_called_with_none_resolution)
+E       assert False
+E        +  where False = any([False])
+
+tests\test_exploration_resolution.py:449: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__________ test_chat_observe_area_resolution_kwarg_to_build_messages __________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_observe_area_resolut0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E826F60>
+
+    def test_chat_observe_area_resolution_kwarg_to_build_messages(tmp_path, monkeypatch):
+        """When /api/chat receives exploration-style text, it routes through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch, active="scene_a")
+        build_messages_called_with_resolution = []
+    
+        def capture_build_messages(*args, **kwargs):
+            # api passes resolution as the 9th positional arg to build_messages
+            res = args[8] if len(args) > 8 else kwargs.get("resolution")
+            build_messages_called_with_resolution.append(res)
+            from game.gm import build_messages as _orig
+            return _orig(*args, **kwargs)
+    
+        def fake_gpt(messages):
+            return {"player_facing_text": "You look around.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.build_messages", capture_build_messages)
+            m.setattr("game.api.call_gpt", fake_gpt)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "observe the area"})
+        assert r.status_code == 200
+        data = r.json()
+        assert data.get("ok") is True
+        assert len(build_messages_called_with_resolution) >= 1
+        resolution = build_messages_called_with_resolution[-1]
+        assert resolution is not None
+>       assert resolution.get("kind") == "observe"
+E       assert None == 'observe'
+E        +  where None = <built-in method get of dict object at 0x000001FA0E86A8C0>('kind')
+E        +    where <built-in method get of dict object at 0x000001FA0E86A8C0> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+
+tests\test_exploration_resolution.py:497: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+__ test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution __
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_observe_area_gm_buil0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E49F860>
+
+    def test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution(tmp_path, monkeypatch):
+        """Chat text 'observe the area' parses and routes through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch)
+        build_messages_resolution = []
+    
+        def capture_build(*args, **kwargs):
+            res = args[8] if len(args) > 8 else kwargs.get("resolution")
+            build_messages_resolution.append(res)
+            return [{"role": "system", "content": "x"}, {"role": "user", "content": "{}"}]
+    
+        def fake_gpt(messages):
+            return {"player_facing_text": "You look around.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            # api holds its own reference to build_messages; patch game.api, not game.gm
+            m.setattr("game.api.build_messages", capture_build)
+            m.setattr("game.api.call_gpt", fake_gpt)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "observe the area"})
+        assert r.status_code == 200
+        assert build_messages_resolution
+        assert build_messages_resolution[0] is not None
+>       assert build_messages_resolution[0].get("kind") == "observe"
+E       assert None == 'observe'
+E        +  where None = <built-in method get of dict object at 0x000001FA0E9641C0>('kind')
+E        +    where <built-in method get of dict object at 0x000001FA0E9641C0> = {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...efs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'observe the area'}.get
+
+tests\test_exploration_resolution.py:609: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+------------------------------ Captured log call ------------------------------
+WARNING  game.stage_diff_telemetry:stage_diff_telemetry.py:287 STAGE_DIFF {"event": "STAGE_DIFF_MEANINGFUL", "from": "retry_terminal_fallback_entry", "to": "retry_terminal_fallback_result", "diff": {"text_fingerprint_changed": true, "route_changed": true, "fallback_changed": true, "repair_flags_changed": false, "resolution_kind_changed": false, "retry_flags_changed": true, "terminal_retry_activated": true}}
+___________ test_chat_exploration_parsed_routes_through_exploration ___________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_exploration_parsed_r0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E945250>
+
+    def test_chat_exploration_parsed_routes_through_exploration(tmp_path, monkeypatch):
+        """Chat with exploration intent (e.g. 'observe the area') is parsed and routed through exploration pipeline."""
+        _seed_scenes_and_session(tmp_path, monkeypatch)
+        payloads_received = []
+    
+        def capture(messages):
+            import json
+            for m in messages:
+                if m.get("role") == "user" and "content" in m:
+                    try:
+                        p = json.loads(m["content"])
+                        payloads_received.append(p)
+                    except Exception:
+                        pass
+            return {"player_facing_text": "You take in the scene.", "tags": [], "scene_update": None, "activate_scene_id": None, "new_scene_draft": None, "world_updates": None, "suggested_action": None, "debug_notes": ""}
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", capture)
+            client = TestClient(app)
+            r = client.post("/api/chat", json={"text": "observe the area"})
+        assert r.status_code == 200
+        assert payloads_received
+        last_payload = payloads_received[-1]
+>       assert "resolved_exploration_action" in last_payload
+E       AssertionError: assert 'resolved_exploration_action' in {'instructions': ['WORLD SIMULATION (bounded engine slice): World progression touched: faction_pressure:ash_cowl, fact..., 'after_anchor': {'scene_id': 'scene_a', 'location_id': None, 'location_label': None, 'time_anchor': None}, ...}, ...}
+
+tests\test_exploration_resolution.py:666: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_____ test_chat_fallback_preserves_endpoint_specific_no_resolution_shape ______
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_fallback_preserves_e0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E99D130>
+
+    def test_chat_fallback_preserves_endpoint_specific_no_resolution_shape(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "hello there"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["ok"] is True
+>       assert data.get("resolution") is None
+E       assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} is None
+E        +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...act_refs': ['scene_world_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'hello there'} = <built-in method get of dict object at 0x000001FA0C07E040>('resolution')
+E        +    where <built-in method get of dict object at 0x000001FA0C07E040> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+
+tests\test_turn_pipeline_shared.py:293: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_direct_npc_question_keeps0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E843380>
+
+    def test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback(
+        tmp_path, monkeypatch
+    ):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            gm = _gm_response("For a breath, the scene holds while voices shift around you.")
+            gm["response_policy"] = {
+                "response_type_contract": {"required_response_type": "neutral_narration"},
+                "social_response_structure": {
+                    "enabled": False,
+                    "required_response_type": "neutral_narration",
+                    "debug_reason": "response_type_not_dialogue:neutral_narration",
+                },
+            }
+            return gm
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Runner, who attacked the patrol?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+>       assert captured_inputs
+E       assert []
+
+tests\test_turn_pipeline_shared.py:472: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+___________ test_chat_known_follow_up_bypasses_uncertainty_fallback ___________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_known_follow_up_bypa0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0B189760>
+
+    def test_chat_known_follow_up_bypasses_uncertainty_fallback(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        session = storage.load_session()
+        scene_runtime = session.setdefault("scene_runtime", {}).setdefault("scene_investigate", {})
+        scene_runtime["recent_contextual_leads"] = [
+            {
+                "key": "lady-misia-near-the-tavern-entrance",
+                "kind": "recent_named_figure",
+                "subject": "Lady Misia",
+                "position": "near the tavern entrance",
+                "named": True,
+                "positioned": True,
+            }
+        ]
+        storage.save_session(session)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response(
+                    "Captain Veyra folds her arms and watches the road."
+                ),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where do I find that person?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        gm_output = data.get("gm_output") or {}
+        assert_no_uncertainty_fallback_stock_smoke(gm_output.get("player_facing_text") or "")
+        assert not any(str(tag).startswith("uncertainty:") for tag in (gm_output.get("tags") or []))
+>       assert "retry_strategy:selected=unresolved_question" in read_turn_debug_notes(data)
+E       assert 'retry_strategy:selected=unresolved_question' in ''
+E        +  where '' = read_turn_debug_notes({'ok': True, 'gm_output': {'player_facing_text': 'person says, "Which do you mean? I cannot tell which one that refers...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...})
+
+tests\test_turn_pipeline_shared.py:579: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______________ test_chat_targeted_retry_unresolved_question_only ______________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_targeted_retry_unres0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E9354C0>
+
+    def test_chat_targeted_retry_unresolved_question_only(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response(
+                    "Rain beats along the roofline while distant bells blur under street noise."
+                )
+            return _gm_response(
+                "The report is usually copied to the notice board before dusk, though no one here will swear the last sheet is still hanging there. "
+                "Best lead: read the posted notices and ask Captain Veyra who took the last copy."
+            )
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+>       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:608: AssertionError
+_______ test_chat_targeted_retry_prefers_highest_priority_failure_first _______
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_targeted_retry_prefe0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E9C9E20>
+
+    def test_chat_targeted_retry_prefers_highest_priority_failure_first(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response("I can't answer that. Based on what's established, we can determine very little here.")
+            return _gm_response(
+                "No one here has pinned the report to one locked drawer, but Captain Veyra says the gate board carried the last official notice before dusk. "
+                "Best lead: check the board, then press her on who removed the fresh copy."
+            )
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where is the missing patrol report?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+>       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:648: AssertionError
+__ test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback __
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_unresolved_retry_fai0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0BA446B0>
+
+    def test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response("Rain rolls over the checkpoint and the crowd shifts under dripping banners.")
+            return _gm_response("The checkpoint feels tense and crowded as boots splash through mud.")
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where are we?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+>       assert len(captured_inputs) == 2
+E       assert 0 == 2
+E        +  where 0 = len([])
+
+tests\test_turn_pipeline_shared.py:678: AssertionError
+_ test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_unresolved_retry_fai1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0B1F1E20>
+
+    def test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+        captured_inputs = []
+    
+        def _fake_call_gpt(messages):
+            captured_inputs.append(messages)
+            if len(captured_inputs) == 1:
+                return _gm_response("Rain rattles over the shutters while everyone keeps their own counsel.")
+            return _gm_response("Fog hangs low by the gate and no one steps forward first.")
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", _fake_call_gpt)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        assert len(captured_inputs) == 2
+        gm_output = data.get("gm_output") or {}
+        text = gm_output.get("player_facing_text") or ""
+        low = text.lower()
+        assert "fog hangs low" not in low
+        assert "tavern runner" in low
+>       assert_emission_repair_evidence(
+            data,
+            tag_markers=("question_retry_fallback",),
+            debug_notes_reader=read_turn_debug_notes,
+        )
+
+tests\test_turn_pipeline_shared.py:722: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = {'ok': True, 'gm_output': {'player_facing_text': 'Tavern Runner says, "I couldn\'t tell you."', 'tags': [], 'scene_upd...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}
+debug_notes_reader = <function read_turn_debug_notes at 0x000001FA0E4D2D40>
+tag_markers = ('question_retry_fallback',), debug_markers = None
+
+    def assert_emission_repair_evidence(
+        data: Mapping[str, Any],
+        *,
+        debug_notes_reader: Callable[[Mapping[str, Any]], str] | None = None,
+        tag_markers: Sequence[str] | None = None,
+        debug_markers: Sequence[str] | None = None,
+    ) -> None:
+        """HTTP smoke: replacement/repair evidence appears via tags or debug notes."""
+        gm_out = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
+        tags = list((gm_out or {}).get("tags") or [])
+        reader = debug_notes_reader or read_turn_debug_notes
+        dbg = _normalized_low(reader(data))
+        tag_set = tuple(tag_markers if tag_markers is not None else _DEFAULT_REPAIR_TAG_MARKERS)
+        debug_set = tuple(debug_markers if debug_markers is not None else _DEFAULT_REPAIR_DEBUG_MARKERS)
+>       assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+tests\helpers\emission_smoke_assertions.py:356: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_social_pressure_line_prefers_dialogue_over_adjudication ______
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_social_pressure_line0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E8267B0>
+
+    def test_chat_social_pressure_line_prefers_dialogue_over_adjudication(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Footman? I require an audience."})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        gm_out = data.get("gm_output") or {}
+>       assert data.get("resolution") is None
+E       assert {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} is None
+E        +  where {'world_tick_events': [{'type': 'faction_pressure', 'text': "House Verevin's pressure mounts.", 'source': 'house_verev...orld_authored_corpus'], ...}, 'ordinary_contract_established': True, ...}, 'prompt': 'Footman? I require an audience.'} = <built-in method get of dict object at 0x000001FA0E9AA6C0>('resolution')
+E        +    where <built-in method get of dict object at 0x000001FA0E9AA6C0> = {'ok': True, 'gm_output': {'player_facing_text': '[Narration]', 'tags': [], 'scene_update': None, 'activate_scene_id':...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}.get
+
+tests\test_turn_pipeline_shared.py:1250: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_active_target_direct_command_routes_to_social_exchange _______
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_active_target_direct0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E8245F0>
+
+    def test_chat_active_target_direct_command_routes_to_social_exchange(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        world = storage.load_world()
+        world["npcs"] = [
+            {
+                "id": "runner",
+                "name": "Tavern Runner",
+                "location": "scene_investigate",
+                "topics": [{"id": "lanes", "text": "They were seen near the east lanes.", "clue_id": "east_lanes"}],
+            }
+        ]
+        storage._save_json(storage.WORLD_PATH, world)
+    
+        session = storage.load_session()
+        session_ctx = session.setdefault("interaction_context", {})
+        session_ctx["active_interaction_target_id"] = "runner"
+        session_ctx["active_interaction_kind"] = "social"
+        session_ctx["interaction_mode"] = "social"
+        session_ctx["engagement_level"] = "engaged"
+        storage.save_session(session)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Tell me plainly."})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+>       assert_dialogue_lock_social_route_smoke(
+            data.get("resolution") or {},
+            allowed_kinds=("social_probe",),
+        )
+
+tests\test_turn_pipeline_shared.py:1287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+resolution = {'kind': 'conversational_clarify', 'action_id': 'conversational_clarify', 'label': 'Tell me plainly.', 'prompt': 'Tell me plainly.', ...}
+npc_id = 'runner', allowed_kinds = ('social_probe',)
+
+    def assert_dialogue_lock_social_route_smoke(
+        resolution: Mapping[str, Any],
+        *,
+        npc_id: str = "runner",
+        allowed_kinds: Sequence[str] = _DIALOGUE_LOCK_SOCIAL_KINDS,
+    ) -> None:
+        """HTTP smoke: dialogue-lock turn reached active-target social exchange wiring."""
+        kind = resolution.get("kind")
+        allowed = set(allowed_kinds)
+>       assert kind in allowed, (
+               ^^^^^^^^^^^^^^^
+            f"expected resolution.kind in {sorted(allowed)!r}, got {kind!r}"
+        )
+E       AssertionError: expected resolution.kind in ['social_probe'], got 'conversational_clarify'
+
+tests\helpers\emission_smoke_assertions.py:377: AssertionError
+________ test_chat_mixed_turn_preserves_embedded_adjudication_metadata ________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_mixed_turn_preserves0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0EA42CF0>
+
+    def test_chat_mixed_turn_preserves_embedded_adjudication_metadata(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post(
+                "/api/chat",
+                json={"text": "I investigate the desk (Is Perception needed?)"},
+            )
+        assert resp.status_code == 200
+        data = resp.json()
+        resolution = data.get("resolution") or {}
+        assert resolution.get("kind") in {"discover_clue", "investigate"}
+        metadata = resolution.get("metadata") or {}
+        embedded = metadata.get("embedded_adjudication") or {}
+>       assert embedded.get("category") == "roll_requirement_query"
+E       AssertionError: assert None == 'roll_requirement_query'
+E        +  where None = <built-in method get of dict object at 0x000001FA0E92E900>('category')
+E        +    where <built-in method get of dict object at 0x000001FA0E92E900> = {}.get
+
+tests\test_turn_pipeline_shared.py:1516: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[CLUE DISCOVERED] desk_clue
+[PROMPT] fresh campaign prompt constructed
+___ test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane ___
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_mixed_dialogue_with_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0BA457F0>
+
+    def test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+        world = storage.load_world()
+        world["npcs"] = [
+            {
+                "id": "runner",
+                "name": "Tavern Runner",
+                "location": "scene_investigate",
+                "topics": [{"id": "alleys", "text": "Try the alley by the bathhouse.", "clue_id": "bathhouse_alley"}],
+            }
+        ]
+        storage._save_json(storage.WORLD_PATH, world)
+    
+        session = storage.load_session()
+        session_ctx = session.setdefault("interaction_context", {})
+        session_ctx["active_interaction_target_id"] = "runner"
+        session_ctx["active_interaction_kind"] = "social"
+        session_ctx["interaction_mode"] = "social"
+        session_ctx["engagement_level"] = "engaged"
+        storage.save_session(session)
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _: FAKE_GPT_RESPONSE)
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post(
+                "/api/chat",
+                json={"text": '"Where can I find them?" (Does that require Sleight of Hand?)'},
+            )
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        resolution = data.get("resolution") or {}
+        assert resolution.get("kind") == "question"
+        assert (resolution.get("social") or {}).get("social_intent_class") == "social_exchange"
+        metadata = resolution.get("metadata") or {}
+        embedded = metadata.get("embedded_adjudication") or {}
+>       assert embedded.get("category") == "roll_requirement_query"
+E       AssertionError: assert None == 'roll_requirement_query'
+E        +  where None = <built-in method get of dict object at 0x000001FA0BF925C0>('category')
+E        +    where <built-in method get of dict object at 0x000001FA0BF925C0> = {}.get
+
+tests\test_turn_pipeline_shared.py:1697: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+______ test_chat_final_output_sanitizer_blocks_internal_scaffold_labels _______
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_final_output_sanitiz0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0B926330>
+
+    def test_chat_final_output_sanitizer_blocks_internal_scaffold_labels(tmp_path, monkeypatch):
+        _seed_shared_world(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response("Planner: route via router. Validator: unresolved."),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Where should I start?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        text = assert_player_text_present(data)
+>       assert_no_internal_scaffold_labels(text)
+
+tests\test_turn_pipeline_shared.py:1790: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\helpers\emission_smoke_assertions.py:313: in assert_no_internal_scaffold_labels
+    _assert_phrases_absent(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+text = 'Planner: route via router. Validator: unresolved.'
+phrases = ('planner:', 'router', 'validator:')
+label = 'internal scaffold labels'
+
+    def _assert_phrases_absent(text: str, phrases: Sequence[str], *, label: str) -> None:
+        low = _normalized_low(text)
+        for phrase in phrases:
+>           assert phrase not in low, f"{label}: unexpected player-facing phrase {phrase!r}"
+                   ^^^^^^^^^^^^^^^^^
+E           AssertionError: internal scaffold labels: unexpected player-facing phrase 'planner:'
+
+tests\helpers\emission_smoke_assertions.py:228: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_______ test_chat_social_exchange_invalid_blob_is_repaired_before_emit ________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_social_exchange_inva0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0EA0B410>
+
+    def test_chat_social_exchange_invalid_blob_is_repaired_before_emit(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response(
+                    "From here, no certain answer presents itself. "
+                    "The runner keeps repeating the same rumors while rain hits the shutters."
+                ),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        gm_out = data.get("gm_output") or {}
+        text = str(gm_out.get("player_facing_text") or "")
+        low = text.lower()
+        assert_no_unresolved_stock_phrases(text)
+        assert "tavern runner" in low
+>       assert_emission_repair_evidence(
+            data,
+            debug_notes_reader=read_turn_debug_notes,
+        )
+
+tests\test_turn_pipeline_shared.py:2008: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = {'ok': True, 'gm_output': {'player_facing_text': 'Tavern Runner says, "I couldn\'t tell you."', 'tags': [], 'scene_upd...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}
+debug_notes_reader = <function read_turn_debug_notes at 0x000001FA0E4D2D40>
+tag_markers = None, debug_markers = None
+
+    def assert_emission_repair_evidence(
+        data: Mapping[str, Any],
+        *,
+        debug_notes_reader: Callable[[Mapping[str, Any]], str] | None = None,
+        tag_markers: Sequence[str] | None = None,
+        debug_markers: Sequence[str] | None = None,
+    ) -> None:
+        """HTTP smoke: replacement/repair evidence appears via tags or debug notes."""
+        gm_out = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
+        tags = list((gm_out or {}).get("tags") or [])
+        reader = debug_notes_reader or read_turn_debug_notes
+        dbg = _normalized_low(reader(data))
+        tag_set = tuple(tag_markers if tag_markers is not None else _DEFAULT_REPAIR_TAG_MARKERS)
+        debug_set = tuple(debug_markers if debug_markers is not None else _DEFAULT_REPAIR_DEBUG_MARKERS)
+>       assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+tests\helpers\emission_smoke_assertions.py:356: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_________ test_chat_social_exchange_blocks_advisory_prose_before_emit _________
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_social_exchange_bloc0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0B1F1D60>
+
+    def test_chat_social_exchange_blocks_advisory_prose_before_emit(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+    
+        with monkeypatch.context() as m:
+            m.setattr(
+                "game.api.call_gpt",
+                lambda _messages: _gm_response(
+                    "I'd suggest you question the notice board clerk before the lane goes cold."
+                ),
+            )
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            resp = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert resp.status_code == 200
+        data = resp.json()
+        text = str((data.get("gm_output") or {}).get("player_facing_text") or "")
+        low = text.lower()
+        assert_no_advisory_prose(text)
+>       assert_emission_repair_evidence(
+            data,
+            debug_notes_reader=read_turn_debug_notes,
+        )
+
+tests\test_turn_pipeline_shared.py:2036: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+data = {'ok': True, 'gm_output': {'player_facing_text': 'Tavern Runner says, "I couldn\'t tell you."', 'tags': [], 'scene_upd...haracter': 'Galinor', ...}, 'character': {'id': 'galinor', 'name': 'Galinor', 'class': 'Wizard', 'level': 1, ...}, ...}
+debug_notes_reader = <function read_turn_debug_notes at 0x000001FA0E4D2D40>
+tag_markers = None, debug_markers = None
+
+    def assert_emission_repair_evidence(
+        data: Mapping[str, Any],
+        *,
+        debug_notes_reader: Callable[[Mapping[str, Any]], str] | None = None,
+        tag_markers: Sequence[str] | None = None,
+        debug_markers: Sequence[str] | None = None,
+    ) -> None:
+        """HTTP smoke: replacement/repair evidence appears via tags or debug notes."""
+        gm_out = data.get("gm_output") if isinstance(data.get("gm_output"), Mapping) else {}
+        tags = list((gm_out or {}).get("tags") or [])
+        reader = debug_notes_reader or read_turn_debug_notes
+        dbg = _normalized_low(reader(data))
+        tag_set = tuple(tag_markers if tag_markers is not None else _DEFAULT_REPAIR_TAG_MARKERS)
+        debug_set = tuple(debug_markers if debug_markers is not None else _DEFAULT_REPAIR_DEBUG_MARKERS)
+>       assert any(marker in tags for marker in tag_set) or any(marker in dbg for marker in debug_set)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError
+
+tests\helpers\emission_smoke_assertions.py:356: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+_ test_chat_repeated_interruption_progresses_without_losing_dialogue_contract _
+
+tmp_path = WindowsPath('C:/Users/Master Mandalcio/Documents/Tabletop Gaming/AI Dungeon Master/ashen_thrones_ai_gm/artifacts/pr_eg_r2c/baseline_local_tmp/test_chat_repeated_interruptio0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001FA0E8421B0>
+
+    def test_chat_repeated_interruption_progresses_without_losing_dialogue_contract(tmp_path, monkeypatch):
+        _seed_runner_dialogue_context(tmp_path, monkeypatch)
+        interruption = "Tavern Runner starts to answer, then glances past you as shouting breaks out in the crowd."
+    
+        with monkeypatch.context() as m:
+            m.setattr("game.api.call_gpt", lambda _messages: _gm_response(interruption))
+            m.setattr("game.api.parse_social_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_exploration_intent", lambda *_args, **_kwargs: None)
+            m.setattr("game.api.parse_intent", lambda *_args, **_kwargs: None)
+            client = TestClient(app)
+            first = client.post("/api/chat", json={"text": "Who attacked them?"})
+            second = client.post("/api/chat", json={"text": "Who attacked them?"})
+    
+        assert first.status_code == 200
+        assert second.status_code == 200
+    
+        first_text = str((first.json().get("gm_output") or {}).get("player_facing_text") or "")
+        second_data = second.json()
+        second_output = second_data.get("gm_output") or {}
+        second_text = str(second_output.get("player_facing_text") or "")
+        low1 = first_text.lower()
+        low2 = second_text.lower()
+        meta = _extract_final_emission_meta(second_data) or {}
+    
+        assert "tavern runner" in low1
+>       assert second_text != first_text
+E       assert 'Tavern Runner says, "I couldn\'t tell you."' != 'Tavern Runner says, "I couldn\'t tell you."'
+
+tests\test_turn_pipeline_shared.py:2111: AssertionError
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_exploration_resolution.py::test_chat_quarterstaff_attack_mechanical_resolution_absent
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_resolution_kwarg_to_build_messages
+FAILED tests/test_exploration_resolution.py::test_chat_observe_area_gm_build_messages_stub_receives_observe_resolution
+FAILED tests/test_exploration_resolution.py::test_chat_exploration_parsed_routes_through_exploration
+FAILED tests/test_turn_pipeline_shared.py::test_chat_fallback_preserves_endpoint_specific_no_resolution_shape
+FAILED tests/test_turn_pipeline_shared.py::test_direct_npc_question_keeps_dialogue_contract_and_question_relevant_unknown_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_known_follow_up_bypasses_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_unresolved_question_only
+FAILED tests/test_turn_pipeline_shared.py::test_chat_targeted_retry_prefers_highest_priority_failure_first
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_deterministic_known_fact_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_unresolved_retry_failure_uses_speaker_grounded_uncertainty_fallback
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_pressure_line_prefers_dialogue_over_adjudication
+FAILED tests/test_turn_pipeline_shared.py::test_chat_active_target_direct_command_routes_to_social_exchange
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_turn_preserves_embedded_adjudication_metadata
+FAILED tests/test_turn_pipeline_shared.py::test_chat_mixed_dialogue_with_parenthetical_rules_uses_social_main_lane
+FAILED tests/test_turn_pipeline_shared.py::test_chat_final_output_sanitizer_blocks_internal_scaffold_labels
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_invalid_blob_is_repaired_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_social_exchange_blocks_advisory_prose_before_emit
+FAILED tests/test_turn_pipeline_shared.py::test_chat_repeated_interruption_progresses_without_losing_dialogue_contract
+19 failed, 393 passed, 1 warning in 19.92s

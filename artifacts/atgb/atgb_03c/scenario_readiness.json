@@ -1,0 +1,828 @@
+[
+  {
+    "scenario_id": "S04",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S04/stores/S04-316953d82e4b446683c7f6c06fac9b76/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  },
+  {
+    "scenario_id": "S05",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S05/stores/S05-303c654ed3bc4f3988158742cb13bc5d/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  },
+  {
+    "scenario_id": "S06",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S06/stores/S06-7f62abef6b7b4945a1f627dae3e8fe27/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  },
+  {
+    "scenario_id": "S07",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S07/stores/S07-e3a05606ef94461a9863a6bdc9923d25/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  },
+  {
+    "scenario_id": "S08",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S08/stores/S08-e240c44229974598913550ba33beaef0/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  },
+  {
+    "scenario_id": "S09",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S09/stores/S09-73332f0ff6384b34879d077261a74fbe/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  },
+  {
+    "scenario_id": "S10",
+    "isolation": {
+      "accepted": true,
+      "reset_invoked": true,
+      "canonical_data_used_as_store": false
+    },
+    "preflight": {
+      "ok": true,
+      "baseline": {
+        "version": "frontier-gate-v1",
+        "manifest_sha256": "4197114379ba9c406d9b2135085eb605d8235fd9a34dcebe852b95451ef41ae9",
+        "source": "data/validation/atgb/baselines/frontier-gate-v1"
+      },
+      "checks": [
+        {
+          "check": "isolated_data_dir",
+          "ok": true
+        },
+        {
+          "check": "baseline_version",
+          "ok": true
+        },
+        {
+          "check": "starting_location",
+          "ok": true
+        },
+        {
+          "check": "starting_scene_present",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:campaign.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:character.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:conditions.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/frontier_gate.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/market_quarter.json",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:scenes/old_milestone.json",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_guard:topic:watch_command",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:location",
+          "ok": true
+        },
+        {
+          "check": "npc:gate_serjeant:topic:route_change",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:location",
+          "ok": true
+        },
+        {
+          "check": "npc:tavern_runner:topic:patrol_rumor",
+          "ok": true
+        },
+        {
+          "check": "authored_baseline:world.json",
+          "ok": true
+        },
+        {
+          "check": "fresh_runtime_and_empty_history",
+          "ok": true
+        }
+      ],
+      "critical_failures": [],
+      "runtime_violations": [],
+      "starting_state_sha256": "c12cb0dfe6a31980b4ecc00a59cc359a143a76452e517a36ad76753a6145561a",
+      "unverified_conditions": [
+        "Naturalness, relevance, ambiguity resolution and IC/OOC response quality require live human review.",
+        "Pending questions, addressees and learned facts must arise through each scenario's own dialogue.",
+        "S09 posture cues are opening/journal seeds; delivery to the player is not verified by silent reset.",
+        "Absence of authored hours, price, origins or cause is not proof that a model will preserve uncertainty."
+      ]
+    },
+    "scene_after_reset": {
+      "scene_id": "frontier_gate",
+      "discovered_clues": [],
+      "world_flag_names": [],
+      "world_state_flag_names": [],
+      "interlocutor": null,
+      "transcript_entries": 0
+    },
+    "worker_source": "artifacts/atgb/atgb_03c/S10/stores/S10-732cbd6e6ad54ea7b6beda6a30e99916/atgb-worker.json",
+    "model_configuration": {
+      "default_model_name": "gpt-4.1-mini",
+      "high_precision_model_name": "gpt-4.1-mini",
+      "retry_escalation_model_name": "gpt-4.1-mini",
+      "model_routing_enabled": true,
+      "sampling": "uncontrolled",
+      "api_key_recorded": false,
+      "provider_calls": "enabled",
+      "live_interpretation": "enabled_unless_the_process_already_disabled_it"
+    }
+  }
+]

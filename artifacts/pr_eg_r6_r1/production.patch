@@ -1,0 +1,448 @@
+--- before/game/api.py
++++ after/game/api.py
+@@ -833,6 +833,7 @@
+             speaker_id=str(decision.proposed_target or "") if decision.communication_owner == "NPC" else "",
+             speaker_name=next((ref.split(":", 1)[1] for ref in decision.context_references if ref.startswith("name:")), "") if decision.communication_owner == "NPC" else "GM",
+             resolution=resolution, player_text=original_text,
++            world=load_world(),
+         )
+         attach_expression_audit(gm, expression_audit)
+     if decision.reason == "npc_request_declined" and decision.proposed_target:
+@@ -3705,6 +3706,7 @@
+     adopted_speech = adopt_host_speech(
+         gm if isinstance(gm, dict) else _gm_for_skipped_provider_narration("", reason="authorized_host_speech"),
+         resolution=resolution, player_text=str(user_text or ""), session=session,
++        world=world,
+     )
+     if adopted_speech is not None:
+         gm = adopted_speech
+--- before/game/clues.py
++++ after/game/clues.py
+@@ -721,6 +721,7 @@
+     """Return (effective_clue_id, primary_text, merged_texts, topic, npc_id, topic_tid) from a social resolution."""
+     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
++
+ 
+     top_clue_id = str(resolution.get("clue_id") or "").strip() or None
+     top_texts: List[str] = []
+@@ -1922,6 +1923,20 @@
+     social = resolution.get("social") if isinstance(resolution.get("social"), dict) else {}
+     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), dict) else None
+ 
++    # A resolver result is a proposal for persistence, never a disclosure grant.
++    # Re-resolve against the host world before the first clue/lead write.
++    from game.dialogue_authority import authorize_npc_disclosure
++    speaker = next((n for n in world.get("npcs") or [] if isinstance(n, dict)
++                    and n.get("id") == social.get("npc_id")), None)
++    grant = authorize_npc_disclosure(speaker, topic)
++    texts = resolution.get("discovered_clues") or []
++    supported_texts = {grant.get("authorized_proposition"), grant.get("authorized_clue_text")}
++    if ((topic or resolution.get("clue_id") or texts) and
++            (not grant["permission"] or any(t not in supported_texts for t in texts)
++             or (resolution.get("clue_id") and resolution.get("clue_id") != grant.get("authorized_clue_id")))):
++        resolution.setdefault("metadata", {})["disclosure_rejected"] = "source_or_policy_denied"
++        return []
++
+     top_clue_id = str(resolution.get("clue_id") or "").strip() or None
+     top_texts: List[str] = []
+     for raw in resolution.get("discovered_clues") or []:
+--- before/game/conversational_continuity.py
++++ after/game/conversational_continuity.py
+@@ -192,7 +192,7 @@
+                 or (adoption.get("integrity_digest") and not verify_delivery_record(adoption))):
+             raise ValueError("Delivered speech does not match the accepted response")
+     payload = social if isinstance(social, Mapping) else {}
+-    if adoption is not None and adoption.get("authorization_source") == "host_terminal_safety":
++    if adoption is not None and adoption.get("authorization_source") in {"host_terminal_safety", "dialogue_authority.disclosure_denied"}:
+         payload = {}
+         ownership = "gm"
+     authority = payload.get("dialogue_authority") if isinstance(payload.get("dialogue_authority"), Mapping) else {}
+@@ -551,6 +551,7 @@
+     session: Mapping[str, Any] | None,
+     npc_id: str,
+     npc_name: str,
++    npc: Mapping[str, Any] | None = None,
+ ) -> str:
+     """Quote the delivered statement when this question asks what it meant."""
+     text = " ".join(str(player_text or "").split())
+@@ -565,10 +566,14 @@
+         return f'{npc_name or "They"} says, "Which statement do you mean?"'
+     if npc_id and str(found.get("speaker_id") or "") not in {"", npc_id}:
+         return ""
++    from game.dialogue_authority import historical_disclosure_permitted
++    if not historical_disclosure_permitted(found, npc):
++        return f'{npc_name or "They"} says, "I cannot share that information."'
+     return _npc_quote(npc_name or str(found.get("speaker_name") or "They"), found)
+ 
+ 
+-def find_reusable_commitment(session: Mapping[str, Any] | None, npc_id: str, player_text: str) -> str:
++def find_reusable_commitment(session: Mapping[str, Any] | None, npc_id: str, player_text: str,
++                             npc: Mapping[str, Any] | None = None) -> str:
+     if not is_incidental_personal(player_text) and not _PERSONAL.search(player_text or ""):
+         return ""
+     if not isinstance(session, Mapping):
+@@ -585,6 +590,9 @@
+         if npc_id and str(row.get("npc_id") or "") != npc_id:
+             continue
+         if str(row.get("kind") or "") not in {"opinion", "partial_answer"}:
++            continue
++        from game.dialogue_authority import commitment_disclosure_permitted
++        if not commitment_disclosure_permitted(row, npc):
+             continue
+         subject = set(str(row.get("subject") or "").split())
+         if tokens & subject or (tokens & pref and subject & pref) or (pref & set(_tokens(str(row.get("text") or "")))):
+@@ -623,7 +631,10 @@
+         return None
+     present = _present(scene, world)
+     active = _active_id(session, present)
+-    rows = delivered_exchanges(session)
++    from game.dialogue_authority import historical_disclosure_permitted
++    people = {str(n.get("id") or ""): n for n in (world or {}).get("npcs") or [] if isinstance(n, Mapping)}
++    rows = [r for r in delivered_exchanges(session)
++            if historical_disclosure_permitted(r, people.get(str(r.get("speaker_id") or "")))]
+     ctx = (session or {}).get("conversational_context") or {}
+     last_gm = ctx.get("last_gm_exchange") or {}
+     latest = rows[-1] if rows else {}
+--- before/game/dialogue_authority.py
++++ after/game/dialogue_authority.py
+@@ -108,6 +108,69 @@
+ _HEDGE = re.compile(r"\b(?:sometimes|not sure|i have not seen|haven't seen|as far as)\b", re.IGNORECASE)
+ 
+ 
++def authorize_npc_disclosure(npc: Mapping[str, Any] | None, topic: Any) -> dict[str, Any]:
++    """Resolve a proposition against its host-owned NPC source, on every route.
++
++    Legacy authored rows without disclosure metadata mean public knowledge.
++    Unrecognized policy/knowledge values fail closed; runtime revealed flags
++    and provider-selected identifiers never override the authored policy.
++    """
++    person = npc if isinstance(npc, Mapping) else {}
++    raw = person.get("topics") or person.get("knowledge") or []
++    candidate = topic if isinstance(topic, Mapping) else {"text": str(topic or "")}
++    text = str(candidate.get("text") or candidate.get("clue_text") or candidate.get("label") or "").strip()
++    ident = str(candidate.get("id") or "")
++    matches = []
++    for item in raw if isinstance(raw, list) else []:
++        row = item if isinstance(item, Mapping) else {"text": str(item)}
++        source_text = str(row.get("text") or row.get("clue_text") or row.get("label") or "").strip()
++        clue_matches = (not candidate.get("clue_text") or str(candidate["clue_text"]) in
++                        {source_text, str(row.get("clue_text") or "")})
++        if text and source_text == text and clue_matches and (not ident or not row.get("id") or str(row.get("id")) == ident):
++            matches.append(row)
++    source = matches[0] if len(matches) == 1 else {}
++    policy = str(source.get("disclosure", "public")).lower().strip()
++    knowledge = str(source.get("knowledge_status", "known")).lower().strip()
++    known = knowledge in {"known", "npc_knowledge", "belief", "rumor"} and source.get("known") is not False
++    permitted = bool(source and person.get("id") and known and policy in {"public", "allowed", "authorized"}
++                     and not source.get("hidden") and not source.get("secret"))
++    epistemic = str(source.get("epistemic") or source.get("epistemic_status") or "npc_knowledge")
++    classification = "unknown" if not source or not known else "public" if permitted else "known_restricted"
++    if permitted and epistemic.lower() in {"rumor", "belief", "false", "disputed", "claim"}:
++        classification = "false_or_disputed"
++    return {"speaker_id": str(person.get("id") or ""), "addressee": "player",
++            "source_id": "npc:" + str(person.get("id") or "") + ":" + str(source.get("id") or ident),
++            "classification": classification, "knowledge_status": knowledge if source else "unknown",
++            "permission": permitted, "epistemic_status": epistemic, "operation": "disclose",
++            "authorized_proposition": text if permitted else "", "canonical": False,
++            "authorized_clue_text": str(source.get("clue_text") or text) if permitted else "",
++            "authorized_clue_id": source.get("clue_id") or source.get("reveals_clue"),
++            "provenance": "authored_npc_source", "validation": "authorized" if permitted else "source_or_policy_denied"}
++
++
++def npc_source_permitted(npc: Mapping[str, Any] | None, topic: Any) -> bool:
++    return authorize_npc_disclosure(npc, topic)["permission"]
++
++
++def historical_disclosure_permitted(row: Mapping[str, Any], npc: Mapping[str, Any] | None) -> bool:
++    """History is evidence of delivery, not an override of current source policy."""
++    topic_id = str(row.get("topic_id") or "")
++    if topic_id:
++        topics = (npc or {}).get("topics") or (npc or {}).get("knowledge") or []
++        return any(isinstance(t, Mapping) and str(t.get("id") or "") == topic_id
++                   and npc_source_permitted(npc, t)
++                   and str(row.get("authorized_proposition") or row.get("supplied_text") or "")
++                   == str(t.get("text") or t.get("clue_text") or "") for t in topics)
++    return bool(row.get("response_integrity_digest") and row.get("authorization_source"))
++
++
++def commitment_disclosure_permitted(row: Mapping[str, Any], npc: Mapping[str, Any] | None) -> bool:
++    proposition = str(row.get("authorized_proposition") or "")
++    if proposition:
++        return npc_source_permitted(npc, {"text": proposition, "id": row.get("topic_id") or ""})
++    return row.get("disclosure_scope") == "nonconsequential_host_speech"
++
++
+ def requested_information(player_text: str) -> str:
+     text = str(player_text or "")
+     from game.conversational_continuity import is_incidental_personal
+@@ -199,6 +262,8 @@
+         return None
+     found: list[dict[str, str]] = []
+     for topic in raw:
++        if not npc_source_permitted(person, topic):
++            continue
+         if isinstance(topic, Mapping):
+             text = str(topic.get("text") or topic.get("clue_text") or topic.get("label") or "").strip()
+             ident = str(topic.get("id") or "")
+@@ -303,6 +368,13 @@
+     role = str(person.get("role") or person.get("occupation") or "")
+     disposition = str(person.get("disposition") or person.get("attitude") or "")
+     topic = payload.get("topic_revealed") if isinstance(payload.get("topic_revealed"), Mapping) else {}
++    if topic and not npc_source_permitted(person, topic):
++        return {"npc_id": str(payload.get("npc_id") or person.get("id") or ""),
++                "npc_name": name, "improvisation_permitted": False,
++                "knowledge_posture": "withheld", "narration_determined": True,
++                "player_line": f'{name} says, "I cannot share that information."',
++                "authorized_proposition": "", "proposition_id": "", "reuse_prior_speech": False,
++                "disclosure_authorization": authorize_npc_disclosure(person, topic)}
+     topic_text = str(topic.get("text") or topic.get("clue_text") or "").strip()
+     kind = requested_information(player_text)
+     plan = str(payload.get("reply_plan_kind") or "")
+@@ -335,7 +407,7 @@
+     npc_id = str(payload.get("npc_id") or person.get("id") or "")
+     from game.conversational_continuity import find_reusable_commitment, supplied_clarification
+ 
+-    quoted = supplied_clarification(player_text, session, npc_id, name)
++    quoted = supplied_clarification(player_text, session, npc_id, name, npc=person)
+     history_source = ""
+     inherited_proposition = ""
+     historical_proposition = ""
+@@ -353,7 +425,7 @@
+                     speaker_id=str(historical.get("speaker_id") or npc_id),
+                     topic_id=str(historical.get("topic_id") or ""),
+                 )
+-    reused = "" if quoted else find_reusable_commitment(session, npc_id, player_text)
++    reused = "" if quoted else find_reusable_commitment(session, npc_id, player_text, npc=person)
+     line = ""
+     partial = None
+     if not quoted and not reused and not topic_text:
+@@ -367,9 +439,11 @@
+         determined = True
+         posture = "partial"
+         line = _partial_answer_line(name, partial["text"], player_text)
+-    prior = active_commitments(session, npc_id=npc_id, subject=subject)
++    prior = [r for r in active_commitments(session, npc_id=npc_id, subject=subject)
++             if commitment_disclosure_permitted(r, person)]
+     if not prior and subject == "that":
+-        prior = active_commitments(session, npc_id=npc_id)[-1:]
++        prior = [r for r in active_commitments(session, npc_id=npc_id)
++                 if commitment_disclosure_permitted(r, person)][-1:]
+     if determined and not line:
+         if prior:
+             line = str(prior[-1].get("text") or "")
+@@ -539,6 +613,8 @@
+     record = social.get("dialogue_authority")
+     if not isinstance(record, Mapping):
+         record = build_dialogue_authority(player_text, social=social, session=session)
++    if (record.get("disclosure_authorization") or {}).get("validation") == "source_or_policy_denied":
++        return str(record["player_line"]), "dialogue_authority.disclosure_denied"
+     # Explicit repeat/clarification binds the relevant delivered exchange even
+     # when a resolver also carries a previously selected topic on this turn.
+     line = str(record.get("player_line") or "").strip()
+@@ -682,6 +758,9 @@
+         "turn": int(turn or 0),
+         "status": "active",
+         "requested_information": str(record.get("requested_information") or ""),
++        "authorized_proposition": str(record.get("authorized_proposition") or ""),
++        "topic_id": str((social.get("topic_revealed") or {}).get("id") or ""),
++        "disclosure_scope": "source_bound" if record.get("authorized_proposition") else "nonconsequential_host_speech",
+     }
+     for older in rows:
+         if (
+--- before/game/gm_resolution_decision.py
++++ after/game/gm_resolution_decision.py
+@@ -365,7 +365,8 @@
+                 parts.append(str(npc.get("name") or ""))
+                 parts.append(str(npc.get("role") or ""))
+                 for topic in npc.get("topics") or []:
+-                    if isinstance(topic, Mapping):
++                    from game.dialogue_authority import npc_source_permitted
++                    if isinstance(topic, Mapping) and npc_source_permitted(npc, topic):
+                         parts.append(str(topic.get("text") or ""))
+     return "\n".join(part for part in parts if str(part).strip())
+ 
+--- before/game/immutable_valid_response.py
++++ after/game/immutable_valid_response.py
+@@ -1134,6 +1134,11 @@
+     topic = social.get("topic_revealed") if isinstance(social.get("topic_revealed"), Mapping) else None
+     topic_text = str((topic or {}).get("text") or (topic or {}).get("clue_text") or "").strip()
+     if topic_text:
++        from game.dialogue_authority import npc_source_permitted
++        person = next((n for n in (world or {}).get("npcs") or [] if isinstance(n, Mapping)
++                       and n.get("id") == social.get("npc_id")), None)
++        if not npc_source_permitted(person, topic):
++            return {**gm, "player_facing_text": f'{social.get("npc_name") or "They"} says, "I cannot share that information."'}
+         try:
+             from game.social import (
+                 _text_communicates_authored_fact,
+@@ -1431,6 +1436,7 @@
+     resolution: Mapping[str, Any] | None,
+     player_text: str,
+     session: Mapping[str, Any] | None = None,
++    world: Mapping[str, Any] | None = None,
+ ) -> dict[str, Any] | None:
+     """Bind host-owned speech to the existing immutable final-response record."""
+     from game.dialogue_authority import select_host_speech
+@@ -1454,17 +1460,43 @@
+     if expressed is not None:
+         line, source, audit = expressed
+     sealed = seal_host_speech(gm, text=line, source=source, speaker_id=social["npc_id"],
+-                              speaker_name=social["npc_name"], resolution=resolution, player_text=player_text)
+-    attach_expression_audit(sealed, audit)
++                              speaker_name=social["npc_name"], resolution=resolution, player_text=player_text, world=world)
++    if sealed["metadata"][ACCEPTED_KEY].get("authorization_source") != "dialogue_authority.disclosure_denied":
++        attach_expression_audit(sealed, audit)
+     return sealed
+ 
+ 
+ def seal_host_speech(
+     gm: dict[str, Any], *, text: str, source: str, speaker_id: str,
+     speaker_name: str, resolution: Mapping[str, Any] | None, player_text: str,
++    world: Mapping[str, Any] | None = None,
+ ) -> dict[str, Any]:
+     """Use one final-response representation for resolver and continuity speech."""
+     line = text
++    social = (resolution or {}).get("social") or {}
++    topic = social.get("topic_revealed")
++    plan = social.get("unified_semantic_plan") or {}
++    if not topic and plan.get("authorized_text"):
++        topic = {"id": next(iter(plan.get("selected_source_ids") or []), ""),
++                 "text": str(plan["authorized_text"])}
++    authority = social.get("dialogue_authority") or {}
++    if not topic and authority.get("authorized_proposition"):
++        topic = {"text": str(authority["authorized_proposition"])}
++    if isinstance(topic, Mapping):
++        from game.dialogue_authority import authorize_npc_disclosure
++        person = next((n for n in (world or {}).get("npcs") or []
++                       if isinstance(n, Mapping) and n.get("id") == speaker_id), None)
++        grant = authorize_npc_disclosure(person, topic)
++        if world is None:
++            # Pure resolver consumers carry the host's source decision. The
++            # production API always supplies world and re-resolves it above.
++            receipt = topic.get("disclosure_authorization") or {}
++            grant = {"permission": bool(receipt.get("permission")
++                     and receipt.get("speaker_id") == speaker_id
++                     and receipt.get("authorized_proposition") == str(topic.get("text") or topic.get("clue_text") or ""))}
++        if not grant["permission"]:
++            line = f'{speaker_name or "They"} says, "I cannot share that information."'
++            source = "dialogue_authority.disclosure_denied"
+     candidate = str(gm.get("player_facing_text") or "")
+     # A discarded draft cannot supply state effects alongside the host answer.
+     for key in ("scene_update", "world_updates", "activate_scene_id", "new_scene_draft", "suggested_action"):
+@@ -1506,7 +1538,7 @@
+     """Generate is already done. Validate, preserve, or retry once."""
+     if not isinstance(gm, dict):
+         return gm
+-    adopted = adopt_host_speech(gm, resolution=resolution, player_text=player_text, session=session)
++    adopted = adopt_host_speech(gm, resolution=resolution, player_text=player_text, session=session, world=world)
+     if adopted is not None:
+         return adopted
+     contract = _contract_from_resolution(resolution)
+--- before/game/player_interpretation_bridge.py
++++ after/game/player_interpretation_bridge.py
+@@ -124,9 +124,10 @@
+     # Engine-owned authored/visible passages, never provider subject/summary.
+     passages = [("scene", str(current.get("summary") or ""))]
+     passages += [("scene.visible_fact", str(v)) for v in current.get("visible_facts") or []]
++    from game.dialogue_authority import npc_source_permitted
+     if addressee_ok:
+         passages += [("npc.authored_subject", str(t.get("text") or ""))
+-                     for t in speaker.get("topics") or [] if isinstance(t, dict)]
++                     for t in speaker.get("topics") or [] if isinstance(t, dict) and npc_source_permitted(speaker, t)]
+     def mentioned(phrase, text):
+         return bool(phrase and re.search(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", text, re.I))
+     remaining = []
+--- before/game/referenced_surface.py
++++ after/game/referenced_surface.py
+@@ -296,9 +296,12 @@
+ ) -> List[Dict[str, Any]]:
+     out: List[Dict[str, Any]] = []
+     for npc in _present_npc_rows(scene_inner, world):
++        from game.dialogue_authority import npc_source_permitted
+         topics = npc.get("topics")
+         if isinstance(topics, list):
+             for topic in topics:
++                if not npc_source_permitted(npc, topic):
++                    continue
+                 if isinstance(topic, Mapping):
+                     text = _clean(topic.get("text"))
+                     if text:
+@@ -306,6 +309,8 @@
+         knowledge = npc.get("knowledge")
+         if isinstance(knowledge, list):
+             for item in knowledge:
++                if not npc_source_permitted(npc, item):
++                    continue
+                 if isinstance(item, Mapping):
+                     text = _clean(item.get("text"))
+                     if text:
+--- before/game/social.py
++++ after/game/social.py
+@@ -1630,6 +1630,9 @@
+ 
+     candidates = []
+     for t in topics:
++        from game.dialogue_authority import npc_source_permitted
++        if not npc_source_permitted(npc, t):
++            continue
+         if not isinstance(t, dict):
+             rec = {"id": str(t)[:40], "text": str(t)} if t else None
+             if not rec:
+@@ -2443,6 +2446,9 @@
+         if not isinstance(topics, list):
+             continue
+         for rec in topics:
++            from game.dialogue_authority import npc_source_permitted
++            if not npc_source_permitted(npc, rec):
++                continue
+             if isinstance(rec, dict):
+                 tid = str(rec.get("id") or "").strip()
+                 topic_text = str(rec.get("clue_text") or rec.get("text") or "").strip()
+@@ -2658,7 +2664,9 @@
+                     continue
+                 if not revealed:
+                     continue
+-                _add(rec.get("clue_text") or rec.get("text"), "authored_topic")
++                from game.dialogue_authority import npc_source_permitted
++                if npc_source_permitted(npc, rec):
++                    _add(rec.get("clue_text") or rec.get("text"), "authored_topic")
+     return out
+ 
+ 
+@@ -4289,7 +4297,7 @@
+ 
+             # Historical restatement is speech authority, not a new topic reveal.
+             from game.conversational_continuity import supplied_clarification
+-            speech_reference = supplied_clarification(str(raw_player_text or prompt or ""), session, npc_id, npc_name)
++            speech_reference = supplied_clarification(str(raw_player_text or prompt or ""), session, npc_id, npc_name, npc=npc)
+             if speech_reference:
+                 topic_rec = None
+                 topic_selection = {"candidate_sources": [], "selected_source": "", "ambiguous": False}
+@@ -4315,7 +4323,14 @@
+                     recalled_topic = True
+                     break
+ 
++        from game.dialogue_authority import authorize_npc_disclosure
++        disclosure = authorize_npc_disclosure(npc, topic_rec)
++        if topic_rec and not disclosure["permission"]:
++            topic_rec = None
++            recalled_topic = False
++
+         if topic_rec:
++            topic_rec["disclosure_authorization"] = disclosure
+             revealed_ids = runtime.get("revealed_topics") or []
+             if topic_rec["id"] not in revealed_ids:
+                 revealed_ids.append(topic_rec["id"])
+--- before/game/unified_semantic_planning.py
++++ after/game/unified_semantic_planning.py
+@@ -621,7 +621,8 @@
+             text = str(topic.get("text") or topic.get("clue_text") or topic.get("label") or "").strip()
+             ident = str(topic.get("id") or "").strip() or _snake(text)[:40]
+             disclosure = str(topic.get("disclosure") or "public").lower()
+-            hidden = bool(topic.get("hidden") or topic.get("secret") or disclosure in {"secret", "hidden", "withheld", "none", "forbidden"})
++            from game.dialogue_authority import npc_source_permitted
++            hidden = not npc_source_permitted(npc, topic)
+             epistemic = str(topic.get("epistemic") or topic.get("epistemic_status") or "npc_knowledge")
+             rows.append({
+                 "id": ident,

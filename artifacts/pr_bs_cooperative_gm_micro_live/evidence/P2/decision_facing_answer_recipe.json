@@ -1,0 +1,47 @@
+{
+  "schema": "decision_facing_answer_recipe_v1",
+  "projection_only": true,
+  "authority_owner": "gm_resolution_decision",
+  "requested_answer": "Answer baker in ordinary speech. Player asked: Baker, which loaf do you usually keep for yourself?",
+  "required_content": [
+    {
+      "claim_id": "rc_9ab69105465f",
+      "role": "MUST_STATE",
+      "text": "A baker stands beside loaves at a bread stall.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    },
+    {
+      "claim_id": "rc_2bb408577206",
+      "role": "MUST_STATE",
+      "text": "Baker exists",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "observation"
+    }
+  ],
+  "permitted_content": [],
+  "permitted_inference": {
+    "allowed": false,
+    "qualified_observations": [],
+    "may_infer_claims": []
+  },
+  "inference_modality": "none",
+  "unresolved_content": [],
+  "forbidden_upgrades": [
+    "unauthorized_consequential_fact",
+    "generated_content_as_authored_world_fact",
+    "durable_preference_without_authorized_claim",
+    "generated_dialogue_as_authored_world_fact"
+  ],
+  "declaration_guidance": {
+    "consequential_authorized_claim": "realize with source_claim_id and the claim provenance",
+    "bounded_inference": "not permitted on this turn",
+    "epistemic_premise": "No player hypothesis, NPC claim, or unresolved premise is authorized on this turn.",
+    "epistemic_claims": [],
+    "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+  },
+  "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+  "answer_strategy": "Have baker reply in ordinary dialogue: a direct answer, a refusal, a hesitation, or an admission that they do not know."
+}

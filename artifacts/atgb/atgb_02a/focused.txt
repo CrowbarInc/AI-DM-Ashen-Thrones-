@@ -1,0 +1,9 @@
+.......................F                                                 [100%]
+================================== FAILURES ===================================
+__________ test_provider_disabled_host_uses_chat_and_isolates_state ___________
+tests\test_atgb_infrastructure.py:256: in test_provider_disabled_host_uses_chat_and_isolates_state
+    assert result["turns"], result.get("scenario_records")
+E   AssertionError: [{'scenario_id': 'S06', 'title': 'Beside the table', 'partition': 'development_visible', 'evidence_status': 'development_visible', ...}]
+E   assert []
+=========================== short test summary info ===========================
+FAILED tests/test_atgb_infrastructure.py::test_provider_disabled_host_uses_chat_and_isolates_state

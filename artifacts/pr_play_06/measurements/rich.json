@@ -1,0 +1,204 @@
+{
+  "name": "rich",
+  "serialized_output": {
+    "characters": 3726,
+    "utf8_bytes": 3726,
+    "estimated_tokens_chars_div_4": 932,
+    "tokenization": "estimate only; model-compatible tokenizer unavailable"
+  },
+  "narration": {
+    "characters": 458,
+    "utf8_bytes": 458,
+    "estimated_tokens_chars_div_4": 115,
+    "tokenization": "estimate only; model-compatible tokenizer unavailable"
+  },
+  "declarations": {
+    "characters": 3230,
+    "utf8_bytes": 3230,
+    "estimated_tokens_chars_div_4": 808,
+    "tokenization": "estimate only; model-compatible tokenizer unavailable"
+  },
+  "structural_characters_including_escaping_whitespace": 38,
+  "parser_valid": true,
+  "declaration_count": 8,
+  "host_status": 200,
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "after": {
+    "campaign_started": true,
+    "turn_counter": 1,
+    "time_pressure": 1,
+    "log_length": 1,
+    "can_start": false,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 3,
+        "agenda_progress": 1
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 3,
+        "agenda_progress": 1
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 2,
+        "agenda_progress": 1
+      }
+    ],
+    "event_types": [
+      "faction_pressure",
+      "faction_pressure"
+    ]
+  },
+  "failure": null,
+  "provider_usage_is_synthetic_estimate": true,
+  "events": [
+    {
+      "event": "initialized",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:31.109878+00:00"
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "13dccbb0ae4e4675a4f997680d77b971",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:31.110878+00:00",
+      "time": "2026-10-29T02:12:31.110878+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "13dccbb0ae4e4675a4f997680d77b971",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:31.110878+00:00",
+      "time": "2026-10-29T02:12:31.112878+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "13dccbb0ae4e4675a4f997680d77b971",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:31.110878+00:00",
+      "time": "2026-10-29T02:12:31.116385+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": true,
+      "request_id": null,
+      "model": "offline-stub",
+      "input_tokens": 20,
+      "output_tokens": 932,
+      "total_tokens": 952,
+      "usage_consistent": true,
+      "refusal": null,
+      "completion_status": "completed",
+      "dispatch_attempted": true,
+      "latency_ms": 1.857
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:31.117390+00:00",
+      "attempt_id": "13dccbb0ae4e4675a4f997680d77b971",
+      "opening_attempt_id": "db83ccf5397e4f97b0a39220eef1ea71",
+      "stage": "provider_response",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "provider_model": "gpt-4.1-mini",
+      "content_segment_count": null,
+      "provider_content_present": true,
+      "extraction_source": "output_text",
+      "extraction_succeeded": true,
+      "extracted_content_length": 3726,
+      "extracted_content_empty": false,
+      "input_tokens": 20,
+      "output_tokens": 932,
+      "total_tokens": 952,
+      "provider_request_id": null,
+      "provider_response_id": null,
+      "provider_status": "completed",
+      "provider_finish_reason": null,
+      "provider_output_limit_exhausted": null,
+      "requested_max_output_tokens": 3000,
+      "output_limit_reached": false,
+      "possible_output_truncation": false,
+      "json_parsing_succeeded": true,
+      "expected_envelope_present": true,
+      "recognized_envelope_keys": [
+        "declared_claims",
+        "narration"
+      ],
+      "parser_output_form": "structured",
+      "structured_validation_result": true,
+      "rejection_reason": null,
+      "classification": "accepted_structured_response",
+      "provider_response_contract": "structured_realization"
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:31.197909+00:00",
+      "attempt_id": null,
+      "opening_attempt_id": "db83ccf5397e4f97b0a39220eef1ea71",
+      "stage": "opening_outcome",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "opening_accepted": true,
+      "gameplay_committed": true,
+      "classification": "accepted_structured_opening",
+      "structured_validation_result": true,
+      "rejection_reason": null,
+      "recovery_classification": "initial_generation"
+    }
+  ]
+}

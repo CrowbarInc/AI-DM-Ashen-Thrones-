@@ -1,0 +1,91 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T01:35:23.808462Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T01:35:23.808462Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "dialogue_commitments": [
+        {
+          "npc_id": "sergeant_mara",
+          "kind": "opinion",
+          "subject": "the evening",
+          "text": "Sergeant Mara says, \"I prefer the evening. It feels restful to me.\"",
+          "canonical": false,
+          "turn": 1,
+          "status": "revised",
+          "requested_information": "opinion"
+        },
+        {
+          "npc_id": "sergeant_mara",
+          "kind": "opinion",
+          "subject": "the evening",
+          "text": "Sergeant Mara says, \"I prefer the morning. It feels restful to me.\"",
+          "canonical": false,
+          "turn": 2,
+          "status": "active",
+          "requested_information": "opinion"
+        }
+      ],
+      "delivered_exchanges": [
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Why do you prefer the evening?",
+          "delivered_text": "Sergeant Mara says, \"I prefer the evening. It feels restful to me.\"",
+          "subject": "the evening",
+          "requested_information": "opinion",
+          "supplied_text": "I prefer the evening. It feels restful to me.",
+          "uncertain": false,
+          "commitment": true,
+          "scene_id": "waystation_courtyard",
+          "turn": 1,
+          "active": false
+        },
+        {
+          "speaker_id": "sergeant_mara",
+          "speaker_name": "Sergeant Mara",
+          "addressee": "player",
+          "ownership": "npc",
+          "player_text": "Why do you prefer the evening?",
+          "delivered_text": "Sergeant Mara says, \"I prefer the morning. It feels restful to me.\"",
+          "subject": "the evening",
+          "requested_information": "opinion",
+          "supplied_text": "I prefer the morning. It feels restful to me.",
+          "uncertain": false,
+          "commitment": true,
+          "scene_id": "waystation_courtyard",
+          "turn": 2,
+          "active": true
+        }
+      ]
+    }
+  },
+  "integrity": {
+    "payload_sha256": "e2e32d4c5f9eba0f4970e171d3c740b0954543d8a474d541478c8d0ee5841bea",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

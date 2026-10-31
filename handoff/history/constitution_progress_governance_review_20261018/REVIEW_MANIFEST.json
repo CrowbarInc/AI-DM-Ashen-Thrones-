@@ -1,0 +1,127 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "constitution_progress_governance_review_20261018",
+  "campaign_name": "Constitution Progress and Benchmark Governance Review",
+  "generated_at": "2026-10-18T19:30:00+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 6500,
+      "sha256": "d22f982c5b4a72b7327795b71120fd1794729015ac6ab8dcfe3525090e706c9e"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "bundle_path": "support/development/reports/constitution_amendment_proposal_progress_and_benchmark_governance.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 29155,
+      "sha256": "5ce24f17fa5386caaba3fd7ab307e5f349b5e6665bd60e79f562e0402277210e"
+    },
+    {
+      "path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "role": "current_authority",
+      "why": "The unchanged Constitution a reviewer needs beside the proposed insertions.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/DEVELOPMENT_CONSTITUTION.md",
+      "bundle_path": "support/docs/DEVELOPMENT_CONSTITUTION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 11143,
+      "sha256": "f5baa11ba171d44ed3762217104b992542ca48d5e1d675663f2935d033f9eb6e"
+    },
+    {
+      "path": "docs/review_handoff_standard.md",
+      "role": "specialized_authority",
+      "why": "Current ZIP obligation and summary contract the proposal extends instead of replacing.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/review_handoff_standard.md",
+      "bundle_path": "support/docs/review_handoff_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 8774,
+      "sha256": "ad9884cf802b10b1220cf99d2d7a6b8855a1743ff6ea357ce74d68ecf52956a6"
+    },
+    {
+      "path": "docs/product_realization_validation.md",
+      "role": "specialized_authority",
+      "why": "Existing systemic-generality gate the proposal points to instead of copying.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/product_realization_validation.md",
+      "bundle_path": "support/docs/product_realization_validation.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 1229,
+      "sha256": "e768965bb0f115b4bfd1fee290d837beb849f46f9ee0de147395adadd978a8e8"
+    },
+    {
+      "path": "docs/validation_evidence_standard.md",
+      "role": "specialized_authority",
+      "why": "Existing evidence-claim rules and the proposed home for benchmark governance.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/validation_evidence_standard.md",
+      "bundle_path": "support/docs/validation_evidence_standard.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 10530,
+      "sha256": "27f21f6ea18a8248e4906cff56a928ef8432b9c640a71d7acee387365696fb4a"
+    },
+    {
+      "path": "docs/NEXT_SESSION.md",
+      "role": "session_orientation",
+      "why": "Shows the pending-proposal pointer and the unrevalidated PR-BL product orientation.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "docs/NEXT_SESSION.md",
+      "bundle_path": "support/docs/NEXT_SESSION.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 50407,
+      "sha256": "53eb6d830a7e8ace03587394b616d5d4788686b62601f08a288adddd54b1e3eb"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 8,
+    "zip_size_bytes": "000000052555",
+    "uncompressed_payload_bytes": 117738,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "data/validation/review_handoffs/constitution_progress_governance_review.json",
+    "canonical_repository_root": "."
+  }
+}

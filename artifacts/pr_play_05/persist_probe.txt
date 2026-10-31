@@ -1,0 +1,21 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+E   AssertionError: session.json
+    assert {'persistence...h': 'sha256'}} == {'persistence...h': 'sha256'}}
+      
+      Omitting 2 identical items, use -vv to show
+      Differing items:
+      {'payload': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 0, ...}} != {'payload': {'active_scene_id': 'frontier_gate', 'visited_scene_ids': ['frontier_gate'], 'current_date': 'Day 1', 'turn_counter': 0, ...}}
+      {'integrity': {'payload_sha256': 'b78e33fdb41be50a00328887c44b6050e2ea02f8c5e96effc91db1ba07e6cdb3', 'canonicalization': 'json/sort_keys,separators', 'hash': 'sha256'}} != {'integrity': {'payload_sha256': 'ab1c63252ef67b98de47eaa7397b4ff...
+      
+      ...Full output truncated (2 lines hidden), use '-vv' to show
+---------------------------- Captured stdout setup ----------------------------
+[SESSION RESET] runtime state cleared
+[API] New campaign started e2150d343c05c08327b95169
+---------------------------- Captured stdout call -----------------------------
+[PROMPT] fresh campaign prompt constructed
+[MODEL ROUTE] purpose=primary_turn selected=gpt-4.1-mini family=default retry=0 escalated=false
+[NON-SOCIAL RESOLUTION REPAIR] empty output repaired
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tests\test_pr_play_05_diagnostics.py:122: AssertionError: session.json
+=========================== short test summary info ===========================
+FAILED tests/test_pr_play_05_diagnostics.py::test_production_diagnostic_matrix[D2-missing_structured_envelope-False]

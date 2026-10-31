@@ -1,0 +1,1970 @@
+[
+  {
+    "family": "s02",
+    "category": "rumor",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s02",
+        "text": "Dockworkers reportedly saw blue fire above the salt tower last night.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "rumor",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "see",
+            "roles": {
+              "observer": "Dockworkers",
+              "phenomenon": "blue fire",
+              "place": "salt tower"
+            },
+            "qualifiers": [
+              "reportedly",
+              "last night"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s02q0",
+        "family": "s02",
+        "partition": "holdout",
+        "category": "rumor",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who reportedly witnessed the blue fire?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Dockworkers"
+          ],
+          "qualifiers": [
+            "reportedly",
+            "last night"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "see",
+          "known_roles": {
+            "phenomenon": "blue fire",
+            "place": "salt tower"
+          },
+          "requested_roles": [
+            "observer"
+          ],
+          "qualifiers": [
+            "reportedly"
+          ]
+        }
+      },
+      {
+        "id": "s02q1",
+        "family": "s02",
+        "partition": "holdout",
+        "category": "rumor",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Where was the rumored blue flame seen?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "salt tower"
+          ],
+          "qualifiers": [
+            "reportedly",
+            "last night"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "see",
+          "known_roles": {
+            "observer": "Dockworkers",
+            "phenomenon": "blue fire"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s02q2",
+        "family": "s02",
+        "partition": "holdout",
+        "category": "rumor",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "When did dockworkers allegedly see the fire?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "last night"
+          ],
+          "qualifiers": [
+            "reportedly",
+            "last night"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "see",
+          "known_roles": {
+            "observer": "Dockworkers",
+            "phenomenon": "blue fire",
+            "place": "salt tower"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s02q3",
+        "family": "s02",
+        "partition": "holdout",
+        "category": "rumor",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who caused the blue fire?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Dockworkers"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "see",
+          "known_roles": {
+            "observer": "Dockworkers",
+            "phenomenon": "blue fire",
+            "place": "salt tower"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s02q4",
+        "family": "s02",
+        "partition": "holdout",
+        "category": "rumor",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who saw blue fire, and what ignited it?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Dockworkers"
+          ],
+          "qualifiers": [
+            "reportedly",
+            "last night"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "see",
+          "known_roles": {
+            "phenomenon": "blue fire",
+            "place": "salt tower"
+          },
+          "requested_roles": [
+            "observer"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s05",
+    "category": "future",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s05",
+        "text": "The river council will open the sluice tomorrow at noon, if the water falls.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "open",
+            "roles": {
+              "agent": "river council",
+              "object": "sluice"
+            },
+            "qualifiers": [
+              "will",
+              "tomorrow at noon",
+              "if the water falls"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s05q0",
+        "family": "s05",
+        "partition": "holdout",
+        "category": "future",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who plans to open the sluice?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "river council"
+          ],
+          "qualifiers": [
+            "will",
+            "tomorrow at noon",
+            "if the water falls"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "open",
+          "known_roles": {
+            "object": "sluice"
+          },
+          "requested_roles": [
+            "agent"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s05q1",
+        "family": "s05",
+        "partition": "holdout",
+        "category": "future",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "When is the conditional sluice opening planned?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "tomorrow at noon"
+          ],
+          "qualifiers": [
+            "will",
+            "tomorrow at noon",
+            "if the water falls"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "open",
+          "known_roles": {
+            "agent": "river council",
+            "object": "sluice"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s05q2",
+        "family": "s05",
+        "partition": "holdout",
+        "category": "future",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What must happen before the council opens the sluice?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "the water falls"
+          ],
+          "qualifiers": [
+            "will",
+            "tomorrow at noon",
+            "if the water falls"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "open",
+          "known_roles": {
+            "agent": "river council",
+            "object": "sluice"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s05q3",
+        "family": "s05",
+        "partition": "holdout",
+        "category": "future",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who opened the sluice yesterday?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "river council"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "open",
+          "known_roles": {
+            "agent": "river council",
+            "object": "sluice"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s05q4",
+        "family": "s05",
+        "partition": "holdout",
+        "category": "future",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who will open it, and how much water will flow?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "river council"
+          ],
+          "qualifiers": [
+            "will",
+            "tomorrow at noon",
+            "if the water falls"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "open",
+          "known_roles": {
+            "object": "sluice"
+          },
+          "requested_roles": [
+            "agent"
+          ],
+          "qualifiers": [
+            "will"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "family": "s08",
+    "category": "may",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s08",
+        "text": "The keeper may have moved the bronze dial yesterday. The destination is unrecorded.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "belief",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "move",
+            "roles": {
+              "agent": "keeper",
+              "object": "bronze dial"
+            },
+            "qualifiers": [
+              "may",
+              "yesterday"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s08q0",
+        "family": "s08",
+        "partition": "holdout",
+        "category": "may",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who may have moved the bronze dial?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "keeper"
+          ],
+          "qualifiers": [
+            "may",
+            "yesterday"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "move",
+          "known_roles": {
+            "object": "bronze dial"
+          },
+          "requested_roles": [
+            "agent"
+          ],
+          "qualifiers": [
+            "may"
+          ]
+        }
+      },
+      {
+        "id": "s08q1",
+        "family": "s08",
+        "partition": "holdout",
+        "category": "may",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who is the possible mover of the dial?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "keeper"
+          ],
+          "qualifiers": [
+            "may",
+            "yesterday"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "move",
+          "known_roles": {
+            "object": "bronze dial"
+          },
+          "requested_roles": [
+            "agent"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s08q2",
+        "family": "s08",
+        "partition": "holdout",
+        "category": "may",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "When might the keeper have moved the dial?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "yesterday"
+          ],
+          "qualifiers": [
+            "may",
+            "yesterday"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "move",
+          "known_roles": {
+            "agent": "keeper",
+            "object": "bronze dial"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s08q3",
+        "family": "s08",
+        "partition": "holdout",
+        "category": "may",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Where was the bronze dial taken?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "keeper"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "move",
+          "known_roles": {
+            "agent": "keeper",
+            "object": "bronze dial"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s08q4",
+        "family": "s08",
+        "partition": "holdout",
+        "category": "may",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who possibly moved it, and where to?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "keeper"
+          ],
+          "qualifiers": [
+            "may",
+            "yesterday"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "move",
+          "known_roles": {
+            "object": "bronze dial"
+          },
+          "requested_roles": [
+            "agent"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s11",
+    "category": "informant_absent",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s11",
+        "text": "The road is called the north road. It ends at the limestone quarry.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "name",
+            "roles": {
+              "road_name": "north road",
+              "destination": "limestone quarry"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s11q0",
+        "family": "s11",
+        "partition": "holdout",
+        "category": "informant_absent",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What is the road called?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "north road"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "name",
+          "known_roles": {
+            "destination": "limestone quarry"
+          },
+          "requested_roles": [
+            "road_name"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s11q1",
+        "family": "s11",
+        "partition": "holdout",
+        "category": "informant_absent",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What name does this road go by?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "north road"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "name",
+          "known_roles": {
+            "destination": "limestone quarry"
+          },
+          "requested_roles": [
+            "road_name"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s11q2",
+        "family": "s11",
+        "partition": "holdout",
+        "category": "informant_absent",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Where does the north road end?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "limestone quarry"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "name",
+          "known_roles": {
+            "road_name": "north road"
+          },
+          "requested_roles": [
+            "destination"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s11q3",
+        "family": "s11",
+        "partition": "holdout",
+        "category": "informant_absent",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who told you the road's name?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "name",
+          "known_roles": {
+            "road_name": "north road",
+            "destination": "limestone quarry"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s11q4",
+        "family": "s11",
+        "partition": "holdout",
+        "category": "informant_absent",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What is it called and who named it?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "north road"
+          ],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "name",
+          "known_roles": {
+            "destination": "limestone quarry"
+          },
+          "requested_roles": [
+            "road_name"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s14",
+    "category": "sanctuary",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s14",
+        "text": "The temple recognizes sanctuary for unarmed fugitives within its outer court.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "recognize_sanctuary",
+            "roles": {
+              "recognizer": "temple",
+              "protected_party": "unarmed fugitives",
+              "place": "outer court"
+            },
+            "qualifiers": [
+              "within its outer court"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s14q0",
+        "family": "s14",
+        "partition": "holdout",
+        "category": "sanctuary",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who recognizes sanctuary for unarmed fugitives?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "temple"
+          ],
+          "qualifiers": [
+            "within its outer court"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "recognize_sanctuary",
+          "known_roles": {
+            "protected_party": "unarmed fugitives",
+            "place": "outer court"
+          },
+          "requested_roles": [
+            "recognizer"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s14q1",
+        "family": "s14",
+        "partition": "holdout",
+        "category": "sanctuary",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Where are unarmed fugitives granted sanctuary?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "outer court"
+          ],
+          "qualifiers": [
+            "within its outer court"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "recognize_sanctuary",
+          "known_roles": {
+            "recognizer": "temple",
+            "protected_party": "unarmed fugitives"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s14q2",
+        "family": "s14",
+        "partition": "holdout",
+        "category": "sanctuary",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Which fugitives qualify for this sanctuary?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "unarmed fugitives"
+          ],
+          "qualifiers": [
+            "within its outer court"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "recognize_sanctuary",
+          "known_roles": {
+            "recognizer": "temple",
+            "place": "outer court"
+          },
+          "requested_roles": [
+            "protected_party"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s14q3",
+        "family": "s14",
+        "partition": "holdout",
+        "category": "sanctuary",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who grants sanctuary to armed fugitives outside the court?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "temple"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "recognize_sanctuary",
+          "known_roles": {
+            "recognizer": "temple",
+            "protected_party": "unarmed fugitives",
+            "place": "outer court"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s14q4",
+        "family": "s14",
+        "partition": "holdout",
+        "category": "sanctuary",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Where is sanctuary recognized and how long may fugitives stay?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "outer court"
+          ],
+          "qualifiers": [
+            "within its outer court"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "recognize_sanctuary",
+          "known_roles": {
+            "recognizer": "temple",
+            "protected_party": "unarmed fugitives"
+          },
+          "requested_roles": [
+            "place"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s17",
+    "category": "sale_roles",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s17",
+        "text": "At dusk, buyer Iven bought a tin astrolabe from seller Sola for nine crowns.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "buy",
+            "roles": {
+              "buyer": "Iven",
+              "seller": "Sola",
+              "object": "tin astrolabe",
+              "price": "nine crowns"
+            },
+            "qualifiers": [
+              "At dusk"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s17q0",
+        "family": "s17",
+        "partition": "holdout",
+        "category": "sale_roles",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who bought the tin astrolabe from Sola?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Iven"
+          ],
+          "qualifiers": [
+            "At dusk"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "buy",
+          "known_roles": {
+            "seller": "Sola",
+            "object": "tin astrolabe",
+            "price": "nine crowns"
+          },
+          "requested_roles": [
+            "buyer"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s17q1",
+        "family": "s17",
+        "partition": "holdout",
+        "category": "sale_roles",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who sold Iven the astrolabe?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "Sola"
+          ],
+          "qualifiers": [
+            "At dusk"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "buy",
+          "known_roles": {
+            "buyer": "Iven",
+            "object": "tin astrolabe",
+            "price": "nine crowns"
+          },
+          "requested_roles": [
+            "seller"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s17q2",
+        "family": "s17",
+        "partition": "holdout",
+        "category": "sale_roles",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What did Iven pay for the astrolabe?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "nine crowns"
+          ],
+          "qualifiers": [
+            "At dusk"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "buy",
+          "known_roles": {
+            "buyer": "Iven",
+            "seller": "Sola",
+            "object": "tin astrolabe"
+          },
+          "requested_roles": [
+            "price"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s17q3",
+        "family": "s17",
+        "partition": "holdout",
+        "category": "sale_roles",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What did Sola buy from Iven?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "tin astrolabe"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "buy",
+          "known_roles": {
+            "buyer": "Iven",
+            "seller": "Sola",
+            "object": "tin astrolabe",
+            "price": "nine crowns"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s17q4",
+        "family": "s17",
+        "partition": "holdout",
+        "category": "sale_roles",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who was the buyer and where was the sale?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "Iven"
+          ],
+          "qualifiers": [
+            "At dusk"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "buy",
+          "known_roles": {
+            "seller": "Sola",
+            "object": "tin astrolabe",
+            "price": "nine crowns"
+          },
+          "requested_roles": [
+            "buyer"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s20",
+    "category": "unfamiliar_redeem",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s20",
+        "text": "The glasswright redeems chipped trade beads for lamp oil at the winter fair.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "redeem",
+            "roles": {
+              "redeemer": "glasswright",
+              "tender": "chipped trade beads",
+              "compensation": "lamp oil"
+            },
+            "qualifiers": [
+              "at the winter fair"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s20q0",
+        "family": "s20",
+        "partition": "holdout",
+        "category": "unfamiliar_redeem",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who redeems chipped trade beads?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "glasswright"
+          ],
+          "qualifiers": [
+            "at the winter fair"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "redeem",
+          "known_roles": {
+            "tender": "chipped trade beads",
+            "compensation": "lamp oil"
+          },
+          "requested_roles": [
+            "redeemer"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s20q1",
+        "family": "s20",
+        "partition": "holdout",
+        "category": "unfamiliar_redeem",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who will exchange damaged beads for oil at the winter fair?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "glasswright"
+          ],
+          "qualifiers": [
+            "at the winter fair"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "redeem",
+          "known_roles": {
+            "tender": "chipped trade beads",
+            "compensation": "lamp oil"
+          },
+          "requested_roles": [
+            "redeemer"
+          ],
+          "qualifiers": [
+            "at the winter fair"
+          ]
+        }
+      },
+      {
+        "id": "s20q2",
+        "family": "s20",
+        "partition": "holdout",
+        "category": "unfamiliar_redeem",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What does the glasswright give for chipped beads?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "lamp oil"
+          ],
+          "qualifiers": [
+            "at the winter fair"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "redeem",
+          "known_roles": {
+            "redeemer": "glasswright",
+            "tender": "chipped trade beads"
+          },
+          "requested_roles": [
+            "compensation"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s20q3",
+        "family": "s20",
+        "partition": "holdout",
+        "category": "unfamiliar_redeem",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who manufactures the chipped trade beads?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "glasswright"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "redeem",
+          "known_roles": {
+            "redeemer": "glasswright",
+            "tender": "chipped trade beads",
+            "compensation": "lamp oil"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s20q4",
+        "family": "s20",
+        "partition": "holdout",
+        "category": "unfamiliar_redeem",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who redeems the beads and what is the exchange rate?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "glasswright"
+          ],
+          "qualifiers": [
+            "at the winter fair"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "redeem",
+          "known_roles": {
+            "tender": "chipped trade beads",
+            "compensation": "lamp oil"
+          },
+          "requested_roles": [
+            "redeemer"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s23",
+    "category": "unfamiliar_impound",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s23",
+        "text": "The toll court impounded a wool barge pending settlement of the disputed levy.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "impound",
+            "roles": {
+              "impounder": "toll court",
+              "object": "wool barge"
+            },
+            "qualifiers": [
+              "pending settlement of the disputed levy"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s23q0",
+        "family": "s23",
+        "partition": "holdout",
+        "category": "unfamiliar_impound",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who impounded the wool barge?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "toll court"
+          ],
+          "qualifiers": [
+            "pending settlement of the disputed levy"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "impound",
+          "known_roles": {
+            "object": "wool barge"
+          },
+          "requested_roles": [
+            "impounder"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s23q1",
+        "family": "s23",
+        "partition": "holdout",
+        "category": "unfamiliar_impound",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who is holding the barge over the levy dispute?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "toll court"
+          ],
+          "qualifiers": [
+            "pending settlement of the disputed levy"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "impound",
+          "known_roles": {
+            "object": "wool barge"
+          },
+          "requested_roles": [
+            "impounder"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s23q2",
+        "family": "s23",
+        "partition": "holdout",
+        "category": "unfamiliar_impound",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What vessel was impounded?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "wool barge"
+          ],
+          "qualifiers": [
+            "pending settlement of the disputed levy"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "impound",
+          "known_roles": {
+            "impounder": "toll court"
+          },
+          "requested_roles": [
+            "object"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s23q3",
+        "family": "s23",
+        "partition": "holdout",
+        "category": "unfamiliar_impound",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who owns the impounded barge?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "toll court"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "impound",
+          "known_roles": {
+            "impounder": "toll court",
+            "object": "wool barge"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s23q4",
+        "family": "s23",
+        "partition": "holdout",
+        "category": "unfamiliar_impound",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who impounded it and how much is the levy?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "toll court"
+          ],
+          "qualifiers": [
+            "pending settlement of the disputed levy"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "impound",
+          "known_roles": {
+            "object": "wool barge"
+          },
+          "requested_roles": [
+            "impounder"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s26",
+    "category": "historical_speech",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s26",
+        "text": "In an old conversation, Vesper said, \"The missing seal is under the altar.\" No authorized world source corroborates this.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "verified_history",
+        "supported_claims": [
+          {
+            "relationship": "historical_say",
+            "roles": {
+              "speaker": "Vesper",
+              "content": "The missing seal is under the altar."
+            },
+            "qualifiers": [
+              "In an old conversation"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s26q0",
+        "family": "s26",
+        "partition": "holdout",
+        "category": "historical_speech",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Where is the missing seal?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "altar"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "historical_say",
+          "known_roles": {
+            "speaker": "Vesper",
+            "content": "The missing seal is under the altar."
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s26q1",
+        "family": "s26",
+        "partition": "holdout",
+        "category": "historical_speech",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who hid the missing seal under the altar?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "Vesper"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "historical_say",
+          "known_roles": {
+            "speaker": "Vesper",
+            "content": "The missing seal is under the altar."
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s26q2",
+        "family": "s26",
+        "partition": "holdout",
+        "category": "historical_speech",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What proves that the seal is under the altar?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "historical_say",
+          "known_roles": {
+            "speaker": "Vesper",
+            "content": "The missing seal is under the altar."
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s26q3",
+        "family": "s26",
+        "partition": "holdout",
+        "category": "historical_speech",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Is the altar location established world knowledge?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "altar"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "historical_say",
+          "known_roles": {
+            "speaker": "Vesper",
+            "content": "The missing seal is under the altar."
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s26q4",
+        "family": "s26",
+        "partition": "holdout",
+        "category": "historical_speech",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who currently possesses the seal?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "historical_say",
+          "known_roles": {
+            "speaker": "Vesper",
+            "content": "The missing seal is under the altar."
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s29",
+    "category": "restricted_countersign",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s29",
+        "text": "The night patrol countersign is hollow lantern.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "secret",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "countersign",
+            "roles": {
+              "patrol": "night patrol",
+              "countersign": "hollow lantern"
+            },
+            "qualifiers": []
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s29q0",
+        "family": "s29",
+        "partition": "holdout",
+        "category": "restricted_countersign",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What is the night patrol countersign?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "hollow lantern"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "countersign",
+          "known_roles": {
+            "patrol": "night patrol",
+            "countersign": "hollow lantern"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s29q1",
+        "family": "s29",
+        "partition": "holdout",
+        "category": "restricted_countersign",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Which response does the patrol expect at night?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "hollow lantern"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "countersign",
+          "known_roles": {
+            "patrol": "night patrol",
+            "countersign": "hollow lantern"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s29q2",
+        "family": "s29",
+        "partition": "holdout",
+        "category": "restricted_countersign",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Give a paraphrase of the night countersign.",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "hollow lantern"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "countersign",
+          "known_roles": {
+            "patrol": "night patrol",
+            "countersign": "hollow lantern"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s29q3",
+        "family": "s29",
+        "partition": "holdout",
+        "category": "restricted_countersign",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who chose the patrol countersign?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "countersign",
+          "known_roles": {
+            "patrol": "night patrol",
+            "countersign": "hollow lantern"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s29q4",
+        "family": "s29",
+        "partition": "holdout",
+        "category": "restricted_countersign",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What secret response identifies a friend to the patrol?",
+        "expected": {
+          "response_class": "UNKNOWN",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "hollow lantern"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "countersign",
+          "known_roles": {
+            "patrol": "night patrol",
+            "countersign": "hollow lantern"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      }
+    ]
+  },
+  {
+    "family": "s32",
+    "category": "unfamiliar_ratify",
+    "partition": "holdout",
+    "sources": [
+      {
+        "id": "s32",
+        "text": "The harbor assembly ratified the pilots' compact after three readings, but deferred the dredging charter.",
+        "npc": "lyra",
+        "context": "experiment",
+        "disclosure": "public",
+        "knowledge_status": "known",
+        "epistemic": "npc_knowledge",
+        "provenance": "world_source",
+        "supported_claims": [
+          {
+            "relationship": "ratify",
+            "roles": {
+              "ratifier": "harbor assembly",
+              "instrument": "pilots' compact"
+            },
+            "qualifiers": [
+              "after three readings"
+            ]
+          }
+        ]
+      }
+    ],
+    "cases": [
+      {
+        "id": "s32q0",
+        "family": "s32",
+        "partition": "holdout",
+        "category": "unfamiliar_ratify",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who ratified the pilots' compact?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "harbor assembly"
+          ],
+          "qualifiers": [
+            "after three readings"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ratify",
+          "known_roles": {
+            "instrument": "pilots' compact"
+          },
+          "requested_roles": [
+            "ratifier"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s32q1",
+        "family": "s32",
+        "partition": "holdout",
+        "category": "unfamiliar_ratify",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Which body formally approved the pilots' compact?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "harbor assembly"
+          ],
+          "qualifiers": [
+            "after three readings"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ratify",
+          "known_roles": {
+            "instrument": "pilots' compact"
+          },
+          "requested_roles": [
+            "ratifier"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s32q2",
+        "family": "s32",
+        "partition": "holdout",
+        "category": "unfamiliar_ratify",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "What instrument did the assembly ratify?",
+        "expected": {
+          "response_class": "DIRECT",
+          "values": [
+            "pilots' compact"
+          ],
+          "qualifiers": [
+            "after three readings"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ratify",
+          "known_roles": {
+            "ratifier": "harbor assembly"
+          },
+          "requested_roles": [
+            "instrument"
+          ],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s32q3",
+        "family": "s32",
+        "partition": "holdout",
+        "category": "unfamiliar_ratify",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who ratified the dredging charter?",
+        "expected": {
+          "response_class": "RELATED_NONANSWER",
+          "values": [],
+          "qualifiers": [],
+          "forbidden": [
+            "harbor assembly"
+          ],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ratify",
+          "known_roles": {
+            "ratifier": "harbor assembly",
+            "instrument": "pilots' compact"
+          },
+          "requested_roles": [],
+          "qualifiers": []
+        }
+      },
+      {
+        "id": "s32q4",
+        "family": "s32",
+        "partition": "holdout",
+        "category": "unfamiliar_ratify",
+        "npc": "lyra",
+        "context": "experiment",
+        "question": "Who ratified the compact and how many voted against it?",
+        "expected": {
+          "response_class": "PARTIAL",
+          "values": [
+            "harbor assembly"
+          ],
+          "qualifiers": [
+            "after three readings"
+          ],
+          "forbidden": [],
+          "label_status": "author_labeled_before_provider; human_pending"
+        },
+        "gold_diagnostic": {
+          "relationship": "ratify",
+          "known_roles": {
+            "instrument": "pilots' compact"
+          },
+          "requested_roles": [
+            "ratifier"
+          ],
+          "qualifiers": []
+        }
+      }
+    ]
+  }
+]

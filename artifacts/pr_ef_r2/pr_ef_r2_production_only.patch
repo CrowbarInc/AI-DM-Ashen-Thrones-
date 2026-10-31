@@ -1,0 +1,277 @@
+--- before/game/ordinary_semantic_ownership.py
++++ after/game/ordinary_semantic_ownership.py
+@@ -182,6 +182,33 @@
+ 
+     _attach(False)
+     contract = contract_mapping_from_resolution(resolution)
++    if bridge.get("operation") == "ASK" and bridge.get("target_ref"):
++        # The visible-id bridge has already validated this speech target. The
++        # lexical constructor may abstain on the wording, but must not replace
++        # that binding with an unresolved person or an old interlocutor.
++        import copy
++        contract = copy.deepcopy(contract)
++        target_id = str(bridge["target_ref"])
++        prior = contract.get("interlocutor_id")
++        construction = contract.setdefault("construction", {})
++        construction["pre_bridge_addressee_binding"] = copy.deepcopy(construction.get("entity_binding"))
++        old_binding = construction.get("entity_binding") or {}
++        if prior and prior != target_id and old_binding.get("explicit_new_interlocutor") and old_binding.get("status") == "bound_canonical":
++            construction["authority_conflict"] = {"contract_target": prior, "bridge_target": target_id}
++            construction["validation_status"] = "abstained"
++            contract["ambiguous"] = True
++            contract["operation"] = "unresolved"
++        else:
++            contract.update(operation="ask", interlocutor_id=target_id, expected_resolution="answer", ambiguous=False)
++            binding = construction.setdefault("entity_binding", {})
++            binding.update(status="bound_canonical", bound_interlocutor_id=target_id,
++                           entity_id=target_id, label=normalized_action.get("label") or target_id,
++                           authority_reasons=["identity:validated_interpretation_bridge"])
++            construction.update(interlocutor_rejected=False, addressee_binding_status="bound_canonical")
++        resolution["metadata"]["resolution_contract"] = contract
++        obligation = resolution["metadata"].get("interaction_obligation")
++        if isinstance(obligation, dict) and not construction.get("authority_conflict"):
++            obligation["interlocutor_id"] = target_id
+     if contract_text != player_text:
+         contract["raw_input"] = player_text
+         contract.setdefault("construction", {})["bridge_processing_input"] = contract_text
+@@ -335,6 +362,41 @@
+         if key in src_md and key not in md:
+             md[key] = src_md[key]
+     dest["metadata"] = md
++    social = dest.get("social")
++    if isinstance(social, dict) and social.get("target_resolved") is True:
++        # Compact provenance over the existing result; this grants no knowledge
++        # beyond the selected topic and never authorizes extra state changes.
++        md["authoritative_result"] = {
++            "source": "social_resolver", "operation": "ask",
++            "target_id": social.get("npc_id"), "target_label": social.get("npc_name"),
++            "target_resolved": True, "outcome": social.get("reply_kind"),
++            "state_changes": dest.get("state_changes") or {},
++            "player_visible_facts": social.get("topic_revealed"),
++            "information_authority": social.get("npc_speech_authority"),
++            "response_constraints": ["preserve_speaker", "selected_topic_only", "no_unapproved_mutations"],
++        }
++        import copy
++        held = copy.deepcopy(md["resolution_contract"])
++        construction = held.setdefault("construction", {})
++        binding = construction.get("entity_binding") or {}
++        target = str(social.get("npc_id") or "")
++        prior = held.get("interlocutor_id")
++        unresolved_explicit = (binding.get("explicit_new_interlocutor")
++                               and binding.get("status") in {"unresolved", "ambiguous", "rejected_consequential"})
++        # A legacy unresolved explicit person remains protected. The earlier
++        # validated-id bridge can settle it; a fallback NPC cannot.
++        if construction.get("authority_conflict") or (prior and prior != target) or unresolved_explicit:
++            construction["authority_conflict"] = {"contract_target": prior, "social_target": target,
++                                                   "unresolved_explicit": bool(unresolved_explicit)}
++        elif target and held.get("operation") in {"ask", "unresolved"}:
++            construction["pre_social_binding"] = copy.deepcopy(binding)
++            held.update(operation="ask", interlocutor_id=target, expected_resolution="answer")
++            binding = dict(binding)
++            binding.update(status="bound_canonical", bound_interlocutor_id=target,
++                           label=social.get("npc_name") or target,
++                           authority_reasons=["identity:social_resolver"])
++            construction["entity_binding"] = binding
++        md["resolution_contract"] = held
+     return dest
+ 
+ 
+--- before/game/live_chat_interpretation.py
++++ after/game/live_chat_interpretation.py
+@@ -80,6 +80,55 @@
+     return _SECRET_RE.sub("[REDACTED]", str(text or ""))
+ 
+ 
++def normalize_social_scope(payload: dict, communication: dict | None) -> tuple[dict, list[str]]:
++    """Separate nonconsequential posture and question subject from ASK targets.
++
++    This is a conservative compatibility normalization of the existing record,
++    not a second interpreter. Unknown gestures remain consequential. A missing
++    ASK target, explicit clarification, and independent operations stay intact.
++    """
++    import copy
++    result = copy.deepcopy(payload)
++    components = result.get("action_components") or []
++    if not isinstance(components, list) or not all(isinstance(c, dict) for c in components):
++        return result, []
++    if not isinstance(result.get("references"), dict):
++        return result, []
++    asks = [c for c in components if c.get("operation_class") == "ASK"]
++    if not communication or communication.get("recipient") != "NPC" or len(asks) != 1:
++        return result, []
++    ask = asks[0]
++    target = ask.get("target_ref")
++    if not target or result.get("interpretation_status") != "INTERPRETED":
++        return result, []
++    incidental = []
++    kept = []
++    # Require the whole component to describe only orientation/attention. This
++    # cannot swallow drawing weapons, threats, movement, unlocking or sequences.
++    posture = re.compile(r"^(?:I\s+)?(?:turn\s+(?:to|toward|towards)|face|(?:nod|incline)\s+(?:(?:my|our|their|the)\s+)?head\s+(?:to|toward|towards)|glance\s+(?:at|toward|towards)|look\s+(?:at|toward|towards))\s+(?P<person>[\w '\-]+?)(?:\s+as a social signal)?[.]?$", re.I)
++    for component in components:
++        description = str(component.get("description") or "").strip()
++        match = posture.fullmatch(description)
++        nominal = set(re.findall(r"[a-z]+", match['person'].casefold())) - {'the'} if match else set()
++        target_words = set(re.findall(r"[a-z]+", str(target).replace('_', ' ').casefold()))
++        if (component.get("operation_class") == "SOCIAL_SIGNAL"
++                and component.get("target_ref") == target and nominal and nominal <= target_words
++                and not re.search(r"\b(?:and|then|after|before|if|unless|sword|weapon|draw|unlock|threaten)\b", description, re.I)):
++            incidental.append(description)
++        else:
++            kept.append(component)
++    result["action_components"] = kept
++    if len(kept) == 1 and kept[0].get("operation_class") == "ASK":
++        refs = result.get("references") or {}
++        subject = str(communication.get("subject") or "").casefold().strip()
++        # Only a declared subject is eligible; unresolved persons and missing
++        # action targets are never cleared by the topic rule.
++        refs["unresolved_references"] = [r for r in refs.get("unresolved_references", [])
++                                         if not (str(r).strip() and re.search(
++                                             r"\b" + re.escape(str(r).casefold().strip()) + r"\b", subject))]
++    return result, incidental
++
++
+ def reset_live_interpretation_consumed() -> None:
+     _CONSUMED.set(False)
+ 
+@@ -296,6 +345,8 @@
+         "NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; "
+         "select its npc:<speaker>:<topic> evidence reference when supplied. "
+         "For GM recall of NPC speech, prefer that same established NPC answer passage."
++        " For clarification of the most recent NPC statement, npc_latest_reply is the actual latest "
++        "utterance, including inability or refusal. Do not substitute an earlier topic for it. "
+         " Communication is the primary contract; legacy communication_mode describes the same speech act. "
+         "Third-person description of a person does not speak to them. A question about what their expression "
+         "implies is GM/EXPLANATION; do not ask the person on the player's behalf. "
+@@ -404,10 +455,12 @@
+             communication["recipient"] = "CHARACTER"
+         elif len(components) > 1:
+             communication["recipient"] = "MIXED"
++    payload, incidental = normalize_social_scope(payload, communication)
+     adapted = adapt_interpretation(payload, permitted_ids=[entity_id for entity_id, _label, _kind in catalog])
+     record = adapted.get("record") if isinstance(adapted.get("record"), dict) else None
+     if record is not None and communication is not None:
+         record["communication"] = communication
++        record["incidental_context"] = incidental
+         # Only passages selected from the engine's public projection can reach emission.
+         record["public_evidence"] = {ref: evidence[ref] for ref in communication["evidence_refs"]}
+     eligibility = adapted.get("eligibility") if isinstance(adapted.get("eligibility"), dict) else {}
+--- before/game/conversational_orchestration.py
++++ after/game/conversational_orchestration.py
+@@ -253,6 +253,10 @@
+                     "That explains how you found it; its origin or purpose has not been established by that discovery."
+                 )
+         social = resolution.get("social") if isinstance(resolution, Mapping) else None
++        if isinstance(social, Mapping) and social.get("target_resolved") and visible:
++            # Latest spoken inability/refusal is conversation evidence too;
++            # older revealed topics must not stand in for a newer reply.
++            evidence["npc_latest_reply"] = str(visible).strip()[:1200]
+         if isinstance(social, Mapping) and isinstance(social.get("topic_revealed"), Mapping):
+             topic = social["topic_revealed"]
+             if social.get("npc_id") and topic.get("id") and topic.get("text"):
+@@ -336,7 +340,7 @@
+         reason="communication_before_execution", player_facing_text=answer,
+         context_references=list((record.get("public_evidence") or {}).keys()),
+         context_update=update, execution_policy="answer_only", intent_modality="informational",
+-        secondary_intentions=[dict(c) for c in components if isinstance(c, Mapping)] if owner == "MIXED" else [],
++        secondary_intentions=[dict(c) for c in components if isinstance(c, Mapping)] if owner == "MIXED" or category == ConversationalDecisionCategory.CLARIFY else [],
+     )
+ 
+ 
+@@ -643,7 +647,7 @@
+ _GENERIC_PLACE_TOKENS = frozenset({"gate", "door", "road", "street", "way", "place", "path", "entrance", "exit"})
+ _AGENT_RE = re.compile(r"^\s*(?:i|we|let's|lets|let\s+us|i'm|im)\b", re.IGNORECASE)
+ _MOVE_CUE_RE = re.compile(
+-    r"\b(?:go(?:es|ing)?|head(?:s|ing)?|walk(?:s|ing)?|travel(?:s|ing|led)?|"
++    r"\b(?:go(?:es|ing)?|(?<!my )(?<!our )(?<!your )(?<!his )(?<!her )(?<!their )head(?:s|ing)?|walk(?:s|ing)?|travel(?:s|ing|led)?|"
+     r"leave|leaves|leaving|depart(?:s|ing)?|return(?:s|ing)?|proceed(?:s|ing)?|"
+     r"stroll(?:s|ing)?|hurry|hurries|hurrying|set\s+off|bound\s+for|"
+     r"make\s+for|makes\s+for|making\s+for|make\s+(?:my|our)\s+way|makes\s+(?:my|our)\s+way|"
+@@ -1870,7 +1874,7 @@
+             player_facing_text=question or "What are you trying to accomplish?",
+         )
+     connected: list[Mapping[str, Any]] = []
+-    incidental: list[str] = []
++    incidental: list[str] = list(record.get("incidental_context") or [])
+     unsupported: list[str] = []
+     for component in components:
+         if not isinstance(component, Mapping):
+--- before/game/immutable_valid_response.py
++++ after/game/immutable_valid_response.py
+@@ -641,6 +641,17 @@
+     addressee = explicit or present_addressee or contract_label
+     speaker = attributed_speaker_label(raw)
+     unresolved_addressee = _unresolved_explicit_addressee(contract)
++    social = resolution.get("social") if isinstance(resolution, Mapping) else None
++    known_social = (isinstance(social, Mapping) and social.get("target_resolved") is True
++                    and social.get("npc_id") == (contract or {}).get("interlocutor_id"))
++    if known_social:
++        addressee = str(social.get("npc_name") or social.get("npc_id"))
++        if operation == "ask" and not response_attributes_npc_speech(raw):
++            reasons.append("interaction_incomplete")
++        if re.search(r"\b(?:no one here|nobody here|person you addressed cannot be identified)\b", raw, re.I):
++            reasons.append("authoritative_target_contradiction")
++    if ((contract or {}).get("construction") or {}).get("authority_conflict"):
++        reasons.append("conflicting_target_authorities")
+     if speaker and unresolved_addressee and _unresolved_addressee_conflict(speaker, unresolved_addressee):
+         reasons.append("wrong_interlocutor")
+     elif speaker and addressee and _speaker_conflicts(speaker, addressee, referents):
+@@ -920,6 +931,12 @@
+     player = str(player_text or (contract or {}).get("raw_input") or "")
+     requested = [name for name in _player_sensory_dimensions(player) if name in _DIMENSION_LEXICON]
+     success = _mechanical_success(resolution)
++    social = resolution.get("social") if isinstance(resolution, Mapping) else None
++    if (operation == "ask" and isinstance(social, Mapping) and social.get("target_resolved") is True
++            and social.get("npc_id") == (contract or {}).get("interlocutor_id")):
++        label = str(social.get("npc_name") or "").strip()
++        if label:
++            return f'{label} says, "I cannot answer that from what is settled here."'
+     if operation in {"inspect", "perceive"} and len(requested) == 1:
+         line = f"The inspection establishes no further reliable detail about the {requested[0]}."
+         return line
+@@ -1666,17 +1683,10 @@
+         line, why = _terminal_after_fidelity(list(first.get("reasons") or []))
+         safe_validation = _check({"player_facing_text": line})
+         if not safe_validation.get("hard_valid"):
+-            safe_validation = {
+-                "hard_valid": True,
+-                "reasons": [],
+-                "soft_flags": [],
+-                "speaker": "",
+-                "addressee": "",
+-                "operation": _operation(contract),
+-                "interaction_complete": True,
+-                "contract_satisfying": True,
+-                "gm_resolution_decision_audit": first.get("gm_resolution_decision_audit"),
+-            }
++            gm["player_facing_text"] = "I cannot provide a validated response to that request."
++            return _finish(mark_candidate_rejected(gm, gm["player_facing_text"],
++                                                   list(safe_validation.get("reasons") or [])),
++                           why="controlled_validation_failure")
+         sealed = seal_accepted_response(
+             gm,
+             text=line,
+@@ -1750,17 +1760,12 @@
+         return _finish(sealed, why="bounded_sentence_preservation")
+     line, why = _terminal_after_fidelity(list(first.get("reasons") or []) + list(second.get("reasons") or []))
+     checked_line = _check({"player_facing_text": line})
+-    safe_validation = checked_line if checked_line.get("hard_valid") else {
+-        "hard_valid": True,
+-        "reasons": [],
+-        "soft_flags": [],
+-        "speaker": "",
+-        "addressee": "",
+-        "operation": _operation(contract),
+-        "interaction_complete": True,
+-        "contract_satisfying": True,
+-        "gm_resolution_decision_audit": second.get("gm_resolution_decision_audit") or first.get("gm_resolution_decision_audit"),
+-    }
++    if not checked_line.get("hard_valid"):
++        regenerated["player_facing_text"] = "I cannot provide a validated response to that request."
++        return _finish(mark_candidate_rejected(regenerated, regenerated["player_facing_text"],
++                                               list(checked_line.get("reasons") or [])),
++                       why="controlled_validation_failure")
++    safe_validation = checked_line
+     # Keep the rejected attempt record beside the safe seal.
+     sealed = seal_accepted_response(
+         regenerated,

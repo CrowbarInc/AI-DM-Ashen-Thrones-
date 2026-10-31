@@ -1,0 +1,327 @@
+{
+  "validation": "PR-BR closeout live revalidation",
+  "generated_utc": "2026-10-04T23:46:48.852383+00:00",
+  "decision": "A",
+  "decision_text": "PR-BR CLOSEOUT RECOMMENDED; SYSTEMIC SEMANTIC/AUTHORITY BOUNDARY IS SUFFICIENTLY STABLE. MOVE REMAINING ISSUES TO LATER AI, GAMEPLAY, OR PRODUCT CAMPAIGNS.",
+  "gameplay_turns": [
+    "A1",
+    "A2",
+    "A3",
+    "B1"
+  ],
+  "halt": "operator stop",
+  "preflight_calls": 1,
+  "interpretation_calls": 0,
+  "initial_generation_calls": 4,
+  "retry_generation_calls": 4,
+  "other_model_calls": 0,
+  "total_model_calls": 9,
+  "http_attempts": 9,
+  "http_statuses": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "bounded_keep_invocations": 0,
+  "provider_input_tokens": 235232,
+  "provider_output_tokens": 3042,
+  "provider_total_tokens": 238274,
+  "files": [
+    {
+      "path": "CURRENT_REVIEW.md",
+      "bytes": 28695,
+      "sha256": "8587b66c016dc22610e5c43a5a8f0c4d8880b0efa2f953ea1f80a91f9a7f8a5c"
+    },
+    {
+      "path": "evidence/A1_decision_1.json",
+      "bytes": 9856,
+      "sha256": "3c79ba05690ced4d692212bfefff9b00d1cb3e29cb1b6d6eefe4a75b50bcb1d6"
+    },
+    {
+      "path": "evidence/A1_digest.json",
+      "bytes": 9451,
+      "sha256": "b041ae9d13da2da98422f50422c2cb9dcc2e629ec7d505554925d7ed6631abe2"
+    },
+    {
+      "path": "evidence/A1_full_trace.json",
+      "bytes": 360040,
+      "sha256": "a8c040985cc76667e6080b7bb724d8341386e129f3c2366e73edecb82b902c29"
+    },
+    {
+      "path": "evidence/A1_raw_envelope_attempt_1.json",
+      "bytes": 2679,
+      "sha256": "301cb336e0ff6d0357ed220fb4f3c2e999c7cc8545fd58a57f6eee5f2de4623c"
+    },
+    {
+      "path": "evidence/A1_raw_envelope_attempt_2.json",
+      "bytes": 930,
+      "sha256": "952f685b5c7935dc99f06d1c4e6b590e764853988b7158aad7977993243455e3"
+    },
+    {
+      "path": "evidence/A2_decision_2.json",
+      "bytes": 10994,
+      "sha256": "394c691fbfb5a0049a6a07bfad57606c1c213a0f813727b3c462d9e03fa3e622"
+    },
+    {
+      "path": "evidence/A2_digest.json",
+      "bytes": 13881,
+      "sha256": "7e8864922064b4eb039e34b004bd6f49ffc35bbda6c63ac5114a4a4b3a8870cc"
+    },
+    {
+      "path": "evidence/A2_full_trace.json",
+      "bytes": 408406,
+      "sha256": "8694f5d5407adb73af0de05062a3125b61ef004a7f6e7b1508dfddddecd7819e"
+    },
+    {
+      "path": "evidence/A2_raw_envelope_attempt_1.json",
+      "bytes": 2549,
+      "sha256": "57cb8078442ddd81d8c31e09b97225939231b4a7ac7e30ff203a453f7dd64317"
+    },
+    {
+      "path": "evidence/A2_raw_envelope_attempt_2.json",
+      "bytes": 1262,
+      "sha256": "0b5e915aa7dc648e2b3ea298d3bfed1eb8be6d46379672c3ed3c7055ed732d63"
+    },
+    {
+      "path": "evidence/A3_decision_3.json",
+      "bytes": 16530,
+      "sha256": "f6f584ff1468bde91ff3f6ad5acc475abf849d2045c1b912f6fc9aa2a510f98f"
+    },
+    {
+      "path": "evidence/A3_digest.json",
+      "bytes": 20336,
+      "sha256": "b119465b6afeb4973b625c1c0fd71d7e36b9cbe2b37195acec5e77a7e84b3164"
+    },
+    {
+      "path": "evidence/A3_full_trace.json",
+      "bytes": 462724,
+      "sha256": "6d666443debd1cb628f364626620cc863f3c07f79e17d1968fd911913d8fcdd1"
+    },
+    {
+      "path": "evidence/A3_raw_envelope_attempt_1.json",
+      "bytes": 3484,
+      "sha256": "2e9d64e44f524df3367a03065df8af66e5238d974d17dd09beec828503760c89"
+    },
+    {
+      "path": "evidence/A3_raw_envelope_attempt_2.json",
+      "bytes": 1972,
+      "sha256": "78a2713ea0ca8536ce41418335bf88e025d5f302dd28ac93e338747ac3e47ba9"
+    },
+    {
+      "path": "evidence/B1_decision_4.json",
+      "bytes": 9638,
+      "sha256": "904fb221d40e0d10d02332081b897f718ae06fd54d34a9f8a654c2c064539d78"
+    },
+    {
+      "path": "evidence/B1_digest.json",
+      "bytes": 8416,
+      "sha256": "ef8ff3adfae8b63d8dd59689a50da2aa23244a4a71bfbd4d1480c94a717c88ea"
+    },
+    {
+      "path": "evidence/B1_full_trace.json",
+      "bytes": 377101,
+      "sha256": "b02c5fc38d2145dbf0b1c3bfb7961307f3f4dad501616b9b7f3399548629b13f"
+    },
+    {
+      "path": "evidence/B1_raw_envelope_attempt_1.json",
+      "bytes": 1992,
+      "sha256": "8db6c5c7402c887a72e2062d4d9634be10a1cd14a037d7197e32ccf630aef3b6"
+    },
+    {
+      "path": "evidence/B1_raw_envelope_attempt_2.json",
+      "bytes": 1439,
+      "sha256": "dc00db1a3b2c026a46039a41f9223766b255a5f99f69e39a73e8d8cdae1e3459"
+    },
+    {
+      "path": "evidence/REPORT.md",
+      "bytes": 28695,
+      "sha256": "8587b66c016dc22610e5c43a5a8f0c4d8880b0efa2f953ea1f80a91f9a7f8a5c"
+    },
+    {
+      "path": "evidence/decisions.json",
+      "bytes": 52245,
+      "sha256": "df6e175c426e4aa71bb01574dd9972556bc721f96700ae293e395cd2a6700cb7"
+    },
+    {
+      "path": "evidence/http_attempts.json",
+      "bytes": 1550,
+      "sha256": "9eeee054597ccecfafc89b6ee60df454492eac67c68e29d4c16ea1f97d04487f"
+    },
+    {
+      "path": "evidence/isolated_A/data/campaign.json",
+      "bytes": 2898,
+      "sha256": "65d9e3063dcf13bcd9b155cd4e80e3ec23b867fa8ad326463fda831d8dacb8a8"
+    },
+    {
+      "path": "evidence/isolated_A/data/character.json",
+      "bytes": 2075,
+      "sha256": "8f52309e6dff2626793fb609fd6226d8a0f0adad6e957cc1fc890d0402842795"
+    },
+    {
+      "path": "evidence/isolated_A/data/combat.json",
+      "bytes": 449,
+      "sha256": "a4f3b94f603a8729cc290c5c872b4ee388bec78126a444a558c7d462bedf333d"
+    },
+    {
+      "path": "evidence/isolated_A/data/conditions.json",
+      "bytes": 1234,
+      "sha256": "6cb4fa4d23897549005c2d26cf17f67d41d64d3dab80a145270619039b92ed7f"
+    },
+    {
+      "path": "evidence/isolated_A/data/scenes/chapel_belfry.json",
+      "bytes": 664,
+      "sha256": "4b7b2c79d0b8eb58b5be1ea52585ced27724e550b8b38ecd2c85911cc2922d82"
+    },
+    {
+      "path": "evidence/isolated_A/data/scenes/frontier_gate.json",
+      "bytes": 5299,
+      "sha256": "efa1cf9c413c206e4554b082c658e9de12e45d4d979ab16fbea124d4f843bef3"
+    },
+    {
+      "path": "evidence/isolated_A/data/scenes/market_quarter.json",
+      "bytes": 1009,
+      "sha256": "e00a2a0132439cf9097bc88ac114702b804ee0a539025deb0b1ee5cf0c91c45b"
+    },
+    {
+      "path": "evidence/isolated_A/data/scenes/old_milestone.json",
+      "bytes": 2043,
+      "sha256": "da083442a66ecb63f554c036ef8e499fc34c1a96a9d7fbf840676acaaf5314ff"
+    },
+    {
+      "path": "evidence/isolated_A/data/session.json",
+      "bytes": 173756,
+      "sha256": "ff3bc9e1ff17e20b175ffe09fff953abc3d495d7b56eddc086dae3fea35a57da"
+    },
+    {
+      "path": "evidence/isolated_A/data/session_log.jsonl",
+      "bytes": 195017,
+      "sha256": "1497b3a3888f21782b4bd65689eb053146cdb4f5fbaeac434954a9b1ff8c58fa"
+    },
+    {
+      "path": "evidence/isolated_A/data/world.json",
+      "bytes": 2113,
+      "sha256": "82228de820a205091826a1197eb75cb359ffbcdc8bf308f65434cf57fd09fced"
+    },
+    {
+      "path": "evidence/isolated_B/data/campaign.json",
+      "bytes": 2898,
+      "sha256": "65d9e3063dcf13bcd9b155cd4e80e3ec23b867fa8ad326463fda831d8dacb8a8"
+    },
+    {
+      "path": "evidence/isolated_B/data/character.json",
+      "bytes": 2075,
+      "sha256": "8f52309e6dff2626793fb609fd6226d8a0f0adad6e957cc1fc890d0402842795"
+    },
+    {
+      "path": "evidence/isolated_B/data/combat.json",
+      "bytes": 449,
+      "sha256": "95e0e75ed09344d4848fd0283257867a6c9e12b81b3360eba0044221c82f7185"
+    },
+    {
+      "path": "evidence/isolated_B/data/conditions.json",
+      "bytes": 1234,
+      "sha256": "6cb4fa4d23897549005c2d26cf17f67d41d64d3dab80a145270619039b92ed7f"
+    },
+    {
+      "path": "evidence/isolated_B/data/scenes/bread_stall.json",
+      "bytes": 741,
+      "sha256": "72a20c18937252a65d4b6150053b5cdc1b0b5fe6a91a8fcfdc0ef4951ad802a8"
+    },
+    {
+      "path": "evidence/isolated_B/data/scenes/frontier_gate.json",
+      "bytes": 5299,
+      "sha256": "efa1cf9c413c206e4554b082c658e9de12e45d4d979ab16fbea124d4f843bef3"
+    },
+    {
+      "path": "evidence/isolated_B/data/scenes/market_quarter.json",
+      "bytes": 1009,
+      "sha256": "e00a2a0132439cf9097bc88ac114702b804ee0a539025deb0b1ee5cf0c91c45b"
+    },
+    {
+      "path": "evidence/isolated_B/data/scenes/old_milestone.json",
+      "bytes": 2043,
+      "sha256": "da083442a66ecb63f554c036ef8e499fc34c1a96a9d7fbf840676acaaf5314ff"
+    },
+    {
+      "path": "evidence/isolated_B/data/session.json",
+      "bytes": 161512,
+      "sha256": "e5e5cc82b11eadc31743535a816e4ee8af4743a8b3ac3128b4e7a2462b0d7831"
+    },
+    {
+      "path": "evidence/isolated_B/data/session_log.jsonl",
+      "bytes": 57729,
+      "sha256": "d33d8f6e01789d20268b9d0182ea3934727abcdc9851804f21d74201a6f3a0ae"
+    },
+    {
+      "path": "evidence/isolated_B/data/world.json",
+      "bytes": 2396,
+      "sha256": "7aa022b51f3b51fb0dd2dc1adf9381d209dc6b77a50359c8bda80caa90ee2d37"
+    },
+    {
+      "path": "evidence/model_calls.json",
+      "bytes": 20249,
+      "sha256": "38a8689d7dde7de28e71d3a2ebbc30ce3b2352fe017d08379b69db88cd82912b"
+    },
+    {
+      "path": "evidence/observe.py",
+      "bytes": 20933,
+      "sha256": "a71c44e8d3807622ce55eb941592b4dd7e80509089caa4f08526f1845ef90dec"
+    },
+    {
+      "path": "evidence/outbox.json",
+      "bytes": 8416,
+      "sha256": "ef8ff3adfae8b63d8dd59689a50da2aa23244a4a71bfbd4d1480c94a717c88ea"
+    },
+    {
+      "path": "evidence/package_evidence.py",
+      "bytes": 3748,
+      "sha256": "45a692600c48dbb09a40b1c6023a2b53a5cfdfe9e0a4feacc93162043c4ef3ac"
+    },
+    {
+      "path": "evidence/preflight.json",
+      "bytes": 235,
+      "sha256": "e888ae356851f7f1b452421e429fa6ae7f5e09c1693dfb53f2d23a657e2de63b"
+    },
+    {
+      "path": "evidence/run_finished.json",
+      "bytes": 160,
+      "sha256": "6d8483b6be4f05153696af5cc3c36b928822c16ccc304dce68f6d87a7e2b5192"
+    },
+    {
+      "path": "evidence/run_started.json",
+      "bytes": 68,
+      "sha256": "7fd92aca102d101c33f71469aedb4725f990515391dd370022e4acbb1cdf6fde"
+    },
+    {
+      "path": "evidence/setup_A.json",
+      "bytes": 1179,
+      "sha256": "5235c833a58448ba36e062a409332e5ad394b7c9faffc1eb44680d446d6f06d8"
+    },
+    {
+      "path": "evidence/setup_B.json",
+      "bytes": 918,
+      "sha256": "e52b56469d70536c84334a60e9cd86141cd3130f8286c0581d4b09602d78b43a"
+    },
+    {
+      "path": "evidence/status.txt",
+      "bytes": 8,
+      "sha256": "20797ee0657b01c990353bc9862562fb29998b8b26a69d59c5db31cfc42dba26"
+    },
+    {
+      "path": "evidence/summary.json",
+      "bytes": 867,
+      "sha256": "89d26c16f0be47b53346dbdbc76215b06a87d5477a40ec572bd7dfae995bc51e"
+    },
+    {
+      "path": "evidence/turns.json",
+      "bytes": 1106,
+      "sha256": "44226bf5ef81e380988f9227001681e68313af323123415a9514a626cdedc68a"
+    }
+  ]
+}

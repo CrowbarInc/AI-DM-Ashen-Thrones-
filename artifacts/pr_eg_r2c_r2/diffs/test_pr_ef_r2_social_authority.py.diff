@@ -1,0 +1,12 @@
+--- cycle_baseline/tests/test_pr_ef_r2_social_authority.py
++++ final/tests/test_pr_ef_r2_social_authority.py
+@@ -106,7 +106,8 @@
+     communication = payload.pop('communication'); communication['subject'] = 'distant kingdom'
+     payload['references']['unresolved_references'] = ['distant kingdom', 'unknown captain']
+     normalized, _ = normalize_social_scope(payload, communication)
+-    assert normalized['references']['unresolved_references'] == ['unknown captain']
++    # Provider subject wording is not authoritative grounding.
++    assert normalized['references']['unresolved_references'] == ['distant kingdom', 'unknown captain']
+     payload['action_components'].append(dict(order=2, description='Leave', operation_class='MOVE', target_ref='courtyard_gate'))
+     normalized, _ = normalize_social_scope(payload, communication)
+     assert normalized['references']['unresolved_references'] == ['distant kingdom', 'unknown captain']

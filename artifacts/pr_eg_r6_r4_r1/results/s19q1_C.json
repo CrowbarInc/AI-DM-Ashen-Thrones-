@@ -1,0 +1,53 @@
+{
+  "case_id": "s19q1",
+  "family": "s19",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "d38b3ca9b2276669019227dd4d33eaf1a1ef12f8ba6af8571c3731213122fd79",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "creditor Aska"
+    ],
+    "qualifiers": [
+      "payable after harvest",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s19"
+    ],
+    "answered_arguments": [
+      "debtor Ren",
+      "creditor Aska",
+      "amount twelve measures of rye"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "Fact f1 explicitly states that debtor Ren owes creditor Aska twelve measures of rye, payable after harvest, indicating Aska is entitled to receive Ren's rye payment."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

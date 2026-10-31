@@ -1,0 +1,48 @@
+{
+  "case_id": "s25q4",
+  "family": "s25",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "44397c95189c820fd26f4bddc878fb2f2375a42af22d44e5e61cddf89bd676cd",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The eastern bridge collapsed according to the evening ledger"
+    ],
+    "qualifiers": [
+      "according to the evening ledger"
+    ],
+    "selected_fact_ids": [
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s25b"
+    ],
+    "answered_arguments": [
+      "condition"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact f2 directly states the condition of the eastern bridge as given by the evening ledger."
+  },
+  "gate": {
+    "candidate_eligible": true,
+    "reasons": [],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

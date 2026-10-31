@@ -1,0 +1,710 @@
+[
+  {
+    "n": 1,
+    "player": "I step over to the tavern runner and hold out a coin. \"Stew later. What's the rumor worth paying for, and does it have anything to do with that missing patrol on the board?\"",
+    "op": "ask",
+    "target": "Notice board",
+    "interlocutor": "tavern_runner",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I keep my voice low and don't take the coin back yet. \"Who saw those footprints, and how long ago? Did anyone from the gate actually go look, or is this just travelers talking?\"",
+    "op": "ask",
+    "target": "tavern_runner",
+    "interlocutor": "tavern_runner",
+    "dimension": "time",
+    "dimensions": [
+      "time",
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "insufficient_discourse_context",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "wrong_interlocutor"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: wrong_interlocutor. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "tavern_runner",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "I turn to the guard captain and keep my voice down. \"If the timing matches their last check-in, why hasn't the watch gone to look? What was that patrol supposed to be doing when they vanished?\"",
+    "op": "ask",
+    "target": "Guard Captain",
+    "interlocutor": "guard_captain",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "guard_captain",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I glance toward the crowded gate, then back at the captain. \"Whose orders are you waiting on, and do you think they want this left alone? If I'm walking out to that milestone, I want to know what I'm walking into.\"",
+    "op": "ask",
+    "target": "Guard Captain",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "crowded gate",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I lean in, matching the captain's low voice. \"Hornet's nest — whose? What are the brass afraid of finding if someone actually goes and looks?\"",
+    "op": "ask",
+    "target": "i lean in",
+    "interlocutor": "inc_bc3b34a66d",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": "i lean in",
+    "bound": "inc_bc3b34a66d",
+    "entity_id": "inc_bc3b34a66d",
+    "authority_reasons": [
+      "scene:populated",
+      "pr_bn:accepted"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_bc3b34a66d",
+      "label": "i lean in",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 6,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "I hold the captain's look and keep my voice just as low. \"Old secrets and unsettled scores — whose? If the brass won't name them, who around this gate still will?\"",
+    "op": "ask",
+    "target": "Guard Captain",
+    "interlocutor": "guard_captain",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "guard_captain",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "incomplete_semantic_structure",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "malformed_output",
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "guard_captain",
+      "label": "i lean in",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 7,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I give the captain a small nod and step back to the tavern runner, keeping my voice under the rain. \"The captain says the gate won't talk. You will. Whose debts and noble quarrels sit past that milestone, and what does a loose tongue cost around here?\"",
+    "op": "ask",
+    "target": "Tavern Runner",
+    "interlocutor": "tavern_runner",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "i lean in",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "I slide another coin toward him, slower this time. \"Then sell me one name. Which family, and what debt would make a patrol vanish before their next report?\"",
+    "op": "ask",
+    "target": "i lean in",
+    "interlocutor": "tavern_runner",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "tavern_runner",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "incomplete_semantic_structure",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "wrong_interlocutor"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: wrong_interlocutor. Do not switch speaker, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "tavern_runner",
+      "label": "i lean in",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 9,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I leave the coin where it is and follow his glance around the square. \"Then point. Who here has those deeper roots, and will they talk to a stranger with a thin purse?\"",
+    "op": "ask",
+    "target": "Ragged stranger",
+    "interlocutor": "refugee",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "refugee",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "refugee",
+      "label": "Ragged stranger",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "spoiler_guard"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "refugee"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "I tilt my head toward the quieter fringe of the square, away from the guards. \"Then not here. Walk with me as far as the notice board, and tell me who you meant.\"",
+    "op": "ask",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": "quieter fringe square",
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [
+      "proposal:not_a_person"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner",
+      "refugee"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  }
+]

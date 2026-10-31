@@ -1,0 +1,66 @@
+--- baseline/game/immutable_valid_response.py
++++ final/game/immutable_valid_response.py
+@@ -1380,6 +1380,53 @@
+     return isinstance(declared, list) or bool(envelope.get("structured_contract_present"))
+ 
+ 
++def adopt_host_speech(
++    gm: dict[str, Any],
++    *,
++    resolution: Mapping[str, Any] | None,
++    player_text: str,
++    session: Mapping[str, Any] | None = None,
++) -> dict[str, Any] | None:
++    """Bind host-owned speech to the existing immutable final-response record."""
++    from game.dialogue_authority import select_host_speech
++
++    selection = select_host_speech(resolution, player_text=player_text, session=session)
++    if selection is None:
++        return None
++    line, source = selection
++    social = resolution["social"]
++    return seal_host_speech(gm, text=line, source=source, speaker_id=social["npc_id"],
++                            speaker_name=social["npc_name"], resolution=resolution, player_text=player_text)
++
++
++def seal_host_speech(
++    gm: dict[str, Any], *, text: str, source: str, speaker_id: str,
++    speaker_name: str, resolution: Mapping[str, Any] | None, player_text: str,
++) -> dict[str, Any]:
++    """Use one final-response representation for resolver and continuity speech."""
++    line = text
++    candidate = str(gm.get("player_facing_text") or "")
++    # A discarded draft cannot supply state effects alongside the host answer.
++    for key in ("scene_update", "world_updates", "activate_scene_id", "new_scene_draft", "suggested_action"):
++        gm[key] = None
++    gm.pop("improvisation_proposals", None)
++    gm.pop("bounded_improvisation_authority", None)
++    sealed = seal_accepted_response(
++        gm, text=line, provenance="authorized_host_speech", attempt=0,
++        validation={"hard_valid": True, "reasons": [], "soft_flags": [],
++                    "speaker": speaker_name, "addressee": "player",
++                    "operation": "ask", "interaction_complete": True,
++                    "contract_satisfying": True, "authority": [source]},
++        contract=_contract_from_resolution(resolution), player_text=player_text,
++        resolution=resolution,
++    )
++    record = sealed["metadata"][ACCEPTED_KEY]
++    record.update(speech_adoption="AUTHORIZED_HOST_SPEECH", authorization_source=source,
++                  speaker_id=speaker_id, canonical=False,
++                  candidate_disposition="UNAUTHORIZED_GENERATED_CANDIDATE" if candidate and not semantic_equal(candidate, line) else "host_selected")
++    return sealed
++
++
+ def run_preserve_if_valid(
+     gm: dict[str, Any],
+     *,
+@@ -1398,6 +1445,9 @@
+     """Generate is already done. Validate, preserve, or retry once."""
+     if not isinstance(gm, dict):
+         return gm
++    adopted = adopt_host_speech(gm, resolution=resolution, player_text=player_text, session=session)
++    if adopted is not None:
++        return adopted
+     contract = _contract_from_resolution(resolution)
+     try:
+         from game.gm_resolution_decision import decision_from_resolution

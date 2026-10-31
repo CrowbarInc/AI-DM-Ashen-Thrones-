@@ -1,0 +1,232 @@
+{
+  "probe_id": "07_mixed_social_and_declared_movement",
+  "probe_question": "Thank Mirelle for the slick-step warning, then go to the eastern courtyard.",
+  "player_text": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+  "http_status": 200,
+  "emitted_narration": "You step through the arch at the bottom of the cistern steps and enter the eastern courtyard of Ashford. The yard is paved and enclosed between the cistern house to one side and the tall stone wall of the mill on the other. A dry stone trough stands quietly against the mill wall, its rough surface weathered by time. The air carries the faint scent of dust and dried earth, stirred occasionally by a chilly breeze that whispers through the courtyard. The usual sounds of milling machinery are muffled here, replaced by distant footsteps and the quiet murmur of town life continuing beyond this enclosed space.",
+  "raw_generations": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "You step through the arch at the bottom of the cistern steps and enter the eastern courtyard of Ashford. The yard is paved and enclosed between the cistern house to one side and the tall stone wall of the mill on the other. A dry stone trough stands quietly against the mill wall, its rough surface weathered by time. The air carries the faint scent of dust and dried earth, stirred occasionally by a chilly breeze that whispers through the courtyard. The usual sounds of milling machinery are muffled here, replaced by distant footsteps and the quiet murmur of town life continuing beyond this enclosed space.",
+      "prompt_flags": {
+        "user_chars": 108722,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true,
+        "contains_authoritative_retry_context": false,
+        "contains_validation_failure": false
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "initial_generation_calls": 1,
+  "retry_generation_calls": 0,
+  "interpretation_call_count": 0,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": "scene_transition",
+  "resolution_social": null,
+  "resolution_npc_id": null,
+  "target_scene_id": "eastern_courtyard",
+  "resolved_transition": true,
+  "selected_resolver": "travel",
+  "interaction_obligation": {
+    "kind": "action_request",
+    "target": null,
+    "interlocutor_id": null,
+    "subject": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+    "requested_outcome": "accept, refuse, condition, or redirect the requested action",
+    "claim_id": null,
+    "resolution_mode": "grounded_information_request",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_6ff0fda95ff8"
+  },
+  "resolution_contract_id": "rc_6ff0fda95ff8",
+  "resolution_contract_operation": "act",
+  "resolution_contract_subject": "travel",
+  "decision_present": true,
+  "decision_contract_id": "rc_6ff0fda95ff8",
+  "decision_id_matches_contract": true,
+  "decision_outcome": "consequentially_unresolved",
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+    "Requested consequential result remains unresolved unless separately authorized by resolver/state."
+  ],
+  "permitted_mutations": null,
+  "proposed_facts": [
+    {
+      "text": "Mirelle warns that the cistern steps are slick.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "An arch at the bottom of the steps opens onto the eastern courtyard.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "Mirelle exists as cistern keeper",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {
+        "kind": "entity",
+        "subject": "mirelle",
+        "subject_aliases": [
+          "Mirelle"
+        ],
+        "relation": "exists",
+        "value": "cistern keeper",
+        "authority": "world_truth"
+      },
+      "outcome": "established_or_retrieved"
+    }
+  ],
+  "accepted_response": {
+    "immutable": true,
+    "text": "You step through the arch at the bottom of the cistern steps and enter the eastern courtyard of Ashford. The yard is paved and enclosed between the cistern house to one side and the tall stone wall of the mill on the other. A dry stone trough stands quietly against the mill wall, its rough surface weathered by time. The air carries the faint scent of dust and dried earth, stirred occasionally by a chilly breeze that whispers through the courtyard. The usual sounds of milling machinery are muffled here, replaced by distant footsteps and the quiet murmur of town life continuing beyond this enclosed space.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+    "turn_identity": "rc_6ff0fda95ff8",
+    "speaker": "",
+    "addressee": "",
+    "target": "",
+    "operation": "act",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_6ff0fda95ff8",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "The yard is paved and enclosed between the cistern house to one side and the tall stone wall of the mill on the other.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "bounded_incidental",
+            "semantic_identity": {}
+          },
+          {
+            "text": "A dry stone trough stands quietly against the mill wall, its rough surface weathered by time.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "bounded_incidental",
+            "semantic_identity": {}
+          },
+          {
+            "text": "The air carries the faint scent of dust and dried earth, stirred occasionally by a chilly breeze that whispers through the courtyard.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "bounded_incidental",
+            "semantic_identity": {}
+          },
+          {
+            "text": "The usual sounds of milling machinery are muffled here, replaced by distant footsteps and the quiet murmur of town life continuing beyond this enclosed space.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "bounded_incidental",
+            "semantic_identity": {}
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_6ff0fda95ff8",
+      "operation": "act",
+      "interlocutor_id": "",
+      "expected_resolution": "action_outcome"
+    },
+    "resolution_kind": "scene_transition",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "gm_metadata_validation_keys": [
+    "hard_validation_attempt_1"
+  ],
+  "committed_active_scene_id": "eastern_courtyard",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "eastern_courtyard",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": {
+      "id": "rc_6ff0fda95ff8",
+      "label": "I thank Mirelle for the warning, then head for the eastern courtyard.",
+      "kind": "act",
+      "scene_id": "eastern_courtyard",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_6ff0fda95ff8"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [],
+    "rejected": [],
+    "incidental_entities": []
+  },
+  "committed_world_flags": [],
+  "committed_factions": [],
+  "committed_event_log": []
+}

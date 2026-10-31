@@ -1,0 +1,17 @@
+{
+  "controls": [
+    {"id": 1, "name": "Harmless subjective question without authored canonical answer", "expected": "existing path retained", "status": "pass"},
+    {"id": 2, "name": "Ambiguous NPC addressee", "expected": "early projection ineligible", "status": "guarded_by_unresolved_explicit_addressee"},
+    {"id": 3, "name": "Unselected social topic", "expected": "existing path retained", "status": "guarded_by_missing_topic_revealed"},
+    {"id": 4, "name": "Restricted NPC knowledge", "expected": "existing path retained", "status": "guarded_by_absent_authorized_topic"},
+    {"id": 5, "name": "Unsupported objective question", "expected": "existing path retained", "status": "guarded_by_social_ask_requirement"},
+    {"id": 6, "name": "Exploration action", "expected": "existing path retained", "status": "guarded_by_social_ask_requirement"},
+    {"id": 7, "name": "Combat action", "expected": "existing path retained", "status": "guarded_by_social_ask_requirement"},
+    {"id": 8, "name": "Physical world action", "expected": "existing path retained", "status": "guarded_by_social_ask_requirement"},
+    {"id": 9, "name": "Narration-only observation request", "expected": "existing path retained", "status": "guarded_by_social_ask_requirement"},
+    {"id": 10, "name": "Additional adjudication required", "expected": "existing path retained", "status": "guarded_by_executable_obligations"},
+    {"id": 11, "name": "Projection fails hard validation", "expected": "existing path retained", "status": "guarded_by_projection_revalidation"},
+    {"id": 12, "name": "Selected answer not authorized for disclosure", "expected": "existing path retained", "status": "guarded_by_missing_authorized_topic_text"}
+  ]
+}
+

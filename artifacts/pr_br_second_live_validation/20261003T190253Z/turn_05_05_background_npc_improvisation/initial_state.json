@@ -1,0 +1,115 @@
+{
+  "scene": {
+    "scene": {
+      "id": "ferry_slip",
+      "location": "Ashford ferry slip",
+      "summary": "A short timber slip meets the river. Osric, a lantern-tender, stands by the post lantern. He is an ordinary worker with no special charge.",
+      "mode": "social",
+      "visible_facts": [
+        "A post lantern burns at the end of the ferry slip.",
+        "Osric stands beside the post lantern."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "osric",
+          "name": "Osric",
+          "scene_id": "ferry_slip",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "lantern-tender",
+            "lantern tender",
+            "lantern-tender"
+          ],
+          "aliases": [
+            "lantern tender",
+            "lantern-tender"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "ashford",
+        "name": "Ashford",
+        "type": "hill_town",
+        "tags": [
+          "mill",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hill town of mills, cisterns, yards, and a ferry slip."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "osric",
+        "name": "Osric",
+        "location": "ferry_slip",
+        "role": "lantern-tender",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "lantern tender",
+          "lantern-tender"
+        ],
+        "topics": [
+          {
+            "id": "work",
+            "text": "Osric keeps the lantern at the ferry slip lit."
+          }
+        ]
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_patch": null,
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "starting_context": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a hill town."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace, yard, or slip in Ashford.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "ferry_slip",
+    "visited_scene_ids": [
+      "ferry_slip"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "interaction_context": null,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

@@ -1,0 +1,1224 @@
+{
+  "fixture": {
+    "player_facing_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+    "tags": [],
+    "scene_update": null,
+    "activate_scene_id": null,
+    "new_scene_draft": null,
+    "world_updates": null,
+    "suggested_action": null,
+    "debug_notes": "",
+    "upstream_prepared_emission": {
+      "prepared_scene_opening_text": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press shoulder to shoulder around the wagon line and guards hold the choke under shouted orders. A tavern runner weaves through the crush, calling offers of hot stew and paid rumor as the notice board waits beside the arch. The queue inches forward in fits, wagon wheels grinding through black ruts while wet canvas slaps against overloaded carts and the smell of damp wool, smoke, and sour road dust clings to everyone close enough to breathe on you. Somewhere ahead, a guard captain's voice cuts through the mutter of the crowd, sharp enough to make shoulders hunch and conversations die for a heartbeat before the pressure of bodies closes in again. To your left, a well-appointed townhouse flies noble colors above the square, clean banners staring down at the mud as if the gate's misery belongs to another city. Near the line, one threadbare watcher stands too still, eyes flicking to packs and faces instead of the arch. You can read the notice board, press the guards, approach the tavern runner, or watch the silent figure in the crush."
+    }
+  },
+  "boundaries": [
+    {
+      "stage": "before_acceptance",
+      "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+      "length": 111,
+      "accepted": null,
+      "debug": {
+        "live_resolution_mode": {
+          "mode": "grounded_information_request",
+          "reason_codes": [
+            "default_existing_resolution"
+          ],
+          "target": "frontier_gate",
+          "speaker_id": "",
+          "topic": "frontier_gate",
+          "improvisation_opportunity_detected": false,
+          "proposal_created": false,
+          "proposal_reason": "not_improvable_mode",
+          "response_complete": true,
+          "response_completeness_reason": "not_gap_mode",
+          "requested_dimension": null,
+          "contract_id": "rc_dd89a2b89c62"
+        },
+        "speaker_contract_enforcement": {
+          "contract_present": false,
+          "validation": {
+            "ok": true,
+            "reason_code": "speaker_contract_match",
+            "canonical_speaker_id": null,
+            "canonical_speaker_name": null,
+            "repair_mode": "none",
+            "details": {
+              "signature": {
+                "speaker_name": null,
+                "speaker_label": null,
+                "is_explicitly_attributed": false,
+                "is_generic_fallback_label": false,
+                "has_interruption_framing": false,
+                "confidence": "low"
+              },
+              "skipped": "no_contract"
+            }
+          },
+          "final_reason_code": "speaker_contract_match"
+        },
+        "opening_curated_facts_present": true,
+        "opening_curated_facts_count": 6,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "opening_seed_facts",
+        "opening_selector_selected_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "opening_curated_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ]
+      },
+      "rejected": null
+    },
+    {
+      "stage": "after_acceptance",
+      "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+      "length": 111,
+      "accepted": {
+        "immutable": true,
+        "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "provenance": "initial_generation",
+        "attempt": 1,
+        "player_input": "",
+        "turn_identity": "rc_dd89a2b89c62",
+        "speaker": "",
+        "addressee": "",
+        "target": "",
+        "operation": "unresolved",
+        "authority_result": "accepted",
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "authority": [
+            {
+              "text": "You stand at Cinderwatch's eastern gate in the rain.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_dd89a2b89c62",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "You stand at Cinderwatch's eastern gate in the rain.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              },
+              {
+                "text": "Refugees crowd the wagon line while guards hold the choke.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "You stand at Cinderwatch's eastern gate in the rain.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              },
+              {
+                "text": "Refugees crowd the wagon line while guards hold the choke.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              }
+            ]
+          },
+          "decision_acceptance_why": "initial_hard_valid"
+        },
+        "interaction_completion": true,
+        "contract_satisfying": true,
+        "contract": {
+          "contract_id": "rc_dd89a2b89c62",
+          "operation": "unresolved",
+          "interlocutor_id": "",
+          "expected_resolution": "answer"
+        },
+        "resolution_kind": "scene_opening",
+        "generation_attempts": 1,
+        "skipped_mutators": [],
+        "subject": "",
+        "authorization_source": "initial_generation",
+        "adoption_status": "candidate_accepted",
+        "integrity_digest": "838404045d3e13c275fa1f6e79587a914f14fea1207276403c0540737b872714"
+      },
+      "debug": {
+        "live_resolution_mode": {
+          "mode": "grounded_information_request",
+          "reason_codes": [
+            "default_existing_resolution"
+          ],
+          "target": "frontier_gate",
+          "speaker_id": "",
+          "topic": "frontier_gate",
+          "improvisation_opportunity_detected": false,
+          "proposal_created": false,
+          "proposal_reason": "not_improvable_mode",
+          "response_complete": true,
+          "response_completeness_reason": "not_gap_mode",
+          "requested_dimension": null,
+          "contract_id": "rc_dd89a2b89c62"
+        },
+        "speaker_contract_enforcement": {
+          "contract_present": false,
+          "validation": {
+            "ok": true,
+            "reason_code": "speaker_contract_match",
+            "canonical_speaker_id": null,
+            "canonical_speaker_name": null,
+            "repair_mode": "none",
+            "details": {
+              "signature": {
+                "speaker_name": null,
+                "speaker_label": null,
+                "is_explicitly_attributed": false,
+                "is_generic_fallback_label": false,
+                "has_interruption_framing": false,
+                "confidence": "low"
+              },
+              "skipped": "no_contract"
+            }
+          },
+          "final_reason_code": "speaker_contract_match"
+        },
+        "opening_curated_facts_present": true,
+        "opening_curated_facts_count": 6,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "opening_seed_facts",
+        "opening_selector_selected_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "opening_curated_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "accepted_response_provenance": "initial_generation",
+        "generation_attempts": 1,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "satisfied",
+          "reasons": [],
+          "preserved": true
+        }
+      },
+      "rejected": null
+    },
+    {
+      "stage": "before_final_emission",
+      "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+      "length": 111,
+      "accepted": {
+        "immutable": true,
+        "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "provenance": "initial_generation",
+        "attempt": 1,
+        "player_input": "",
+        "turn_identity": "rc_dd89a2b89c62",
+        "speaker": "",
+        "addressee": "",
+        "target": "",
+        "operation": "unresolved",
+        "authority_result": "accepted",
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": [],
+          "authority": [
+            {
+              "text": "You stand at Cinderwatch's eastern gate in the rain.",
+              "kind": "incidental_fact",
+              "epistemic_status": "world_truth",
+              "grounded": false,
+              "consequential": false,
+              "family": "incidental"
+            }
+          ],
+          "gm_resolution_decision_audit": {
+            "decision_id": "rc_dd89a2b89c62",
+            "hard_valid": true,
+            "violations": [],
+            "proposed_facts": [
+              {
+                "text": "You stand at Cinderwatch's eastern gate in the rain.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              },
+              {
+                "text": "Refugees crowd the wagon line while guards hold the choke.",
+                "provenance": "bounded_incidental",
+                "consequence": "low",
+                "authorized": true,
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "authority": "bounded_incidental",
+                "persistence": "runtime_incidental",
+                "source_ref": "",
+                "outcome_classification": "epistemically_qualified",
+                "semantic_identity": {}
+              }
+            ],
+            "claim_results": [
+              {
+                "text": "You stand at Cinderwatch's eastern gate in the rain.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              },
+              {
+                "text": "Refugees crowd the wagon line while guards hold the choke.",
+                "semantic_identity": {},
+                "provenance": "bounded_incidental",
+                "authority": "bounded_incidental",
+                "epistemic_status": "",
+                "relation_kind": "ordinary_predicate",
+                "persistence": "runtime_incidental",
+                "authorized": true,
+                "source_ref": "",
+                "source_turn": null,
+                "source_scene": "",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ]
+              }
+            ]
+          },
+          "decision_acceptance_why": "initial_hard_valid"
+        },
+        "interaction_completion": true,
+        "contract_satisfying": true,
+        "contract": {
+          "contract_id": "rc_dd89a2b89c62",
+          "operation": "unresolved",
+          "interlocutor_id": "",
+          "expected_resolution": "answer"
+        },
+        "resolution_kind": "scene_opening",
+        "generation_attempts": 1,
+        "skipped_mutators": [
+          "apply_response_policy_enforcement",
+          "apply_authored_knowledge_realization_to_gm",
+          "apply_stay_leave_narration_agreement_to_gm",
+          "apply_destination_arrival_realization_to_gm",
+          "apply_perception_non_invention_to_gm"
+        ],
+        "subject": "",
+        "authorization_source": "initial_generation",
+        "adoption_status": "candidate_accepted",
+        "integrity_digest": "838404045d3e13c275fa1f6e79587a914f14fea1207276403c0540737b872714"
+      },
+      "debug": {
+        "live_resolution_mode": {
+          "mode": "grounded_information_request",
+          "reason_codes": [
+            "default_existing_resolution"
+          ],
+          "target": "frontier_gate",
+          "speaker_id": "",
+          "topic": "frontier_gate",
+          "improvisation_opportunity_detected": false,
+          "proposal_created": false,
+          "proposal_reason": "not_improvable_mode",
+          "response_complete": true,
+          "response_completeness_reason": "not_gap_mode",
+          "requested_dimension": null,
+          "contract_id": "rc_dd89a2b89c62"
+        },
+        "speaker_contract_enforcement": {
+          "contract_present": false,
+          "validation": {
+            "ok": true,
+            "reason_code": "speaker_contract_match",
+            "canonical_speaker_id": null,
+            "canonical_speaker_name": null,
+            "repair_mode": "none",
+            "details": {
+              "signature": {
+                "speaker_name": null,
+                "speaker_label": null,
+                "is_explicitly_attributed": false,
+                "is_generic_fallback_label": false,
+                "has_interruption_framing": false,
+                "confidence": "low"
+              },
+              "skipped": "no_contract"
+            }
+          },
+          "final_reason_code": "speaker_contract_match"
+        },
+        "opening_curated_facts_present": true,
+        "opening_curated_facts_count": 6,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "opening_seed_facts",
+        "opening_selector_selected_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "opening_curated_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "accepted_response_provenance": "initial_generation",
+        "generation_attempts": 1,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "satisfied",
+          "reasons": [],
+          "preserved": true
+        }
+      },
+      "rejected": null
+    },
+    {
+      "stage": "after_final_emission",
+      "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+      "length": 111,
+      "accepted": {
+        "addressee": "",
+        "adoption_status": "candidate_accepted",
+        "attempt": 1,
+        "authority_result": "accepted",
+        "authorization_source": "initial_generation",
+        "contract": {
+          "contract_id": "rc_dd89a2b89c62",
+          "expected_resolution": "answer",
+          "interlocutor_id": "",
+          "operation": "unresolved"
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 1,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            {
+              "consequential": false,
+              "epistemic_status": "world_truth",
+              "family": "incidental",
+              "grounded": false,
+              "kind": "incidental_fact",
+              "text": "You stand at Cinderwatch's eastern gate in the rain."
+            }
+          ],
+          "decision_acceptance_why": "initial_hard_valid",
+          "gm_resolution_decision_audit": {
+            "claim_results": [
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "epistemic_status": "",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "relation_kind": "ordinary_predicate",
+                "semantic_identity": {},
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "You stand at Cinderwatch's eastern gate in the rain."
+              },
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "epistemic_status": "",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "relation_kind": "ordinary_predicate",
+                "semantic_identity": {},
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "Refugees crowd the wagon line while guards hold the choke."
+              }
+            ],
+            "decision_id": "rc_dd89a2b89c62",
+            "hard_valid": true,
+            "proposed_facts": [
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "consequence": "low",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "semantic_identity": {},
+                "source_ref": "",
+                "text": "You stand at Cinderwatch's eastern gate in the rain."
+              },
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "consequence": "low",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "semantic_identity": {},
+                "source_ref": "",
+                "text": "Refugees crowd the wagon line while guards hold the choke."
+              }
+            ],
+            "violations": []
+          },
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "unresolved",
+        "player_input": "",
+        "provenance": "initial_generation",
+        "resolution_kind": "scene_opening",
+        "speaker": "",
+        "subject": "",
+        "target": "",
+        "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "turn_identity": "rc_dd89a2b89c62",
+        "integrity_digest": "838404045d3e13c275fa1f6e79587a914f14fea1207276403c0540737b872714",
+        "skipped_mutators": [
+          "_preserve_authoritative_resolution_facts_after_gate"
+        ]
+      },
+      "debug": {
+        "live_resolution_mode": {
+          "mode": "grounded_information_request",
+          "reason_codes": [
+            "default_existing_resolution"
+          ],
+          "target": "frontier_gate",
+          "speaker_id": "",
+          "topic": "frontier_gate",
+          "improvisation_opportunity_detected": false,
+          "proposal_created": false,
+          "proposal_reason": "not_improvable_mode",
+          "response_complete": true,
+          "response_completeness_reason": "not_gap_mode",
+          "requested_dimension": null,
+          "contract_id": "rc_dd89a2b89c62"
+        },
+        "speaker_contract_enforcement": {
+          "contract_present": false,
+          "validation": {
+            "ok": true,
+            "reason_code": "speaker_contract_match",
+            "canonical_speaker_id": null,
+            "canonical_speaker_name": null,
+            "repair_mode": "none",
+            "details": {
+              "signature": {
+                "speaker_name": null,
+                "speaker_label": null,
+                "is_explicitly_attributed": false,
+                "is_generic_fallback_label": false,
+                "has_interruption_framing": false,
+                "confidence": "low"
+              },
+              "skipped": "no_contract"
+            }
+          },
+          "final_reason_code": "speaker_contract_match"
+        },
+        "opening_curated_facts_present": true,
+        "opening_curated_facts_count": 6,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "opening_seed_facts",
+        "opening_selector_selected_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "opening_curated_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "accepted_response_provenance": "initial_generation",
+        "generation_attempts": 1,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "satisfied",
+          "reasons": [],
+          "preserved": true
+        },
+        "accepted_emitted_equality": {
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": true,
+          "attempted_text": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press shoulder to shoulder around the wagon line and guards hold the choke under shouted orders. A tavern runner weaves through the crush, calling offers of hot stew and paid rumor as the notice board waits beside the arch. The queue inches forward in fits, wagon wheels grinding through black ruts while wet canvas slaps again"
+        },
+        "opening_upstream_prepared_present": true,
+        "opening_upstream_prepared_len": 1218,
+        "opening_upstream_prepared_promoted": true,
+        "opening_raw_text_source": "upstream_prepared_emission",
+        "pre_gate_text_len": 1100,
+        "post_final_emission_gate_text_len": 1100,
+        "narration_state_consistency_before_preview": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press s...",
+        "outcome_precedence": {
+          "downgrade_attempted": false,
+          "downgrade_rejected": false,
+          "downgrade_reason": null,
+          "recovery_used": false,
+          "recovery_source": null,
+          "destroyed": false,
+          "scene_momentum_appended": false,
+          "final_outcome_kind": null,
+          "final_satisfaction": "unchecked",
+          "replacement_reason": "resolution_content_preserved"
+        },
+        "post_narration_state_consistency_text_len": 1100,
+        "narration_state_consistency_changed_text": false,
+        "narration_state_consistency_after_preview": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press s...",
+        "accepted_emitted_report": {
+          "immutable": true,
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": true,
+          "metadata_mutation_blocked": true,
+          "accepted_response_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+          "emitted_response_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke."
+        },
+        "temporal_provenance_commit": {
+          "sealed_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+          "accepted_claim_count": 2,
+          "rejected_discarded_claim_count": 0,
+          "bucket_counts": {
+            "gm_inferences": 0,
+            "player_hypotheses": 0,
+            "accepted_incidentals": 2,
+            "rejected_consequential": 0
+          }
+        }
+      },
+      "rejected": null
+    },
+    {
+      "stage": "response",
+      "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+      "length": 111,
+      "accepted": {
+        "addressee": "",
+        "adoption_status": "candidate_accepted",
+        "attempt": 1,
+        "authority_result": "accepted",
+        "authorization_source": "initial_generation",
+        "contract": {
+          "contract_id": "rc_dd89a2b89c62",
+          "expected_resolution": "answer",
+          "interlocutor_id": "",
+          "operation": "unresolved"
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 1,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            {
+              "consequential": false,
+              "epistemic_status": "world_truth",
+              "family": "incidental",
+              "grounded": false,
+              "kind": "incidental_fact",
+              "text": "You stand at Cinderwatch's eastern gate in the rain."
+            }
+          ],
+          "decision_acceptance_why": "initial_hard_valid",
+          "gm_resolution_decision_audit": {
+            "claim_results": [
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "epistemic_status": "",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "relation_kind": "ordinary_predicate",
+                "semantic_identity": {},
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "You stand at Cinderwatch's eastern gate in the rain."
+              },
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "epistemic_status": "",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "relation_kind": "ordinary_predicate",
+                "semantic_identity": {},
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "Refugees crowd the wagon line while guards hold the choke."
+              }
+            ],
+            "decision_id": "rc_dd89a2b89c62",
+            "hard_valid": true,
+            "proposed_facts": [
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "consequence": "low",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "semantic_identity": {},
+                "source_ref": "",
+                "text": "You stand at Cinderwatch's eastern gate in the rain."
+              },
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "consequence": "low",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "semantic_identity": {},
+                "source_ref": "",
+                "text": "Refugees crowd the wagon line while guards hold the choke."
+              }
+            ],
+            "violations": []
+          },
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "unresolved",
+        "player_input": "",
+        "provenance": "initial_generation",
+        "resolution_kind": "scene_opening",
+        "speaker": "",
+        "subject": "",
+        "target": "",
+        "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "turn_identity": "rc_dd89a2b89c62",
+        "integrity_digest": "838404045d3e13c275fa1f6e79587a914f14fea1207276403c0540737b872714"
+      },
+      "debug": {
+        "live_resolution_mode": {
+          "mode": "grounded_information_request",
+          "reason_codes": [
+            "default_existing_resolution"
+          ],
+          "target": "frontier_gate",
+          "speaker_id": "",
+          "topic": "frontier_gate",
+          "improvisation_opportunity_detected": false,
+          "proposal_created": false,
+          "proposal_reason": "not_improvable_mode",
+          "response_complete": true,
+          "response_completeness_reason": "not_gap_mode",
+          "requested_dimension": null,
+          "contract_id": "rc_dd89a2b89c62"
+        },
+        "speaker_contract_enforcement": {
+          "contract_present": false,
+          "validation": {
+            "ok": true,
+            "reason_code": "speaker_contract_match",
+            "canonical_speaker_id": null,
+            "canonical_speaker_name": null,
+            "repair_mode": "none",
+            "details": {
+              "signature": {
+                "speaker_name": null,
+                "speaker_label": null,
+                "is_explicitly_attributed": false,
+                "is_generic_fallback_label": false,
+                "has_interruption_framing": false,
+                "confidence": "low"
+              },
+              "skipped": "no_contract"
+            }
+          },
+          "final_reason_code": "speaker_contract_match"
+        },
+        "opening_curated_facts_present": true,
+        "opening_curated_facts_count": 6,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "opening_seed_facts",
+        "opening_selector_selected_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "opening_curated_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "accepted_response_provenance": "initial_generation",
+        "generation_attempts": 1,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "satisfied",
+          "reasons": [],
+          "preserved": true
+        },
+        "accepted_emitted_equality": {
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": false,
+          "attempted_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke."
+        },
+        "opening_upstream_prepared_present": true,
+        "opening_upstream_prepared_len": 1218,
+        "opening_upstream_prepared_promoted": true,
+        "opening_raw_text_source": "upstream_prepared_emission",
+        "pre_gate_text_len": 1100,
+        "post_final_emission_gate_text_len": 1100,
+        "narration_state_consistency_before_preview": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press s...",
+        "outcome_precedence": {
+          "downgrade_attempted": false,
+          "downgrade_rejected": false,
+          "downgrade_reason": null,
+          "recovery_used": false,
+          "recovery_source": null,
+          "destroyed": false,
+          "scene_momentum_appended": false,
+          "final_outcome_kind": null,
+          "final_satisfaction": "unchecked",
+          "replacement_reason": "resolution_content_preserved"
+        },
+        "post_narration_state_consistency_text_len": 1100,
+        "narration_state_consistency_changed_text": false,
+        "narration_state_consistency_after_preview": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press s...",
+        "accepted_emitted_report": {
+          "immutable": true,
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": true,
+          "metadata_mutation_blocked": true,
+          "accepted_response_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+          "emitted_response_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke."
+        },
+        "temporal_provenance_commit": {
+          "sealed_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+          "accepted_claim_count": 2,
+          "rejected_discarded_claim_count": 0,
+          "bucket_counts": {
+            "gm_inferences": 0,
+            "player_hypotheses": 0,
+            "accepted_incidentals": 2,
+            "rejected_consequential": 0
+          }
+        },
+        "legacy_would_emit": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "legacy_comparison": {
+          "downgrade_attempted": false,
+          "downgrade_rejected": false,
+          "downgrade_reason": null,
+          "recovery_used": false,
+          "recovery_source": null,
+          "destroyed": false,
+          "scene_momentum_appended": false,
+          "final_outcome_kind": null,
+          "final_satisfaction": "unchecked"
+        },
+        "gm_output_player_facing_len": 111,
+        "final_emission_text_preview": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "response_payload_text_preview": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "log_payload_text_preview": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "canonical_gm_object_id": 1882351006016
+      },
+      "rejected": null
+    },
+    {
+      "stage": "persisted",
+      "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+      "length": 111,
+      "accepted": {
+        "addressee": "",
+        "adoption_status": "candidate_accepted",
+        "attempt": 1,
+        "authority_result": "accepted",
+        "authorization_source": "initial_generation",
+        "contract": {
+          "contract_id": "rc_dd89a2b89c62",
+          "expected_resolution": "answer",
+          "interlocutor_id": "",
+          "operation": "unresolved"
+        },
+        "contract_satisfying": true,
+        "generation_attempts": 1,
+        "grounding_result": "not_a_replacement_trigger",
+        "hard_validation": {
+          "authority": [
+            {
+              "consequential": false,
+              "epistemic_status": "world_truth",
+              "family": "incidental",
+              "grounded": false,
+              "kind": "incidental_fact",
+              "text": "You stand at Cinderwatch's eastern gate in the rain."
+            }
+          ],
+          "decision_acceptance_why": "initial_hard_valid",
+          "gm_resolution_decision_audit": {
+            "claim_results": [
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "epistemic_status": "",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "relation_kind": "ordinary_predicate",
+                "semantic_identity": {},
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "You stand at Cinderwatch's eastern gate in the rain."
+              },
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "epistemic_status": "",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "relation_kind": "ordinary_predicate",
+                "semantic_identity": {},
+                "source_ref": "",
+                "source_scene": "",
+                "source_turn": null,
+                "text": "Refugees crowd the wagon line while guards hold the choke."
+              }
+            ],
+            "decision_id": "rc_dd89a2b89c62",
+            "hard_valid": true,
+            "proposed_facts": [
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "consequence": "low",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "semantic_identity": {},
+                "source_ref": "",
+                "text": "You stand at Cinderwatch's eastern gate in the rain."
+              },
+              {
+                "authority": "bounded_incidental",
+                "authorized": true,
+                "consequence": "low",
+                "outcome_classification": "epistemically_qualified",
+                "persistence": "runtime_incidental",
+                "provenance": "bounded_incidental",
+                "reason_codes": [
+                  "bounded_incidental_texture"
+                ],
+                "semantic_identity": {},
+                "source_ref": "",
+                "text": "Refugees crowd the wagon line while guards hold the choke."
+              }
+            ],
+            "violations": []
+          },
+          "hard_valid": true,
+          "reasons": [],
+          "soft_flags": []
+        },
+        "immutable": true,
+        "interaction_completion": true,
+        "operation": "unresolved",
+        "player_input": "",
+        "provenance": "initial_generation",
+        "resolution_kind": "scene_opening",
+        "speaker": "",
+        "subject": "",
+        "target": "",
+        "text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "turn_identity": "rc_dd89a2b89c62",
+        "integrity_digest": "838404045d3e13c275fa1f6e79587a914f14fea1207276403c0540737b872714"
+      },
+      "debug": {
+        "live_resolution_mode": {
+          "mode": "grounded_information_request",
+          "reason_codes": [
+            "default_existing_resolution"
+          ],
+          "target": "frontier_gate",
+          "speaker_id": "",
+          "topic": "frontier_gate",
+          "improvisation_opportunity_detected": false,
+          "proposal_created": false,
+          "proposal_reason": "not_improvable_mode",
+          "response_complete": true,
+          "response_completeness_reason": "not_gap_mode",
+          "requested_dimension": null,
+          "contract_id": "rc_dd89a2b89c62"
+        },
+        "speaker_contract_enforcement": {
+          "contract_present": false,
+          "validation": {
+            "ok": true,
+            "reason_code": "speaker_contract_match",
+            "canonical_speaker_id": null,
+            "canonical_speaker_name": null,
+            "repair_mode": "none",
+            "details": {
+              "signature": {
+                "speaker_name": null,
+                "speaker_label": null,
+                "is_explicitly_attributed": false,
+                "is_generic_fallback_label": false,
+                "has_interruption_framing": false,
+                "confidence": "low"
+              },
+              "skipped": "no_contract"
+            }
+          },
+          "final_reason_code": "speaker_contract_match"
+        },
+        "opening_curated_facts_present": true,
+        "opening_curated_facts_count": 6,
+        "opening_curated_facts_source": "selector",
+        "opening_selector_source_used": "opening_seed_facts",
+        "opening_selector_selected_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "opening_curated_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "A well-appointed townhouse overlooking the square flies noble colors\u2014a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol."
+        ],
+        "accepted_response_provenance": "initial_generation",
+        "generation_attempts": 1,
+        "legacy_emission_authority": false,
+        "semantic_degradation": false,
+        "semantic_degradation_reasons": [],
+        "resolution_contract_semantic": {
+          "status": "satisfied",
+          "reasons": [],
+          "preserved": true
+        },
+        "accepted_emitted_equality": {
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": false,
+          "attempted_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke."
+        },
+        "opening_upstream_prepared_present": true,
+        "opening_upstream_prepared_len": 1218,
+        "opening_upstream_prepared_promoted": true,
+        "opening_raw_text_source": "upstream_prepared_emission",
+        "pre_gate_text_len": 1100,
+        "post_final_emission_gate_text_len": 1100,
+        "narration_state_consistency_before_preview": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press s...",
+        "outcome_precedence": {
+          "downgrade_attempted": false,
+          "downgrade_rejected": false,
+          "downgrade_reason": null,
+          "recovery_used": false,
+          "recovery_source": null,
+          "destroyed": false,
+          "scene_momentum_appended": false,
+          "final_outcome_kind": null,
+          "final_satisfaction": "unchecked",
+          "replacement_reason": "resolution_content_preserved"
+        },
+        "post_narration_state_consistency_text_len": 1100,
+        "narration_state_consistency_changed_text": false,
+        "narration_state_consistency_after_preview": "Rain spatters soot-dark stone across Cinderwatch's eastern gate while frayed banners snap above the muddy approach. You stand in the churned mud before the gate as refugees press s...",
+        "accepted_emitted_report": {
+          "immutable": true,
+          "exact_match": true,
+          "semantic_match": true,
+          "presentation_only": false,
+          "mutation_blocked": true,
+          "metadata_mutation_blocked": true,
+          "accepted_response_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+          "emitted_response_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke."
+        },
+        "temporal_provenance_commit": {
+          "sealed_text": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+          "accepted_claim_count": 2,
+          "rejected_discarded_claim_count": 0,
+          "bucket_counts": {
+            "gm_inferences": 0,
+            "player_hypotheses": 0,
+            "accepted_incidentals": 2,
+            "rejected_consequential": 0
+          }
+        },
+        "legacy_would_emit": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "legacy_comparison": {
+          "downgrade_attempted": false,
+          "downgrade_rejected": false,
+          "downgrade_reason": null,
+          "recovery_used": false,
+          "recovery_source": null,
+          "destroyed": false,
+          "scene_momentum_appended": false,
+          "final_outcome_kind": null,
+          "final_satisfaction": "unchecked"
+        },
+        "gm_output_player_facing_len": 111,
+        "final_emission_text_preview": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "response_payload_text_preview": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "log_payload_text_preview": "You stand at Cinderwatch's eastern gate in the rain. Refugees crowd the wagon line while guards hold the choke.",
+        "canonical_gm_object_id": 1882351006016
+      },
+      "rejected": null
+    }
+  ]
+}

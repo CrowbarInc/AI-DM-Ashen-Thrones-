@@ -1,0 +1,79 @@
+{
+  "stage": "historical_replay_after_repair",
+  "sources": {
+    "interaction_completion.py": "8429c501a150fc79311703775205f4ed182e3df23ce0c1087f31ca27b1e3dd5b",
+    "ordinary_semantic_ownership.py": "fec56e852b2920bc103fb47c4f34f5080f6262fd12164079a8fe6b5b466d08c8"
+  },
+  "turns": {
+    "S03.3": {
+      "player_input": "If I ask you again later, will you still tell me that same thing?",
+      "established_conversational_participant": "tavern_runner",
+      "model_selected_addressee": "tavern_runner",
+      "model_subject": "Whether the Tavern Runner will repeat the same information if asked again later",
+      "host_extracted_addressee_candidate": "you",
+      "grounding": {
+        "target_id": "tavern_runner",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "direct_address": true,
+        "conflict_status": "none",
+        "clarification": "",
+        "communication_ownership": "npc_directed"
+      },
+      "downstream_decision": {
+        "category": "EXECUTE",
+        "reason": "single_authoritative_component",
+        "proposed_target": "tavern_runner",
+        "player_facing_text": "",
+        "missing_information": []
+      },
+      "resolver": {
+        "npc_id": "tavern_runner",
+        "npc_speech_authority": "none",
+        "reply_plan_kind": "genuine_uncertainty",
+        "topic_revealed": null,
+        "hint": "Player spoke with Tavern Runner. No authored answer was available. Narrate honest uncertainty or a bounded conversational reply without inventing facts the speaker does not have."
+      },
+      "session_unchanged_by_grounding_and_decision": true,
+      "world_state_unchanged": true,
+      "historical_failure_eliminated": true
+    },
+    "S05.3": {
+      "player_input": "Tell me more about that.",
+      "established_conversational_participant": "tavern_runner",
+      "model_selected_addressee": "tavern_runner",
+      "model_subject": "More information about the patrol rumor from the Tavern Runner",
+      "host_extracted_addressee_candidate": "me",
+      "grounding": {
+        "target_id": "tavern_runner",
+        "target_resolution": "contextual",
+        "target_provenance": "established_interlocutor",
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "direct_address": true,
+        "conflict_status": "none",
+        "clarification": "",
+        "communication_ownership": "npc_directed"
+      },
+      "downstream_decision": {
+        "category": "EXECUTE",
+        "reason": "single_authoritative_component",
+        "proposed_target": "tavern_runner",
+        "player_facing_text": "",
+        "missing_information": []
+      },
+      "resolver": {
+        "npc_id": "tavern_runner",
+        "npc_speech_authority": "none",
+        "reply_plan_kind": "genuine_uncertainty",
+        "topic_revealed": null,
+        "hint": "Player spoke with Tavern Runner. No authored answer was available. Narrate honest uncertainty or a bounded conversational reply without inventing facts the speaker does not have."
+      },
+      "session_unchanged_by_grounding_and_decision": true,
+      "world_state_unchanged": true,
+      "historical_failure_eliminated": true
+    }
+  }
+}

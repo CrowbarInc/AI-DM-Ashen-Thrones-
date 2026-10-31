@@ -1,0 +1,158 @@
+{
+  "status": 422,
+  "events": [
+    {
+      "event": "initialized",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:35.411610+00:00"
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "a5aa9b1927924d1487390e850e360cb1",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:35.413604+00:00",
+      "time": "2026-10-29T02:12:35.413604+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "a5aa9b1927924d1487390e850e360cb1",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:35.413604+00:00",
+      "time": "2026-10-29T02:12:35.414604+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "attempt_id": "a5aa9b1927924d1487390e850e360cb1",
+      "purpose": "primary_turn",
+      "owner": "gm.call_gpt",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-29T02:12:35.413604+00:00",
+      "time": "2026-10-29T02:12:35.416109+00:00",
+      "sequence": 1,
+      "admission": "admitted",
+      "budget_remaining": 5,
+      "sdk_retries": 0,
+      "host_retries": "disabled",
+      "sent": true,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": null,
+      "completion_status": "failed",
+      "dispatch_attempted": true,
+      "latency_ms": 0.052,
+      "error": "provider_error"
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:35.417113+00:00",
+      "attempt_id": "a5aa9b1927924d1487390e850e360cb1",
+      "opening_attempt_id": "8439532659d2486185dbefcb9d76ab7c",
+      "stage": "provider_response",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "provider_model": "gpt-4.1-mini",
+      "classification": "provider_error",
+      "provider_status": null,
+      "provider_finish_reason": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "requested_max_output_tokens": 3000,
+      "rejection_reason": "provider_error"
+    },
+    {
+      "event": "generation_diagnostic",
+      "version": "ATGB-03B-1",
+      "run_id": "0b448b94498c41bb9986d185108916b4",
+      "time": "2026-10-29T02:12:35.432621+00:00",
+      "attempt_id": null,
+      "opening_attempt_id": "8439532659d2486185dbefcb9d76ab7c",
+      "stage": "opening_outcome",
+      "logical_operation": "scene_opening",
+      "requested_response_type": "scene_opening",
+      "opening_accepted": false,
+      "gameplay_committed": false,
+      "classification": "opening_rejected",
+      "structured_validation_result": false,
+      "rejection_reason": "provider_opening_not_delivered",
+      "recovery_classification": "initial_generation"
+    }
+  ],
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "after": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "time_pressure": 0,
+    "log_length": 0,
+    "can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  }
+}

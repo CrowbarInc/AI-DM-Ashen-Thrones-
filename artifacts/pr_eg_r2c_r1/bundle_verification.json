@@ -1,0 +1,16 @@
+{
+  "checks": {
+    "zip_crc_ok": true,
+    "summary_content_matches": true,
+    "manifest_content_matches": true,
+    "manifest_archive_hashes_match": true,
+    "all_22_reports": true,
+    "no_sensitive_filenames": true,
+    "source_freeze_matches": true,
+    "historical_holdout_unchanged": true,
+    "original_tests_unchanged": true,
+    "review_history_preserved": true
+  },
+  "note": "The established builder writes Windows text line endings on disk and LF inside the ZIP. Text is decoded as UTF-8 and normalized for content comparisons; ZIP manifest hashes are checked byte-for-byte.",
+  "zip_sha256": "7766f3f8b9296c15b1c14c9fa5a8a418b6047b8f9d8c337a7fcca52ae2e270eb"
+}

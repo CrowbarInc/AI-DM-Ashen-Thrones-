@@ -1,0 +1,52 @@
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 23%]
+........................................................................ [ 31%]
+........................................................................ [ 39%]
+........................................................................ [ 47%]
+...............................................F........................ [ 55%]
+........................................................................ [ 63%]
+........................................................................ [ 70%]
+........................................................................ [ 78%]
+........................................................................ [ 86%]
+........................................................................ [ 94%]
+..................................................                       [100%]
+================================== FAILURES ===================================
+________ test_pr_bt_provider_requests_remove_at_least_12000_chars_each ________
+tests\test_pr_bt_policy_instruction_deduplication.py:23: in test_pr_bt_provider_requests_remove_at_least_12000_chars_each
+    assert BEFORE[probe]["total"] - after >= 12000
+E   assert (121438 - 109853) >= 12000
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================ slowest 25 durations =============================
+5.34s call     tests/test_pr_br_claim_control_regex_bound.py::test_slice2_detector_searches_stay_bounded_on_adversarial_text
+2.07s call     tests/test_pr_br_continuation23_precontract_routes.py::test_q_probes_do_not_call_models
+1.48s call     tests/test_pr_br_continuation22_commitment.py::test_raw_chat_stub_covers_commitment_and_addressee
+1.22s call     tests/test_pr_br_continuation24_contract_first_unparsed.py::test_s1_through_s8_compound_turns_keep_contract
+1.18s call     tests/test_pr_br_continuation21_subject_integrity.py::test_raw_chat_stub_covers_the_ten_boundaries
+1.13s call     tests/test_pr_br_continuation19_hard_authority.py::test_raw_chat_stub_authority_and_contracts
+1.12s call     tests/test_pr_br_continuation20_incidental_entity.py::test_raw_chat_stub_covers_incidental_binding_and_authority
+0.85s call     tests/test_pr_br_continuation21c_referential_head.py::test_raw_chat_stub_covers_referential_heads
+0.83s call     tests/test_pr_br_continuation21b_referential_personhood.py::test_raw_chat_stub_rejects_nonpersons_and_keeps_people
+0.75s call     tests/test_pr_br_continuation24_contract_first_unparsed.py::test_p2_through_p8_and_nearby_controls
+0.66s call     tests/test_realization_layer_audit.py::test_real_repo_scan_does_not_require_zero_findings
+0.64s call     tests/test_pr_br_continuation25_semantic_ownership.py::test_chat_turns_keep_one_contract_and_do_not_execute_uncommitted_travel
+0.60s call     tests/test_pr_br_continuation16_interaction_completion.py::test_raw_chat_stub_covers_completion_switch_and_leakage
+0.60s call     tests/test_pr_br_structured_chat_path.py::test_malformed_envelopes_do_not_leak_and_fall_back
+0.43s call     tests/test_pr_br_resolution_contract.py::test_real_path_rumor_repeat_and_sheet_content
+0.43s call     tests/test_pr_br_outcome_precedence.py::test_real_path_preserves_rumor_repeat_and_sheet_content
+0.29s call     tests/test_pr_br_continuation15_content_clarification.py::test_raw_chat_preserves_content_clarification_use_and_blocks_equal_rank_loss
+0.27s call     tests/test_pr_br_continuation23_precontract_routes.py::test_exact_c22_after_runner_still_bypasses_contract
+0.26s call     tests/test_pr_br_continuation24_contract_first_unparsed.py::test_p1_c22_after_runner_keeps_contract_and_runner
+0.26s call     tests/test_pr_br_resolution_contract.py::test_real_path_promoted_claim_accepts_indirect_follow_ups
+0.24s call     tests/test_realization_provenance_audit.py::test_real_repo_scan_does_not_require_zero_findings
+0.22s call     tests/test_pr_br_continuation18_immutable_boundary.py::test_raw_chat_stub_preserves_valid_and_contains_invalid
+0.22s call     tests/test_pr_br_continuation13_semantic_preservation.py::test_raw_chat_keeps_a_useful_inspection_and_rejects_atmospheric_avoidance
+0.21s call     tests/test_pr_br_resolution_contract.py::test_real_path_source_answer_survives_unrelated_authored_fact
+0.20s call     tests/test_pr_br_structured_chat_path.py::test_authorized_inference_persists_without_promotion
+=========================== short test summary info ===========================
+FAILED tests/test_pr_bt_policy_instruction_deduplication.py::test_pr_bt_provider_requests_remove_at_least_12000_chars_each

@@ -1,0 +1,17 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_ test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts _
+tests\test_start_campaign_api.py:337: in test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts
+    assert sc.status_code == 200
+E   assert 422 == 200
+E    +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+---------------------------- Captured stdout call -----------------------------
+[upstream_dependent_run_gate] UPSTREAM RUN GATE: WARNING - preflight skipped by env - live-upstream conclusions not established
+[upstream_dependent_run_gate] action_hint: Unset ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT (or set to 0) so startup preflight runs for live manual testing.
+[SESSION RESET] runtime state cleared
+[API] New campaign started b836229b24e2d3d6446a9f8e
+[PROMPT] fresh campaign prompt constructed
+=========================== short test summary info ===========================
+FAILED tests/test_start_campaign_api.py::test_start_campaign_opening_fallback_basis_uses_journal_seed_not_visible_facts
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa

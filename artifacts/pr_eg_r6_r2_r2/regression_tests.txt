@@ -1,0 +1,478 @@
+........................................................................ [ 14%]
+.................................FFF.................................... [ 28%]
+.........F.............................................................. [ 42%]
+........................................................................ [ 57%]
+............................................................FFF.......FF [ 71%]
+.......................FFFFFFFF..............F.......................... [ 85%]
+...............................................................F........ [100%]
+================================== FAILURES ===================================
+_________________ test_independent_clarification_holdout[C01] _________________
+
+case = {'id': 'C01', 'name': 'Harbormaster Lis', 'line': 'Which sailor do you mean: Fenn or Rook?', 'question': 'Can you repeat that?'}
+
+    @pytest.mark.parametrize('case',json.loads((H/'clarification_holdouts.json').read_text()),ids=lambda c:c['id'])
+    def test_independent_clarification_holdout(case):
+     assert hashlib.sha256((H/'clarification_holdouts.json').read_bytes()).hexdigest()==json.loads((H/'clarification_freeze.json').read_text())['sha256']
+     from game.conversational_continuity import continuity_directive
+     ss={};soc=dict(npc_id='speaker',npc_name=case['name'])
+     record_delivered_exchange(ss,player_text='What is open?',delivered_text=case['name']+' says, "The old quay is open."',social=soc,scene_id='harbor')
+     record_delivered_exchange(ss,player_text='I ask one of them.',delivered_text=case['line'],social={},scene_id='harbor',ownership='gm')
+     ctx=ss['conversational_context'];ctx['last_gm_exchange']=dict(category='CLARIFY',scene_id='harbor',response=case['line'])
+     ctx['pending_clarification']=dict(kind='ambiguous_addressee',status='pending')
+     before=copy.deepcopy(ss)
+     got=continuity_directive(case['question'],session=ss,scene=dict(id='harbor'),world=dict(npcs=[]))
+>    assert got['action']=='clarify' and got['line']==case['line'] and got['owner']=='gm'
+E    assert ('clarify' == 'clarify'
+E      
+E        clarify and 'Harbormaster...someone here?' == 'Which sailor...Fenn or Rook?'
+E      
+E      - Which sailor do you mean: Fenn or Rook?
+E      + Harbormaster Lis is not here, so I will not speak to Harbormaster Lis from this place. When you last spoke, Harbormaster Lis said: "The old quay is open." Nothing new has been established since that conversation. Do you want that recalled as it stands, or are you speaking to someone here?)
+
+tests\test_pr_eg_r2c_r2_reference_eligibility.py:157: AssertionError
+_________________ test_independent_clarification_holdout[C02] _________________
+
+case = {'id': 'C02', 'name': 'Scholar Om', 'line': 'Which library do you mean?', 'question': 'What did you mean by that?'}
+
+    @pytest.mark.parametrize('case',json.loads((H/'clarification_holdouts.json').read_text()),ids=lambda c:c['id'])
+    def test_independent_clarification_holdout(case):
+     assert hashlib.sha256((H/'clarification_holdouts.json').read_bytes()).hexdigest()==json.loads((H/'clarification_freeze.json').read_text())['sha256']
+     from game.conversational_continuity import continuity_directive
+     ss={};soc=dict(npc_id='speaker',npc_name=case['name'])
+     record_delivered_exchange(ss,player_text='What is open?',delivered_text=case['name']+' says, "The old quay is open."',social=soc,scene_id='harbor')
+     record_delivered_exchange(ss,player_text='I ask one of them.',delivered_text=case['line'],social={},scene_id='harbor',ownership='gm')
+     ctx=ss['conversational_context'];ctx['last_gm_exchange']=dict(category='CLARIFY',scene_id='harbor',response=case['line'])
+     ctx['pending_clarification']=dict(kind='ambiguous_addressee',status='pending')
+     before=copy.deepcopy(ss)
+     got=continuity_directive(case['question'],session=ss,scene=dict(id='harbor'),world=dict(npcs=[]))
+>    assert got['action']=='clarify' and got['line']==case['line'] and got['owner']=='gm'
+E    assert ('clarify' == 'clarify'
+E      
+E        clarify and 'Scholar Om i...someone here?' == 'Which library do you mean?'
+E      
+E      - Which library do you mean?
+E      + Scholar Om is not here, so I will not speak to Scholar Om from this place. When you last spoke, Scholar Om said: "The old quay is open." Nothing new has been established since that conversation. Do you want that recalled as it stands, or are you speaking to someone here?)
+
+tests\test_pr_eg_r2c_r2_reference_eligibility.py:157: AssertionError
+_________________ test_independent_clarification_holdout[C03] _________________
+
+case = {'id': 'C03', 'name': 'Sentry Nao', 'line': 'Which tower are you asking about?', 'question': 'Say that again in simpler words.'}
+
+    @pytest.mark.parametrize('case',json.loads((H/'clarification_holdouts.json').read_text()),ids=lambda c:c['id'])
+    def test_independent_clarification_holdout(case):
+     assert hashlib.sha256((H/'clarification_holdouts.json').read_bytes()).hexdigest()==json.loads((H/'clarification_freeze.json').read_text())['sha256']
+     from game.conversational_continuity import continuity_directive
+     ss={};soc=dict(npc_id='speaker',npc_name=case['name'])
+     record_delivered_exchange(ss,player_text='What is open?',delivered_text=case['name']+' says, "The old quay is open."',social=soc,scene_id='harbor')
+     record_delivered_exchange(ss,player_text='I ask one of them.',delivered_text=case['line'],social={},scene_id='harbor',ownership='gm')
+     ctx=ss['conversational_context'];ctx['last_gm_exchange']=dict(category='CLARIFY',scene_id='harbor',response=case['line'])
+     ctx['pending_clarification']=dict(kind='ambiguous_addressee',status='pending')
+     before=copy.deepcopy(ss)
+     got=continuity_directive(case['question'],session=ss,scene=dict(id='harbor'),world=dict(npcs=[]))
+>    assert got['action']=='clarify' and got['line']==case['line'] and got['owner']=='gm'
+E    assert ('clarify' == 'clarify'
+E      
+E        clarify and 'Sentry Nao i...someone here?' == 'Which tower ...asking about?'
+E      
+E      - Which tower are you asking about?
+E      + Sentry Nao is not here, so I will not speak to Sentry Nao from this place. When you last spoke, Sentry Nao said: "The old quay is open." Nothing new has been established since that conversation. Do you want that recalled as it stands, or are you speaking to someone here?)
+
+tests\test_pr_eg_r2c_r2_reference_eligibility.py:157: AssertionError
+_________________ test_t19_t23_answer_sufficiency_and_refusal _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002994C0AE720>
+
+    def test_t19_t23_answer_sufficiency_and_refusal(monkeypatch):
+        assert classify_answer_sufficiency("Do the guards watch the north gate at night?", WATCH) == "directly_answers"
+        assert classify_answer_sufficiency("Is the north gate ever left unattended?", WATCH) == "partially_informs"
+        assert classify_answer_sufficiency("Who made the lantern?", WATCH) == "does_not_answer"
+        assert classify_answer_sufficiency("Who made the lantern?", "") == "unknown"
+        npc = dict(id="sergeant_mara", name="Sergeant Mara", topics=[dict(id="watch", text=WATCH), dict(id="road", text=ROAD)])
+        partial_q = "Is the north gate ever left unattended?"
+        authority = build_dialogue_authority(partial_q, npc=npc, social=dict(npc_id="sergeant_mara", npc_name="Sergeant Mara", target_resolved=True))
+        assert authority["answer_sufficiency"] == "partially_informs"
+        assert authority["proposition_id"] == "topic:sergeant_mara:watch"
+        line, source = select_host_speech(_resolution(partial_q, npc=npc) , player_text=partial_q)
+        assert "throughout the night" in line.lower()
+        assert "couldn't say" in line.lower()
+        assert "never" not in line.lower()
+        assert line.lower().strip().endswith('unattended."') or "unattended" in line.lower()
+        direct = build_dialogue_authority("Do the guards watch the north gate at night?", social=dict(npc_id="sergeant_mara", npc_name="Sergeant Mara", topic_revealed=dict(id="watch", text=WATCH)))
+>       assert direct["answer_sufficiency"] == "directly_answers"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'answer_sufficiency'
+
+tests\test_pr_eg_r3_r1_expression_semantics.py:215: KeyError
+______________ test_forged_authority_or_entity_rejected[change0] ______________
+
+change = {'canonical_fact': 'invented'}
+
+    @pytest.mark.parametrize('change',[
+     {'canonical_fact':'invented'},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'phantom','reference':'Sable','evidence':'Sable'}]},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'oren','reference':'Oren','evidence':'Oren'}]},
+    ])
+    def test_forged_authority_or_entity_rejected(change):
+        plan=proposal();plan.update(change)
+        p=ask(plan)
+>       assert p['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:154: AssertionError
+______________ test_forged_authority_or_entity_rejected[change1] ______________
+
+change = {'entity_roles': [{'role': 'mentioned_npc', 'entity_id': 'phantom', 'reference': 'Sable', 'evidence': 'Sable'}]}
+
+    @pytest.mark.parametrize('change',[
+     {'canonical_fact':'invented'},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'phantom','reference':'Sable','evidence':'Sable'}]},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'oren','reference':'Oren','evidence':'Oren'}]},
+    ])
+    def test_forged_authority_or_entity_rejected(change):
+        plan=proposal();plan.update(change)
+        p=ask(plan)
+>       assert p['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:154: AssertionError
+______________ test_forged_authority_or_entity_rejected[change2] ______________
+
+change = {'entity_roles': [{'role': 'mentioned_npc', 'entity_id': 'oren', 'reference': 'Oren', 'evidence': 'Oren'}]}
+
+    @pytest.mark.parametrize('change',[
+     {'canonical_fact':'invented'},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'phantom','reference':'Sable','evidence':'Sable'}]},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'oren','reference':'Oren','evidence':'Oren'}]},
+    ])
+    def test_forged_authority_or_entity_rejected(change):
+        plan=proposal();plan.update(change)
+        p=ask(plan)
+>       assert p['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:154: AssertionError
+__________ test_bad_prior_target_cannot_launder_history[correction] ___________
+
+act = 'correction'
+
+    @pytest.mark.parametrize('act',['correction','follow_up'])
+    def test_bad_prior_target_cannot_launder_history(act):
+        plan=proposal(prop(prior_reference='forged'),conversational_act=act,correction_target='invented')
+>       assert ask(plan,text='Who told you?',session=prior_session())['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:199: AssertionError
+___________ test_bad_prior_target_cannot_launder_history[follow_up] ___________
+
+act = 'follow_up'
+
+    @pytest.mark.parametrize('act',['correction','follow_up'])
+    def test_bad_prior_target_cannot_launder_history(act):
+        plan=proposal(prop(prior_reference='forged'),conversational_act=act,correction_target='invented')
+>       assert ask(plan,text='Who told you?',session=prior_session())['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:199: AssertionError
+_____ test_untrusted_operations_fail_closed_without_losing_focus[forged] ______
+
+attack = 'forged'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+_ test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation] _
+
+attack = 'cross_conversation'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+______ test_untrusted_operations_fail_closed_without_losing_focus[stale] ______
+
+attack = 'stale'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+_____ test_untrusted_operations_fail_closed_without_losing_focus[speaker] _____
+
+attack = 'speaker'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+______ test_untrusted_operations_fail_closed_without_losing_focus[field] ______
+
+attack = 'field'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+____ test_untrusted_operations_fail_closed_without_losing_focus[operation] ____
+
+attack = 'operation'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+___ test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed] ___
+
+attack = 'unwitnessed'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+__ test_untrusted_operations_fail_closed_without_losing_focus[substitution] ___
+
+attack = 'substitution'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+____________ test_unqualified_historical_id_cannot_override_focus _____________
+
+    def test_unqualified_historical_id_cannot_override_focus():
+        session, first = seeded()
+        deliver(session,resolve(session,question(prop(object='night ledger',object_evidence='night ledger')),
+            text='Mara, who keeps the night ledger?'),2)
+        locked=resolve(session,follow(first),text='Who told you?')
+>       assert locked['bound_referent_id']==refs.active(session)['referent_id']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'bound_referent_id'
+
+tests\test_pr_eg_r6_r2_r1_referents.py:323: KeyError
+__ test_immutable_preseal_preserves_selected_authored_answer_over_ignorance ___
+
+    def test_immutable_preseal_preserves_selected_authored_answer_over_ignorance():
+        from game.immutable_valid_response import accepted_record, run_preserve_if_valid
+    
+        world = _brine_world()
+        scene = _brine_scene()
+        session = _session_for(world, "brine_yard", scene)
+        player_text = 'I turn to the Kiln Tender. "When is kiln three banked?"'
+        resolution = _ask(world, session, "kiln_tender", player_text, scene)
+        gm = {"player_facing_text": 'Kiln Tender says, "I do not know."', "metadata": {}, "tags": []}
+    
+        sealed = run_preserve_if_valid(
+            gm,
+            regenerate=None,
+            resolution=resolution,
+            player_text=player_text,
+            scene=scene,
+            world=world,
+            session=session,
+        )
+    
+        text = _facing({"gm_output": sealed}).lower()
+        record = accepted_record(sealed) or {}
+        assert "morning bell" in text
+        assert record.get("immutable") is True
+>       assert record.get("provenance") == "initial_generation"
+E       AssertionError: assert 'authorized_host_speech' == 'initial_generation'
+E         
+E         - initial_generation
+E         + authorized_host_speech
+
+tests\test_social_question_relevance_answer_selection.py:428: AssertionError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_eg_r2c_r2_reference_eligibility.py::test_independent_clarification_holdout[C01]
+FAILED tests/test_pr_eg_r2c_r2_reference_eligibility.py::test_independent_clarification_holdout[C02]
+FAILED tests/test_pr_eg_r2c_r2_reference_eligibility.py::test_independent_clarification_holdout[C03]
+FAILED tests/test_pr_eg_r3_r1_expression_semantics.py::test_t19_t23_answer_sufficiency_and_refusal
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change0]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change1]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change2]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_bad_prior_target_cannot_launder_history[correction]
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_bad_prior_target_cannot_launder_history[follow_up]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[forged]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[stale]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[speaker]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[field]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[operation]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[substitution]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_unqualified_historical_id_cannot_override_focus
+FAILED tests/test_social_question_relevance_answer_selection.py::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance
+19 failed, 485 passed, 1 warning in 10.94s

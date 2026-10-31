@@ -109,7 +109,7 @@ compatibility, and verification expectations.
 - `development/reports/` repository-organization and housekeeping reports
 - `development/tmp/` disposable pytest/agent scratch (Git-ignored)
 - `docs/README.md` this file
-- `docs/DEVELOPMENT_CONSTITUTION.md` — **standing development-process authority** (session entry/exit, file placement, and canonical [`docs/NEXT_SESSION.md`](NEXT_SESSION.md) handoff). Does not replace architecture, validation, Product Realization, documentation, or review-handoff authorities.
+- `docs/DEVELOPMENT_CONSTITUTION.md` — **standing development-process authority** (session entry/exit, minimal change, validation-claim separation, failure investigation, task proportion, file placement, and canonical [`docs/NEXT_SESSION.md`](NEXT_SESSION.md) handoff). It delegates architecture, validation evidence, the Ashen Thrones Gameplay Benchmark, Product Realization, documentation, and review-handoff authorities.
 - `docs/product_realization_validation.md` — Product Realization validation rule: content may be specific; systems must be general.
 - `docs/convergence_ci_inventory.md` — **canonical governance discovery index** (convergence CI map, local command parity, [split-owner matrix governance](convergence_ci_inventory.md#split-owner-acceptance-matrix-governance); `.github/workflows/convergence-checks.yml`; planner convergence stays in `content-lint.yml`)
 - `docs/audits/closeouts/evaluator_convergence_closeout.md` — evaluator convergence freeze: offline/read-only invariants, intentional overlaps, and future maintenance test slice

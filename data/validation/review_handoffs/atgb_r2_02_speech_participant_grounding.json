@@ -1,0 +1,82 @@
+{
+  "campaign_id": "atgb_r2_02",
+  "campaign_name": "ATGB-R2-02 Bounded Speech-Participant Grounding Repair",
+  "campaign_date": "2026-10-19",
+  "purpose": "Repair ordinary first- and second-person addressee grounding without live provider calls.",
+  "objective_status": "A — Repair accepted",
+  "executive_summary": "S03.3 and S05.3 no longer treat grammatical speech as an unidentified NPC. The established runner remains the recipient. S05.3's subject stays unresolved, and the existing resolver returns uncertainty rather than a new rumor. Related variations keep real ambiguity, explicit addressee changes, and off-scene rejection. Slice: 351 passed / 2 preexisting failed. No new relevant regression. Stop for external review.",
+  "changes": {
+    "production": [
+      "game/interaction_completion.py: speech_participant_head applied inside addressed_person_nominal.",
+      "game/ordinary_semantic_ownership.py: first- and second-person roles use the existing present-interlocutor branch."
+    ],
+    "validation": [
+      "tests/test_atgb_r2_02_speech_participant_grounding.py: 46 deterministic tests. Frozen holdouts unchanged."
+    ],
+    "tooling": [
+      "No reusable tool or production framework changed."
+    ],
+    "documentation": [
+      "Eight reports in development/reports/atgb_r2_02/ and a short docs/NEXT_SESSION.md orientation update."
+    ],
+    "generated_artifacts": [
+      "Baseline reproduction, after replay, source diff, regression count, evidence packet, and review ZIP."
+    ]
+  },
+  "testing": {
+    "focused": "46 passed, 0 failed. Historical S03.3 and S05.3 replays included.",
+    "broader": "353 collected in the relevant slice: 351 passed / 2 failed. Both failures reproduce on the pre-repair production files.",
+    "full_suite": "Not run.",
+    "runtime_validation": "Offline replay of captured interpretations through grounding, the interpretation decision, and the existing social resolver. Resolver result is genuine_uncertainty with no topic revealed.",
+    "model_runtime_boundary": "No live provider calls, no prompt or schema edits, no retries.",
+    "new_regressions": "None in the stable slice.",
+    "pre_existing_failures": "test_raw_chat_stub_covers_commitment_and_addressee and test_chat_hailing_runner_with_can_you_question_routes_social. Both fail on b012c3d copies of the two production files."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "S05.3 recipient is grounded, but the host still does not ask which account 'that' means. The resolver reports authored uncertainty.",
+      "Related variations were written with this repair. They are not independent held-out evidence."
+    ],
+    "pre_existing": [
+      "Two slice failures named above.",
+      "Full suite not run.",
+      "R1-07 live acceptance remains pending.",
+      "Preexisting dirty worktree was preserved. No commit or push."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Accept or reject verdict A before any further conversational implementation.",
+    "Do not treat this package as authorization for a live provider trial or a subject-binding repair."
+  ],
+  "missing_concepts": [
+    "No new subsystem. Question-subject binding stays with its existing owner and was not repaired."
+  ],
+  "does_not_prove": [
+    "Improved natural dialogue, a correct answer to the S03.3 promise question, a focused S05.3 topic clarification, independent generalization, a gameplay-benchmark score, or full-suite green."
+  ],
+  "recommended_next_step": "Stop for external review. Do not implement a follow-on repair or live trial from this pass.",
+  "primary_report": "development/reports/atgb_r2_02/08_final_verdict_and_handoff.md",
+  "evidence_packets": [
+    "artifacts/validation_evidence/atgb_r2_02"
+  ],
+  "self_contained_review_test": "Bundle contains the eight reports, production diff, modified sources, new tests, before/after replay, generalization and authority reports, regression count, repository status, verdict, and next action.",
+  "configuration_source": "data/validation/review_handoffs/atgb_r2_02_speech_participant_grounding.json",
+  "supporting_files": [
+    {"path": "development/reports/atgb_r2_02/01_baseline_and_reproduction.md", "role": "report", "why": "Baseline and historical reproduction.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/reports/atgb_r2_02/02_root_cause_and_repair.md", "role": "report", "why": "Root cause and repair rationale.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "development/reports/atgb_r2_02/03_implementation_diff.md", "role": "report", "why": "Implementation summary.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "development/reports/atgb_r2_02/04_historical_replay_results.md", "role": "report", "why": "Before and after historical replay.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/reports/atgb_r2_02/05_generalization_and_ambiguity.md", "role": "report", "why": "Speech-role and ambiguity results.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "development/reports/atgb_r2_02/06_authority_validation.md", "role": "report", "why": "Authority and state-integrity results.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "development/reports/atgb_r2_02/07_regression_and_performance.md", "role": "report", "why": "Regression counts and performance limits.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "game/interaction_completion.py", "role": "modified_source", "why": "Nominal extraction after the repair.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "game/ordinary_semantic_ownership.py", "role": "modified_source", "why": "Addressee grounding after the repair.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "tests/test_atgb_r2_02_speech_participant_grounding.py", "role": "tests", "why": "New and historical grounding tests.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/atgb/atgb_r2_02/source.diff", "role": "diff", "why": "Production source diff.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/atgb/atgb_r2_02/baseline_reproduction.json", "role": "replay", "why": "Pre-repair S03.3 and S05.3 host decisions.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/atgb/atgb_r2_02/historical_replay_after.json", "role": "replay", "why": "Post-repair grounding, decision, and resolver results.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/atgb/atgb_r2_02/regression_slice.txt", "role": "regression", "why": "Slice command and counts.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/atgb/atgb_r2_02/repository_status.txt", "role": "status", "why": "Branch, commit refusal, and file scope.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "docs/NEXT_SESSION.md", "role": "orientation", "why": "Updated session orientation.", "behavioral_evidence": false, "human_review_required": true}
+  ]
+}

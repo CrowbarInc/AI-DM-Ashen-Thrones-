@@ -1,0 +1,181 @@
+{
+  "attempt_1": {
+    "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared.",
+    "reasons": [],
+    "gm_resolution_decision_audit": {
+      "decision_id": "rc_d4c97cad4722",
+      "hard_valid": true,
+      "declaration_validation": {
+        "schema_version": 1,
+        "structured_contract_present": true,
+        "hard_valid": true,
+        "accepted_claims": [],
+        "rejected_claims": [],
+        "violations": []
+      },
+      "narration_validation": {
+        "decision_id": "rc_d4c97cad4722",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {}
+          },
+          {
+            "text": "\"I don't have a particular favorite to keep for myself,\" they say carefully.",
+            "provenance": "npc_claim",
+            "consequence": "epistemic",
+            "authorized": true,
+            "reason_codes": [
+              "epistemically_qualified"
+            ],
+            "authority": "claim_only",
+            "persistence": "claim_only",
+            "source_ref": "",
+            "outcome_classification": "epistemically_qualified",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "hearsay"
+            }
+          }
+        ],
+        "claim_results": [
+          {
+            "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+            "semantic_identity": {},
+            "provenance": "bounded_incidental",
+            "authority": "bounded_incidental",
+            "epistemic_status": "",
+            "relation_kind": "ordinary_predicate",
+            "persistence": "runtime_incidental",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ]
+          },
+          {
+            "text": "\"I don't have a particular favorite to keep for myself,\" they say carefully.",
+            "semantic_identity": {
+              "relation_kind": "epistemic_status",
+              "epistemic_status": "hearsay"
+            },
+            "provenance": "npc_claim",
+            "authority": "claim_only",
+            "epistemic_status": "hearsay",
+            "relation_kind": "epistemic_status",
+            "persistence": "claim_only",
+            "authorized": true,
+            "source_ref": "",
+            "source_turn": null,
+            "source_scene": "",
+            "reason_codes": [
+              "epistemically_qualified"
+            ]
+          }
+        ]
+      },
+      "violations": [],
+      "proposed_facts": [
+        {
+          "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+          "provenance": "bounded_incidental",
+          "consequence": "low",
+          "authorized": true,
+          "reason_codes": [
+            "bounded_incidental_texture"
+          ],
+          "authority": "bounded_incidental",
+          "persistence": "runtime_incidental",
+          "source_ref": "",
+          "outcome_classification": "epistemically_qualified",
+          "semantic_identity": {}
+        },
+        {
+          "text": "\"I don't have a particular favorite to keep for myself,\" they say carefully.",
+          "provenance": "npc_claim",
+          "consequence": "epistemic",
+          "authorized": true,
+          "reason_codes": [
+            "epistemically_qualified"
+          ],
+          "authority": "claim_only",
+          "persistence": "claim_only",
+          "source_ref": "",
+          "outcome_classification": "epistemically_qualified",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "hearsay"
+          }
+        }
+      ],
+      "claim_results": [
+        {
+          "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile.",
+          "semantic_identity": {},
+          "provenance": "bounded_incidental",
+          "authority": "bounded_incidental",
+          "epistemic_status": "",
+          "relation_kind": "ordinary_predicate",
+          "persistence": "runtime_incidental",
+          "authorized": true,
+          "source_ref": "",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "bounded_incidental_texture"
+          ]
+        },
+        {
+          "text": "\"I don't have a particular favorite to keep for myself,\" they say carefully.",
+          "semantic_identity": {
+            "relation_kind": "epistemic_status",
+            "epistemic_status": "hearsay"
+          },
+          "provenance": "npc_claim",
+          "authority": "claim_only",
+          "epistemic_status": "hearsay",
+          "relation_kind": "epistemic_status",
+          "persistence": "claim_only",
+          "authorized": true,
+          "source_ref": "",
+          "source_turn": null,
+          "source_scene": "",
+          "reason_codes": [
+            "epistemically_qualified"
+          ]
+        }
+      ],
+      "accepted_realized_claims": []
+    }
+  },
+  "attempt_2": null,
+  "retry_context": "",
+  "acceptance": {
+    "why": "initial_hard_valid",
+    "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared."
+  },
+  "hard_validation_attempt_1": {
+    "hard_valid": true,
+    "reasons": [],
+    "soft_flags": [],
+    "text": "The baker glances at the neatly arranged loaves, then shrugs with a faint, noncommittal smile. \"I don't have a particular favorite to keep for myself,\" they say carefully. \"Every loaf here is made with care, but I try not to show any preference.\" Their tone carries a hint of guarded discretion, as if some details are best left unshared."
+  },
+  "hard_validation_attempt_2": null,
+  "regeneration_feedback": null,
+  "regeneration_invoked": null,
+  "provider_response_contract": "narration_only"
+}

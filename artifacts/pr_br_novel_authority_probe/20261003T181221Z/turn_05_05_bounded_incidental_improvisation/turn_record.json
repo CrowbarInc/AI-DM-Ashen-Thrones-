@@ -1,0 +1,359 @@
+{
+  "probe_id": "05_bounded_incidental_improvisation",
+  "probe_question": "Ordinary stall with smell and clothing left unspecified.",
+  "player_text": "What does the bread smell like, and what is the baker wearing?",
+  "http_status": 200,
+  "emitted_narration": "The bread at the stall carries a warm, yeasty aroma, faintly sweet with a hint of toasted crust, inviting and comforting in the cool air of Brineward lane. Bram the baker works behind the counter wearing a simple, well-worn linen shirt rolled up at the sleeves and a stained leather apron tied firmly around his waist, his hands dusted with flour from the day's baking.",
+  "raw_generations": [
+    {
+      "purpose": "strict_social",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "The bread at the stall carries a warm, yeasty aroma, faintly sweet with a hint of toasted crust, inviting and comforting in the cool air of Brineward lane. Bram the baker works behind the counter wearing a simple, well-worn linen shirt rolled up at the sleeves and a stained leather apron tied firmly around his waist, his hands dusted with flour from the day's baking.",
+      "prompt_flags": {
+        "user_chars": 103974,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "interpretation_call_count": 0,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": null,
+  "target_scene_id": null,
+  "resolved_transition": null,
+  "resolution_contract": {
+    "contract_id": "rc_58f57e232b78",
+    "turn_index": 1,
+    "request_kind": "inquiry",
+    "operation": "perceive",
+    "target_ref": {
+      "type": "place",
+      "id_or_text": "Brineward lane",
+      "source": "explicit_player"
+    },
+    "interlocutor_id": null,
+    "conversational_subject": "Brineward lane",
+    "dimension": "smell",
+    "dimensions": [
+      "smell"
+    ],
+    "expected_resolution": "answer",
+    "epistemic_mode": "bounded_incidental",
+    "discourse_ref": {
+      "type": "place",
+      "id": "bread_stall",
+      "label": "Brineward lane",
+      "source_turn": null
+    },
+    "referent_provenance": "explicit_player",
+    "ambiguous": false,
+    "raw_input": "What does the bread smell like, and what is the baker wearing?",
+    "construction": {
+      "cues": [
+        "smell"
+      ],
+      "referent_slot": "explicit_target",
+      "referent_reason": "explicit_current_turn_target",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "bread_stall",
+          "type": "place",
+          "label": "Brineward lane"
+        },
+        {
+          "id": "bram",
+          "type": "interlocutor",
+          "label": "Bram"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "perceive",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": "bread",
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "bread_stall",
+        "canonical_target_label": "Brineward lane",
+        "canonical_target_type": "place",
+        "canonical_basis": "scene",
+        "authoritative_operation": "perceive",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [],
+        "claim_binding": "none"
+      },
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "What does the bread smell like, and what is the baker wearing?",
+        "source": "deterministic_fast_path",
+        "primary_operation": "perceive",
+        "supporting_operations": [],
+        "raw_target_text": "bread",
+        "proposed_target_id": null,
+        "target_capture": "what_does",
+        "has_determiner": true,
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": "smell",
+        "dimensions": [
+          "smell"
+        ],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      },
+      "commitment_status": "executed_now",
+      "primary_operation": "perceive",
+      "resolution_subject": "perception",
+      "resolution_subject_coherence": "accepted",
+      "semantic_input_length": 62,
+      "provenance_excerpt": "What does the bread smell like, and what is the baker wearing?",
+      "secondary_operations": [],
+      "requested_addressee": null,
+      "addressee_binding_status": "unresolved"
+    },
+    "retry_preserved": true
+  },
+  "gm_resolution_decision": {
+    "contract_id": "rc_58f57e232b78",
+    "resolution_method": "perceive",
+    "outcome_classification": "bounded_incidental",
+    "established_fact_refs": [
+      "scene_world_authored_corpus",
+      "contract_discourse_ref"
+    ],
+    "proposed_facts": [
+      {
+        "text": "A bread stall stands at the edge of the lane.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "Bram the baker is working behind the counter.",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_state_source"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "scene.visible_facts.1",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {}
+      },
+      {
+        "text": "Bram exists as baker",
+        "provenance": "authored_world_fact",
+        "consequence": "consequential",
+        "authorized": true,
+        "reason_codes": [
+          "authored_world_npc"
+        ],
+        "authority": "world_truth",
+        "persistence": "world_truth",
+        "source_ref": "world.npcs.0",
+        "outcome_classification": "established_or_retrieved",
+        "semantic_identity": {
+          "kind": "entity",
+          "subject": "bram",
+          "subject_aliases": [
+            "Bram"
+          ],
+          "relation": "exists",
+          "value": "baker",
+          "authority": "world_truth"
+        }
+      }
+    ],
+    "permitted_state_mutations": [],
+    "persistence_policy": "runtime_incidental",
+    "narration_constraints": [
+      "Narration may not establish consequential world facts absent this decision.",
+      "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+      "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+      "Inference must not be narrated as physical evidence.",
+      "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+      "Harmless sensory, mannerism, and mundane connective detail may persist as bounded incidental continuity."
+    ],
+    "unresolved_consequential_questions": [],
+    "authority_algorithm": "source_provenance_v2"
+  },
+  "accepted_response": {
+    "immutable": true,
+    "text": "The bread at the stall carries a warm, yeasty aroma, faintly sweet with a hint of toasted crust, inviting and comforting in the cool air of Brineward lane. Bram the baker works behind the counter wearing a simple, well-worn linen shirt rolled up at the sleeves and a stained leather apron tied firmly around his waist, his hands dusted with flour from the day's baking.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "What does the bread smell like, and what is the baker wearing?",
+    "turn_identity": "rc_58f57e232b78",
+    "speaker": "",
+    "addressee": "",
+    "target": "Brineward lane",
+    "operation": "perceive",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [
+        {
+          "text": "The bread at the stall carries a warm, yeasty aroma, faintly sweet with a hint of toasted crust, inviting and comforting in the cool air of Brineward lane.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        },
+        {
+          "text": "Bram the baker works behind the counter wearing a simple, well-worn linen shirt rolled up at the sleeves and a stained leather apron tied firmly around his waist, his hands dusted with flour from the day's baking.",
+          "kind": "incidental_fact",
+          "epistemic_status": "uncertain",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_58f57e232b78",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "Bram the baker works behind the counter wearing a simple, well-worn linen shirt rolled up at the sleeves and a stained leather apron tied firmly around his waist, his hands dusted with flour from the day's baking.",
+            "provenance": "authored_world_fact",
+            "consequence": "consequential",
+            "authorized": true,
+            "reason_codes": [
+              "authored_state_source"
+            ],
+            "authority": "world_truth",
+            "persistence": "world_truth",
+            "source_ref": "scene.visible_facts.1",
+            "outcome_classification": "established_or_retrieved",
+            "semantic_identity": {}
+          }
+        ]
+      }
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_58f57e232b78",
+      "operation": "perceive",
+      "interlocutor_id": "",
+      "expected_resolution": "answer"
+    },
+    "resolution_kind": "",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "committed_active_scene_id": "bread_stall",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "bread_stall",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "bread_stall",
+      "label": "Brineward lane",
+      "kind": "place",
+      "scene_id": "bread_stall",
+      "turn_index": 1,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": null,
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_58f57e232b78"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [
+      {
+        "id": "bi_6ea884cfe089",
+        "kind": "incidental_fact",
+        "category": "sensory_detail",
+        "content": "The bread at the stall carries a warm, yeasty aroma, faintly sweet with a hint of toasted crust, inviting and comforting in the cool air of Brineward lane. Bram the baker works behind the counter wearing a simple, well-worn linen shirt rolled up at the sleeves and a stained leather apron tied firmly around his waist, his hands dusted with flour from the day's baking.",
+        "scope": "scene",
+        "scene_id": "bread_stall",
+        "consequence_level": "low",
+        "source": "dm_improvisation",
+        "speaker_id": null,
+        "epistemic_status": null,
+        "status": "promoted",
+        "authority": "bounded_improvisation",
+        "truth_status": "runtime_incidental",
+        "satisfies_contract_id": "rc_58f57e232b78",
+        "requested_dimension": "smell"
+      }
+    ],
+    "rejected": [],
+    "incidental_entities": []
+  }
+}

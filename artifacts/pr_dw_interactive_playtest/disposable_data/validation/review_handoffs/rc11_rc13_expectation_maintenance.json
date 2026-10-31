@@ -1,0 +1,44 @@
+{
+  "campaign_id": "rc11_rc13_expectation_maintenance_20260919",
+  "campaign_name": "RC-11 / RC-13 Expectation Maintenance & Governance Drift Triage",
+  "campaign_date": "2026-09-19",
+  "purpose": "Modernize RC-11 and RC-13 expectations and triage the unrelated governance-document failure without changing product behavior or deciding RC-10/RC-21.",
+  "objective_status": "ACHIEVED",
+  "executive_summary": "The baseline moved from seven failures to four. RC-11 now separately asserts identical accepted text/debug previews and the complete governed write-site attribution row, preserving both behavioral and provenance coverage. RC-13 derives its mutation aggregate from six named subtype caps, reconciles aggregate and subtype totals, rejects unknown kinds, and retains excessive-subtype controls. GD-01 was high-confidence STALE_EXPECTATION: its CO98 heading check lagged the active CO99 generated governance context, so only the validator advanced. Product behavior and validation authority did not change; no test was skipped, xfailed, or deleted. The four remaining failures are exactly RC-10 and RC-21 policy decisions; no unexplained technical defect remains red. The next justified campaign is policy resolution after review.",
+  "changes": {
+    "production": [],
+    "validation": ["Modernized RC-11 behavioral/provenance assertions.", "Modernized RC-13 subtype-derived lineage profile and added two negative controls.", "Advanced GD-01 validator from CO98 to active CO99 context while preserving substantive governance locks."],
+    "tooling": [],
+    "documentation": ["Added canonical maintenance report, ledger, governance triage, baseline comparison, remaining-red audit, and command record."],
+    "generated_artifacts": ["Added pre/post and focused JUnit evidence."]
+  },
+  "testing": {
+    "focused": "RC-11 family: 85 passed. RC-13 family: 18 passed. Governance family: 44 passed. Replay profile/boundary: 8 passed.",
+    "broader": "Opening fallback, attribution, replay projection, failure-classification governance, and replay ownership boundaries passed.",
+    "full_suite": "Pre: 6,448 collected, 6,342 passed, 7 failed, 99 skipped. Post: 6,450 collected, 6,347 passed, 4 failed, 99 skipped. Two new passing negative controls explain collection growth.",
+    "runtime_validation": "Existing deterministic 25-turn replay passed without runtime changes.",
+    "model_runtime_boundary": "No external model invocation; deterministic test stubs only.",
+    "new_regressions": "None.",
+    "pre_existing_failures": "RC-10 (one) and RC-21 (three) remain intentionally red and untouched."
+  },
+  "decisions_requiring_human_review": ["RC-10 local raw-token boundary policy.", "RC-21 destination-redirect authority policy."],
+  "known_problems": {"campaign_specific": [], "pre_existing": ["RC-10: tests/test_final_emission_meta.py::test_compat_local_raw_token_boundary_is_opening_fallback_evidence_only", "RC-21: tests/test_social_destination_redirect_leads.py::test_lirael_near_notice_board_creates_actionable_npc_pending_and_registry", "RC-21: tests/test_social_destination_redirect_leads.py::test_repeat_redirect_merges_pending_no_duplicate_authoritative_rows", "RC-21: tests/test_social_destination_redirect_leads.py::test_destination_lead_distinct_from_existing_milestone_pending"]},
+  "missing_concepts": ["Policy resolution, Calibration Round 2, State-to-Narration Consistency, and product realization are out of scope."],
+  "does_not_prove": ["Which RC-10 or RC-21 policy option should be selected.", "That policy resolution can occur without its own product and validation review."],
+  "recommended_next_step": "Review the policy-only technical baseline, then authorize a separate RC-10 / RC-21 Policy Resolution campaign.",
+  "primary_report": "docs/rc11_rc13_expectation_maintenance_and_governance_drift_triage.md",
+  "evidence_packets": [],
+  "supporting_files": [
+    {"path": "artifacts/expectation_maintenance/maintenance_ledger.json", "role": "maintenance_ledger", "why": "Records authority, old/new expectations, controls, and impact for all three cases.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/expectation_maintenance/governance_drift_triage.json", "role": "gd01_triage", "why": "Documents GD-01 evidence, classification, confidence, and repair.", "behavioral_evidence": false, "human_review_required": true},
+    {"path": "artifacts/expectation_maintenance/baseline_comparison.json", "role": "baseline_delta", "why": "Reconciles exact pre/post suite counts.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/expectation_maintenance/remaining_red_audit.json", "role": "remaining_red_audit", "why": "Accounts for every final failure and technical-baseline status.", "behavioral_evidence": true, "human_review_required": true},
+    {"path": "artifacts/expectation_maintenance/commands_executed.md", "role": "command_record", "why": "Preserves exact verification commands.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/expectation_maintenance/pre_maintenance_suite.xml", "role": "pre_junit", "why": "Authoritative seven-red starting baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/expectation_maintenance/post_maintenance_suite.xml", "role": "post_junit", "why": "Authoritative four-red ending baseline.", "behavioral_evidence": false, "human_review_required": false},
+    {"path": "artifacts/expectation_maintenance/focused_rc11.xml", "role": "rc11_focused_junit", "why": "Opening and attribution family verification.", "behavioral_evidence": true, "human_review_required": false},
+    {"path": "artifacts/expectation_maintenance/focused_rc13.xml", "role": "rc13_focused_junit", "why": "Replay, projection, positive, and negative control verification.", "behavioral_evidence": true, "human_review_required": false},
+    {"path": "artifacts/expectation_maintenance/focused_governance.xml", "role": "governance_focused_junit", "why": "Failure-classification and replay-boundary governance verification.", "behavioral_evidence": false, "human_review_required": false}
+  ],
+  "self_contained_review_test": "PASS: report, ledger, GD-01 triage, exact baselines, remaining-red audit, commands, and focused evidence are bundled."
+}

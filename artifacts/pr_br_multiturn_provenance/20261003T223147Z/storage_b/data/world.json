@@ -1,0 +1,79 @@
+{
+  "settlements": [
+    {
+      "id": "reedbank",
+      "name": "Reedbank",
+      "type": "riverside_hamlet",
+      "tags": [
+        "craft",
+        "river"
+      ],
+      "status": "ordinary",
+      "notes": "A hamlet of small craft sheds along a slow river."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_seat_shop_linden_work",
+      "scene_id": "seat_shop",
+      "npc_id": "linden",
+      "topic_id": "work"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_seat_shop_linden_brine_hearsay",
+      "scene_id": "seat_shop",
+      "npc_id": "linden",
+      "topic_id": "brine_hearsay"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "linden",
+      "name": "Linden",
+      "location": "seat_shop",
+      "role": "chair-seater",
+      "affiliation": "",
+      "disposition": "neutral",
+      "current_agenda": "",
+      "availability": "available",
+      "tags": [],
+      "aliases": [
+        "chair-seater",
+        "chair seater"
+      ],
+      "topics": [
+        {
+          "id": "work",
+          "text": "Linden seats wooden chairs with woven rush."
+        },
+        {
+          "id": "brine_hearsay",
+          "text": "Linden heard a carter claim that the brine cask at the curing house was found unbunged. Linden did not see the cask and does not know whether that claim is true."
+        }
+      ],
+      "knowledge_scope": [
+        "rush_seating"
+      ],
+      "information_reliability": "partial",
+      "stance_toward_player": "neutral",
+      "origin_kind": "npc",
+      "origin_scene_id": "seat_shop",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

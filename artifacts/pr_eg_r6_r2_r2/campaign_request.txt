@@ -1,0 +1,1597 @@
+# ============================================================
+# PR-EG-R6-R2-R2
+# Semantic Operation Coherence & Multi-Role Propositions
+# ============================================================
+#
+# ERA: Product Realization
+# CHAPTER: II
+# CYCLE: PR-EG-R6-R2-R2
+#
+# LANES:
+# - AI
+# - Architecture
+# - Gameplay
+# - State
+# - Integrity
+# - Validation
+#
+# PRIORITY: HIGH
+# TYPE: Architectural Repair & Conversational Qualification
+# PREDECESSOR: PR-EG-R6-R2-R1
+#
+# ============================================================
+# 0. MISSION
+# ============================================================
+#
+# Improve semantic operation selection and validation
+# within the existing unified-planning architecture.
+#
+# PR-EG-R6-R2-R1 established durable conversational
+# referents and demonstrated meaningful improvements
+# in correction and follow-up continuity.
+#
+# However, the engine still frequently:
+#
+# - Misclassifies corrections as new questions.
+# - Misclassifies follow-ups.
+# - Selects incorrect referent targets.
+# - Confuses relationship arguments.
+# - Fails to represent multi-role relationships.
+# - Produces malformed referent operations.
+# - Falls back to unnecessary clarification.
+# - Misclassifies partial answers as sufficient.
+#
+# PRIMARY OBJECTIVE:
+#
+# Establish a coherent semantic-operation contract
+# capable of interpreting and validating player
+# modifications to durable conversational referents.
+#
+# SECONDARY OBJECTIVES:
+#
+# - Preserve all meaningful relationship roles.
+# - Improve correction and follow-up reliability.
+# - Improve referent-binding accuracy.
+# - Reduce false clarification.
+# - Improve answer-status classification.
+# - Preserve existing authorization boundaries.
+# - Avoid excessive provider calls or context growth.
+#
+# This cycle must improve actual conversational
+# behavior, not merely structured-output validity.
+#
+# ============================================================
+# 1. PREDECESSOR BASELINE
+# ============================================================
+#
+# Verify these figures against repository evidence:
+#
+# PR-EG-R6-R2-R1:
+#
+# Correction success:
+# 7/13 = 53.8%.
+#
+# Follow-up success:
+# 18/28 = 64.3%.
+#
+# Referent-binding accuracy:
+# 61.0%.
+#
+# Active-question preservation:
+# 92.5%.
+#
+# False clarification:
+# 22/120 = 18.3%.
+#
+# Relevant answer selection:
+# 79.2%.
+#
+# Answer sufficiency:
+# 76.7%.
+#
+# Matched 30-turn comparison:
+#
+# Corrections:
+# 0/4 -> 2/4.
+#
+# Follow-ups:
+# 0/10 -> 7/10.
+#
+# False clarifications:
+# 16/30 -> 4/30.
+#
+# Relevant answers:
+# 14/30 -> 25/30.
+#
+# Sufficient answers:
+# 14/30 -> 23/30.
+#
+# Regression:
+# 431 passed / 5 failed.
+#
+# New regression failures:
+# 0.
+#
+# Preserve the distinction between:
+#
+# - Matched comparison evidence.
+# - Independent fresh-provider qualification.
+# - Controlled tests.
+# - Implementing-agent local assessment.
+#
+# Do not treat these as interchangeable.
+#
+# ============================================================
+# 2. ARCHITECTURAL PRINCIPLE
+# ============================================================
+#
+# Separate four responsibilities:
+#
+# A. PLAYER INTENT INTERPRETATION
+#
+# What conversational operation is the player
+# attempting?
+#
+# B. REFERENT BINDING
+#
+# Which existing conversational proposition
+# does that operation concern?
+#
+# C. OPERATION VALIDATION
+#
+# Is the proposed modification coherent and
+# supported by the player's utterance?
+#
+# D. ANSWER RESOLUTION
+#
+# What authorized information, if any, can
+# the NPC provide in response?
+#
+# These responsibilities must not collapse
+# into one opaque decision.
+#
+# The AI proposes meaning.
+#
+# The host validates identities, operations,
+# state transitions, sources, and disclosure.
+#
+# ============================================================
+# 3. NON-NEGOTIABLE INVARIANTS
+# ============================================================
+#
+# INV-01 — HOST AUTHORITY
+#
+# Provider interpretation cannot create
+# canonical world facts.
+#
+# INV-02 — REFERENT OWNERSHIP
+#
+# Durable conversational referents remain
+# host-owned, noncanonical records.
+#
+# INV-03 — DISCLOSURE
+#
+# Every consequential factual disclosure
+# requires existing host authorization.
+#
+# INV-04 — PROVENANCE
+#
+# Preserve:
+#
+# - world_source
+# - host_operation
+# - bounded_expression
+# - verified_history
+#
+# INV-05 — FINAL DELIVERY
+#
+# Preserve immutable final-response adoption.
+#
+# INV-06 — PERSISTENCE
+#
+# Unauthorized information cannot create
+# discovered clues or canonical mutations.
+#
+# INV-07 — HISTORY
+#
+# Corrections do not rewrite previously
+# delivered speech.
+#
+# INV-08 — NO LEXICAL PATCHWORK
+#
+# Do not solve general operation failures
+# through expanding keyword tables.
+#
+# INV-09 — NO AUTHORITY LAUNDERING
+#
+# Conversational referents cannot become
+# independent factual authority.
+#
+# INV-10 — NO SILENT RESELECTION
+#
+# Legacy topic selectors cannot override
+# accepted semantic operations.
+#
+# INV-11 — PLAYER AGENCY
+#
+# Do not invent player actions, intentions,
+# consent, or commitments.
+#
+# INV-12 — FAIL CLOSED
+#
+# Unsupported consequential claims cannot
+# reach the player.
+#
+# ============================================================
+# 4. SCOPE
+# ============================================================
+#
+# IN SCOPE:
+#
+# - Semantic operation classification.
+# - Durable referent binding.
+# - Multi-role proposition representation.
+# - Structured correction operations.
+# - Follow-up transformations.
+# - Role reversal.
+# - Temporal and spatial modifications.
+# - Answer-status classification.
+# - Clarification decisions.
+# - Provider schema validation.
+# - Bounded recovery from malformed plans.
+# - Save/load compatibility.
+# - Fresh-provider qualification.
+#
+# OUT OF SCOPE:
+#
+# - Broad semantic paraphrase redesign.
+# - General NPC personality.
+# - Negotiation and bargaining.
+# - Quest dialogue.
+# - Combat.
+# - Movement.
+# - Inventory.
+# - World generation.
+# - Campaign lifecycle.
+# - General performance optimization.
+# - Full conversational rewrite.
+#
+# Preserve the existing R6 feature gate.
+#
+# ============================================================
+# 5. BASELINE REPRODUCTION
+# ============================================================
+#
+# Before production modifications:
+#
+# Reproduce representative R6-R2-R1 failures.
+#
+# Capture:
+#
+# - Player utterance.
+# - Active referent.
+# - Available referents.
+# - Provider interpretation.
+# - Proposed operation.
+# - Target referent.
+# - Host validation.
+# - Resulting response plan.
+# - Delivered speech.
+#
+# Include:
+#
+# A. New-question/correction confusion.
+#
+# B. Incorrect referent target.
+#
+# C. Subject/object replacement confusion.
+#
+# D. Multi-role relationship failure.
+#
+# E. Follow-up operation confusion.
+#
+# F. Malformed provider operation.
+#
+# G. False clarification.
+#
+# H. Partial-answer overclassification.
+#
+# Attribute failures to specific boundaries.
+#
+# ============================================================
+# 6. CURRENT CONTRACT AUDIT
+# ============================================================
+#
+# Inspect:
+#
+# - unified_semantic_planning.py
+# - conversational_referents.py
+# - semantic_correspondence.py
+# - dialogue_authority.py
+# - immutable_valid_response.py
+#
+# And all relevant callers.
+#
+# Identify:
+#
+# - Current operation types.
+# - Provider schema.
+# - Referent schema.
+# - Relationship representation.
+# - Validation order.
+# - Recovery behavior.
+# - Source matching.
+# - Answer-status assignment.
+# - Persistence behavior.
+#
+# Determine where semantic information is
+# discarded or incorrectly transformed.
+#
+# Produce a source-linked audit.
+#
+# ============================================================
+# 7. SEMANTIC OPERATION TAXONOMY
+# ============================================================
+#
+# Establish a bounded operation taxonomy.
+#
+# Suggested top-level operations:
+#
+# NEW_QUESTION
+#
+# A new information request.
+#
+# CORRECTION
+#
+# A modification to a prior request.
+#
+# FOLLOW_UP
+#
+# A new request dependent on an existing
+# conversational proposition.
+#
+# CLARIFICATION_RESPONSE
+#
+# A response resolving an outstanding
+# clarification.
+#
+# REFERENCE_TO_PRIOR_SPEECH
+#
+# A question about what was previously said.
+#
+# OTHER
+#
+# An utterance outside this cycle's scope.
+#
+# These names are illustrative.
+#
+# Adapt to existing structures.
+#
+# Do not force every utterance into an
+# information-question operation.
+#
+# ============================================================
+# 8. OPERATION CLASSIFICATION
+# ============================================================
+#
+# The provider should identify:
+#
+# - Proposed operation type.
+# - Target referent, if applicable.
+# - Requested semantic transformation.
+# - Supporting player-language evidence.
+# - Unresolved ambiguity, if any.
+#
+# Do not use provider confidence alone
+# to establish validity.
+#
+# Validate against:
+#
+# - Current player utterance.
+# - Active conversational focus.
+# - Available referents.
+# - Existing clarification state.
+#
+# Distinguish malformed output from
+# genuine ambiguity in player intent.
+#
+# ============================================================
+# 9. MULTI-ROLE PROPOSITION CONTRACT
+# ============================================================
+#
+# Replace or extend binary proposition
+# assumptions where necessary.
+#
+# Support relationships with multiple
+# semantically meaningful roles.
+#
+# Example:
+#
+# "What did Mara tell Oren about the road?"
+#
+# Relationship:
+#
+# communicate
+#
+# Roles:
+#
+# speaker = Mara
+# recipient = Oren
+# topic = road
+# requested = message_content
+#
+# The representation must preserve all
+# meaningful arguments.
+#
+# Do not collapse speaker and recipient
+# into interchangeable subject/object slots.
+#
+# Do not create an unlimited ontology
+# of hard-coded relationship names.
+#
+# ============================================================
+# 10. ROLE REPRESENTATION
+# ============================================================
+#
+# Use a compact structured representation
+# supporting:
+#
+# - Predicate or relationship.
+# - Named semantic roles.
+# - Grounded entity references.
+# - Requested missing role.
+# - Temporal qualifier.
+# - Spatial qualifier.
+# - Negation.
+# - Epistemic qualifier.
+# - Prior proposition reference.
+#
+# Support unfamiliar relationships.
+#
+# Preserve backward compatibility with
+# existing binary propositions.
+#
+# Avoid unbounded provider-generated prose.
+#
+# ============================================================
+# 11. ROLE IDENTITY
+# ============================================================
+#
+# Distinguish:
+#
+# - Role name.
+# - Entity identity.
+# - Entity description.
+# - Requested unknown argument.
+#
+# A role change is not automatically
+# an entity change.
+#
+# An entity change is not automatically
+# a relationship change.
+#
+# Example:
+#
+# "What did Mara tell Oren?"
+#
+# versus:
+#
+# "What did Oren tell Mara?"
+#
+# The relationship remains communication.
+#
+# Speaker and recipient assignments reverse.
+#
+# ============================================================
+# 12. CORRECTION TRANSFORMATIONS
+# ============================================================
+#
+# Represent corrections as explicit,
+# bounded transformations.
+#
+# Examples:
+#
+# REPLACE_ROLE_VALUE
+#
+# Replace the entity occupying one role.
+#
+# REASSIGN_ROLES
+#
+# Change role assignments without losing
+# the underlying relationship.
+#
+# REPLACE_RELATIONSHIP
+#
+# Change the requested predicate.
+#
+# REPLACE_QUALIFIER
+#
+# Modify temporal, spatial, or epistemic
+# qualifiers.
+#
+# REPLACE_REQUESTED_ARGUMENT
+#
+# Change which relationship argument
+# the player wants supplied.
+#
+# REJECT_INTERPRETATION
+#
+# Mark a previous interpretation as rejected.
+#
+# Do not permit arbitrary opaque
+# referent replacement.
+#
+# ============================================================
+# 13. CORRECTION VALIDATION
+# ============================================================
+#
+# Validate:
+#
+# - Target referent exists.
+# - Target belongs to current conversation.
+# - Proposed operation is supported.
+# - Referenced entities are grounded.
+# - Role changes are coherent.
+# - Unchanged fields remain preserved.
+# - Requested relationship remains meaningful.
+# - Player utterance supports the modification.
+#
+# Reject unsupported transformations.
+#
+# Preserve active focus on rejection.
+#
+# Do not mutate canonical world state.
+#
+# ============================================================
+# 14. ROLE REVERSAL
+# ============================================================
+#
+# Required example:
+#
+# ORIGINAL:
+#
+# "What did Mara tell Oren about the road?"
+#
+# CORRECTION:
+#
+# "No, what did Oren tell Mara?"
+#
+# EXPECTED:
+#
+# Preserve:
+#
+# - Communication relationship.
+# - Requested message content.
+# - Road topic, where context supports it.
+#
+# Change:
+#
+# - Speaker to Oren.
+# - Recipient to Mara.
+#
+# Do not swap unrelated fields.
+#
+# Do not invent message content.
+#
+# ============================================================
+# 15. SUBJECT AND OBJECT CORRECTIONS
+# ============================================================
+#
+# Required example:
+#
+# ORIGINAL:
+#
+# "Who keeps the amber reliquary?"
+#
+# CORRECTION:
+#
+# "I meant the copper reliquary."
+#
+# EXPECTED:
+#
+# Preserve:
+#
+# - Keeper relationship.
+# - Requested keeper identity.
+# - Addressee.
+#
+# Replace:
+#
+# - Object of the keeper relationship.
+#
+# The operation should not require
+# the player to repeat the question.
+#
+# ============================================================
+# 16. RELATIONSHIP CORRECTIONS
+# ============================================================
+#
+# Required example:
+#
+# ORIGINAL:
+#
+# "Who guards the north gate?"
+#
+# CORRECTION:
+#
+# "No, who owns it?"
+#
+# EXPECTED:
+#
+# Preserve:
+#
+# - North gate.
+# - Addressee.
+#
+# Replace:
+#
+# - Guards relationship with ownership.
+#
+# Preserve the requested missing role.
+#
+# Do not fabricate the owner.
+#
+# ============================================================
+# 17. FOLLOW-UP OPERATIONS
+# ============================================================
+#
+# Support distinct follow-up relationships:
+#
+# SOURCE_ATTRIBUTION
+#
+# "Who told you?"
+#
+# EXPLANATION
+#
+# "Why?"
+#
+# EVIDENCE
+#
+# "How do you know?"
+#
+# TEMPORAL_VARIATION
+#
+# "What about tomorrow?"
+#
+# ALTERNATIVE_ARGUMENT
+#
+# "And the other one?"
+#
+# SPEECH_CLARIFICATION
+#
+# "What did you mean?"
+#
+# These are semantic categories,
+# not phrase-specific response rules.
+#
+# Generalize beyond the example wording.
+#
+# ============================================================
+# 18. FOLLOW-UP BINDING
+# ============================================================
+#
+# Resolve the target referent using:
+#
+# - Explicit references.
+# - Active focus.
+# - Recent relevant referents.
+# - Speaker continuity.
+# - Semantic compatibility.
+#
+# Do not bind solely by recency.
+#
+# Do not require exact historical quotation.
+#
+# If multiple plausible targets remain,
+# request targeted clarification.
+#
+# ============================================================
+# 19. FOLLOW-UP AFTER UNCERTAINTY
+# ============================================================
+#
+# If an NPC previously expressed uncertainty:
+#
+# Preserve the underlying question.
+#
+# Preserve the NPC's epistemic status.
+#
+# Example:
+#
+# PLAYER:
+#
+# "What is the aqueduct called?"
+#
+# NPC:
+#
+# "I don't know."
+#
+# PLAYER:
+#
+# "Who told you?"
+#
+# The engine should understand that the
+# follow-up concerns the previous discussion.
+#
+# It must not invent an informant.
+#
+# Appropriate uncertainty is acceptable.
+#
+# Generic referent clarification is not.
+#
+# ============================================================
+# 20. FOLLOW-UP AFTER PARTIAL ANSWER
+# ============================================================
+#
+# Preserve:
+#
+# - Original requested proposition.
+# - Information actually supplied.
+# - Missing information.
+# - Answer status.
+#
+# A partial answer must not automatically
+# close the active question.
+#
+# A follow-up should be able to request
+# the missing information.
+#
+# ============================================================
+# 21. ANSWER-STATUS CONTRACT
+# ============================================================
+#
+# Distinguish:
+#
+# DIRECT_ANSWER
+#
+# The authorized information answers
+# the requested proposition.
+#
+# PARTIAL_ANSWER
+#
+# The information supplies some but not
+# all required arguments or qualifiers.
+#
+# RELATED_NONANSWER
+#
+# The information concerns the same topic
+# but does not answer the request.
+#
+# UNKNOWN
+#
+# No authorized sufficient information
+# is available.
+#
+# CLARIFICATION_REQUIRED
+#
+# The request itself remains genuinely
+# ambiguous.
+#
+# Do not classify related information
+# as a direct answer.
+#
+# ============================================================
+# 22. ANSWER-STATUS VALIDATION
+# ============================================================
+#
+# Evaluate sufficiency against:
+#
+# - Requested relationship.
+# - Requested missing role.
+# - Required relationship arguments.
+# - Relevant qualifiers.
+# - Available authorized sources.
+#
+# Example:
+#
+# QUESTION:
+#
+# "Who told you the road's name?"
+#
+# SOURCE:
+#
+# "The road is called the north road."
+#
+# RESULT:
+#
+# RELATED_NONANSWER.
+#
+# The road's name is not the identity
+# of the informant.
+#
+# ============================================================
+# 23. MALFORMED PROVIDER OUTPUT
+# ============================================================
+#
+# Identify malformed operation families.
+#
+# Distinguish:
+#
+# - Invalid schema.
+# - Unknown operation type.
+# - Invalid referent ID.
+# - Invalid role name.
+# - Unsupported transformation.
+# - Missing required argument.
+# - Genuine semantic ambiguity.
+#
+# Do not treat all failures as
+# player ambiguity.
+#
+# Record structured failure reasons.
+#
+# ============================================================
+# 24. BOUNDED RECOVERY
+# ============================================================
+#
+# Implement safe recovery for malformed
+# or incomplete provider proposals.
+#
+# Recovery may:
+#
+# - Normalize schema-equivalent structures.
+# - Resolve unambiguous host-owned IDs.
+# - Preserve a valid active referent.
+# - Request targeted clarification.
+# - Return appropriate uncertainty.
+#
+# Recovery must not:
+#
+# - Invent missing player intent.
+# - Invent world facts.
+# - Guess unauthorized entity identities.
+# - Accept arbitrary provider metadata.
+# - Bypass disclosure authorization.
+#
+# Avoid adding routine provider retries.
+#
+# ============================================================
+# 25. CLARIFICATION DISCIPLINE
+# ============================================================
+#
+# Before asking for clarification:
+#
+# Determine whether uncertainty concerns:
+#
+# A. Player intent.
+#
+# B. Referent identity.
+#
+# C. Entity grounding.
+#
+# D. Relationship interpretation.
+#
+# E. NPC knowledge.
+#
+# F. Disclosure permission.
+#
+# Only A-D may justify conversational
+# clarification.
+#
+# E should ordinarily produce uncertainty.
+#
+# F should produce authorized refusal
+# or withholding behavior.
+#
+# Do not use clarification as a generic
+# fallback for unavailable information.
+#
+# ============================================================
+# 26. PROVIDER INPUT
+# ============================================================
+#
+# Supply bounded structured context:
+#
+# - Active referent.
+# - Relevant recent referents.
+# - Named relationship roles.
+# - Current answer status.
+# - Correction lineage.
+# - Relevant delivered speech.
+# - Outstanding clarification state.
+#
+# Keep the payload compact.
+#
+# Do not expose protected world facts
+# merely to improve operation selection.
+#
+# ============================================================
+# 27. PROVIDER OUTPUT
+# ============================================================
+#
+# Use bounded structured output.
+#
+# Include:
+#
+# - Operation type.
+# - Target referent ID.
+# - Relationship.
+# - Role assignments.
+# - Proposed transformations.
+# - Requested missing argument.
+# - Qualifier changes.
+# - Ambiguity indication.
+#
+# Provider output is a proposal.
+#
+# It does not independently establish
+# canonical or disclosure authority.
+#
+# ============================================================
+# 28. HOST VALIDATION ORDER
+# ============================================================
+#
+# Establish explicit validation order:
+#
+# 1. Parse provider proposal.
+# 2. Validate operation schema.
+# 3. Resolve host-owned referent identity.
+# 4. Ground entities.
+# 5. Validate relationship roles.
+# 6. Validate proposed transformation.
+# 7. Construct candidate updated referent.
+# 8. Resolve available information.
+# 9. Validate disclosure authorization.
+# 10. Construct authorized response plan.
+# 11. Adopt immutable final speech.
+# 12. Commit referent update and history.
+#
+# Adapt transaction boundaries to
+# existing project architecture.
+#
+# Avoid partially committed state.
+#
+# ============================================================
+# 29. REFERENT PERSISTENCE
+# ============================================================
+#
+# Preserve:
+#
+# - Stable referent IDs.
+# - Revision lineage.
+# - Active focus.
+# - Named relationship roles.
+# - Answer status.
+# - Correction operations.
+#
+# Support save/load.
+#
+# Maintain compatibility with existing
+# binary proposition records.
+#
+# Do not migrate old saves by inventing
+# consequential factual relationships.
+#
+# ============================================================
+# 30. LEGACY ROUTING
+# ============================================================
+#
+# Once a semantic operation is accepted:
+#
+# Legacy topic selectors must not replace
+# its relationship or arguments.
+#
+# Preserve universal disclosure checks
+# across all routes.
+#
+# If the operation cannot be resolved:
+#
+# Preserve active referent context.
+#
+# Return safe uncertainty or targeted
+# clarification.
+#
+# Do not silently downgrade to lexical
+# topic selection.
+#
+# ============================================================
+# 31. CONTROLLED TESTS
+# ============================================================
+#
+# Add at least 50 focused tests.
+#
+# Include:
+#
+# T01 — New-question classification.
+# T02 — Correction classification.
+# T03 — Follow-up classification.
+# T04 — Clarification-response classification.
+# T05 — Prior-speech reference.
+# T06 — Out-of-scope utterance.
+# T07 — Stable referent target.
+# T08 — Multiple referent selection.
+# T09 — Genuine referent ambiguity.
+# T10 — False referent ambiguity.
+# T11 — Multi-role proposition creation.
+# T12 — Speaker role preservation.
+# T13 — Recipient role preservation.
+# T14 — Topic role preservation.
+# T15 — Requested-content role preservation.
+# T16 — Role reversal.
+# T17 — Role-value replacement.
+# T18 — Relationship replacement.
+# T19 — Requested-role replacement.
+# T20 — Temporal qualifier replacement.
+# T21 — Spatial qualifier replacement.
+# T22 — Negation preservation.
+# T23 — Epistemic qualifier preservation.
+# T24 — Unchanged-field preservation.
+# T25 — Correction lineage.
+# T26 — Historical speech unchanged.
+# T27 — Follow-up source attribution.
+# T28 — Follow-up explanation.
+# T29 — Follow-up evidence.
+# T30 — Follow-up temporal variation.
+# T31 — Follow-up alternative argument.
+# T32 — Follow-up speech clarification.
+# T33 — Follow-up after uncertainty.
+# T34 — Follow-up after partial answer.
+# T35 — Direct-answer classification.
+# T36 — Partial-answer classification.
+# T37 — Related-nonanswer classification.
+# T38 — Unknown-answer classification.
+# T39 — Genuine clarification.
+# T40 — False clarification avoidance.
+# T41 — Malformed schema handling.
+# T42 — Invalid operation rejection.
+# T43 — Invalid role rejection.
+# T44 — Forged referent ID rejection.
+# T45 — Cross-conversation ID rejection.
+# T46 — No canonical fact creation.
+# T47 — Restricted disclosure rejected.
+# T48 — Protected password remains blocked.
+# T49 — No unauthorized clue discovery.
+# T50 — Final-response seal preserved.
+# T51 — API/history agreement.
+# T52 — Save/load compatibility.
+# T53 — Retry idempotence.
+# T54 — No legacy semantic reselection.
+# T55 — No unauthorized canonical mutation.
+#
+# Add further tests for discovered
+# failure families.
+#
+# ============================================================
+# 32. FROZEN HOLDOUTS
+# ============================================================
+#
+# Preserve:
+#
+# - Original R6 frozen holdouts.
+# - R6-R2 frozen holdouts.
+# - R6-R2-R1 frozen holdouts.
+#
+# Do not modify their contents.
+#
+# Create additional independent holdouts
+# before implementation tuning.
+#
+# Include unfamiliar:
+#
+# - NPC names.
+# - Objects.
+# - Multi-role relationships.
+# - Correction forms.
+# - Follow-up forms.
+# - Referent ambiguities.
+# - Partial answers.
+# - Epistemic situations.
+#
+# Freeze and hash new holdouts.
+#
+# Do not tune against failed holdout
+# examples after evaluation.
+#
+# ============================================================
+# 33. ADVERSARIAL QUALIFICATION
+# ============================================================
+#
+# Test attempts to:
+#
+# - Forge referent IDs.
+# - Forge role assignments.
+# - Forge authorization provenance.
+# - Redirect correction to another conversation.
+# - Substitute protected information.
+# - Convert rumor into canonical truth.
+# - Convert historical speech into authority.
+# - Introduce unsupported causal claims.
+# - Exploit malformed schema recovery.
+# - Override accepted operations through
+#   legacy topic selection.
+#
+# Verify:
+#
+# Zero unauthorized consequential disclosures.
+#
+# Zero unauthorized canonical mutations.
+#
+# Zero unauthorized clue discoveries.
+#
+# Zero final-response integrity violations.
+#
+# ============================================================
+# 34. MATCHED BASELINE COMPARISON
+# ============================================================
+#
+# Compare:
+#
+# A. PR-EG-R6-R2-R1 baseline.
+#
+# B. PR-EG-R6-R2-R2 final implementation.
+#
+# Use identical:
+#
+# - Initial world state.
+# - NPC knowledge.
+# - Disclosure permissions.
+# - Player utterances.
+# - Initial conversation context.
+#
+# Include at least 40 matched turns.
+#
+# Cover:
+#
+# - New-question classification.
+# - Object correction.
+# - Relationship correction.
+# - Role reversal.
+# - Follow-up attribution.
+# - Follow-up explanation.
+# - Follow-up after uncertainty.
+# - Multiple recent questions.
+# - Genuine ambiguity.
+# - False ambiguity.
+# - Partial-answer classification.
+# - Restricted information requests.
+#
+# Preserve raw transcripts.
+#
+# Report all divergences.
+#
+# Do not count only favorable examples.
+#
+# ============================================================
+# 35. FRESH-PROVIDER QUALIFICATION
+# ============================================================
+#
+# Run final-code qualification through
+# production /api/chat.
+#
+# TARGET:
+#
+# At least 150 turns across 10 independent
+# conversations.
+#
+# Include:
+#
+# - Direct questions.
+# - Corrections.
+# - Follow-ups.
+# - Multi-role propositions.
+# - Role reversals.
+# - Uncertainty.
+# - Partial answers.
+# - Multiple referents.
+# - Clarification responses.
+# - Authorized disclosure.
+# - Restricted disclosure attempts.
+# - Save/load continuation.
+#
+# Use real provider calls.
+#
+# Do not substitute mock-provider results.
+#
+# Preserve complete transcripts.
+#
+# ============================================================
+# 36. INDEPENDENT ASSESSMENT
+# ============================================================
+#
+# Evaluate:
+#
+# - Operation classification.
+# - Referent binding.
+# - Role preservation.
+# - Correction success.
+# - Follow-up success.
+# - Answer relevance.
+# - Answer sufficiency.
+# - Clarification quality.
+#
+# Separate:
+#
+# - Host-validated structural correctness.
+# - Implementing-agent assessment.
+# - Independent transcript grading.
+#
+# Use blinded or separately generated
+# grading where feasible.
+#
+# Preserve grading criteria and raw evidence.
+#
+# Do not silently reclassify failures
+# to improve reported metrics.
+#
+# ============================================================
+# 37. TURN-LEVEL EVIDENCE
+# ============================================================
+#
+# Record:
+#
+# - Player utterance.
+# - Prior active referent.
+# - Provider operation proposal.
+# - Target referent ID.
+# - Proposed role changes.
+# - Host validation result.
+# - Resulting referent.
+# - Requested relationship.
+# - Selected source.
+# - Answer-status classification.
+# - Disclosure authorization.
+# - Authorized response plan.
+# - Final adopted speech.
+# - API-delivered speech.
+# - Delivered history.
+# - Persisted referent state.
+# - Provider calls.
+# - Tokens.
+# - Latency.
+#
+# Distinguish provider proposals from
+# host-committed state.
+#
+# ============================================================
+# 38. QUALITY METRICS
+# ============================================================
+#
+# Report:
+#
+# - Operation-classification accuracy.
+# - Referent-binding accuracy.
+# - Role-preservation accuracy.
+# - Correction success.
+# - Follow-up success.
+# - Active-focus preservation.
+# - False clarification rate.
+# - Genuine clarification accuracy.
+# - Relevant answer selection.
+# - Answer sufficiency.
+# - Unauthorized disclosures.
+# - Unauthorized canonical mutations.
+# - Unauthorized clue discoveries.
+# - Final-response mismatches.
+#
+# Score:
+#
+# - Dialogue quality, 0–3.
+# - Playability, 0–3.
+#
+# Include representative successes
+# and failures.
+#
+# ============================================================
+# 39. PERFORMANCE
+# ============================================================
+#
+# Record:
+#
+# - Provider calls per turn.
+# - Input tokens per turn.
+# - Output tokens per turn.
+# - Mean latency.
+# - Median latency.
+# - P95 latency.
+# - Maximum latency.
+# - Retry frequency.
+#
+# TARGETS:
+#
+# - Mean input tokens <=3,500.
+# - P95 input tokens <=5,000.
+# - P95 latency <=5 seconds.
+# - No systemic retry loops.
+#
+# Track inherited strict_social
+# outliers separately.
+#
+# Avoid additional provider calls
+# solely for operation validation.
+#
+# ============================================================
+# 40. REGRESSION
+# ============================================================
+#
+# Run relevant regression suites.
+#
+# Preserve:
+#
+# - PR-EG-R2C speech adoption.
+# - PR-EG-R3 bounded expression.
+# - PR-EG-R3-R1 expression semantics.
+# - PR-EG-R4-R1 final delivery integrity.
+# - PR-EG-R6 semantic planning.
+# - PR-EG-R6-R1 disclosure authority.
+# - PR-EG-R6-R1-R1 provenance.
+# - PR-EG-R6-R2 semantic correspondence.
+# - PR-EG-R6-R2-R1 durable referents.
+#
+# Report:
+#
+# - Passed.
+# - Failed.
+# - Inherited failures.
+# - Newly failing identities.
+#
+# Do not rewrite existing tests merely
+# to improve pass counts.
+#
+# ============================================================
+# 41. ACCEPTANCE GATES
+# ============================================================
+#
+# GATE 1 — OPERATION CLASSIFICATION
+#
+# >=95% correct operation classification.
+#
+# GATE 2 — REFERENT BINDING
+#
+# >=95% correct referent selection.
+#
+# GATE 3 — ROLE PRESERVATION
+#
+# >=95% correct relationship-role handling.
+#
+# GATE 4 — CORRECTIONS
+#
+# >=90% successful corrections.
+#
+# GATE 5 — FOLLOW-UPS
+#
+# >=90% successful follow-ups.
+#
+# GATE 6 — ACTIVE FOCUS
+#
+# >=95% active-focus preservation.
+#
+# GATE 7 — CLARIFICATION
+#
+# False clarification rate <=10%.
+#
+# GATE 8 — RELEVANCE
+#
+# Demonstrable improvement over matched
+# R6-R2-R1 behavior.
+#
+# GATE 9 — SUFFICIENCY
+#
+# No systematic answer-sufficiency
+# regression.
+#
+# GATE 10 — DISCLOSURE
+#
+# Zero unauthorized consequential disclosures.
+#
+# GATE 11 — STATE
+#
+# Zero unauthorized canonical mutations.
+#
+# GATE 12 — DISCOVERY
+#
+# Zero unauthorized clue discoveries.
+#
+# GATE 13 — FINAL DELIVERY
+#
+# Zero final-response integrity violations.
+#
+# GATE 14 — SAVE/LOAD
+#
+# Multi-role referents survive persistence.
+#
+# GATE 15 — REGRESSION
+#
+# Zero unexplained new critical failures.
+#
+# GATE 16 — HOLDOUTS
+#
+# Independent holdouts support
+# generalization.
+#
+# GATE 17 — PERFORMANCE
+#
+# No pathological cost or latency regression.
+#
+# GATE 18 — FRESH PROVIDER
+#
+# Final-code production-path evidence
+# supports the verdict.
+#
+# ============================================================
+# 42. FAILURE ATTRIBUTION
+# ============================================================
+#
+# For every failed correction or follow-up:
+#
+# Classify the failure as:
+#
+# - Operation classification.
+# - Referent selection.
+# - Role representation.
+# - Transformation validation.
+# - Entity grounding.
+# - Source matching.
+# - Answer sufficiency.
+# - Clarification selection.
+# - Response expression.
+# - Persistence.
+# - Other.
+#
+# Include:
+#
+# - Exact player utterance.
+# - Expected behavior.
+# - Actual behavior.
+# - Relevant plan.
+# - Relevant source location.
+#
+# Do not hide failure clusters
+# behind aggregate percentages.
+#
+# ============================================================
+# 43. REQUIRED REVIEW ARTIFACTS
+# ============================================================
+#
+# Generate:
+#
+# 01 — Executive Summary
+# 02 — Repository and Baseline State
+# 03 — Failure Reproduction
+# 04 — Current Contract Audit
+# 05 — Semantic Operation Taxonomy
+# 06 — Operation Classification
+# 07 — Multi-Role Proposition Contract
+# 08 — Role Representation
+# 09 — Role Identity
+# 10 — Correction Transformations
+# 11 — Correction Validation
+# 12 — Role Reversal
+# 13 — Subject/Object Corrections
+# 14 — Relationship Corrections
+# 15 — Follow-Up Operations
+# 16 — Follow-Up Binding
+# 17 — Follow-Up After Uncertainty
+# 18 — Follow-Up After Partial Answer
+# 19 — Answer-Status Contract
+# 20 — Answer-Status Validation
+# 21 — Malformed Provider Output
+# 22 — Bounded Recovery
+# 23 — Clarification Discipline
+# 24 — Provider Input/Output Contract
+# 25 — Host Validation Order
+# 26 — Referent Persistence
+# 27 — Legacy Routing
+# 28 — Controlled Tests
+# 29 — Frozen Holdouts
+# 30 — Adversarial Qualification
+# 31 — Matched Baseline Comparison
+# 32 — Fresh-Provider Conversations
+# 33 — Independent Assessment
+# 34 — Turn-Level Qualification
+# 35 — Dialogue Quality and Playability
+# 36 — Performance
+# 37 — Regression Comparison
+# 38 — Acceptance Gates
+# 39 — Failure Attribution
+# 40 — Remaining Limitations
+# 41 — Recommended Next Action
+# 42 — Final Verdict
+# 43 — Source and Evidence Inventory
+#
+# Package through the established
+# CURRENT_REVIEW workflow.
+#
+# ============================================================
+# 44. VERDICT
+# ============================================================
+#
+# Choose:
+#
+# A — SEMANTIC OPERATIONS QUALIFIED
+#
+# B — QUALIFIED WITH LIMITATIONS
+#
+# C — SEMANTIC OPERATIONS BELOW ACCEPTANCE
+#
+# D — CRITICAL INTEGRITY OR ARCHITECTURAL BLOCKER
+#
+# UNVERIFIED — INSUFFICIENT EVIDENCE
+#
+# Do not declare A or B solely because
+# controlled tests pass.
+#
+# Require:
+#
+# - Matched baseline improvement.
+# - Reliable correction handling.
+# - Reliable follow-up handling.
+# - Multi-role proposition preservation.
+# - Independent holdout qualification.
+# - Fresh-provider production evidence.
+# - Preserved authorization integrity.
+# - No unexplained critical regressions.
+#
+# ============================================================
+# 45. STOP CONDITIONS
+# ============================================================
+#
+# Stop if:
+#
+# - Protected information reaches the player.
+# - Unauthorized discovery is persisted.
+# - Final-response integrity is bypassed.
+# - Provider proposals create canonical facts.
+# - Referent operations create factual authority.
+# - Legacy selectors override accepted operations.
+# - Corrections rewrite delivered history.
+# - Generalization requires extensive
+#   phrase-specific exceptions.
+# - Provider costs become pathological.
+#
+# Preserve evidence.
+#
+# Do not conceal architectural failures
+# behind favorable aggregate metrics.
+#
+# ============================================================
+# 46. FINAL INSTRUCTION
+# ============================================================
+#
+# Reproduce the R6-R2-R1 semantic-operation failures.
+#
+# Audit the current provider/host contract.
+#
+# Establish coherent operation classification.
+#
+# Support multi-role propositions.
+#
+# Preserve named relationship roles.
+#
+# Implement bounded correction transformations.
+#
+# Improve referent selection.
+#
+# Improve follow-up binding.
+#
+# Improve answer-status classification.
+#
+# Distinguish malformed plans from genuine
+# player ambiguity.
+#
+# Preserve durable referent state.
+#
+# Preserve authorization provenance.
+#
+# Preserve final-response integrity.
+#
+# Preserve canonical-state integrity.
+#
+# Run controlled tests and frozen holdouts.
+#
+# Run adversarial integrity tests.
+#
+# Compare against matched R6-R2-R1 behavior.
+#
+# Qualify through fresh-provider /api/chat turns.
+#
+# Measure conversational quality, correctness,
+# cost, latency, and regression.
+#
+# Do not expand into unrelated interaction families.
+#
+# Do not begin PR-EH.
+#
+# Generate CURRENT_REVIEW.
+#
+# STOP after PR-EG-R6-R2-R2.
+#
+# Await external review before proceeding.

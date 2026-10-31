@@ -1,0 +1,3 @@
+# 23 — Human Adjudication Packet
+
+Independent human adjudication is **pending**. The frozen pre-run packet includes 34 category-stratified q0 cases; human_review_packet.json supplies 68 cases with sources, labels and all three outputs, adding alternating partial/nonanswer questions. Suggested review fields: supported class/content, uncertainty, reported-speech truth, role direction, authority, missing roles and grader disagreement. No reviewer names, decisions, minutes or agreement rates are invented. Conclusions about strict label agreement are reproducible; conclusions about semantic precision, recall, authoring burden and deployment suitability require review.

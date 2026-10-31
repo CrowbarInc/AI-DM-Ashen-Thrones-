@@ -1,0 +1,84 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_keeper_nara_bell",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "keeper_nara",
+      "topic_id": "bell"
+    },
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_keeper_nara_harbor_watch",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "keeper_nara",
+      "topic_id": "harbor_watch"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "keeper_nara",
+      "name": "Keeper Nara",
+      "role": "keeper",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [],
+      "affiliation": "ash_cowl",
+      "topics": [
+        {
+          "id": "bell",
+          "text": "The bell beside the ferry is called the harbor bell."
+        },
+        {
+          "id": "harbor_watch",
+          "text": "Guards watch the harbor gate throughout the night."
+        },
+        {
+          "id": "gate_dawn",
+          "text": "The harbor gate opens at dawn."
+        },
+        {
+          "id": "password",
+          "text": "The ash cowl password is sword.",
+          "disclosure": "secret"
+        }
+      ],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

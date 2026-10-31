@@ -1,0 +1,18 @@
+{
+  "command": [
+    "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_gm_retry.py",
+    "tests/test_social_interaction_authority.py",
+    "tests/test_pr_ef_r2_social_authority.py",
+    "-q",
+    "--tb=short",
+    "--basetemp=development/tmp/pr_play_07/ordinary_direct",
+    "--junitxml=artifacts\\pr_play_07\\ordinary_direct.xml",
+    "-k",
+    "not original_captured_failures and not possessive_body_part"
+  ],
+  "exit": 0,
+  "seconds": 5.717999999993481
+}

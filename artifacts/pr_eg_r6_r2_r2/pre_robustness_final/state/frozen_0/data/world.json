@@ -1,0 +1,131 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_selka_opal",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "selka",
+      "topic_id": "opal"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "selka",
+      "name": "Selka",
+      "role": "archivist",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [],
+      "affiliation": "",
+      "topics": [
+        {
+          "id": "opal",
+          "text": "The surveyor maintains the opal astrolabe."
+        },
+        {
+          "id": "pewter",
+          "text": "The glassworker maintains the pewter astrolabe."
+        },
+        {
+          "id": "pier",
+          "text": "Neris owns the west pier."
+        },
+        {
+          "id": "roster",
+          "text": "Someone maintains the roster."
+        },
+        {
+          "id": "skiff",
+          "text": "The skiff departs at noon."
+        },
+        {
+          "id": "secret",
+          "text": "The sealed countersign is sword.",
+          "disclosure": "secret"
+        },
+        {
+          "id": "speech",
+          "text": "Iven told Neris about the sluice: the sluice is damaged."
+        }
+      ],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "iven",
+      "name": "Iven",
+      "role": "surveyor",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [],
+      "affiliation": "",
+      "topics": [],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "neris",
+      "name": "Neris",
+      "role": "clerk",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "aliases": [],
+      "affiliation": "",
+      "topics": [],
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

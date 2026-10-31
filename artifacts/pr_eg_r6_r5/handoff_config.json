@@ -1,0 +1,441 @@
+{
+  "campaign_name": "PR-EG-R6-R5 \u2014 Conversational Pipeline Reliability",
+  "campaign_id": "pr_eg_r6_r5_pipeline_reliability_20261018",
+  "campaign_date": "2026-10-18",
+  "purpose": "End-to-end causal diagnosis of player-facing dialogue loss. No production repair and no PR-EH.",
+  "executive_summary": "**B \u2014 DIAGNOSIS SUPPORTED WITH LIMITATIONS.** Production replies succeed on 59/164 frozen turns (36.0%). Validation is 18/54. Corrections are 0/25. Restricted text was not disclosed. Substituting a host-authorized plan raises validation to 44/54 (I8) and 45/54 with expression off (I10B). Correcting every upstream input and still running authorization reaches 32/54 (I9). Question-only and source-only substitutions lose successes (net -2 and -3); both together gain 8, with 7 only in the combination. Source-id filtering changes nothing (I4 net 0). The loss is in referent bind, witness checks, and question-to-source correspondence. Expression is not the main loss. Human review is pending. No production code was changed.",
+  "objective_status": "B \u2014 DIAGNOSIS SUPPORTED WITH LIMITATIONS",
+  "primary_report": "artifacts/pr_eg_r6_r5/01_EXECUTIVE_SUMMARY.md",
+  "self_contained_review_test": "37 numbered artifacts, frozen corpus hash, raw baseline and paired intervention rows, and manifest hashes.",
+  "changes": {
+    "production": [],
+    "validation": [
+      "Offline diagnostic tests for quotas, gold disclosure limits, and the ignorance rubric."
+    ],
+    "tooling": [
+      "Diagnostic harness, scorer, analyzer, and report writer under experiments/pr_eg_r6_r5."
+    ],
+    "documentation": [
+      "Artifacts 01-37 and a 32-item human review packet marked pending."
+    ]
+  },
+  "testing": {
+    "focused": "tests/test_pr_eg_r6_r5_diagnostic.py: 4 passed.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "164 real-provider baseline turns; 756 validation intervention rows; 54 expression-control calls. 0 restricted disclosures.",
+    "model_runtime_boundary": "gpt-4.1-mini (gpt-4.1-mini-2025-04-14); semantic temperature 0; SDK retries disabled.",
+    "new_regressions": "No production modules were modified.",
+    "pre_existing_failures": "Working tree already had 1765 dirty entries at baseline capture. Full suite not reassessed."
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Human review pending.",
+      "F18 covers 20 of 105 baseline failures.",
+      "Two validation turns never entered the planner.",
+      "c06t06 is PARTIAL with no eligible source.",
+      "I6 on compact payloads patches coverage() only.",
+      "Schema-rejected intervention file is archived and not scored."
+    ],
+    "pre_existing": [
+      "Extensive unrelated working-tree changes predate this cycle.",
+      "Unified semantic planning defaults off; this baseline enabled it as the current information path."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "Adjudicate the 32-item packet.",
+    "Accept or reject the repair order: bind/witness first, joint correspondence second, expression guard third.",
+    "Do not start PR-EH from this packet alone."
+  ],
+  "missing_concepts": [
+    "A measured local patch for bind and named coverage.",
+    "Human adjudication of F18."
+  ],
+  "does_not_prove": [
+    "That a specific patch will reach the I8 rate.",
+    "Production readiness, holdout improvement, or a reason to replace the expression boundary."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R6-R5 and await external review. Do not begin PR-EH.",
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000,
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6_r5/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/02_REPOSITORY_BASELINE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/03_PRODUCTION_PIPELINE_MAP.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/04_INSTRUMENTATION_AUDIT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/05_EVALUATION_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/06_CORPUS_DESIGN.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/07_CONVERSATIONAL_CONTEXT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/08_WORLD_FIXTURES.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/09_GROUND_TRUTH.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/10_FROZEN_PARTITIONS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/11_PRODUCTION_BASELINE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/12_GOLD_INTERVENTION_HARNESS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/13_INTENT_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/14_REFERENT_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/15_QUESTION_PROPOSITION_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/16_SOURCE_RETRIEVAL_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/17_SOURCE_PROPOSITION_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/18_CORRESPONDENCE_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/19_SUFFICIENCY_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/20_AUTHORIZED_PLAN_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/21_COMBINED_UPSTREAM_INTERVENTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/22_EXPRESSION_CONTROL.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/23_PAIRED_RESULTS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/24_INTERACTION_EFFECTS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/25_FIRST_FAILURE_ATTRIBUTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/26_SECURITY_VERIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/27_PLAYER_FACING_QUALITY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/28_INDEPENDENT_EVALUATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/29_HUMAN_REVIEW_PACKET.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/30_PERFORMANCE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/31_BOTTLENECK_CONTRIBUTION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/32_REPAIR_PRIORITIZATION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/33_ARCHITECTURE_DECISION.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/34_REMAINING_UNKNOWNS.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/35_RECOMMENDED_NEXT_CYCLE.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/36_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/37_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/freeze.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/repository_baseline.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/summary.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/first_failures.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/human_review_packet.json",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/baseline.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/interventions.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/expression_control.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/baseline_ledger_collision.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r5/interventions_schema_rejected.jsonl",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r5/__init__.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r5/gold.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r5/score.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r5/run.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r5/analyze.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "experiments/pr_eg_r6_r5/report.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r5_diagnostic.py",
+      "role": "cycle_evidence",
+      "why": "PR-EG-R6-R5 diagnostic evidence or source.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# 29 — Annotation Cost
+
+Human source preparation, extraction review, corrections, role ambiguity resolution and qualifier resolution were not measured: no human reviewer participated. Human minutes/source, minutes/accepted fact, intervention rate and correction frequency are **unavailable**, not zero. Provider processing time is measured in calls/ and performance metrics. Scenario planning only: at 1–3 review minutes/source, 31 eligible records imply 31–93 initial minutes, excluding corrections; this assumption is not observed labor. Campaign authoring burden remains unqualified. Full semantic annotations were not supplied to the runtime provider.

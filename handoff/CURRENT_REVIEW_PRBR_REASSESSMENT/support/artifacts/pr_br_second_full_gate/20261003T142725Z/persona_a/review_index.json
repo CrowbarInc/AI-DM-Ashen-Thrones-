@@ -1,0 +1,799 @@
+[
+  {
+    "n": 1,
+    "player": "I study the still figure’s boots and hands, then scan the mud near the rain barrel for tracks or discarded belongings.",
+    "op": "inspect",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "malformed_target_span",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "consequential_invention"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "consequential_invention"
+    ],
+    "rejected2": [
+      "consequential_invention"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": null,
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 2,
+    "player": "I move to the notice board and closely examine the missing-patrol warning—its date, seal, handwriting, and whether it was posted before or after the tax and curfew notices.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 3,
+    "player": "I approach the gate serjeant and gesture to the warning. “When did the patrol leave, by which route, and what sign—if any—has been recovered since?”",
+    "op": "ask",
+    "target": "Gate Serjeant",
+    "interlocutor": "gate_serjeant",
+    "dimension": "time",
+    "dimensions": [
+      "time"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:established"
+    ],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 3,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 4,
+    "player": "I examine the roster board for the missing patrol’s names, departure time, assigned route, and any later annotations, comparing its writing and dates with the warning notice.",
+    "op": "inspect",
+    "target": "Notice board",
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 5,
+    "player": "I follow the edge of the northwest mud track to the storage crates, searching for bootprints, wagon ruts, broken gear, or guard insignia that differ from the crowd’s fresher traffic.",
+    "op": "unresolved",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 6,
+    "player": "I circle the crates and inspect their sheltered sides, gaps, and muddy bases for scratches, cloth snags, concealed marks, or older impressions preserved from the rain and traffic.",
+    "op": "inspect",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "answer",
+    "ambiguous": true,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "target_not_canonical",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "consequential_invention"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": true,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "regeneration",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": null,
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 7,
+    "player": "I return to the serjeant. “The route by the crates has yielded nothing the rain spared. Please direct me to the guard captain; I want to compare any recent sightings or signals with the roster’s four-day timeline.”",
+    "op": "act",
+    "target": null,
+    "interlocutor": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected": "action_outcome",
+    "ambiguous": false,
+    "binding": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed": null,
+    "bound": null,
+    "entity_id": null,
+    "authority_reasons": [],
+    "fast_path_used": true,
+    "fast_path_abstained": false,
+    "abstention": null,
+    "interpreter": false,
+    "interp_calls": 0,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "consequential_invention"
+    ],
+    "regen": true,
+    "regen_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "consequential_invention"
+    ],
+    "rejected2": [
+      "consequential_invention"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "FAIL",
+    "failing_gates": [
+      "player_intent_addressed"
+    ],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_2a2ef877bd52",
+      "label": "I return to the serjeant. “The route by the crates has yielded nothing the rain spared. Please direct me to the guard captain; I want to compare any recent sigh",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity",
+      "resolution_contract_semantic_preserved"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 8,
+    "player": "“What prevents it—the captain’s absence, restricted entry, or the press at the gate? If I cannot speak with them, tell me who last brought news from the northwest route.”",
+    "op": "unresolved",
+    "target": null,
+    "interlocutor": "gate_serjeant",
+    "dimension": null,
+    "dimensions": [],
+    "expected": "clarification",
+    "ambiguous": true,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "deterministic_fast_path",
+    "validation_status": "abstained",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "Gate Serjeant",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 4,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_2a2ef877bd52",
+      "label": "I return to the serjeant. “The route by the crates has yielded nothing the rain spared. Please direct me to the guard captain; I want to compare any recent sigh",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "incidental_ids": [],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 0,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 9,
+    "player": "I ask the guard tending the roster, “Which patrol member brought that last news, what exactly did they report, and did you personally see them return through this gate?”",
+    "op": "ask",
+    "target": "Gate Serjeant",
+    "interlocutor": "inc_ac5eb02005",
+    "dimension": "content",
+    "dimensions": [
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_incidental",
+    "entity_class": "permitted_bounded_incidental",
+    "proposed": "guard",
+    "bound": "inc_ac5eb02005",
+    "entity_id": "inc_ac5eb02005",
+    "authority_reasons": [
+      "identity:existing_incidental"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "ambiguous_referent",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 1,
+    "attempt1_hard": true,
+    "attempt1_reasons": [],
+    "regen": false,
+    "regen_feedback": null,
+    "attempt2_hard": null,
+    "attempt2_reasons": [],
+    "rejected2": null,
+    "provenance": "initial_generation",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "inc_ac5eb02005",
+      "label": "guard",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_2a2ef877bd52",
+      "label": "I return to the serjeant. “The route by the crates has yielded nothing the rain spared. Please direct me to the guard captain; I want to compare any recent sigh",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:consequence_or_opportunity"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  },
+  {
+    "n": 10,
+    "player": "I return to the serjeant. “You said no word came back, yet the roster guard says a patrol member reported trouble. Which account is correct, and where is that report recorded?”",
+    "op": "ask",
+    "target": "Gate Serjeant",
+    "interlocutor": "gate_serjeant",
+    "dimension": "location",
+    "dimensions": [
+      "location",
+      "content"
+    ],
+    "expected": "answer",
+    "ambiguous": false,
+    "binding": "bound_canonical",
+    "entity_class": "canonical_established",
+    "proposed": null,
+    "bound": "gate_serjeant",
+    "entity_id": null,
+    "authority_reasons": [
+      "identity:discourse"
+    ],
+    "fast_path_used": false,
+    "fast_path_abstained": true,
+    "abstention": "insufficient_discourse_context",
+    "interpreter": true,
+    "interp_calls": 1,
+    "proposal_source": "model_assisted",
+    "validation_status": "validated",
+    "gen_calls": 2,
+    "attempt1_hard": false,
+    "attempt1_reasons": [
+      "wrong_interlocutor"
+    ],
+    "regen": true,
+    "regen_feedback": "The previous attempt was rejected for: wrong_interlocutor. The response assigns the answer to the wrong speaker. Preserve the bound interlocutor. Do not answer as a different person, and do not turn an observation into unrelated NPC speech. Keep the same resolution contract, operation, target, and dimension. Answer again. Do not rewrite a name into the previous sentence.",
+    "attempt2_hard": false,
+    "attempt2_reasons": [
+      "wrong_interlocutor"
+    ],
+    "rejected2": [
+      "wrong_interlocutor"
+    ],
+    "provenance": "safe_nonresolution",
+    "exact": true,
+    "semantic": true,
+    "immutable": true,
+    "eval": "PASS",
+    "failing_gates": [],
+    "active_interlocutor": {
+      "id": "gate_serjeant",
+      "label": "guard",
+      "kind": "interlocutor",
+      "epistemic_status": null,
+      "turn_index": 11,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "epistemic_status": null,
+      "turn_index": 5,
+      "source": "resolution_contract"
+    },
+    "previous_action": {
+      "id": "rc_2a2ef877bd52",
+      "label": "I return to the serjeant. “The route by the crates has yielded nothing the rain spared. Please direct me to the guard captain; I want to compare any recent sigh",
+      "kind": "act",
+      "epistemic_status": null,
+      "turn_index": 8,
+      "source": "resolution_contract"
+    },
+    "actionable_lead": null,
+    "unauth_gen": [],
+    "unauth_retry": [],
+    "unauth_emit": [],
+    "tags": [
+      "scene_momentum:new_information",
+      "interaction_obligation_terminal_preserved"
+    ],
+    "incidental_ids": [
+      null
+    ],
+    "npc_ids": [
+      "gate_guard",
+      "gate_serjeant",
+      "tavern_runner"
+    ],
+    "clue_ids": [
+      "notice_patrol_route"
+    ],
+    "ledger_entry_count": 1,
+    "ledger_rejected_count": 0
+  }
+]

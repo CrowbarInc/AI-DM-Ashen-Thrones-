@@ -1,0 +1,52 @@
+{
+  "case_id": "s22q4",
+  "family": "s22",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "c34a0372bba0b82bc23debce8a4803bb75b5f249f52db935c8042d65c0fec2a8",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "The regent commuted Dar's exile to service in the archive for one year"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s22"
+    ],
+    "answered_arguments": [
+      "who commuted the exile"
+    ],
+    "missing_arguments": [
+      "what crime did Dar commit"
+    ],
+    "conflict": false,
+    "reason": "The fact explicitly states who commuted the exile and the new condition of the exile, but does not mention the crime Dar committed."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": false,
+    "content_correct": false,
+    "qualifier_preserved": false,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

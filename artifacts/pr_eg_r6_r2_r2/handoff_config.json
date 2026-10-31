@@ -1,0 +1,1486 @@
+{
+  "campaign_id": "pr_eg_r6_r2_r2_semantic_operations_20261017",
+  "campaign_name": "PR-EG-R6-R2-R2 \u2014 Semantic Operation Coherence and Multi-Role Propositions",
+  "campaign_date": "2026-10-17",
+  "purpose": "Repair and qualify host-validated semantic operations while preserving disclosure and delivery authority.",
+  "objective_status": "C \u2014 SEMANTIC OPERATIONS BELOW ACCEPTANCE",
+  "executive_summary": "C \u2014 SEMANTIC OPERATIONS BELOW ACCEPTANCE. Added named propositions, witnessed bounded role transformations, explicit malformed-plan handling and preserved host authority. 68/68 new controlled cases pass. Regression 485 passed / 19 failed: five inherited, fourteen explained status/target-contract expectation changes. Fresh primary 150 turns / 10 conversations; matched baseline 45 turns; predecessor supplements 89 turns. Explicit local classification 130/150, dependent binding 25/74, false clarification 16/150; optimistic correction/followup success bounds 5/23 and 20/51. Automated grading overcredits failures and is not reliable acceptance evidence; matched relevance and sufficiency improvement remain unverified. Observed integrity checks and separate-process save/load pass within their documented scope. Keep the existing feature gate default off.",
+  "self_contained_review_test": "Structural package verification: ZIP CRC, manifest/source hashes, 43-artifact presence, UTF-8 summary/manifest agreement, excluded state/credentials, source/holdout freezes. All pass. This is not independent human review.",
+  "changes": {
+    "production": [
+      "game/semantic_operations.py",
+      "game/conversational_referents.py",
+      "game/semantic_correspondence.py",
+      "game/unified_semantic_planning.py"
+    ],
+    "validation": [
+      "tests/test_pr_eg_r6_r2_r2_operations.py"
+    ],
+    "tooling": [
+      "tools/qualify_pr_eg_r6_r2_r2.py",
+      "tools/audit_pr_eg_r6_r2_r2.py",
+      "tools/assess_pr_eg_r6_r2_r2.py",
+      "tools/probe_pr_eg_r6_r2_r2_restart.py",
+      "tools/write_pr_eg_r6_r2_r2_review.py",
+      "tools/local_pr_eg_r6_r2_r2_assessment.py"
+    ],
+    "documentation": [
+      "43 numbered review artifacts."
+    ]
+  },
+  "testing": {
+    "focused": "68/68 new cases pass.",
+    "broader": "485 passed / 19 failed; 5 inherited, 14 explained changed-contract expectations.",
+    "full_suite": "Not run.",
+    "runtime_validation": "150 primary turns / 10 conversations; 45 matched baseline turns; 89 predecessor supplement turns.",
+    "model_runtime_boundary": "Real provider, production HTTP. Controlled tests, pilots and automated grading reported separately.",
+    "new_regressions": "['tests.test_pr_eg_r6_r2_grounding::test_forged_authority_or_entity_rejected[change0]', 'tests.test_pr_eg_r6_r2_grounding::test_forged_authority_or_entity_rejected[change1]', 'tests.test_pr_eg_r6_r2_grounding::test_forged_authority_or_entity_rejected[change2]', 'tests.test_pr_eg_r6_r2_grounding::test_bad_prior_target_cannot_launder_history[correction]', 'tests.test_pr_eg_r6_r2_grounding::test_bad_prior_target_cannot_launder_history[follow_up]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[forged]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[stale]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[speaker]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[field]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[operation]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed]', 'tests.test_pr_eg_r6_r2_r1_referents::test_untrusted_operations_fail_closed_without_losing_focus[substitution]', 'tests.test_pr_eg_r6_r2_r1_referents::test_unqualified_historical_id_cannot_override_focus']",
+    "pre_existing_failures": "['tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C01]', 'tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C02]', 'tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C03]', 'tests.test_pr_eg_r3_r1_expression_semantics::test_t19_t23_answer_sufficiency_and_refusal', 'tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance']"
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Provider classification, target choice and source-role interpretation remain fallible. Current-evidence spans do not independently prove unrestricted semantic entailment. Relationship-specific requested-role names can complicate relationship replacement and source-role alignment. Existing scope prefilter can miss unfamiliar bare corrections. Named-role ontology alignment across independent source interpretations can fail. Historical speech clarification uses bounded question context but does not add a new verified-history retrieval path. Multiple direct sources can still trigger generic clarification. Only finite state projections are measured. New holdouts are internally authored; automated grading shares the configured model and can itself err. Fourteen existing assertions now disagree with deliberate noncritical contract changes. The stricter historical-ID rejection is a design choice, not mandated by the no-legacy-topic-override invariant; an explicitly traced host recovery deserves external review. Keep gate off."
+    ],
+    "pre_existing": [
+      "Five inherited selected-suite failures."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "External review of below-acceptance behavior and fourteen explained contract-expectation failures."
+  ],
+  "does_not_prove": [
+    "A/B qualification, independent human grading, externally authored holdouts, unrestricted state/disclosure integrity, or full-suite health."
+  ],
+  "recommended_next_step": "Stop after PR-EG-R6-R2-R2. Await external review of failed transcripts, source-contract coherence and explained regression identities. Do not begin PR-EH or tune against the now-exposed holdouts.",
+  "primary_report": "artifacts/pr_eg_r6_r2_r2/01_EXECUTIVE_SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/02_REPOSITORY_AND_BASELINE_STATE.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/03_FAILURE_REPRODUCTION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/04_CURRENT_CONTRACT_AUDIT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/05_SEMANTIC_OPERATION_TAXONOMY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/06_OPERATION_CLASSIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/07_MULTI_ROLE_PROPOSITION_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/08_ROLE_REPRESENTATION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/09_ROLE_IDENTITY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/10_CORRECTION_TRANSFORMATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/11_CORRECTION_VALIDATION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/12_ROLE_REVERSAL.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/13_SUBJECT_OBJECT_CORRECTIONS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/14_RELATIONSHIP_CORRECTIONS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/15_FOLLOW_UP_OPERATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/16_FOLLOW_UP_BINDING.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/17_FOLLOW_UP_AFTER_UNCERTAINTY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/18_FOLLOW_UP_AFTER_PARTIAL_ANSWER.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/19_ANSWER_STATUS_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/20_ANSWER_STATUS_VALIDATION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/21_MALFORMED_PROVIDER_OUTPUT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/22_BOUNDED_RECOVERY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/23_CLARIFICATION_DISCIPLINE.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/24_PROVIDER_INPUT_OUTPUT_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/25_HOST_VALIDATION_ORDER.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/26_REFERENT_PERSISTENCE.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/27_LEGACY_ROUTING.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/28_CONTROLLED_TESTS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/29_FROZEN_HOLDOUTS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/30_ADVERSARIAL_QUALIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/31_MATCHED_BASELINE_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/32_FRESH_PROVIDER_CONVERSATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/33_INDEPENDENT_ASSESSMENT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/34_TURN_LEVEL_QUALIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/35_DIALOGUE_QUALITY_AND_PLAYABILITY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/36_PERFORMANCE.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/37_REGRESSION_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/38_ACCEPTANCE_GATES.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/39_FAILURE_ATTRIBUTION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/40_REMAINING_LIMITATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/41_RECOMMENDED_NEXT_ACTION.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/42_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/43_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/acceptance_gates.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/adversarial_contract_results.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_grading_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_head.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_sources/game/conversational_continuity.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_sources/game/conversational_referents.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_sources/game/dialogue_authority.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_sources/game/immutable_valid_response.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_sources/game/semantic_correspondence.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_sources/game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_tests_unsandboxed.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/baseline_unsandboxed_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/caller_inventory.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/campaign_request.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/controlled_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/controlled_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/conversational_referents_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/failure_attribution.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/final_source_freeze.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/focus_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/focus_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/focus_tests_unsandboxed.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/freeze.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/grading_blind_map.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/grading_completed_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/grading_criteria.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/grading_final_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/grading_more_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/grading_payloads.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/holdout_results.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/independent_grades.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/integrity_results.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/late_validation_audit.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/local_assessment.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/matched_comparison.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/performance.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_2_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_3_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_4_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_5/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_5/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_5/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_5/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_5/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_5/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_7/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_7/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_7/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_7/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_7/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_7/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pilot_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_final/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_final/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_final/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_final/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_final/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_predecessors/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_predecessors/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_predecessors/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_predecessors/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_predecessors/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_predecessors/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/pre_robustness_source_freeze.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/predecessors_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/preimplementation_contract_audit.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/preimplementation_failures.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/preimplementation_source_inventory.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/quality_metrics.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/refinal_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/regression_comparison.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/regression_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/regression_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/repository_status.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/repredecessors_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/restart/result.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/restart/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/restart/usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/restart_console.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/robustness_refreeze.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/runtime_probe.txt",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/semantic_contract.md",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/semantic_correspondence_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/semantic_operations_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/turn_scores.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/unified_semantic_planning_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/verdict.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/verified_predecessor_metrics.json",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/api.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_referents.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_correspondence.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_operations.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/social.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/storage.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_dialogue_quality.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r1_continuity.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_r2_reference_eligibility.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_speech_adoption.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_expressive_dialogue.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_r1_expression_semantics.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r4_r1_delivery_integrity.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r1_disclosure_boundary.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r1_r1_provenance.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r2_grounding.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r2_r1_referents.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r2_r2_operations.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_social_question_relevance_answer_selection.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/assess_pr_eg_r6_r2_r2.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/audit_pr_eg_r6_r2_r2.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/local_pr_eg_r6_r2_r2_assessment.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/probe_pr_eg_r6_r2_r2_restart.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r2_r1.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r2_r2.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/write_pr_eg_r6_r2_r2_review.py",
+      "role": "cycle_evidence",
+      "why": "Semantic operation source or preserved qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r2/evidence_inventory.json",
+      "role": "inventory",
+      "why": "Complete hashed evidence inventory."
+    }
+  ],
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000
+}

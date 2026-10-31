@@ -1,0 +1,200 @@
+{
+  "campaign_id": "pr-br-continuation-14",
+  "campaign_name": "PR-BR Continuation 14 — Resolution-Content Preservation & Authoritative Best-Candidate Emission",
+  "campaign_date": "2026-09-30",
+  "purpose": "Require a later candidate to preserve the resolution content of the current best safe answer, and make that best answer the emitted line unless it is explicitly invalidated. Six focused live turns. No smoke. No 4x10 gate. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Equal rank is no longer enough to replace a safe answer. Procedure, use, and confidence each keep their own resolution on the six recorded Continuation 13 replays. Deterministic band: 316 passed, 0 failed. Live turns: 6. Interpretation calls: 3. Generation calls: 6. Evaluator model calls: 0. Retries: 0. Correct contracts 5/6. Initial manual PASS 6/6. Final manual PASS 4/6. Semantic degradations 2. best_safe emission mismatches 0. Evaluator PASS 4/6 with 1 false PASS and 1 false FAIL. READY FOR INDEPENDENT 10-TURN SMOKE: NO. READY FOR FULL SYNTHETIC GATE: NO. HUMAN PLAYTEST: NOT AUTHORIZED. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff, uncommitted.",
+  "primary_report": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [
+      "game/resolution_contract.py compares resolution coverage, not rank alone, and emits best_safe_candidate unless that text was explicitly invalidated.",
+      "game/interpretation_proposal.py canonicalizes dimension aliases, rejects unknown dimensions, and abstains when the fast path omits an obvious dimension.",
+      "game/playability_eval.py fails a satisfied line that does not cover the contract dimensions.",
+      "game/perception_grounding.py and game/narration_state_consistency.py invalidate a candidate that grounding replaced, without discarding a social answer that already resolves the contract.",
+      "game/api_turn_support.py does not replace a referenced-surface or perception grounding line with the contract fallback."
+    ],
+    "validation": [
+      "tests/test_pr_br_continuation14_resolution_content.py replays all six Continuation 13 turns and covers equal-rank, superset, authority, and evaluator fixtures.",
+      "Broader band: 316 passed, 0 failed."
+    ],
+    "tooling": [
+      "tools/run_pr_br_continuation14_live.py runs at most six focused live turns."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md Continuation 14 section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_continuation14 live transcript, selection traces, manual review, junit, and provenance."
+    ]
+  },
+  "testing": {
+    "focused": "Continuation 14 resolution-content tests, including all six recorded Continuation 13 replays, passed inside the 316-test band.",
+    "broader": "316 passed, 0 failed, 0 skipped. Junit artifacts/pr_br_continuation14/junit.xml.",
+    "full_suite": "Not run.",
+    "runtime_validation": "6 completed live turns. 3 fast-path. 3 interpretation calls. No smoke. No 4x10 gate. No repair rerun.",
+    "model_runtime_boundary": "3 interpretation calls. 6 generation calls. 0 evaluator model calls. 0 generation retries. 0 aborted.",
+    "new_regressions": "None in the final band. An intermediate grounding restoration was corrected before the live run.",
+    "pre_existing_failures": "None in this band."
+  },
+  "decisions_requiring_human_review": [
+    "Do not authorize independent smoke. Two useful generated answers were still replaced after generation.",
+    "PR-BR remains open. Do not start PR-BS. Do not run the 4x10 gate. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "Turn 5 left a content question at dimension None, so a Thoran fact replaced the traveler answer at equal rank.",
+      "Turn 2 replaced a useful clarification with a generic time inability.",
+      "Turn 4's use answer was emitted and then false-failed because it also says recently."
+    ],
+    "pre_existing": [
+      "The omitted-index unscoped nominal bridge remains for callers that do not pass a catalog."
+    ]
+  },
+  "missing_concepts": [
+    "What travelers have been saying should carry a content dimension.",
+    "A clarifying question should outrank a generic inability at the same nonresolution rank."
+  ],
+  "does_not_prove": [
+    "Does not prove 10-turn smoke health.",
+    "Does not prove 4x10 synthetic-gate health.",
+    "Does not authorize a human playtest."
+  ],
+  "recommended_next_step": "Give content questions a dimension, and do not let a generic inability replace a clarification at the same rank. Do not start independent smoke. Do not start PR-BS.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_typed_resolution_contract_and_discourse_state.md",
+      "role": "audit",
+      "why": "Continuation 14 record.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "game/resolution_contract.py",
+      "role": "selection",
+      "why": "Resolution coverage, equal-rank guard, best-safe authority, and explicit invalidation.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/interpretation_proposal.py",
+      "role": "dimensions",
+      "why": "Dimension aliases, unknown-dimension rejection, and fast-path abstention.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/playability_eval.py",
+      "role": "evaluator",
+      "why": "Fails a satisfied line that misses the requested resolution.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/perception_grounding.py",
+      "role": "grounding",
+      "why": "Grounding invalidates the replaced candidate and does not discard a keeping social answer.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/narration_state_consistency.py",
+      "role": "grounding",
+      "why": "A stub destination line invalidates the invented text.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/api_turn_support.py",
+      "role": "emission",
+      "why": "Contract fallback does not erase a grounding line.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/social.py",
+      "role": "social",
+      "why": "Clue-frame replacement still reports the precedence reason.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation14_resolution_content.py",
+      "role": "tests",
+      "why": "Six recorded replays, variants, equal-rank, superset, unsafe, and evaluator fixtures.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_br_continuation13_semantic_preservation.py",
+      "role": "tests",
+      "why": "Social-resolution and earlier preservation regressions.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/junit.xml",
+      "role": "regression",
+      "why": "316 passed, 0 failed.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/manual_review.md",
+      "role": "manual_review",
+      "why": "Human-DM review of the six live turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/provenance.json",
+      "role": "provenance",
+      "why": "HEAD and cost bounds.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/20261001T013504Z/transcript.md",
+      "role": "transcript",
+      "why": "Focused live transcript.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/20261001T013504Z/turns.json",
+      "role": "traces",
+      "why": "Per-turn contracts, coverage, and candidate transitions.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/20261001T013504Z/summary.json",
+      "role": "cost",
+      "why": "Call counts.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/20261001T013504Z/generation_calls.json",
+      "role": "traces",
+      "why": "Generated candidates before final emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_continuation14/20261001T013504Z/interpretation_calls.json",
+      "role": "traces",
+      "why": "Structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/run_pr_br_continuation14_live.py",
+      "role": "harness",
+      "why": "Six-turn cap and the live shapes.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    }
+  ]
+}

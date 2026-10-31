@@ -1,0 +1,78 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T09:55:11.097695Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T09:55:11.097695Z",
+    "campaign_started": true,
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "I teleport to the moon.",
+          "delivered_text": "I cannot carry that out under the current scene and rules.",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": false
+        },
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Why not?",
+          "delivered_text": "I cannot carry that out under the current scene and rules. That establishes the observation or result; its cause has not been established.",
+          "subject": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": true,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "ANSWER",
+        "owner": "GM",
+        "purpose": "EXPLANATION",
+        "subject": "Why not?",
+        "response": "I cannot carry that out under the current scene and rules. That establishes the observation or result; its cause has not been established.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "f8f1219d2d72a5a67559561478e7aca0a7c05b0ecdd94df0ae09cbc78338fad7",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "case_id": "s06q0",
+  "family": "s06",
+  "partition": "development",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "36e98f5ee50f382a56e1c9dd3e87b597a05abab3d1320a03f0e6cd2827e98f78",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Neri ferries passengers across the inlet"
+    ],
+    "qualifiers": [
+      "unless the red flag is raised",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s06"
+    ],
+    "answered_arguments": [
+      "agent",
+      "patient",
+      "route"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that Neri ferries passengers across the inlet, directly answering the question with the qualifier 'unless the red flag is raised' and under npc knowledge scope."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

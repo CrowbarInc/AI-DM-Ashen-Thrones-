@@ -1,0 +1,114 @@
+{
+  "C1": {
+    "status": "PASS",
+    "evidence": "before_repair_replay.json; baseline.xml: historical production replay returned 422"
+  },
+  "C2": {
+    "status": "PASS",
+    "evidence": "Historical unchanged JSON remains 422 after guidance; conservative_generation.json returns 200 with source sentence"
+  },
+  "C3": {
+    "status": "PASS",
+    "evidence": "Both PR-PLAY-08 and 09 unchanged parsed captures replay with 200"
+  },
+  "C4": {
+    "status": "PASS",
+    "evidence": "C4.json: valid claim with source reference"
+  },
+  "C5": {
+    "status": "PASS_WITH_CONTRACT_CLARIFICATION",
+    "evidence": "C5.json: unsupported fact without evidence rejected; source ID is not mandatory if authored text matches"
+  },
+  "C6": {
+    "status": "PASS_WITH_CONTRACT_CLARIFICATION",
+    "evidence": "C6.json: nonexistent ID plus unsupported text rejected; source_id_fallback.json proves invalid ID alone is not fatal with exact authored evidence"
+  },
+  "C7": {
+    "status": "PASS",
+    "evidence": "C7.json: contradictory authored claim rejected"
+  },
+  "C8": {
+    "status": "PASS",
+    "evidence": "C8.json: existing authored environmental realization accepted"
+  },
+  "C9": {
+    "status": "PASS",
+    "evidence": "C9.json: sensory incidental accepted; hidden_faction regression includes bounded proposal acceptance/promotion controls"
+  },
+  "C10": {
+    "status": "PASS",
+    "evidence": "C10.json: unauthorized action outcome rejected"
+  },
+  "C11": {
+    "status": "PASS",
+    "evidence": "C11.json: unauthorized mechanical/resource decision rejected"
+  },
+  "C12": {
+    "status": "PASS",
+    "evidence": "C12.json: unauthorized consequential gate/faction change rejected"
+  },
+  "C13": {
+    "status": "PASS",
+    "evidence": "C13.json and narrative-authority/hidden regressions"
+  },
+  "C14": {
+    "status": "PASS",
+    "evidence": "C14.json: established authored provenance requested in proposal rejected"
+  },
+  "C15": {
+    "status": "PASS",
+    "evidence": "C15.json: exact authored text with empty premises and no source ID accepted"
+  },
+  "C16": {
+    "status": "PASS",
+    "evidence": "C16.json and mixed-opening endpoint rollback/retry test"
+  },
+  "C17": {
+    "status": "PASS",
+    "evidence": "C17.json: both invalid declaration IDs captured"
+  },
+  "C18": {
+    "status": "PASS",
+    "evidence": "Historical endpoint replay before==after gameplay snapshot; PR04 rollback controls"
+  },
+  "C19": {
+    "status": "PASS",
+    "evidence": "Accepted endpoint replay advances one turn/log; PR04 exactly-once controls"
+  },
+  "C20": {
+    "status": "PASS",
+    "evidence": "Mixed-opening test fails without progression then succeeds on explicit new Start"
+  },
+  "C21": {
+    "status": "PASS",
+    "evidence": "Accepted historical replay repeat returns 409 and no extra transport dispatch"
+  },
+  "C22": {
+    "status": "PASS",
+    "evidence": "PR04 and PR10 concurrent endpoint tests pass in diagnostics/overlay lanes"
+  },
+  "C23": {
+    "status": "PARTIAL_EVIDENCE_LIMIT",
+    "evidence": "Original capture bytes hashed and copied unchanged; parsed JSON equal. Original provider wire bytes and original request payload were not captured; cannot claim byte-exact transport replay."
+  },
+  "C24": {
+    "status": "PASS",
+    "evidence": "Pytest live-model guard, SDK synthetic transport, H15/G23 external socket refusal controls"
+  },
+  "C25": {
+    "status": "PASS",
+    "evidence": "Existing nested decision audit plus declaration_analysis.json and lexical_failure.json identify accepted declarations and sole narration rule"
+  },
+  "C26": {
+    "status": "PASS",
+    "evidence": "Explicit export selection, no environment dumps, configured-secret scan and ZIP scan"
+  },
+  "C27": {
+    "status": "PASS",
+    "evidence": "Overlay lane including O1-O15, production replay, rollback and concurrency"
+  },
+  "C28": {
+    "status": "PASS_WITH_EXISTING_LIMIT",
+    "evidence": "Gameplay HTTP synthetic pipeline proceeds past opening through T1-T4 and safely skips T5 at unchanged six-request ceiling; no all-five completion claim"
+  }
+}

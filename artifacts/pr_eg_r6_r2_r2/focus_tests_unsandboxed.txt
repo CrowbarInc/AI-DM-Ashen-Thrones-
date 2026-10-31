@@ -1,0 +1,268 @@
+........................................................................ [ 51%]
+...FFFFFFFF..............F..........................F...............     [100%]
+================================== FAILURES ===================================
+_____ test_untrusted_operations_fail_closed_without_losing_focus[forged] ______
+
+attack = 'forged'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+_ test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation] _
+
+attack = 'cross_conversation'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+______ test_untrusted_operations_fail_closed_without_losing_focus[stale] ______
+
+attack = 'stale'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+_____ test_untrusted_operations_fail_closed_without_losing_focus[speaker] _____
+
+attack = 'speaker'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+______ test_untrusted_operations_fail_closed_without_losing_focus[field] ______
+
+attack = 'field'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+____ test_untrusted_operations_fail_closed_without_losing_focus[operation] ____
+
+attack = 'operation'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+___ test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed] ___
+
+attack = 'unwitnessed'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+__ test_untrusted_operations_fail_closed_without_losing_focus[substitution] ___
+
+attack = 'substitution'
+
+    @pytest.mark.parametrize('attack', ['forged', 'cross_conversation', 'stale', 'speaker', 'field', 'operation', 'unwitnessed', 'substitution'])
+    def test_untrusted_operations_fail_closed_without_losing_focus(attack):
+        session, old = seeded('unknown');p = correction(old)
+        if attack == 'forged':p['referent_operation']['target_referent_id'] = 'invented'
+        if attack == 'cross_conversation':p['referent_operation']['target_referent_id'] = seeded()[1]['referent_id']
+        if attack == 'stale':
+            session['conversational_context'][refs.KEY]['records'][0]['correction_status'] = 'corrected'
+        if attack == 'speaker':
+            p['addressee_id'] = 'oren'
+        if attack == 'field':p['referent_operation']['changed_fields'] = ['predicate']
+        if attack == 'operation':p['referent_operation']['operation'] = 'grant_truth'
+        if attack == 'unwitnessed':p['request_proposition']['object_evidence'] = 'unseen ledger'
+        if attack == 'substitution':p['request_proposition']['predicate'] = 'invent'
+        before = copy.deepcopy(refs.state(session))
+        text = 'Oren, I meant the night ledger.' if attack == 'speaker' else 'I meant the night ledger.'
+        locked = resolve(session, p, text=text)
+>       assert locked['response_kind'] == 'clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_r1_referents.py:211: AssertionError
+____________ test_unqualified_historical_id_cannot_override_focus _____________
+
+    def test_unqualified_historical_id_cannot_override_focus():
+        session, first = seeded()
+        deliver(session,resolve(session,question(prop(object='night ledger',object_evidence='night ledger')),
+            text='Mara, who keeps the night ledger?'),2)
+        locked=resolve(session,follow(first),text='Who told you?')
+>       assert locked['bound_referent_id']==refs.active(session)['referent_id']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'bound_referent_id'
+
+tests\test_pr_eg_r6_r2_r1_referents.py:323: KeyError
+______________ test_forged_authority_or_entity_rejected[change0] ______________
+
+change = {'canonical_fact': 'invented'}
+
+    @pytest.mark.parametrize('change',[
+     {'canonical_fact':'invented'},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'phantom','reference':'Sable','evidence':'Sable'}]},
+     {'entity_roles':[{'role':'mentioned_npc','entity_id':'oren','reference':'Oren','evidence':'Oren'}]},
+    ])
+    def test_forged_authority_or_entity_rejected(change):
+        plan=proposal();plan.update(change)
+        p=ask(plan)
+>       assert p['response_kind']=='clarification'
+E       AssertionError: assert 'unknown' == 'clarification'
+E         
+E         - clarification
+E         + unknown
+
+tests\test_pr_eg_r6_r2_grounding.py:154: AssertionError
+============================== warnings summary ===============================
+tests/test_pr_eg_r6_r2_r1_referents.py::test_save_load_preserves_identity_and_next_revision
+  C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[forged]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[cross_conversation]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[stale]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[speaker]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[field]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[operation]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[unwitnessed]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_untrusted_operations_fail_closed_without_losing_focus[substitution]
+FAILED tests/test_pr_eg_r6_r2_r1_referents.py::test_unqualified_historical_id_cannot_override_focus
+FAILED tests/test_pr_eg_r6_r2_grounding.py::test_forged_authority_or_entity_rejected[change0]
+10 failed, 130 passed, 1 warning in 3.02s

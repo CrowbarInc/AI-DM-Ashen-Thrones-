@@ -1,0 +1,84 @@
+.FFFFFFFF....F.......E...E.........                                      [100%]
+=================================== ERRORS ====================================
+_____ ERROR at setup of test_scenario_and_inherited_limits_cannot_expand ______
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_08\\harness'
+_________________ ERROR at setup of test_secret_log_redaction _________________
+..\..\..\..\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1312: in mkdir
+    os.mkdir(self, mode)
+E   FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\development\\tmp\\pr_play_08\\harness'
+================================== FAILURES ===================================
+_____ test_failure_matrix[H2-truncation-provider_output_limit_exhaustion] _____
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'provider_out...it_exhaustion'
+E     
+E     - provider_output_limit_exhaustion
+E     + state_integrity_violation
+__________ test_failure_matrix[H3-invalid_json-json_parsing_failure] __________
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'json_parsing_failure'
+E     
+E     - json_parsing_failure
+E     + state_integrity_violation
+________ test_failure_matrix[H4-envelope-structured_envelope_failure] _________
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'structured_envelope_failure'
+E     
+E     - structured_envelope_failure
+E     + state_integrity_violation
+________ test_failure_matrix[H5-semantic-semantic_validation_failure] _________
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'semantic_validation_failure'
+E     
+E     - semantic_validation_failure
+E     + state_integrity_violation
+___ test_failure_matrix[H6-safe_nonresolution-semantic_validation_failure] ____
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'semantic_validation_failure'
+E     
+E     - semantic_validation_failure
+E     + state_integrity_violation
+____________ test_failure_matrix[H7-exception-provider_exception] _____________
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'provider_exception'
+E     
+E     - provider_exception
+E     + state_integrity_violation
+_______ test_failure_matrix[H8-admission-provider_admission_rejection] ________
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'state_integrity_violation' == 'provider_admission_rejection'
+E     
+E     - provider_admission_rejection
+E     + state_integrity_violation
+___________________ test_H9_failed_opening_preserves_state ____________________
+tests\test_automated_playtest.py:58: in test_H9_failed_opening_preserves_state
+    assert result['state_comparison']['integrity'] is True
+E   assert False is True
+_________________________ test_H14_missing_diagnostic _________________________
+tests\test_automated_playtest.py:113: in test_H14_missing_diagnostic
+    assert result['verdict'] == 'INCONCLUSIVE'
+E   AssertionError: assert 'FAIL' == 'INCONCLUSIVE'
+E     
+E     - INCONCLUSIVE
+E     + FAIL
+=========================== short test summary info ===========================
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H2-truncation-provider_output_limit_exhaustion]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H3-invalid_json-json_parsing_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H4-envelope-structured_envelope_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H5-semantic-semantic_validation_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H6-safe_nonresolution-semantic_validation_failure]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H7-exception-provider_exception]
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H8-admission-provider_admission_rejection]
+FAILED tests/test_automated_playtest.py::test_H9_failed_opening_preserves_state
+FAILED tests/test_automated_playtest.py::test_H14_missing_diagnostic - Assert...
+ERROR tests/test_automated_playtest.py::test_scenario_and_inherited_limits_cannot_expand
+ERROR tests/test_automated_playtest.py::test_secret_log_redaction - FileNotFo...
+9 failed, 24 passed, 2 errors in 33.94s

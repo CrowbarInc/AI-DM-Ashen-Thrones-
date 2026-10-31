@@ -1,0 +1,25 @@
+--- entry/game/api.py
++++ final/game/api.py
+@@ -6139,6 +6139,9 @@
+ @app.post('/api/start_campaign')
+ def start_campaign(request: Request):
+     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
++    from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
++    if playtest_stop_reason():
++        return JSONResponse(status_code=409, content={"ok": False, "status": "blocked", "error": PLAYTEST_STOP_MESSAGE})
+     try:
+         ui_mode = resolve_requested_ui_mode(request)
+         assert_mode_allows_runtime_action(ui_mode)
+@@ -6387,6 +6390,12 @@
+     _mark_turn_started()
+     reset_live_interpretation_consumed()
+     mode_decision = _resolve_communication_mode(req)
++    from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
++    if playtest_stop_reason():
++        return _live_interpretation_block_response(req, mode_decision, {
++            "reason": "playtest_stopped", "player_facing_text": PLAYTEST_STOP_MESSAGE,
++            "tags": ["provider_budget_refused", "non_mutating"], "provider_requests": [],
++        })
+     original_player_text = mode_decision.original_text
+     if mode_decision.conflict:
+         return _communication_mode_conflict_response(req, mode_decision)

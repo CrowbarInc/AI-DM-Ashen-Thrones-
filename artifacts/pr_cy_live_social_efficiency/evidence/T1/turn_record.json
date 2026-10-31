@@ -1,0 +1,772 @@
+{
+  "turn": "T1",
+  "player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+  "http_status": 200,
+  "error": null,
+  "halt_after": null,
+  "severe_mutations": [],
+  "wall_seconds": 4.178,
+  "trace": {
+    "player_facing_text": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+    "gm_tags": [],
+    "selected_resolver_hits": [
+      {
+        "path": "$.session.debug_traces[18].selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": "$.session.debug_traces[18].resolution.metadata.selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": "$.debug_traces[18].selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": "$.debug_traces[18].resolution.metadata.selected_resolver",
+        "value": "social"
+      },
+      {
+        "path": "$.resolution.metadata.selected_resolver",
+        "value": "social"
+      }
+    ],
+    "response_envelope": "narration_only",
+    "provider_context_projection": {
+      "mode": "harmless_social_incidental_dialogue_v1",
+      "selected": true,
+      "reason": "ordinary social ask uses narration-only incidental_dialogue with one grounded addressee and no authorized state mutation",
+      "retained_authority_surfaces": [
+        "player_input",
+        "scene",
+        "active_interlocutor",
+        "dialogue_social_plan",
+        "speaker_selection",
+        "selected_conversational_memory",
+        "recent_log",
+        "response_policy",
+        "resolution_contract",
+        "gm_resolution_decision",
+        "decision_facing_answer_recipe",
+        "narration_visibility"
+      ],
+      "omitted_sections": [
+        "interlocutor_lead_behavior_hints",
+        "opening_curated_facts",
+        "opening_inputs_are_curated",
+        "opening_narration_obligations",
+        "opening_scene_realization",
+        "opening_selector_selected_facts",
+        "opening_selector_source_used",
+        "scene_advancement",
+        "transition",
+        "world_progression_summary"
+      ],
+      "compacted_sections": [
+        "mechanical_resolution",
+        "narrative_plan",
+        "turn_packet"
+      ]
+    },
+    "active_interlocutor": {
+      "npc_id": "guard_captain",
+      "raw_interaction_target_id": "guard_captain",
+      "display_name": "Guard Captain",
+      "origin_kind": "npc",
+      "stance_toward_player": "neutral",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "affiliation": "cinderwatch",
+      "current_agenda": "patrol_gate",
+      "promoted_from_actor_id": null
+    },
+    "recent_log": [],
+    "operation": null,
+    "interlocutor_id": null,
+    "validation": {
+      "regeneration_invoked": null,
+      "regeneration_feedback": null,
+      "hard_validation_attempt_1": {
+        "hard_valid": true,
+        "reasons": [],
+        "soft_flags": [],
+        "text": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons."
+      },
+      "hard_validation_attempt_2": null,
+      "accepted_attempt": 1,
+      "accepted_text": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+      "accepted_authority_result": "accepted",
+      "accepted_provenance": "initial_generation"
+    },
+    "compact_classification": null,
+    "compact_resolution_path": null,
+    "interaction_after": null,
+    "provider_request_count": 1,
+    "generation_count": 1,
+    "retry_count": 0,
+    "provider_candidates": [
+      {
+        "index": 1,
+        "kind": "generation",
+        "retry_attempt": 0,
+        "retry_reason": null,
+        "response_model": "gpt-4.1-mini-2025-04-14",
+        "usage": {
+          "input_tokens": 27442,
+          "output_tokens": 109,
+          "total_tokens": 27551,
+          "cached_input_tokens": 0,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "latency_seconds": 3.844,
+        "error": null,
+        "parsed_narration": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+        "raw_output": "{\"narration\": \"The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \\\"I suppose most would prefer dry ground,\\\" they say with a dry chuckle, \\\"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\\\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.\"}"
+      }
+    ],
+    "state_before": {
+      "turn_counter": 1,
+      "active_scene_id": "frontier_gate",
+      "interaction_context": {
+        "active_interaction_target_id": null,
+        "active_interaction_kind": null,
+        "interaction_mode": "none",
+        "engagement_level": "none",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "discourse_focus": null,
+      "conversation": [],
+      "known_clues": null,
+      "scene_runtime": {
+        "discovered_clues": [],
+        "discovered_clue_ids": [],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": null,
+        "repeated_action_count": 0,
+        "last_resolution_kind": null,
+        "last_description_hash": null,
+        "last_perception_visible_facts": [],
+        "last_perception_narration": "",
+        "last_perception_turn": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null
+      },
+      "npc_runtime": {},
+      "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+        "mode": "social",
+        "visible_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+        ],
+        "hidden_facts": [
+          "An agent of a noble house is watching new arrivals from the square's edge.",
+          "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+          "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+          "A spotter above the lane is matching faces to a written list paid for in silver."
+        ],
+        "discoverable_clues": [
+          "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+          "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+          "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+          "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+          "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+          "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+          "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+          "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 0,
+            "address_roles": [
+              "guard",
+              "watchman",
+              "sentry",
+              "guardsman",
+              "captain"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 1,
+            "address_roles": [
+              "runner",
+              "informant"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 2,
+            "address_roles": [
+              "stranger",
+              "refugee"
+            ],
+            "aliases": [
+              "ragged stranger"
+            ]
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 3,
+            "address_roles": [
+              "watcher"
+            ],
+            "aliases": []
+          }
+        ]
+      },
+      "world": {
+        "npcs": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "frontier_gate",
+            "role": "guard",
+            "affiliation": "cinderwatch",
+            "disposition": "neutral",
+            "current_agenda": "patrol_gate",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone."
+              }
+            ],
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "role": "informant",
+            "affiliation": "ash_cowl",
+            "disposition": "friendly",
+            "current_agenda": "sell_rumors",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "stew",
+                "text": "Hot stew and rumors for coin."
+              }
+            ],
+            "stance_toward_player": "favorable",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 2,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 0,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 1,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 0,
+            "assets": []
+          }
+        ],
+        "clues": {},
+        "world_flags": []
+      },
+      "character": {
+        "name": "Galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "spells": {
+          "prepared": [
+            {
+              "id": "daze",
+              "name": "Daze",
+              "cast": false,
+              "level": 0
+            },
+            {
+              "id": "detect_magic",
+              "name": "Detect Magic",
+              "cast": false,
+              "level": 0
+            },
+            {
+              "id": "magic_missile",
+              "name": "Magic Missile",
+              "cast": false,
+              "level": 1
+            },
+            {
+              "id": "shield",
+              "name": "Shield",
+              "cast": false,
+              "level": 1
+            }
+          ],
+          "slots": {
+            "0": 3,
+            "1": 1
+          }
+        },
+        "conditions": []
+      }
+    },
+    "state_after": {
+      "turn_counter": 2,
+      "active_scene_id": "frontier_gate",
+      "interaction_context": {
+        "active_interaction_target_id": "guard_captain",
+        "active_interaction_kind": "social",
+        "interaction_mode": "social",
+        "engagement_level": "engaged",
+        "conversation_privacy": null,
+        "player_position_context": null
+      },
+      "discourse_focus": {
+        "version": 1,
+        "scene_id": "frontier_gate",
+        "active_interlocutor": {
+          "id": "guard_captain",
+          "label": "Guard Captain",
+          "kind": "interlocutor",
+          "scene_id": "frontier_gate",
+          "turn_index": 2,
+          "source": "resolution_contract"
+        },
+        "active_claim": null,
+        "active_actionable_lead": null,
+        "active_inspected": null,
+        "last_attempted_action": null,
+        "last_committed_turn": 2,
+        "last_committed_contract_id": "rc_601d8bc1627e"
+      },
+      "conversation": [],
+      "known_clues": null,
+      "scene_runtime": {
+        "discovered_clues": [],
+        "discovered_clue_ids": [],
+        "pending_leads": [],
+        "revealed_hidden_facts": [],
+        "suspicion_flags": [],
+        "searched_targets": [],
+        "resolved_interactables": [],
+        "last_exploration_action_key": "question_guard_captain",
+        "repeated_action_count": 1,
+        "last_resolution_kind": "question",
+        "last_description_hash": null,
+        "last_perception_visible_facts": [],
+        "last_perception_narration": "",
+        "last_perception_turn": null,
+        "consumed_action_ids": [],
+        "momentum_exchanges_since": 0,
+        "momentum_next_due_in": 2,
+        "momentum_last_kind": null,
+        "passive_action_streak": 1,
+        "recent_player_actions": [
+          {
+            "text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+            "passive": true,
+            "markers": [
+              "watch"
+            ],
+            "resolution_kind": null,
+            "turn": 2
+          }
+        ],
+        "last_player_action_text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+        "last_player_action_passive": true,
+        "topic_pressure": {
+          "topic:captain_guard_prefer": {
+            "repeat_count": 1,
+            "low_progress_streak": 0,
+            "progress_score_total": 0.0,
+            "last_answer": "",
+            "last_turn": 2,
+            "speaker_targets": {
+              "guard_captain": {
+                "repeat_count": 1,
+                "low_progress_streak": 0,
+                "patience": 3,
+                "last_turn": 2
+              }
+            },
+            "previous_probe_dimension": "",
+            "last_probe_dimension": "general",
+            "last_player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?"
+          }
+        },
+        "topic_pressure_last_topic_key": "topic:captain_guard_prefer",
+        "topic_pressure_current": {
+          "topic_key": "topic:captain_guard_prefer",
+          "speaker_key": "guard_captain",
+          "turn": 2,
+          "player_text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+          "interaction_kind": "social",
+          "interaction_mode": "social",
+          "social_intent_class": "social_exchange",
+          "npc_name": "Guard Captain"
+        },
+        "recent_contextual_leads": [
+          {
+            "key": "active_event_guard_captain_shrugs_slightly_water_dripping_from_the_brim_of_their_helmet_as_rain_spatters_the_soot_dark_stone_of_cinderwatchs_eastern_gate",
+            "kind": "active_event",
+            "subject": "guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of cinderwatch's eastern gate",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 2
+          },
+          {
+            "key": "active_event_keeps_you_sharp_or_maybe_just_miserable_enough_to_stay_alert_their_gaze_flickers_briefly_to_the_frayed_banners_hanging_overhead_and_then_back_to_the_queue_clogged_with_refugees_and_wagons",
+            "kind": "active_event",
+            "subject": "keeps you sharp, or maybe just miserable enough to stay alert.\" their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons",
+            "position": "",
+            "named": false,
+            "positioned": false,
+            "mentions": 1,
+            "last_turn": 2
+          }
+        ]
+      },
+      "npc_runtime": {
+        "guard_captain": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": 2
+        },
+        "tavern_runner": {
+          "attitude": 0,
+          "trust": 0,
+          "fear": 0,
+          "suspicion": 0,
+          "known_topics": [],
+          "revealed_topics": [],
+          "last_interaction_turn": null
+        }
+      },
+      "scene": {
+        "id": "frontier_gate",
+        "location": "Cinderwatch Gate District",
+        "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+        "mode": "social",
+        "visible_facts": [
+          "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+          "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+          "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+          "A tavern runner shouts offers of hot stew and paid rumor.",
+          "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+          "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+        ],
+        "hidden_facts": [
+          "An agent of a noble house is watching new arrivals from the square's edge.",
+          "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+          "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+          "A spotter above the lane is matching faces to a written list paid for in silver."
+        ],
+        "discoverable_clues": [
+          "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+          "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+          "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+          "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+          "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+          "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+          "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+          "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+        ],
+        "addressables": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 0,
+            "address_roles": [
+              "guard",
+              "watchman",
+              "sentry",
+              "guardsman",
+              "captain"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "scene_id": "frontier_gate",
+            "kind": "npc",
+            "addressable": true,
+            "address_priority": 1,
+            "address_roles": [
+              "runner",
+              "informant"
+            ],
+            "aliases": []
+          },
+          {
+            "id": "refugee",
+            "name": "Ragged stranger",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 2,
+            "address_roles": [
+              "stranger",
+              "refugee"
+            ],
+            "aliases": [
+              "ragged stranger"
+            ]
+          },
+          {
+            "id": "threadbare_watcher",
+            "name": "Threadbare watcher",
+            "scene_id": "frontier_gate",
+            "kind": "scene_actor",
+            "addressable": true,
+            "address_priority": 3,
+            "address_roles": [
+              "watcher"
+            ],
+            "aliases": []
+          }
+        ]
+      },
+      "world": {
+        "npcs": [
+          {
+            "id": "guard_captain",
+            "name": "Guard Captain",
+            "location": "frontier_gate",
+            "role": "guard",
+            "affiliation": "cinderwatch",
+            "disposition": "neutral",
+            "current_agenda": "patrol_gate",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "patrol",
+                "text": "A patrol went missing near the old milestone."
+              }
+            ],
+            "stance_toward_player": "neutral",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          },
+          {
+            "id": "tavern_runner",
+            "name": "Tavern Runner",
+            "location": "frontier_gate",
+            "role": "informant",
+            "affiliation": "ash_cowl",
+            "disposition": "friendly",
+            "current_agenda": "sell_rumors",
+            "availability": "available",
+            "topics": [
+              {
+                "id": "stew",
+                "text": "Hot stew and rumors for coin."
+              }
+            ],
+            "stance_toward_player": "favorable",
+            "knowledge_scope": [],
+            "information_reliability": "partial",
+            "origin_kind": "npc",
+            "origin_scene_id": "frontier_gate",
+            "promoted_from_actor_id": null,
+            "promotion_reason": null,
+            "promotion_turn": null,
+            "tags": []
+          }
+        ],
+        "factions": [
+          {
+            "id": "house_verevin",
+            "name": "House Verevin",
+            "type": "noble_house",
+            "attitude": "wary",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Expand territory",
+            "current_plan": "Gathering influence",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ash_cowl",
+            "name": "The Ash Cowl",
+            "type": "criminal_syndicate",
+            "attitude": "opportunistic",
+            "influence": 3,
+            "pressure": 3,
+            "goal": "Control black market",
+            "current_plan": "Establishing smuggling routes",
+            "agenda_progress": 1,
+            "assets": []
+          },
+          {
+            "id": "ordo_pyric",
+            "name": "Ordo Pyric",
+            "type": "religious_order",
+            "attitude": "suspicious",
+            "influence": 2,
+            "pressure": 2,
+            "goal": "Suppress dangerous magic",
+            "current_plan": "Watching newcomers",
+            "agenda_progress": 1,
+            "assets": []
+          }
+        ],
+        "clues": {},
+        "world_flags": []
+      },
+      "character": {
+        "name": "Galinor",
+        "hp": {
+          "current": 8,
+          "max": 8,
+          "nonlethal": 0
+        },
+        "inventory": [
+          {
+            "id": "spellbook",
+            "name": "Spellbook",
+            "quantity": 1,
+            "usable": false
+          }
+        ],
+        "spells": {
+          "prepared": [
+            {
+              "id": "daze",
+              "name": "Daze",
+              "cast": false,
+              "level": 0
+            },
+            {
+              "id": "detect_magic",
+              "name": "Detect Magic",
+              "cast": false,
+              "level": 0
+            },
+            {
+              "id": "magic_missile",
+              "name": "Magic Missile",
+              "cast": false,
+              "level": 1
+            },
+            {
+              "id": "shield",
+              "name": "Shield",
+              "cast": false,
+              "level": 1
+            }
+          ],
+          "slots": {
+            "0": 3,
+            "1": 1
+          }
+        },
+        "conditions": []
+      }
+    },
+    "wall_seconds": 4.178
+  }
+}

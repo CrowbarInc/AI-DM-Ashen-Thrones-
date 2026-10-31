@@ -1,0 +1,91 @@
+{
+  "version": "ATGB-03B-1",
+  "run_id": "649f365b811d436789547490e8fffc8d",
+  "requests": 1,
+  "request_upper_bound": 1,
+  "dispatched_requests": 1,
+  "pending_requests": 0,
+  "input_tokens": null,
+  "output_tokens": null,
+  "total_tokens": null,
+  "stopped": true,
+  "stop_reason": "provider usage accounting unavailable",
+  "records": [
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "649f365b811d436789547490e8fffc8d",
+      "attempt_id": "c51bdcc3c8b04b4a9a347ee467c59f3b",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-19T10:43:30.540758+00:00",
+      "time": "2026-10-19T10:43:31.782721+00:00",
+      "sent": true,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": null,
+      "completion_status": "failed",
+      "dispatch_attempted": true,
+      "latency_ms": 91.72,
+      "error": "provider_error"
+    }
+  ],
+  "events": [
+    {
+      "event": "initialized",
+      "version": "ATGB-03B-1",
+      "run_id": "649f365b811d436789547490e8fffc8d",
+      "time": "2026-10-19T10:43:30.451607+00:00"
+    },
+    {
+      "event": "admitted",
+      "version": "ATGB-03B-1",
+      "run_id": "649f365b811d436789547490e8fffc8d",
+      "attempt_id": "c51bdcc3c8b04b4a9a347ee467c59f3b",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-19T10:43:30.540758+00:00",
+      "time": "2026-10-19T10:43:30.540758+00:00"
+    },
+    {
+      "event": "dispatch_attempted",
+      "version": "ATGB-03B-1",
+      "run_id": "649f365b811d436789547490e8fffc8d",
+      "attempt_id": "c51bdcc3c8b04b4a9a347ee467c59f3b",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-19T10:43:30.540758+00:00",
+      "time": "2026-10-19T10:43:31.689296+00:00"
+    },
+    {
+      "event": "completed",
+      "version": "ATGB-03B-1",
+      "run_id": "649f365b811d436789547490e8fffc8d",
+      "attempt_id": "c51bdcc3c8b04b4a9a347ee467c59f3b",
+      "purpose": "interpretation",
+      "owner": "live_chat_interpretation.request_interpretation",
+      "configured_model": "gpt-4.1-mini",
+      "admitted_at": "2026-10-19T10:43:30.540758+00:00",
+      "time": "2026-10-19T10:43:31.782721+00:00",
+      "sent": true,
+      "request_id": null,
+      "model": "gpt-4.1-mini",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null,
+      "usage_consistent": false,
+      "refusal": null,
+      "completion_status": "failed",
+      "dispatch_attempted": true,
+      "latency_ms": 91.72,
+      "error": "provider_error"
+    }
+  ]
+}

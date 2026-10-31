@@ -1,0 +1,55 @@
+{
+  "case_id": "s10q3",
+  "family": "s10",
+  "partition": "validation",
+  "architecture": "B",
+  "diagnostic": false,
+  "context": "long",
+  "extraction_hash": "06721c14ddb169379b5befb7fdf36e21fcbd3365b595005493b8798c90f805b3",
+  "answer": {
+    "response_class": "PARTIAL",
+    "values": [
+      "Two sentries guard the eastern bridge"
+    ],
+    "qualifiers": [
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1",
+      "f2"
+    ],
+    "selected_source_ids": [
+      "s10"
+    ],
+    "answered_arguments": [
+      "agent",
+      "object"
+    ],
+    "missing_arguments": [
+      "shift schedule",
+      "shift change times"
+    ],
+    "conflict": false,
+    "reason": "The facts establish that two sentries guard the eastern bridge, but the shift schedule or shift change times are not posted and thus unknown."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": false,
+    "qualifier_preserved": true,
+    "answer_success": false,
+    "false_acceptance": true,
+    "false_rejection": false,
+    "unsupported_inference": true,
+    "earliest_failure": "F16"
+  },
+  "provider_error": null
+}

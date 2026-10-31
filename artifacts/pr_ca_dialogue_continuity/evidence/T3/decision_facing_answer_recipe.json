@@ -1,0 +1,68 @@
+{
+  "schema": "decision_facing_answer_recipe_v1",
+  "projection_only": true,
+  "authority_owner": "gm_resolution_decision",
+  "turn_operation": {
+    "projection_only": true,
+    "authority_owner": "gm_resolution_decision",
+    "response_operation": "incidental_dialogue",
+    "declaration_expectation": "reply_not_required",
+    "semantic_ceiling": "transient_dialogue_not_durable_fact",
+    "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+  },
+  "requested_answer": "Answer baker in ordinary speech. Player asked: Fair enough. Which loaf would you recommend to someone who has never bought bread here?",
+  "required_content": [
+    {
+      "claim_id": "rc_9ab69105465f",
+      "role": "MUST_STATE",
+      "text": "A baker stands beside loaves at a bread stall.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    },
+    {
+      "claim_id": "rc_2bb408577206",
+      "role": "MUST_STATE",
+      "text": "Baker exists",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "observation"
+    }
+  ],
+  "permitted_content": [],
+  "permitted_inference": {
+    "allowed": false,
+    "qualified_observations": [],
+    "may_infer_claims": []
+  },
+  "inference_modality": "none",
+  "unresolved_content": [
+    "actor",
+    "Unresolved consequential slot"
+  ],
+  "forbidden_upgrades": [
+    "unauthorized_consequential_fact",
+    "generated_content_as_authored_world_fact",
+    "durable_preference_without_authorized_claim",
+    "generated_dialogue_as_authored_world_fact"
+  ],
+  "declaration_guidance": {
+    "consequential_authorized_claim": "Listed claims may be realized with source_claim_id and their provenance. The turn-local reply is narration, not a new authored world fact.",
+    "bounded_inference": "not permitted on this turn",
+    "epistemic_premise": "Preserve epistemic status and premise_claim_ids. Do not promote a hypothesis, NPC claim, or unresolved premise into world truth.",
+    "epistemic_claims": [
+      {
+        "claim_id": "rc_82f8e49c7630",
+        "role": "MUST_PRESERVE_UNCERTAINTY",
+        "text": "Unresolved consequential slot",
+        "provenance": "speculation",
+        "epistemic_status": "unresolved",
+        "relation_kind": "epistemic_status",
+        "modality": "unresolved"
+      }
+    ],
+    "ordinary_incidental_expression": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth."
+  },
+  "incidental_improvisation_guidance": "Ordinary refusal, hesitation, mannerism, and phrasing may stay plain narration or a bounded incidental improvisation. That speech is not authored world truth.",
+  "answer_strategy": "State the required claims, then say in ordinary speech that the unresolved part is not established."
+}

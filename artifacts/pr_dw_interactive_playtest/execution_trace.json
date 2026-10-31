@@ -1,0 +1,39 @@
+{
+  "pr": "PR-DW",
+  "decision": "D - LIVE INTERPRETATION BLOCKED",
+  "head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+  "server": {
+    "command": ".\\.venv\\Scripts\\python.exe run.py",
+    "url": "http://127.0.0.1:8000",
+    "env": {
+      "ASHEN_DATA_DIR": "artifacts/pr_dw_interactive_playtest/disposable_data",
+      "ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT": "1",
+      "ASHEN_DISABLE_LIVE_INTERPRETATION": "1",
+      "UVICORN_RELOAD": "false"
+    },
+    "startup_result": "success",
+    "startup_warning": "upstream preflight skipped; live-upstream conclusions not established"
+  },
+  "http_checks": [
+    {"endpoint": "GET /api/state?ui_mode=player", "result": "ok"},
+    {"endpoint": "GET /api/log?ui_mode=player", "result": "ok"},
+    {"endpoint": "POST /api/chat?ui_mode=player", "result": "ok but safety failure on generic OOC"},
+    {"endpoint": "POST /api/chat?ui_mode=author", "result": "403 forbidden"}
+  ],
+  "browser_checks": {
+    "loaded": true,
+    "input_accepts_text": true,
+    "submit_control_works": true,
+    "player_message_visible": true,
+    "gm_response_visible": true
+  },
+  "live_provider_usage": {
+    "semantic_interpretation_api_calls": 0,
+    "narration_generation_requests_observed": 2,
+    "token_usage": "unavailable"
+  },
+  "gameplay_turns_completed": 0,
+  "human_playtest_completed": false,
+  "stop_reason": "Generic OOC probe caused state advancement and live narration provider calls."
+}
+

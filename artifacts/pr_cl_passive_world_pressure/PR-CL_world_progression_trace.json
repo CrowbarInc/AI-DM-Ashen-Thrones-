@@ -1,0 +1,89 @@
+{
+  "live_calls": 0,
+  "tests": [
+    {
+      "id": "test_chat_single_wait_in_tense_scene_forces_interaction_pressure",
+      "turns": [
+        {
+          "input": "I wait.",
+          "questions": {
+            "1_world_clock_advances": "Session time_pressure advances 0 to 1. current_date stays Day 1. world.world_state.clocks stays empty. This is the every-chat session counter, not a wait-owned diegetic clock.",
+            "2_elapsed_time_established": "The elapsed amount is one time_pressure step. No duration, hour, or date delta is established.",
+            "3_scheduled_developments_evaluated": true,
+            "4_world_pressure_condition_triggered": "Faction pressure threshold 3 is crossed for House Verevin and The Ash Cowl. Scene tension is true from the visible facts, but the passive-pressure rewriter does not run.",
+            "5_npc_or_environmental_change_selected": "No NPC move. No environmental state change. The selected player text is the sealed provider line.",
+            "6_authority_source": "Faction events are authorized by advance_world_tick. The interruption phrases have no authority source in this scene.",
+            "7_durable_state_modified": "time_pressure, faction pressure, faction agenda, event_log, turn_counter, and passive_action_streak change. NPC locations do not.",
+            "8_state_represented_in_narration": false,
+            "9_final_emission_preserves_authorized_result": "The hard-valid provider line is preserved. The faction events remain in resolution.world_tick_events and event_log. They are not copied into player text.",
+            "10_subsequent_turn_observes_update": "Not exercised. The stored faction pressure and event_log would be visible to a later tick."
+          },
+          "resolver": "generation",
+          "operation": "unresolved",
+          "resolution_kind": null,
+          "immutable": true,
+          "hard_valid": true,
+          "pressure_rewriter_called": false,
+          "player_facing_text": "Rain beads on the checkpoint while nobody moves first.",
+          "world_tick_events": [
+            "House Verevin's pressure mounts.",
+            "The Ash Cowl's pressure mounts."
+          ],
+          "first_divergence": "phrase assertion versus sealed atmosphere"
+        }
+      ]
+    },
+    {
+      "id": "test_chat_repeated_passive_actions_do_not_stall_into_atmosphere",
+      "turns": [
+        {
+          "input": "I wait.",
+          "questions": {
+            "1_world_clock_advances": "time_pressure 0 to 1. Date unchanged. World clocks empty.",
+            "2_elapsed_time_established": "One session time_pressure step.",
+            "3_scheduled_developments_evaluated": true,
+            "4_world_pressure_condition_triggered": "Verevin and Ash Cowl faction events fire. Passive rewriter does not run.",
+            "5_npc_or_environmental_change_selected": "None for narration. NPCs remain at frontier_gate.",
+            "6_authority_source": "Tick events only.",
+            "7_durable_state_modified": true,
+            "8_state_represented_in_narration": false,
+            "9_final_emission_preserves_authorized_result": "Sealed atmosphere preserved. Tick events retained in state.",
+            "10_subsequent_turn_observes_update": "Turn 2 sees streak 1, momentum due, and the stored faction rows."
+          },
+          "resolver": "generation",
+          "immutable": true,
+          "hard_valid": true,
+          "pressure_rewriter_called": false,
+          "player_facing_text": "The damp air hangs over the gate as everyone watches everyone else.",
+          "first_divergence": "not asserted; the test asserts only the second response"
+        },
+        {
+          "input": "I hold position and watch.",
+          "questions": {
+            "1_world_clock_advances": "time_pressure 1 to 2. Date still Day 1. World clocks still empty.",
+            "2_elapsed_time_established": "A second session time_pressure step. Still no diegetic duration.",
+            "3_scheduled_developments_evaluated": true,
+            "4_world_pressure_condition_triggered": "Ordo Pyric crosses the faction pressure threshold. Scene stall is due. Passive pressure source visible_figure is selected at streak 2.",
+            "5_npc_or_environmental_change_selected": "No NPC location change. Narration selects the existing visible fact about a guard at the checkpoint.",
+            "6_authority_source": "The visible fact is scene prose. The faction event is the tick. Neither source contains the required interruption phrases.",
+            "7_durable_state_modified": "Clocks, factions, event_log, streak 2, and momentum consumption change. A misparsed lead subject 'as you' is also stored.",
+            "8_state_represented_in_narration": "The visible fact is restated. Faction event text is not narrated.",
+            "9_final_emission_preserves_authorized_result": "Final text is the grounded checkpoint sentence. passive_scene_pressure and streak=2 survive in tags and debug notes. The required dramatic phrases are absent.",
+            "10_subsequent_turn_observes_update": "Not exercised past turn 2. Streak, event_log, and faction pressure are stored."
+          },
+          "resolver": "generation",
+          "immutable": false,
+          "scene_stall_retries": 2,
+          "fallback": "retry_escape_hatch",
+          "pressure_source": "visible_figure",
+          "pressure_streak_note": "passive_scene_pressure:visible_figure:streak=2",
+          "player_facing_text": "As you watch the scene, a guard leans near the checkpoint, watching the road.",
+          "world_tick_events": [
+            "Ordo Pyric's pressure mounts."
+          ],
+          "first_divergence": "phrase assertion versus grounded visible fact"
+        }
+      ]
+    }
+  ]
+}

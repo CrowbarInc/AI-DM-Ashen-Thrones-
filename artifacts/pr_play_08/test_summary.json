@@ -1,0 +1,75 @@
+{
+  "diagnostics": {
+    "tests": 81,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 81,
+    "seconds": "12.361",
+    "failures_observed": []
+  },
+  "export_atgb": {
+    "tests": 56,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 55,
+    "seconds": "12.804",
+    "failures_observed": [
+      "tests.test_atgb_accounting::test_readiness_verifies_repaired_dispatch_coverage"
+    ]
+  },
+  "harness": {
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 35,
+    "seconds": "30.170",
+    "failures_observed": []
+  },
+  "opening": {
+    "tests": 26,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 23,
+    "seconds": "5.309",
+    "failures_observed": [
+      "tests.test_start_campaign_api::test_start_campaign_emits_opening_and_sets_started",
+      "tests.test_start_campaign_api::test_start_campaign_scene_opening_reconcile_cannot_shorten_rich_post_gate_text",
+      "tests.test_start_campaign_api::test_start_campaign_promotes_valid_upstream_prepared_scene_opening"
+    ]
+  },
+  "provider": {
+    "tests": 89,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 88,
+    "seconds": "26.472",
+    "failures_observed": [
+      "tests.test_provider_accounting_integrity::test_readiness_acceptance_is_not_live_execution"
+    ]
+  },
+  "structured": {
+    "tests": 61,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 60,
+    "seconds": "2.401",
+    "failures_observed": [
+      "tests.test_pr_br_continuation18_immutable_boundary::test_raw_chat_stub_preserves_valid_and_contains_invalid"
+    ]
+  },
+  "world": {
+    "tests": 123,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 123,
+    "seconds": "2.336",
+    "failures_observed": []
+  }
+}

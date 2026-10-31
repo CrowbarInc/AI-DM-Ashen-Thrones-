@@ -1,0 +1,19 @@
+[
+  {
+    "event": "attempt",
+    "prompt": {
+      "roles": [
+        "system",
+        "user"
+      ],
+      "user_chars": 953,
+      "contains_resolution_contract": false,
+      "contains_gm_resolution_decision": false,
+      "contains_temporal_provenance": false,
+      "contains_authoritative_retry_context": false,
+      "contains_validation_failure": false,
+      "user_content": "{\"utterance\": \"All right—so whether visitors may use it before then still isn't settled. I ask Tavia what she's tying those blank tags with and whether her fingers are sore from the work.\", \"abstention_reason\": \"incomplete_semantic_structure\", \"candidates\": [{\"id\": \"tavia\", \"type\": \"interlocutor\", \"label\": \"Tavia\", \"aliases\": []}, {\"id\": \"archive_lift_hall\", \"type\": \"place\", \"label\": \"Rookhaven civic archive lift hall\", \"aliases\": []}, {\"id\": \"tavia\", \"type\": \"interlocutor\", \"label\": \"Tavia\", \"aliases\": [\"clerk\", \"archive clerk\"]}], \"discourse\": {\"scene_id\": \"archive_lift_hall\", \"active_interlocutor\": {\"id\": \"tavia\", \"label\": \"Tavia\"}, \"active_claim\": null, \"active_actionable_lead\": null, \"active_inspected\": null, \"last_attempted_action\": null}, \"recent_visible\": [{\"player\": \"When does the archive's document lift stop running?\", \"gm\": \"\"}, {\"player\": \"So can visitors still send records up before the sundial is fully in shade?\", \"gm\": \"\"}]}"
+    },
+    "output_text": "{\"primary_operation\":\"ask\",\"supporting_operations\":[\"perceive\"],\"raw_target_text\":\"I ask Tavia what she's tying those blank tags with and whether her fingers are sore from the work.\",\"proposed_target_id\":\"tavia\",\"interlocutor_id\":\"tavia\",\"conversational_subject\":\"Tavia's activity with blank tags and her physical state\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"Obtain information about the material Tavia is using to tie tags and her physical condition\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":null,\"clarification_required\":false,\"ambiguous\":false,\"confidence\":\"high\"}"
+  }
+]

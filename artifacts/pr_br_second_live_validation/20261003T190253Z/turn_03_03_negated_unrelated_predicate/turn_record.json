@@ -1,0 +1,194 @@
+{
+  "probe_id": "03_negated_unrelated_predicate",
+  "probe_question": "Cistern is full. The question asks whether it is locked, a different predicate.",
+  "player_text": "Is the cistern locked?",
+  "http_status": 200,
+  "emitted_narration": "The cistern is not locked; its lid rests on the ground beside the rim, and the cistern itself is full to the rim.",
+  "raw_generations": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "The cistern is not locked; its lid rests on the ground beside the rim, and the cistern itself is full to the rim.",
+      "prompt_flags": {
+        "user_chars": 101825,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true,
+        "contains_authoritative_retry_context": false,
+        "contains_validation_failure": false
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "initial_generation_calls": 1,
+  "retry_generation_calls": 0,
+  "interpretation_call_count": 0,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": null,
+  "resolution_social": null,
+  "resolution_npc_id": null,
+  "target_scene_id": null,
+  "resolved_transition": null,
+  "selected_resolver": "social",
+  "interaction_obligation": {
+    "kind": "question",
+    "target": null,
+    "interlocutor_id": null,
+    "subject": "Is the cistern locked",
+    "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+    "claim_id": null,
+    "resolution_mode": "clarification_target_failure",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_0fde9c4bb196"
+  },
+  "resolution_contract_id": "rc_0fde9c4bb196",
+  "resolution_contract_operation": "ask",
+  "resolution_contract_subject": "social",
+  "decision_present": true,
+  "decision_contract_id": "rc_0fde9c4bb196",
+  "decision_id_matches_contract": true,
+  "decision_outcome": "established_or_retrieved",
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+    "The asked predicate is not an authorized value. It may be denied. It may not be asserted."
+  ],
+  "permitted_mutations": null,
+  "proposed_facts": [
+    {
+      "text": "The orchard cistern is full to the rim.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {
+        "kind": "world_fact",
+        "subject": "orchard_cistern",
+        "subject_aliases": [
+          "orchard cistern",
+          "cistern"
+        ],
+        "relation": "condition",
+        "value": "full",
+        "value_aliases": [
+          "full",
+          "full to the rim"
+        ],
+        "polarity": "positive"
+      },
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "The cistern lid rests on the ground beside the rim.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    }
+  ],
+  "accepted_response": {
+    "immutable": true,
+    "text": "The cistern is not locked; its lid rests on the ground beside the rim, and the cistern itself is full to the rim.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "Is the cistern locked?",
+    "turn_identity": "rc_0fde9c4bb196",
+    "speaker": "",
+    "addressee": "",
+    "target": "",
+    "operation": "ask",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_0fde9c4bb196",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "The cistern is not locked; its lid rests on the ground beside the rim, and the cistern itself is full to the rim.",
+            "provenance": "authored_world_fact",
+            "consequence": "consequential",
+            "authorized": true,
+            "reason_codes": [
+              "authored_state_source"
+            ],
+            "authority": "world_truth",
+            "persistence": "world_truth",
+            "source_ref": "scene.visible_facts.0",
+            "outcome_classification": "established_or_retrieved",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "orchard_cistern",
+              "subject_aliases": [
+                "orchard cistern",
+                "cistern"
+              ],
+              "relation": "condition",
+              "value": "full",
+              "value_aliases": [
+                "full",
+                "full to the rim"
+              ],
+              "polarity": "positive"
+            }
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_0fde9c4bb196",
+      "operation": "ask",
+      "interlocutor_id": "",
+      "expected_resolution": "answer"
+    },
+    "resolution_kind": "",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "gm_metadata_validation_keys": [
+    "hard_validation_attempt_1"
+  ],
+  "committed_active_scene_id": "orchard_cistern",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "orchard_cistern",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_0fde9c4bb196"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [],
+    "rejected": [],
+    "incidental_entities": []
+  },
+  "committed_world_flags": [],
+  "committed_factions": [],
+  "committed_event_log": []
+}

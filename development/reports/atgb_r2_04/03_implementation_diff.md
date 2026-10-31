@@ -1,0 +1,9 @@
+# 03 — Implementation Diff
+
+Production modified by this pass: game/live_chat_interpretation.py, one existing system-instruction literal in interpret_production_turn. New test: tests/test_atgb_r2_04_question_evidence_contract.py (18 collected cases). No existing tests changed. Entry working-tree source is live_chat_interpretation.py.before; full modified source and test are included at their canonical paths in the ZIP. source.diff includes only this pass's production/test delta, excluding prior dirty changes.
+
+contract_preservation.json proves exact effective schema equality across all four before/after requests, including descriptions, required and optional fields, enums and evidence/mode/unresolved-reference representation. AST comparison replacing only the changed instruction literal yields equality for the complete production module. Thus parser, validation, provider dispatch/configuration, call count and all other executable logic are unchanged.
+
+integrity.json hashes all protected entry files and finds only the intended production instruction file changed. No other game production path, canonical data, frozen ATGB data, experimental PR-EG file, prior test or prior R2 evidence changed. No new persistent structure or gameplay authority. New test fixture errors were corrected within the new test; no host repair followed them.
+
+Documentation: eight reports under development/reports/atgb_r2_04 and a concise docs/NEXT_SESSION.md orientation entry. Evidence and review artifacts use established artifact/handoff directories; development/tmp contains disposable offline capture, qualification and packaging scripts, copied into the review ZIP for reproducibility. Generated stable review exports supersede the prior review export; its preexisting bytes are retained in a local backup. No commit or push.

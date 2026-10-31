@@ -129,6 +129,18 @@ class CoverageEntry:
 # ---------------------------------------------------------------------------
 
 REGISTRY: Final[tuple[CoverageEntry, ...]] = (
+    CoverageEntry(
+        feature_id="automated_playtest_harness",
+        title="Isolated opening and five-turn gameplay diagnostics and evidence export",
+        owner_domain="tooling",
+        status=CoverageStatus.ACTIVE,
+        required_surfaces=frozenset({RequiredSurface.INTEGRATION_SMOKE}),
+        transcript_modules=(), behavioral_gauntlet_axes=(), manual_gauntlets=(),
+        playability_scenarios=(), unit_contract_modules=("tests/test_pr_play_10_overlays.py",),
+        integration_smoke_modules=("tests/test_automated_playtest.py", "tests/test_five_turn_gameplay.py"),
+        notes="Production HTTP, acceptance, admission and ledger owners; synthetic transport. No gameplay-quality scoring authority.",
+        optional_smoke_overlap=(),
+    ),
     # Validation-layer *contracts* (Objective #11): fast unit/AST contract tests;
     # not defended by playability/transcript/gauntlet lanes.
     CoverageEntry(

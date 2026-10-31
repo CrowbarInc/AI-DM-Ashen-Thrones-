@@ -1,0 +1,108 @@
+{
+  "settlements": [
+    {
+      "id": "cinderwatch",
+      "name": "Cinderwatch",
+      "type": "frontier_city",
+      "tags": [
+        "frontier",
+        "trade",
+        "unstable"
+      ],
+      "status": "strained",
+      "notes": "A frontier city balanced between noble influence, criminal pressure, and military necessity."
+    }
+  ],
+  "factions": [],
+  "assets": [],
+  "projects": [],
+  "world_flags": [],
+  "event_log": [
+    {
+      "type": "social_lead_revealed",
+      "clue_id": "social_waystation_courtyard_sergeant_mara_street",
+      "scene_id": "waystation_courtyard",
+      "npc_id": "sergeant_mara",
+      "topic_id": "street"
+    }
+  ],
+  "inference_rules": [],
+  "clues": {},
+  "npcs": [
+    {
+      "id": "sergeant_mara",
+      "name": "Sergeant Mara",
+      "role": "guard",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "topics": [
+        {
+          "id": "street",
+          "text": "The street beyond the gate is the north road."
+        },
+        {
+          "id": "night_watch",
+          "text": "Guards watch the north gate throughout the night."
+        },
+        {
+          "id": "preference",
+          "text": "I prefer the evening."
+        },
+        {
+          "id": "rumor",
+          "text": "I have heard a rumor that a caravan may be late; I am not sure."
+        }
+      ],
+      "affiliation": "ash_cowl",
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    },
+    {
+      "id": "tavern_runner",
+      "name": "Tavern Runner",
+      "role": "informant",
+      "location": "waystation_courtyard",
+      "disposition": "friendly",
+      "availability": "available",
+      "topics": [
+        {
+          "id": "stew",
+          "text": "Hot stew and rumors for coin."
+        },
+        {
+          "id": "preference",
+          "text": "I prefer the morning."
+        },
+        {
+          "id": "rumor",
+          "text": "I have heard a rumor that a caravan may be late; I am not sure."
+        }
+      ],
+      "affiliation": "",
+      "current_agenda": "",
+      "stance_toward_player": "favorable",
+      "knowledge_scope": [],
+      "information_reliability": "partial",
+      "origin_kind": "npc",
+      "origin_scene_id": "waystation_courtyard",
+      "promoted_from_actor_id": null,
+      "promotion_reason": null,
+      "promotion_turn": null,
+      "tags": []
+    }
+  ],
+  "world_state": {
+    "flags": {},
+    "counters": {},
+    "clocks": {}
+  }
+}

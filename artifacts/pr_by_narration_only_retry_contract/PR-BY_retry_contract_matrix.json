@@ -1,0 +1,211 @@
+[
+  {
+    "case": "P2 initial narration-only contract",
+    "initial_envelope": "narration_only",
+    "failure_reason": null,
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "PR-BX unauthorized_resolution_decision_fact",
+    "initial_envelope": "narration_only",
+    "failure_reason": "unauthorized_resolution_decision_fact",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch ungrounded_authoritative_rule",
+    "initial_envelope": "narration_only",
+    "failure_reason": "ungrounded_authoritative_rule",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch wrong_interlocutor",
+    "initial_envelope": "narration_only",
+    "failure_reason": "wrong_interlocutor",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch unsolicited_npc_speech",
+    "initial_envelope": "narration_only",
+    "failure_reason": "unsolicited_npc_speech",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch structured_envelope",
+    "initial_envelope": "narration_only",
+    "failure_reason": "structured_envelope",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch malformed_or_truncated",
+    "initial_envelope": "narration_only",
+    "failure_reason": "malformed_or_truncated",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch hidden_information",
+    "initial_envelope": "narration_only",
+    "failure_reason": "hidden_information",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch interaction_incomplete",
+    "initial_envelope": "narration_only",
+    "failure_reason": "interaction_incomplete",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch consequential_invention",
+    "initial_envelope": "narration_only",
+    "failure_reason": "consequential_invention",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 narration validation branch mechanical_contradiction",
+    "initial_envelope": "narration_only",
+    "failure_reason": "mechanical_contradiction",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "malformed narration-only JSON",
+    "initial_envelope": "narration_only",
+    "failure_reason": "structured_contract_failure",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "smuggled declared_claims on narration-only output",
+    "initial_envelope": "narration_only",
+    "failure_reason": "unexpected_declared_claims",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P1 structured retry",
+    "initial_envelope": "structured_realization",
+    "failure_reason": "unauthorized_resolution_decision_fact",
+    "retry_envelope": "structured_realization",
+    "declared_claims_exposed": true,
+    "structured_schema_exposed": true,
+    "structured_envelope_phrase": true,
+    "expected_provider_keys": [
+      "declared_claims",
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P3 structured retry",
+    "initial_envelope": "structured_realization",
+    "failure_reason": "malformed_or_truncated",
+    "retry_envelope": "structured_realization",
+    "declared_claims_exposed": true,
+    "structured_schema_exposed": true,
+    "structured_envelope_phrase": true,
+    "expected_provider_keys": [
+      "declared_claims",
+      "narration"
+    ],
+    "result": "preserved"
+  },
+  {
+    "case": "P2 baker narration through run_preserve_if_valid",
+    "initial_envelope": "narration_only",
+    "failure_reason": "unauthorized_resolution_decision_fact",
+    "retry_envelope": "narration_only",
+    "declared_claims_exposed": false,
+    "structured_schema_exposed": false,
+    "structured_envelope_phrase": false,
+    "expected_provider_keys": [
+      "narration"
+    ],
+    "result": "preserved"
+  }
+]

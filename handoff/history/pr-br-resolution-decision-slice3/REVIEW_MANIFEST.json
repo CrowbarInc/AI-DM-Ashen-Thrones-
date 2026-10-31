@@ -1,0 +1,127 @@
+{
+  "schema_version": "review_handoff.v1",
+  "campaign_id": "pr-br-resolution-decision-slice3",
+  "campaign_name": "PR-BR Resolution Decision Slice 3",
+  "generated_at": "2026-10-03T17:49:51.376030+00:00",
+  "summary_path": "CURRENT_REVIEW.md",
+  "generation_tool": "tools/build_review_handoff.py",
+  "generation_tool_version": "1",
+  "included_files": [
+    {
+      "bundle_path": "CURRENT_REVIEW.md",
+      "canonical_source_path": null,
+      "role": "review_summary",
+      "canonical": false,
+      "generated": true,
+      "why": "Stable human-readable review surface.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "size_bytes": 5659,
+      "sha256": "5fe526caadb495cbb3e6a785b51b0ec5b10037cb450da76506b9fc0fd4a019ce"
+    },
+    {
+      "bundle_path": "REVIEW_MANIFEST.json",
+      "canonical_source_path": null,
+      "role": "review_manifest",
+      "canonical": false,
+      "generated": true,
+      "why": "Portable provenance and bundle-policy record.",
+      "behavioral_evidence": false,
+      "human_review_required": false,
+      "size_bytes": null,
+      "sha256": null
+    },
+    {
+      "path": "artifacts/pr_br_resolution_decision_slice3/implementation_report.md",
+      "role": "primary_campaign_report",
+      "why": "Primary campaign standard/report used to orient the review.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/pr_br_resolution_decision_slice3/implementation_report.md",
+      "bundle_path": "support/artifacts/pr_br_resolution_decision_slice3/implementation_report.md",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 8541,
+      "sha256": "7cb91b08c7a04db13cd8852b2e1d2c3907c9dfb3142663c018dd3f6c9e210412"
+    },
+    {
+      "path": "game/gm_resolution_decision.py",
+      "role": "production_code",
+      "why": "Decision-owned fact authority and semantic fidelity implementation.",
+      "behavioral_evidence": false,
+      "human_review_required": true,
+      "canonical_source_path": "game/gm_resolution_decision.py",
+      "bundle_path": "support/game/gm_resolution_decision.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 42964,
+      "sha256": "ad06138a2264195db74bafdcc94e350dca2ef3af1745bbf1ca06395ad7402b20"
+    },
+    {
+      "path": "tests/test_pr_br_decision_semantic_fidelity_slice3.py",
+      "role": "focused_tests",
+      "why": "New deterministic Slice 3 semantic-fidelity matrix.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "tests/test_pr_br_decision_semantic_fidelity_slice3.py",
+      "bundle_path": "support/tests/test_pr_br_decision_semantic_fidelity_slice3.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 8762,
+      "sha256": "a77d1b21abaa68891a24ca26100d43ce92709f24c02bb7dafd98e81cfd1de184"
+    },
+    {
+      "path": "tests/test_pr_br_gm_resolution_decision.py",
+      "role": "slice1_regression_tests",
+      "why": "Slice 1 regression coverage relevant to decision ownership.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "tests/test_pr_br_gm_resolution_decision.py",
+      "bundle_path": "support/tests/test_pr_br_gm_resolution_decision.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 9928,
+      "sha256": "8ad0acaad810f1804ef6bf5ad0cfb416712235d4b5d878371f0f94a0589f5084"
+    },
+    {
+      "path": "tests/test_pr_br_decision_ownership_slice2.py",
+      "role": "slice2_regression_tests",
+      "why": "Slice 2 regression coverage relevant to proposed facts and movement.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "tests/test_pr_br_decision_ownership_slice2.py",
+      "bundle_path": "support/tests/test_pr_br_decision_ownership_slice2.py",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 8198,
+      "sha256": "f1568f38b29a02d25aefefae9e6c9dc11160384e5c0f60e1c4973af61e0f3024"
+    },
+    {
+      "path": "artifacts/pr_br_resolution_decision_slice3/saved_gate_static_audit.json",
+      "role": "saved_gate_audit",
+      "why": "Deterministic audit of saved gate evidence only.",
+      "behavioral_evidence": true,
+      "human_review_required": true,
+      "canonical_source_path": "artifacts/pr_br_resolution_decision_slice3/saved_gate_static_audit.json",
+      "bundle_path": "support/artifacts/pr_br_resolution_decision_slice3/saved_gate_static_audit.json",
+      "canonical": true,
+      "generated": false,
+      "size_bytes": 377341,
+      "sha256": "5decf5444b4785bf477d9ee1493774920c8de197e28d8b6e6277ab5deb623a9d"
+    }
+  ],
+  "omitted_artifacts": [],
+  "omitted_artifact_policy": "Explicit sources only. Sensitive, recursive handoff/ZIP, missing, oversized, and duplicate files are omitted with a reason and canonical reference. Unrelated repository/artifact trees are not discovered.",
+  "sensitive_file_policy": "Reject .env variants, credential/API-key/token/secret/private-key/auth-cache filename patterns, key/certificate suffixes, VCS, virtualenv, dependency, and cache paths without inspecting secret values.",
+  "bundle_metrics": {
+    "file_count": 8,
+    "zip_size_bytes": "000000054913",
+    "uncompressed_payload_bytes": 461393,
+    "warning_threshold_bytes": 20971520,
+    "warning": false
+  },
+  "provenance": {
+    "configuration_source": "artifacts/pr_br_resolution_decision_slice3/handoff_config.json",
+    "canonical_repository_root": "."
+  }
+}

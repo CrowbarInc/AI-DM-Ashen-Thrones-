@@ -1,0 +1,104 @@
+{
+  "primary": {
+    "turns": 16,
+    "provider_calls": 10,
+    "interpretation_calls": 10,
+    "narration_calls": 0,
+    "retry_calls": 0,
+    "input_tokens": 19055,
+    "output_tokens": 1963,
+    "calls_per_turn": 0.625,
+    "input_tokens_per_turn": 1190.9375,
+    "output_tokens_per_turn": 122.6875,
+    "average_latency_ms": 1617.931118746128,
+    "maximum_latency_ms": 4440.535699977772,
+    "high_cost_outliers": [
+      {
+        "turn": 16,
+        "latency_ms": 4440.535699977772,
+        "calls": 1,
+        "input_tokens": 1969
+      },
+      {
+        "turn": 1,
+        "latency_ms": 2913.4765999915544,
+        "calls": 1,
+        "input_tokens": 1724
+      },
+      {
+        "turn": 12,
+        "latency_ms": 2528.2689000014216,
+        "calls": 1,
+        "input_tokens": 1976
+      }
+    ]
+  },
+  "secondary": {
+    "turns": 13,
+    "provider_calls": 8,
+    "interpretation_calls": 8,
+    "narration_calls": 0,
+    "retry_calls": 0,
+    "input_tokens": 15216,
+    "output_tokens": 1529,
+    "calls_per_turn": 0.6153846153846154,
+    "input_tokens_per_turn": 1170.4615384615386,
+    "output_tokens_per_turn": 117.61538461538461,
+    "average_latency_ms": 1465.1652230778172,
+    "maximum_latency_ms": 2645.678200002294,
+    "high_cost_outliers": [
+      {
+        "turn": 6,
+        "latency_ms": 2645.678200002294,
+        "calls": 1,
+        "input_tokens": 1887
+      },
+      {
+        "turn": 8,
+        "latency_ms": 2463.2376999943517,
+        "calls": 1,
+        "input_tokens": 1935
+      },
+      {
+        "turn": 1,
+        "latency_ms": 2407.6724000042304,
+        "calls": 1,
+        "input_tokens": 1725
+      }
+    ]
+  },
+  "combined": {
+    "turns": 29,
+    "provider_calls": 18,
+    "interpretation_calls": 18,
+    "narration_calls": 0,
+    "retry_calls": 0,
+    "input_tokens": 34271,
+    "output_tokens": 3492,
+    "calls_per_turn": 0.6206896551724138,
+    "input_tokens_per_turn": 1181.7586206896551,
+    "output_tokens_per_turn": 120.41379310344827,
+    "average_latency_ms": 1549.4498551706783,
+    "maximum_latency_ms": 4440.535699977772,
+    "high_cost_outliers": [
+      {
+        "turn": 16,
+        "latency_ms": 4440.535699977772,
+        "calls": 1,
+        "input_tokens": 1969
+      },
+      {
+        "turn": 1,
+        "latency_ms": 2913.4765999915544,
+        "calls": 1,
+        "input_tokens": 1724
+      },
+      {
+        "turn": 6,
+        "latency_ms": 2645.678200002294,
+        "calls": 1,
+        "input_tokens": 1887
+      }
+    ]
+  }
+}

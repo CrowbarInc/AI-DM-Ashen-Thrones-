@@ -1,0 +1,12 @@
+.....F.............................                                      [100%]
+================================== FAILURES ===================================
+___ test_failure_matrix[H6-safe_nonresolution-semantic_validation_failure] ____
+tests\test_automated_playtest.py:47: in test_failure_matrix
+    assert result['failure_classification']['category'] == category
+E   AssertionError: assert 'opening_acceptance_failure' == 'semantic_validation_failure'
+E     
+E     - semantic_validation_failure
+E     + opening_acceptance_failure
+=========================== short test summary info ===========================
+FAILED tests/test_automated_playtest.py::test_failure_matrix[H6-safe_nonresolution-semantic_validation_failure]
+1 failed, 34 passed in 32.34s

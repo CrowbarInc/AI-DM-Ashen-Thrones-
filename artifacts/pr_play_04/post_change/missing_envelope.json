@@ -1,0 +1,88 @@
+{
+  "case": "missing_envelope",
+  "functions": [
+    "api.start_campaign",
+    "api._run_resolved_turn_pipeline",
+    "api._build_gpt_narration_from_authoritative_state",
+    "api._complete_opening_turn_persistence_like_chat",
+    "world.advance_world_tick",
+    "gm.call_gpt"
+  ],
+  "new_campaign": true,
+  "before": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "active_scene_id": "frontier_gate",
+    "log_length": 0,
+    "campaign_can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "status_code": 422,
+  "response": {
+    "ok": false,
+    "status": "opening_failed",
+    "player_facing_text": null,
+    "provenance": null,
+    "authorization_source": null,
+    "structured_contract_failure": null,
+    "structured_contract_reason": null,
+    "resolution_kind": null
+  },
+  "after": {
+    "campaign_started": false,
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "active_scene_id": "frontier_gate",
+    "log_length": 0,
+    "campaign_can_start": true,
+    "factions": [
+      {
+        "id": "house_verevin",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ash_cowl",
+        "pressure": 2,
+        "agenda_progress": 0
+      },
+      {
+        "id": "ordo_pyric",
+        "pressure": 1,
+        "agenda_progress": 0
+      }
+    ],
+    "event_types": []
+  },
+  "sdk_mock_calls": 1
+}

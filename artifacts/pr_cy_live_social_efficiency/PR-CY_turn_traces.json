@@ -1,0 +1,3207 @@
+{
+  "phase0": {
+    "git_head": "d31beb7d73dd4fda0f22184a6a69b947b5f470ff",
+    "config": {
+      "utc": "2026-10-10T14:04:33.824721+00:00",
+      "provider": "OpenAI",
+      "billing_path": "OpenAI Python SDK Responses API via client.responses.create.",
+      "endpoint": "https://api.openai.com/v1/responses",
+      "base_url_override_present": false,
+      "models": {
+        "MODEL_NAME": "gpt-4.1-mini",
+        "DEFAULT_MODEL_NAME": "gpt-4.1-mini",
+        "HIGH_PRECISION_MODEL_NAME": "gpt-4.1-mini",
+        "RETRY_ESCALATION_MODEL_NAME": "gpt-4.1-mini"
+      },
+      "enable_model_routing": true,
+      "required_response_model": "gpt-4.1-mini-2025-04-14",
+      "api_key_present": true,
+      "api_key_length": 164,
+      "startup_preflight": "skipped by ASHEN_THRONES_SKIP_UPSTREAM_API_PREFLIGHT=1; no billable preflight request used.",
+      "live_interpretation": "disabled by ASHEN_DISABLE_LIVE_INTERPRETATION=1 to preserve gameplay request budget.",
+      "hard_budget": {
+        "max_completed_gameplay_turns": 2,
+        "max_provider_requests": 3,
+        "max_combined_tokens": 110000
+      },
+      "unknown_unpriced_or_substituted_models": []
+    }
+  },
+  "payload_reconstruction": {
+    "player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+    "full_context": {
+      "label": "full_context_reconstruction",
+      "provider_context_projection_selected": null,
+      "selected_resolver": "social",
+      "selected_response_envelope": "narration_only",
+      "active_interlocutor": {
+        "npc_id": "guard_captain",
+        "raw_interaction_target_id": "guard_captain",
+        "display_name": "Guard Captain",
+        "origin_kind": "npc",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "affiliation": "cinderwatch",
+        "current_agenda": "patrol_gate",
+        "promoted_from_actor_id": null
+      },
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "serialized_prompt_bytes": 126926,
+      "user_payload_bytes": 115012,
+      "estimated_tokens_rough_bytes_over_4": 31732,
+      "payload_hash": "6018dc2fed20672b8aa4e26b4c8e4ec94bd7a79b9acc3d8ae4d11a4cbcfb9615",
+      "top_level_keys": [
+        "active_interlocutor",
+        "active_topic_anchor",
+        "anti_railroading_contract",
+        "bounded_improvisation",
+        "campaign",
+        "character",
+        "clues",
+        "combat",
+        "context_separation_contract",
+        "conversational_memory_window",
+        "decision_facing_answer_recipe",
+        "dialogue_social_plan",
+        "discoverable_hinting",
+        "fallback_behavior",
+        "first_mention_contract",
+        "follow_up_pressure",
+        "gm_resolution_decision",
+        "instructions",
+        "interaction_continuity",
+        "interaction_continuity_contract",
+        "interlocutor_lead_behavior_hints",
+        "interlocutor_lead_context",
+        "known_answer_hint",
+        "lead_context",
+        "mechanical_resolution",
+        "narration_obligations",
+        "narration_visibility",
+        "narrative_plan",
+        "opening_curated_facts",
+        "opening_inputs_are_curated",
+        "opening_narration_obligations",
+        "opening_scene_realization",
+        "opening_selector_selected_facts",
+        "opening_selector_source_used",
+        "player_expression_contract",
+        "player_facing_narration_purity_contract",
+        "player_input",
+        "recent_log",
+        "referent_clause_prompt_hints",
+        "referent_tracking",
+        "resolution_contract",
+        "response_policy",
+        "scene",
+        "scene_advancement",
+        "scene_state_anchor_contract",
+        "selected_conversational_memory",
+        "session",
+        "social_context",
+        "social_response_structure_contract",
+        "speaker_selection",
+        "transition",
+        "turn_packet",
+        "turn_summary",
+        "uncertainty_hint",
+        "world",
+        "world_progression_summary",
+        "world_state"
+      ],
+      "projection": {}
+    },
+    "reduced_context": {
+      "label": "reduced_context_reconstruction",
+      "provider_context_projection_selected": true,
+      "selected_resolver": "social",
+      "selected_response_envelope": "narration_only",
+      "active_interlocutor": {
+        "npc_id": "guard_captain",
+        "raw_interaction_target_id": "guard_captain",
+        "display_name": "Guard Captain",
+        "origin_kind": "npc",
+        "stance_toward_player": "neutral",
+        "knowledge_scope": [],
+        "information_reliability": "partial",
+        "affiliation": "cinderwatch",
+        "current_agenda": "patrol_gate",
+        "promoted_from_actor_id": null
+      },
+      "turn_operation": {
+        "projection_only": true,
+        "authority_owner": "gm_resolution_decision",
+        "response_operation": "incidental_dialogue",
+        "declaration_expectation": "reply_not_required",
+        "semantic_ceiling": "transient_dialogue_not_durable_fact",
+        "instruction": "On this turn, reply in ordinary narration: answer, hesitate, deflect, joke, or refuse. The reply itself belongs in narration. Do not declare that reply as a world fact. Do not establish a durable preference or history merely to answer. Listed claims may still be realized if restated."
+      },
+      "serialized_prompt_bytes": 116087,
+      "user_payload_bytes": 104921,
+      "estimated_tokens_rough_bytes_over_4": 29022,
+      "payload_hash": "faf834cfa43b7b7050c7e06100d5bc6feb7e688ef81ca60456c1d076230f0aae",
+      "top_level_keys": [
+        "active_interlocutor",
+        "active_topic_anchor",
+        "anti_railroading_contract",
+        "bounded_improvisation",
+        "campaign",
+        "character",
+        "clues",
+        "combat",
+        "context_separation_contract",
+        "conversational_memory_window",
+        "decision_facing_answer_recipe",
+        "dialogue_social_plan",
+        "discoverable_hinting",
+        "fallback_behavior",
+        "first_mention_contract",
+        "follow_up_pressure",
+        "gm_resolution_decision",
+        "instructions",
+        "interaction_continuity",
+        "interaction_continuity_contract",
+        "interlocutor_lead_context",
+        "known_answer_hint",
+        "lead_context",
+        "mechanical_resolution",
+        "narration_obligations",
+        "narration_visibility",
+        "narrative_plan",
+        "player_expression_contract",
+        "player_facing_narration_purity_contract",
+        "player_input",
+        "provider_context_projection",
+        "recent_log",
+        "referent_clause_prompt_hints",
+        "referent_tracking",
+        "resolution_contract",
+        "response_policy",
+        "scene",
+        "scene_state_anchor_contract",
+        "selected_conversational_memory",
+        "session",
+        "social_context",
+        "social_response_structure_contract",
+        "speaker_selection",
+        "turn_packet",
+        "turn_summary",
+        "uncertainty_hint",
+        "world",
+        "world_state"
+      ],
+      "projection": {
+        "mode": "harmless_social_incidental_dialogue_v1",
+        "selected": true,
+        "reason": "ordinary social ask uses narration-only incidental_dialogue with one grounded addressee and no authorized state mutation",
+        "retained_authority_surfaces": [
+          "player_input",
+          "scene",
+          "active_interlocutor",
+          "dialogue_social_plan",
+          "speaker_selection",
+          "selected_conversational_memory",
+          "recent_log",
+          "response_policy",
+          "resolution_contract",
+          "gm_resolution_decision",
+          "decision_facing_answer_recipe",
+          "narration_visibility"
+        ],
+        "omitted_sections": [
+          "interlocutor_lead_behavior_hints",
+          "opening_curated_facts",
+          "opening_inputs_are_curated",
+          "opening_narration_obligations",
+          "opening_scene_realization",
+          "opening_selector_selected_facts",
+          "opening_selector_source_used",
+          "scene_advancement",
+          "transition",
+          "world_progression_summary"
+        ],
+        "compacted_sections": [
+          "mechanical_resolution",
+          "narrative_plan",
+          "turn_packet"
+        ]
+      }
+    },
+    "retained_context_top_level_keys": [
+      "active_interlocutor",
+      "active_topic_anchor",
+      "anti_railroading_contract",
+      "bounded_improvisation",
+      "campaign",
+      "character",
+      "clues",
+      "combat",
+      "context_separation_contract",
+      "conversational_memory_window",
+      "decision_facing_answer_recipe",
+      "dialogue_social_plan",
+      "discoverable_hinting",
+      "fallback_behavior",
+      "first_mention_contract",
+      "follow_up_pressure",
+      "gm_resolution_decision",
+      "instructions",
+      "interaction_continuity",
+      "interaction_continuity_contract",
+      "interlocutor_lead_context",
+      "known_answer_hint",
+      "lead_context",
+      "mechanical_resolution",
+      "narration_obligations",
+      "narration_visibility",
+      "narrative_plan",
+      "player_expression_contract",
+      "player_facing_narration_purity_contract",
+      "player_input",
+      "recent_log",
+      "referent_clause_prompt_hints",
+      "referent_tracking",
+      "resolution_contract",
+      "response_policy",
+      "scene",
+      "scene_state_anchor_contract",
+      "selected_conversational_memory",
+      "session",
+      "social_context",
+      "social_response_structure_contract",
+      "speaker_selection",
+      "turn_packet",
+      "turn_summary",
+      "uncertainty_hint",
+      "world",
+      "world_state"
+    ],
+    "omitted_context_top_level_keys": [
+      "interlocutor_lead_behavior_hints",
+      "opening_curated_facts",
+      "opening_inputs_are_curated",
+      "opening_narration_obligations",
+      "opening_scene_realization",
+      "opening_selector_selected_facts",
+      "opening_selector_source_used",
+      "scene_advancement",
+      "transition",
+      "world_progression_summary"
+    ],
+    "changed_retained_context_sizes": {
+      "mechanical_resolution": {
+        "full_bytes": 3091,
+        "reduced_bytes": 2685,
+        "delta_bytes": -406
+      },
+      "narrative_plan": {
+        "full_bytes": 5405,
+        "reduced_bytes": 2626,
+        "delta_bytes": -2779
+      },
+      "turn_packet": {
+        "full_bytes": 10815,
+        "reduced_bytes": 4422,
+        "delta_bytes": -6393
+      }
+    },
+    "byte_reduction": 10839
+  },
+  "halt": null,
+  "provider_requests": 3,
+  "combined_tokens": 99616,
+  "turns": [
+    {
+      "turn": "T1",
+      "player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+      "http_status": 200,
+      "error": null,
+      "halt_after": null,
+      "severe_mutations": [],
+      "wall_seconds": 4.178,
+      "trace": {
+        "player_facing_text": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+        "gm_tags": [],
+        "selected_resolver_hits": [
+          {
+            "path": "$.session.debug_traces[18].selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.session.debug_traces[18].resolution.metadata.selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.debug_traces[18].selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.debug_traces[18].resolution.metadata.selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.resolution.metadata.selected_resolver",
+            "value": "social"
+          }
+        ],
+        "response_envelope": "narration_only",
+        "provider_context_projection": {
+          "mode": "harmless_social_incidental_dialogue_v1",
+          "selected": true,
+          "reason": "ordinary social ask uses narration-only incidental_dialogue with one grounded addressee and no authorized state mutation",
+          "retained_authority_surfaces": [
+            "player_input",
+            "scene",
+            "active_interlocutor",
+            "dialogue_social_plan",
+            "speaker_selection",
+            "selected_conversational_memory",
+            "recent_log",
+            "response_policy",
+            "resolution_contract",
+            "gm_resolution_decision",
+            "decision_facing_answer_recipe",
+            "narration_visibility"
+          ],
+          "omitted_sections": [
+            "interlocutor_lead_behavior_hints",
+            "opening_curated_facts",
+            "opening_inputs_are_curated",
+            "opening_narration_obligations",
+            "opening_scene_realization",
+            "opening_selector_selected_facts",
+            "opening_selector_source_used",
+            "scene_advancement",
+            "transition",
+            "world_progression_summary"
+          ],
+          "compacted_sections": [
+            "mechanical_resolution",
+            "narrative_plan",
+            "turn_packet"
+          ]
+        },
+        "active_interlocutor": {
+          "npc_id": "guard_captain",
+          "raw_interaction_target_id": "guard_captain",
+          "display_name": "Guard Captain",
+          "origin_kind": "npc",
+          "stance_toward_player": "neutral",
+          "knowledge_scope": [],
+          "information_reliability": "partial",
+          "affiliation": "cinderwatch",
+          "current_agenda": "patrol_gate",
+          "promoted_from_actor_id": null
+        },
+        "recent_log": [],
+        "operation": null,
+        "interlocutor_id": null,
+        "validation": {
+          "regeneration_invoked": null,
+          "regeneration_feedback": null,
+          "hard_validation_attempt_1": {
+            "hard_valid": true,
+            "reasons": [],
+            "soft_flags": [],
+            "text": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons."
+          },
+          "hard_validation_attempt_2": null,
+          "accepted_attempt": 1,
+          "accepted_text": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+          "accepted_authority_result": "accepted",
+          "accepted_provenance": "initial_generation"
+        },
+        "compact_classification": null,
+        "compact_resolution_path": null,
+        "interaction_after": null,
+        "provider_request_count": 1,
+        "generation_count": 1,
+        "retry_count": 0,
+        "provider_candidates": [
+          {
+            "index": 1,
+            "kind": "generation",
+            "retry_attempt": 0,
+            "retry_reason": null,
+            "response_model": "gpt-4.1-mini-2025-04-14",
+            "usage": {
+              "input_tokens": 27442,
+              "output_tokens": 109,
+              "total_tokens": 27551,
+              "cached_input_tokens": 0,
+              "input_tokens_details": {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "latency_seconds": 3.844,
+            "error": null,
+            "parsed_narration": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say with a dry chuckle, \"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+            "raw_output": "{\"narration\": \"The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \\\"I suppose most would prefer dry ground,\\\" they say with a dry chuckle, \\\"but standing watch in the rain is part of the job here. Keeps you sharp, or maybe just miserable enough to stay alert.\\\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.\"}"
+          }
+        ],
+        "state_before": {
+          "turn_counter": 1,
+          "active_scene_id": "frontier_gate",
+          "interaction_context": {
+            "active_interaction_target_id": null,
+            "active_interaction_kind": null,
+            "interaction_mode": "none",
+            "engagement_level": "none",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "discourse_focus": null,
+          "conversation": [],
+          "known_clues": null,
+          "scene_runtime": {
+            "discovered_clues": [],
+            "discovered_clue_ids": [],
+            "pending_leads": [],
+            "revealed_hidden_facts": [],
+            "suspicion_flags": [],
+            "searched_targets": [],
+            "resolved_interactables": [],
+            "last_exploration_action_key": null,
+            "repeated_action_count": 0,
+            "last_resolution_kind": null,
+            "last_description_hash": null,
+            "last_perception_visible_facts": [],
+            "last_perception_narration": "",
+            "last_perception_turn": null,
+            "consumed_action_ids": [],
+            "momentum_exchanges_since": 0,
+            "momentum_next_due_in": 2,
+            "momentum_last_kind": null
+          },
+          "npc_runtime": {},
+          "scene": {
+            "id": "frontier_gate",
+            "location": "Cinderwatch Gate District",
+            "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+            "mode": "social",
+            "visible_facts": [
+              "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+              "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+              "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+              "A tavern runner shouts offers of hot stew and paid rumor.",
+              "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+              "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+            ],
+            "hidden_facts": [
+              "An agent of a noble house is watching new arrivals from the square's edge.",
+              "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+              "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+              "A spotter above the lane is matching faces to a written list paid for in silver."
+            ],
+            "discoverable_clues": [
+              "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+              "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+              "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+              "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+              "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+              "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+              "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+              "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+            ],
+            "addressables": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 0,
+                "address_roles": [
+                  "guard",
+                  "watchman",
+                  "sentry",
+                  "guardsman",
+                  "captain"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 1,
+                "address_roles": [
+                  "runner",
+                  "informant"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "refugee",
+                "name": "Ragged stranger",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 2,
+                "address_roles": [
+                  "stranger",
+                  "refugee"
+                ],
+                "aliases": [
+                  "ragged stranger"
+                ]
+              },
+              {
+                "id": "threadbare_watcher",
+                "name": "Threadbare watcher",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 3,
+                "address_roles": [
+                  "watcher"
+                ],
+                "aliases": []
+              }
+            ]
+          },
+          "world": {
+            "npcs": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "location": "frontier_gate",
+                "role": "guard",
+                "affiliation": "cinderwatch",
+                "disposition": "neutral",
+                "current_agenda": "patrol_gate",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "patrol",
+                    "text": "A patrol went missing near the old milestone."
+                  }
+                ],
+                "stance_toward_player": "neutral",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "role": "informant",
+                "affiliation": "ash_cowl",
+                "disposition": "friendly",
+                "current_agenda": "sell_rumors",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "stew",
+                    "text": "Hot stew and rumors for coin."
+                  }
+                ],
+                "stance_toward_player": "favorable",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "name": "House Verevin",
+                "type": "noble_house",
+                "attitude": "wary",
+                "influence": 3,
+                "pressure": 2,
+                "goal": "Expand territory",
+                "current_plan": "Gathering influence",
+                "agenda_progress": 0,
+                "assets": []
+              },
+              {
+                "id": "ash_cowl",
+                "name": "The Ash Cowl",
+                "type": "criminal_syndicate",
+                "attitude": "opportunistic",
+                "influence": 3,
+                "pressure": 2,
+                "goal": "Control black market",
+                "current_plan": "Establishing smuggling routes",
+                "agenda_progress": 0,
+                "assets": []
+              },
+              {
+                "id": "ordo_pyric",
+                "name": "Ordo Pyric",
+                "type": "religious_order",
+                "attitude": "suspicious",
+                "influence": 2,
+                "pressure": 1,
+                "goal": "Suppress dangerous magic",
+                "current_plan": "Watching newcomers",
+                "agenda_progress": 0,
+                "assets": []
+              }
+            ],
+            "clues": {},
+            "world_flags": []
+          },
+          "character": {
+            "name": "Galinor",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "conditions": []
+          }
+        },
+        "state_after": {
+          "turn_counter": 2,
+          "active_scene_id": "frontier_gate",
+          "interaction_context": {
+            "active_interaction_target_id": "guard_captain",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "discourse_focus": {
+            "version": 1,
+            "scene_id": "frontier_gate",
+            "active_interlocutor": {
+              "id": "guard_captain",
+              "label": "Guard Captain",
+              "kind": "interlocutor",
+              "scene_id": "frontier_gate",
+              "turn_index": 2,
+              "source": "resolution_contract"
+            },
+            "active_claim": null,
+            "active_actionable_lead": null,
+            "active_inspected": null,
+            "last_attempted_action": null,
+            "last_committed_turn": 2,
+            "last_committed_contract_id": "rc_601d8bc1627e"
+          },
+          "conversation": [],
+          "known_clues": null,
+          "scene_runtime": {
+            "discovered_clues": [],
+            "discovered_clue_ids": [],
+            "pending_leads": [],
+            "revealed_hidden_facts": [],
+            "suspicion_flags": [],
+            "searched_targets": [],
+            "resolved_interactables": [],
+            "last_exploration_action_key": "question_guard_captain",
+            "repeated_action_count": 1,
+            "last_resolution_kind": "question",
+            "last_description_hash": null,
+            "last_perception_visible_facts": [],
+            "last_perception_narration": "",
+            "last_perception_turn": null,
+            "consumed_action_ids": [],
+            "momentum_exchanges_since": 0,
+            "momentum_next_due_in": 2,
+            "momentum_last_kind": null,
+            "passive_action_streak": 1,
+            "recent_player_actions": [
+              {
+                "text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+                "passive": true,
+                "markers": [
+                  "watch"
+                ],
+                "resolution_kind": null,
+                "turn": 2
+              }
+            ],
+            "last_player_action_text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+            "last_player_action_passive": true,
+            "topic_pressure": {
+              "topic:captain_guard_prefer": {
+                "repeat_count": 1,
+                "low_progress_streak": 0,
+                "progress_score_total": 0.0,
+                "last_answer": "",
+                "last_turn": 2,
+                "speaker_targets": {
+                  "guard_captain": {
+                    "repeat_count": 1,
+                    "low_progress_streak": 0,
+                    "patience": 3,
+                    "last_turn": 2
+                  }
+                },
+                "previous_probe_dimension": "",
+                "last_probe_dimension": "general",
+                "last_player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?"
+              }
+            },
+            "topic_pressure_last_topic_key": "topic:captain_guard_prefer",
+            "topic_pressure_current": {
+              "topic_key": "topic:captain_guard_prefer",
+              "speaker_key": "guard_captain",
+              "turn": 2,
+              "player_text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+              "interaction_kind": "social",
+              "interaction_mode": "social",
+              "social_intent_class": "social_exchange",
+              "npc_name": "Guard Captain"
+            },
+            "recent_contextual_leads": [
+              {
+                "key": "active_event_guard_captain_shrugs_slightly_water_dripping_from_the_brim_of_their_helmet_as_rain_spatters_the_soot_dark_stone_of_cinderwatchs_eastern_gate",
+                "kind": "active_event",
+                "subject": "guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of cinderwatch's eastern gate",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 2
+              },
+              {
+                "key": "active_event_keeps_you_sharp_or_maybe_just_miserable_enough_to_stay_alert_their_gaze_flickers_briefly_to_the_frayed_banners_hanging_overhead_and_then_back_to_the_queue_clogged_with_refugees_and_wagons",
+                "kind": "active_event",
+                "subject": "keeps you sharp, or maybe just miserable enough to stay alert.\" their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 2
+              }
+            ]
+          },
+          "npc_runtime": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": 2
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "scene": {
+            "id": "frontier_gate",
+            "location": "Cinderwatch Gate District",
+            "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+            "mode": "social",
+            "visible_facts": [
+              "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+              "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+              "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+              "A tavern runner shouts offers of hot stew and paid rumor.",
+              "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+              "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+            ],
+            "hidden_facts": [
+              "An agent of a noble house is watching new arrivals from the square's edge.",
+              "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+              "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+              "A spotter above the lane is matching faces to a written list paid for in silver."
+            ],
+            "discoverable_clues": [
+              "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+              "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+              "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+              "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+              "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+              "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+              "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+              "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+            ],
+            "addressables": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 0,
+                "address_roles": [
+                  "guard",
+                  "watchman",
+                  "sentry",
+                  "guardsman",
+                  "captain"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 1,
+                "address_roles": [
+                  "runner",
+                  "informant"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "refugee",
+                "name": "Ragged stranger",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 2,
+                "address_roles": [
+                  "stranger",
+                  "refugee"
+                ],
+                "aliases": [
+                  "ragged stranger"
+                ]
+              },
+              {
+                "id": "threadbare_watcher",
+                "name": "Threadbare watcher",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 3,
+                "address_roles": [
+                  "watcher"
+                ],
+                "aliases": []
+              }
+            ]
+          },
+          "world": {
+            "npcs": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "location": "frontier_gate",
+                "role": "guard",
+                "affiliation": "cinderwatch",
+                "disposition": "neutral",
+                "current_agenda": "patrol_gate",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "patrol",
+                    "text": "A patrol went missing near the old milestone."
+                  }
+                ],
+                "stance_toward_player": "neutral",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "role": "informant",
+                "affiliation": "ash_cowl",
+                "disposition": "friendly",
+                "current_agenda": "sell_rumors",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "stew",
+                    "text": "Hot stew and rumors for coin."
+                  }
+                ],
+                "stance_toward_player": "favorable",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "name": "House Verevin",
+                "type": "noble_house",
+                "attitude": "wary",
+                "influence": 3,
+                "pressure": 3,
+                "goal": "Expand territory",
+                "current_plan": "Gathering influence",
+                "agenda_progress": 1,
+                "assets": []
+              },
+              {
+                "id": "ash_cowl",
+                "name": "The Ash Cowl",
+                "type": "criminal_syndicate",
+                "attitude": "opportunistic",
+                "influence": 3,
+                "pressure": 3,
+                "goal": "Control black market",
+                "current_plan": "Establishing smuggling routes",
+                "agenda_progress": 1,
+                "assets": []
+              },
+              {
+                "id": "ordo_pyric",
+                "name": "Ordo Pyric",
+                "type": "religious_order",
+                "attitude": "suspicious",
+                "influence": 2,
+                "pressure": 2,
+                "goal": "Suppress dangerous magic",
+                "current_plan": "Watching newcomers",
+                "agenda_progress": 1,
+                "assets": []
+              }
+            ],
+            "clues": {},
+            "world_flags": []
+          },
+          "character": {
+            "name": "Galinor",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "conditions": []
+          }
+        },
+        "wall_seconds": 4.178
+      }
+    },
+    {
+      "turn": "T2",
+      "player_input": "Does the rain make it harder to keep watch?",
+      "http_status": 200,
+      "error": null,
+      "halt_after": null,
+      "severe_mutations": [],
+      "wall_seconds": 15.674,
+      "trace": {
+        "player_facing_text": "Guard Captain says, \"I cannot answer that from what is settled here.\"",
+        "gm_tags": [
+          "interaction_obligation_terminal_preserved"
+        ],
+        "selected_resolver_hits": [
+          {
+            "path": "$.session.debug_traces[0].selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.session.debug_traces[0].resolution.metadata.selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.session.debug_traces[18].selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.session.debug_traces[18].resolution.metadata.selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.debug_traces[0].selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.debug_traces[0].resolution.metadata.selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.debug_traces[18].selected_resolver",
+            "value": "social"
+          },
+          {
+            "path": "$.debug_traces[18].resolution.metadata.selected_resolver",
+            "value": "social"
+          }
+        ],
+        "response_envelope": "structured_realization",
+        "provider_context_projection": {},
+        "active_interlocutor": null,
+        "recent_log": [
+          {
+            "player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+            "gm_snippet": "The guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of Cinderwatch's eastern gate. \"I suppose most would prefer dry ground,\" they say w"
+          },
+          {
+            "player_input": "",
+            "gm_snippet": "guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of cinderwatch's eastern gate [active_event_guard_captain_shrugs_slightly_water_drippin"
+          },
+          {
+            "player_input": "",
+            "gm_snippet": "keeps you sharp, or maybe just miserable enough to stay alert.\" their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons [active_"
+          }
+        ],
+        "operation": null,
+        "interlocutor_id": null,
+        "validation": {
+          "regeneration_invoked": true,
+          "regeneration_feedback": "The previous attempt was rejected for: unauthorized_resolution_decision_fact. It narrated consequential world facts that were not authorized by the pre-narration GM resolution decision. Answer again as the same structured envelope with declared_claims plus narration. Do not repeat rejected declarations or their prose realization. Answer again using only established facts, bounded incidental detail, or explicitly qualified NPC belief/hearsay. Do not invent routes, orders, command authorities, physical evidence, rosters, notice history, or movement as world truth. Keep every sentence that already matches the GM resolution decision. Repair only the rejected sentence. AUTHORITATIVE RETRY CONTEXT {\"resolution_contract\": {\"request_kind\": \"inquiry\", \"operation\": \"ask\", \"target\": \"Guard Captain\", \"interlocutor\": null, \"subject\": \"Guard Captain\", \"dimension\": null, \"dimensions\": [], \"expected_resolution\": \"answer\", \"authority\": \"unknown_allowed\", \"constraint\": \"Resolve ask for Guard Captain (ask). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description. That target is available. Do not deny that it is present.\"}, \"gm_resolution_decision\": {\"contract_id\": \"rc_bb4f0e625ef1\", \"outcome_classification\": \"established_or_retrieved\", \"proposed_facts\": [{\"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Cold rain needles Cinderwatch's eastern gate under frayed banners.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A notice board announces new taxes and curfews, and names a missing patrol.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A tavern runner is hawking hot stew and rumor for coin.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"A ragged stranger hangs back, watching the crowd more than the queue.\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {}}, {\"text\": \"Guard Captain exists as guard\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"guard_captain\", \"subject_aliases\": [\"Guard Captain\"], \"relation\": \"exists\", \"value\": \"guard\", \"authority\": \"world_truth\"}}, {\"text\": \"Tavern Runner exists as informant\", \"authorized\": true, \"authority\": \"world_truth\", \"provenance\": \"authored_world_fact\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"tavern_runner\", \"subject_aliases\": [\"Tavern Runner\"], \"relation\": \"exists\", \"value\": \"informant\", \"authority\": \"world_truth\"}}, {\"text\": \"\\\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.\", \"authorized\": true, \"authority\": \"bounded_incidental\", \"provenance\": \"bounded_incidental\", \"epistemic_status\": null, \"relation_kind\": null, \"semantic_identity\": {\"epistemic_status\": \"established\"}}], \"realization_claims\": [{\"claim_id\": \"rc_ad718c5402fd\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_b08a2a2bacbe\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.1\", \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_abcf2a4da605\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.2\", \"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_ceeffa83562d\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.3\", \"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_ea492080989d\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.4\", \"text\": \"A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_e1a3e4a3b185\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.5\", \"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_9ff7c6a22f9c\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.0\", \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_8c2fbda8bbde\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.1\", \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_47a790889228\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.2\", \"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6bcf4f33f5a7\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.3\", \"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6e7c52d53ba7\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.4\", \"text\": \"A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_17336662807c\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.5\", \"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_1199ffccd4f4\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.0\", \"text\": \"Cold rain needles Cinderwatch's eastern gate under frayed banners.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_8aad2e8f332c\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.1\", \"text\": \"The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_9ec9a5230d36\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.2\", \"text\": \"A notice board announces new taxes and curfews, and names a missing patrol.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_92efcd618915\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.3\", \"text\": \"A tavern runner is hawking hot stew and rumor for coin.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_b402854b8b4f\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.4\", \"text\": \"A ragged stranger hangs back, watching the crowd more than the queue.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_d7d3b3f46078\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"guard_captain\", \"subject_aliases\": [\"Guard Captain\"], \"relation\": \"exists\", \"value\": \"guard\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Guard Captain exists as guard\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_0619c8445d76\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"tavern_runner\", \"subject_aliases\": [\"Tavern Runner\"], \"relation\": \"exists\", \"value\": \"informant\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.1\", \"text\": \"Tavern Runner exists as informant\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_bc155268a84f\", \"semantic_identity\": {\"epistemic_status\": \"established\"}, \"provenance\": \"bounded_incidental\", \"authority\": \"bounded_incidental\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"INCIDENTAL_TEXTURE\", \"persistence\": \"runtime_incidental\", \"source_ref\": \"temporal.accepted_incidentals.0\", \"text\": \"\\\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"narration_constraints\": [\"Narration may not establish consequential world facts absent this decision.\", \"Generated proposals are not world truth unless already grounded or explicitly permitted.\", \"NPC claims remain claims; belief/hearsay/uncertainty does not promote them.\", \"Inference must not be narrated as physical evidence.\", \"Do not narrate authoritative travel/location change unless a location mutation is permitted.\"], \"unresolved_qualifiers\": [], \"answer_relations\": [], \"epistemic_acts\": [{\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.4\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.visible_facts.5\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.opening_seed_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.opening_seed_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.opening_seed_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.opening_seed_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.opening_seed_facts.4\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.opening_seed_facts.5\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.journal_seed_facts.0\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.journal_seed_facts.1\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.journal_seed_facts.2\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.journal_seed_facts.3\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"scene.journal_seed_facts.4\", \"authority\": \"world_truth\", \"semantic_identity\": {}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.0\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"guard_captain\", \"subject_aliases\": [\"Guard Captain\"], \"relation\": \"exists\", \"value\": \"guard\", \"authority\": \"world_truth\"}}, {\"act\": \"establish\", \"source_ref\": \"world.npcs.1\", \"authority\": \"world_truth\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"tavern_runner\", \"subject_aliases\": [\"Tavern Runner\"], \"relation\": \"exists\", \"value\": \"informant\", \"authority\": \"world_truth\"}}, {\"act\": \"infer\", \"source_ref\": \"temporal.accepted_incidentals.0\", \"authority\": \"bounded_incidental\", \"semantic_identity\": {\"epistemic_status\": \"established\"}}], \"permitted_state_mutations\": [], \"executable_obligations\": {\"primary\": null, \"mutation_owner\": null, \"sequence\": [], \"supporting\": []}}, \"accepted_realization_claims\": [{\"claim_id\": \"rc_ad718c5402fd\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.0\", \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_b08a2a2bacbe\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.1\", \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_abcf2a4da605\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.2\", \"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_ceeffa83562d\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.3\", \"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_ea492080989d\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.4\", \"text\": \"A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_e1a3e4a3b185\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.visible_facts.5\", \"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_9ff7c6a22f9c\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.0\", \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_8c2fbda8bbde\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.1\", \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_47a790889228\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.2\", \"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6bcf4f33f5a7\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.3\", \"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_6e7c52d53ba7\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.4\", \"text\": \"A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_17336662807c\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.opening_seed_facts.5\", \"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_1199ffccd4f4\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.0\", \"text\": \"Cold rain needles Cinderwatch's eastern gate under frayed banners.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_8aad2e8f332c\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.1\", \"text\": \"The approach is jammed with refugees, wagons, and travelers; guards watch with hard, tired discipline.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_9ec9a5230d36\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.2\", \"text\": \"A notice board announces new taxes and curfews, and names a missing patrol.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_92efcd618915\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.3\", \"text\": \"A tavern runner is hawking hot stew and rumor for coin.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_b402854b8b4f\", \"semantic_identity\": {}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"scene.journal_seed_facts.4\", \"text\": \"A ragged stranger hangs back, watching the crowd more than the queue.\", \"relation_kind\": \"ordinary_predicate\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_d7d3b3f46078\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"guard_captain\", \"subject_aliases\": [\"Guard Captain\"], \"relation\": \"exists\", \"value\": \"guard\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.0\", \"text\": \"Guard Captain exists as guard\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_0619c8445d76\", \"semantic_identity\": {\"kind\": \"entity\", \"subject\": \"tavern_runner\", \"subject_aliases\": [\"Tavern Runner\"], \"relation\": \"exists\", \"value\": \"informant\", \"authority\": \"world_truth\"}, \"provenance\": \"authored_world_fact\", \"authority\": \"world_truth\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"MUST_STATE\", \"persistence\": \"world_truth\", \"source_ref\": \"world.npcs.1\", \"text\": \"Tavern Runner exists as informant\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}, {\"claim_id\": \"rc_bc155268a84f\", \"semantic_identity\": {\"epistemic_status\": \"established\"}, \"provenance\": \"bounded_incidental\", \"authority\": \"bounded_incidental\", \"epistemic_status\": \"established\", \"modality\": \"\", \"realization_role\": \"INCIDENTAL_TEXTURE\", \"persistence\": \"runtime_incidental\", \"source_ref\": \"temporal.accepted_incidentals.0\", \"text\": \"\\\" Their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.\", \"relation_kind\": \"observation\", \"premise_claim_ids\": []}], \"rejected_declarations\": [], \"validation_failure\": {\"reasons\": [\"unauthorized_resolution_decision_fact\"], \"violations\": [{\"reason_codes\": [\"unauthorized_certainty_upgrade\"], \"text\": \"Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.\"}, {\"reason_codes\": [\"undeclared_consequential_claim\"], \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.\"}, {\"reason_codes\": [\"undeclared_consequential_claim\"], \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.\"}]}, \"structured_envelope_schema\": {\"declared_claims\": [{\"declaration_mode\": \"realize|propose\", \"source_claim_id\": \"claim_id_from_gm_resolution_decision or null\", \"premise_claim_ids\": [\"claim ids of propositions this epistemic claim depends on\"], \"text\": \"short internal claim\", \"relation_kind\": \"observation|causal|evidential|epistemic_status|ordinary_predicate|gameplay_lead\", \"modality\": \"established|possible|hypothetical|unresolved\"}], \"narration\": \"player-facing sentence\"}}",
+          "hard_validation_attempt_1": {
+            "hard_valid": false,
+            "reasons": [
+              "unauthorized_resolution_decision_fact"
+            ],
+            "soft_flags": [],
+            "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in. A notice board displays new taxes, curfews, and a warning about a missing patrol. Nearby, a tavern runner shouts offers of hot stew and paid rumor. Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself. Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+            "gm_resolution_decision_audit": {
+              "decision_id": "rc_bb4f0e625ef1",
+              "hard_valid": false,
+              "declaration_validation": {
+                "schema_version": 1,
+                "structured_contract_present": true,
+                "hard_valid": true,
+                "accepted_claims": [
+                  {
+                    "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+                    "semantic_identity": {
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.0",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  },
+                  {
+                    "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+                    "semantic_identity": {
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.1",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  },
+                  {
+                    "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+                    "semantic_identity": {
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.2",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  },
+                  {
+                    "text": "A tavern runner shouts offers of hot stew and paid rumor.",
+                    "semantic_identity": {
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.3",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  },
+                  {
+                    "text": "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+                    "semantic_identity": {
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.4",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  },
+                  {
+                    "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+                    "semantic_identity": {
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.5",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  }
+                ],
+                "rejected_claims": [],
+                "violations": []
+              },
+              "narration_validation": {
+                "decision_id": "rc_bb4f0e625ef1",
+                "hard_valid": false,
+                "violations": [
+                  {
+                    "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                    "provenance": "generated_proposal",
+                    "consequence": "consequential",
+                    "authorized": false,
+                    "reason_codes": [
+                      "unauthorized_certainty_upgrade"
+                    ],
+                    "authority": "unauthorized",
+                    "persistence": "do_not_persist",
+                    "source_ref": "",
+                    "outcome_classification": "consequentially_unresolved",
+                    "semantic_identity": {}
+                  }
+                ],
+                "proposed_facts": [
+                  {
+                    "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate.",
+                    "provenance": "authored_world_fact",
+                    "consequence": "consequential",
+                    "authorized": true,
+                    "reason_codes": [
+                      "authored_state_source"
+                    ],
+                    "authority": "world_truth",
+                    "persistence": "world_truth",
+                    "source_ref": "scene.visible_facts.0",
+                    "outcome_classification": "established_or_retrieved",
+                    "semantic_identity": {}
+                  },
+                  {
+                    "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                    "provenance": "authored_world_fact",
+                    "consequence": "consequential",
+                    "authorized": true,
+                    "reason_codes": [
+                      "authored_state_source"
+                    ],
+                    "authority": "world_truth",
+                    "persistence": "world_truth",
+                    "source_ref": "scene.visible_facts.1",
+                    "outcome_classification": "established_or_retrieved",
+                    "semantic_identity": {}
+                  },
+                  {
+                    "text": "Nearby, a tavern runner shouts offers of hot stew and paid rumor.",
+                    "provenance": "npc_claim",
+                    "consequence": "epistemic",
+                    "authorized": true,
+                    "reason_codes": [
+                      "epistemically_qualified"
+                    ],
+                    "authority": "claim_only",
+                    "persistence": "claim_only",
+                    "source_ref": "",
+                    "outcome_classification": "epistemically_qualified",
+                    "semantic_identity": {
+                      "relation_kind": "epistemic_status",
+                      "epistemic_status": "rumor"
+                    }
+                  },
+                  {
+                    "text": "Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself.",
+                    "provenance": "bounded_incidental",
+                    "consequence": "low",
+                    "authorized": true,
+                    "reason_codes": [
+                      "bounded_incidental_texture"
+                    ],
+                    "authority": "bounded_incidental",
+                    "persistence": "runtime_incidental",
+                    "source_ref": "",
+                    "outcome_classification": "epistemically_qualified",
+                    "semantic_identity": {}
+                  },
+                  {
+                    "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                    "provenance": "generated_proposal",
+                    "consequence": "consequential",
+                    "authorized": false,
+                    "reason_codes": [
+                      "unauthorized_certainty_upgrade"
+                    ],
+                    "authority": "unauthorized",
+                    "persistence": "do_not_persist",
+                    "source_ref": "",
+                    "outcome_classification": "consequentially_unresolved",
+                    "semantic_identity": {}
+                  }
+                ],
+                "claim_results": [
+                  {
+                    "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate.",
+                    "semantic_identity": {},
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.0",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authored_state_source"
+                    ]
+                  },
+                  {
+                    "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate.",
+                    "semantic_identity": {},
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.opening_seed_facts.0",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authored_state_source"
+                    ]
+                  },
+                  {
+                    "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                    "semantic_identity": {},
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.visible_facts.1",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authored_state_source"
+                    ]
+                  },
+                  {
+                    "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                    "semantic_identity": {},
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "scene.opening_seed_facts.1",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authored_state_source"
+                    ]
+                  },
+                  {
+                    "text": "Nearby, a tavern runner shouts offers of hot stew and paid rumor.",
+                    "semantic_identity": {
+                      "relation_kind": "epistemic_status",
+                      "epistemic_status": "rumor"
+                    },
+                    "provenance": "npc_claim",
+                    "authority": "claim_only",
+                    "epistemic_status": "rumor",
+                    "relation_kind": "epistemic_status",
+                    "persistence": "claim_only",
+                    "authorized": true,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "epistemically_qualified"
+                    ]
+                  },
+                  {
+                    "text": "Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself.",
+                    "semantic_identity": {},
+                    "provenance": "bounded_incidental",
+                    "authority": "bounded_incidental",
+                    "epistemic_status": "",
+                    "relation_kind": "ordinary_predicate",
+                    "persistence": "runtime_incidental",
+                    "authorized": true,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "bounded_incidental_texture"
+                    ]
+                  },
+                  {
+                    "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                    "semantic_identity": {
+                      "relation_kind": "epistemic_status",
+                      "epistemic_status": "inferred"
+                    },
+                    "provenance": "gm_inference",
+                    "authority": "observation",
+                    "epistemic_status": "inferred",
+                    "relation_kind": "epistemic_status",
+                    "persistence": "do_not_persist",
+                    "authorized": true,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authorized_qualified_inference"
+                    ]
+                  },
+                  {
+                    "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                    "semantic_identity": {
+                      "relation_kind": "epistemic_status",
+                      "epistemic_status": "established"
+                    },
+                    "provenance": "generated_proposal",
+                    "authority": "unauthorized",
+                    "epistemic_status": "unresolved",
+                    "relation_kind": "epistemic_status",
+                    "persistence": "do_not_persist",
+                    "authorized": false,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "unauthorized_certainty_upgrade"
+                    ]
+                  }
+                ]
+              },
+              "violations": [
+                {
+                  "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                  "provenance": "generated_proposal",
+                  "consequence": "consequential",
+                  "authorized": false,
+                  "reason_codes": [
+                    "unauthorized_certainty_upgrade"
+                  ],
+                  "authority": "unauthorized",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "consequentially_unresolved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "unauthorized",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": false,
+                  "source_ref": "scene.visible_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "undeclared_consequential_claim"
+                  ]
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "unauthorized",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": false,
+                  "source_ref": "scene.opening_seed_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "undeclared_consequential_claim"
+                  ]
+                }
+              ],
+              "proposed_facts": [
+                {
+                  "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.0",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_state_source"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "scene.visible_facts.1",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Nearby, a tavern runner shouts offers of hot stew and paid rumor.",
+                  "provenance": "npc_claim",
+                  "consequence": "epistemic",
+                  "authorized": true,
+                  "reason_codes": [
+                    "epistemically_qualified"
+                  ],
+                  "authority": "claim_only",
+                  "persistence": "claim_only",
+                  "source_ref": "",
+                  "outcome_classification": "epistemically_qualified",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "rumor"
+                  }
+                },
+                {
+                  "text": "Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself.",
+                  "provenance": "bounded_incidental",
+                  "consequence": "low",
+                  "authorized": true,
+                  "reason_codes": [
+                    "bounded_incidental_texture"
+                  ],
+                  "authority": "bounded_incidental",
+                  "persistence": "runtime_incidental",
+                  "source_ref": "",
+                  "outcome_classification": "epistemically_qualified",
+                  "semantic_identity": {}
+                },
+                {
+                  "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                  "provenance": "generated_proposal",
+                  "consequence": "consequential",
+                  "authorized": false,
+                  "reason_codes": [
+                    "unauthorized_certainty_upgrade"
+                  ],
+                  "authority": "unauthorized",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "consequentially_unresolved",
+                  "semantic_identity": {}
+                }
+              ],
+              "claim_results": [
+                {
+                  "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.2",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "A tavern runner shouts offers of hot stew and paid rumor.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.3",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.4",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.5",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_state_source"
+                  ]
+                },
+                {
+                  "text": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.opening_seed_facts.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_state_source"
+                  ]
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_state_source"
+                  ]
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.opening_seed_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_state_source"
+                  ]
+                },
+                {
+                  "text": "Nearby, a tavern runner shouts offers of hot stew and paid rumor.",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "rumor"
+                  },
+                  "provenance": "npc_claim",
+                  "authority": "claim_only",
+                  "epistemic_status": "rumor",
+                  "relation_kind": "epistemic_status",
+                  "persistence": "claim_only",
+                  "authorized": true,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "epistemically_qualified"
+                  ]
+                },
+                {
+                  "text": "Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself.",
+                  "semantic_identity": {},
+                  "provenance": "bounded_incidental",
+                  "authority": "bounded_incidental",
+                  "epistemic_status": "",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "runtime_incidental",
+                  "authorized": true,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "bounded_incidental_texture"
+                  ]
+                },
+                {
+                  "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "inferred"
+                  },
+                  "provenance": "gm_inference",
+                  "authority": "observation",
+                  "epistemic_status": "inferred",
+                  "relation_kind": "epistemic_status",
+                  "persistence": "do_not_persist",
+                  "authorized": true,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authorized_qualified_inference"
+                  ]
+                },
+                {
+                  "text": "Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "established"
+                  },
+                  "provenance": "generated_proposal",
+                  "authority": "unauthorized",
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "epistemic_status",
+                  "persistence": "do_not_persist",
+                  "authorized": false,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "unauthorized_certainty_upgrade"
+                  ]
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "unauthorized",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": false,
+                  "source_ref": "scene.visible_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "undeclared_consequential_claim"
+                  ]
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in.",
+                  "semantic_identity": {},
+                  "provenance": "authored_world_fact",
+                  "authority": "unauthorized",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": false,
+                  "source_ref": "scene.opening_seed_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "undeclared_consequential_claim"
+                  ]
+                }
+              ],
+              "accepted_realized_claims": [
+                {
+                  "text": "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.1",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.2",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "A tavern runner shouts offers of hot stew and paid rumor.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.3",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.4",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.",
+                  "semantic_identity": {
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "ordinary_predicate",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "scene.visible_facts.5",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                }
+              ]
+            }
+          },
+          "hard_validation_attempt_2": {
+            "hard_valid": false,
+            "reasons": [
+              "unauthorized_resolution_decision_fact"
+            ],
+            "soft_flags": [],
+            "text": "The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue. They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+            "gm_resolution_decision_audit": {
+              "decision_id": "rc_bb4f0e625ef1",
+              "hard_valid": false,
+              "declaration_validation": {
+                "schema_version": 1,
+                "structured_contract_present": true,
+                "hard_valid": true,
+                "accepted_claims": [
+                  {
+                    "text": "The guard captain's gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+                    "semantic_identity": {
+                      "epistemic_status": "established",
+                      "premise_claim_ids": []
+                    },
+                    "provenance": "bounded_incidental",
+                    "authority": "bounded_incidental",
+                    "epistemic_status": "established",
+                    "relation_kind": "observation",
+                    "persistence": "runtime_incidental",
+                    "authorized": true,
+                    "source_ref": "temporal.accepted_incidentals.0",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "accepted_declared_realization"
+                    ],
+                    "premise_claim_ids": []
+                  }
+                ],
+                "rejected_claims": [],
+                "violations": []
+              },
+              "narration_validation": {
+                "decision_id": "rc_bb4f0e625ef1",
+                "hard_valid": false,
+                "violations": [
+                  {
+                    "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                    "provenance": "generated_proposal",
+                    "consequence": "consequential",
+                    "authorized": false,
+                    "reason_codes": [
+                      "unsupported_narrator_lead"
+                    ],
+                    "authority": "unauthorized",
+                    "persistence": "do_not_persist",
+                    "source_ref": "",
+                    "outcome_classification": "consequentially_unresolved",
+                    "semantic_identity": {}
+                  }
+                ],
+                "proposed_facts": [
+                  {
+                    "text": "The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue.",
+                    "provenance": "authored_world_fact",
+                    "consequence": "consequential",
+                    "authorized": true,
+                    "reason_codes": [
+                      "authored_world_npc"
+                    ],
+                    "authority": "world_truth",
+                    "persistence": "world_truth",
+                    "source_ref": "world.npcs.0",
+                    "outcome_classification": "established_or_retrieved",
+                    "semantic_identity": {
+                      "kind": "entity",
+                      "subject": "guard_captain",
+                      "subject_aliases": [
+                        "Guard Captain"
+                      ],
+                      "relation": "exists",
+                      "value": "guard",
+                      "authority": "world_truth"
+                    }
+                  },
+                  {
+                    "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                    "provenance": "generated_proposal",
+                    "consequence": "consequential",
+                    "authorized": false,
+                    "reason_codes": [
+                      "unsupported_narrator_lead"
+                    ],
+                    "authority": "unauthorized",
+                    "persistence": "do_not_persist",
+                    "source_ref": "",
+                    "outcome_classification": "consequentially_unresolved",
+                    "semantic_identity": {}
+                  }
+                ],
+                "claim_results": [
+                  {
+                    "text": "The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue.",
+                    "semantic_identity": {
+                      "kind": "entity",
+                      "subject": "guard_captain",
+                      "subject_aliases": [
+                        "Guard Captain"
+                      ],
+                      "relation": "exists",
+                      "value": "guard",
+                      "authority": "world_truth"
+                    },
+                    "provenance": "authored_world_fact",
+                    "authority": "world_truth",
+                    "epistemic_status": "established",
+                    "relation_kind": "observation",
+                    "persistence": "world_truth",
+                    "authorized": true,
+                    "source_ref": "world.npcs.0",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authored_world_npc"
+                    ]
+                  },
+                  {
+                    "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                    "semantic_identity": {},
+                    "provenance": "generated_proposal",
+                    "authority": "unauthorized",
+                    "epistemic_status": "unresolved",
+                    "relation_kind": "gameplay_lead",
+                    "persistence": "do_not_persist",
+                    "authorized": false,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "unsupported_narrator_lead"
+                    ]
+                  },
+                  {
+                    "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                    "semantic_identity": {
+                      "relation_kind": "epistemic_status",
+                      "epistemic_status": "inferred"
+                    },
+                    "provenance": "gm_inference",
+                    "authority": "observation",
+                    "epistemic_status": "inferred",
+                    "relation_kind": "epistemic_status",
+                    "persistence": "do_not_persist",
+                    "authorized": true,
+                    "source_ref": "",
+                    "source_turn": null,
+                    "source_scene": "",
+                    "reason_codes": [
+                      "authorized_qualified_inference"
+                    ]
+                  }
+                ]
+              },
+              "violations": [
+                {
+                  "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                  "provenance": "generated_proposal",
+                  "consequence": "consequential",
+                  "authorized": false,
+                  "reason_codes": [
+                    "unsupported_narrator_lead"
+                  ],
+                  "authority": "unauthorized",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "consequentially_unresolved",
+                  "semantic_identity": {}
+                }
+              ],
+              "proposed_facts": [
+                {
+                  "text": "The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue.",
+                  "provenance": "authored_world_fact",
+                  "consequence": "consequential",
+                  "authorized": true,
+                  "reason_codes": [
+                    "authored_world_npc"
+                  ],
+                  "authority": "world_truth",
+                  "persistence": "world_truth",
+                  "source_ref": "world.npcs.0",
+                  "outcome_classification": "established_or_retrieved",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "guard_captain",
+                    "subject_aliases": [
+                      "Guard Captain"
+                    ],
+                    "relation": "exists",
+                    "value": "guard",
+                    "authority": "world_truth"
+                  }
+                },
+                {
+                  "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                  "provenance": "generated_proposal",
+                  "consequence": "consequential",
+                  "authorized": false,
+                  "reason_codes": [
+                    "unsupported_narrator_lead"
+                  ],
+                  "authority": "unauthorized",
+                  "persistence": "do_not_persist",
+                  "source_ref": "",
+                  "outcome_classification": "consequentially_unresolved",
+                  "semantic_identity": {}
+                }
+              ],
+              "claim_results": [
+                {
+                  "text": "The guard captain's gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+                  "semantic_identity": {
+                    "epistemic_status": "established",
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "bounded_incidental",
+                  "authority": "bounded_incidental",
+                  "epistemic_status": "established",
+                  "relation_kind": "observation",
+                  "persistence": "runtime_incidental",
+                  "authorized": true,
+                  "source_ref": "temporal.accepted_incidentals.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                },
+                {
+                  "text": "The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue.",
+                  "semantic_identity": {
+                    "kind": "entity",
+                    "subject": "guard_captain",
+                    "subject_aliases": [
+                      "Guard Captain"
+                    ],
+                    "relation": "exists",
+                    "value": "guard",
+                    "authority": "world_truth"
+                  },
+                  "provenance": "authored_world_fact",
+                  "authority": "world_truth",
+                  "epistemic_status": "established",
+                  "relation_kind": "observation",
+                  "persistence": "world_truth",
+                  "authorized": true,
+                  "source_ref": "world.npcs.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authored_world_npc"
+                  ]
+                },
+                {
+                  "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                  "semantic_identity": {},
+                  "provenance": "generated_proposal",
+                  "authority": "unauthorized",
+                  "epistemic_status": "unresolved",
+                  "relation_kind": "gameplay_lead",
+                  "persistence": "do_not_persist",
+                  "authorized": false,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "unsupported_narrator_lead"
+                  ]
+                },
+                {
+                  "text": "They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+                  "semantic_identity": {
+                    "relation_kind": "epistemic_status",
+                    "epistemic_status": "inferred"
+                  },
+                  "provenance": "gm_inference",
+                  "authority": "observation",
+                  "epistemic_status": "inferred",
+                  "relation_kind": "epistemic_status",
+                  "persistence": "do_not_persist",
+                  "authorized": true,
+                  "source_ref": "",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "authorized_qualified_inference"
+                  ]
+                }
+              ],
+              "accepted_realized_claims": [
+                {
+                  "text": "The guard captain's gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.",
+                  "semantic_identity": {
+                    "epistemic_status": "established",
+                    "premise_claim_ids": []
+                  },
+                  "provenance": "bounded_incidental",
+                  "authority": "bounded_incidental",
+                  "epistemic_status": "established",
+                  "relation_kind": "observation",
+                  "persistence": "runtime_incidental",
+                  "authorized": true,
+                  "source_ref": "temporal.accepted_incidentals.0",
+                  "source_turn": null,
+                  "source_scene": "",
+                  "reason_codes": [
+                    "accepted_declared_realization"
+                  ],
+                  "premise_claim_ids": []
+                }
+              ]
+            }
+          },
+          "accepted_attempt": 2,
+          "accepted_text": "Guard Captain says, \"I cannot answer that from what is settled here.\"",
+          "accepted_authority_result": "accepted",
+          "accepted_provenance": "safe_nonresolution"
+        },
+        "compact_classification": null,
+        "compact_resolution_path": null,
+        "interaction_after": null,
+        "provider_request_count": 2,
+        "generation_count": 2,
+        "retry_count": 1,
+        "provider_candidates": [
+          {
+            "index": 2,
+            "kind": "generation",
+            "retry_attempt": 0,
+            "retry_reason": null,
+            "response_model": "gpt-4.1-mini-2025-04-14",
+            "usage": {
+              "input_tokens": 31242,
+              "output_tokens": 1230,
+              "total_tokens": 32472,
+              "cached_input_tokens": 0,
+              "input_tokens_details": {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "latency_seconds": 10.599,
+            "error": null,
+            "parsed_narration": "Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in. A notice board displays new taxes, curfews, and a warning about a missing patrol. Nearby, a tavern runner shouts offers of hot stew and paid rumor. Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself. Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.",
+            "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_id\": \"rc_ad718c5402fd\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_ad718c5402fd\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.\"\n    },\n    {\n      \"declaration_id\": \"rc_b08a2a2bacbe\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_b08a2a2bacbe\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.\"\n    },\n    {\n      \"declaration_id\": \"rc_abcf2a4da605\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_abcf2a4da605\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"A notice board lists new taxes, curfews, and a posted warning about a missing patrol.\"\n    },\n    {\n      \"declaration_id\": \"rc_ceeffa83562d\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_ceeffa83562d\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"A tavern runner shouts offers of hot stew and paid rumor.\"\n    },\n    {\n      \"declaration_id\": \"rc_ea492080989d\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_ea492080989d\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"A well-appointed townhouse overlooking the square flies noble colors\\u2014a quiet contrast to the mud and clamor.\"\n    },\n    {\n      \"declaration_id\": \"rc_e1a3e4a3b185\",\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_e1a3e4a3b185\",\n      \"premise_claim_ids\": [],\n      \"semantic_identity\": {},\n      \"provenance_requested\": \"authored_world_fact\",\n      \"epistemic_status\": \"established\",\n      \"modality\": \"established\",\n      \"realization_role\": \"MUST_STATE\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"text\": \"One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue.\"\n    }\n  ],\n  \"narration\": \"Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in. A notice board displays new taxes, curfews, and a warning about a missing patrol. Nearby, a tavern runner shouts offers of hot stew and paid rumor. Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself. Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.\"\n  ,\n  \"player_facing_text\": \"Rain spatters the soot-dark stone and frayed banners that hang above Cinderwatch's eastern gate. Refugees, wagons, and foot traffic clog the muddy approach as guards hold the choke point while the crowd presses in. A notice board displays new taxes, curfews, and a warning about a missing patrol. Nearby, a tavern runner shouts offers of hot stew and paid rumor. Among the watchers, one figure in threadbare clothes stands almost unnervingly still, observing the packs and faces more than the queue itself. Although the rain adds discomfort, the guards' discipline suggests they manage to keep watch despite the wet conditions, neither clearly hindered nor supported by the weather.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"No specific NPC replied; answering as narrator indicating weather adds discomfort but guards maintain watch.\"\n}"
+          },
+          {
+            "index": 3,
+            "kind": "generation",
+            "retry_attempt": 1,
+            "retry_reason": "hard_invalid",
+            "response_model": "gpt-4.1-mini-2025-04-14",
+            "usage": {
+              "input_tokens": 39262,
+              "output_tokens": 331,
+              "total_tokens": 39593,
+              "cached_input_tokens": 0,
+              "input_tokens_details": {
+                "cache_write_tokens": 0,
+                "cached_tokens": 0
+              },
+              "output_tokens_details": {
+                "reasoning_tokens": 0
+              }
+            },
+            "latency_seconds": 4.618,
+            "error": null,
+            "parsed_narration": "The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue. They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.",
+            "raw_output": "{\n  \"declared_claims\": [\n    {\n      \"declaration_mode\": \"realize\",\n      \"source_claim_id\": \"rc_bc155268a84f\",\n      \"premise_claim_ids\": [],\n      \"text\": \"The guard captain's gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons.\",\n      \"relation_kind\": \"ordinary_predicate\",\n      \"modality\": \"established\"\n    }\n  ],\n  \"narration\": \"The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue. They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.\",\n  \"player_facing_text\": \"The guard captain blinks, water dripping from their helmet's brim, and their gaze flickers briefly to the frayed banners overhead, then back to the crowded queue. They seem to bear the rain's discomfort with silent endurance, a flicker of misery perhaps, but no clear sign that it hampers or aids their vigilance.\",\n  \"tags\": [],\n  \"improvisation_proposals\": null,\n  \"scene_update\": null,\n  \"activate_scene_id\": null,\n  \"new_scene_draft\": null,\n  \"world_updates\": null,\n  \"suggested_action\": null,\n  \"debug_notes\": \"Narration reframed to avoid unauthorized factual claims about rain's effect; only bounded incidental detail used.\"\n}"
+          }
+        ],
+        "state_before": {
+          "turn_counter": 2,
+          "active_scene_id": "frontier_gate",
+          "interaction_context": {
+            "active_interaction_target_id": "guard_captain",
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "engaged",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "discourse_focus": {
+            "version": 1,
+            "scene_id": "frontier_gate",
+            "active_interlocutor": {
+              "id": "guard_captain",
+              "label": "Guard Captain",
+              "kind": "interlocutor",
+              "scene_id": "frontier_gate",
+              "turn_index": 2,
+              "source": "resolution_contract"
+            },
+            "active_claim": null,
+            "active_actionable_lead": null,
+            "active_inspected": null,
+            "last_attempted_action": null,
+            "last_committed_turn": 2,
+            "last_committed_contract_id": "rc_601d8bc1627e"
+          },
+          "conversation": [],
+          "known_clues": null,
+          "scene_runtime": {
+            "discovered_clues": [],
+            "discovered_clue_ids": [],
+            "pending_leads": [],
+            "revealed_hidden_facts": [],
+            "suspicion_flags": [],
+            "searched_targets": [],
+            "resolved_interactables": [],
+            "last_exploration_action_key": "question_guard_captain",
+            "repeated_action_count": 1,
+            "last_resolution_kind": "question",
+            "last_description_hash": null,
+            "last_perception_visible_facts": [],
+            "last_perception_narration": "",
+            "last_perception_turn": null,
+            "consumed_action_ids": [],
+            "momentum_exchanges_since": 0,
+            "momentum_next_due_in": 2,
+            "momentum_last_kind": null,
+            "passive_action_streak": 1,
+            "recent_player_actions": [
+              {
+                "text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+                "passive": true,
+                "markers": [
+                  "watch"
+                ],
+                "resolution_kind": null,
+                "turn": 2
+              }
+            ],
+            "last_player_action_text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+            "last_player_action_passive": true,
+            "topic_pressure": {
+              "topic:captain_guard_prefer": {
+                "repeat_count": 1,
+                "low_progress_streak": 0,
+                "progress_score_total": 0.0,
+                "last_answer": "",
+                "last_turn": 2,
+                "speaker_targets": {
+                  "guard_captain": {
+                    "repeat_count": 1,
+                    "low_progress_streak": 0,
+                    "patience": 3,
+                    "last_turn": 2
+                  }
+                },
+                "previous_probe_dimension": "",
+                "last_probe_dimension": "general",
+                "last_player_input": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?"
+              }
+            },
+            "topic_pressure_last_topic_key": "topic:captain_guard_prefer",
+            "topic_pressure_current": {
+              "topic_key": "topic:captain_guard_prefer",
+              "speaker_key": "guard_captain",
+              "turn": 2,
+              "player_text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+              "interaction_kind": "social",
+              "interaction_mode": "social",
+              "social_intent_class": "social_exchange",
+              "npc_name": "Guard Captain"
+            },
+            "recent_contextual_leads": [
+              {
+                "key": "active_event_guard_captain_shrugs_slightly_water_dripping_from_the_brim_of_their_helmet_as_rain_spatters_the_soot_dark_stone_of_cinderwatchs_eastern_gate",
+                "kind": "active_event",
+                "subject": "guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of cinderwatch's eastern gate",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 2
+              },
+              {
+                "key": "active_event_keeps_you_sharp_or_maybe_just_miserable_enough_to_stay_alert_their_gaze_flickers_briefly_to_the_frayed_banners_hanging_overhead_and_then_back_to_the_queue_clogged_with_refugees_and_wagons",
+                "kind": "active_event",
+                "subject": "keeps you sharp, or maybe just miserable enough to stay alert.\" their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 2
+              }
+            ]
+          },
+          "npc_runtime": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": 2
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "scene": {
+            "id": "frontier_gate",
+            "location": "Cinderwatch Gate District",
+            "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+            "mode": "social",
+            "visible_facts": [
+              "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+              "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+              "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+              "A tavern runner shouts offers of hot stew and paid rumor.",
+              "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+              "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+            ],
+            "hidden_facts": [
+              "An agent of a noble house is watching new arrivals from the square's edge.",
+              "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+              "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+              "A spotter above the lane is matching faces to a written list paid for in silver."
+            ],
+            "discoverable_clues": [
+              "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+              "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+              "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+              "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+              "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+              "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+              "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+              "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+            ],
+            "addressables": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 0,
+                "address_roles": [
+                  "guard",
+                  "watchman",
+                  "sentry",
+                  "guardsman",
+                  "captain"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 1,
+                "address_roles": [
+                  "runner",
+                  "informant"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "refugee",
+                "name": "Ragged stranger",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 2,
+                "address_roles": [
+                  "stranger",
+                  "refugee"
+                ],
+                "aliases": [
+                  "ragged stranger"
+                ]
+              },
+              {
+                "id": "threadbare_watcher",
+                "name": "Threadbare watcher",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 3,
+                "address_roles": [
+                  "watcher"
+                ],
+                "aliases": []
+              }
+            ]
+          },
+          "world": {
+            "npcs": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "location": "frontier_gate",
+                "role": "guard",
+                "affiliation": "cinderwatch",
+                "disposition": "neutral",
+                "current_agenda": "patrol_gate",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "patrol",
+                    "text": "A patrol went missing near the old milestone."
+                  }
+                ],
+                "stance_toward_player": "neutral",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "role": "informant",
+                "affiliation": "ash_cowl",
+                "disposition": "friendly",
+                "current_agenda": "sell_rumors",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "stew",
+                    "text": "Hot stew and rumors for coin."
+                  }
+                ],
+                "stance_toward_player": "favorable",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "name": "House Verevin",
+                "type": "noble_house",
+                "attitude": "wary",
+                "influence": 3,
+                "pressure": 3,
+                "goal": "Expand territory",
+                "current_plan": "Gathering influence",
+                "agenda_progress": 1,
+                "assets": []
+              },
+              {
+                "id": "ash_cowl",
+                "name": "The Ash Cowl",
+                "type": "criminal_syndicate",
+                "attitude": "opportunistic",
+                "influence": 3,
+                "pressure": 3,
+                "goal": "Control black market",
+                "current_plan": "Establishing smuggling routes",
+                "agenda_progress": 1,
+                "assets": []
+              },
+              {
+                "id": "ordo_pyric",
+                "name": "Ordo Pyric",
+                "type": "religious_order",
+                "attitude": "suspicious",
+                "influence": 2,
+                "pressure": 2,
+                "goal": "Suppress dangerous magic",
+                "current_plan": "Watching newcomers",
+                "agenda_progress": 1,
+                "assets": []
+              }
+            ],
+            "clues": {},
+            "world_flags": []
+          },
+          "character": {
+            "name": "Galinor",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "conditions": []
+          }
+        },
+        "state_after": {
+          "turn_counter": 3,
+          "active_scene_id": "frontier_gate",
+          "interaction_context": {
+            "active_interaction_target_id": null,
+            "active_interaction_kind": "social",
+            "interaction_mode": "social",
+            "engagement_level": "focused",
+            "conversation_privacy": null,
+            "player_position_context": null
+          },
+          "discourse_focus": {
+            "version": 1,
+            "scene_id": "frontier_gate",
+            "active_interlocutor": {
+              "id": "guard_captain",
+              "label": "Guard Captain",
+              "kind": "interlocutor",
+              "scene_id": "frontier_gate",
+              "turn_index": 2,
+              "source": "resolution_contract"
+            },
+            "active_claim": null,
+            "active_actionable_lead": null,
+            "active_inspected": null,
+            "last_attempted_action": null,
+            "last_committed_turn": 3,
+            "last_committed_contract_id": "rc_bb4f0e625ef1"
+          },
+          "conversation": [],
+          "known_clues": null,
+          "scene_runtime": {
+            "discovered_clues": [],
+            "discovered_clue_ids": [],
+            "pending_leads": [],
+            "revealed_hidden_facts": [],
+            "suspicion_flags": [],
+            "searched_targets": [],
+            "resolved_interactables": [],
+            "last_exploration_action_key": "question_npc",
+            "repeated_action_count": 1,
+            "last_resolution_kind": "question",
+            "last_description_hash": "0efa22719fc220b9c6163845f28b22d9",
+            "last_perception_visible_facts": [],
+            "last_perception_narration": "",
+            "last_perception_turn": null,
+            "consumed_action_ids": [],
+            "momentum_exchanges_since": 1,
+            "momentum_next_due_in": 2,
+            "momentum_last_kind": null,
+            "passive_action_streak": 2,
+            "recent_player_actions": [
+              {
+                "text": "Guard Captain, do you prefer standing watch in the rain, or somewhere dry?",
+                "passive": true,
+                "markers": [
+                  "watch"
+                ],
+                "resolution_kind": null,
+                "turn": 2
+              },
+              {
+                "text": "Does the rain make it harder to keep watch?",
+                "passive": true,
+                "markers": [
+                  "watch"
+                ],
+                "resolution_kind": null,
+                "turn": 3
+              }
+            ],
+            "last_player_action_text": "Does the rain make it harder to keep watch?",
+            "last_player_action_passive": true,
+            "topic_pressure": {
+              "topic:captain_guard_prefer": {
+                "repeat_count": 2,
+                "low_progress_streak": 0,
+                "progress_score_total": 0.0,
+                "last_answer": "",
+                "last_turn": 3,
+                "speaker_targets": {
+                  "guard_captain": {
+                    "repeat_count": 1,
+                    "low_progress_streak": 0,
+                    "patience": 3,
+                    "last_turn": 2
+                  },
+                  "__scene__": {
+                    "repeat_count": 1,
+                    "low_progress_streak": 0,
+                    "patience": 3,
+                    "last_turn": 3
+                  }
+                },
+                "previous_probe_dimension": "general",
+                "last_probe_dimension": "general",
+                "last_player_input": "Does the rain make it harder to keep watch?"
+              }
+            },
+            "topic_pressure_last_topic_key": "topic:captain_guard_prefer",
+            "topic_pressure_current": {
+              "topic_key": "topic:captain_guard_prefer",
+              "speaker_key": "__scene__",
+              "turn": 3,
+              "player_text": "Does the rain make it harder to keep watch?",
+              "interaction_kind": "observe",
+              "interaction_mode": "activity",
+              "social_intent_class": "social_exchange",
+              "npc_name": ""
+            },
+            "recent_contextual_leads": [
+              {
+                "key": "active_event_guard_captain_shrugs_slightly_water_dripping_from_the_brim_of_their_helmet_as_rain_spatters_the_soot_dark_stone_of_cinderwatchs_eastern_gate",
+                "kind": "active_event",
+                "subject": "guard captain shrugs slightly, water dripping from the brim of their helmet as rain spatters the soot-dark stone of cinderwatch's eastern gate",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 2
+              },
+              {
+                "key": "active_event_keeps_you_sharp_or_maybe_just_miserable_enough_to_stay_alert_their_gaze_flickers_briefly_to_the_frayed_banners_hanging_overhead_and_then_back_to_the_queue_clogged_with_refugees_and_wagons",
+                "kind": "active_event",
+                "subject": "keeps you sharp, or maybe just miserable enough to stay alert.\" their gaze flickers briefly to the frayed banners hanging overhead, and then back to the queue clogged with refugees and wagons",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 2
+              },
+              {
+                "key": "active_event_guard_captain_says_i_cannot_answer_that_from_what",
+                "kind": "active_event",
+                "subject": "guard captain says, \"i cannot answer that from what",
+                "position": "",
+                "named": false,
+                "positioned": false,
+                "mentions": 1,
+                "last_turn": 3
+              }
+            ]
+          },
+          "npc_runtime": {
+            "guard_captain": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": 2
+            },
+            "tavern_runner": {
+              "attitude": 0,
+              "trust": 0,
+              "fear": 0,
+              "suspicion": 0,
+              "known_topics": [],
+              "revealed_topics": [],
+              "last_interaction_turn": null
+            }
+          },
+          "scene": {
+            "id": "frontier_gate",
+            "location": "Cinderwatch Gate District",
+            "summary": "Rain spatters soot-dark stone as caravans and refugees choke the eastern gate. Guards watch the crowd with the brittle discipline of men who expect trouble, while old banners rot above the walls.",
+            "mode": "social",
+            "visible_facts": [
+              "Rain spatters soot-dark stone; frayed banners hang above Cinderwatch's eastern gate.",
+              "Refugees, wagons, and foot traffic clog the muddy approach; guards hold the choke while the crowd presses in.",
+              "A notice board lists new taxes, curfews, and a posted warning about a missing patrol.",
+              "A tavern runner shouts offers of hot stew and paid rumor.",
+              "A well-appointed townhouse overlooking the square flies noble colors—a quiet contrast to the mud and clamor.",
+              "One figure in threadbare clothes stands uncannily still, gaze flicking to packs and faces more than the gate queue."
+            ],
+            "hidden_facts": [
+              "An agent of a noble house is watching new arrivals from the square's edge.",
+              "A contact tied to the Ash Cowl smuggling web is scouting the crowd for arcane talent.",
+              "The threadbare watcher is waiting on a coordinated signal from someone already past the checkpoint.",
+              "A spotter above the lane is matching faces to a written list paid for in silver."
+            ],
+            "discoverable_clues": [
+              "Closer reading or asking around may reveal who posted the missing-patrol notice.",
+              "Paying the runner (or sharing a drink) might buy a clearer line on where the patrol was last seen; talk drifts toward the old trading crossroads.",
+              "A well-dressed watcher near the gate studies newcomers more than stamped papers; tailing or testing him could show whether he's House, guild, or hired eyes.",
+              "A rough customer in the press keeps sizing up travelers with unusual packs or sigils—enough attention might expose black-market or arcane interest.",
+              "The threadbare watcher starts at certain whistles and hand-signs; shadowing him could reveal who he's meeting.",
+              "When guards look away, voices near the tavern door drop to hurried talk about the patrol and whether the inn is safe after dark.",
+              "Stall-holders and porters mutter about needing extra hands—busy season, nerves, or both.",
+              "Job chalkboards and runner gossip hint at merchants hiring short-term muscle for the next caravan push."
+            ],
+            "addressables": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 0,
+                "address_roles": [
+                  "guard",
+                  "watchman",
+                  "sentry",
+                  "guardsman",
+                  "captain"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "scene_id": "frontier_gate",
+                "kind": "npc",
+                "addressable": true,
+                "address_priority": 1,
+                "address_roles": [
+                  "runner",
+                  "informant"
+                ],
+                "aliases": []
+              },
+              {
+                "id": "refugee",
+                "name": "Ragged stranger",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 2,
+                "address_roles": [
+                  "stranger",
+                  "refugee"
+                ],
+                "aliases": [
+                  "ragged stranger"
+                ]
+              },
+              {
+                "id": "threadbare_watcher",
+                "name": "Threadbare watcher",
+                "scene_id": "frontier_gate",
+                "kind": "scene_actor",
+                "addressable": true,
+                "address_priority": 3,
+                "address_roles": [
+                  "watcher"
+                ],
+                "aliases": []
+              }
+            ]
+          },
+          "world": {
+            "npcs": [
+              {
+                "id": "guard_captain",
+                "name": "Guard Captain",
+                "location": "frontier_gate",
+                "role": "guard",
+                "affiliation": "cinderwatch",
+                "disposition": "neutral",
+                "current_agenda": "patrol_gate",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "patrol",
+                    "text": "A patrol went missing near the old milestone."
+                  }
+                ],
+                "stance_toward_player": "neutral",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              },
+              {
+                "id": "tavern_runner",
+                "name": "Tavern Runner",
+                "location": "frontier_gate",
+                "role": "informant",
+                "affiliation": "ash_cowl",
+                "disposition": "friendly",
+                "current_agenda": "sell_rumors",
+                "availability": "available",
+                "topics": [
+                  {
+                    "id": "stew",
+                    "text": "Hot stew and rumors for coin."
+                  }
+                ],
+                "stance_toward_player": "favorable",
+                "knowledge_scope": [],
+                "information_reliability": "partial",
+                "origin_kind": "npc",
+                "origin_scene_id": "frontier_gate",
+                "promoted_from_actor_id": null,
+                "promotion_reason": null,
+                "promotion_turn": null,
+                "tags": []
+              }
+            ],
+            "factions": [
+              {
+                "id": "house_verevin",
+                "name": "House Verevin",
+                "type": "noble_house",
+                "attitude": "wary",
+                "influence": 3,
+                "pressure": 4,
+                "goal": "Expand territory",
+                "current_plan": "Gathering influence",
+                "agenda_progress": 2,
+                "assets": []
+              },
+              {
+                "id": "ash_cowl",
+                "name": "The Ash Cowl",
+                "type": "criminal_syndicate",
+                "attitude": "opportunistic",
+                "influence": 3,
+                "pressure": 4,
+                "goal": "Control black market",
+                "current_plan": "Establishing smuggling routes",
+                "agenda_progress": 2,
+                "assets": []
+              },
+              {
+                "id": "ordo_pyric",
+                "name": "Ordo Pyric",
+                "type": "religious_order",
+                "attitude": "suspicious",
+                "influence": 2,
+                "pressure": 3,
+                "goal": "Suppress dangerous magic",
+                "current_plan": "Watching newcomers",
+                "agenda_progress": 2,
+                "assets": []
+              }
+            ],
+            "clues": {},
+            "world_flags": []
+          },
+          "character": {
+            "name": "Galinor",
+            "hp": {
+              "current": 8,
+              "max": 8,
+              "nonlethal": 0
+            },
+            "inventory": [
+              {
+                "id": "spellbook",
+                "name": "Spellbook",
+                "quantity": 1,
+                "usable": false
+              }
+            ],
+            "spells": {
+              "prepared": [
+                {
+                  "id": "daze",
+                  "name": "Daze",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "detect_magic",
+                  "name": "Detect Magic",
+                  "cast": false,
+                  "level": 0
+                },
+                {
+                  "id": "magic_missile",
+                  "name": "Magic Missile",
+                  "cast": false,
+                  "level": 1
+                },
+                {
+                  "id": "shield",
+                  "name": "Shield",
+                  "cast": false,
+                  "level": 1
+                }
+              ],
+              "slots": {
+                "0": 3,
+                "1": 1
+              }
+            },
+            "conditions": []
+          }
+        },
+        "wall_seconds": 15.674
+      }
+    }
+  ]
+}

@@ -1,0 +1,1130 @@
+# ============================================================
+# PR-EG-R4 — Conversational Playability Qualification
+# ============================================================
+
+ERA: Product Realization
+CHAPTER: II
+CYCLE: PR-EG-R4
+LANES: Gameplay / AI / Validation / UX / Performance
+PRIORITY: HIGH
+TYPE: Evaluation-First
+PREDECESSOR: PR-EG-R3-R1
+
+============================================================
+0. MISSION
+============================================================
+
+Determine whether the current AI-DM can sustain
+ordinary, unscripted-feeling NPC conversations
+without repeatedly exposing its underlying
+authorization and command-processing machinery.
+
+Evaluate the integrated conversational product,
+not merely its individual components.
+
+The primary question is:
+
+"Can a player have an ordinary conversation with
+an NPC without constantly encountering the
+engine's authorization machinery?"
+
+Secondary questions:
+
+1. Can NPCs answer reasonable questions naturally?
+
+2. Can they maintain conversational context?
+
+3. Can they improvise harmless incidental details?
+
+4. Can they communicate uncertainty appropriately?
+
+5. Can they distinguish knowledge from authority?
+
+6. Can players change subjects naturally?
+
+7. Can players return to earlier subjects?
+
+8. Can multiple NPCs remain distinct?
+
+9. Can the engine preserve information integrity?
+
+10. Does the experience feel like interacting with
+    a fictional person rather than a command parser?
+
+This is primarily an evaluation campaign.
+
+DO NOT begin by implementing changes.
+
+============================================================
+1. BASELINE
+============================================================
+
+PR-EG-R3-R1 closed with verdict B.
+
+Reported qualification:
+
+- 692 passing relevant regression tests.
+- 25 inherited failures.
+- No new relevant regression failures.
+- 27 fresh-provider conversation turns.
+- 21 provider calls.
+- 9 interpretation calls.
+- 12 expression calls.
+- 0 narration calls.
+- 0 retries.
+- 18,840 input tokens.
+- 1,888 output tokens.
+- 1.34 seconds average latency.
+- 9/12 expression attempts adopted.
+- Dialogue quality approximately 2.44/3.
+
+Established capabilities include:
+
+- Host-owned speech adoption.
+- Bounded generative expression.
+- Authorized factual paraphrasing.
+- Limited personal characterization.
+- Reference grounding.
+- Conversational topic continuity.
+- Historical recall.
+- Proposition identity.
+- Partial-answer handling.
+- Information-integrity containment.
+
+Known limitations include:
+
+- Narrow characterization themes.
+- Repetitive explanations.
+- Inconsistent identity for repeated personal
+  explanations.
+- Limited semantic flexibility.
+- Dependence on authored information.
+- Limited evidence of sustained free-form dialogue.
+
+Treat these as hypotheses to investigate,
+not predetermined conclusions.
+
+============================================================
+2. SCOPE
+============================================================
+
+IN SCOPE:
+
+- Integrated NPC dialogue.
+- GM conversational ownership.
+- Multiple NPCs.
+- Player conversational freedom.
+- Conversational continuity.
+- Harmless improvisation.
+- Knowledge and disclosure.
+- Ambiguity handling.
+- Natural language quality.
+- Information integrity.
+- Player experience.
+- Provider efficiency.
+
+OUT OF SCOPE:
+
+- Formal campaign creation.
+- Character generation.
+- Combat.
+- Inventory management.
+- Movement mechanics.
+- Quest implementation.
+- New world-generation systems.
+- New NPC personality architecture.
+- New semantic validation architecture.
+- Unrelated regression repairs.
+- Broad performance optimization.
+
+Do not expand this cycle into PR-EH.
+
+============================================================
+3. EVALUATION PRINCIPLES
+============================================================
+
+Evaluate the game as a player experiences it.
+
+Do not award full credit merely because:
+
+- The response was safe.
+- The response was authorized.
+- The response was deterministic.
+- The response did not mutate world state.
+- The response matched a test fixture.
+- The response avoided hallucination.
+- The response was grammatically valid.
+
+A successful conversational response must also
+be relevant and useful.
+
+Distinguish:
+
+CORRECTNESS:
+Did the engine respect its rules and authority?
+
+QUALITY:
+Was the response natural, relevant, and coherent?
+
+PLAYABILITY:
+Could a reasonable player continue interacting
+without frustration or repeated reformulation?
+
+A technically correct but unhelpful response
+may pass correctness and fail playability.
+
+============================================================
+4. NO PREMATURE IMPLEMENTATION
+============================================================
+
+Phase 1 must be discovery and qualification only.
+
+Do not alter production behavior before completing
+the initial evaluation.
+
+Do not modify tests to accommodate current behavior.
+
+Do not introduce new fallback phrases.
+
+Do not add vocabulary exceptions.
+
+Do not change prompts merely to improve the
+qualification transcripts.
+
+The first objective is to measure the existing
+product honestly.
+
+============================================================
+5. EVALUATION ENVIRONMENT
+============================================================
+
+Record:
+
+- Repository revision.
+- Working-tree status.
+- Provider configuration.
+- Model identifiers.
+- Runtime configuration.
+- Relevant feature flags.
+- Scene fixtures.
+- NPC definitions.
+- Authorized facts.
+- Knowledge restrictions.
+- Save/load state.
+- Current regression baseline.
+
+Use the actual production /api/chat path.
+
+Do not substitute direct calls to isolated
+dialogue-generation helpers.
+
+Do not treat recorded-provider replay as
+fresh-provider evidence.
+
+============================================================
+6. SCENE DESIGN
+============================================================
+
+Construct at least three distinct conversational
+scenes.
+
+Each should contain enough information to support
+meaningful interaction without requiring extensive
+world-building.
+
+SCENE A — PUBLIC SOCIAL SETTING
+
+Examples:
+
+- Tavern.
+- Market.
+- Town square.
+- Roadside inn.
+
+Include:
+
+- Multiple NPCs.
+- Ordinary local knowledge.
+- Personal preferences.
+- Rumors.
+- At least one unknown fact.
+- At least one consequential restricted fact.
+
+SCENE B — INFORMATION-SEEKING SETTING
+
+Examples:
+
+- Guard post.
+- Harbor office.
+- Caravan checkpoint.
+
+Include:
+
+- Authorized operational information.
+- Information NPCs do not know.
+- Information NPCs cannot disclose.
+- Multiple related subjects.
+- Questions with partial answers.
+
+SCENE C — PERSONAL CONVERSATION
+
+Examples:
+
+- Campfire.
+- Workshop.
+- Quiet conversation at an inn.
+
+Include:
+
+- At least two NPCs.
+- Distinct authorized characterization.
+- Personal preferences.
+- Incidental nonconsequential subjects.
+- Opportunities for conversational follow-ups.
+- Opportunities for misunderstandings.
+
+Prefer existing game content and fixtures.
+
+Do not introduce extensive new lore merely
+to support testing.
+
+Document all newly constructed fixtures.
+
+============================================================
+7. SIMULATED PLAYER PROFILES
+============================================================
+
+Use multiple simulated player profiles.
+
+PROFILE 1 — COOPERATIVE
+
+Asks clear questions and follows established
+conversation topics.
+
+PROFILE 2 — CURIOUS
+
+Asks unexpected follow-ups, requests elaboration,
+and explores incidental details.
+
+PROFILE 3 — CASUAL
+
+Uses informal language, incomplete sentences,
+and conversational shorthand.
+
+PROFILE 4 — DISTRACTED
+
+Changes subjects, forgets details, and returns
+to earlier topics.
+
+PROFILE 5 — SKEPTICAL
+
+Challenges NPC statements and asks for reasons,
+evidence, or clarification.
+
+PROFILE 6 — PUSHY
+
+Requests information or commitments that the
+NPC may not be authorized to provide.
+
+PROFILE 7 — SOCIALLY PLAYFUL
+
+Jokes, teases, compliments, and engages in
+harmless small talk.
+
+PROFILE 8 — AMBIGUOUS
+
+Uses pronouns and vague references that may
+require clarification.
+
+Profiles should affect player behavior, not
+the engine's authorization rules.
+
+============================================================
+8. PLAYER GENERATION
+============================================================
+
+Use simulated players to produce conversational
+inputs.
+
+The simulated player should receive:
+
+- The scene visible to the player.
+- The player's conversational objective.
+- The previous player-facing transcript.
+- The simulated player's behavioral profile.
+
+The simulated player should NOT receive:
+
+- Hidden NPC facts.
+- Resolver internals.
+- Authorization contracts.
+- Expected test answers.
+- Validator implementation.
+- Canonical secrets.
+
+Do not generate the entire conversation script
+in advance.
+
+Generate each next player action based on the
+actual preceding player-facing response.
+
+This is essential.
+
+We want adaptive conversations, not predetermined
+question lists.
+
+============================================================
+9. CONVERSATION VOLUME
+============================================================
+
+Conduct at least:
+
+- 3 scenes.
+- 4 distinct simulated player profiles per scene.
+- 12 independent conversations.
+- 15 player turns per conversation.
+
+TARGET:
+
+At least 180 player turns.
+
+Each conversation should begin from a documented
+initial state.
+
+Do not allow state from one independent
+conversation to contaminate another.
+
+Preserve the complete transcript for every run.
+
+If provider budget or runtime prevents completing
+the target, stop and report the actual coverage.
+
+Do not silently substitute recorded responses.
+
+============================================================
+10. ADAPTIVE CONVERSATIONAL BEHAVIOR
+============================================================
+
+Simulated players should respond naturally to
+what the engine actually says.
+
+Examples:
+
+NPC:
+"I prefer the evening."
+
+PLAYER:
+"Why?"
+
+NPC:
+"It feels quieter to me."
+
+PLAYER:
+"Does the daytime bother you, then?"
+
+The next question should emerge from the
+previous answer.
+
+Include natural transitions such as:
+
+- "Really?"
+- "What makes you say that?"
+- "And what about the other one?"
+- "I don't follow."
+- "Wait, I meant..."
+- "You said something different earlier."
+- "Anyway, back to the road."
+- "What did she say?"
+- "Could you explain that another way?"
+
+These are examples, not required exact phrases.
+
+Do not optimize the test solely around them.
+
+============================================================
+11. CONVERSATIONAL STRESSORS
+============================================================
+
+Ensure the combined evaluation exercises:
+
+A. Immediate follow-up questions.
+
+B. Requests for explanation.
+
+C. Requests for paraphrasing.
+
+D. Challenges to previous statements.
+
+E. Harmless personal questions.
+
+F. Questions outside authored topics.
+
+G. Genuine ambiguity.
+
+H. Clarification resolution.
+
+I. Multiple NPCs.
+
+J. Speaker changes.
+
+K. Topic changes.
+
+L. Earlier-topic recall.
+
+M. Contradictory player assumptions.
+
+N. Requests for promises or rewards.
+
+O. Questions about hidden information.
+
+P. Questions with partial authorized answers.
+
+Q. Humor and informal conversation.
+
+R. Player corrections.
+
+S. Uncertainty.
+
+T. Long conversational chains.
+
+Do not force every stressor into every
+conversation.
+
+Distribute them naturally.
+
+============================================================
+12. CONVERSATIONAL FAILURE TAXONOMY
+============================================================
+
+Classify observed failures.
+
+F01 — Incorrect addressee.
+
+F02 — Incorrect subject.
+
+F03 — Unnecessary clarification.
+
+F04 — Missing necessary clarification.
+
+F05 — False ignorance.
+
+F06 — Unsupported factual invention.
+
+F07 — Unauthorized commitment.
+
+F08 — Hidden-information disclosure.
+
+F09 — Irrelevant answer.
+
+F10 — Verbatim repetition when explanation
+      was requested.
+
+F11 — Lost conversational context.
+
+F12 — Incorrect historical recall.
+
+F13 — Speaker or personality inconsistency.
+
+F14 — Excessive refusal.
+
+F15 — Unnatural template language.
+
+F16 — Inability to sustain small talk.
+
+F17 — Incorrect answer sufficiency.
+
+F18 — Contradictory delivered statements.
+
+F19 — Provider or latency failure.
+
+F20 — State-integrity failure.
+
+F21 — Other, with explanation.
+
+A turn may have multiple failure categories.
+
+Do not force mutually exclusive classification.
+
+============================================================
+13. TURN-LEVEL EVALUATION
+============================================================
+
+For every turn, record:
+
+- Player input.
+- Player-visible context.
+- Selected addressee.
+- Selected subject.
+- Relevant authorized sources.
+- Resolver outcome.
+- Expression category.
+- Generated candidate, if any.
+- Validation result.
+- Adopted speech.
+- Player-facing output.
+- State changes.
+- Provider calls.
+- Latency.
+- Failure categories.
+- Quality score.
+- Playability score.
+
+Distinguish raw provider output from final
+delivered speech.
+
+============================================================
+14. QUALITY SCORING
+============================================================
+
+Use a 0–3 scale.
+
+0 — Incorrect, irrelevant, or unauthorized.
+
+1 — Safe but rigid, repetitive, or unhelpful.
+
+2 — Relevant and adequate.
+
+3 — Natural, informative within authority,
+    and conversationally appropriate.
+
+Report:
+
+- Mean score.
+- Median score.
+- Distribution.
+- Scores by player profile.
+- Scores by scene.
+- Scores by interaction category.
+
+Do not average away safety failures.
+
+============================================================
+15. PLAYABILITY SCORING
+============================================================
+
+Use a separate 0–3 scale.
+
+0 — Conversation effectively blocked.
+
+1 — Player must repeatedly reformulate or
+    work around the engine.
+
+2 — Conversation remains usable with occasional
+    friction.
+
+3 — Conversation flows naturally.
+
+Measure:
+
+- Reformulation frequency.
+- Clarification frequency.
+- Repeated-response frequency.
+- Unproductive-turn frequency.
+- Successful conversational recovery.
+- Topic-continuity success.
+- Average uninterrupted conversational span.
+
+A response may score 2 for correctness
+and 0 for playability.
+
+============================================================
+16. CONVERSATIONAL RECOVERY
+============================================================
+
+Pay particular attention to what happens
+after a poor response.
+
+Example:
+
+PLAYER:
+"Why do you prefer the evening?"
+
+NPC:
+"I prefer the evening."
+
+PLAYER:
+"That doesn't answer my question."
+
+Can the engine recover?
+
+Or does it repeat the same answer indefinitely?
+
+Record:
+
+- Initial failure.
+- Player recovery attempt.
+- Engine response.
+- Whether recovery succeeded.
+- Additional turns required.
+
+Repeated failure after reasonable clarification
+is more serious than a single awkward response.
+
+============================================================
+17. INFORMATION-INTEGRITY AUDIT
+============================================================
+
+Audit every delivered NPC statement for:
+
+- Unsupported consequential facts.
+- Unauthorized commitments.
+- Hidden-information leakage.
+- Unsupported relationships.
+- Unauthorized entity creation.
+- Unsupported causal explanations.
+- Epistemic strengthening.
+- Canonical state inconsistencies.
+
+Distinguish:
+
+- Harmless characterization.
+- Authorized factual disclosure.
+- NPC belief.
+- Rumor.
+- Canonical truth.
+- Unsupported invention.
+
+Inspect delivered history and canonical state.
+
+Do not assume safety merely because the
+validator returned ACCEPT.
+
+============================================================
+18. CONTINUITY AUDIT
+============================================================
+
+Evaluate:
+
+- Immediate reference resolution.
+- Earlier-topic reference resolution.
+- Exact historical recall.
+- Paraphrase continuity.
+- Proposition identity.
+- Speaker attribution.
+- Multiple matching statements.
+- Save/load continuation.
+
+Look for cases where:
+
+- The correct information exists but cannot
+  be retrieved.
+
+- Equivalent expressions become ambiguous.
+
+- Different subjects are incorrectly merged.
+
+- Prior refusals displace earlier facts.
+
+- Generated characterization is forgotten.
+
+- NPC speech becomes canonical truth.
+
+============================================================
+19. PROVIDER EFFICIENCY
+============================================================
+
+Record:
+
+- Total provider calls.
+- Interpretation calls.
+- Expression calls.
+- Narration calls.
+- Retries.
+- Input tokens.
+- Output tokens.
+- Average latency.
+- Median latency.
+- P95 latency.
+- Maximum latency.
+- Cost estimates where available.
+
+Break down by:
+
+- Scene.
+- Player profile.
+- Turn category.
+- Successful vs failed responses.
+
+Identify whether expensive turns provide
+corresponding conversational value.
+
+Do not optimize performance during initial
+evaluation.
+
+============================================================
+20. REGRESSION BASELINE
+============================================================
+
+Run the existing relevant regression family
+without changing production behavior.
+
+Record:
+
+- Passing tests.
+- Failing tests.
+- Inherited failures.
+- New failures.
+- Test environment.
+
+Do not modify regression expectations.
+
+Do not interpret an unchanged regression suite
+as evidence of conversational playability.
+
+============================================================
+21. INDEPENDENT EVALUATION
+============================================================
+
+Avoid relying exclusively on the same provider
+to generate player turns and score the engine.
+
+Where feasible:
+
+- Use deterministic scoring for objective
+  violations.
+
+- Use a separate evaluation pass for dialogue
+  quality.
+
+- Preserve raw transcripts for external review.
+
+- Record evaluator prompts and model identity.
+
+- Identify disagreements between evaluators.
+
+Do not allow the engine's own explanations
+to substitute for evidence.
+
+============================================================
+22. CONVERSATION-LEVEL ASSESSMENT
+============================================================
+
+For each complete conversation, assess:
+
+1. Was the player's conversational objective
+   meaningfully supported?
+
+2. Did the NPC remain coherent?
+
+3. Did the player encounter repeated friction?
+
+4. Were misunderstandings recoverable?
+
+5. Did the NPC exhibit believable personality?
+
+6. Did the conversation remain information-safe?
+
+7. Did the player have meaningful freedom?
+
+8. Would a reasonable player want to continue?
+
+Provide a concise narrative assessment.
+
+Do not reduce the entire conversation to
+an average turn score.
+
+============================================================
+23. FAILURE CLUSTERING
+============================================================
+
+After the evaluation, cluster failures by
+underlying mechanism.
+
+Possible clusters:
+
+- Interpretation.
+- Reference grounding.
+- Knowledge selection.
+- Answer sufficiency.
+- Expression contract.
+- Candidate validation.
+- Host-owned adoption.
+- Delivered-history continuity.
+- Personality representation.
+- Prompt construction.
+- Provider performance.
+
+Do not assume every symptom requires a
+separate patch.
+
+Identify shared root causes.
+
+============================================================
+24. PRIORITIZATION
+============================================================
+
+Rank failure clusters using:
+
+- Frequency.
+- Severity.
+- Player impact.
+- Recoverability.
+- Architectural significance.
+- Estimated implementation scope.
+
+Distinguish:
+
+CRITICAL:
+Information-integrity violation or severe
+world-state corruption.
+
+BLOCKING:
+Common interactions repeatedly fail or
+cannot recover.
+
+MAJOR:
+Conversation remains usable but frequently
+unnatural or frustrating.
+
+MINOR:
+Occasional awkwardness without meaningful
+loss of player agency.
+
+Do not prioritize merely by test count.
+
+============================================================
+25. PLAYABILITY ACCEPTANCE CRITERIA
+============================================================
+
+Evaluate the following gates.
+
+GATE 1 — INFORMATION INTEGRITY
+
+No critical unauthorized consequential
+disclosures in observed qualification.
+
+GATE 2 — CONVERSATIONAL RELEVANCE
+
+At least 85% of evaluated turns score
+2 or higher for dialogue quality.
+
+GATE 3 — PLAYABILITY
+
+At least 80% of evaluated turns score
+2 or higher for playability.
+
+GATE 4 — RECOVERY
+
+At least 75% of reasonable recovery
+attempts succeed within two additional
+player turns.
+
+GATE 5 — CONTINUITY
+
+At least 90% of evaluated continuity
+references resolve correctly.
+
+GATE 6 — CHARACTERIZATION
+
+At least three distinct NPCs demonstrate
+recognizably different conversational
+characterization.
+
+GATE 7 — PLAYER FREEDOM
+
+The evaluation demonstrates useful
+interaction beyond explicitly authored
+topic prompts.
+
+GATE 8 — PERFORMANCE
+
+No systemic retry loops or pathological
+prompt growth.
+
+GATE 9 — STATE INTEGRITY
+
+No unauthorized canonical mutations.
+
+GATE 10 — EVIDENCE QUALITY
+
+Sufficient fresh-provider transcripts,
+state records, and independent assessment
+to support the verdict.
+
+These thresholds are qualification targets,
+not permission to weaken safety controls.
+
+Report exact denominators.
+
+Do not claim statistical certainty from
+a small sample.
+
+============================================================
+26. STOP CONDITIONS
+============================================================
+
+Stop and report immediately if:
+
+- A critical information-integrity defect
+  is reproduced.
+
+- Generated dialogue establishes unauthorized
+  consequential facts.
+
+- Rejected candidates reach delivered history.
+
+- Canonical state corruption is detected.
+
+- A systemic provider failure prevents
+  meaningful evaluation.
+
+- Evaluation infrastructure cannot preserve
+  trustworthy transcripts.
+
+Do not silently continue after a critical
+safety or integrity failure.
+
+Preserve the evidence.
+
+============================================================
+27. IMPLEMENTATION POLICY
+============================================================
+
+This cycle is evaluation-first.
+
+After completing the initial qualification:
+
+DO NOT automatically implement fixes.
+
+Instead:
+
+- Identify failure clusters.
+- Rank them.
+- Determine whether a focused repair is needed.
+- Recommend the smallest justified next cycle.
+
+If all critical gates pass:
+
+Recommend closing PR-EG with documented
+limitations.
+
+If a specific blocker remains:
+
+Recommend a narrowly scoped repair.
+
+If broad architectural limitations dominate:
+
+Recommend an explicit architectural review.
+
+Do not begin that work within R4.
+
+============================================================
+28. REQUIRED REVIEW ARTIFACTS
+============================================================
+
+Generate:
+
+01 — Executive Summary
+
+02 — Baseline and Environment
+
+03 — Evaluation Methodology
+
+04 — Scene Definitions
+
+05 — Simulated Player Profiles
+
+06 — Player Generation Method
+
+07 — Conversation Inventory
+
+08 — Complete Conversation Transcripts
+
+09 — Turn-Level Scoring
+
+10 — Playability Scoring
+
+11 — Conversational Recovery Analysis
+
+12 — Information-Integrity Audit
+
+13 — Continuity Audit
+
+14 — Characterization Assessment
+
+15 — Player-Freedom Assessment
+
+16 — Provider Performance
+
+17 — Regression Baseline
+
+18 — Independent Evaluation Method
+
+19 — Failure Taxonomy Results
+
+20 — Failure Clustering
+
+21 — Severity and Priority Ranking
+
+22 — Conversation-Level Assessments
+
+23 — Acceptance Gate Results
+
+24 — Root-Cause Hypotheses
+
+25 — Recommended Next Action
+
+26 — Final Verdict
+
+27 — Source and Evidence Inventory
+
+Package all artifacts using the established
+CURRENT_REVIEW workflow.
+
+============================================================
+29. FINAL VERDICT
+============================================================
+
+Choose:
+
+A — CONVERSATIONAL PLAYABILITY QUALIFIED
+
+B — QUALIFIED WITH DOCUMENTED LIMITATIONS
+
+C — PLAYABILITY BELOW ACCEPTANCE STANDARD
+
+D — CRITICAL ARCHITECTURAL OR INTEGRITY BLOCKER
+
+UNVERIFIED — INSUFFICIENT EVIDENCE
+
+Do not declare A or B merely because the
+existing regression suite passes.
+
+Do not declare A or B without sustained
+fresh-provider conversational evidence.
+
+============================================================
+30. FINAL INSTRUCTION
+============================================================
+
+Evaluate the integrated conversational product.
+
+Use adaptive simulated players.
+
+Exercise multiple scenes, NPCs, and
+conversational styles.
+
+Preserve complete player-facing transcripts.
+
+Audit correctness, quality, playability,
+continuity, and information integrity
+independently.
+
+Do not modify production behavior during
+initial qualification.
+
+Do not optimize against the evaluation.
+
+Identify root-cause failure clusters.
+
+Recommend PR-EG closure only if the
+qualification evidence supports it.
+
+Otherwise identify the smallest justified
+next repair or architectural investigation.
+
+Generate CURRENT_REVIEW.
+
+STOP after PR-EG-R4.
+
+Await external review before proceeding.

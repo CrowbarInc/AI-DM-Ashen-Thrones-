@@ -1,0 +1,163 @@
+[
+  {
+    "id": "continuity_0",
+    "npcs": [
+      {
+        "id": "tavi",
+        "name": "Tavi",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "copper",
+            "text": "The miller keeps the copper reliquary."
+          },
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          },
+          {
+            "id": "ferry",
+            "text": "The ferry leaves at dawn."
+          },
+          {
+            "id": "quay",
+            "text": "Mara guards the east quay."
+          },
+          {
+            "id": "jade",
+            "text": "The artisan maintains the jade compass."
+          },
+          {
+            "id": "ivory",
+            "text": "The miller keeps the ivory compass."
+          },
+          {
+            "id": "roster",
+            "text": "Someone keeps the roster."
+          },
+          {
+            "id": "secret",
+            "text": "The sealed countersign is sword.",
+            "disclosure": "secret"
+          }
+        ]
+      },
+      {
+        "id": "mara",
+        "name": "Mara",
+        "role": "warden",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [
+          "warden"
+        ],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "Oren says the north road is flooded."
+          }
+        ]
+      },
+      {
+        "id": "oren",
+        "name": "Oren",
+        "role": "clerk",
+        "location": "waystation_courtyard",
+        "disposition": "friendly",
+        "availability": "available",
+        "aliases": [],
+        "affiliation": "",
+        "topics": [
+          {
+            "id": "road",
+            "text": "The north road is called the Crown Way."
+          }
+        ]
+      }
+    ],
+    "turns": [
+      [
+        "Tavi, who keeps the amber reliquary?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "I meant the copper reliquary.",
+        {
+          "reload": true
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, what is the aqueduct called?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "reload": true
+        }
+      ],
+      [
+        "Tavi, who keeps the bell?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "I wasn't asking about the bell. I meant the north road.",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "Mara, what did Oren say about the road?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "Tavi, who keeps the roster?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "How do you know?",
+        {
+          "reload": true
+        }
+      ],
+      [
+        "Tavi, when does the ferry leave?",
+        {
+          "reload": false
+        }
+      ],
+      [
+        "Who told you?",
+        {
+          "reload": false
+        }
+      ]
+    ],
+    "source": "matched_continuity"
+  }
+]

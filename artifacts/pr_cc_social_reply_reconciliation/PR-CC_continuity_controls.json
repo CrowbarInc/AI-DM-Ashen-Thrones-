@@ -1,0 +1,37 @@
+{
+  "live_calls": 0,
+  "status": "partial",
+  "offline_controls": [
+    {
+      "control": "previous_refusal_remains_history",
+      "status": "not_deleted_by_repair",
+      "evidence": "No conversation history deletion path was changed."
+    },
+    {
+      "control": "previous_refusal_does_not_force_future_refusal",
+      "status": "provider_guidance_projected",
+      "evidence": "Prompt guidance states prior evasive dialogue in recent_log does not by itself force continued refusal when the current plan permits a subjective reply."
+    },
+    {
+      "control": "changed_player_request_can_receive_new_response",
+      "status": "covered_by_reply_plan",
+      "evidence": "The reply plan is derived from the current social request, not a durable refusal flag."
+    },
+    {
+      "control": "uncertainty_without_secret_invention",
+      "status": "covered_by_negative_controls",
+      "evidence": "Consequential requests receive unknown/consequential plan codes with authored-context-required objective fact authority."
+    },
+    {
+      "control": "inaccurate_player_premise_not_established",
+      "status": "covered_by_negative_controls",
+      "evidence": "Crime/allegiance/destination requests do not enter the harmless subjective lane."
+    },
+    {
+      "control": "conversational_memory_distinct_from_world_state",
+      "status": "covered_by_authority_flags",
+      "evidence": "Subjective replies assert claim_only speech authority and durable_state_mutation_allowed=false."
+    }
+  ],
+  "limitation": "The full PR-CA reconstructed multi-turn replay was not completed in this turn; broad regression was interrupted after long quiet periods without failure output."
+}

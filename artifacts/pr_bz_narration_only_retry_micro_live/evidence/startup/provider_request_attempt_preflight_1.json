@@ -1,0 +1,35 @@
+{
+  "measurements": {
+    "roles": [
+      "system",
+      "user"
+    ],
+    "input_chars": 134,
+    "recipe_present": false,
+    "retry_context_present": false
+  },
+  "contract": {
+    "provider_response_contract": "structured_realization",
+    "exact_narration_only_contract_present": false,
+    "declared_claims_in_system_prompt": false,
+    "system_prompt_chars": 62,
+    "response_contract_tail": "You are an infrastructure health probe. Reply with exactly: OK"
+  },
+  "create_kwarg_keys": [
+    "max_output_tokens",
+    "temperature",
+    "timeout"
+  ],
+  "api_response_schema_present": false,
+  "decision_facing_answer_recipe": null,
+  "provider_input": [
+    {
+      "role": "system",
+      "content": "You are an infrastructure health probe. Reply with exactly: OK"
+    },
+    {
+      "role": "user",
+      "content": "ping"
+    }
+  ]
+}

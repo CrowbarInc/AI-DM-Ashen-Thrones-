@@ -1,0 +1,112 @@
+{
+  "scene": {
+    "scene": {
+      "id": "cooper_yard",
+      "location": "Ashford cooper yard",
+      "summary": "Oak staves and iron hoops are stacked against a shed wall. Sedge, a cooper, is driving a hoop onto a barrel. He has said nothing about guilds, quays, or civic orders.",
+      "mode": "social",
+      "visible_facts": [
+        "Oak staves and iron hoops are stacked against the shed wall.",
+        "Sedge is driving an iron hoop onto an oak barrel."
+      ],
+      "opening_seed_facts": [],
+      "journal_seed_facts": [],
+      "discoverable_clues": [],
+      "hidden_facts": [],
+      "exits": [],
+      "enemies": [],
+      "actions": [],
+      "addressables": [
+        {
+          "id": "sedge",
+          "name": "Sedge",
+          "scene_id": "cooper_yard",
+          "kind": "npc",
+          "addressable": true,
+          "address_priority": 0,
+          "address_roles": [
+            "cooper",
+            "cooper"
+          ],
+          "aliases": [
+            "cooper"
+          ]
+        }
+      ],
+      "interactables": []
+    }
+  },
+  "extra_scenes": [],
+  "world": {
+    "settlements": [
+      {
+        "id": "ashford",
+        "name": "Ashford",
+        "type": "hill_town",
+        "tags": [
+          "mill",
+          "river"
+        ],
+        "status": "ordinary",
+        "notes": "A hill town of mills, cisterns, yards, and a ferry slip."
+      }
+    ],
+    "factions": [],
+    "assets": [],
+    "projects": [],
+    "world_flags": [],
+    "event_log": [],
+    "inference_rules": [],
+    "clues": {},
+    "npcs": [
+      {
+        "id": "sedge",
+        "name": "Sedge",
+        "location": "cooper_yard",
+        "role": "cooper",
+        "affiliation": "",
+        "disposition": "neutral",
+        "current_agenda": "",
+        "availability": "available",
+        "tags": [],
+        "aliases": [
+          "cooper"
+        ],
+        "topics": [
+          {
+            "id": "work",
+            "text": "Sedge fits iron hoops on oak barrels in this yard."
+          }
+        ]
+      }
+    ],
+    "world_state": {
+      "flags": {},
+      "counters": {},
+      "clocks": {}
+    }
+  },
+  "session_patch": null,
+  "campaign_overrides": {
+    "premise": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "starting_context": "Galinor is spending the day in Ashford, a hill town of mills, cisterns, yards, and a ferry slip.",
+    "world_pressures": [
+      "Ordinary work, weather, and trade in a hill town."
+    ],
+    "gm_guidance": [
+      "The current scene is an ordinary workplace, yard, or slip in Ashford.",
+      "People present are ordinary workers unless the scene says otherwise."
+    ]
+  },
+  "session": {
+    "active_scene_id": "cooper_yard",
+    "visited_scene_ids": [
+      "cooper_yard"
+    ],
+    "turn_counter": 0,
+    "campaign_started": true,
+    "interaction_context": null,
+    "discourse_focus": null,
+    "bounded_improvisation": null
+  }
+}

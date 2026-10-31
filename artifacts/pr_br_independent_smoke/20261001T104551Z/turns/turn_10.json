@@ -1,0 +1,701 @@
+{
+  "turn_number": 10,
+  "player_text": "The board will not give me the rule. I leave it and walk over to the threadbare figure who has been standing still, watching packs and faces. I ask, quietly, whether they are waiting to get in or watching for someone.",
+  "visible_motivation": "The curfew posting named categories and then said closer looking yielded nothing. The captain already closed the toll. The still watcher from the opening is the person I have not spoken to.",
+  "intended_meaning": "Ask the still threadbare figure whether they are waiting to enter or watching for someone.",
+  "generated_candidate": "You step away from the notice board and approach the threadbare watcher standing silently at the muddy gate line. Their eyes flick between the waiting packs of travelers and the guarded faces pressed near the gate, betraying a wary vigilance rather than personal impatience. You ask in a low tone if they are waiting to enter or watching for someone. They glance at you briefly, their lined face unreadable, and reply quietly that they are neither waiting nor simply watching—they are keeping an eye on the arrivals, looking for a particular face that hasn’t shown up yet. The watcher’s tone suggests urgency beneath the calm, but they offer no further details unless pressed.",
+  "gm_text": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+  "gm_tags": [
+    "scene_momentum:new_information",
+    "final_emission_gate_replaced",
+    "referential_clarity_enforcement_replaced",
+    "referential_clarity_violation:ambiguous_entity_reference"
+  ],
+  "best_safe_candidate": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+  "final_selected_candidate": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+  "best_candidate_emitted": true,
+  "best_safe_invalidation": null,
+  "satisfied_candidate": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+  "initial_safe_candidate": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+  "candidate_transitions": [
+    {
+      "stage": "final_emission",
+      "reason": "lower_satisfaction_rank",
+      "contract_id": "rc_9a30196e52ca",
+      "operation": "ask",
+      "target": "Guard Captain",
+      "interlocutor": "guard_captain",
+      "dimension": null,
+      "expected_resolution": "answer",
+      "satisfaction_before": "unsatisfied",
+      "satisfaction_after": "satisfied",
+      "rank_before": 0,
+      "rank_after": 4,
+      "coverage_before": [],
+      "coverage_after": [],
+      "replacement_decision": "accepted",
+      "replacement_reason": "higher_rank",
+      "best_safe_candidate_before": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+      "selected_preview": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line.",
+      "invalidation_reason": null
+    }
+  ],
+  "outcome_precedence": {
+    "downgrade_attempted": true,
+    "downgrade_rejected": true,
+    "downgrade_reason": "lower_satisfaction_rank",
+    "recovery_used": true,
+    "recovery_source": "candidate",
+    "destroyed": false,
+    "scene_momentum_appended": false,
+    "final_outcome_kind": "answer",
+    "final_satisfaction": "satisfied",
+    "replacement_reason": "lower_satisfaction_rank",
+    "stage": "final_emission"
+  },
+  "telemetry_semantic_degradation": false,
+  "telemetry_semantic_degradation_reasons": [],
+  "initial_satisfaction": {
+    "status": "unsatisfied",
+    "reasons": [
+      "unrelated_fact"
+    ],
+    "resolution_kind": "unrelated",
+    "dimension_compatible": false,
+    "keeps_answer": false,
+    "rank": null
+  },
+  "final_satisfaction": {
+    "status": "satisfied",
+    "reasons": [
+      "inquiry_answered"
+    ],
+    "resolution_kind": "answer",
+    "dimension_compatible": true,
+    "keeps_answer": true,
+    "rank": null
+  },
+  "initial_coverage": {
+    "required_dimensions": [],
+    "covered_dimensions": [],
+    "complete": true,
+    "dimension": null,
+    "operation": "ask",
+    "expected_resolution": "answer"
+  },
+  "final_coverage": {
+    "required_dimensions": [],
+    "covered_dimensions": [],
+    "complete": true,
+    "dimension": null,
+    "operation": "ask",
+    "expected_resolution": "answer"
+  },
+  "detector_semantic_degradation": false,
+  "detector_semantic_degradation_reasons": [],
+  "fast_path_used": true,
+  "semantic_completeness": "sufficient",
+  "fast_path_abstained": false,
+  "abstention_reason": null,
+  "interpreter_invoked": false,
+  "proposal_source": "discourse_inheritance",
+  "validation_status": "validated",
+  "validator_reason": null,
+  "interpretation_proposal": {
+    "raw_input": "The board will not give me the rule. I leave it and walk over to the threadbare figure who has been standing still, watching packs and faces. I ask, quietly, whether they are waiting to get in or watching for someone.",
+    "source": "discourse_inheritance",
+    "primary_operation": "ask",
+    "supporting_operations": [],
+    "raw_target_text": null,
+    "proposed_target_id": null,
+    "target_capture": "none",
+    "has_determiner": false,
+    "interlocutor_id": "guard_captain",
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": "guard_captain",
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "ask",
+  "canonical_target": "Guard Captain",
+  "target_ref": {
+    "type": "interlocutor",
+    "id_or_text": "Guard Captain",
+    "source": "inherited_discourse"
+  },
+  "discourse_ref": {
+    "type": "interlocutor",
+    "id": "guard_captain",
+    "label": "Guard Captain",
+    "source_turn": 9
+  },
+  "interlocutor_id": "guard_captain",
+  "conversational_subject": "Guard Captain",
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "answer",
+  "ambiguous": false,
+  "contract_id": "rc_9a30196e52ca",
+  "contract": {
+    "contract_id": "rc_9a30196e52ca",
+    "turn_index": 11,
+    "request_kind": "inquiry",
+    "operation": "ask",
+    "target_ref": {
+      "type": "interlocutor",
+      "id_or_text": "Guard Captain",
+      "source": "inherited_discourse"
+    },
+    "interlocutor_id": "guard_captain",
+    "conversational_subject": "Guard Captain",
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": {
+      "type": "interlocutor",
+      "id": "guard_captain",
+      "label": "Guard Captain",
+      "source_turn": 9
+    },
+    "referent_provenance": "inherited_discourse",
+    "ambiguous": false,
+    "raw_input": "The board will not give me the rule. I leave it and walk over to the threadbare figure who has been standing still, watching packs and faces. I ask, quietly, whether they are waiting to get in or watching for someone.",
+    "construction": {
+      "cues": [
+        "pronoun"
+      ],
+      "referent_slot": "active_interlocutor",
+      "referent_reason": "active_interlocutor",
+      "ambiguity_detected": false,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": true,
+      "fast_path_abstained": false,
+      "fast_path_abstention_reason": null,
+      "model_interpreter_invoked": false,
+      "model_proposal_rejected": false,
+      "clarification_after_model": false,
+      "interpretation_api_calls": 0,
+      "interpretation_error": null,
+      "canonical_candidates": [
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "minlead_exit_frontier_gate_old_milestone",
+          "type": "lead",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        }
+      ],
+      "proposal_source": "discourse_inheritance",
+      "proposed_operation": "ask",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": null,
+      "canonicalization_attempted": true,
+      "canonical_target_found": true,
+      "operation_conflict": false,
+      "validation_status": "validated",
+      "validation_result": {
+        "status": "validated",
+        "reason": null,
+        "failed_fields": [],
+        "clarification_required": false,
+        "model_interpretation_appropriate": false,
+        "canonical_target_id": "guard_captain",
+        "canonical_target_label": "Guard Captain",
+        "canonical_target_type": "interlocutor",
+        "canonical_basis": "discourse",
+        "authoritative_operation": "ask",
+        "discourse_commit_allowed": true,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": null,
+      "failed_fields": [],
+      "clarification_required": false,
+      "model_interpretation_appropriate": false,
+      "discourse_commit_allowed": true,
+      "authoritative": true,
+      "semantic_completeness": "sufficient",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "The board will not give me the rule. I leave it and walk over to the threadbare figure who has been standing still, watching packs and faces. I ask, quietly, whether they are waiting to get in or watching for someone.",
+        "source": "discourse_inheritance",
+        "primary_operation": "ask",
+        "supporting_operations": [],
+        "raw_target_text": null,
+        "proposed_target_id": null,
+        "target_capture": "none",
+        "has_determiner": false,
+        "interlocutor_id": "guard_captain",
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": "guard_captain",
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      }
+    }
+  },
+  "active_interlocutor": {
+    "id": "guard_captain",
+    "label": "guard_captain",
+    "kind": "interlocutor"
+  },
+  "active_claim": null,
+  "active_inspected": {
+    "id": "notice_board",
+    "label": "Notice board",
+    "kind": "object"
+  },
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": {
+      "id": "guard_captain",
+      "label": "guard_captain",
+      "kind": "interlocutor",
+      "scene_id": "frontier_gate",
+      "turn_index": 11,
+      "source": "resolution_contract"
+    },
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 10,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": null,
+    "last_committed_turn": 11,
+    "last_committed_contract_id": "rc_9a30196e52ca"
+  },
+  "authority": null,
+  "bounded_ledger_tail": {
+    "entries": [],
+    "rejected": []
+  },
+  "semantic_result": "PASS",
+  "failing_gates": [],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 82,
+      "rating": "strong",
+      "passed": true,
+      "semantic_result": "PASS",
+      "diagnostic_quality_rating": "strong"
+    },
+    "semantic_result": "PASS",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 15,
+          "text_preview": "As you watch the scene, threadbare watchers and refugees cluster along the muddy gate line."
+        }
+      },
+      "player_intent_addressed": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "request_kind": "action_or_statement",
+          "player_terms": [
+            "board",
+            "faces",
+            "figure",
+            "give",
+            "leave",
+            "over",
+            "packs",
+            "quietly",
+            "rule",
+            "someone",
+            "standing",
+            "still",
+            "they",
+            "threadbare",
+            "waiting",
+            "walk",
+            "watching",
+            "whether"
+          ],
+          "gm_terms": [
+            "along",
+            "cluster",
+            "gate",
+            "line",
+            "muddy",
+            "refugees",
+            "scene",
+            "threadbare",
+            "watch",
+            "watchers"
+          ],
+          "direct_answer_score": 23,
+          "player_intent_score": 13,
+          "resolution_contract": {
+            "contract_id": "rc_9a30196e52ca",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "ask",
+            "referent_provenance": "inherited_discourse",
+            "assessment_status": "satisfied",
+            "assessment_reasons": [
+              "inquiry_answered"
+            ],
+            "target": "Guard Captain",
+            "candidate_answer_target": null,
+            "target_compatible": true,
+            "operation_compatible": true,
+            "dimension_compatible": true,
+            "resolution_kind": "answer",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [
+                "pronoun"
+              ],
+              "referent_slot": "active_interlocutor",
+              "referent_reason": "active_interlocutor",
+              "ambiguity_detected": false,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": true,
+              "fast_path_abstained": false,
+              "fast_path_abstention_reason": null,
+              "model_interpreter_invoked": false,
+              "model_proposal_rejected": false,
+              "clarification_after_model": false,
+              "interpretation_api_calls": 0,
+              "interpretation_error": null,
+              "canonical_candidates": [
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "minlead_exit_frontier_gate_old_milestone",
+                  "type": "lead",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                }
+              ],
+              "proposal_source": "discourse_inheritance",
+              "proposed_operation": "ask",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": null,
+              "canonicalization_attempted": true,
+              "canonical_target_found": true,
+              "operation_conflict": false,
+              "validation_status": "validated",
+              "validation_result": {
+                "status": "validated",
+                "reason": null,
+                "failed_fields": [],
+                "clarification_required": false,
+                "model_interpretation_appropriate": false,
+                "canonical_target_id": "guard_captain",
+                "canonical_target_label": "Guard Captain",
+                "canonical_target_type": "interlocutor",
+                "canonical_basis": "discourse",
+                "authoritative_operation": "ask",
+                "discourse_commit_allowed": true,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": null,
+              "failed_fields": [],
+              "clarification_required": false,
+              "model_interpretation_appropriate": false,
+              "discourse_commit_allowed": true,
+              "authoritative": true,
+              "semantic_completeness": "sufficient",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "The board will not give me the rule. I leave it and walk over to the threadbare figure who has been standing still, watching packs and faces. I ask, quietly, whether they are waiting to get in or watching for someone.",
+                "source": "discourse_inheritance",
+                "primary_operation": "ask",
+                "supporting_operations": [],
+                "raw_target_text": null,
+                "proposed_target_id": null,
+                "target_capture": "none",
+                "has_determiner": false,
+                "interlocutor_id": "guard_captain",
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": "guard_captain",
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              }
+            },
+            "failure_locus": "response_met_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 82,
+      "rating": "strong",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 23,
+        "player_intent": 13,
+        "logical_escalation": 23,
+        "immersion": 23
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "No explicit question detected; scored leniently for directness."
+        ],
+        "signals": {
+          "has_question": false,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.033,
+          "gm_word_count": 15,
+          "bounded_partial": false,
+          "next_lead": true,
+          "answer_markers": 0
+        }
+      },
+      "player_intent": {
+        "score": 13,
+        "passed": false,
+        "reasons": [
+          "Possible thread drift from the established player focus."
+        ],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 1,
+          "topic_overlap_ratio": 0.056,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Net-new specifics relative to the prior beat."
+        ],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.0,
+          "player_presses_thread": false,
+          "gm_word_count": 15,
+          "net_new_terms": 10
+        }
+      },
+      "immersion": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "Diegetic scene grounding or voiced dialogue present."
+        ],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": false,
+          "scene_anchor_hits": 1
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (23/25).",
+        "logical_escalation: strong (23/25).",
+        "immersion: strong (23/25)."
+      ],
+      "failures": [
+        "player_intent: weak (13/25).",
+        "player_intent: Possible thread drift from the established player focus."
+      ],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 82,
+        "rating": "strong",
+        "passed": true,
+        "semantic_result": "PASS",
+        "diagnostic_quality_rating": "strong"
+      }
+    }
+  },
+  "generation_calls_this_turn": 1,
+  "interpretation_calls_this_turn": 0,
+  "turn_generation_calls": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "model_player_facing_text": "You step away from the notice board and approach the threadbare watcher standing silently at the muddy gate line. Their eyes flick between the waiting packs of travelers and the guarded faces pressed near the gate, betraying a wary vigilance rather than personal impatience. You ask in a low tone if they are waiting to enter or watching for someone. They glance at you briefly, their lined face unreadable, and reply quietly that they are neither waiting nor simply watching—they are keeping an eye on the arrivals, looking for a particular face that hasn’t shown up yet. The watcher’s tone suggests urgency beneath the calm, but they offer no further details unless pressed."
+    }
+  ],
+  "turn_interpretation_calls": [],
+  "resolution_kind": "travel",
+  "api_ok": true
+}

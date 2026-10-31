@@ -1,0 +1,1246 @@
+"""Persistence: static/bootstrap files vs runtime documents.
+
+This module is the **I/O and document-shape** layer: load, save, and lazy
+initialization of session roots. It is **not** a semantic policy owner for
+``interaction_state`` or authoritative domain mutation (see ``game.interaction_context``,
+``game.world``, ``game.api``, and ``docs/state_authority_model.md``).
+
+Static + bootstrap (authored defaults; not wiped by ``create_fresh_session_document``):
+``campaign.json``, ``world.json``, ``character.json``, ``data/scenes/*.json``,
+``conditions.json``.
+
+Runtime (canonical fresh shape in ``game.campaign_state.py``): ``session.json``,
+``combat.json``, ``session_log.jsonl``. A full New Campaign also clears world
+playthrough fields via ``game.world.reset_world_playthrough_state`` (see
+``game.campaign_reset.apply_new_campaign_hard_reset``).
+
+``load_scene`` reads scene templates only from disk; session stores playthrough
+progress (``runtime_scene_overlays``, ``scene_runtime``, clocks, etc.), never a
+copy of the scene JSON.
+"""
+from __future__ import annotations
+from pathlib import Path
+import copy
+import hashlib
+import json
+import os
+import secrets
+import threading
+from contextlib import contextmanager
+from typing import Any, Dict, List, Optional
+
+from game.defaults import (
+    default_campaign,
+    default_character,
+    default_combat,
+    default_conditions,
+    default_scene,
+    default_session,
+    default_world,
+)
+from game.utils import utc_iso_now
+from game.validation import validate_all_scenes
+from game.persistence_contract import (
+    PersistenceContractError,
+    PersistenceFailureCategory,
+    unwrap_and_validate,
+    wrap_runtime_payload,
+)
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def _configured_data_dir() -> Path:
+    override = os.getenv("ASHEN_DATA_DIR")
+    if override and override.strip():
+        return Path(override).expanduser().resolve()
+    return BASE_DIR / 'data'
+
+
+DATA_DIR = _configured_data_dir()
+SCENES_DIR = DATA_DIR / 'scenes'
+
+CHARACTER_PATH = DATA_DIR / 'character.json'
+CAMPAIGN_PATH = DATA_DIR / 'campaign.json'
+SESSION_PATH = DATA_DIR / 'session.json'
+WORLD_PATH = DATA_DIR / 'world.json'
+COMBAT_PATH = DATA_DIR / 'combat.json'
+CONDITIONS_PATH = DATA_DIR / 'conditions.json'
+SESSION_LOG_PATH = DATA_DIR / 'session_log.jsonl'
+SNAPSHOTS_DIR = DATA_DIR / 'snapshots'
+SNAPSHOT_VERSION = 1
+
+
+class RuntimePersistenceConcurrencyError(RuntimeError):
+    """Raised when overlapping runtime persistence operations are attempted."""
+
+
+class RuntimePersistenceCoherencyError(RuntimeError):
+    """Raised when a post-restore runtime coherency check fails."""
+
+
+_RUNTIME_PERSISTENCE_LOCK = threading.RLock()
+
+# Tests may set this to observe/pause phases deterministically.
+# Signature: hook(op_name: str, phase: str) -> None
+_RUNTIME_PERSISTENCE_TEST_HOOK = None
+
+
+@contextmanager
+def _runtime_persistence_guard(op_name: str):
+    """Serialize runtime persistence operations within this process.
+
+    Scope: local process / local file-backed runtime only.
+    """
+    _RUNTIME_PERSISTENCE_LOCK.acquire()
+    try:
+        hook = _RUNTIME_PERSISTENCE_TEST_HOOK
+        if hook:
+            hook(op_name, "acquired")
+        yield
+    finally:
+        try:
+            hook = _RUNTIME_PERSISTENCE_TEST_HOOK
+            if hook:
+                hook(op_name, "releasing")
+        finally:
+            _RUNTIME_PERSISTENCE_LOCK.release()
+
+
+def _load_json(path: Path, default: Dict[str, Any]) -> Dict[str, Any]:
+    if not path.exists():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(default, indent=2), encoding='utf-8')
+        return copy.deepcopy(default)
+    text = path.read_text(encoding='utf-8').strip()
+    if not text:
+        raise ValueError(f'JSON file is empty: {path}')
+    return json.loads(text)
+
+
+def _save_json(path: Path, data: Dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2), encoding='utf-8')
+
+
+def _atomic_write_bytes(path: Path, content: bytes) -> None:
+    """Atomically replace a file's contents with bytes.
+
+    Writes to a temp file in the same directory, fsyncs, then swaps with os.replace.
+    Cleans up temp files on failure.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f"{path.name}.tmp.{secrets.token_hex(8)}")
+    try:
+        with open(tmp, "wb") as f:
+            f.write(content)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+        # Best-effort directory fsync for durability; may not be supported on all platforms.
+        try:
+            dfd = os.open(path.parent, os.O_RDONLY)
+        except OSError:
+            dfd = None
+        if dfd is not None:
+            try:
+                os.fsync(dfd)
+            except OSError:
+                pass
+            finally:
+                os.close(dfd)
+    except Exception:
+        try:
+            if tmp.exists():
+                tmp.unlink()
+        finally:
+            raise
+
+
+def _atomic_write_text(path: Path, text: str, *, encoding: str = "utf-8") -> None:
+    _atomic_write_bytes(path, text.encode(encoding))
+
+
+def _atomic_save_json(path: Path, data: Dict[str, Any]) -> None:
+    _atomic_write_text(path, json.dumps(data, indent=2), encoding="utf-8")
+
+
+def _read_bytes_if_exists(path: Path) -> Optional[bytes]:
+    try:
+        if path.exists():
+            return path.read_bytes()
+        return None
+    except OSError:
+        return None
+
+
+def scene_path(scene_id: str) -> Path:
+    return SCENES_DIR / f'{scene_id}.json'
+
+
+def ensure_data_files_exist() -> None:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    SCENES_DIR.mkdir(parents=True, exist_ok=True)
+    load_campaign()
+    load_character()
+    load_session()
+    load_world()
+    load_combat()
+    load_conditions()
+    # seed base scenes
+    for sid in ['frontier_gate', 'market_quarter']:
+        path = scene_path(sid)
+        if not path.exists():
+            _save_json(path, default_scene(sid))
+    # validate all scenes before serving
+    validate_all_scenes(SCENES_DIR, list_scene_ids)
+    # ensure active scene exists
+    load_active_scene()
+    if not SESSION_LOG_PATH.exists():
+        _atomic_write_text(SESSION_LOG_PATH, "", encoding="utf-8")
+
+
+def load_campaign() -> Dict[str, Any]:
+    return _load_json(CAMPAIGN_PATH, default_campaign())
+
+
+def save_campaign(data: Dict[str, Any]) -> None:
+    existing = load_campaign()
+    existing.update(data)
+    _save_json(CAMPAIGN_PATH, existing)
+
+
+def load_character() -> Dict[str, Any]:
+    return _load_json(CHARACTER_PATH, default_character())
+
+
+def save_character(data: Dict[str, Any]) -> None:
+    _save_json(CHARACTER_PATH, data)
+
+
+def load_session() -> Dict[str, Any]:
+    default_payload = default_session()
+    if not SESSION_PATH.exists():
+        # Fresh runtime document: write canonical envelope.
+        now = utc_iso_now()
+        default_payload = dict(default_payload)
+        default_payload["last_saved_at"] = now
+        env = wrap_runtime_payload(kind="session", payload=default_payload, saved_at=now, include_integrity=True)
+        _atomic_save_json(SESSION_PATH, env)
+        return copy.deepcopy(default_payload)
+
+    raw = _load_json(SESSION_PATH, default_payload)
+    try:
+        payload, decision = unwrap_and_validate(raw, expected_kind="session", allow_legacy_missing_envelope=True)
+    except PersistenceContractError as e:
+        # Safe failure: fall back to deterministic default for malformed/unsafe persisted data.
+        # This preserves fresh-session bootstrap behavior and prevents undefined state.
+        if e.category in (
+            PersistenceFailureCategory.MALFORMED_PAYLOAD,
+            PersistenceFailureCategory.UNSUPPORTED_VERSION,
+            PersistenceFailureCategory.WRONG_DOCUMENT_KIND,
+            PersistenceFailureCategory.INTEGRITY_MISMATCH,
+            PersistenceFailureCategory.MISSING_ENVELOPE,
+        ):
+            return copy.deepcopy(default_payload)
+        raise
+
+    return payload
+
+
+def save_session(data: Dict[str, Any]) -> None:
+    """Persist session to disk. Sets last_saved_at timestamp for save summary."""
+    with _runtime_persistence_guard("save_session"):
+        payload = dict(data)
+        now = utc_iso_now()
+        payload["last_saved_at"] = now
+        env = wrap_runtime_payload(kind="session", payload=payload, saved_at=now, include_integrity=True)
+        _atomic_save_json(SESSION_PATH, env)
+
+
+def load_world() -> Dict[str, Any]:
+    data = _load_json(WORLD_PATH, default_world())
+    from game.world import ensure_defaults, ensure_npc_social_fields
+
+    ensure_defaults(data)
+    for npc in data.get("npcs") or []:
+        if isinstance(npc, dict):
+            ensure_npc_social_fields(npc)
+    return data
+
+
+def save_world(data: Dict[str, Any]) -> None:
+    _save_json(WORLD_PATH, data)
+
+
+def load_combat() -> Dict[str, Any]:
+    default_payload = default_combat()
+    if not COMBAT_PATH.exists():
+        now = utc_iso_now()
+        env = wrap_runtime_payload(kind="combat", payload=dict(default_payload), saved_at=now, include_integrity=True)
+        _atomic_save_json(COMBAT_PATH, env)
+        return copy.deepcopy(default_payload)
+
+    raw = _load_json(COMBAT_PATH, default_payload)
+    try:
+        payload, _ = unwrap_and_validate(raw, expected_kind="combat", allow_legacy_missing_envelope=True)
+    except PersistenceContractError as e:
+        if e.category in (
+            PersistenceFailureCategory.MALFORMED_PAYLOAD,
+            PersistenceFailureCategory.UNSUPPORTED_VERSION,
+            PersistenceFailureCategory.WRONG_DOCUMENT_KIND,
+            PersistenceFailureCategory.INTEGRITY_MISMATCH,
+            PersistenceFailureCategory.MISSING_ENVELOPE,
+        ):
+            return copy.deepcopy(default_payload)
+        raise
+    return payload
+
+
+def save_combat(data: Dict[str, Any]) -> None:
+    with _runtime_persistence_guard("save_combat"):
+        payload = dict(data)
+        now = utc_iso_now()
+        env = wrap_runtime_payload(kind="combat", payload=payload, saved_at=now, include_integrity=True)
+        _atomic_save_json(COMBAT_PATH, env)
+
+
+def load_conditions() -> Dict[str, Any]:
+    return _load_json(CONDITIONS_PATH, default_conditions())
+
+
+def load_scene(scene_id: str) -> Dict[str, Any]:
+    """Load authored campaign canon only; gameplay logic should use ``get_effective_scene``."""
+    scene = _load_json(scene_path(scene_id), default_scene(scene_id))
+    # Backward-compatible normalization: older scenes may not have discoverable_clues.
+    scene.setdefault('scene', {})
+    scene['scene'].setdefault('visible_facts', [])
+    scene['scene'].setdefault('discoverable_clues', [])
+    scene['scene'].setdefault('hidden_facts', [])
+    # Optional structured actions; legacy scenes may omit or use suggested_actions
+    scene['scene'].setdefault('actions', [])
+    # Interactables (id, type, reveals_clue?, leads_to?); default empty for scenes without them
+    scene['scene'].setdefault('interactables', [])
+    # Optional objects (id, label?, type?) for auto-generated affordances
+    scene['scene'].setdefault('objects', [])
+    scene["_is_canon"] = True
+    return scene
+
+
+load_canon_scene = load_scene
+
+
+def assert_canon_immutable(scene: Dict[str, Any]) -> None:
+    if isinstance(scene, dict) and scene.get("_is_canon"):
+        raise RuntimeError("Canonical scene mutation attempted")
+
+
+def save_scene(scene: Dict[str, Any]) -> None:
+    assert_canon_immutable(scene)
+    _save_json(scene_path(scene['scene']['id']), scene)
+
+
+def load_active_scene() -> Dict[str, Any]:
+    session = load_session()
+    scene_id = session['active_scene_id']
+    return get_effective_scene(session, scene_id)
+
+
+def get_effective_scene(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    """Load canon and merge the session runtime overlay; required for gameplay logic."""
+    return build_effective_scene(load_scene(scene_id), get_runtime_scene_overlay(session, scene_id))
+
+
+def activate_scene(scene_id: str) -> Dict[str, Any]:
+    session = load_session()
+    session['active_scene_id'] = scene_id
+    if scene_id not in session['visited_scene_ids']:
+        session['visited_scene_ids'].append(scene_id)
+    save_session(session)
+    return session
+
+
+def list_scene_ids() -> List[str]:
+    SCENES_DIR.mkdir(parents=True, exist_ok=True)
+    return sorted([p.stem for p in SCENES_DIR.glob('*.json')])
+
+
+def is_known_scene_id(scene_id: str) -> bool:
+    """Return True if a scene file exists for this ID; used to validate activate_scene_id."""
+    if not scene_id or not isinstance(scene_id, str):
+        return False
+    return scene_id.strip() in list_scene_ids()
+
+
+def append_log(entry: Dict[str, Any]) -> None:
+    # Serialize with other runtime persistence ops (restore/reset/clear/save) to avoid
+    # mixed visible state windows where the transcript diverges from session/combat.
+    with _runtime_persistence_guard("append_log"):
+        with SESSION_LOG_PATH.open('a', encoding='utf-8') as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+            f.flush()
+            try:
+                os.fsync(f.fileno())
+            except OSError:
+                # Best-effort durability; some platforms/filesystems may not support fsync.
+                pass
+
+
+def load_log() -> List[Dict[str, Any]]:
+    if not SESSION_LOG_PATH.exists():
+        return []
+    entries = []
+    for line in SESSION_LOG_PATH.read_text(encoding='utf-8').splitlines():
+        if line.strip():
+            entries.append(json.loads(line))
+    return entries
+
+
+def clear_log() -> None:
+    with _runtime_persistence_guard("clear_log"):
+        _atomic_write_text(SESSION_LOG_PATH, "", encoding="utf-8")
+
+
+def _validate_runtime_coherency_structural() -> None:
+    """Structural, deterministic coherency check for runtime state.
+
+    Must not attempt semantic repair or authored-data linting.
+    """
+    session = load_session()
+    combat = load_combat()
+    world = load_world()
+    character = load_character()
+    log_entries = load_log()
+
+    if not isinstance(session, dict):
+        raise RuntimePersistenceCoherencyError("session is not a dict")
+    if not isinstance(combat, dict):
+        raise RuntimePersistenceCoherencyError("combat is not a dict")
+    if not isinstance(world, dict):
+        raise RuntimePersistenceCoherencyError("world is not a dict")
+    if not isinstance(character, dict):
+        raise RuntimePersistenceCoherencyError("character is not a dict")
+    if not isinstance(log_entries, list):
+        raise RuntimePersistenceCoherencyError("session_log is not a list")
+
+    active_scene_id = session.get("active_scene_id")
+    if not isinstance(active_scene_id, str) or not active_scene_id.strip():
+        raise RuntimePersistenceCoherencyError("session.active_scene_id must be a non-empty string")
+    if not is_known_scene_id(active_scene_id):
+        raise RuntimePersistenceCoherencyError(f"session.active_scene_id is not a known scene id: {active_scene_id}")
+
+    visited = session.get("visited_scene_ids")
+    if not isinstance(visited, list) or not all(isinstance(x, str) for x in visited):
+        raise RuntimePersistenceCoherencyError("session.visited_scene_ids must be a list[str]")
+
+    scene_state = session.get("scene_state")
+    if scene_state is not None and not isinstance(scene_state, dict):
+        raise RuntimePersistenceCoherencyError("session.scene_state must be an object when present")
+    if isinstance(scene_state, dict):
+        ssid = scene_state.get("active_scene_id")
+        if ssid is not None and isinstance(ssid, str) and ssid.strip() and not is_known_scene_id(ssid):
+            raise RuntimePersistenceCoherencyError(
+                f"session.scene_state.active_scene_id is not a known scene id: {ssid}"
+            )
+
+    overlays = session.get("runtime_scene_overlays")
+    if overlays is not None and not isinstance(overlays, dict):
+        raise RuntimePersistenceCoherencyError("session.runtime_scene_overlays must be an object when present")
+
+    # Minimal combat structure: ensure in_combat is a bool when present.
+    if "in_combat" in combat and not isinstance(combat.get("in_combat"), bool):
+        raise RuntimePersistenceCoherencyError("combat.in_combat must be a bool when present")
+
+    # Ensure that active scene template is loadable via normal storage path.
+    scene = load_scene(active_scene_id)
+    if not isinstance(scene, dict):
+        raise RuntimePersistenceCoherencyError("active scene template did not load as an object")
+
+
+def _ensure_scene_runtime_root(session: Dict[str, Any]) -> Dict[str, Any]:
+    if 'scene_runtime' not in session or not isinstance(session['scene_runtime'], dict):
+        session['scene_runtime'] = {}
+    return session['scene_runtime']
+
+
+def _ensure_runtime_scene_overlay_root(session: Dict[str, Any]) -> Dict[str, Any]:
+    if 'runtime_scene_overlays' not in session or not isinstance(session['runtime_scene_overlays'], dict):
+        session['runtime_scene_overlays'] = {}
+    return session['runtime_scene_overlays']
+
+
+def _default_runtime_scene_overlay(scene_id: str) -> Dict[str, Any]:
+    return {
+        "scene_id": scene_id,
+        "visible_facts_add": [],
+        "discovered_clues": [],
+        "state_flags": {},
+        "runtime_entities": [],
+        "mutations": {},
+    }
+
+
+def _ensure_runtime_scene_overlay_shape(overlay: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    overlay["scene_id"] = str(overlay.get("scene_id") or scene_id).strip() or scene_id
+    if not isinstance(overlay.get("visible_facts_add"), list):
+        overlay["visible_facts_add"] = []
+    if not isinstance(overlay.get("discovered_clues"), list):
+        overlay["discovered_clues"] = []
+    if not isinstance(overlay.get("state_flags"), dict):
+        overlay["state_flags"] = {}
+    if not isinstance(overlay.get("runtime_entities"), list):
+        overlay["runtime_entities"] = []
+    if not isinstance(overlay.get("mutations"), dict):
+        overlay["mutations"] = {}
+    return overlay
+
+
+def get_runtime_scene_overlay(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    """Return mutable runtime overlay for *scene_id*, creating the canonical shape if missing."""
+    sid = str(scene_id or "").strip()
+    if not sid:
+        raise ValueError("scene_id must be a non-empty string")
+    root = _ensure_runtime_scene_overlay_root(session)
+    overlay = root.get(sid)
+    if not isinstance(overlay, dict):
+        overlay = _default_runtime_scene_overlay(sid)
+        root[sid] = overlay
+    return _ensure_runtime_scene_overlay_shape(overlay, sid)
+
+
+def _dedupe_preserve_order(items: List[Any]) -> List[Any]:
+    out: List[Any] = []
+    seen: set[str] = set()
+    for item in items:
+        key = json.dumps(item, sort_keys=True, default=str) if isinstance(item, (dict, list)) else str(item)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(copy.deepcopy(item))
+    return out
+
+
+def _merged_list(base: Any, additions: Any) -> List[Any]:
+    base_list = base if isinstance(base, list) else []
+    add_list = additions if isinstance(additions, list) else []
+    return _dedupe_preserve_order(list(base_list) + list(add_list))
+
+
+def build_effective_scene(canon_scene: Dict[str, Any], overlay: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a merged scene view without mutating the canon scene or overlay."""
+    effective = copy.deepcopy(canon_scene if isinstance(canon_scene, dict) else {})
+    effective.pop("_is_canon", None)
+    scene = effective.setdefault("scene", {})
+    if not isinstance(scene, dict):
+        effective["scene"] = {}
+        scene = effective["scene"]
+
+    ov = _ensure_runtime_scene_overlay_shape(copy.deepcopy(overlay or {}), str(scene.get("id") or ""))
+    mutations = ov.get("mutations") if isinstance(ov.get("mutations"), dict) else {}
+
+    scene["visible_facts"] = _merged_list(scene.get("visible_facts"), ov.get("visible_facts_add"))
+    scene["discovered_clues"] = _merged_list(scene.get("discovered_clues"), ov.get("discovered_clues"))
+    scene["runtime_entities"] = _merged_list(scene.get("runtime_entities"), ov.get("runtime_entities"))
+
+    discoverable_add = mutations.get("discoverable_clues_add") if isinstance(mutations, dict) else None
+    if discoverable_add is not None:
+        scene["discoverable_clues"] = _merged_list(scene.get("discoverable_clues"), discoverable_add)
+    hidden_add = mutations.get("hidden_facts_add") if isinstance(mutations, dict) else None
+    if hidden_add is not None:
+        scene["hidden_facts"] = _merged_list(scene.get("hidden_facts"), hidden_add)
+    if isinstance(mutations, dict) and isinstance(mutations.get("mode"), str) and mutations["mode"].strip():
+        scene["mode"] = mutations["mode"].strip()
+
+    if ov.get("state_flags"):
+        scene["state_flags"] = {**(scene.get("state_flags") if isinstance(scene.get("state_flags"), dict) else {}), **ov["state_flags"]}
+    return effective
+
+
+def get_interaction_context(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Return mutable interaction context, initializing deterministic default keys.
+
+    First-touch initialization lives here as a **historical lazy-root seam** (no
+    ``state_authority`` guard on empty-session materialization—see
+    ``tests/test_state_authority.py``). This establishes session **shape** only;
+    semantic writes remain in ``game.interaction_context``.
+    """
+    ctx = session.get("interaction_context")
+    if not isinstance(ctx, dict):
+        ctx = {}
+        session["interaction_context"] = ctx
+    for key in (
+        "active_interaction_target_id",
+        "active_interaction_kind",
+        "interaction_mode",
+        "engagement_level",
+        "conversation_privacy",
+        "player_position_context",
+    ):
+        if key not in ctx:
+            if key in ("interaction_mode", "engagement_level"):
+                ctx[key] = "none"
+            else:
+                ctx[key] = None
+        elif ctx[key] is not None:
+            ctx[key] = str(ctx[key]).strip() or None
+    if ctx.get("interaction_mode") is None:
+        ctx["interaction_mode"] = "none"
+    if ctx.get("engagement_level") is None:
+        ctx["engagement_level"] = "none"
+    return ctx
+
+
+def get_scene_state(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Return mutable scene-state scope, initializing deterministic keys."""
+    state = session.get("scene_state")
+    if not isinstance(state, dict):
+        state = {}
+        session["scene_state"] = state
+    if "active_scene_id" not in state:
+        state["active_scene_id"] = str(session.get("active_scene_id") or "").strip()
+    if not isinstance(state.get("active_entities"), list):
+        state["active_entities"] = []
+    if not isinstance(state.get("entity_presence"), dict):
+        state["entity_presence"] = {}
+    if "current_interlocutor" not in state:
+        state["current_interlocutor"] = None
+    if not isinstance(state.get("promoted_actor_npc_map"), dict):
+        state["promoted_actor_npc_map"] = {}
+    return state
+
+
+def clear_interaction_context(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Backward-compatible clear helper; delegates to owner API."""
+    from game.interaction_context import clear_for_scene_change
+
+    return clear_for_scene_change(session)
+
+
+def get_scene_runtime(session: Dict[str, Any], scene_id: str) -> Dict[str, Any]:
+    """Return mutable runtime dict for a given scene, initializing if needed."""
+    root = _ensure_scene_runtime_root(session)
+    scene_rt = root.get(scene_id)
+    if not isinstance(scene_rt, dict):
+        scene_rt = {}
+        root[scene_id] = scene_rt
+    overlay = get_runtime_scene_overlay(session, scene_id)
+    existing_clues = scene_rt.get('discovered_clues')
+    if isinstance(existing_clues, list):
+        for clue in existing_clues:
+            _add_unique_to_list(overlay['discovered_clues'], clue)
+    scene_rt['discovered_clues'] = overlay['discovered_clues']
+    scene_rt.setdefault('discovered_clue_ids', [])  # Structured clue ids for world progression
+    scene_rt.setdefault('pending_leads', [])
+    scene_rt.setdefault('revealed_hidden_facts', [])
+    scene_rt.setdefault('suspicion_flags', [])
+    # Discovery memory: per-target search state
+    scene_rt.setdefault('searched_targets', [])  # target ids (interactable id or action_id) already investigated
+    scene_rt.setdefault('resolved_interactables', [])  # interactable ids that yielded discover_clue (one-time)
+    # Anti-stall: repeated same exploration action in same scene
+    scene_rt.setdefault('last_exploration_action_key', None)
+    scene_rt.setdefault('repeated_action_count', 0)
+    scene_rt.setdefault('last_resolution_kind', None)
+    scene_rt.setdefault('last_description_hash', None)
+    scene_rt.setdefault('last_perception_visible_facts', [])
+    scene_rt.setdefault('last_perception_narration', "")
+    scene_rt.setdefault('last_perception_turn', None)
+    scene_rt.setdefault('consumed_action_ids', [])
+    # Scene momentum (anti-stall) tracking:
+    # - momentum_exchanges_since: number of completed exchanges since last momentum beat
+    # - momentum_next_due_in: next window size (2 or 3) for requiring a momentum beat
+    # - momentum_last_kind: last momentum kind tag applied (debug/telemetry)
+    scene_rt.setdefault('momentum_exchanges_since', 0)
+    scene_rt.setdefault('momentum_next_due_in', 2)
+    scene_rt.setdefault('momentum_last_kind', None)
+    return scene_rt
+
+
+SCENE_MOMENTUM_TAG_PREFIX = "scene_momentum:"
+SCENE_MOMENTUM_KINDS: tuple[str, ...] = (
+    "new_information",
+    "new_actor_entering",
+    "environmental_change",
+    "time_pressure",
+    "consequence_or_opportunity",
+)
+
+
+def update_scene_momentum_runtime(session: Dict[str, Any], scene_id: str, gm: Dict[str, Any]) -> Dict[str, Any]:
+    """Update per-scene momentum counters based on GM output tags.
+
+    Deterministic rule:
+    - If the GM includes exactly one scene_momentum:<kind> tag, reset exchanges_since=0
+      and toggle next_due_in between 2 and 3.
+    - Otherwise, increment exchanges_since by 1.
+    """
+    rt = get_scene_runtime(session, scene_id)
+    tags = gm.get("tags") if isinstance(gm, dict) else None
+    tags_list = tags if isinstance(tags, list) else []
+    found: list[str] = []
+    for t in tags_list:
+        if not isinstance(t, str):
+            continue
+        t = t.strip()
+        if not t.startswith(SCENE_MOMENTUM_TAG_PREFIX):
+            continue
+        kind = t[len(SCENE_MOMENTUM_TAG_PREFIX):].strip()
+        if kind in SCENE_MOMENTUM_KINDS and kind not in found:
+            found.append(kind)
+
+    if len(found) == 1:
+        rt["momentum_exchanges_since"] = 0
+        rt["momentum_last_kind"] = found[0]
+        # Toggle 2 ↔ 3 to enforce a 2–3 beat cadence without randomness.
+        prev = int(rt.get("momentum_next_due_in", 2) or 2)
+        rt["momentum_next_due_in"] = 3 if prev == 2 else 2
+        return rt
+
+    rt["momentum_exchanges_since"] = int(rt.get("momentum_exchanges_since", 0) or 0) + 1
+    return rt
+
+
+def hash_text(text: str) -> str:
+    """MD5 hash of text for detecting repeated narration."""
+    return hashlib.md5(text.encode("utf-8")).hexdigest()
+
+
+REPEATED_DESCRIPTION_SUMMARY = "You find nothing new beyond what you have already observed."
+
+
+def apply_repeated_description_guard(
+    gm: Dict[str, Any], session: Dict[str, Any], scene_id: str
+) -> None:
+    """If narration matches the last description for this scene, replace with short summary.
+    Mutates gm in place. Updates last_description_hash when narration changes."""
+    from game.immutable_valid_response import response_is_immutable, note_mutator_skipped
+
+    text = gm.get('player_facing_text')
+    if isinstance(gm, dict) and response_is_immutable(gm):
+        note_mutator_skipped(gm, "apply_repeated_description_guard")
+        if isinstance(text, str) and text.strip():
+            rt = get_scene_runtime(session, scene_id)
+            rt['last_description_hash'] = hash_text(text)
+        return
+    if not isinstance(text, str) or not text.strip():
+        return
+    new_hash = hash_text(text)
+    rt = get_scene_runtime(session, scene_id)
+    last_hash = rt.get('last_description_hash')
+    if last_hash is not None and new_hash == last_hash:
+        gm['player_facing_text'] = REPEATED_DESCRIPTION_SUMMARY
+    else:
+        rt['last_description_hash'] = new_hash
+
+
+def _add_unique_to_list(lst: List[str], value: str) -> bool:
+    if not isinstance(value, str) or not value.strip():
+        return False
+    if value in lst:
+        return False
+    lst.append(value)
+    return True
+
+
+def mark_clue_discovered(session: Dict[str, Any], scene_id: str, clue_text: str) -> bool:
+    """Mark a clue as discovered; return True only if newly added."""
+    rt = get_scene_runtime(session, scene_id)
+    return _add_unique_to_list(rt['discovered_clues'], clue_text)
+
+
+def _pending_lead_clean(lead: Dict[str, Any]) -> Dict[str, Any]:
+    return {k: v for k, v in lead.items() if v is not None and v != ''}
+
+
+def _pending_str_field(d: Dict[str, Any], key: str) -> str:
+    return str(d.get(key) or "").strip()
+
+
+def _merge_pending_lead_authoritative(
+    existing: Dict[str, Any], incoming: Dict[str, Any]
+) -> tuple[Dict[str, Any], bool]:
+    """Merge incoming into existing for the same authoritative_lead_id; fill empty leads_to_* / text / clue_id."""
+    out = dict(existing)
+    changed = False
+    for key in ("leads_to_scene", "leads_to_npc", "leads_to_rumor"):
+        cur = _pending_str_field(out, key)
+        raw = incoming.get(key)
+        if raw is None or raw == "":
+            continue
+        inc = str(raw).strip()
+        if not inc:
+            continue
+        if not cur:
+            out[key] = raw
+            changed = True
+    inc_text = _pending_str_field(incoming, "text")
+    if inc_text and not _pending_str_field(out, "text"):
+        out["text"] = incoming["text"]
+        changed = True
+    elif inc_text and _pending_str_field(out, "text") and inc_text != _pending_str_field(out, "text"):
+        inc_targets = sum(
+            1 for k in ("leads_to_scene", "leads_to_npc", "leads_to_rumor") if _pending_str_field(incoming, k)
+        )
+        out_targets = sum(
+            1 for k in ("leads_to_scene", "leads_to_npc", "leads_to_rumor") if _pending_str_field(out, k)
+        )
+        if inc_targets > out_targets:
+            out["text"] = incoming["text"]
+            changed = True
+    inc_cid = _pending_str_field(incoming, "clue_id")
+    if inc_cid and not _pending_str_field(out, "clue_id"):
+        out["clue_id"] = incoming["clue_id"]
+        changed = True
+    inc_auth = _pending_str_field(incoming, "authoritative_lead_id")
+    if inc_auth and _pending_str_field(out, "authoritative_lead_id") != inc_auth:
+        out["authoritative_lead_id"] = incoming["authoritative_lead_id"]
+        changed = True
+    clean = _pending_lead_clean(out)
+    if clean != out:
+        changed = True
+    return clean, changed
+
+
+def add_pending_lead(session: Dict[str, Any], scene_id: str, lead: Dict[str, Any]) -> bool:
+    """Add or merge a pending lead from a discovered clue.
+
+    When ``authoritative_lead_id`` is present, dedupe/merge by that id (single row per authority);
+    otherwise use legacy ``clue_id`` dedupe (append-only, no merge).
+
+    Returns True if the pending list changed (new row or merged update).
+    Lead shape: {clue_id, text, authoritative_lead_id?, leads_to_scene?, leads_to_npc?, leads_to_rumor?}.
+    """
+    if not lead or not isinstance(lead, dict):
+        return False
+    clue_id = str(lead.get('clue_id', '')).strip()
+    if not clue_id:
+        return False
+    rt = get_scene_runtime(session, scene_id)
+    pending = rt.get('pending_leads') or []
+    if not isinstance(pending, list):
+        rt['pending_leads'] = []
+        pending = []
+    auth_in = str(lead.get("authoritative_lead_id") or "").strip() or None
+
+    if auth_in:
+        for i, p in enumerate(pending):
+            if not isinstance(p, dict):
+                continue
+            if str(p.get("authoritative_lead_id") or "").strip() != auth_in:
+                continue
+            merged, changed = _merge_pending_lead_authoritative(p, lead)
+            if changed:
+                pending[i] = merged
+                rt['pending_leads'] = pending
+            return changed
+        clean = _pending_lead_clean(lead)
+        rt['pending_leads'] = pending + [clean]
+        return True
+
+    for p in pending:
+        if isinstance(p, dict) and p.get('clue_id') == clue_id:
+            return False
+    clean = _pending_lead_clean(lead)
+    rt['pending_leads'] = pending + [clean]
+    return True
+
+
+def mark_hidden_fact_revealed(session: Dict[str, Any], scene_id: str, hidden_text: str) -> bool:
+    """Mark a hidden fact as explicitly revealed; return True only if newly added."""
+    rt = get_scene_runtime(session, scene_id)
+    return _add_unique_to_list(rt['revealed_hidden_facts'], hidden_text)
+
+
+def mark_action_consumed(session: Dict[str, Any], scene_id: str, action_id: str) -> bool:
+    """Mark an affordance as consumed (completed). Actions in consumed_action_ids are hidden from affordances.
+    Returns True only if newly added."""
+    if not action_id or not isinstance(action_id, str):
+        return False
+    action_id = action_id.strip()
+    if not action_id:
+        return False
+    rt = get_scene_runtime(session, scene_id)
+    consumed = rt.get('consumed_action_ids') or []
+    if not isinstance(consumed, list):
+        rt['consumed_action_ids'] = []
+        consumed = []
+    if action_id in consumed:
+        return False
+    consumed.append(action_id)
+    rt['consumed_action_ids'] = consumed
+    return True
+
+
+def add_suspicion_flag(session: Dict[str, Any], scene_id: str, flag: str) -> bool:
+    """Add a suspicion flag; return True only if newly added."""
+    rt = get_scene_runtime(session, scene_id)
+    return _add_unique_to_list(rt['suspicion_flags'], flag)
+
+
+def is_target_searched(session: Dict[str, Any], scene_id: str, target_id: str) -> bool:
+    """Return True if the target (interactable id or action_id) has been searched."""
+    if not target_id or not isinstance(target_id, str):
+        return False
+    rt = get_scene_runtime(session, scene_id)
+    searched = rt.get('searched_targets') or []
+    return str(target_id).strip() in [str(x).strip() for x in searched if x]
+
+
+def is_interactable_resolved(session: Dict[str, Any], scene_id: str, interactable_id: str) -> bool:
+    """Return True if the interactable already yielded discover_clue (one-time exhausted)."""
+    if not interactable_id or not isinstance(interactable_id, str):
+        return False
+    rt = get_scene_runtime(session, scene_id)
+    resolved = rt.get('resolved_interactables') or []
+    return str(interactable_id).strip() in [str(x).strip() for x in resolved if x]
+
+
+def mark_target_searched(session: Dict[str, Any], scene_id: str, target_id: str) -> bool:
+    """Mark a target as searched. Returns True only if newly added."""
+    if not target_id or not isinstance(target_id, str):
+        return False
+    target_id = str(target_id).strip()
+    if not target_id:
+        return False
+    rt = get_scene_runtime(session, scene_id)
+    return _add_unique_to_list(rt['searched_targets'], target_id)
+
+
+def mark_interactable_resolved(session: Dict[str, Any], scene_id: str, interactable_id: str) -> bool:
+    """Mark an interactable as resolved (clue discovered). Returns True only if newly added."""
+    if not interactable_id or not isinstance(interactable_id, str):
+        return False
+    interactable_id = str(interactable_id).strip()
+    if not interactable_id:
+        return False
+    rt = get_scene_runtime(session, scene_id)
+    added = _add_unique_to_list(rt['resolved_interactables'], interactable_id)
+    if added:
+        _add_unique_to_list(rt['searched_targets'], interactable_id)
+    return added
+
+
+def _ensure_npc_runtime_root(session: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure session has npc_runtime dict. Returns mutable npc_runtime."""
+    if 'npc_runtime' not in session or not isinstance(session['npc_runtime'], dict):
+        session['npc_runtime'] = {}
+    return session['npc_runtime']
+
+
+def get_npc_runtime(session: Dict[str, Any], npc_id: str) -> Dict[str, Any]:
+    """Return mutable runtime dict for an NPC, initializing if needed.
+
+    NPC runtime tracks: attitude, trust, fear, suspicion, known_topics, revealed_topics,
+    last_interaction_turn. Lives in session.npc_runtime[npc_id].
+    """
+    root = _ensure_npc_runtime_root(session)
+    npc_rt = root.get(npc_id)
+    if not isinstance(npc_rt, dict):
+        npc_rt = {}
+        root[npc_id] = npc_rt
+    npc_rt.setdefault('attitude', 0)
+    npc_rt.setdefault('trust', 0)
+    npc_rt.setdefault('fear', 0)
+    npc_rt.setdefault('suspicion', 0)
+    npc_rt.setdefault('known_topics', [])
+    npc_rt.setdefault('revealed_topics', [])
+    npc_rt.setdefault('last_interaction_turn', None)
+    return npc_rt
+
+
+def _ensure_world_state(world: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure world has world_state with flags, counters, clocks. Returns world_state dict."""
+    if 'world_state' not in world or not isinstance(world['world_state'], dict):
+        world['world_state'] = {'flags': {}, 'counters': {}, 'clocks': {}}
+    ws = world['world_state']
+    ws.setdefault('flags', {})
+    ws.setdefault('counters', {})
+    ws.setdefault('clocks', {})
+    return ws
+
+
+def get_world_flag(world: Dict[str, Any], key: str) -> Any:
+    """Get the value of a world flag. Returns None if not set."""
+    ws = _ensure_world_state(world)
+    return ws['flags'].get(key)
+
+
+def set_world_flag(world: Dict[str, Any], key: str, value: Any) -> None:
+    """Set a world flag. Value must be JSON-serializable."""
+    if not key or not isinstance(key, str):
+        return
+    ws = _ensure_world_state(world)
+    ws['flags'][key] = value
+
+
+def increment_world_counter(world: Dict[str, Any], key: str, amount: int = 1) -> int:
+    """Increment a world counter and return the new value."""
+    if not key or not isinstance(key, str):
+        return 0
+    ws = _ensure_world_state(world)
+    current = int(ws['counters'].get(key, 0) or 0)
+    new_val = current + int(amount)
+    ws['counters'][key] = new_val
+    return new_val
+
+
+DEBUG_TRACE_MAX = 20
+
+
+def append_debug_trace(session: Dict[str, Any], trace: Dict[str, Any]) -> None:
+    """Append a debug trace and keep only the most recent DEBUG_TRACE_MAX traces."""
+    if 'debug_traces' not in session or not isinstance(session['debug_traces'], list):
+        session['debug_traces'] = []
+    session['debug_traces'].append(trace)
+    session['debug_traces'] = session['debug_traces'][-DEBUG_TRACE_MAX:]
+
+
+def get_save_summary() -> Dict[str, Any]:
+    """Return a summary of the persisted playthrough state for UI display.
+
+    Reflects what is on disk (session, world, character, log). Playthrough state
+    is auto-saved on every action/chat. Save buttons (Save Campaign, Save Scene)
+    persist campaign metadata and scene templates only.
+    """
+    session = load_session()
+    world = load_world()
+    character = load_character()
+    log_entries = load_log()
+
+    # Aggregate discovered clues across scene overlays first; legacy scene_runtime is a fallback.
+    discovered_total = 0
+    overlay_rt = session.get('runtime_scene_overlays') or {}
+    if isinstance(overlay_rt, dict):
+        for overlay in overlay_rt.values():
+            if isinstance(overlay, dict):
+                discovered_total += len(overlay.get('discovered_clues') or [])
+    if discovered_total == 0:
+        rt = session.get('scene_runtime') or {}
+        if isinstance(rt, dict):
+            for scene_rt in rt.values():
+                if isinstance(scene_rt, dict):
+                    discovered_total += len(scene_rt.get('discovered_clues') or [])
+    else:
+        rt = session.get('scene_runtime') or {}
+
+    ws = _ensure_world_state(world)
+    flags_count = len(ws.get('flags') or {})
+    counters_count = len(ws.get('counters') or {})
+    world_clocks_count = len(ws.get('clocks') or {})
+
+    player_name = (
+        session.get('character_name')
+        or (character.get('name') or '').strip()
+        or 'You'
+    )
+
+    return {
+        'saved_at': session.get('last_saved_at'),
+        'active_scene_id': session.get('active_scene_id', ''),
+        'chat_messages': len(log_entries),
+        'discovered_clues': discovered_total,
+        'world_flags_count': flags_count,
+        'world_counters_count': counters_count,
+        'world_clocks_count': world_clocks_count,
+        'player_name': player_name,
+        'save_data_exists': bool(
+            session.get('last_saved_at')
+            or session.get('turn_counter', 0) > 0
+            or (isinstance(rt, dict) and len(rt) > 0)
+            or len(session.get('visited_scene_ids', [])) > 1
+        ),
+    }
+
+
+def advance_world_clock(world: Dict[str, Any], clock_name: str, amount: int = 1) -> int:
+    """Advance a world clock by amount. Creates clock if missing (max=10). Returns new value (clamped).
+
+    Authoritative storage is ``world_state.clocks[clock_id]`` as a canonical clock row
+    (``id``, ``value``, ``min_value``, ``max_value``, ``scope``, ``metadata``).
+    """
+    from game.schema_contracts import coerce_world_state_clock_row, normalize_clock, validate_clock
+
+    if not clock_name or not isinstance(clock_name, str):
+        return 0
+    ws = _ensure_world_state(world)
+    clocks = ws['clocks']
+    if not isinstance(clocks, dict):
+        clocks = {}
+        ws['clocks'] = clocks
+    raw = clocks.get(clock_name)
+    canon = coerce_world_state_clock_row(clock_name, raw if isinstance(raw, dict) else {})
+    ok, _ = validate_clock(canon)
+    if not ok:
+        return 0
+    new_val = min(
+        int(canon["max_value"]),
+        max(int(canon["min_value"]), int(canon["value"]) + int(amount)),
+    )
+    out = normalize_clock({**canon, "value": new_val})
+    cid = str(out["id"])
+    clocks[cid] = out
+    if cid != clock_name and clock_name in clocks:
+        del clocks[clock_name]
+    return int(out["value"])
+
+
+# -----------------------------------------------------------------------------
+# Snapshot / Save Slots
+# -----------------------------------------------------------------------------
+# Lightweight named save slots for playtesting and branching. Each snapshot
+# captures session, world, combat, character, and log. Does not touch
+# campaign or scene templates. Default persistence is unchanged.
+# -----------------------------------------------------------------------------
+
+
+def _snapshot_path(snapshot_id: str) -> Path:
+    """Return path for a snapshot file. ID must be safe (alphanumeric, underscore, hyphen)."""
+    safe = "".join(c for c in snapshot_id if c.isalnum() or c in "_-")
+    if not safe:
+        raise ValueError("Invalid snapshot id")
+    return SNAPSHOTS_DIR / f"{safe}.json"
+
+
+def create_snapshot(label: Optional[str] = None) -> Dict[str, Any]:
+    """Create a snapshot of current runtime state. Returns snapshot meta (id, created_at, label)."""
+    # Guard snapshot creation so the bundle is taken from a stable runtime view and
+    # cannot race with restore/reset/saves in this process.
+    with _runtime_persistence_guard("snapshot_create"):
+        SNAPSHOTS_DIR.mkdir(parents=True, exist_ok=True)
+        snapshot_id = f"{utc_iso_now().replace(':', '-').replace('.', '-')[:19]}_{secrets.token_hex(4)}"
+        created_at = utc_iso_now()
+        label_clean = (label or "").strip() or None
+
+        session = load_session()
+        world = load_world()
+        combat = load_combat()
+        character = load_character()
+        log_entries = load_log()
+
+        bundle: Dict[str, Any] = {
+            "version": SNAPSHOT_VERSION,
+            "created_at": created_at,
+            "label": label_clean,
+            "session": copy.deepcopy(session),
+            "world": copy.deepcopy(world),
+            "combat": copy.deepcopy(combat),
+            "character": copy.deepcopy(character),
+            "log_entries": copy.deepcopy(log_entries),
+        }
+        _atomic_save_json(_snapshot_path(snapshot_id), bundle)
+        return {"id": snapshot_id, "created_at": created_at, "label": label_clean}
+
+
+def list_snapshots() -> List[Dict[str, Any]]:
+    """List all snapshots. Returns [{id, created_at, label}] sorted by created_at descending."""
+    if not SNAPSHOTS_DIR.exists():
+        return []
+    result: List[Dict[str, Any]] = []
+    for path in sorted(SNAPSHOTS_DIR.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                result.append({
+                    "id": path.stem,
+                    "created_at": data.get("created_at", ""),
+                    "label": data.get("label"),
+                })
+        except (json.JSONDecodeError, OSError):
+            continue
+    return result
+
+
+def load_snapshot(snapshot_id: str) -> Optional[Dict[str, Any]]:
+    """Restore state from snapshot (validate-first, commit-second).
+
+    All required pieces must validate before any live runtime mutation occurs.
+    If commit fails mid-flight, attempts rollback to preserve the prior live state
+    and then raises.
+    """
+    with _runtime_persistence_guard("snapshot_restore"):
+        path = _snapshot_path(snapshot_id)
+        if not path.exists():
+            return None
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            return None
+        if not isinstance(data, dict):
+            return None
+
+        if int(data.get("version") or 0) != SNAPSHOT_VERSION:
+            return None
+
+        session = data.get("session")
+        world = data.get("world")
+        combat = data.get("combat")
+        character = data.get("character")
+        log_entries = data.get("log_entries")
+
+        if not isinstance(session, dict):
+            return None
+        if not isinstance(world, dict):
+            return None
+        if not isinstance(combat, dict):
+            return None
+        if not isinstance(character, dict):
+            return None
+        if not isinstance(log_entries, list):
+            log_entries = []
+
+        # Prepare replacement artifacts in memory first (no mutation yet).
+        now = utc_iso_now()
+        session_payload = dict(session)
+        session_payload["last_saved_at"] = now
+        session_env = wrap_runtime_payload(kind="session", payload=session_payload, saved_at=now, include_integrity=True)
+        combat_env = wrap_runtime_payload(kind="combat", payload=dict(combat), saved_at=now, include_integrity=True)
+        log_text = "".join(
+            json.dumps(e, ensure_ascii=False) + "\n" for e in log_entries if isinstance(e, dict)
+        )
+
+        # Commit-second with rollback-on-failure to avoid mixed runtime state.
+        targets: list[Path] = [SESSION_PATH, WORLD_PATH, COMBAT_PATH, CHARACTER_PATH, SESSION_LOG_PATH]
+        originals: dict[Path, Optional[bytes]] = {p: _read_bytes_if_exists(p) for p in targets}
+        applied: list[Path] = []
+        try:
+            _atomic_save_json(SESSION_PATH, session_env)
+            applied.append(SESSION_PATH)
+            _atomic_save_json(WORLD_PATH, world)
+            applied.append(WORLD_PATH)
+            _atomic_save_json(COMBAT_PATH, combat_env)
+            applied.append(COMBAT_PATH)
+            _atomic_save_json(CHARACTER_PATH, character)
+            applied.append(CHARACTER_PATH)
+            _atomic_write_text(SESSION_LOG_PATH, log_text, encoding="utf-8")
+            applied.append(SESSION_LOG_PATH)
+        except Exception as e:
+            # Best-effort rollback to the original live runtime state.
+            for p in reversed(applied):
+                orig = originals.get(p)
+                try:
+                    if orig is None:
+                        if p.exists():
+                            p.unlink()
+                    else:
+                        _atomic_write_bytes(p, orig)
+                except Exception:
+                    pass
+            raise RuntimeError("Snapshot restore failed during commit; live state may be inconsistent.") from e
+
+        # Restore success requires both commit success and post-restore coherency.
+        try:
+            _validate_runtime_coherency_structural()
+        except Exception as e:
+            # Roll back to preserve safe runtime state; do not advertise success.
+            for p in reversed(applied):
+                orig = originals.get(p)
+                try:
+                    if orig is None:
+                        if p.exists():
+                            p.unlink()
+                    else:
+                        _atomic_write_bytes(p, orig)
+                except Exception:
+                    pass
+            raise RuntimeError("Snapshot restore rejected: restored runtime failed coherency validation.") from e
+
+        return {"id": data.get("id", snapshot_id), "created_at": data.get("created_at"), "label": data.get("label")}

@@ -1,0 +1,45 @@
+{
+  "schema": "decision_facing_answer_recipe_v1",
+  "projection_only": true,
+  "authority_owner": "gm_resolution_decision",
+  "requested_answer": "Answer the perceive about chapel bell. Player asked: Looking at the split wooden yoke and the torn leather hanger, maybe someone cut it deliberately. Does that fit what I'm seeing?",
+  "required_content": [
+    {
+      "claim_id": "rc_db5ec0aa65c3",
+      "role": "MUST_STATE",
+      "text": "The bell's wooden yoke is split.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    },
+    {
+      "claim_id": "rc_b31ecb1fd1c7",
+      "role": "MUST_STATE",
+      "text": "The bell's leather hanger is torn.",
+      "provenance": "authored_world_fact",
+      "epistemic_status": "established",
+      "relation_kind": "ordinary_predicate"
+    }
+  ],
+  "permitted_content": [],
+  "permitted_inference": {
+    "allowed": false,
+    "qualified_observations": [],
+    "may_infer_claims": []
+  },
+  "inference_modality": "none",
+  "unresolved_content": [],
+  "forbidden_upgrades": [
+    "unauthorized_consequential_fact",
+    "generated_content_as_authored_world_fact"
+  ],
+  "declaration_guidance": {
+    "consequential_authorized_claim": "realize with source_claim_id and the claim provenance",
+    "bounded_inference": "not permitted on this turn",
+    "epistemic_premise": "No player hypothesis, NPC claim, or unresolved premise is authorized on this turn.",
+    "epistemic_claims": [],
+    "ordinary_incidental_expression": "Harmless sensory detail and mannerism may stay plain narration. They are not consequential claims."
+  },
+  "incidental_improvisation_guidance": "Harmless sensory detail and mannerism may stay plain narration. They are not consequential claims.",
+  "answer_strategy": "Answer directly by realizing the required claims."
+}

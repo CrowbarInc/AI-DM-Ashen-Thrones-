@@ -1,0 +1,16 @@
+PR-BY regression. No model calls.
+
+PR-BW focused slice:
+command: .venv\Scripts\python.exe -m pytest tests/test_pr_bw_narration_only_envelope.py tests/test_pr_bv_turn_local_operation_projection.py tests/test_pr_br_structured_realization_envelope.py -q --tb=line --basetemp=development/tmp/pytest_pr_by_bw
+result: PASS
+26 passed, 0 failed.
+
+Retry/regeneration slice:
+command: .venv\Scripts\python.exe -m pytest tests/test_gm_retry.py tests/test_gm_retry_context_separation.py tests/test_pr_br_continuation19_hard_authority.py tests/test_pr_br_continuation21_subject_integrity.py tests/test_pr_br_structured_chat_path.py::test_raw_chat_rejects_unauthorized_cause_and_emits_only_the_retry tests/test_pr_br_structured_chat_path.py::test_raw_chat_plain_prose_is_a_structured_contract_failure -q --tb=line --basetemp=development/tmp/pytest_pr_by_retry
+result: PASS
+47 passed, 0 failed.
+
+Broad deterministic slice matching the PR-BX review set, plus the PR-BY tests:
+command: .venv\Scripts\python.exe -m pytest tests/test_pr_by_narration_only_retry_contract.py tests/test_pr_bw_narration_only_envelope.py tests/test_pr_bv_turn_local_operation_projection.py tests/test_pr_bs_decision_facing_answer_recipe.py tests/test_pr_bu_narration_claim_composition.py tests/test_pr_bu_lexical_scope.py tests/test_pr_br_gm_resolution_decision.py tests/test_pr_br_structured_realization_envelope.py tests/test_gm_retry.py tests/test_gm_retry_context_separation.py -q --tb=line --basetemp=development/tmp/pytest_pr_by_broad
+result: PASS
+180 passed, 0 failed.

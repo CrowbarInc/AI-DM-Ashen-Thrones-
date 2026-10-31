@@ -1,0 +1,751 @@
+--- entry/game/api.py
++++ final/game/api.py
+@@ -4897,6 +4897,7 @@
+         self.baseline: dict | None = None
+         self.tracked = False
+         self.committed = False
++        self.diagnostic_token = None
+ 
+     def acquire(self) -> None:
+         if self.lock_held:
+@@ -4905,6 +4906,8 @@
+ 
+         _RUNTIME_PERSISTENCE_LOCK.acquire()
+         self.lock_held = True
++        from game.provider_budget import begin_opening_diagnostic
++        self.diagnostic_token = begin_opening_diagnostic()
+ 
+     def track(self, session: dict, world: dict, combat: dict) -> None:
+         if not self.tracked:
+@@ -4919,6 +4922,9 @@
+             if self.tracked and not self.committed and self.baseline is not None:
+                 _restore_opening_baseline(self.baseline)
+         finally:
++            from game.provider_budget import end_opening_diagnostic
++            end_opening_diagnostic(self.diagnostic_token, committed=self.committed, tracked=self.tracked)
++            self.diagnostic_token = None
+             if self.lock_held:
+                 from game.storage import _RUNTIME_PERSISTENCE_LOCK
+ 
+@@ -6116,6 +6122,14 @@
+     scene["scene_state"] = session.get("scene_state")
+     if mark_campaign_started:
+         opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
++        from game.provider_budget import observe_opening_validation
++        observe_opening_validation(
++            rejection=opening_rejection,
++            recovery=_stable_opening_reason(
++                ((gm.get("metadata") or {}).get("accepted_response") or {}).get("provenance"),
++                "rejected_without_recovery" if opening_rejection else "unavailable",
++            ),
++        )
+         if opening_rejection:
+             return _opening_failure_response(opening_rejection)
+     save_world(world)
+@@ -6329,6 +6343,10 @@
+     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+     from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
+     if playtest_stop_reason():
++        from game.provider_budget import record_generation_diagnostic
++        record_generation_diagnostic({"stage": "opening_admission", "logical_operation": "scene_opening",
++            "requested_response_type": "scene_opening", "classification": "provider_budget_refused",
++            "rejection_reason": "provider_budget_refused", "opening_accepted": False, "gameplay_committed": False})
+         return JSONResponse(status_code=409, content={"ok": False, "status": "blocked", "error": PLAYTEST_STOP_MESSAGE})
+     try:
+         ui_mode = resolve_requested_ui_mode(request)
+@@ -6367,6 +6385,8 @@
+     session = load_session()
+     recent_log = load_log()
+     if not _session_allows_structured_start_campaign(session, recent_log):
++        from game.provider_budget import observe_opening_validation
++        observe_opening_validation(rejection="already_started", recovery="not_attempted")
+         st = compose_state()
+         return JSONResponse(
+             status_code=409,
+--- entry/game/gm.py
++++ final/game/gm.py
+@@ -5052,6 +5052,89 @@
+     )
+ 
+ 
++def _extract_provider_response_text(response) -> tuple[str, dict]:
++    """Responses SDK output_text convenience property and typed message output.
++
++    Never stringify an SDK object: its repr is not generated narration.
++    """
++    output = getattr(response, "output", None)
++    segments = [segment for item in (output or [])
++                if getattr(item, "type", None) == "message"
++                for segment in (getattr(item, "content", None) or [])]
++    text_segments = [segment.text for segment in segments
++                     if getattr(segment, "type", None) == "output_text"
++                     and isinstance(getattr(segment, "text", None), str)]
++    text = getattr(response, "output_text", None)
++    source = "output_text"
++    if not isinstance(text, str):
++        text = "".join(text_segments)
++        source = "output_message_content" if text_segments else "unavailable"
++    return text, {
++        "content_segment_count": len(segments) if output is not None else None,
++        "provider_content_present": bool(segments or text),
++        "extraction_source": source,
++        "extraction_succeeded": source != "unavailable",
++        "extracted_content_length": len(text), "extracted_content_empty": not bool(text.strip()),
++    }
++
++
++def _generation_response_diagnostic(response, text, extraction, parsed, *, maximum, contract):
++    """Observe the actual parser result; JSON syntax is separate from the contract."""
++    from game.structured_player_output import classify_model_output
++
++    classified = classify_model_output(text)
++    # Match the production parser's supported fenced JSON handling.
++    raw = text.strip()
++    fence = re.fullmatch(r"```(?:json)?\s*(.*?)\s*```", raw, re.DOTALL | re.IGNORECASE)
++    if fence:
++        raw = fence.group(1).strip()
++    try:
++        value = json.loads(raw)
++        json_ok = True
++    except (ValueError, TypeError):
++        value, json_ok = None, False
++    envelope_present = (isinstance(value, dict) and
++                        (("narration" in value) if contract == "narration_only"
++                         else {"declared_claims", "narration"} <= value.keys()))
++    meta = parsed.get("metadata") or {}
++    reason = meta.get("structured_contract_reason")
++    valid = not bool(meta.get("structured_output_rejected") or meta.get("structured_contract_failure"))
++    status = getattr(response, "status", None)
++    status = status if status in {"completed", "incomplete", "failed", "cancelled", "queued", "in_progress"} else None
++    incomplete = getattr(getattr(response, "incomplete_details", None), "reason", None)
++    incomplete = incomplete if incomplete in {"max_output_tokens", "content_filter"} else None
++    usage = getattr(response, "usage", None)
++    counts = {key: getattr(usage, key, None) for key in ("input_tokens", "output_tokens", "total_tokens")}
++    counts = {key: val if type(val) is int and val >= 0 else None for key, val in counts.items()}
++    reached = counts["output_tokens"] >= maximum if maximum is not None and counts["output_tokens"] is not None else None
++    if not extraction["extraction_succeeded"]:
++        category = "extraction_failure" if extraction["provider_content_present"] else "empty_provider_content"
++    elif extraction["extracted_content_empty"]:
++        category = "empty_provider_content"
++    elif not json_ok:
++        category = "json_parse_failure"
++    elif not envelope_present:
++        category = "missing_structured_envelope"
++    elif not valid:
++        category = "structured_validation_failure"
++    else:
++        category = "accepted_structured_response"
++    def safe_identifier(value):
++        return value if isinstance(value, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,200}", value) else None
++    return {**extraction, **counts,
++            "provider_request_id": safe_identifier(getattr(response, "_request_id", None)),
++            "provider_response_id": safe_identifier(getattr(response, "id", None)),
++            "provider_status": status, "provider_finish_reason": incomplete,
++            "provider_output_limit_exhausted": incomplete == "max_output_tokens" if incomplete else None,
++            "requested_max_output_tokens": maximum, "output_limit_reached": reached,
++            "possible_output_truncation": bool(reached and not valid),
++            "json_parsing_succeeded": json_ok, "expected_envelope_present": envelope_present,
++            "recognized_envelope_keys": sorted(set(value) & {"narration", "declared_claims", "player_facing_text"}) if isinstance(value, dict) else [],
++            "parser_output_form": classified["form"], "structured_validation_result": valid,
++            "rejection_reason": reason, "classification": category,
++            "provider_response_contract": contract}
++
++
+ def call_gpt(
+     messages: List[Dict[str, str]],
+     *,
+@@ -5193,6 +5276,21 @@
+             force_high_precision=force_high_precision,
+         )
+     request_sent = False
++    from game.provider_budget import generation_diagnostics_enabled, record_generation_diagnostic
++    diagnostic_context = {"stage": "provider_response", "logical_operation": purpose,
++                          "requested_response_type": None, "provider_model": selected_model}
++    if generation_diagnostics_enabled():
++        for message in reversed(messages):
++            try:
++                payload = json.loads(message.get("content") or "")
++            except (ValueError, TypeError):
++                continue
++            if isinstance(payload, dict):
++                requested = (payload.get("response_type_contract") or {}).get("required_response_type")
++                if requested in {"scene_opening", "answer", "clarification", "action_result", "npc_dialogue"}:
++                    diagnostic_context["requested_response_type"] = requested
++                    diagnostic_context["logical_operation"] = requested
++                break
+     try:
+         from openai import OpenAI
+         from game.provider_budget import sdk_retry_options
+@@ -5217,10 +5315,7 @@
+         resp = attempt.dispatch(client.responses.create, **create_kwargs)
+         if isinstance(stamp, dict):
+             stamp["latency_ms"] = max(0, int(round((time.perf_counter() - float(stamp.get("started") or time.perf_counter())) * 1000)))
+-        text = getattr(resp, 'output_text', None)
+-        if text is None:
+-            # Fallback to stringifying the response if expected attribute missing.
+-            text = str(resp)
++        text, extraction = _extract_provider_response_text(resp)
+         usage = getattr(resp, "usage", None)
+         incoming = getattr(usage, "input_tokens", None) if usage is not None else None
+         outgoing = getattr(usage, "output_tokens", None) if usage is not None else None
+@@ -5245,12 +5340,17 @@
+                 }
+             )
+         provider_response_contract = _provider_response_contract_from_messages(messages)
++        parsed_response = _safe_json(
++            text.strip(), require_structured_claims=True,
++            provider_response_contract=provider_response_contract,
++        )
++        if generation_diagnostics_enabled():
++            record_generation_diagnostic({**diagnostic_context, **_generation_response_diagnostic(
++                resp, text, extraction, parsed_response,
++                maximum=create_kwargs.get("max_output_tokens"), contract=provider_response_contract,
++            )}, attempt)
+         return _attach_model_route_metadata(
+-            _safe_json(
+-                text.strip(),
+-                require_structured_claims=True,
+-                provider_response_contract=provider_response_contract,
+-            ),
++            parsed_response,
+             selected_model=route.selected_model,
+             route_reason=route.route_reason,
+             route_family=route.route_family,
+@@ -5261,6 +5361,11 @@
+             force_high_precision=force_high_precision,
+         )
+     except Exception as e:
++        record_generation_diagnostic({**diagnostic_context, "classification": "provider_error",
++                                     "provider_status": None, "provider_finish_reason": None,
++                                     "input_tokens": None, "output_tokens": None, "total_tokens": None,
++                                     "requested_max_output_tokens": narration_cap if accounting_active() else None,
++                                     "rejection_reason": "provider_error"}, attempt)
+         stamp = _PROVIDER_CALL_STAMP.get()
+         if isinstance(stamp, dict):
+             stamp["sent"] = bool(request_sent)
+--- entry/game/provider_budget.py
++++ final/game/provider_budget.py
+@@ -31,6 +31,63 @@
+ _LEDGER_PATH: str | None = None
+ _RUN_ID = uuid.uuid4().hex
+ _LEGACY: ContextVar[Any] = ContextVar("provider_legacy_attempt", default=None)
++_OPENING_DIAGNOSTIC: ContextVar[Any] = ContextVar("provider_opening_diagnostic", default=None)
++
++
++def generation_diagnostics_enabled() -> bool:
++    return _truthy("ASHEN_GENERATION_DIAGNOSTICS")
++
++
++def record_generation_diagnostic(fields: dict[str, Any], attempt=None) -> None:
++    """Structural observations only, in the existing ledger; never request/response text.
++
++    Failure stops future admissions, but cannot turn a committed gameplay result
++    into a failed opening. Callers supply explicitly constructed, content-free fields.
++    """
++    if not generation_diagnostics_enabled() or not accounting_active():
++        return
++    with _LOCK:
++        try:
++            _initialize_locked()
++            scope = _OPENING_DIAGNOSTIC.get()
++            _append({"event": "generation_diagnostic", "version": ACCOUNTING_VERSION,
++                     "run_id": _RUN_ID, "time": _now(),
++                     "attempt_id": attempt.attempt_id if attempt else None,
++                     "opening_attempt_id": scope["id"] if scope else None, **fields})
++        except (OSError, ValueError, TypeError, ProviderAccountingError):
++            _stop("generation diagnostic ledger write failed")
++
++
++def begin_opening_diagnostic():
++    if not generation_diagnostics_enabled():
++        return None
++    return _OPENING_DIAGNOSTIC.set({"id": uuid.uuid4().hex})
++
++
++def observe_opening_validation(*, rejection: str | None, recovery: str | None) -> None:
++    scope = _OPENING_DIAGNOSTIC.get()
++    if scope is not None:
++        scope.update(rejection_reason=rejection, recovery_classification=recovery,
++                     final_validation_passed=rejection is None)
++
++
++def end_opening_diagnostic(token, *, committed: bool, tracked: bool) -> None:
++    if token is None:
++        return
++    try:
++        scope = _OPENING_DIAGNOSTIC.get()
++        if tracked or scope.get("rejection_reason"):
++            record_generation_diagnostic({
++                "stage": "opening_outcome", "logical_operation": "scene_opening",
++                "requested_response_type": "scene_opening",
++                "opening_accepted": committed, "gameplay_committed": committed,
++                "classification": "accepted_structured_opening" if committed else "opening_rejected",
++                "structured_validation_result": scope.get("final_validation_passed"),
++                "rejection_reason": scope.get("rejection_reason") or (None if committed else "pipeline_exception"),
++                "recovery_classification": scope.get("recovery_classification"),
++            })
++    finally:
++        _OPENING_DIAGNOSTIC.reset(token)
+ 
+ class ProviderAccountingError(RuntimeError):
+     """No external dispatch is safe after an accounting failure."""
+--- entry/tools/atgb/accounting.py
++++ final/tools/atgb/accounting.py
+@@ -74,6 +74,13 @@
+                 raise ValueError("ledger_run_identity_disagreement")
+             aid = event.get("attempt_id")
+             kind = event.get("event")
++            if kind == "generation_diagnostic":
++                # Observations neither admit requests nor change lifecycle state.
++                if event.get("stage") not in {"provider_response", "opening_outcome", "opening_admission"}:
++                    raise ValueError("invalid_generation_diagnostic_stage")
++                if aid is not None and aid not in states:
++                    raise ValueError("diagnostic_without_admitted_attempt")
++                continue
+             if kind == "rejected" and aid and event.get("sent") is False and event.get("refusal"):
+                 continue  # A refusal is evidence, never an admitted outbound request.
+             if not aid or not event.get("purpose") or not event.get("owner") or not event.get("admitted_at"):
+--- entry/tests/test_start_campaign_api.py
++++ final/tests/test_start_campaign_api.py
+@@ -57,6 +57,17 @@
+         "prepared_scene_opening_text": RICH_OPENING_GPT_RESPONSE["player_facing_text"],
+     },
+ }
++
++
++def _structured_opening_fixture(narration: str, messages: list | None = None) -> dict:
++    from game.gm import _safe_json
++    payload = json.loads(messages[-1]["content"]) if messages else {}
++    claims = (payload.get("gm_resolution_decision") or {}).get("realization_claims") or []
++    declarations = [{"declaration_mode": "realize", "source_claim_id": claim["claim_id"],
++                     "text": claim["text"], "relation_kind": claim.get("relation_kind", "observation")}
++                    for claim in claims if claim.get("text") and claim["text"] in narration]
++    return _safe_json(json.dumps({"declared_claims": declarations, "narration": narration}),
++                      require_structured_claims=True)
+ 
+ 
+ def _assert_scene_opening_reads_like_scene(text: str) -> None:
+@@ -293,7 +304,8 @@
+ ) -> None:
+     _seed_campaign_start_storage(tmp_path, monkeypatch)
+     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
++    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: _structured_opening_fixture(
++        CONTRACT_OPENING_GPT_RESPONSE["player_facing_text"], _a[0]))
+ 
+     with TestClient(app) as client:
+         assert client.post("/api/new_campaign").status_code == 200
+@@ -319,7 +331,8 @@
+ ) -> None:
+     _seed_campaign_start_storage(tmp_path, monkeypatch)
+     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
+-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(FAKE_GPT_RESPONSE))
++    journal_fact = "You stand at Cinderwatch's eastern gate as rain spatters soot-dark stone."
++    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: _structured_opening_fixture(journal_fact, _a[0]))
+ 
+     with TestClient(app) as client:
+         assert client.post("/api/new_campaign").status_code == 200
+@@ -330,27 +343,31 @@
+         scene.pop("campaign_spine_opening_facts", None)
+         scene.pop("spine_opening_facts", None)
+         scene["visible_facts"] = ["VISIBLE FACT SHOULD NOT APPEAR"]
+-        scene["journal_seed_facts"] = ["JOURNAL FACT SHOULD APPEAR"]
++        scene["journal_seed_facts"] = [journal_fact]
+         gate_path.write_text(json.dumps(gate, indent=2), encoding="utf-8")
+ 
+         sc = client.post("/api/start_campaign")
+-        assert sc.status_code == 200
++        assert sc.status_code == 200, sc.json()
+         data = sc.json()
+ 
+     text = str(data.get("gm_output", {}).get("player_facing_text") or "")
+-    assert "JOURNAL FACT SHOULD APPEAR" in text
++    assert journal_fact in text
+     assert "VISIBLE FACT SHOULD NOT APPEAR" not in text
+ 
+     gm_output = (load_log()[0].get("gm_output") or {})
+     emission_debug = (gm_output.get("metadata") or {}).get("emission_debug") or {}
+     final_meta = gm_output.get("_final_emission_meta") or {}
+     assert emission_debug.get("opening_selector_source_used") == "journal_seed_facts"
+-    assert emission_debug.get("opening_selector_selected_facts") == ["JOURNAL FACT SHOULD APPEAR"]
+-    assert emission_debug.get("opening_curated_facts") == ["JOURNAL FACT SHOULD APPEAR"]
+-    assert final_meta.get("opening_final_fallback_basis") == ["JOURNAL FACT SHOULD APPEAR"]
+-    assert final_meta.get("opening_final_basis_matches_selector") is True
+-    if data.get("resolution", {}).get("kind") == "scene_opening":
+-        assert final_meta.get("opening_final_basis_matches_selector") is True
++    assert emission_debug.get("opening_selector_selected_facts") == [journal_fact]
++    assert emission_debug.get("opening_curated_facts") == [journal_fact]
++    assert final_meta.get("opening_selector_selected_facts") == [journal_fact]
++    # A valid immutable opening does not select a fallback. Exercise its actual
++    # context owner separately so fallback-basis coverage remains meaningful.
++    from game.opening_deterministic_fallback import opening_context_from_gm_output
++    from game.final_emission_opening_fallback import build_opening_fallback_result_meta
++    fallback_meta = build_opening_fallback_result_meta(context=opening_context_from_gm_output(gm_output))
++    assert fallback_meta["opening_final_fallback_basis"] == [journal_fact]
++    assert fallback_meta["opening_final_basis_matches_selector"] is True
+ 
+ 
+ def test_start_campaign_log_has_no_begin_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+--- entry/docs/NEXT_SESSION.md
++++ final/docs/NEXT_SESSION.md
+@@ -1,8 +1,29 @@
+ # NEXT_SESSION
+ 
+-Ashen Thrones — Product Realization. Updated 2026-10-26 / PR-PLAY-04.
++Ashen Thrones — Product Realization. Updated 2026-10-27 / PR-PLAY-05.
+ Read `docs/DEVELOPMENT_CONSTITUTION.md` first, then this orientation and the
+ relevant authorities below.
++
++## Latest closure and diagnostics — PR-PLAY-05
++
++2026-10-27: **B — Conditionally ready for one operator opening after external
++review.** Two obsolete journal/placeholder HTTP fixtures now use valid declared
++structured openings. Three rich emission cases reproduce on hash-verified pre04
++source, remain failing and are excluded; no threshold/acceptance relaxation.
++Opt-in ASHEN_GENERATION_DIAGNOSTICS=1 extends the existing provider usage ledger
++with extraction/JSON/envelope/finish/validation and final commit observations.
++No raw-response logging; SDK text segments replace response-object stringification.
++39 focused checks pass, including all 18 PR-PLAY-04 checks; broader 238 pass / 5
++demonstrated preexisting failures. Original live failure cause remains unknown;
++600/600 is possible-truncation evidence only. Frozen attestation remains stale.
++Reports and one-Start manual: development/campaigns/product_realization/pr_play_05/.
++Evidence: artifacts/pr_play_05/; review: handoff/CURRENT_REVIEW.md and timestamped
++ZIP. PR_PLAY_05_LIVE_OPENING_TEST.txt supersedes PR-PLAY-02 for the next trial.
++Stop after review package; no live trial until external review accepts it.
++No live/connectivity calls, prompt/schema/model/cap changes, extra provider
++operations, normal-save/frozen/experiment changes, commit or push. Dirty entry
++work retained. PR-PLAY-04 acceptance/commit-integrity repair remains valid in
++its deterministic scope. No benchmark or broad gameplay-quality claim.
+ 
+ ## Latest repair — PR-PLAY-04
+ 
+--- /dev/null
++++ final/tests/test_pr_play_05_diagnostics.py
+@@ -0,0 +1,230 @@
++"""Synthetic SDK responses through real generation, parsing, validation and commit."""
++import json
++from pathlib import Path
++from types import SimpleNamespace as NS
++
++import openai
++import pytest
++
++import game.api as api
++import game.gm as gm
++from game import provider_budget as budget
++from tests.helpers.live_model_guard import production_call_gpt
++from tests.test_pr_play_04_opening_integrity import (
++    opening_world, _start, _snap, _envelope, VALID_NARRATION,
++)
++
++
++@pytest.fixture
++def diagnostic_world(opening_world, monkeypatch, tmp_path):
++    for name, value in {
++        '_REQUESTS': 0, '_RECORDS': [], '_EVENTS': [], '_ATTEMPTS': {},
++        '_INPUT': 0, '_OUTPUT': 0, '_RESERVED_INPUT': 0, '_RESERVED_OUTPUT': 0,
++        '_USAGE_KNOWN': True, '_STOPPED': False, '_STOP_REASON': '',
++        '_INITIALIZED': False, '_LEDGER_PATH': None,
++    }.items():
++        monkeypatch.setattr(budget, name, value)
++    monkeypatch.setenv('ASHEN_GENERATION_DIAGNOSTICS', '1')
++    monkeypatch.setenv('ASHEN_PROVIDER_USAGE_PATH', str(tmp_path/'provider_usage.jsonl'))
++    monkeypatch.setenv('ASHEN_PROVIDER_REQUEST_LIMIT', '6')
++    for name in ['INPUT','OUTPUT','TOTAL']:
++        monkeypatch.setenv('ASHEN_PROVIDER_'+name+'_TOKEN_LIMIT','1000000')
++    return opening_world
++
++
++@pytest.mark.parametrize('case,category,accepted', [
++    ('D1','accepted_structured_response',True),
++    ('D2','missing_structured_envelope',False),
++    ('D3','json_parse_failure',False),
++    ('D4','empty_provider_content',False),
++    ('D5','accepted_structured_response',True),
++    ('D6','json_parse_failure',False),
++    ('D7','provider_error',False),
++    ('D8','accepted_structured_response',True),
++    ('D9','accepted_structured_response',True),
++    ('D10','missing_structured_envelope',False),
++    ('extraction','extraction_failure',False),
++    ('validation','structured_validation_failure',False),
++    ('placeholder','json_parse_failure',False),
++])
++def test_production_diagnostic_matrix(diagnostic_world, monkeypatch, case, category, accepted):
++    calls = diagnostic_world['calls']
++    text = _envelope(VALID_NARRATION)
++    if case == 'D2': text = '{"ordinary": true}'
++    if case == 'D3': text = '{broken'
++    if case == 'D4': text = ''
++    if case == 'D6': text = '{"declared_claims": [], "narration": "You stand'
++    if case == 'D10': text = '{"ordinary": true}'
++    if case == 'validation': text = '{"declared_claims": null, "narration": "You stand at the gate."}'
++    if case == 'placeholder': text = '[Narration]'
++    response = NS(output_text=text, model='offline-stub', id='synthetic-response',
++                  usage=NS(input_tokens=20, output_tokens=10, total_tokens=30), status='completed')
++    if case == 'D5':
++        del response.output_text
++        response.output = [NS(type='message',content=[NS(type='output_text',text=text)])]
++    if case == 'D6':
++        response.status='incomplete'
++        response.incomplete_details=NS(reason='max_output_tokens')
++        response.usage=NS(input_tokens=20,output_tokens=600,total_tokens=620)
++    if case == 'D8': del response.usage
++    if case == 'D9': del response.status
++    if case == 'D10': response.usage=NS(input_tokens=20,output_tokens=600,total_tokens=620)
++    if case == 'extraction':
++        del response.output_text
++        response.output=[NS(type='message',content=[NS(type='refusal',refusal='private sentinel')])]
++    def create(**kwargs):
++        calls.append({'keys': sorted(kwargs)})
++        assert kwargs['max_output_tokens']==600
++        assert 'text' not in kwargs  # No new provider response-format setting.
++        if case == 'D7': raise RuntimeError('private provider exception sentinel')
++        return response
++    monkeypatch.setattr(openai,'OpenAI',lambda **_k: NS(responses=NS(create=create)))
++    # Materialize initialization defaults before measuring gameplay persistence.
++    import game.storage as storage
++    storage.load_campaign()
++    storage.load_character()
++    storage.load_conditions()
++    session=storage.load_session()
++    api.snapshot_turn_start_interlocutor(session)
++    api.synchronize_scene_addressability(session,storage.load_active_scene(),storage.load_world())
++    storage.save_session(session)
++    before = _snap()
++    # Full persisted files, not merely the public projection.
++    files_before = {p.relative_to(storage.DATA_DIR).as_posix():p.read_bytes()
++                    for p in storage.DATA_DIR.rglob('*') if p.is_file()}
++    body,status = _start()
++    assert status == (200 if accepted else 422), body
++    assert len(calls)==1
++    assert budget.snapshot()['request_upper_bound']==1
++    if accepted:
++        assert body['gm_output']['player_facing_text']==VALID_NARRATION
++        assert _snap()['campaign_started'] is True
++        assert _snap()['turn_counter']==1 and _snap()['time_pressure']==1
++        assert [r['agenda_progress'] for r in _snap()['factions']]==[1,1,1]
++    else:
++        assert body['gameplay_committed'] is False and body.get('gm_output') is None
++        assert _snap()==before
++        files_after = {p.relative_to(storage.DATA_DIR).as_posix():p.read_bytes()
++                       for p in storage.DATA_DIR.rglob('*') if p.is_file()}
++        # JSON serialization on rollback may change bytes, but values and file inventory must match.
++        # Existing rollback creates an empty log if New Campaign removed it.
++        assert set(files_after)-set(files_before) <= {'session_log.jsonl'}
++        if 'session_log.jsonl' not in files_before:
++            assert files_after.get('session_log.jsonl',b'')==b''
++        for name in files_before:
++            if name.endswith('.json'):
++                after_value,before_value=json.loads(files_after[name]),json.loads(files_before[name])
++                # Persistence envelope timestamps change when the existing rollback saves.
++                after_value.pop('saved_at',None)
++                before_value.pop('saved_at',None)
++                if name=='session.json':
++                    for value in [after_value,before_value]:
++                        payload=value['payload']
++                        payload.pop('last_saved_at',None)
++                        traces=payload.pop('debug_traces',[])
++                        assert all(t=={'kind':'state_mutation','domain':'scene_state',
++                            'owner_module':'game.interaction_context','operation':'rebuild_active_scene_entities',
++                            'changed_area':'scene_state.active_entities'} for t in traces)
++                        value.pop('integrity',None)
++                assert after_value==before_value, name
++            else:
++                assert files_after[name]==files_before[name], name
++    events = budget.snapshot()['events']
++    from tools.atgb.accounting import inspect_ledger
++    reconciled=inspect_ledger(Path(__import__('os').environ['ASHEN_PROVIDER_USAGE_PATH']),budget.snapshot())
++    assert reconciled['status']=='recorded'
++    assert reconciled['request_upper_bound']==1
++    diagnostic = next(r for r in events if r.get('stage')=='provider_response')
++    outcome = next(r for r in events if r.get('stage')=='opening_outcome')
++    assert diagnostic['classification']==category
++    assert outcome['opening_accepted'] is accepted
++    assert outcome['gameplay_committed'] is accepted
++    assert diagnostic['opening_attempt_id']==outcome['opening_attempt_id']
++    assert outcome['classification']==('accepted_structured_opening' if accepted else 'opening_rejected')
++    if case == 'D2': assert diagnostic['json_parsing_succeeded'] and not diagnostic['expected_envelope_present']
++    if case in {'D3','D6'}: assert diagnostic['json_parsing_succeeded'] is False
++    if case == 'D6': assert diagnostic['provider_output_limit_exhausted'] is True
++    if case == 'D8': assert all(diagnostic[k] is None for k in ['input_tokens','output_tokens','total_tokens'])
++    if case == 'D9': assert diagnostic['provider_status'] is None and diagnostic['provider_finish_reason'] is None
++    if case == 'D10':
++        assert diagnostic['output_limit_reached'] is True
++        assert diagnostic['possible_output_truncation'] is True
++        assert diagnostic['provider_output_limit_exhausted'] is None
++        assert diagnostic['classification']=='missing_structured_envelope'
++    if case == 'D5': assert diagnostic['extraction_source']=='output_message_content' and diagnostic['content_segment_count']==1
++    raw = Path(__import__('os').environ['ASHEN_PROVIDER_USAGE_PATH']).read_text()
++    assert 'private sentinel' not in raw and 'private provider exception sentinel' not in raw
++    assert VALID_NARRATION not in raw
++    # Retain only structural evidence with a stable location for the review package.
++    dest=Path('artifacts/pr_play_05/diagnostics')
++    dest.mkdir(parents=True,exist_ok=True)
++    (dest/(case+'.json')).write_text(json.dumps({'status':status,'events':events,'before':before,'after':_snap()},indent=2))
++
++
++def test_diagnostics_disabled_has_no_events(diagnostic_world, monkeypatch):
++    monkeypatch.delenv('ASHEN_GENERATION_DIAGNOSTICS')
++    assert _start()[1]==200
++    assert not any(r.get('event')=='generation_diagnostic' for r in budget.snapshot()['events'])
++
++
++def test_invalid_placeholder_over_http(diagnostic_world):
++    from fastapi.testclient import TestClient
++    diagnostic_world['state']['text']='[Narration]'
++    before=_snap()
++    with TestClient(api.app) as client:
++        response=client.post('/api/start_campaign')
++    assert response.status_code==422
++    assert response.json()['gameplay_committed'] is False
++    assert _snap()==before
++    assert len(diagnostic_world['calls'])==1
++    Path('artifacts/pr_play_05/placeholder_http.json').write_text(json.dumps({
++        'status':response.status_code,'body':response.json(),'before':before,'after':_snap(),
++        'events':budget.snapshot()['events']},indent=2))
++
++
++def test_sdk_extraction_does_not_stringify_objects():
++    class Unusable:
++        def __str__(self): raise AssertionError('SDK repr must not reach parser')
++    assert gm._extract_provider_response_text(Unusable())[0]==''
++
++
++def test_native_sdk_content_segments_and_request_identity():
++    from openai.types.responses import Response, ResponseOutputMessage, ResponseOutputText
++    message=ResponseOutputMessage.model_construct(type='message',role='assistant',status='completed',id='msg_stub',
++        content=[ResponseOutputText(type='output_text',text='{"declared_claims":[],',annotations=[]),
++                 ResponseOutputText(type='output_text',text='"narration":"You stand at the gate."}',annotations=[])])
++    response=Response.model_construct(id='resp_stub',model='offline-stub',status='completed',output=[message],usage=None)
++    response._request_id='req_stub'
++    text,details=gm._extract_provider_response_text(response)
++    assert details['content_segment_count']==2
++    parsed=gm._safe_json(text,require_structured_claims=True)
++    diag=gm._generation_response_diagnostic(response,text,details,parsed,maximum=600,contract='structured_realization')
++    assert diag['structured_validation_result'] is True
++    assert diag['provider_request_id']=='req_stub' and diag['provider_response_id']=='resp_stub'
++
++
++@pytest.mark.parametrize('scenario', ['repeat','retry','concurrent','budget'])
++def test_existing_integrity_controls_with_diagnostics(diagnostic_world,monkeypatch,tmp_path,scenario):
++    from tests import test_pr_play_04_opening_integrity as original
++    controls={
++        'repeat':lambda:original.test_valid_opening_commits_once_and_repeat_does_not(diagnostic_world),
++        'retry':lambda:original.test_failure_then_failure_then_success_commits_once(diagnostic_world),
++        'concurrent':lambda:original.test_concurrent_starts_commit_one_opening(diagnostic_world,monkeypatch),
++        'budget':lambda:original.test_budget_rejection_is_before_dispatch(diagnostic_world,monkeypatch,tmp_path),
++    }
++    controls[scenario]()
++    events=budget.snapshot()['events']
++    outcomes=[r for r in events if r.get('stage')=='opening_outcome']
++    if scenario=='budget':
++        assert any(r.get('classification')=='provider_budget_refused' for r in events)
++        assert budget.snapshot()['request_upper_bound']==0
++    else:
++        assert sum(r['gameplay_committed'] for r in outcomes)==1
++        assert len(diagnostic_world['calls'])==(3 if scenario=='retry' else 1)
++        if scenario=='repeat':
++            assert outcomes[-1]['rejection_reason']=='already_started'
++        if scenario=='retry':
++            assert [r['gameplay_committed'] for r in outcomes]==[False,False,True]
++    dest=Path('artifacts/pr_play_05/diagnostics')
++    dest.mkdir(parents=True,exist_ok=True)
++    (dest/(scenario+'.json')).write_text(json.dumps({'events':events,'after':_snap()},indent=2))
+--- /dev/null
++++ final/tests/test_pr_play_05_emission_evidence.py
+@@ -0,0 +1,58 @@
++"""Inspection controls; do not change the existing rich-emission contracts."""
++import copy
++import json
++import os
++from pathlib import Path
++
++import pytest
++from fastapi.testclient import TestClient
++import game.api as api
++import game.immutable_valid_response as immutable
++import game.storage as storage
++from tests.helpers.turn_pipeline_http_fixtures import _seed_campaign_start_storage
++from tests.test_start_campaign_api import RICH_OPENING_GPT_RESPONSE, SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE
++
++
++@pytest.mark.parametrize('case',['rich','reconcile','prepared'])
++def test_capture_emission_boundaries(tmp_path,monkeypatch,case):
++    _seed_campaign_start_storage(tmp_path,monkeypatch)
++    monkeypatch.setattr(api,'log_upstream_api_preflight_at_startup',lambda:None)
++    fixture = copy.deepcopy(SHORT_OPENING_WITH_RICH_UPSTREAM_PREPARED_RESPONSE if case=='prepared' else RICH_OPENING_GPT_RESPONSE)
++    monkeypatch.setattr(api,'call_gpt',lambda *_a,**_k:copy.deepcopy(fixture))
++    boundaries=[]
++    def snapshot(stage,gm):
++        meta=gm.get('metadata') or {}
++        text=gm.get('player_facing_text') or ''
++        boundaries.append({'stage':stage,'text':text,'length':len(text),
++                           'accepted':copy.deepcopy(meta.get('accepted_response')),
++                           'debug':copy.deepcopy(meta.get('emission_debug')),
++                           'rejected':copy.deepcopy(meta.get('rejected_candidate'))})
++    real=immutable.run_preserve_if_valid
++    def preserve(gm,*args,**kwargs):
++        snapshot('before_acceptance',gm)
++        result=real(gm,*args,**kwargs)
++        snapshot('after_acceptance',result)
++        return result
++    monkeypatch.setattr(immutable,'run_preserve_if_valid',preserve)
++    finalize=api._finalize_player_facing_for_turn
++    def final(gm,**kwargs):
++        snapshot('before_final_emission',gm)
++        result=finalize(gm,**kwargs)
++        snapshot('after_final_emission',result[0])
++        return result
++    monkeypatch.setattr(api,'_finalize_player_facing_for_turn',final)
++    if case=='reconcile':
++        import game.api_turn_support as support
++        def shorten(**kwargs):
++            kwargs['gm_output']['player_facing_text']='You stand at the gate. Rain falls.'
++            return {'mismatch_kind':'synthetic_summary'}
++        monkeypatch.setattr(support,'reconcile_final_text_with_structured_state',shorten)
++    with TestClient(api.app) as client:
++        assert client.post('/api/new_campaign').status_code==200
++        response=client.post('/api/start_campaign')
++        assert response.status_code==200
++    snapshot('response',response.json()['gm_output'])
++    snapshot('persisted',storage.load_log()[0]['gm_output'])
++    out=Path(os.environ.get('PR_PLAY_05_EMISSION_OUT','artifacts/pr_play_05/emission'))
++    out.mkdir(parents=True,exist_ok=True)
++    (out/(case+'.json')).write_text(json.dumps({'fixture':fixture,'boundaries':boundaries},indent=2))
+--- /dev/null
++++ final/tests/helpers/pr_play_05_http_capture.py
+@@ -0,0 +1,33 @@
++"""Opt-in offline test evidence; observes responses without changing HTTP calls."""
++import json
++import os
++from pathlib import Path
++
++import pytest
++from fastapi.testclient import TestClient
++
++
++@pytest.fixture(autouse=True)
++def capture_opening_http_response(monkeypatch,request):
++    destination=os.environ.get('PR_PLAY_05_HTTP_CAPTURE_DIR')
++    if not destination:
++        yield
++        return
++    records=[]
++    post=TestClient.post
++    def observed(client,url,*args,**kwargs):
++        response=post(client,url,*args,**kwargs)
++        if str(url)=='/api/start_campaign':
++            body=response.json()
++            gm=body.get('gm_output') or {}
++            records.append({'status':response.status_code,'response':{
++                key:body.get(key) for key in ['ok','status','error','opening_failure_reason','campaign_started','gameplay_committed']},
++                'gm_output':{'player_facing_text':gm.get('player_facing_text'),
++                             'metadata':gm.get('metadata')},
++                'session':body.get('session'), 'resolution_kind':(body.get('resolution')or{}).get('kind')})
++        return response
++    monkeypatch.setattr(TestClient,'post',observed)
++    yield
++    path=Path(destination)
++    path.mkdir(parents=True,exist_ok=True)
++    (path/(request.node.name+'.json')).write_text(json.dumps(records,indent=2),encoding='utf-8')

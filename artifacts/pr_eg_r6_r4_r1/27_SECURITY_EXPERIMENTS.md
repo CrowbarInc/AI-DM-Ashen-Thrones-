@@ -1,0 +1,3 @@
+# 27 — Security Experiments
+
+Deterministic adversarial checks: 14/14. They cover disclosure denial, private knowledge, foreign NPC/conversation, historical laundering, forged IDs, fabricated spans/arguments and authority inheritance. Role-swap anchoring is deliberately shown to remain semantically unverified. Primary provider payload audit: 0/570 unavailable-source text exposures and 0/570 gold-field leaks. Password/countersign paraphrases and unsupported clue questions run with empty source context. These counts concern this finite synthetic corpus and saved payloads, not universal security. No generated value reaches world state or final emission.

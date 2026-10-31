@@ -1,0 +1,38 @@
+{
+  "L1": {
+    "classification": "transport_failure",
+    "error_type": "APIConnectionError",
+    "admissions": 1,
+    "dispatches": 1,
+    "latency_ms": 625.517,
+    "end_to_end_ms": 1781.25,
+    "sdk_clients": [
+      {
+        "max_retries": 0
+      }
+    ],
+    "request_id": null,
+    "usage_known": false,
+    "exact_status_code": null,
+    "underlying_cause": "unresolved",
+    "application_parse_failure_evidence": false
+  },
+  "L2": {
+    "classification": "provider_failure",
+    "error_type": "InternalServerError",
+    "admissions": 1,
+    "dispatches": 1,
+    "latency_ms": 6519.199,
+    "end_to_end_ms": 7471.197,
+    "sdk_clients": [
+      {
+        "max_retries": 0
+      }
+    ],
+    "request_id": null,
+    "usage_known": false,
+    "exact_status_code": null,
+    "underlying_cause": "unresolved",
+    "application_parse_failure_evidence": false
+  }
+}

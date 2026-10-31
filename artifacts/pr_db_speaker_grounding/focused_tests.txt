@@ -1,0 +1,11 @@
+.\.venv\Scripts\python.exe -m pytest tests/test_pr_db_speaker_grounding.py tests/test_world_action_social_continuity_break.py -q --tb=short --basetemp=codex_pytest_tmp_pr_db_focus3
+21 passed
+
+.\.venv\Scripts\python.exe -m pytest tests/test_pr_db_speaker_grounding.py tests/test_pr_cz_followup_reliability.py tests/test_pr_cx_authority_assurance.py tests/test_pr_cw_social_context_projection.py tests/test_pr_ct_safe_prompt_deduplication.py tests/test_pr_cp_authorized_finalization.py tests/test_pr_ce_subjective_preference_classification.py tests/test_pr_ck_ordinary_resolver_selection.py tests/test_pr_cn_contextual_figure_integrity.py tests/test_pr_bt_policy_instruction_deduplication.py tests/test_pr_bt_selective_epistemic_guidance.py tests/test_pr_by_narration_only_retry_contract.py tests/test_pr_br_continuation18_immutable_boundary.py tests/test_pr_br_continuation19_hard_authority.py tests/test_authored_knowledge_realization.py tests/test_bounded_improvisation_authority.py tests/test_world_action_social_continuity_break.py -q --tb=line --basetemp=codex_pytest_tmp_pr_db_reg --junitxml=artifacts/pr_db_speaker_grounding/focused_regression.xml
+227 passed / 3 failed / 0 skipped
+
+.\.venv\Scripts\python.exe -m pytest tests/test_pr_br_c19_free_text_authority.py -q --tb=line --basetemp=codex_pytest_tmp_pr_db_c19
+5 passed
+
+.\.venv\Scripts\python.exe -m pytest tests/test_turn_pipeline_shared.py -q --tb=no --basetemp=codex_pytest_tmp_pr_db_shared --junitxml=artifacts/pr_db_speaker_grounding/shared_regression.xml
+41 passed / 24 failed / 0 skipped

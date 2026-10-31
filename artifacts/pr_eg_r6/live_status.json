@@ -1,0 +1,179 @@
+{
+  "status": "STOP",
+  "reason": "integrity",
+  "conversation": "labeled_adversarial",
+  "turn": 14,
+  "summary": {
+    "turns": 119,
+    "conversations": [
+      "adaptive_A",
+      "adaptive_B",
+      "adaptive_C",
+      "adaptive_wardens",
+      "labeled_adversarial",
+      "labeled_harbor_direct",
+      "labeled_harbor_gap",
+      "labeled_quill"
+    ],
+    "integrity_failures": [
+      {
+        "conversation": "labeled_harbor_direct",
+        "turn": 9,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "ash cowl",
+          "sword"
+        ]
+      },
+      {
+        "conversation": "labeled_quill",
+        "turn": 13,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "miller keeps"
+        ]
+      },
+      {
+        "conversation": "labeled_adversarial",
+        "turn": 3,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "throughout the night"
+        ]
+      },
+      {
+        "conversation": "labeled_adversarial",
+        "turn": 5,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "under the mill"
+        ]
+      },
+      {
+        "conversation": "labeled_adversarial",
+        "turn": 10,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": true,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "harbor bell"
+        ]
+      },
+      {
+        "conversation": "labeled_adversarial",
+        "turn": 14,
+        "checks": {
+          "http_ok": true,
+          "contract_present": true,
+          "exact_authorized": true,
+          "valid_digest": true,
+          "history_exact": true,
+          "hidden_not_delivered": false,
+          "canonical_unchanged": true
+        },
+        "forbidden": [
+          "sword"
+        ]
+      }
+    ],
+    "intent": {
+      "n": 58,
+      "ok": 55,
+      "rate": 0.9482758620689655
+    },
+    "addressee": {
+      "n": 58,
+      "ok": 55,
+      "rate": 0.9482758620689655
+    },
+    "subject": {
+      "n": 58,
+      "ok": 55,
+      "rate": 0.9482758620689655
+    },
+    "relevance": {
+      "n": 58,
+      "ok": 47,
+      "rate": 0.8103448275862069
+    },
+    "sufficiency": {
+      "n": 58,
+      "ok": 43,
+      "rate": 0.7413793103448276
+    },
+    "corrections": {
+      "n": 9,
+      "ok": 5,
+      "rate": 0.5555555555555556
+    },
+    "followups": {
+      "n": 15,
+      "ok": 15,
+      "rate": 1.0
+    },
+    "recovery": {
+      "n": 9,
+      "ok": 5,
+      "rate": 0.5555555555555556
+    },
+    "quality_mean": 2.411764705882353,
+    "playability_mean": 2.411764705882353,
+    "quality_ge_2": 96,
+    "playability_ge_2": 96,
+    "quality_n": 119,
+    "provider_calls": 142,
+    "calls_per_turn_mean": 1.1932773109243697,
+    "input_tokens_mean": 1795.6971830985915,
+    "input_tokens_p95": 2220,
+    "output_tokens_mean": 143.71830985915494,
+    "turn_input_tokens_mean": 2256.5398230088495,
+    "turn_input_tokens_p95": 2220,
+    "latency_mean_ms": 2716.20425210084,
+    "latency_median_ms": 2465.359,
+    "latency_p95_ms": 4898.392,
+    "latency_max_ms": 12271.412,
+    "provider_latency_p95_ms": 2811.008,
+    "retry_calls": 1,
+    "models": [
+      "gpt-4.1-mini-2025-04-14"
+    ]
+  }
+}

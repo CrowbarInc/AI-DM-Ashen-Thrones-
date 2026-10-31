@@ -1,0 +1,42 @@
+{
+  "B": {
+    "requests": 22,
+    "successful_requests": 21,
+    "candidate_evaluations": 116,
+    "input_tokens": 10688,
+    "output_tokens": 11002,
+    "batch_latency_ms_median": 3767.5208000073326,
+    "batch_latency_ms_p95": 4812.58969999908,
+    "input_tokens_per_successful_candidate_including_failed_request": 92.13793103448276,
+    "output_tokens_per_successful_candidate_including_failed_request": 94.84482758620689,
+    "elapsed_ms_per_candidate_amortized": 722.8822663797974,
+    "single_latency_ms": [
+      1314.6640000049956,
+      1289.5701000088593
+    ],
+    "median_host_check_ms": 0.0050615
+  },
+  "C": {
+    "requests": 10,
+    "successful_requests": 10,
+    "candidate_evaluations": 60,
+    "input_tokens": 7564,
+    "output_tokens": 5301,
+    "batch_latency_ms_median": 3706.9141500032856,
+    "batch_latency_ms_p95": 4936.099200000172,
+    "input_tokens_per_successful_candidate_including_failed_request": 126.06666666666666,
+    "output_tokens_per_successful_candidate_including_failed_request": 88.35,
+    "elapsed_ms_per_candidate_amortized": 654.4376699998489
+  },
+  "A": {
+    "provider_calls": 0,
+    "median_local_ms": 0.0020499999999999997
+  },
+  "D": {
+    "scope": "policy replay, not independently timed network routing",
+    "A_fast_accepts": 5,
+    "population": 102,
+    "potential_calls_avoided_fraction": 0.049019607843137254,
+    "critical_accepts_in_C_replay": 3
+  }
+}

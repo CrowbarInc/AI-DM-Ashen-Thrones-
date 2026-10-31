@@ -2,21 +2,25 @@
 
 - Advisory only: `true`
 - Report only: `true`
-- Generated at: `2026-06-06T00:00:00Z`
-- Total classifications: `0`
+- Command: `C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\pytest\__main__.py -m golden_replay -q --tb=short -o addopts=--basetemp=development/tmp/maintenance_golden --junitxml=development/tmp/github_checkpoint/golden_after.xml`
+- Total classifications: `1`
 
 ## Top Drift Fields
 
-No drift fields recorded.
+1. scaffold_leakage
+   Count: 1
+   Trend: stable
 
 ## Top Investigation Targets
 
-No investigation targets recorded.
+1. game/output_sanitizer.py (1)
 
 ## Top Owner Drift Buckets
 
-No owner drift buckets recorded.
+1. semantic_drift (1)
 
 ## Owner Drift Buckets By Field
 
-No field/bucket pairings recorded.
+| Field | Owner Drift Bucket | Count |
+|---|---|---:|
+| `scaffold_leakage` | `semantic_drift` | `1` |

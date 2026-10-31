@@ -1,0 +1,54 @@
+{
+  "case_id": "s04q0",
+  "family": "s04",
+  "partition": "validation",
+  "architecture": "C",
+  "diagnostic": false,
+  "context": "short",
+  "extraction_hash": "f2f55186171825f44c67011b9ad29159d3629954404e6edcae1655d21c699d66",
+  "answer": {
+    "response_class": "DIRECT",
+    "values": [
+      "Edda"
+    ],
+    "qualifiers": [
+      "used to",
+      "before the flood",
+      "npc_knowledge"
+    ],
+    "selected_fact_ids": [
+      "f1"
+    ],
+    "selected_source_ids": [
+      "s04"
+    ],
+    "answered_arguments": [
+      "maintainer",
+      "object",
+      "temporal"
+    ],
+    "missing_arguments": [],
+    "conflict": false,
+    "reason": "The fact explicitly states that Edda used to maintain the west beacon before the flood, matching the question's temporal and object criteria."
+  },
+  "gate": {
+    "candidate_eligible": false,
+    "reasons": [
+      "unanchored_qualifier"
+    ],
+    "delivery_authorized": false,
+    "canonical": false,
+    "semantic_support": "unestablished"
+  },
+  "scores": {
+    "class_correct": true,
+    "content_correct": true,
+    "qualifier_preserved": true,
+    "answer_success": true,
+    "false_acceptance": false,
+    "false_rejection": false,
+    "unsupported_inference": false,
+    "earliest_failure": ""
+  },
+  "provider_error": null
+}

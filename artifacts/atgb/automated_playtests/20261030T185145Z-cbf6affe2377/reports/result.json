@@ -1,0 +1,394 @@
+{
+  "schema_version": 1,
+  "run_id": "20261030T185145Z-cbf6affe2377",
+  "timestamp": "2026-10-30T18:51:45.881475+00:00",
+  "mode": "Live",
+  "scenario": {
+    "id": "FiveTurnGameplay",
+    "version": "1.0.0",
+    "description": "Opening followed by five production chat intents; bounded at six provider requests",
+    "fixture": "frontier-gate-v1",
+    "execution_modes": [
+      "Deterministic",
+      "Live",
+      "ScriptedGameplay"
+    ],
+    "actions": [
+      {
+        "kind": "initialize_campaign"
+      },
+      {
+        "kind": "capture_baseline"
+      },
+      {
+        "kind": "start_campaign"
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T1",
+        "interaction_category": "observation",
+        "player_input": "I take a moment to look around the gate district. What do I notice?",
+        "subject_terms": [
+          "gate",
+          "rain",
+          "crowd"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": [
+          "Q6"
+        ]
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T2",
+        "interaction_category": "conversation",
+        "player_input": "I approach the gate serjeant and ask what happened to the missing patrol.",
+        "subject_terms": [
+          "serjeant",
+          "patrol"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": []
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T3",
+        "interaction_category": "environment",
+        "player_input": "I examine the notice board carefully. What notices are posted?",
+        "subject_terms": [
+          "notice",
+          "board",
+          "tax",
+          "curfew"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": [
+          "Q6"
+        ]
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T4",
+        "interaction_category": "investigation",
+        "player_input": "I want to investigate the missing patrol. What leads can I pursue from here?",
+        "subject_terms": [
+          "patrol",
+          "track",
+          "board",
+          "lead"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [],
+        "inapplicable_dimensions": []
+      },
+      {
+        "kind": "player_turn",
+        "step_id": "T5",
+        "interaction_category": "movement",
+        "player_input": "I approach the gate and try to enter the city.",
+        "subject_terms": [
+          "gate",
+          "city",
+          "market",
+          "Cinderwatch"
+        ],
+        "required_scene": "frontier_gate",
+        "expected_response_properties": [
+          "addresses intent",
+          "grounded facts",
+          "legitimate refusal/check/obstacle permitted"
+        ],
+        "allowed_state_changes": [
+          "engine-owned bookkeeping",
+          "authorized resolution effects only"
+        ],
+        "forbidden_state_changes": [
+          "/character.json",
+          "/campaign.json",
+          "/conditions.json",
+          "/combat.json",
+          "/scenes"
+        ],
+        "evaluation_criteria": [
+          "native validation",
+          "scene and progression invariants",
+          "Q1-Q6 human review"
+        ],
+        "timeout": 90,
+        "stop_conditions": [
+          "budget",
+          "transport",
+          "invalid_structure",
+          "state_integrity",
+          "timeout",
+          "scenario_invalidation"
+        ],
+        "allowed_destinations": [
+          "market_quarter"
+        ],
+        "inapplicable_dimensions": []
+      },
+      {
+        "kind": "capture_final_state"
+      }
+    ],
+    "expected_invariants": {
+      "campaign_started": true,
+      "opening_commits": 1,
+      "turn_delta": 1,
+      "log_delta": 1
+    },
+    "maximum_action_count": 9,
+    "provider_request_ceiling": 6,
+    "token_budgets": {
+      "input": 200000,
+      "output": 20000,
+      "total": 220000
+    },
+    "timeouts": {
+      "preflight": 30,
+      "startup": 30,
+      "request": 90,
+      "scenario": 180,
+      "evidence": 30,
+      "shutdown": 5
+    },
+    "evidence_requirements": [
+      "provider_usage.jsonl",
+      "baseline",
+      "after",
+      "result.json",
+      "SUMMARY.md"
+    ],
+    "stop_conditions": [
+      "first_failed_step",
+      "budget_exhaustion",
+      "timeout",
+      "interruption"
+    ],
+    "budget_feasibility": {
+      "readiness": "B_CONDITIONAL",
+      "six_requests_guarantee": "Ceiling enforced; completion of five turns cannot be guaranteed",
+      "expected_exposure": "Opening 1; informational turns may use 1 interpretation; resolved actions may add narration. A normal two-operation path for all five actions would require 11; SDK/host retries disabled. Six-request run stops before unfinished turns.",
+      "alternative": "Review six-request diagnostic run with possible partial completion; authorize any larger scope separately."
+    }
+  },
+  "repository": {
+    "revision": "b012c3d7e5887fdfb09d10bb9cc0f0220de09df9",
+    "worktree_dirty": true,
+    "note": "HEAD identifies the commit. A dirty worktree means the running files can differ from that commit."
+  },
+  "environment_verification": {},
+  "provider_usage": {
+    "allowances": {},
+    "remaining_budget": {},
+    "budget_rejections": []
+  },
+  "state_comparison": {},
+  "structural_validation": null,
+  "semantic_validation": null,
+  "opening_acceptance": null,
+  "ui": {
+    "status": "NOT_TESTED",
+    "reason": "No repository browser runner/dependency; API evidence does not establish rendered UI behavior."
+  },
+  "steps": [],
+  "uncertainties": [
+    "Bounded provider response unavailable (disabled, capture failed, or response unparsed)",
+    "Required provider/acceptance diagnostic artifact unavailable",
+    "Rendered UI, live adequacy, and gameplay quality not established by deterministic API execution"
+  ],
+  "verdict": "BLOCKED",
+  "evidence_zip": "C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\artifacts\\atgb\\automated_playtests\\20261030T185145Z-cbf6affe2377\\evidence\\evidence.zip",
+  "failure": {
+    "type": "PermissionError",
+    "stage": "environment_preflight_failure"
+  },
+  "stop_reason": "environment_preflight_failure",
+  "process_cleanup": {
+    "owned": false,
+    "stopped": true
+  },
+  "correlation": {
+    "harness_run_id": "20261030T185145Z-cbf6affe2377",
+    "scenario_id": "FiveTurnGameplay",
+    "provider_run_ids": [],
+    "opening_attempt_ids": [],
+    "provider_attempt_ids": [],
+    "limitation": "Missing native identifiers remain unavailable; harness run ID maps to isolated journal, not fabricated provider IDs."
+  },
+  "provider_completion": null,
+  "provider_response_evidence": [],
+  "opening_commits_observed": 0,
+  "provider_exposure": {
+    "live_calls": 0,
+    "transport": "production"
+  },
+  "failure_classification": {
+    "category": "environment_preflight_failure",
+    "stage": "infrastructure",
+    "evidence_record": "reports/result.json",
+    "record_index": null,
+    "field": "failure",
+    "observed_value": "environment_preflight_failure",
+    "source": null,
+    "root_cause": "Not established",
+    "inferred": false
+  },
+  "elapsed_seconds": 0.0,
+  "attempted_turns": 0,
+  "completed_turns": 0,
+  "gameplay_turns": [],
+  "state_integrity_findings": [],
+  "earliest": {
+    "mechanical_failure": null,
+    "semantic_failure": null,
+    "quality_concern": null
+  },
+  "skipped_turns": [
+    {
+      "step_id": "T1",
+      "reason": "environment_preflight_failure"
+    },
+    {
+      "step_id": "T2",
+      "reason": "environment_preflight_failure"
+    },
+    {
+      "step_id": "T3",
+      "reason": "environment_preflight_failure"
+    },
+    {
+      "step_id": "T4",
+      "reason": "environment_preflight_failure"
+    },
+    {
+      "step_id": "T5",
+      "reason": "environment_preflight_failure"
+    }
+  ],
+  "five_meaningful_interactions": "NOT_ESTABLISHED"
+}

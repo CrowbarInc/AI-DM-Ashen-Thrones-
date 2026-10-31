@@ -1,0 +1,47 @@
+{
+  "method": "tools.measure_pr_bt_policy_instruction_payloads.reconstruct_probe via game.gm.build_messages. Zero model/API calls.",
+  "before_source": "artifacts/pr_bt_selective_epistemic_guidance/p1_p2_p3_measurements.json total_provider_chars and answer_recipe_chars. Discovery recorded this payload as byte-identical to the pre-PR-BV recipe.",
+  "pr_bs": {"P1": 110450, "P2": 121438, "P3": 110665},
+  "probes": {
+    "P1": {
+      "provider_chars_before": 97812,
+      "provider_chars_after": 98442,
+      "net_char_change": 630,
+      "recipe_chars_before": 2356,
+      "recipe_chars_after": 2962,
+      "recipe_char_change": 606,
+      "turn_operation_chars": 523,
+      "savings_vs_pr_bs": 12008,
+      "prior_reduction": 12638,
+      "percent_of_pr_bt_reduction_retained": 95.02,
+      "system_prompt_chars": 9564
+    },
+    "P2": {
+      "provider_chars_before": 110405,
+      "provider_chars_after": 111060,
+      "net_char_change": 655,
+      "recipe_chars_before": 1876,
+      "recipe_chars_after": 2507,
+      "recipe_char_change": 631,
+      "turn_operation_chars": 526,
+      "savings_vs_pr_bs": 10378,
+      "prior_reduction": 11033,
+      "percent_of_pr_bt_reduction_retained": 94.06,
+      "system_prompt_chars": 9564
+    },
+    "P3": {
+      "provider_chars_before": 99752,
+      "provider_chars_after": 100389,
+      "net_char_change": 637,
+      "recipe_chars_before": 1691,
+      "recipe_chars_after": 2304,
+      "recipe_char_change": 613,
+      "turn_operation_chars": 509,
+      "savings_vs_pr_bs": 10276,
+      "prior_reduction": 10913,
+      "percent_of_pr_bt_reduction_retained": 94.16,
+      "system_prompt_chars": 9564
+    }
+  },
+  "escaping_note": "Provider growth exceeds recipe JSON growth by 24 characters on each probe because the recipe is embedded in the user-message JSON string."
+}

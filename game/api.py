@@ -23,6 +23,7 @@ from typing import Any, Callable, Mapping
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from pathlib import Path
+import copy
 import inspect
 import json
 import re
@@ -707,6 +708,22 @@ def _live_interpretation_block_response(
             },
         },
     }
+    # This early return bypasses ordinary chat finalization. Attach only the
+    # existing performance fields and a separately scoped accounting observation.
+    from game.provider_budget import snapshot as provider_budget_snapshot
+
+    resolution["metadata"]["performance"] = _performance_record(
+        latency={"total_turn": _turn_elapsed_ms()}, gm=gm,
+        provider_requests=len(public.get("provider_requests") or []),
+        successful=True, disposition="interpretation_rejected",
+        interpretation_usage=public.get("provider_requests") or [],
+    )
+    accounting = provider_budget_snapshot()
+    resolution["metadata"]["provider_accounting"] = {
+        "version": accounting["version"], "scope": "process_cumulative_admissions",
+        "request_upper_bound": accounting["request_upper_bound"],
+        "status": "recorded" if accounting["request_upper_bound"] is not None else "unavailable",
+    }
     append_log(
         {
             "timestamp": utc_iso_now(),
@@ -980,6 +997,7 @@ _LATENCY_TRACE_KEYS = (
 
 
 _TURN_STARTED: ContextVar[float | None] = ContextVar("ashen_turn_started", default=None)
+_OPENING_SCOPE: ContextVar["_OpeningScope | None"] = ContextVar("ashen_opening_scope", default=None)
 
 
 def _now_perf() -> float:
@@ -4245,8 +4263,20 @@ def _build_gpt_narration_from_authoritative_state(
         from game.resolution_contract import contract_mapping_from_resolution
 
         _narration_contract = contract_mapping_from_resolution(resolution)
+        _opening_meta = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+        _opening_tags = {str(tag) for tag in (gm.get("tags") or []) if isinstance(tag, str)}
+        # A rejected scene_opening must not be sealed as a generic information answer.
+        _structured_opening_rejected = _opening_operation_required(
+            resolution, response_type_contract
+        ) and (
+            bool(_opening_meta.get("structured_contract_failure"))
+            or bool(_opening_meta.get("structured_output_rejected"))
+            or "structured_contract_failure" in _opening_tags
+            or "structured_output_rejected" in _opening_tags
+        )
         if (
-            str(_narration_contract.get("operation") or "") == "unresolved"
+            not _structured_opening_rejected
+            and str(_narration_contract.get("operation") or "") == "unresolved"
             and not str(_narration_contract.get("interlocutor_id") or "").strip()
             and not response_is_immutable(gm)
         ):
@@ -4724,6 +4754,182 @@ def _session_allows_structured_start_campaign(session: dict, recent_log: list | 
     if int(session.get("turn_counter", 0) or 0) != 0:
         return False
     return True
+
+
+_OPENING_FAILURE_MESSAGE = (
+    "The campaign opening could not be generated. No gameplay turn was completed. "
+    "You may try starting the campaign again."
+)
+_GENERIC_INFORMATION_FALLBACK_MARKERS = (
+    "no one here can answer that from what is settled here.",
+    "cannot answer that from what is settled here.",
+)
+
+
+def _opening_operation_required(resolution: dict | None, response_type_contract: dict | None) -> bool:
+    """True when this turn's existing contract is a campaign scene opening."""
+    if isinstance(resolution, dict):
+        if str(resolution.get("kind") or "").strip().lower() == "scene_opening":
+            return True
+        if str(resolution.get("action_id") or "") == "campaign_start_opening_scene":
+            return True
+    if isinstance(response_type_contract, dict):
+        if str(response_type_contract.get("required_response_type") or "").strip().lower() == "scene_opening":
+            return True
+    return False
+
+
+def _stable_opening_reason(value: object, default: str) -> str:
+    token = str(value or "").strip()
+    if re.fullmatch(r"[A-Za-z0-9_]{1,80}", token):
+        return token
+    return default
+
+
+def _opening_response_rejection(
+    gm: dict | None,
+    resolution: dict | None,
+    response_type_contract: dict | None,
+) -> str | None:
+    """Reject an opening that the existing contract does not accept.
+
+    Safe fallback text is not a completed scene_opening. Structured validation
+    is unchanged: a rejected envelope stays rejected.
+    """
+    if not _opening_operation_required(resolution, response_type_contract):
+        return None
+    if not isinstance(gm, dict):
+        return "missing_opening_response"
+    meta = gm.get("metadata") if isinstance(gm.get("metadata"), dict) else {}
+    tags = {str(tag) for tag in (gm.get("tags") or []) if isinstance(tag, str)}
+    text = str(gm.get("player_facing_text") or "").strip()
+    lowered = text.lower()
+    debug_notes = str(gm.get("debug_notes") or "")
+    if "provider_budget_refused" in tags or meta.get("provider_budget_refusal") or "provider_budget_refused" in debug_notes:
+        return "provider_budget_refused"
+    if meta.get("structured_contract_failure") or meta.get("structured_output_rejected"):
+        return _stable_opening_reason(meta.get("structured_contract_reason"), "structured_contract_rejected")
+    if tags & {"structured_contract_failure", "structured_output_rejected"}:
+        return "structured_contract_rejected"
+    if tags & {"fast_fallback", "upstream_api_fast_fallback", "provider_calls_disabled"}:
+        return "provider_opening_not_delivered"
+    if debug_notes.startswith("call_gpt error") or "provider_calls_disabled" in debug_notes:
+        return "provider_opening_not_delivered"
+    accepted = meta.get("accepted_response") if isinstance(meta.get("accepted_response"), dict) else {}
+    provenance = str(accepted.get("provenance") or "")
+    authorization = str(accepted.get("authorization_source") or "")
+    if provenance == "safe_nonresolution" or authorization == "safe_nonresolution":
+        return "safe_nonresolution"
+    seal = gm.get("_final_delivery_seal")
+    if isinstance(seal, str) and "safe_nonresolution" in seal:
+        return "safe_nonresolution"
+    if isinstance(seal, dict) and (
+        seal.get("provenance") == "safe_nonresolution" or seal.get("authorization_source") == "safe_nonresolution"
+    ):
+        return "safe_nonresolution"
+    if any(marker in lowered for marker in _GENERIC_INFORMATION_FALLBACK_MARKERS):
+        return "generic_information_request_fallback"
+    emission = meta.get("emission_debug") if isinstance(meta.get("emission_debug"), dict) else {}
+    if emission.get("opening_fallback_failed_closed"):
+        return "opening_fallback_failed_closed"
+    if emission.get("response_type_candidate_ok") is False:
+        return "scene_opening_contract_rejected"
+    from game.final_emission_validators import candidate_satisfies_scene_opening_contract
+
+    accepted_opening, reasons = candidate_satisfies_scene_opening_contract(text)
+    if not accepted_opening:
+        return _stable_opening_reason((reasons or ["scene_opening_contract_rejected"])[0], "scene_opening_contract_rejected")
+    return None
+
+
+def _opening_failure_response(reason: str) -> JSONResponse:
+    if reason == "provider_budget_refused":
+        from game.provider_budget import PLAYTEST_STOP_MESSAGE
+
+        message = PLAYTEST_STOP_MESSAGE
+        status_code = 409
+        status = "blocked"
+    else:
+        message = _OPENING_FAILURE_MESSAGE
+        status_code = 422
+        status = "opening_failed"
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "ok": False,
+            "status": status,
+            "error": message,
+            "opening_failure_reason": reason,
+            "campaign_started": False,
+            "gameplay_committed": False,
+        },
+    )
+
+
+def _capture_opening_baseline(session: dict, world: dict, combat: dict) -> dict:
+    return {
+        "session": copy.deepcopy(session),
+        "world": copy.deepcopy(world),
+        "combat": copy.deepcopy(combat),
+        "log_len": len(load_log()),
+    }
+
+
+def _restore_opening_baseline(baseline: dict) -> None:
+    """Write the pre-attempt session, world, combat, and transcript back to disk."""
+    save_world(baseline["world"])
+    save_combat(baseline["combat"])
+    save_session(baseline["session"])
+    current = load_log()
+    expected = int(baseline.get("log_len") or 0)
+    if len(current) > expected:
+        prior = current[:expected]
+        clear_log()
+        for row in prior:
+            append_log(row)
+
+
+class _OpeningScope:
+    """Process-local opening attempt. Holds the existing persistence lock until close."""
+
+    def __init__(self) -> None:
+        self.lock_held = False
+        self.baseline: dict | None = None
+        self.tracked = False
+        self.committed = False
+        self.diagnostic_token = None
+
+    def acquire(self) -> None:
+        if self.lock_held:
+            return
+        from game.storage import _RUNTIME_PERSISTENCE_LOCK
+
+        _RUNTIME_PERSISTENCE_LOCK.acquire()
+        self.lock_held = True
+        from game.provider_budget import begin_opening_diagnostic
+        self.diagnostic_token = begin_opening_diagnostic()
+
+    def track(self, session: dict, world: dict, combat: dict) -> None:
+        if not self.tracked:
+            self.baseline = _capture_opening_baseline(session, world, combat)
+            self.tracked = True
+
+    def mark_committed(self) -> None:
+        self.committed = True
+
+    def close(self) -> None:
+        try:
+            if self.tracked and not self.committed and self.baseline is not None:
+                _restore_opening_baseline(self.baseline)
+        finally:
+            from game.provider_budget import end_opening_diagnostic
+            end_opening_diagnostic(self.diagnostic_token, committed=self.committed, tracked=self.tracked)
+            self.diagnostic_token = None
+            if self.lock_held:
+                from game.storage import _RUNTIME_PERSISTENCE_LOCK
+
+                _RUNTIME_PERSISTENCE_LOCK.release()
+                self.lock_held = False
 
 
 def _compose_ui_interaction_snapshot(session: dict, world: dict) -> dict:
@@ -5914,6 +6120,18 @@ def _complete_opening_turn_persistence_like_chat(
     )
     synchronize_scene_addressability(session, scene, world)
     scene["scene_state"] = session.get("scene_state")
+    if mark_campaign_started:
+        opening_rejection = _opening_response_rejection(gm, resolution, response_type_contract)
+        from game.provider_budget import observe_opening_validation
+        observe_opening_validation(
+            rejection=opening_rejection,
+            recovery=_stable_opening_reason(
+                ((gm.get("metadata") or {}).get("accepted_response") or {}).get("provenance"),
+                "rejected_without_recovery" if opening_rejection else "unavailable",
+            ),
+        )
+        if opening_rejection:
+            return _opening_failure_response(opening_rejection)
     save_world(world)
 
     leads_inspection = _lead_debug_trace_around_authoritative_reconcile(session)
@@ -6123,6 +6341,13 @@ def _complete_opening_turn_persistence_like_chat(
 @app.post('/api/start_campaign')
 def start_campaign(request: Request):
     """First opening via internal bootstrap intent; same narration stack as chat opening (OF1 path)."""
+    from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
+    if playtest_stop_reason():
+        from game.provider_budget import record_generation_diagnostic
+        record_generation_diagnostic({"stage": "opening_admission", "logical_operation": "scene_opening",
+            "requested_response_type": "scene_opening", "classification": "provider_budget_refused",
+            "rejection_reason": "provider_budget_refused", "opening_accepted": False, "gameplay_committed": False})
+        return JSONResponse(status_code=409, content={"ok": False, "status": "blocked", "error": PLAYTEST_STOP_MESSAGE})
     try:
         ui_mode = resolve_requested_ui_mode(request)
         assert_mode_allows_runtime_action(ui_mode)
@@ -6144,11 +6369,24 @@ def start_campaign(request: Request):
             },
         )
 
+    opening_scope = _OpeningScope()
+    try:
+        opening_scope.acquire()
+        if playtest_stop_reason():
+            return JSONResponse(status_code=409, content={"ok": False, "status": "blocked", "error": PLAYTEST_STOP_MESSAGE})
+        return _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope)
+    finally:
+        opening_scope.close()
+
+
+def _start_campaign_after_admission(ui_mode, gate, gate_operator, opening_scope: _OpeningScope):
     campaign = load_campaign()
     character = load_character()
     session = load_session()
     recent_log = load_log()
     if not _session_allows_structured_start_campaign(session, recent_log):
+        from game.provider_budget import observe_opening_validation
+        observe_opening_validation(rejection="already_started", recovery="not_attempted")
         st = compose_state()
         return JSONResponse(
             status_code=409,
@@ -6195,12 +6433,12 @@ def start_campaign(request: Request):
     latency_ms: dict[str, int] = {}
     clue_presentation_before = _snapshot_known_clue_presentations(session)
 
+    opening_scope.track(session, world, combat)
     if session.get("turn_counter") is None:
         session["turn_counter"] = 0
     session["turn_counter"] += 1
 
     tick = advance_world_tick(world, campaign)
-    save_world(world)
 
     clocks_before = dict(get_or_init_clocks(session))
     time_pressure_after = advance_clock(session, "time_pressure", 1)
@@ -6295,8 +6533,6 @@ def start_campaign(request: Request):
             latency_sink=latency_ms,
         )
     except Exception:
-        session["turn_counter"] = max(0, int(session.get("turn_counter", 0) or 0) - 1)
-        save_session(session)
         raise
 
     authoritative_clue_updates.extend(turn_clue_updates)
@@ -6319,7 +6555,7 @@ def start_campaign(request: Request):
         },
     }
 
-    return _complete_opening_turn_persistence_like_chat(
+    result = _complete_opening_turn_persistence_like_chat(
         turn_started=turn_started,
         campaign=campaign,
         character=character,
@@ -6355,6 +6591,9 @@ def start_campaign(request: Request):
         request_log_payload=request_log,
         mark_campaign_started=True,
     )
+    if not isinstance(result, JSONResponse):
+        opening_scope.mark_committed()
+    return result
 
 
 @app.post('/api/chat')
@@ -6367,10 +6606,28 @@ def api_chat(request: Request, req: ChatRequest):
 
 
 def chat(req: ChatRequest, ui_mode: str = "player"):
+    scope = _OpeningScope()
+    token = _OPENING_SCOPE.set(scope)
+    try:
+        return _chat_turn(req, ui_mode=ui_mode)
+    finally:
+        try:
+            scope.close()
+        finally:
+            _OPENING_SCOPE.reset(token)
+
+
+def _chat_turn(req: ChatRequest, ui_mode: str = "player"):
     assert_mode_allows_runtime_action(ui_mode)
     _mark_turn_started()
     reset_live_interpretation_consumed()
     mode_decision = _resolve_communication_mode(req)
+    from game.provider_budget import playtest_stop_reason, PLAYTEST_STOP_MESSAGE
+    if playtest_stop_reason():
+        return _live_interpretation_block_response(req, mode_decision, {
+            "reason": "playtest_stopped", "player_facing_text": PLAYTEST_STOP_MESSAGE,
+            "tags": ["provider_budget_refused", "non_mutating"], "provider_requests": [],
+        })
     original_player_text = mode_decision.original_text
     if mode_decision.conflict:
         return _communication_mode_conflict_response(req, mode_decision)
@@ -6685,6 +6942,22 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
     latency_ms: dict[str, int] = {}
     clue_presentation_before = _snapshot_known_clue_presentations(session)
 
+    if campaign_start:
+        opening_scope = _OPENING_SCOPE.get()
+        if opening_scope is not None:
+            opening_scope.acquire()
+            if not _session_allows_structured_start_campaign(load_session(), load_log()):
+                return JSONResponse(
+                    status_code=409,
+                    content={
+                        "ok": False,
+                        "status": "already_started",
+                        "error": "Campaign has already started, or the transcript is not empty.",
+                        "campaign_started": False,
+                        "gameplay_committed": False,
+                    },
+                )
+            opening_scope.track(session, world, combat)
     if session.get('turn_counter') is None:
         session['turn_counter'] = 0
     committed = session.setdefault("conversational_context", {})
@@ -6702,7 +6975,8 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
     session['turn_counter'] += 1
 
     tick = advance_world_tick(world, campaign)
-    save_world(world)
+    if not campaign_start:
+        save_world(world)
 
     # Advance a simple time pressure clock each chat turn.
     clocks_before = dict(get_or_init_clocks(session))
@@ -7475,7 +7749,7 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
             "mode_source": mode_decision.source,
         },
     }
-    return _complete_opening_turn_persistence_like_chat(
+    result = _complete_opening_turn_persistence_like_chat(
         turn_started=turn_started,
         campaign=campaign,
         character=character,
@@ -7513,6 +7787,10 @@ def chat(req: ChatRequest, ui_mode: str = "player"):
             isinstance(resolution, dict) and resolution.get("action_id") == "campaign_start_opening_scene"
         ),
     )
+    opening_scope = _OPENING_SCOPE.get()
+    if opening_scope is not None and opening_scope.tracked and not isinstance(result, JSONResponse):
+        opening_scope.mark_committed()
+    return result
 
 
 from game.api_turn_support import (

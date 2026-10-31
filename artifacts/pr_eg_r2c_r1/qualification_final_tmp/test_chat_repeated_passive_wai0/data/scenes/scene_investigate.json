@@ -1,0 +1,51 @@
+{
+  "scene": {
+    "id": "scene_investigate",
+    "location": "Investigator's Office",
+    "summary": "Lamplight pools over clutter: ink-stained maps, a ledger half-shut, and the damp smell of rain through the shutters.",
+    "mode": "exploration",
+    "visible_facts": [
+      "A guard leans near the checkpoint, watching the road.",
+      "A missing patrol notice curls in the damp beside him."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "desk_clue",
+        "text": "A map indicates patrol locations."
+      }
+    ],
+    "hidden_facts": [],
+    "exits": [],
+    "enemies": [],
+    "actions": [],
+    "interactables": [
+      {
+        "id": "desk",
+        "type": "investigate",
+        "reveals_clue": "desk_clue"
+      },
+      {
+        "id": "iron_latch",
+        "label": "iron latch",
+        "aliases": [
+          "latch"
+        ]
+      },
+      {
+        "id": "cooking_pot",
+        "label": "cooking pot",
+        "aliases": [
+          "pot"
+        ]
+      },
+      {
+        "id": "posted_sheet",
+        "label": "posted sheet",
+        "aliases": [
+          "sheet"
+        ]
+      }
+    ],
+    "objects": []
+  }
+}

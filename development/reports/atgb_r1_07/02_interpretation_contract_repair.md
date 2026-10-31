@@ -1,0 +1,7 @@
+# 02 — Interpretation Contract Repair
+
+Previously purpose CORRECTION meant revising unexecuted intent. Legacy user guidance included referent correction under OUT_OF_CHARACTER_CORRECTION and called CLARIFICATION an unclear utterance; production also used that purpose for a player's request to explain NPC speech. These meanings were not adequately separated.
+
+Production purpose description now includes correcting conversational meaning, subject, referent or description. Production instructions explicitly distinguish the player clarifying their own meaning from the AI-DM requesting more information. A resolved ordinary correction uses INTERPRETED, GM/CORRECTION, legacy OTHER, correction.subject REFERENT, and no action components. It continues the conversation without redundant confirmation. A targeted question remains permitted for competing referents, missing interlocutor/parameter or conflicting intentions. Player requests for explanation can retain NPC/CLARIFICATION without requiring legacy CLARIFICATION.
+
+The existing production message assembly specializes only its legacy Communication modes line; experimental prompt source is unchanged. No enum, key, required property or structural constraint changes. Schema shape comparison strips documentation only and passes. Mechanical revision still needs an actual eligible pending intention and host authorization; executed actions cannot be undone. Existing revision guard is AST-identical to entry. Locations and exact entry-relative diff are in modified_locations.json and source.diff.

@@ -1,0 +1,13 @@
+--- pre_edit/game/conversational_continuity.py
++++ final/game/conversational_continuity.py
+@@ -275,6 +275,10 @@
+             return last
+         last["active"] = False
+     rows.append(row)
++    if isinstance(semantic_plan, Mapping) and semantic_plan.get('locked'):
++        from game.conversational_referents import commit
++
++        commit(session, row, semantic_plan, adoption)
+     while len(rows) > MAX_DELIVERED:
+         disposable = next((index for index, item in enumerate(rows) if item.get("ownership") != "npc"), None)
+         del rows[0 if disposable is None else disposable]

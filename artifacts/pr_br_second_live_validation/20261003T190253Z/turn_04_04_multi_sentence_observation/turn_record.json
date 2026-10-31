@@ -1,0 +1,245 @@
+{
+  "probe_id": "04_multi_sentence_observation",
+  "probe_question": "Wagon wheel, torn cover, and spare rope are observable. No cause is established.",
+  "player_text": "I look over the timber wagon.",
+  "http_status": 200,
+  "emitted_narration": "You study the timber wagon carefully. Its near wheel stands out as damaged, with two spokes missing, making it appear unsteady. The canvas cover stretching over the wooden bed has a noticeable tear along one seam, ragged and worn from use. Resting atop the bed is a coil of spare rope, neatly arranged but ready for immediate use if needed.",
+  "raw_generations": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "",
+      "player_facing_text": "You study the timber wagon carefully. Its near wheel stands out as damaged, with two spokes missing, making it appear unsteady. The canvas cover stretching over the wooden bed has a noticeable tear along one seam, ragged and worn from use. Resting atop the bed is a coil of spare rope, neatly arranged but ready for immediate use if needed.",
+      "prompt_flags": {
+        "user_chars": 105842,
+        "contains_resolution_contract": true,
+        "contains_gm_resolution_decision": true,
+        "contains_authoritative_retry_context": false,
+        "contains_validation_failure": false
+      }
+    }
+  ],
+  "generation_call_count": 1,
+  "initial_generation_calls": 1,
+  "retry_generation_calls": 0,
+  "interpretation_call_count": 0,
+  "preflight_call_count_during_turn": 0,
+  "resolution_kind": "investigate",
+  "resolution_social": null,
+  "resolution_npc_id": null,
+  "target_scene_id": null,
+  "resolved_transition": false,
+  "selected_resolver": "exploration",
+  "interaction_obligation": {
+    "kind": "inspection",
+    "target": null,
+    "interlocutor_id": null,
+    "subject": null,
+    "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+    "claim_id": null,
+    "resolution_mode": "grounded_information_request",
+    "turn_index": 1,
+    "resolution_contract_id": "rc_3f7f479d7d62"
+  },
+  "resolution_contract_id": "rc_3f7f479d7d62",
+  "resolution_contract_operation": "inspect",
+  "resolution_contract_subject": "perception",
+  "decision_present": true,
+  "decision_contract_id": "rc_3f7f479d7d62",
+  "decision_id_matches_contract": true,
+  "decision_outcome": "established_or_retrieved",
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted."
+  ],
+  "permitted_mutations": null,
+  "proposed_facts": [
+    {
+      "text": "The timber wagon's near wheel is missing two spokes.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {
+        "kind": "world_fact",
+        "subject": "timber_wagon",
+        "subject_aliases": [
+          "timber wagon",
+          "wagon",
+          "near wheel",
+          "wheel"
+        ],
+        "relation": "condition",
+        "value": "missing spokes",
+        "value_aliases": [
+          "missing two spokes",
+          "missing spokes",
+          "two spokes"
+        ],
+        "polarity": "positive"
+      },
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "The canvas cover on the timber wagon is torn along one seam.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {
+        "kind": "world_fact",
+        "subject": "wagon_cover",
+        "subject_aliases": [
+          "canvas cover",
+          "cover",
+          "wagon cover"
+        ],
+        "relation": "condition",
+        "value": "torn",
+        "value_aliases": [
+          "torn",
+          "torn along one seam"
+        ],
+        "polarity": "positive"
+      },
+      "outcome": "established_or_retrieved"
+    },
+    {
+      "text": "A coil of spare rope sits on the wagon bed.",
+      "authorized": true,
+      "authority": "world_truth",
+      "provenance": null,
+      "semantic_identity": {},
+      "outcome": "established_or_retrieved"
+    }
+  ],
+  "accepted_response": {
+    "immutable": true,
+    "text": "You study the timber wagon carefully. Its near wheel stands out as damaged, with two spokes missing, making it appear unsteady. The canvas cover stretching over the wooden bed has a noticeable tear along one seam, ragged and worn from use. Resting atop the bed is a coil of spare rope, neatly arranged but ready for immediate use if needed.",
+    "provenance": "initial_generation",
+    "attempt": 1,
+    "player_input": "I look over the timber wagon.",
+    "turn_identity": "rc_3f7f479d7d62",
+    "speaker": "",
+    "addressee": "",
+    "target": "",
+    "operation": "inspect",
+    "authority_result": "accepted",
+    "grounding_result": "not_a_replacement_trigger",
+    "hard_validation": {
+      "hard_valid": true,
+      "reasons": [],
+      "soft_flags": [],
+      "authority": [
+        {
+          "text": "The canvas cover stretching over the wooden bed has a noticeable tear along one seam, ragged and worn from use.",
+          "kind": "incidental_fact",
+          "epistemic_status": "world_truth",
+          "grounded": false,
+          "consequential": false,
+          "family": "incidental"
+        }
+      ],
+      "gm_resolution_decision_audit": {
+        "decision_id": "rc_3f7f479d7d62",
+        "hard_valid": true,
+        "violations": [],
+        "proposed_facts": [
+          {
+            "text": "Its near wheel stands out as damaged, with two spokes missing, making it appear unsteady.",
+            "provenance": "authored_world_fact",
+            "consequence": "consequential",
+            "authorized": true,
+            "reason_codes": [
+              "authored_state_source"
+            ],
+            "authority": "world_truth",
+            "persistence": "world_truth",
+            "source_ref": "scene.visible_facts.0",
+            "outcome_classification": "established_or_retrieved",
+            "semantic_identity": {
+              "kind": "world_fact",
+              "subject": "timber_wagon",
+              "subject_aliases": [
+                "timber wagon",
+                "wagon",
+                "near wheel",
+                "wheel"
+              ],
+              "relation": "condition",
+              "value": "missing spokes",
+              "value_aliases": [
+                "missing two spokes",
+                "missing spokes",
+                "two spokes"
+              ],
+              "polarity": "positive"
+            }
+          },
+          {
+            "text": "The canvas cover stretching over the wooden bed has a noticeable tear along one seam, ragged and worn from use.",
+            "provenance": "bounded_incidental",
+            "consequence": "low",
+            "authorized": true,
+            "reason_codes": [
+              "bounded_incidental_texture"
+            ],
+            "authority": "bounded_incidental",
+            "persistence": "runtime_incidental",
+            "source_ref": "",
+            "outcome_classification": "bounded_incidental",
+            "semantic_identity": {}
+          }
+        ]
+      },
+      "decision_acceptance_why": "initial_hard_valid"
+    },
+    "interaction_completion": true,
+    "contract_satisfying": true,
+    "contract": {
+      "contract_id": "rc_3f7f479d7d62",
+      "operation": "inspect",
+      "interlocutor_id": "",
+      "expected_resolution": "answer"
+    },
+    "resolution_kind": "investigate",
+    "generation_attempts": 1,
+    "skipped_mutators": [
+      "apply_response_policy_enforcement",
+      "apply_authored_knowledge_realization_to_gm",
+      "apply_stay_leave_narration_agreement_to_gm",
+      "apply_destination_arrival_realization_to_gm",
+      "apply_perception_non_invention_to_gm",
+      "apply_repeated_description_guard",
+      "apply_final_emission_gate",
+      "enforce_emitted_contract_monotonicity",
+      "apply_spoken_state_refinement_cash_out"
+    ]
+  },
+  "gm_metadata_validation_keys": [
+    "hard_validation_attempt_1"
+  ],
+  "committed_active_scene_id": "timber_yard",
+  "committed_discourse_focus": {
+    "version": 1,
+    "scene_id": "timber_yard",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": null,
+    "last_attempted_action": null,
+    "last_committed_turn": 1,
+    "last_committed_contract_id": "rc_3f7f479d7d62"
+  },
+  "committed_bounded_improvisation": {
+    "entries": [],
+    "rejected": [],
+    "incidental_entities": []
+  },
+  "committed_world_flags": [],
+  "committed_factions": [],
+  "committed_event_log": []
+}

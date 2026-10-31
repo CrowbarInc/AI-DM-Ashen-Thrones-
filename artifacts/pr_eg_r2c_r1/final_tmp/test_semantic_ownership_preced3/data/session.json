@@ -1,0 +1,69 @@
+{
+  "persistence_version": 1,
+  "kind": "session",
+  "saved_at": "2026-10-17T10:20:15.396135Z",
+  "payload": {
+    "active_scene_id": "waystation_courtyard",
+    "visited_scene_ids": [
+      "waystation_courtyard"
+    ],
+    "turn_counter": 0,
+    "clocks": {
+      "suspicion": 0,
+      "unrest": 0,
+      "danger": 0,
+      "occult_instability": 0,
+      "time_pressure": 0
+    },
+    "npc_runtime": {},
+    "scene_runtime": {},
+    "scene_state": {
+      "active_scene_id": "waystation_courtyard"
+    },
+    "flags": {},
+    "inventory": [],
+    "last_saved_at": "2026-10-17T10:20:15.396135Z",
+    "campaign_started": true,
+    "interaction_context": {
+      "active_interaction_kind": "social",
+      "active_interaction_target_id": "sergeant_mara"
+    },
+    "conversational_context": {
+      "delivered_exchanges": [
+        {
+          "speaker_id": "",
+          "speaker_name": "",
+          "addressee": "player",
+          "ownership": "gm",
+          "player_text": "Could you interpret the situation for me?",
+          "delivered_text": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+          "subject": "",
+          "topic_id": "",
+          "requested_information": "",
+          "supplied_text": "",
+          "uncertain": false,
+          "commitment": false,
+          "scene_id": "waystation_courtyard",
+          "turn": 0,
+          "active": true,
+          "authorization_source": "conversational_decision:communication_before_execution",
+          "adoption_turn_identity": ""
+        }
+      ],
+      "last_gm_exchange": {
+        "category": "CLARIFY",
+        "owner": "MIXED",
+        "purpose": "QUESTION",
+        "subject": "Could you interpret the situation for me?",
+        "response": "Let's settle the question before attempting the action. That condition is not established yet. No part of the action has been attempted.",
+        "refusal_reason": null,
+        "scene_id": "waystation_courtyard"
+      }
+    }
+  },
+  "integrity": {
+    "payload_sha256": "0b366868955ca89c1c2a5c764c5cff0b49e01e43c31242668b0a2c59e13730a0",
+    "canonicalization": "json/sort_keys,separators",
+    "hash": "sha256"
+  }
+}

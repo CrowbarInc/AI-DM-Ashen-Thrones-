@@ -1,0 +1,108 @@
+{
+  "scenario_id": "S08",
+  "title": "Same gate, other words",
+  "catalog_heading": "S08 — Same gate, other words",
+  "source_catalog": "development/reports/atgb_01_scenario_catalog.md",
+  "partition": "related_variation",
+  "catalog_partition": "related variation",
+  "evidence_status": "related_variation",
+  "evidence_status_note": "These turns are published with the visible set. They are not independent generalization.",
+  "primary_capability": "intent_recognition",
+  "secondary_capabilities": ["corrections_and_clarifications", "response_relevance", "conversational_continuity"],
+  "environment_id": "frontier_gate",
+  "initial_context": "Fresh gate. This is a related variation, not a held-out scenario. The requirements match S01, S02, and S04. The words do not.",
+  "authoritative_facts": [
+    "The same visible list and the serjeant's route-change sentence.",
+    "Who issued the change is unauthored."
+  ],
+  "npc_knowledge": [
+    "The serjeant, once addressed by the conversation, knows the route change and the census choke as the setting of that change.",
+    "The serjeant does not know the official who ordered it."
+  ],
+  "expected_outcomes": [
+    "A question-shaped look still looks.",
+    "A correction toward people is honored.",
+    "The crowd-handler is the serjeant from the visible fact.",
+    "The follow-up recalls the choke and withholds the official."
+  ],
+  "acceptable_variations": ["Any grounded description, and any wording of the route-change fact."],
+  "unacceptable_behaviors": [
+    "Treating S08.1 as travel.",
+    "Describing only the rain after the player asks for the people.",
+    "Naming an official.",
+    "Answering who handles the crowd with the runner."
+  ],
+  "required_evidence": ["Shared packet, labeled related_variation."],
+  "setup_dependencies": ["None beyond the fresh gate. Do not chain this scenario after S04."],
+  "determinism": "mixed",
+  "turns": [
+    {
+      "turn_id": "S08.1",
+      "catalog_heading": "S08.1 — primary: intent recognition",
+      "primary_capability": "intent_recognition",
+      "player_input": "What's in front of me right now?",
+      "communicative_act": "Variation of a look, in question form.",
+      "interpretation_pass": "Current-scene observation.",
+      "response_pass": "Present public facts, not a history of the patrol.",
+      "authority_pass": "No hidden fact and no scene change.",
+      "acceptable_variations": ["Any grounded description of what is present."],
+      "unacceptable_behaviors": ["Treating the line as travel."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "not_applicable",
+      "continuity_notes": "",
+      "required_evidence": ["Shared packet, labeled related_variation."]
+    },
+    {
+      "turn_id": "S08.2",
+      "catalog_heading": "S08.2 — primary: corrections and clarifications",
+      "primary_capability": "corrections_and_clarifications",
+      "player_input": "I meant the people, not the weather.",
+      "communicative_act": "Correction of S08.1 toward the people present.",
+      "interpretation_pass": "Correction of S08.1 toward the people present.",
+      "response_pass": "Names people who are actually there, from the visible set: serjeant, runner, watchers, refugees, guards. Weather may be dropped.",
+      "authority_pass": "No invented traveler with a name and a story.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Describing only the rain."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved for the look the player is correcting.",
+      "required_evidence": ["Shared packet, labeled related_variation."]
+    },
+    {
+      "turn_id": "S08.3",
+      "catalog_heading": "S08.3 — primary: response relevance",
+      "primary_capability": "response_relevance",
+      "player_input": "Which person looks like they handle the crowd?",
+      "communicative_act": "A question about the visible crowd-handler.",
+      "interpretation_pass": "A question about the visible crowd-handler.",
+      "response_pass": "The gate serjeant, who is described as managing the crowd. The roster board may be mentioned because the same visible sentence includes it.",
+      "authority_pass": "No rank promotion and no claim that the serjeant commands the watch. That command sentence belongs to Thoran's topic.",
+      "acceptable_variations": [],
+      "unacceptable_behaviors": ["Answering with the runner."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if the people from S08.2 are the set being narrowed.",
+      "required_evidence": ["Shared packet, labeled related_variation."]
+    },
+    {
+      "turn_id": "S08.4",
+      "catalog_heading": "S08.4 — primary: conversational continuity",
+      "primary_capability": "conversational_continuity",
+      "player_input": "You just said the route changed because the choke got worse. Who changed it?",
+      "communicative_act": "A who-question about the agent of the change. If S08.3 never said the route changed, the line is still that question.",
+      "interpretation_pass": "A who-question about the agent of the change.",
+      "response_pass": "The choke worsened and the route changed; the person who ordered it is not known. The serjeant fact may be stated once before the gap when the previous reply never said it.",
+      "authority_pass": "No name, no office, and no claim that the captain ordered it. Inventing the missing statement in order to agree with the player is an authority failure.",
+      "acceptable_variations": ["Any wording of the route-change fact that withholds the official."],
+      "unacceptable_behaviors": ["Naming an official."],
+      "clarification_expected": "none",
+      "clarification_notes": "",
+      "continuity_expected": "preserved",
+      "continuity_notes": "preserved if a route or choke statement was made and is still the topic. If no such statement was made, continuity is not_applicable and the turn is only the unauthored who-question.",
+      "required_evidence": ["Shared packet, labeled related_variation."]
+    }
+  ]
+}

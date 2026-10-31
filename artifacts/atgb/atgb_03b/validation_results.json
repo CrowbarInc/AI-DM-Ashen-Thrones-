@@ -1,0 +1,172 @@
+{
+  "accounting_version": "ATGB-03B-1",
+  "attempts": [
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting.xml",
+      "tests": 62,
+      "failures": 4,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_provider_accounting_integrity": 41,
+        "tests.test_atgb_accounting": 21
+      },
+      "failed_tests": [
+        {
+          "module": "tests.test_provider_accounting_integrity",
+          "name": "test_each_dispatch_owner_accounts_success_or_provider_exception[False-expression]"
+        },
+        {
+          "module": "tests.test_provider_accounting_integrity",
+          "name": "test_each_dispatch_owner_accounts_success_or_provider_exception[False-contract]"
+        },
+        {
+          "module": "tests.test_provider_accounting_integrity",
+          "name": "test_each_dispatch_owner_accounts_success_or_provider_exception[True-expression]"
+        },
+        {
+          "module": "tests.test_provider_accounting_integrity",
+          "name": "test_each_dispatch_owner_accounts_success_or_provider_exception[True-contract]"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_final.xml",
+      "tests": 102,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_provider_accounting_integrity": 57,
+        "tests.test_atgb_accounting": 21,
+        "tests.test_atgb_infrastructure": 9,
+        "tests.test_atgb_readiness": 15
+      },
+      "failed_tests": []
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_fixed.xml",
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_provider_accounting_integrity": 41,
+        "tests.test_atgb_accounting": 21
+      },
+      "failed_tests": []
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/accounting_verified.xml",
+      "tests": 103,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_provider_accounting_integrity": 58,
+        "tests.test_atgb_accounting": 21,
+        "tests.test_atgb_infrastructure": 9,
+        "tests.test_atgb_readiness": 15
+      },
+      "failed_tests": [
+        {
+          "module": "tests.test_atgb_readiness",
+          "name": "test_all_scenarios_reset_reproducibly_without_chat_or_canonical_changes"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/preflight_retry.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_atgb_readiness": 1
+      },
+      "failed_tests": []
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/prior_failures.xml",
+      "tests": 2,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_model_routing_runtime": 1,
+        "tests.test_pr_eg_r3_r1_expression_semantics": 1
+      },
+      "failed_tests": [
+        {
+          "module": "tests.test_model_routing_runtime",
+          "name": "test_call_gpt_attaches_route_metadata_and_merges_existing_metadata"
+        },
+        {
+          "module": "tests.test_pr_eg_r3_r1_expression_semantics",
+          "name": "test_t19_t23_answer_sufficiency_and_refusal"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/regression.xml",
+      "tests": 227,
+      "failures": 2,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_provider_accounting_integrity": 56,
+        "tests.test_atgb_accounting": 21,
+        "tests.test_atgb_infrastructure": 9,
+        "tests.test_atgb_readiness": 15,
+        "tests.test_api_upstream_preflight": 15,
+        "tests.test_model_routing_config": 4,
+        "tests.test_model_routing_runtime": 8,
+        "tests.test_model_routing_escalation": 10,
+        "tests.test_pr_ed_provider_efficiency": 7,
+        "tests.test_pr_eg_r3_expressive_dialogue": 21,
+        "tests.test_pr_eg_r3_r1_expression_semantics": 21,
+        "tests.test_pr_eg_r6_unified_semantic_planning": 31,
+        "tests.test_pr_ea_conversational_orchestration": 6,
+        "tests.test_pr_eb_conversational_continuity": 3
+      },
+      "failed_tests": [
+        {
+          "module": "tests.test_model_routing_runtime",
+          "name": "test_call_gpt_attaches_route_metadata_and_merges_existing_metadata"
+        },
+        {
+          "module": "tests.test_pr_eg_r3_r1_expression_semantics",
+          "name": "test_t19_t23_answer_sufficiency_and_refusal"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/atgb/atgb_03b/surface_final.xml",
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "modules": {
+        "tests.test_provider_accounting_integrity": 59
+      },
+      "failed_tests": []
+    }
+  ],
+  "current_lifecycle_dispatch_owner_readiness_checks": {
+    "tests": 59,
+    "passed": 59,
+    "source": "surface_final.xml"
+  },
+  "regression": {
+    "tests": 227,
+    "passed": 225,
+    "pre_existing_failures_reproduced_before_repair": 2,
+    "source": "regression.xml"
+  },
+  "environmental_failure": "One isolated Windows os.replace permission error in all-scenario reset; targeted retry passed. Both records retained.",
+  "initial_test_wiring_failure": "Four test-guard failures fixed by using captured production functions with a controlled transport; corrected suite passed.",
+  "real_provider_requests": 0,
+  "live_benchmark_executed": false,
+  "full_suite": "not_run",
+  "gameplay_performance_claim": false
+}

@@ -28,6 +28,14 @@ from tests.helpers.turn_pipeline_http_fixtures import (
 
 pytestmark = pytest.mark.integration
 
+CONTRACT_OPENING_STUB = {
+    **TURN_FAKE_GPT,
+    "player_facing_text": (
+        "You stand at Cinderwatch's eastern gate. Rain spatters soot-dark stone while guards hold the crowd. "
+        "You can read the notice board or watch the wagons."
+    ),
+}
+
 # Exact / near-exact failure markers from the contaminated-opener class (regression targets).
 _BAD_OPENER_MARKERS = (
     "Guard Captain indicates",
@@ -89,7 +97,7 @@ def test_start_campaign_prompt_basis_filters_bad_opener_class(tmp_path: Path, mo
 
     def _spy(messages: list, **_kwargs: Any) -> dict:
         captured.append(messages)
-        return dict(TURN_FAKE_GPT)
+        return dict(CONTRACT_OPENING_STUB)
 
     monkeypatch.setattr("game.api.call_gpt", _spy)
 
@@ -119,7 +127,7 @@ def test_chat_begin_campaign_prompt_matches_of1_stack(tmp_path: Path, monkeypatc
 
     def _spy(messages: list, **_kwargs: Any) -> dict:
         captured.append(messages)
-        return dict(TURN_FAKE_GPT)
+        return dict(CONTRACT_OPENING_STUB)
 
     monkeypatch.setattr("game.api.call_gpt", _spy)
 
@@ -148,7 +156,7 @@ def test_sparse_opening_basis_does_not_reintroduce_curated_bad_lines(tmp_path: P
 
     def _spy(messages: list, **_kwargs: Any) -> dict:
         captured.append(messages)
-        return dict(TURN_FAKE_GPT)
+        return dict(CONTRACT_OPENING_STUB)
 
     monkeypatch.setattr("game.api.call_gpt", _spy)
 
@@ -229,7 +237,7 @@ def test_opening_scene_normalized_action_internal_vs_chat_parity() -> None:
 def test_first_chat_non_opening_does_not_mark_campaign_started(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _write_scenes_default(monkeypatch, tmp_path)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(TURN_FAKE_GPT))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_STUB))
 
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
@@ -247,7 +255,7 @@ def test_first_chat_non_opening_does_not_mark_campaign_started(tmp_path: Path, m
 def test_start_then_chat_keeps_campaign_started_true(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _write_scenes_default(monkeypatch, tmp_path)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(TURN_FAKE_GPT))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_STUB))
 
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200
@@ -264,7 +272,7 @@ def test_start_and_chat_opening_share_log_and_started_semantics(tmp_path: Path, 
     def run_start_channel(*, use_http_start: bool) -> dict:
         _write_scenes_default(monkeypatch, tmp_path)
         monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-        monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(TURN_FAKE_GPT))
+        monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_STUB))
         with TestClient(app) as client:
             assert client.post("/api/new_campaign").status_code == 200
             if use_http_start:
@@ -310,7 +318,7 @@ def test_failed_start_leaves_turn_counter_and_log_clean(tmp_path: Path, monkeypa
 def test_transcript_first_row_is_gm_not_bootstrap_player_line(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _write_scenes_default(monkeypatch, tmp_path)
     monkeypatch.setattr(api_mod, "log_upstream_api_preflight_at_startup", lambda: None)
-    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(TURN_FAKE_GPT))
+    monkeypatch.setattr("game.api.call_gpt", lambda *_a, **_k: dict(CONTRACT_OPENING_STUB))
 
     with TestClient(app) as client:
         assert client.post("/api/new_campaign").status_code == 200

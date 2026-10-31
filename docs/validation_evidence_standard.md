@@ -193,6 +193,61 @@ Use narrow claims such as `Six reactive runs completed through /api/chat` or `Th
 detected 11 mandatory failures`. Do not claim `playability validated`, `behavior verified`, `AI-GM
 working`, or `simulation successful` unless inspectable evidence supports that full scope.
 
+## Ashen Thrones Gameplay Benchmark
+
+The Ashen Thrones Gameplay Benchmark (ATGB) is a checkpoint instrument for player-AI-DM
+communication. ATGB-02 implements the corpus at `data/validation/atgb/`. Its specification is
+`development/reports/atgb_02_benchmark_specification.md`. This section governs that corpus. It does
+not add a scorer, and does not change `evaluate_playability`,
+semantic calibration, protected replay, or campaign-specific regression suites.
+
+Its primary purpose is to measure whether players can communicate naturally, sustain coherent
+conversations, receive relevant responses, and recover from ambiguity or misunderstanding.
+
+The initial benchmark prioritizes that communication: intent recognition, conversational continuity,
+corrections, relevance, dialogue coherence, IC/OOC separation, ambiguity handling, conversational
+initiative, narration quality, and response efficiency. Combat mechanics, inventory management,
+character creation, economy, and other mechanical subsystems stay outside the initial benchmark
+except where a turn needs them in order to exercise communication.
+
+ATGB stays distinct from the playability evaluator, protected replay, semantic calibration, and
+campaign-specific regression suites. It does not wrap `evaluate_playability`, reinterpret that
+evaluator's PASS or FAIL, or become a second playability scorer. Playability PASS remains the
+heuristic contract in `docs/playability_validation.md`.
+
+The initial corpus is about 30–40 representative turns. Each turn is labeled before any run as either
+a fixed scenario or a held-out variation. Held-out variations measure generalization. They are not a
+tuning set for the change under test. Related variations authored alongside an implementation are not
+held-out evidence.
+
+Report benchmark performance by capability and by evidence level. Fixed and held-out results stay
+separate. When a run speaks to a repair, original reproduction, related variations, and independent
+generalization stay separate. An aggregate is orientation only. The run does not report a single PASS
+that means the AI-DM works.
+
+A benchmark run produces inspectable exchanges under this evidence standard. The run states the
+runtime and model boundary, what was not covered, and which results are human-reviewed.
+
+Run the benchmark at a meaningful checkpoint: a declared communication milestone, a major change whose
+purpose is to move player-AI-DM communication, or when the previous benchmark no longer describes
+current behavior. Do not run it after every development block. Do not require a provider call merely
+because a block closed.
+
+Communication-related development cannot continue indefinitely without reconsidering whether the
+benchmark should be rerun. The exact interval belongs to the future benchmark operating procedure.
+This section does not impose a block count. Reconsideration does not itself authorize a provider
+call.
+
+ATGB-02 adopts the ATGB-01 catalog with one partition change: S07 is held-out. The implemented
+counts are 25 development-visible turns, 4 related-variation turns, and 8 held-out turns. Those
+held-out turns already appeared in the ATGB-01 review, so they are not fully independent unseen
+evaluation data.
+
+No campaign may report an Ashen Thrones Gameplay Benchmark performance result from provider-disabled
+infrastructure validation, from host-deterministic output, or from an unscored transcript. A
+performance result requires a live-provider execution of this corpus and human review of
+interpretation, response, and authority. That live baseline has not been established.
+
 ## Initial packets
 
 - Reactive/adversarial standard packet:

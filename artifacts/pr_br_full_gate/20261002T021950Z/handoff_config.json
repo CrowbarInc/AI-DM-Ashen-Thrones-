@@ -1,0 +1,641 @@
+{
+  "campaign_id": "pr-br-full-4x10-synthetic-gate",
+  "campaign_name": "PR-BR — Full 4×10 Synthetic Playability Gate",
+  "campaign_date": "2026-10-01",
+  "purpose": "Release-candidate 4x10 synthetic playability gate after Continuation 20. No behavior changes. No repair. No rerun. PR-BR remains open.",
+  "objective_status": "OPEN",
+  "executive_summary": "Four isolated frontier-gate sessions, 40/40 gameplay turns, no product edits. Final manual PASS 32/40. Initial manual PASS 32/40. Contracts: 6 correct, 18 partial, 16 incorrect. Partial contracts all still played. Incorrect contracts failed play on 6 turns. Accepted text matched emitted text on all 40 turns. Post-seal mismatches: 0. Unsupported consequential entities: 0. Stale binding fallbacks: 0. Rejected-response commits: 0. Structured-output leaks: 0. Two recurrent gameplay mechanisms: ordinary inspections replaced by one wear sentence (C10, D3), and a sealed speaker who is not the person addressed (B2, B9, C8). Sentence fragments were bound as incidental people in every persona. One roster name, Eldrin Voss, was emitted as a posted fact. DECISION: PR-BR SYNTHETIC GATE FAILED — MULTIPLE SYSTEMIC DEFECTS REMAIN. HUMAN PLAYTEST: NOT AUTHORIZED. PR-BR: STILL OPEN. HEAD d31beb7d73dd4fda0f22184a6a69b947b5f470ff.",
+  "primary_report": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+  "evidence_packets": [],
+  "changes": {
+    "production": [],
+    "validation": [],
+    "tooling": [
+      "artifacts/pr_br_full_gate/run_gate_session.py is a validation harness only. It does not change gameplay behavior."
+    ],
+    "documentation": [
+      "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md gains the full 4x10 gate section."
+    ],
+    "generated_artifacts": [
+      "artifacts/pr_br_full_gate/20261002T021950Z holds four isolated sessions, transcripts, contracts, and the audit."
+    ]
+  },
+  "testing": {
+    "focused": "Not a deterministic band. This cycle is the 4x10 synthetic gate.",
+    "broader": "Not run.",
+    "full_suite": "Not run.",
+    "runtime_validation": "40/40 gameplay turns in four isolated sessions. Opening plus chat through the product API. No early stop. No rerun.",
+    "model_runtime_boundary": "Opening generation 4. Gameplay initial 40. Gameplay retry 8. Interpretation 15. Product synthetic-player calls 0. Evaluator model calls 0. Operator player-selection calls outside the product: 40.",
+    "new_regressions": "No product patch. Live manual failures: 8/40 final. Recurrent: wear-sentence safe fallback; wrong speaker including one catalog grimace.",
+    "pre_existing_failures": "Not re-scored. The gate did not replay prior failure strings."
+  },
+  "decisions_requiring_human_review": [
+    "The manual pass count is 32/40, at the approximate strong-pass line, while two mechanisms recurred across personas. The decision is FAILED — MULTIPLE SYSTEMIC DEFECTS REMAIN rather than a pass.",
+    "A reviewer may instead treat the wear-sentence pair as the only narrow defect and the wrong-speaker turns as isolated. That would be decision B, still not a pass.",
+    "PR-BR remains open. Do not start PR-BS. Do not implement a repair from this cycle. Human playtest is not authorized."
+  ],
+  "known_problems": {
+    "campaign_specific": [
+      "C10 and D3 emitted the same safe line about the wear after both inspection candidates were rejected as interaction-incomplete.",
+      "B2 sealed a captain reply to a player who was still questioning the runner.",
+      "B9 replaced the generated answer with a catalog grimace before the immutable seal.",
+      "C8 turned a look into stranger speech.",
+      "Every persona stored at least one sentence fragment as an incidental person.",
+      "D1 stated Eldrin Voss as the roster name of the missing patrol leader."
+    ],
+    "pre_existing": [
+      "The local evaluator marked 16 manually acceptable turns as failures and passed 5 manual failures."
+    ]
+  },
+  "missing_concepts": [],
+  "does_not_prove": [
+    "Does not prove the stack is ready for a human playtest.",
+    "Does not prove contract correctness. Correct contracts were 6/40.",
+    "Does not authorize a repair or Continuation 21.",
+    "Does not prove the authority classifier catches every consequential sentence. It missed the Eldrin Voss roster line."
+  ],
+  "recommended_next_step": "External review. Do not repair, rerun, or playtest with a human from this cycle. Do not close PR-BR. Do not start PR-BS.",
+  "supporting_files": [
+    {
+      "path": "docs/audits/PR-BR_post_generation_transformation_boundary_discovery.md",
+      "role": "audit",
+      "why": "Campaign report, including the full 4x10 gate section and the C18-C20 baseline.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/audit.md",
+      "role": "audit",
+      "why": "Gate audit: contracts, manual review, authority, discourse, and the decision.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/freeze.json",
+      "role": "provenance",
+      "why": "HEAD, worktree, model names, and file hashes frozen before Session A.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/personas/persona_a.md",
+      "role": "persona",
+      "why": "Player persona. No contracts, validators, or prior-session findings.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/personas/persona_b.md",
+      "role": "persona",
+      "why": "Player persona. No contracts, validators, or prior-session findings.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/personas/persona_c.md",
+      "role": "persona",
+      "why": "Player persona. No contracts, validators, or prior-session findings.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/personas/persona_d.md",
+      "role": "persona",
+      "why": "Player persona. No contracts, validators, or prior-session findings.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/visible.md",
+      "role": "transcript",
+      "why": "Persona A direct/practical player-visible opening and ten turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/isolation.json",
+      "role": "isolation",
+      "why": "Persona A direct/practical session id and empty discourse before Turn 1.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/opening.json",
+      "role": "opening",
+      "why": "Persona A direct/practical product opening text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/review_index.json",
+      "role": "contracts",
+      "why": "Persona A direct/practical contracts, routing, hard validation, and discourse slots.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/preflight.json",
+      "role": "provenance",
+      "why": "Persona A direct/practical HEAD and model configuration at session start.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/summary.json",
+      "role": "accounting",
+      "why": "Persona A direct/practical generation and interpretation counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/generation_calls.json",
+      "role": "candidates",
+      "why": "Persona A direct/practical opening and gameplay model texts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/interpretation_calls.json",
+      "role": "routing",
+      "why": "Persona A direct/practical structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/inbox.jsonl",
+      "role": "transcript",
+      "why": "Persona A direct/practical turn-by-turn player lines.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_01.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 1 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_02.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 2 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_03.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 3 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_04.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 4 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_05.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 5 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_06.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 6 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_07.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 7 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_08.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 8 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_09.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 9 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_a/turns/turn_10.json",
+      "role": "turn",
+      "why": "Persona A direct/practical turn 10 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/visible.md",
+      "role": "transcript",
+      "why": "Persona B social/curious player-visible opening and ten turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/isolation.json",
+      "role": "isolation",
+      "why": "Persona B social/curious session id and empty discourse before Turn 1.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/opening.json",
+      "role": "opening",
+      "why": "Persona B social/curious product opening text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/review_index.json",
+      "role": "contracts",
+      "why": "Persona B social/curious contracts, routing, hard validation, and discourse slots.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/preflight.json",
+      "role": "provenance",
+      "why": "Persona B social/curious HEAD and model configuration at session start.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/summary.json",
+      "role": "accounting",
+      "why": "Persona B social/curious generation and interpretation counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/generation_calls.json",
+      "role": "candidates",
+      "why": "Persona B social/curious opening and gameplay model texts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/interpretation_calls.json",
+      "role": "routing",
+      "why": "Persona B social/curious structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/inbox.jsonl",
+      "role": "transcript",
+      "why": "Persona B social/curious turn-by-turn player lines.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_01.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 1 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_02.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 2 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_03.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 3 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_04.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 4 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_05.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 5 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_06.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 6 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_07.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 7 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_08.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 8 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_09.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 9 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_b/turns/turn_10.json",
+      "role": "turn",
+      "why": "Persona B social/curious turn 10 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/visible.md",
+      "role": "transcript",
+      "why": "Persona C exploratory player-visible opening and ten turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/isolation.json",
+      "role": "isolation",
+      "why": "Persona C exploratory session id and empty discourse before Turn 1.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/opening.json",
+      "role": "opening",
+      "why": "Persona C exploratory product opening text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/review_index.json",
+      "role": "contracts",
+      "why": "Persona C exploratory contracts, routing, hard validation, and discourse slots.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/preflight.json",
+      "role": "provenance",
+      "why": "Persona C exploratory HEAD and model configuration at session start.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/summary.json",
+      "role": "accounting",
+      "why": "Persona C exploratory generation and interpretation counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/generation_calls.json",
+      "role": "candidates",
+      "why": "Persona C exploratory opening and gameplay model texts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/interpretation_calls.json",
+      "role": "routing",
+      "why": "Persona C exploratory structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/inbox.jsonl",
+      "role": "transcript",
+      "why": "Persona C exploratory turn-by-turn player lines.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_01.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 1 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_02.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 2 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_03.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 3 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_04.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 4 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_05.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 5 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_06.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 6 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_07.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 7 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_08.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 8 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_09.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 9 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_c/turns/turn_10.json",
+      "role": "turn",
+      "why": "Persona C exploratory turn 10 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/visible.md",
+      "role": "transcript",
+      "why": "Persona D action-oriented player-visible opening and ten turns.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/isolation.json",
+      "role": "isolation",
+      "why": "Persona D action-oriented session id and empty discourse before Turn 1.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/opening.json",
+      "role": "opening",
+      "why": "Persona D action-oriented product opening text.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/review_index.json",
+      "role": "contracts",
+      "why": "Persona D action-oriented contracts, routing, hard validation, and discourse slots.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/preflight.json",
+      "role": "provenance",
+      "why": "Persona D action-oriented HEAD and model configuration at session start.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/summary.json",
+      "role": "accounting",
+      "why": "Persona D action-oriented generation and interpretation counts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/generation_calls.json",
+      "role": "candidates",
+      "why": "Persona D action-oriented opening and gameplay model texts.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/interpretation_calls.json",
+      "role": "routing",
+      "why": "Persona D action-oriented structured interpretation outputs.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/inbox.jsonl",
+      "role": "transcript",
+      "why": "Persona D action-oriented turn-by-turn player lines.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_01.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 1 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_02.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 2 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_03.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 3 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_04.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 4 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_05.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 5 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_06.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 6 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_07.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 7 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_08.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 8 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_09.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 9 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_br_full_gate/20261002T021950Z/persona_d/turns/turn_10.json",
+      "role": "turn",
+      "why": "Persona D action-oriented turn 10 candidate, contract, validation, and emission.",
+      "behavioral_evidence": true,
+      "human_review_required": true
+    }
+  ]
+}

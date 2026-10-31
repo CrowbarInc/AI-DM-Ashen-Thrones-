@@ -1,0 +1,381 @@
+[
+  {
+    "turn_index": 0,
+    "probe_id": "establish_inspected",
+    "player_text": "I step under the frayed banner and look at the cloth itself, not the crowd.",
+    "gm_text": "Nothing here matches that. What you can actually see is the notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+    "api_ok": true,
+    "api_error": null,
+    "contract_id": "rc_ac1cd45c2d47",
+    "resolution_contract": {
+      "contract_id": "rc_ac1cd45c2d47",
+      "turn_index": 1,
+      "request_kind": "inquiry",
+      "operation": "inspect",
+      "target_ref": {
+        "type": "object",
+        "id_or_text": "cloth itself",
+        "source": "explicit_player"
+      },
+      "interlocutor_id": null,
+      "conversational_subject": "cloth itself",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "unknown_allowed",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I step under the frayed banner and look at the cloth itself, not the crowd."
+    },
+    "interaction_obligation": {
+      "kind": "inspection",
+      "target": "cloth itself, not the crowd",
+      "interlocutor_id": null,
+      "subject": "cloth itself, not the crowd",
+      "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+      "claim_id": null,
+      "resolution_mode": "grounded_information_request",
+      "turn_index": 1,
+      "resolution_contract_id": "rc_ac1cd45c2d47"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "cloth itself",
+        "label": "cloth itself",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 1,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 1,
+      "last_committed_contract_id": "rc_ac1cd45c2d47"
+    },
+    "authority_route": {
+      "mode": "grounded_information_request",
+      "requested_dimension": null,
+      "contract_id": "rc_ac1cd45c2d47",
+      "reason_codes": [
+        "default_existing_resolution"
+      ],
+      "proposal_created": false
+    },
+    "generation_calls": [
+      {
+        "generation": {
+          "resolution_contract_in_prompt": true,
+          "prompt_contract": {
+            "request_kind": "inquiry",
+            "operation": "inspect",
+            "target": "cloth itself",
+            "interlocutor": null,
+            "subject": "cloth itself",
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "authority": "unknown_allowed",
+            "constraint": "Resolve inspect for cloth itself (inspect). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description."
+          }
+        },
+        "kwargs": {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null
+        }
+      }
+    ],
+    "model_calls_this_turn": 1,
+    "final_emission_semantic": {
+      "status": "unchecked",
+      "reasons": [
+        "no_dimension"
+      ],
+      "contract_id": "rc_ac1cd45c2d47"
+    },
+    "retry_preserved": false,
+    "semantic_result": "PASS",
+    "intent_gate": {
+      "status": "PASS",
+      "reason_codes": [],
+      "resolution_contract": {
+        "contract_id": "rc_ac1cd45c2d47",
+        "dimension": null,
+        "dimensions": [],
+        "operation": "inspect",
+        "referent_provenance": "explicit_player",
+        "assessment_status": "unchecked",
+        "assessment_reasons": [
+          "no_dimension"
+        ]
+      }
+    },
+    "tags": [
+      "scene_momentum:new_information",
+      "referenced_surface_realization"
+    ]
+  },
+  {
+    "turn_index": 1,
+    "probe_id": "perception_smell_referent",
+    "player_text": "This close, what does it smell like?",
+    "gm_text": "No distinct sound or smell can be established beyond the current scene's general activity.",
+    "api_ok": true,
+    "api_error": null,
+    "contract_id": "rc_d86535730220",
+    "resolution_contract": {
+      "contract_id": "rc_d86535730220",
+      "turn_index": 2,
+      "request_kind": "inquiry",
+      "operation": "perceive",
+      "target_ref": {
+        "type": "object",
+        "id_or_text": "cloth itself",
+        "source": "inherited_discourse"
+      },
+      "interlocutor_id": null,
+      "conversational_subject": "cloth itself",
+      "dimension": "smell",
+      "dimensions": [
+        "smell"
+      ],
+      "expected_resolution": "answer",
+      "epistemic_mode": "bounded_incidental",
+      "discourse_ref": {
+        "type": "object",
+        "id": "cloth itself",
+        "label": "cloth itself",
+        "source_turn": 1
+      },
+      "referent_provenance": "inherited_discourse",
+      "ambiguous": false,
+      "raw_input": "This close, what does it smell like?"
+    },
+    "interaction_obligation": {
+      "kind": "inspection",
+      "target": "This close, what does it smell like?",
+      "interlocutor_id": null,
+      "subject": "This close, what does it smell like",
+      "requested_outcome": "resolve the inspection from authoritative or bounded incidental detail",
+      "claim_id": null,
+      "resolution_mode": "bounded_improvisable_request",
+      "turn_index": 2,
+      "resolution_contract_id": "rc_d86535730220"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "cloth itself",
+        "label": "cloth itself",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 2,
+      "last_committed_contract_id": "rc_d86535730220"
+    },
+    "authority_route": {
+      "mode": "bounded_improvisable_request",
+      "requested_dimension": "smell",
+      "contract_id": "rc_d86535730220",
+      "reason_codes": [
+        "incidental_description_gap",
+        "contract_dimension:smell"
+      ],
+      "proposal_created": true
+    },
+    "generation_calls": [
+      {
+        "generation": {
+          "resolution_contract_in_prompt": true,
+          "prompt_contract": {
+            "request_kind": "inquiry",
+            "operation": "perceive",
+            "target": "cloth itself",
+            "interlocutor": null,
+            "subject": "cloth itself",
+            "dimension": "smell",
+            "dimensions": [
+              "smell"
+            ],
+            "expected_resolution": "answer",
+            "authority": "bounded_incidental",
+            "constraint": "Resolve perceive for cloth itself (smell). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description."
+          }
+        },
+        "kwargs": {
+          "purpose": "primary_turn",
+          "retry_attempt": 0,
+          "retry_reason": null
+        }
+      }
+    ],
+    "model_calls_this_turn": 1,
+    "final_emission_semantic": {
+      "status": "satisfied",
+      "reasons": [
+        "covered:smell"
+      ],
+      "contract_id": "rc_d86535730220"
+    },
+    "retry_preserved": false,
+    "semantic_result": "PASS",
+    "intent_gate": {
+      "status": "PASS",
+      "reason_codes": [],
+      "resolution_contract": {
+        "contract_id": "rc_d86535730220",
+        "dimension": "smell",
+        "dimensions": [
+          "smell"
+        ],
+        "operation": "perceive",
+        "referent_provenance": "inherited_discourse",
+        "assessment_status": "satisfied",
+        "assessment_reasons": [
+          "covered:smell"
+        ]
+      }
+    },
+    "tags": [
+      "scene_momentum:new_information",
+      "live_bounded_improvisation_proposal",
+      "uncertainty:unknown_method",
+      "uncertainty_source:npc_ignorance",
+      "question_resolution_rule",
+      "nonsocial_empty_resolution_repair",
+      "retry_exhausted",
+      "final_emission_gate_replaced",
+      "final_emission_gate:anti_reset_continuation_fallback"
+    ]
+  },
+  {
+    "turn_index": 2,
+    "probe_id": "claim_source_in_utterance",
+    "player_text": "I ask the stew-seller where he heard the rumor he has been repeating.",
+    "gm_text": "Tavern Runner mutters, \"Word is, the runner heard the patrol vanished near muddy footprints northwest of the crates.\"",
+    "api_ok": true,
+    "api_error": null,
+    "contract_id": "rc_66ab1109e3b8",
+    "resolution_contract": {
+      "contract_id": "rc_66ab1109e3b8",
+      "turn_index": 3,
+      "request_kind": "inquiry",
+      "operation": "ask",
+      "target_ref": null,
+      "interlocutor_id": null,
+      "conversational_subject": "I ask the stew-seller where he heard the rumor he has been repeating.",
+      "dimension": null,
+      "dimensions": [],
+      "expected_resolution": "answer",
+      "epistemic_mode": "npc_claim",
+      "discourse_ref": null,
+      "referent_provenance": "explicit_player",
+      "ambiguous": false,
+      "raw_input": "I ask the stew-seller where he heard the rumor he has been repeating."
+    },
+    "interaction_obligation": {
+      "kind": "question",
+      "target": "stew-seller where he heard the rumor he has been r",
+      "interlocutor_id": null,
+      "subject": "where he heard the rumor he has been repeating",
+      "requested_outcome": "answer, admit uncertainty, refuse, or redirect the question",
+      "claim_id": null,
+      "resolution_mode": "npc_claim_response",
+      "turn_index": 3,
+      "resolution_contract_id": "rc_66ab1109e3b8"
+    },
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "cloth itself",
+        "label": "cloth itself",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_66ab1109e3b8"
+    },
+    "authority_route": {
+      "mode": "npc_claim_response",
+      "requested_dimension": null,
+      "contract_id": "rc_66ab1109e3b8",
+      "reason_codes": [
+        "npc_claim_or_epistemic_question"
+      ],
+      "proposal_created": true
+    },
+    "generation_calls": [
+      {
+        "generation": {
+          "resolution_contract_in_prompt": true,
+          "prompt_contract": {
+            "request_kind": "inquiry",
+            "operation": "ask",
+            "target": null,
+            "interlocutor": null,
+            "subject": "I ask the stew-seller where he heard the rumor he has been repeating.",
+            "dimension": null,
+            "dimensions": [],
+            "expected_resolution": "answer",
+            "authority": "npc_claim",
+            "constraint": "Resolve ask for the established target (ask). The reply must be an answer, a real inability, a refusal, a condition, or a clarification. Do not replace that request with an unrelated scene description."
+          }
+        },
+        "kwargs": {
+          "purpose": "strict_social",
+          "retry_attempt": 0,
+          "retry_reason": null
+        }
+      }
+    ],
+    "model_calls_this_turn": 1,
+    "final_emission_semantic": {
+      "status": "unchecked",
+      "reasons": [
+        "no_dimension"
+      ],
+      "contract_id": "rc_66ab1109e3b8"
+    },
+    "retry_preserved": false,
+    "semantic_result": "PASS",
+    "intent_gate": {
+      "status": "PASS",
+      "reason_codes": [],
+      "resolution_contract": {
+        "contract_id": "rc_66ab1109e3b8",
+        "dimension": null,
+        "dimensions": [],
+        "operation": "ask",
+        "referent_provenance": "explicit_player",
+        "assessment_status": "unchecked",
+        "assessment_reasons": [
+          "no_dimension"
+        ]
+      }
+    },
+    "tags": [
+      "scene_momentum:new_information",
+      "live_bounded_improvisation_proposal",
+      "authored_knowledge_realization"
+    ]
+  }
+]

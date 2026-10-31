@@ -1,0 +1,778 @@
+{
+  "provider_calls": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "captures": [
+    {
+      "utterance": "I meant the orchard shift coordinator, not the sundial.",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: I meant the orchard shift coordinator, not the sundial.\nVisible scene: Waystation courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.\nPermitted entity references: courtyard_gate=Courtyard gate [gate | courtyard gate] (exit); courtyard_lantern=courtyard lantern (inspect_target); sergeant_mara=Sergeant Mara (npc); tavern_runner=Tavern Runner (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"Say that another way.\", \"gm\": \"Sergeant Mara mutters, \\\"The guards are watching the north gate during the night.\\\"\"}, {\"player\": \"I ask Tavern Runner whether you prefer the morning or evening.\", \"gm\": \"Tavern Runner mutters, \\\"Word is, i prefer the morning.\\\"\"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Waystation courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.\", \"visible:0\": \"A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.\", \"reply:0\": \"Tavern Runner says, \\\"I couldn't tell you.\\\"\", \"reply:1\": \"Sergeant Mara mutters, \\\"Word is, guards watch the north gate throughout the night.\\\"\", \"reply:2\": \"Sergeant Mara mutters, \\\"The guards are watching the north gate during the night.\\\"\", \"reply:3\": \"Tavern Runner mutters, \\\"Word is, i prefer the morning.\\\"\"}\nConversation ownership context: {\"active_npc_id\": \"tavern_runner\", \"last_response_category\": \"RESOLVED\", \"last_response_owner\": \"GM\", \"last_subject\": \"I ask Tavern Runner whether you prefer the morning or evening.\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+        }
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "communication": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "recipient": {
+                "type": "string",
+                "enum": [
+                  "GM",
+                  "NPC",
+                  "CHARACTER",
+                  "SESSION",
+                  "MIXED",
+                  "AMBIGUOUS"
+                ],
+                "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+              },
+              "purpose": {
+                "type": "string",
+                "enum": [
+                  "QUESTION",
+                  "DESCRIPTION",
+                  "EXPLANATION",
+                  "RECALL",
+                  "RULES",
+                  "ACTION",
+                  "OBSERVATION",
+                  "CORRECTION",
+                  "WITHDRAWAL",
+                  "CONFIRMATION",
+                  "TENTATIVE",
+                  "CLARIFICATION"
+                ],
+                "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION revises unexecuted intent; WITHDRAWAL cancels it; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+              },
+              "subject": {
+                "type": "string"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "recipient",
+              "purpose",
+              "subject",
+              "evidence_refs"
+            ]
+          },
+          "communication_mode": {
+            "enum": [
+              "CLARIFICATION",
+              "IN_WORLD_ACTION",
+              "OTHER",
+              "OUT_OF_CHARACTER_CORRECTION",
+              "RULES_QUESTION"
+            ]
+          },
+          "interpretation_status": {
+            "enum": [
+              "ABSTAIN",
+              "CLARIFICATION_REQUIRED",
+              "INTERPRETED",
+              "UNSUPPORTED_REQUEST"
+            ]
+          },
+          "player_intent": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "summary"
+            ]
+          },
+          "asserted_premises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "requested_outcomes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "action_components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "order": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "target_ref": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "operation_class": {
+                  "enum": [
+                    "ASK",
+                    "ATTACK",
+                    "CANON_DECLARATION",
+                    "DICE_OVERRIDE",
+                    "FOLLOW",
+                    "HIDDEN_INFORMATION_REQUEST",
+                    "HP_ASSIGNMENT",
+                    "INSPECT",
+                    "INVENTORY_GRANT",
+                    "MOVE",
+                    "NPC_COMMITMENT",
+                    "PERCEIVE",
+                    "RETCON",
+                    "SOCIAL_SIGNAL",
+                    "STEALTH_MODE_TOGGLE",
+                    "TIME_CONTROL",
+                    "UNSUPPORTED_MECHANIC",
+                    "USE_VISIBLE_OBJECT"
+                  ]
+                }
+              },
+              "required": [
+                "order",
+                "description",
+                "target_ref",
+                "operation_class"
+              ]
+            }
+          },
+          "references": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "permitted_entity_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unresolved_references": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "permitted_entity_ids",
+              "unresolved_references"
+            ]
+          },
+          "clarification_question": {
+            "type": "string"
+          },
+          "correction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "subject": {
+                "enum": [
+                  "COMMITTED_ACTION",
+                  "INTENTION",
+                  "NONE",
+                  "REFERENT"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "subject",
+              "note"
+            ]
+          }
+        },
+        "required": [
+          "action_components",
+          "asserted_premises",
+          "clarification_question",
+          "communication_mode",
+          "correction",
+          "interpretation_status",
+          "player_intent",
+          "references",
+          "requested_outcomes",
+          "communication"
+        ]
+      },
+      "estimate": {
+        "estimated_input": 3245
+      },
+      "evidence_class": "C: prompt-construction probe, provider stubbed, no provider judgment",
+      "outcome": {
+        "status": "blocked",
+        "reason": "provider_failure",
+        "player_facing_text": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "tags": [
+          "interpretation_rejected",
+          "non_mutating"
+        ],
+        "record": null,
+        "raw_interpretation": "",
+        "provider_requests": [],
+        "provider_error": "R5_CAPTURE_ONLY"
+      }
+    },
+    {
+      "utterance": "What did she mean by that?",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: What did she mean by that?\nVisible scene: Waystation courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.\nPermitted entity references: courtyard_gate=Courtyard gate [gate | courtyard gate] (exit); courtyard_lantern=courtyard lantern (inspect_target); sergeant_mara=Sergeant Mara (npc); tavern_runner=Tavern Runner (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"Say that another way.\", \"gm\": \"Sergeant Mara mutters, \\\"The guards are watching the north gate during the night.\\\"\"}, {\"player\": \"I ask Tavern Runner whether you prefer the morning or evening.\", \"gm\": \"Tavern Runner mutters, \\\"Word is, i prefer the morning.\\\"\"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Waystation courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.\", \"visible:0\": \"A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.\", \"reply:0\": \"Tavern Runner says, \\\"I couldn't tell you.\\\"\", \"reply:1\": \"Sergeant Mara mutters, \\\"Word is, guards watch the north gate throughout the night.\\\"\", \"reply:2\": \"Sergeant Mara mutters, \\\"The guards are watching the north gate during the night.\\\"\", \"reply:3\": \"Tavern Runner mutters, \\\"Word is, i prefer the morning.\\\"\"}\nConversation ownership context: {\"active_npc_id\": \"tavern_runner\", \"last_response_category\": \"RESOLVED\", \"last_response_owner\": \"GM\", \"last_subject\": \"I ask Tavern Runner whether you prefer the morning or evening.\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+        }
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "communication": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "recipient": {
+                "type": "string",
+                "enum": [
+                  "GM",
+                  "NPC",
+                  "CHARACTER",
+                  "SESSION",
+                  "MIXED",
+                  "AMBIGUOUS"
+                ],
+                "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+              },
+              "purpose": {
+                "type": "string",
+                "enum": [
+                  "QUESTION",
+                  "DESCRIPTION",
+                  "EXPLANATION",
+                  "RECALL",
+                  "RULES",
+                  "ACTION",
+                  "OBSERVATION",
+                  "CORRECTION",
+                  "WITHDRAWAL",
+                  "CONFIRMATION",
+                  "TENTATIVE",
+                  "CLARIFICATION"
+                ],
+                "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION revises unexecuted intent; WITHDRAWAL cancels it; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+              },
+              "subject": {
+                "type": "string"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "recipient",
+              "purpose",
+              "subject",
+              "evidence_refs"
+            ]
+          },
+          "communication_mode": {
+            "enum": [
+              "CLARIFICATION",
+              "IN_WORLD_ACTION",
+              "OTHER",
+              "OUT_OF_CHARACTER_CORRECTION",
+              "RULES_QUESTION"
+            ]
+          },
+          "interpretation_status": {
+            "enum": [
+              "ABSTAIN",
+              "CLARIFICATION_REQUIRED",
+              "INTERPRETED",
+              "UNSUPPORTED_REQUEST"
+            ]
+          },
+          "player_intent": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "summary"
+            ]
+          },
+          "asserted_premises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "requested_outcomes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "action_components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "order": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "target_ref": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "operation_class": {
+                  "enum": [
+                    "ASK",
+                    "ATTACK",
+                    "CANON_DECLARATION",
+                    "DICE_OVERRIDE",
+                    "FOLLOW",
+                    "HIDDEN_INFORMATION_REQUEST",
+                    "HP_ASSIGNMENT",
+                    "INSPECT",
+                    "INVENTORY_GRANT",
+                    "MOVE",
+                    "NPC_COMMITMENT",
+                    "PERCEIVE",
+                    "RETCON",
+                    "SOCIAL_SIGNAL",
+                    "STEALTH_MODE_TOGGLE",
+                    "TIME_CONTROL",
+                    "UNSUPPORTED_MECHANIC",
+                    "USE_VISIBLE_OBJECT"
+                  ]
+                }
+              },
+              "required": [
+                "order",
+                "description",
+                "target_ref",
+                "operation_class"
+              ]
+            }
+          },
+          "references": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "permitted_entity_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unresolved_references": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "permitted_entity_ids",
+              "unresolved_references"
+            ]
+          },
+          "clarification_question": {
+            "type": "string"
+          },
+          "correction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "subject": {
+                "enum": [
+                  "COMMITTED_ACTION",
+                  "INTENTION",
+                  "NONE",
+                  "REFERENT"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "subject",
+              "note"
+            ]
+          }
+        },
+        "required": [
+          "action_components",
+          "asserted_premises",
+          "clarification_question",
+          "communication_mode",
+          "correction",
+          "interpretation_status",
+          "player_intent",
+          "references",
+          "requested_outcomes",
+          "communication"
+        ]
+      },
+      "estimate": {
+        "estimated_input": 3235
+      },
+      "evidence_class": "C: prompt-construction probe, provider stubbed, no provider judgment",
+      "outcome": {
+        "status": "blocked",
+        "reason": "provider_failure",
+        "player_facing_text": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "tags": [
+          "interpretation_rejected",
+          "non_mutating"
+        ],
+        "record": null,
+        "raw_interpretation": "",
+        "provider_requests": [],
+        "provider_error": "R5_CAPTURE_ONLY"
+      }
+    },
+    {
+      "utterance": "Your preference is morning; why is that your choice?",
+      "messages": [
+        {
+          "role": "system",
+          "content": "Fill the schema. Describe the attempt. Do not authorize execution. Establish communication.recipient and purpose BEFORE describing operations. GM is the facilitator, never an NPC. Questions about perception, possibility, prior narration, third-person NPC appearance, or what an NPC meant address GM; speaking TO an NPC uses NPC. A short question continuing an active NPC exchange may address NPC; explicit GM address overrides it. SESSION owns rules and interface questions. CHARACTER owns committed attempts only. MIXED owns question plus conditional or independent action; preserve all components, never authorize them. CORRECTION and WITHDRAWAL never undo committed facts. TENTATIVE and capability questions never commit actions. For GM/session communication leave action_components empty unless a NEW observation is requested; use existing PERCEIVE/INSPECT for that. Meaningful communication can be INTERPRETED with zero operations. Select evidence_refs only when the supplied PUBLIC passage actually answers the question. No evidence means unknown. Subject describes the question, never a new fact. Do not convert GM communication into SOCIAL_SIGNAL, ASK or an unsupported operation. A declaration of what I/we do is CHARACTER/ACTION, including inspection; a request to describe already visible information is GM/DESCRIPTION. NPC clarification or recall of what that NPC just said is NPC/CLARIFICATION with an ASK component; select its npc:<speaker>:<topic> evidence reference when supplied. For GM recall of NPC speech, prefer that same established NPC answer passage. For clarification of the most recent NPC statement, npc_latest_reply is the actual latest utterance, including inability or refusal. Do not substitute an earlier topic for it.  Communication is the primary contract; legacy communication_mode describes the same speech act. Third-person description of a person does not speak to them. A question about what their expression implies is GM/EXPLANATION; do not ask the person on the player's behalf. A request about checks, rolls or adjudication is SESSION/RULES even when phrased hypothetically. Cancellation, revision and assent describe control of pending intent, never a new world attempt. Use AMBIGUOUS when a demonstrative has no unique context referent. For a cause question prefer cause: evidence; if only an outcome is known, do not pretend it explains why. For mixed observation and speech preserve both components under MIXED; the engine controls their order. Keep descriptions concise so the complete schema fits the output budget. SESSION does NOT mean every instruction submitted to the engine: describing a character's physical movement is CHARACTER/ACTION. Assent to proceeding is GM/CONFIRMATION even without a pending proposal (then the engine will clarify); revising a proposed attempt is GM/CORRECTION. Conditional commitments are MIXED, even without a question mark. Ancillary facing, turning toward a speaker, or addressing them is context for ASK, not a separate SOCIAL_SIGNAL attempt. Dialogue topics need not be entity ids: unresolved_references holds missing action targets or referents, never merely an unknown subject of a question."
+        },
+        {
+          "role": "user",
+          "content": "Utterance: Your preference is morning; why is that your choice?\nVisible scene: Waystation courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.\nPermitted entity references: courtyard_gate=Courtyard gate [gate | courtyard gate] (exit); courtyard_lantern=courtyard lantern (inspect_target); sergeant_mara=Sergeant Mara (npc); tavern_runner=Tavern Runner (npc).\nCommunication modes: IN_WORLD_ACTION=the character acts or speaks in the scene; OUT_OF_CHARACTER_CORRECTION=the player corrects a referent, an intention, or a committed action; RULES_QUESTION=the player asks how play works; CLARIFICATION=the utterance is unclear; OTHER=none of these.\nOperation classes: Describable for later validation: MOVE, ATTACK, INSPECT, ASK, SOCIAL_SIGNAL, PERCEIVE, FOLLOW, USE_VISIBLE_OBJECT. Ineligible: HP_ASSIGNMENT, DICE_OVERRIDE, INVENTORY_GRANT, CANON_DECLARATION, NPC_COMMITMENT, HIDDEN_INFORMATION_REQUEST, RETCON, UNSUPPORTED_MECHANIC, TIME_CONTROL, STEALTH_MODE_TOGGLE.\nLater validation is not authorization. Describe the attempt. Do not authorize execution.\nIf the utterance is ambiguous between in-character play and table talk, use CLARIFICATION, one question, and no guessed id.\nPremises and wished results are text. No outcomes, HP, dice, inventory, time, canon, NPC commitments, hidden facts, or execution.\nUse only permitted entity ids. Order attempts. Empty list or string if unused.\nRecent visible turns: [{\"player\": \"Say that another way.\", \"gm\": \"Sergeant Mara mutters, \\\"The guards are watching the north gate during the night.\\\"\"}, {\"player\": \"I ask Tavern Runner whether you prefer the morning or evening.\", \"gm\": \"Tavern Runner mutters, \\\"Word is, i prefer the morning.\\\"\"}]\nPUBLIC answer evidence: {\"scene\": \"You are at Waystation courtyard. A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate. Visible points of interest: courtyard lantern. Known exits: Courtyard gate.\", \"visible:0\": \"A public waystation courtyard with a lit lantern beside its gate. Sergeant Mara and Tavern Runner are here, available to talk. The road is visible beyond the gate.\", \"reply:0\": \"Tavern Runner says, \\\"I couldn't tell you.\\\"\", \"reply:1\": \"Sergeant Mara mutters, \\\"Word is, guards watch the north gate throughout the night.\\\"\", \"reply:2\": \"Sergeant Mara mutters, \\\"The guards are watching the north gate during the night.\\\"\", \"reply:3\": \"Tavern Runner mutters, \\\"Word is, i prefer the morning.\\\"\"}\nConversation ownership context: {\"active_npc_id\": \"tavern_runner\", \"last_response_category\": \"RESOLVED\", \"last_response_owner\": \"GM\", \"last_subject\": \"I ask Tavern Runner whether you prefer the morning or evening.\", \"pending_kind\": null, \"pending_scene_id\": null, \"pending_steps\": [], \"pending_choices\": []}"
+        }
+      ],
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "communication": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "recipient": {
+                "type": "string",
+                "enum": [
+                  "GM",
+                  "NPC",
+                  "CHARACTER",
+                  "SESSION",
+                  "MIXED",
+                  "AMBIGUOUS"
+                ],
+                "description": "Communicative function of the whole turn, not the person mentioned. GM: asks the facilitator about the world, including interpreting another person's behavior. NPC: the character actually speaks to that person. SESSION: mechanics or play procedure. CHARACTER: committed physical attempt. MIXED: distinct speech/action intentions, including conditional action. AMBIGUOUS: unresolved referent."
+              },
+              "purpose": {
+                "type": "string",
+                "enum": [
+                  "QUESTION",
+                  "DESCRIPTION",
+                  "EXPLANATION",
+                  "RECALL",
+                  "RULES",
+                  "ACTION",
+                  "OBSERVATION",
+                  "CORRECTION",
+                  "WITHDRAWAL",
+                  "CONFIRMATION",
+                  "TENTATIVE",
+                  "CLARIFICATION"
+                ],
+                "description": "Speech act, independent of executable operations: CONFIRMATION accepts pending work; CORRECTION revises unexecuted intent; WITHDRAWAL cancels it; RULES asks play procedure; EXPLANATION asks cause or meaning. These control acts are never ACTION, even when mentioning a physical operation."
+              },
+              "subject": {
+                "type": "string"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "recipient",
+              "purpose",
+              "subject",
+              "evidence_refs"
+            ]
+          },
+          "communication_mode": {
+            "enum": [
+              "CLARIFICATION",
+              "IN_WORLD_ACTION",
+              "OTHER",
+              "OUT_OF_CHARACTER_CORRECTION",
+              "RULES_QUESTION"
+            ]
+          },
+          "interpretation_status": {
+            "enum": [
+              "ABSTAIN",
+              "CLARIFICATION_REQUIRED",
+              "INTERPRETED",
+              "UNSUPPORTED_REQUEST"
+            ]
+          },
+          "player_intent": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "summary": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "summary"
+            ]
+          },
+          "asserted_premises": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "requested_outcomes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          },
+          "action_components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "order": {
+                  "type": "integer"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "target_ref": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "operation_class": {
+                  "enum": [
+                    "ASK",
+                    "ATTACK",
+                    "CANON_DECLARATION",
+                    "DICE_OVERRIDE",
+                    "FOLLOW",
+                    "HIDDEN_INFORMATION_REQUEST",
+                    "HP_ASSIGNMENT",
+                    "INSPECT",
+                    "INVENTORY_GRANT",
+                    "MOVE",
+                    "NPC_COMMITMENT",
+                    "PERCEIVE",
+                    "RETCON",
+                    "SOCIAL_SIGNAL",
+                    "STEALTH_MODE_TOGGLE",
+                    "TIME_CONTROL",
+                    "UNSUPPORTED_MECHANIC",
+                    "USE_VISIBLE_OBJECT"
+                  ]
+                }
+              },
+              "required": [
+                "order",
+                "description",
+                "target_ref",
+                "operation_class"
+              ]
+            }
+          },
+          "references": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "permitted_entity_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "unresolved_references": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "required": [
+              "permitted_entity_ids",
+              "unresolved_references"
+            ]
+          },
+          "clarification_question": {
+            "type": "string"
+          },
+          "correction": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "subject": {
+                "enum": [
+                  "COMMITTED_ACTION",
+                  "INTENTION",
+                  "NONE",
+                  "REFERENT"
+                ]
+              },
+              "note": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "subject",
+              "note"
+            ]
+          }
+        },
+        "required": [
+          "action_components",
+          "asserted_premises",
+          "clarification_question",
+          "communication_mode",
+          "correction",
+          "interpretation_status",
+          "player_intent",
+          "references",
+          "requested_outcomes",
+          "communication"
+        ]
+      },
+      "estimate": {
+        "estimated_input": 3244
+      },
+      "evidence_class": "C: prompt-construction probe, provider stubbed, no provider judgment",
+      "outcome": {
+        "status": "blocked",
+        "reason": "provider_failure",
+        "player_facing_text": "I couldn't interpret that just now, so no gameplay action was taken.",
+        "tags": [
+          "interpretation_rejected",
+          "non_mutating"
+        ],
+        "record": null,
+        "raw_interpretation": "",
+        "provider_requests": [],
+        "provider_error": "R5_CAPTURE_ONLY"
+      }
+    }
+  ]
+}

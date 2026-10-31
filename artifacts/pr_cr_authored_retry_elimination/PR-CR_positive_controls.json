@@ -1,0 +1,47 @@
+{
+  "controls": [
+    {
+      "id": "A",
+      "name": "PR-CQ patrol replay",
+      "result": "pass",
+      "evidence": {
+        "selected_topic": "patrol",
+        "canonical_answer": "A patrol went missing near the old milestone.",
+        "first_provider_hard_valid": false,
+        "after_retry_count": 0,
+        "accepted_provenance": "authored_answer_projection"
+      }
+    },
+    {
+      "id": "B",
+      "name": "Another authored NPC answer",
+      "result": "covered_by_existing_finalization_suite",
+      "evidence": "tests/test_pr_cp_authorized_finalization.py"
+    },
+    {
+      "id": "C",
+      "name": "Ordinary conversational framing",
+      "result": "pass",
+      "evidence": "Valid initial preference generation remains initial_hard_valid."
+    },
+    {
+      "id": "D",
+      "name": "Authored answer after invalid draft",
+      "result": "pass",
+      "evidence": "Invalid patrol draft projects without regeneration."
+    },
+    {
+      "id": "E",
+      "name": "Invalid draft with valid and unauthorized facts",
+      "result": "pass",
+      "evidence": "Old milestone survives; crossroads and non-return do not."
+    },
+    {
+      "id": "F",
+      "name": "Initial generation already hard-valid",
+      "result": "pass",
+      "evidence": "Initial valid preference answer remains unchanged."
+    }
+  ]
+}
+

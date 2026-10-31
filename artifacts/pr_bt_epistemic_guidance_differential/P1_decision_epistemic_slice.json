@@ -1,0 +1,52 @@
+{
+  "epistemic_acts": [
+    {
+      "act": "establish",
+      "source_ref": "scene.visible_facts.0",
+      "authority": "world_truth",
+      "semantic_identity": {}
+    },
+    {
+      "act": "establish",
+      "source_ref": "scene.visible_facts.1",
+      "authority": "world_truth",
+      "semantic_identity": {}
+    },
+    {
+      "act": "infer",
+      "authority": "observation",
+      "semantic_identity": {
+        "relation_kind": "epistemic_status",
+        "epistemic_status": "inferred",
+        "subject": "chapel bell",
+        "scope": "qualified_possibilities_only"
+      }
+    }
+  ],
+  "unresolved_qualifiers": [],
+  "narration_constraints": [
+    "Narration may not establish consequential world facts absent this decision.",
+    "Generated proposals are not world truth unless already grounded or explicitly permitted.",
+    "NPC claims remain claims; belief/hearsay/uncertainty does not promote them.",
+    "Inference must not be narrated as physical evidence.",
+    "Do not narrate authoritative travel/location change unless a location mutation is permitted.",
+    "Qualified possibilities may be inferred from authorized observations; no cause, actor, or history is established."
+  ],
+  "answer_relations": [],
+  "realization_claims_texts": [
+    {
+      "text": "The bell's wooden yoke is split.",
+      "epistemic_status": "established",
+      "provenance": "authored_world_fact",
+      "relation_kind": "ordinary_predicate",
+      "realization_role": "MUST_STATE"
+    },
+    {
+      "text": "The bell's leather hanger is torn.",
+      "epistemic_status": "established",
+      "provenance": "authored_world_fact",
+      "relation_kind": "ordinary_predicate",
+      "realization_role": "MUST_STATE"
+    }
+  ]
+}

@@ -1,0 +1,512 @@
+C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+[CLUE DISCOVERED] social_waystation_courtyard_keeper_nara_ferry_manager
+harbor 1 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara mutters, "Word is, the dock clerk manages the ferry schedules."
+harbor 2 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Clerk Oren says, "I'm not sure who manages the ferry schedules."
+harbor 3 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+harbor 4 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+[CLUE DISCOVERED] social_waystation_courtyard_keeper_nara_bell
+harbor 5 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara mutters, "Word is, the bell beside the ferry is called the harbor bell."
+harbor 6 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+harbor 7 clarification addressee_not_grounded {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean?
+harbor 8 refusal unsupported_consequential_request {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I couldn't answer that."
+harbor 9 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I cannot share that information."
+harbor 10 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+harbor 11 None None {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean: Keeper Nara or Clerk Oren? Nothing has been attempted.
+harbor 12 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I do not know who forged the courtyard lantern."
+harbor 13 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+harbor 14 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+harbor 15 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Clerk Oren says, "I'm not sure when the boats leave."
+Timeout (0:00:45)!
+Thread 0x00004a34 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1107 in read
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1234 in recv
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 128 in read
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 217 in _receive_event
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 177 in _receive_response_headers
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 106 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 103 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_transports\default.py", line 250 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 990 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 461 in _send_with_auth_retry
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 483 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1065 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1360 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\resources\responses\responses.py", line 1004 in create
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 547 in _invoke_provider
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 594 in propose_semantic_plan
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 848 in authorize_information_turn
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 1264 in planning_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\conversational_orchestration.py", line 2038 in deterministic_conversational_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6410 in chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6364 in api_chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x0000486c (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 769 in _poll
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444 in select
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1913 in _run_once
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 618 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 321 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 651 in run_until_complete
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 536 in run_blocking_portal
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 989 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 334 in wait
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 338 in call
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 353 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 454 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1144 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 555 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 96 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+[CLUE DISCOVERED] social_waystation_courtyard_quill_ledger_keep
+quill 1 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill mutters, "Word is, the miller keeps the night ledger."
+quill 2 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who is responsible for departures."
+[CLUE DISCOVERED] social_waystation_courtyard_quill_ash_drum
+quill 3 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill mutters, "Word is, the ash drum is called the ash drum."
+quill 4 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+quill 5 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+quill 6 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+quill 7 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I couldn't tell you."
+quill 8 refusal unauthorized_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I couldn't answer that."
+quill 9 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know where the night ledger is kept."
+quill 10 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+quill 11 None None {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} That action already resolved, so I cannot undo it. You can take a new action if you want.
+quill 12 clarification addressee_not_grounded {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean?
+quill 13 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+quill 14 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+quill 15 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+security 1 refusal unauthorized_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I couldn't answer that."
+security 2 clarification addressee_not_grounded {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean?
+Timeout (0:00:45)!
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py", line 353 in raw_decode
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\json\decoder.py", line 337 in decode
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\json\__init__.py", line 346 in loads
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\storage.py", line 118 in _load_json
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\storage.py", line 232 in load_session
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 94 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+security 3 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I do not know who manages the guard schedules."
+security 4 refusal unsupported_consequential_request {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I couldn't answer that."
+security 5 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I do not know if the sealed route runs under the mill."
+security 6 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+security 7 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+security 8 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+security 9 refusal unsupported_consequential_request {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I couldn't answer that."
+security 10 None None {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Do you mean Keeper Nara? Nothing has been attempted.
+security 11 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I couldn't tell you."
+security 12 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I do not know who told me the gate opens at dawn."
+security 13 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+security 14 None None {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I couldn't answer that."
+security 15 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Keeper Nara says, "I do not know which person runs the ferry."
+roles 1 partial authorized_partial {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Mara says, "Oren says the north road is flooded. I couldn't say more than that."
+roles 2 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+roles 3 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Mara says, "I don't know who keeps the night drum."
+Timeout (0:00:45)!
+Thread 0x00004a48 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1107 in read
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1234 in recv
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 128 in read
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 217 in _receive_event
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 177 in _receive_response_headers
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 106 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 103 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_transports\default.py", line 250 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 990 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 461 in _send_with_auth_retry
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 483 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1065 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1360 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\resources\responses\responses.py", line 1004 in create
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 547 in _invoke_provider
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 594 in propose_semantic_plan
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 848 in authorize_information_turn
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 1264 in planning_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\conversational_orchestration.py", line 2038 in deterministic_conversational_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6410 in chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6364 in api_chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007810 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 769 in _poll
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444 in select
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1913 in _run_once
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 618 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 321 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 651 in run_until_complete
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 536 in run_blocking_portal
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 989 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 334 in wait
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 338 in call
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 353 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 454 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1144 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 555 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 96 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+roles 4 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Oren says, "I do not know who told me the north road name."
+roles 5 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+roles 6 clarification proposition_ambiguity {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Oren says, "Which part of that information do you mean?"
+roles 7 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+[CLUE DISCOVERED] social_waystation_courtyard_mara_bell
+roles 8 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Mara mutters, "Word is, the harbor bell is called the Tide Bell."
+roles 9 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+roles 10 None None {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+[CLUE DISCOVERED] social_waystation_courtyard_mara_drum
+roles 11 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Mara mutters, "Word is, the miller keeps the night ledger."
+roles 12 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+roles 13 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Oren says, "I couldn't tell you."
+roles 14 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Oren says, "I don't know what Mara said."
+roles 15 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Mara says, "I couldn't tell you."
+new_holdouts_0 1 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know what Ilex said about the aqueduct."
+Timeout (0:00:45)!
+Thread 0x000078fc (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1107 in read
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1234 in recv
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 128 in read
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 217 in _receive_event
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 177 in _receive_response_headers
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 106 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 103 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_transports\default.py", line 250 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 990 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 461 in _send_with_auth_retry
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 483 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1065 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1360 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\resources\responses\responses.py", line 1004 in create
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\expressive_dialogue.py", line 817 in request_expression
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\expressive_dialogue.py", line 875 in _attempt
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\expressive_dialogue.py", line 938 in apply_expression
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\immutable_valid_response.py", line 1451 in adopt_host_speech
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 3706 in _build_gpt_narration_from_authoritative_state
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 4472 in _run_resolved_turn_pipeline
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 7233 in chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6364 in api_chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00008458 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 769 in _poll
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444 in select
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1913 in _run_once
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 618 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 321 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 651 in run_until_complete
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 536 in run_blocking_portal
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 989 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 334 in wait
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 338 in call
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 353 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 454 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1144 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 555 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 96 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+new_holdouts_0 2 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Ilex says, "I don't know what Tavi said about the aqueduct."
+new_holdouts_0 3 clarification addressee_not_grounded {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean?
+new_holdouts_0 4 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know who maintains the amber astrolabe."
+new_holdouts_0 5 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know who supplied the aqueduct designation."
+new_holdouts_0 6 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know whose duty it is to ensure the skiffs can sail."
+new_holdouts_0 7 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know who maintains the amber astrolabe."
+new_holdouts_0 8 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+new_holdouts_0 9 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+new_holdouts_0 10 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I'm not sure what Ilex said."
+new_holdouts_0 11 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Ilex says, "I do not know who told me the aqueduct name."
+new_holdouts_0 12 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I couldn't tell you."
+new_holdouts_0 13 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Ilex says, "I simply couldn't tell you."
+new_holdouts_0 14 refusal unauthorized_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I couldn't answer that."
+new_holdouts_6 1 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know who keeps the amber reliquary."
+new_holdouts_6 2 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+new_holdouts_6 3 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know who keeps the amber reliquary."
+Timeout (0:00:45)!
+Thread 0x000084b8 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1107 in read
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1234 in recv
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 128 in read
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 217 in _receive_event
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 177 in _receive_response_headers
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 106 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 103 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_transports\default.py", line 250 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 990 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 461 in _send_with_auth_retry
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 483 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1065 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1360 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\resources\responses\responses.py", line 1004 in create
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 547 in _invoke_provider
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 594 in propose_semantic_plan
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 848 in authorize_information_turn
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 1264 in planning_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\conversational_orchestration.py", line 2038 in deterministic_conversational_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6410 in chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6364 in api_chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007620 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 769 in _poll
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444 in select
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1913 in _run_once
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 618 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 321 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 651 in run_until_complete
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 536 in run_blocking_portal
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 989 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 334 in wait
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 338 in call
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 353 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 454 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1144 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 555 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 96 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+new_holdouts_6 4 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I'm not sure what the aqueduct is called."
+new_holdouts_6 5 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+new_holdouts_6 6 clarification addressee_not_grounded {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean?
+new_holdouts_6 7 None None {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I'm just not sure what the aqueduct is called."
+new_holdouts_6 8 clarification invalid_source_proposition {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} I didn't catch what you're asking.
+new_holdouts_6 9 partial authorized_partial {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I have heard this as a rumor: Rumor says the carver owns the skiffs. I couldn't say more
+new_holdouts_6 10 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I don't know who maintains the amber astrolabe."
+new_holdouts_6 11 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+new_holdouts_6 12 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+new_holdouts_6 13 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I'm not sure what Ilex said."
+new_holdouts_6 14 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Ilex says, "I do not know who told me the aqueduct name."
+new_holdouts_6 15 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Tavi says, "I couldn't tell you."
+original_holdouts_0 1 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night ledger."
+[CLUE DISCOVERED] social_waystation_courtyard_quill_ledger_keep
+original_holdouts_0 2 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill mutters, "Word is, the miller keeps the night ledger."
+original_holdouts_0 3 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know which person is responsible for departures."
+original_holdouts_0 4 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night ledger."
+Timeout (0:00:45)!
+Thread 0x00003cac (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1107 in read
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1234 in recv
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 128 in read
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 217 in _receive_event
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 177 in _receive_response_headers
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 106 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 103 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_transports\default.py", line 250 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 990 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 461 in _send_with_auth_retry
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 483 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1065 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1360 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\resources\responses\responses.py", line 1004 in create
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 547 in _invoke_provider
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 594 in propose_semantic_plan
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 848 in authorize_information_turn
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 1264 in planning_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\conversational_orchestration.py", line 2038 in deterministic_conversational_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6410 in chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6364 in api_chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007c88 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 769 in _poll
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444 in select
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1913 in _run_once
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 618 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 321 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 651 in run_until_complete
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 536 in run_blocking_portal
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 989 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 334 in wait
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 338 in call
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 353 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 454 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1144 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 555 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 96 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+[CLUE DISCOVERED] social_waystation_courtyard_quill_ash_drum
+original_holdouts_0 5 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill mutters, "Word is, the ash drum is called the ash drum."
+original_holdouts_0 6 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+original_holdouts_0 7 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 8 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 9 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 10 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 11 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 12 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 13 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 14 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_0 15 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+[CLUE DISCOVERED] social_waystation_courtyard_quill_ledger_keep
+original_holdouts_1 1 direct authorized_direct {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill mutters, "Word is, the miller keeps the night ledger."
+original_holdouts_1 2 clarification invalid_role_or_prior_binding {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which information do you mean?
+original_holdouts_1 3 clarification addressee_not_grounded {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Which person do you mean?
+original_holdouts_1 4 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I couldn't tell you."
+Timeout (0:00:45)!
+Thread 0x00005f2c (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1107 in read
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1234 in recv
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_backends\sync.py", line 128 in read
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 217 in _receive_event
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 177 in _receive_response_headers
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\http11.py", line 106 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection.py", line 103 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpcore\_sync\connection_pool.py", line 236 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_transports\default.py", line 250 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 990 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 461 in _send_with_auth_retry
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_client.py", line 483 in _send_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1065 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\_base_client.py", line 1360 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\openai\resources\responses\responses.py", line 1004 in create
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 547 in _invoke_provider
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 594 in propose_semantic_plan
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 848 in authorize_information_turn
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\unified_semantic_planning.py", line 1264 in planning_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\conversational_orchestration.py", line 2038 in deterministic_conversational_decision
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6410 in chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\game\api.py", line 6364 in api_chat
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007abc (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 769 in _poll
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 444 in select
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 1913 in _run_once
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 618 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\windows_events.py", line 321 in run_forever
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 651 in run_until_complete
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2481 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\_core\_eventloop.py", line 83 in run
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 536 in run_blocking_portal
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 989 in run
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1052 in _bootstrap_inner
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 1009 in _bootstrap
+
+Thread 0x00007f58 (most recent call first):
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\threading.py", line 334 in wait
+  File "C:\Users\Master Mandalcio\AppData\Local\Programs\Python\Python312\Lib\concurrent\futures\_base.py", line 451 in result
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\anyio\from_thread.py", line 338 in call
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 353 in handle_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1014 in _send_single_request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 979 in _send_handling_redirects
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 942 in _send_handling_auth
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 914 in send
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 825 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 454 in request
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\httpx\_client.py", line 1144 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\.venv\Lib\site-packages\starlette\testclient.py", line 555 in post
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 96 in main
+  File "C:\Users\Master Mandalcio\Documents\Tabletop Gaming\AI Dungeon Master\ashen_thrones_ai_gm\tools\qualify_pr_eg_r6_r2.py", line 117 in <module>
+original_holdouts_1 5 refusal unauthorized_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I couldn't answer that."
+original_holdouts_1 6 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night ledger."
+original_holdouts_1 7 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 8 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 9 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 10 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 11 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 12 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 13 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 14 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."
+original_holdouts_1 15 unknown no_relevant_source {'http': True, 'no_secret': True, 'sealed': True, 'exact': True, 'history_exact': True, 'canonical': True, 'no_secret_clue': True} Quill says, "I don't know who keeps the night drum."

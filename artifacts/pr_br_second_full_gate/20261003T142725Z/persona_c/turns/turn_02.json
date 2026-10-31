@@ -1,0 +1,747 @@
+{
+  "turn_number": 2,
+  "player_text": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+  "visible_motivation": "Follow the notice's concrete route clue while the rain has not erased every trace.",
+  "intended_meaning": "Inspect the path by the crates for tracks and physical evidence.",
+  "generation_attempt_1": "Examining the muddy path northwest past the stacked crates, you find faint, half-erased boot prints leading away toward the dense thicket beyond the gate district. The ground shows subtle, disturbed marks consistent with a struggle—scattered tufts of torn fabric caught on broken branches and a few drops of dark-stained liquid near crushed reeds. Among the debris, a small, oddly crafted pendant lies half-buried in the mud, its design unfamiliar but vaguely arcane. No other obvious items appear dropped along the narrow track, but the tracks suggest hurried passage and possibly multiple individuals. The scene deepens the mystery surrounding the missing patrol and offers tangible clues to follow.",
+  "generation_attempt_2": "The muddy northwest path near the stacked crates shows signs of recent use. You notice faint footprints that could belong to patrolling soldiers, but the rain has begun to blur their clarity. There are no obvious signs of struggle along the path, nor any dropped items caught in the mud. The soaked earth and continuing drizzle make it difficult to discern finer details here.",
+  "attempt_1_hard_valid": false,
+  "attempt_1_reasons": [
+    "consequential_invention"
+  ],
+  "attempt_2_hard_valid": false,
+  "attempt_2_reasons": [
+    "consequential_invention"
+  ],
+  "regeneration_invoked": true,
+  "regeneration_feedback": "Regenerate this turn under the same resolution contract, canonical state, authority boundaries, mechanical result, operation, and interlocutor. The previous attempt was rejected for: consequential_invention. Do not switch speaker, do not switch the inspected target or dimension, do not invent a posted fact, and do not quote the player. Produce a complete in-world response.",
+  "rejected_attempt_2_reasons": [
+    "consequential_invention"
+  ],
+  "generation_attempt_count": 2,
+  "accepted_provenance": "safe_nonresolution",
+  "accepted_response_text": "The inspection establishes no further reliable detail from the current scene.",
+  "accepted_immutable": true,
+  "final_emitted_response": "The inspection establishes no further reliable detail from the current scene.",
+  "gm_text": "The inspection establishes no further reliable detail from the current scene.",
+  "accepted_emitted_exact_match": true,
+  "accepted_emitted_semantic_match": true,
+  "gm_tags": [
+    "resolution_contract_semantic_preserved"
+  ],
+  "best_safe_candidate": null,
+  "final_selected_candidate": null,
+  "best_safe_invalidation": null,
+  "candidate_transitions": [],
+  "fast_path_used": false,
+  "fast_path_abstained": true,
+  "abstention_reason": "target_not_canonical",
+  "interpreter_invoked": true,
+  "proposal_source": "deterministic_fast_path",
+  "validation_status": "abstained",
+  "validator_reason": "target_not_canonical",
+  "interpretation_proposal": {
+    "raw_input": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+    "source": "deterministic_fast_path",
+    "primary_operation": "inspect",
+    "supporting_operations": [],
+    "raw_target_text": "muddy northwest path for patrol tracks",
+    "proposed_target_id": null,
+    "target_capture": "verb_object",
+    "has_determiner": true,
+    "interlocutor_id": null,
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "referenced_claim_id": null,
+    "referenced_action_id": null,
+    "referenced_inspected_id": null,
+    "confidence": null,
+    "clarification_required": false,
+    "ambiguous": false,
+    "operation_conflict": false,
+    "notes": {}
+  },
+  "operation": "inspect",
+  "canonical_target": null,
+  "target_ref": {},
+  "discourse_ref": null,
+  "interlocutor_id": null,
+  "dimension": null,
+  "dimensions": [],
+  "expected_resolution": "answer",
+  "ambiguous": true,
+  "binding_status": "unresolved",
+  "entity_class": "ambiguous_unresolved",
+  "proposed_interlocutor": null,
+  "bound_interlocutor": null,
+  "entity_id": null,
+  "authority_reasons": [],
+  "entity_binding": {
+    "status": "unresolved",
+    "entity_class": "ambiguous_unresolved",
+    "proposed_interlocutor": null,
+    "proposed_span": null,
+    "bound_interlocutor_id": null,
+    "entity_id": null,
+    "label": null,
+    "explicit_new_interlocutor": false,
+    "authority_reasons": [],
+    "claim_binding": "none"
+  },
+  "contract": {
+    "contract_id": "rc_34eff203eef1",
+    "turn_index": 3,
+    "request_kind": "inquiry",
+    "operation": "inspect",
+    "target_ref": null,
+    "interlocutor_id": null,
+    "conversational_subject": null,
+    "dimension": null,
+    "dimensions": [],
+    "expected_resolution": "answer",
+    "epistemic_mode": "unknown_allowed",
+    "discourse_ref": null,
+    "referent_provenance": "unresolved",
+    "ambiguous": true,
+    "raw_input": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+    "construction": {
+      "cues": [],
+      "referent_slot": null,
+      "referent_reason": "target_not_canonical",
+      "ambiguity_detected": true,
+      "actionable_inherited": false,
+      "active_claim_inherited": false,
+      "fast_path_proposal": true,
+      "fast_path_used": false,
+      "fast_path_abstained": true,
+      "fast_path_abstention_reason": "target_not_canonical",
+      "model_interpreter_invoked": true,
+      "model_proposal_rejected": true,
+      "clarification_after_model": true,
+      "interpretation_api_calls": 1,
+      "interpretation_error": "ambiguous_referent",
+      "canonical_candidates": [
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "frontier_gate",
+          "type": "place",
+          "label": "Cinderwatch Gate District"
+        },
+        {
+          "id": "notice_board",
+          "type": "object",
+          "label": "Notice board"
+        },
+        {
+          "id": "market_quarter",
+          "type": "place",
+          "label": "Enter Cinderwatch"
+        },
+        {
+          "id": "old_milestone",
+          "type": "place",
+          "label": "Follow the missing patrol rumor"
+        },
+        {
+          "id": "guard_captain",
+          "type": "interlocutor",
+          "label": "Guard Captain"
+        },
+        {
+          "id": "tavern_runner",
+          "type": "interlocutor",
+          "label": "Tavern Runner"
+        },
+        {
+          "id": "refugee",
+          "type": "interlocutor",
+          "label": "Ragged stranger"
+        },
+        {
+          "id": "threadbare_watcher",
+          "type": "interlocutor",
+          "label": "Threadbare watcher"
+        },
+        {
+          "id": "gate_guard",
+          "type": "interlocutor",
+          "label": "Gate Guard"
+        },
+        {
+          "id": "gate_serjeant",
+          "type": "interlocutor",
+          "label": "Gate Serjeant"
+        }
+      ],
+      "proposal_source": "deterministic_fast_path",
+      "proposed_operation": "inspect",
+      "proposed_supporting_operations": [],
+      "proposed_raw_target": "muddy northwest path for patrol tracks",
+      "canonicalization_attempted": true,
+      "canonical_target_found": false,
+      "operation_conflict": false,
+      "validation_status": "abstained",
+      "validation_result": {
+        "status": "abstained",
+        "reason": "target_not_canonical",
+        "failed_fields": [
+          "raw_target_text"
+        ],
+        "clarification_required": true,
+        "model_interpretation_appropriate": true,
+        "canonical_target_id": null,
+        "canonical_target_label": null,
+        "canonical_target_type": null,
+        "canonical_basis": null,
+        "authoritative_operation": "unresolved",
+        "discourse_commit_allowed": false,
+        "compatibility_bridge": null
+      },
+      "abstention_reason": "target_not_canonical",
+      "failed_fields": [
+        "raw_target_text"
+      ],
+      "clarification_required": true,
+      "model_interpretation_appropriate": true,
+      "discourse_commit_allowed": false,
+      "interlocutor_rejected": false,
+      "entity_binding": {
+        "status": "unresolved",
+        "entity_class": "ambiguous_unresolved",
+        "proposed_interlocutor": null,
+        "proposed_span": null,
+        "bound_interlocutor_id": null,
+        "entity_id": null,
+        "label": null,
+        "explicit_new_interlocutor": false,
+        "authority_reasons": [],
+        "claim_binding": "none"
+      },
+      "authoritative": false,
+      "semantic_completeness": "not_applied",
+      "compatibility_bridge": null,
+      "interpretation_proposal": {
+        "raw_input": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+        "source": "deterministic_fast_path",
+        "primary_operation": "inspect",
+        "supporting_operations": [],
+        "raw_target_text": "muddy northwest path for patrol tracks",
+        "proposed_target_id": null,
+        "target_capture": "verb_object",
+        "has_determiner": true,
+        "interlocutor_id": null,
+        "conversational_subject": null,
+        "dimension": null,
+        "dimensions": [],
+        "expected_resolution": "answer",
+        "referenced_claim_id": null,
+        "referenced_action_id": null,
+        "referenced_inspected_id": null,
+        "confidence": null,
+        "clarification_required": false,
+        "ambiguous": false,
+        "operation_conflict": false,
+        "notes": {}
+      },
+      "commitment_status": "executed_now",
+      "primary_operation": "inspect",
+      "resolution_subject": "perception",
+      "resolution_subject_coherence": "accepted",
+      "semantic_input_length": 124,
+      "provenance_excerpt": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+      "secondary_operations": [],
+      "requested_addressee": null,
+      "addressee_binding_status": "unresolved"
+    },
+    "retry_preserved": true
+  },
+  "active_interlocutor": null,
+  "active_claim": null,
+  "active_inspected": {
+    "id": "notice_board",
+    "label": "Notice board",
+    "kind": "object",
+    "epistemic_status": null,
+    "turn_index": 2,
+    "source": "resolution_contract"
+  },
+  "actionable_lead": null,
+  "previous_action": null,
+  "discourse_focus": {
+    "version": 1,
+    "scene_id": "frontier_gate",
+    "active_interlocutor": null,
+    "active_claim": null,
+    "active_actionable_lead": null,
+    "active_inspected": {
+      "id": "notice_board",
+      "label": "Notice board",
+      "kind": "object",
+      "scene_id": "frontier_gate",
+      "turn_index": 2,
+      "source": "resolution_contract"
+    },
+    "last_attempted_action": null,
+    "last_committed_turn": 3,
+    "last_committed_contract_id": "rc_34eff203eef1"
+  },
+  "authority_generated": [
+    {
+      "proposition": "Among the debris, a small, oddly crafted pendant lies half-buried in the mud, its design unfamiliar but vaguely arcane.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "authority_retry": [
+    {
+      "proposition": "You notice faint footprints that could belong to patrolling soldiers, but the rain has begun to blur their clarity.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "uncertain",
+      "consequential": false,
+      "family": "incidental"
+    },
+    {
+      "proposition": "There are no obvious signs of struggle along the path, nor any dropped items caught in the mud.",
+      "authority_class": "incidental_fact",
+      "grounded": false,
+      "epistemic_framing": "world_truth",
+      "consequential": false,
+      "family": "incidental"
+    }
+  ],
+  "authority_emitted": [],
+  "unauthorized_generated": [],
+  "unauthorized_retry": [],
+  "unauthorized_emitted": [],
+  "semantic_result": "FAIL",
+  "failing_gates": [
+    "player_intent_addressed"
+  ],
+  "evaluation": {
+    "version": 3,
+    "overall": {
+      "score": 72,
+      "rating": "acceptable",
+      "passed": false,
+      "semantic_result": "FAIL",
+      "diagnostic_quality_rating": "acceptable"
+    },
+    "semantic_result": "FAIL",
+    "mandatory_gates": {
+      "malformed_output": {
+        "status": "PASS",
+        "passed": true,
+        "reason_codes": [],
+        "evidence": {
+          "gm_word_count": 11,
+          "text_preview": "The inspection establishes no further reliable detail from the current scene."
+        }
+      },
+      "player_intent_addressed": {
+        "status": "FAIL",
+        "passed": false,
+        "reason_codes": [
+          "intent_addressed:resolution_contract_unsatisfied"
+        ],
+        "evidence": {
+          "request_kind": "action_or_statement",
+          "player_terms": [
+            "anything",
+            "crates",
+            "dropped",
+            "examine",
+            "move",
+            "muddy",
+            "northwest",
+            "path",
+            "patrol",
+            "signs",
+            "stacked",
+            "struggle",
+            "tracks"
+          ],
+          "gm_terms": [
+            "current",
+            "detail",
+            "establishes",
+            "further",
+            "inspection",
+            "reliable",
+            "scene"
+          ],
+          "direct_answer_score": 23,
+          "player_intent_score": 9,
+          "resolution_contract": {
+            "contract_id": "rc_34eff203eef1",
+            "dimension": null,
+            "dimensions": [],
+            "operation": "inspect",
+            "referent_provenance": "unresolved",
+            "assessment_status": "unsatisfied",
+            "assessment_reasons": [
+              "clarification_missing"
+            ],
+            "target": null,
+            "candidate_answer_target": null,
+            "target_compatible": null,
+            "operation_compatible": false,
+            "dimension_compatible": null,
+            "resolution_kind": "unrelated",
+            "resolution_coverage": [],
+            "echo_detected": false,
+            "construction": {
+              "cues": [],
+              "referent_slot": null,
+              "referent_reason": "target_not_canonical",
+              "ambiguity_detected": true,
+              "actionable_inherited": false,
+              "active_claim_inherited": false,
+              "fast_path_proposal": true,
+              "fast_path_used": false,
+              "fast_path_abstained": true,
+              "fast_path_abstention_reason": "target_not_canonical",
+              "model_interpreter_invoked": true,
+              "model_proposal_rejected": true,
+              "clarification_after_model": true,
+              "interpretation_api_calls": 1,
+              "interpretation_error": "ambiguous_referent",
+              "canonical_candidates": [
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "frontier_gate",
+                  "type": "place",
+                  "label": "Cinderwatch Gate District"
+                },
+                {
+                  "id": "notice_board",
+                  "type": "object",
+                  "label": "Notice board"
+                },
+                {
+                  "id": "market_quarter",
+                  "type": "place",
+                  "label": "Enter Cinderwatch"
+                },
+                {
+                  "id": "old_milestone",
+                  "type": "place",
+                  "label": "Follow the missing patrol rumor"
+                },
+                {
+                  "id": "guard_captain",
+                  "type": "interlocutor",
+                  "label": "Guard Captain"
+                },
+                {
+                  "id": "tavern_runner",
+                  "type": "interlocutor",
+                  "label": "Tavern Runner"
+                },
+                {
+                  "id": "refugee",
+                  "type": "interlocutor",
+                  "label": "Ragged stranger"
+                },
+                {
+                  "id": "threadbare_watcher",
+                  "type": "interlocutor",
+                  "label": "Threadbare watcher"
+                },
+                {
+                  "id": "gate_guard",
+                  "type": "interlocutor",
+                  "label": "Gate Guard"
+                },
+                {
+                  "id": "gate_serjeant",
+                  "type": "interlocutor",
+                  "label": "Gate Serjeant"
+                }
+              ],
+              "proposal_source": "deterministic_fast_path",
+              "proposed_operation": "inspect",
+              "proposed_supporting_operations": [],
+              "proposed_raw_target": "muddy northwest path for patrol tracks",
+              "canonicalization_attempted": true,
+              "canonical_target_found": false,
+              "operation_conflict": false,
+              "validation_status": "abstained",
+              "validation_result": {
+                "status": "abstained",
+                "reason": "target_not_canonical",
+                "failed_fields": [
+                  "raw_target_text"
+                ],
+                "clarification_required": true,
+                "model_interpretation_appropriate": true,
+                "canonical_target_id": null,
+                "canonical_target_label": null,
+                "canonical_target_type": null,
+                "canonical_basis": null,
+                "authoritative_operation": "unresolved",
+                "discourse_commit_allowed": false,
+                "compatibility_bridge": null
+              },
+              "abstention_reason": "target_not_canonical",
+              "failed_fields": [
+                "raw_target_text"
+              ],
+              "clarification_required": true,
+              "model_interpretation_appropriate": true,
+              "discourse_commit_allowed": false,
+              "interlocutor_rejected": false,
+              "entity_binding": {
+                "status": "unresolved",
+                "entity_class": "ambiguous_unresolved",
+                "proposed_interlocutor": null,
+                "proposed_span": null,
+                "bound_interlocutor_id": null,
+                "entity_id": null,
+                "label": null,
+                "explicit_new_interlocutor": false,
+                "authority_reasons": [],
+                "claim_binding": "none"
+              },
+              "authoritative": false,
+              "semantic_completeness": "not_applied",
+              "compatibility_bridge": null,
+              "interpretation_proposal": {
+                "raw_input": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+                "source": "deterministic_fast_path",
+                "primary_operation": "inspect",
+                "supporting_operations": [],
+                "raw_target_text": "muddy northwest path for patrol tracks",
+                "proposed_target_id": null,
+                "target_capture": "verb_object",
+                "has_determiner": true,
+                "interlocutor_id": null,
+                "conversational_subject": null,
+                "dimension": null,
+                "dimensions": [],
+                "expected_resolution": "answer",
+                "referenced_claim_id": null,
+                "referenced_action_id": null,
+                "referenced_inspected_id": null,
+                "confidence": null,
+                "clarification_required": false,
+                "ambiguous": false,
+                "operation_conflict": false,
+                "notes": {}
+              },
+              "commitment_status": "executed_now",
+              "primary_operation": "inspect",
+              "resolution_subject": "perception",
+              "resolution_subject_coherence": "accepted",
+              "semantic_input_length": 124,
+              "provenance_excerpt": "I move to the stacked crates and examine the muddy northwest path for patrol tracks, signs of struggle, or anything dropped.",
+              "secondary_operations": [],
+              "requested_addressee": null,
+              "addressee_binding_status": "unresolved"
+            },
+            "failure_locus": "response_missed_contract"
+          }
+        }
+      }
+    },
+    "diagnostic_quality": {
+      "score": 72,
+      "rating": "acceptable",
+      "passed": true,
+      "axis_scores": {
+        "direct_answer": 23,
+        "player_intent": 9,
+        "logical_escalation": 18,
+        "immersion": 22
+      }
+    },
+    "evaluation_complete": true,
+    "axes": {
+      "direct_answer": {
+        "score": 23,
+        "passed": true,
+        "reasons": [
+          "No explicit question detected; scored leniently for directness."
+        ],
+        "signals": {
+          "has_question": false,
+          "deflection_hits": 0,
+          "procedure_hits": 0,
+          "echo_jaccard": 0.0,
+          "gm_word_count": 11,
+          "bounded_partial": false,
+          "next_lead": false,
+          "answer_markers": 1
+        }
+      },
+      "player_intent": {
+        "score": 9,
+        "passed": false,
+        "reasons": [
+          "GM misses obvious player topic anchors."
+        ],
+        "signals": {
+          "narrowing": false,
+          "topic_overlap_count": 0,
+          "topic_overlap_ratio": 0.0,
+          "forced_action_hits": 0,
+          "prior_present": true
+        }
+      },
+      "logical_escalation": {
+        "score": 18,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "prior_gm_present": true,
+          "prior_player_present": true,
+          "gm_repeat_jaccard": 0.0,
+          "player_presses_thread": false,
+          "gm_word_count": 11,
+          "net_new_terms": 7
+        }
+      },
+      "immersion": {
+        "score": 22,
+        "passed": true,
+        "reasons": [],
+        "signals": {
+          "leak_hits": 0,
+          "menu_hits": 0,
+          "system_voice_hits": 0,
+          "quoted_dialogue": false,
+          "scene_anchor_hits": 0
+        }
+      }
+    },
+    "summary": {
+      "strengths": [
+        "direct_answer: strong (23/25).",
+        "logical_escalation: acceptable (18/25).",
+        "immersion: strong (22/25)."
+      ],
+      "failures": [
+        "player_intent: weak (9/25).",
+        "player_intent: GM misses obvious player topic anchors."
+      ],
+      "warnings": []
+    },
+    "gameplay_validation": {
+      "run_valid": true,
+      "excluded_from_scoring": false,
+      "invalidation_reason": null,
+      "dead_turn_count": 0,
+      "infra_failure_count": 0,
+      "dead_turn": {
+        "is_dead_turn": false,
+        "dead_turn_reason_codes": [],
+        "dead_turn_class": "none",
+        "validation_playable": true,
+        "manual_test_valid": true
+      },
+      "raw_overall": {
+        "score": 72,
+        "rating": "acceptable",
+        "passed": false,
+        "semantic_result": "FAIL",
+        "diagnostic_quality_rating": "acceptable"
+      }
+    }
+  },
+  "generation_calls_this_turn": 2,
+  "interpretation_calls_this_turn": 1,
+  "turn_generation_calls": [
+    {
+      "purpose": "primary_turn",
+      "retry_attempt": 0,
+      "retry_reason": null,
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "Examining the muddy path northwest past the stacked crates, you find faint, half-erased boot prints leading away toward the dense thicket beyond the gate district. The ground shows subtle, disturbed marks consistent with a struggle—scattered tufts of torn fabric caught on broken branches and a few drops of dark-stained liquid near crushed reeds. Among the debris, a small, oddly crafted pendant lies half-buried in the mud, its design unfamiliar but vaguely arcane. No other obvious items appear dropped along the narrow track, but the tracks suggest hurried passage and possibly multiple individuals. The scene deepens the mystery surrounding the missing patrol and offers tangible clues to follow."
+    },
+    {
+      "purpose": "retry_escalation",
+      "retry_attempt": 1,
+      "retry_reason": "hard_invalid",
+      "model": "gpt-4.1-mini",
+      "model_player_facing_text": "The muddy northwest path near the stacked crates shows signs of recent use. You notice faint footprints that could belong to patrolling soldiers, but the rain has begun to blur their clarity. There are no obvious signs of struggle along the path, nor any dropped items caught in the mud. The soaked earth and continuing drizzle make it difficult to discern finer details here."
+    }
+  ],
+  "turn_interpretation_calls": [
+    {
+      "event": "attempt",
+      "output_text": "{\"primary_operation\":\"inspect\",\"supporting_operations\":[\"act\"],\"raw_target_text\":\"the muddy northwest path\",\"proposed_target_id\":null,\"interlocutor_id\":null,\"conversational_subject\":\"patrol tracks, signs of struggle, or anything dropped\",\"dimension\":\"content\",\"dimensions\":[\"content\"],\"expected_resolution\":\"determine if there are patrol tracks, signs of struggle, or dropped items on the muddy northwest path\",\"referenced_claim_id\":null,\"referenced_action_id\":null,\"referenced_inspected_id\":\"notice_board\",\"clarification_required\":true,\"ambiguous\":true,\"confidence\":\"medium\"}"
+    }
+  ],
+  "persistence": {
+    "session_id": "49816028b7531f142a976169",
+    "campaign_run_id": "49816028b7531f142a976169",
+    "active_scene_id": "frontier_gate",
+    "discourse_focus": {
+      "version": 1,
+      "scene_id": "frontier_gate",
+      "active_interlocutor": null,
+      "active_claim": null,
+      "active_actionable_lead": null,
+      "active_inspected": {
+        "id": "notice_board",
+        "label": "Notice board",
+        "kind": "object",
+        "scene_id": "frontier_gate",
+        "turn_index": 2,
+        "source": "resolution_contract"
+      },
+      "last_attempted_action": null,
+      "last_committed_turn": 3,
+      "last_committed_contract_id": "rc_34eff203eef1"
+    },
+    "incidental_entities": [],
+    "ledger_entries": [],
+    "ledger_rejected": [],
+    "npc_ids": [
+      {
+        "id": "gate_guard",
+        "name": "Gate Guard",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "gate_serjeant",
+        "name": "Gate Serjeant",
+        "location": "frontier_gate"
+      },
+      {
+        "id": "tavern_runner",
+        "name": "Tavern Runner",
+        "location": "frontier_gate"
+      }
+    ],
+    "visible_facts": [
+      "The notice board lists taxes, curfew rules, and a warning about a missing patrol.",
+      "A gate serjeant manages the crowd and keeps one eye on the roster board.",
+      "A tavern runner trades hot stew and rumors near the rain barrel.",
+      "Threadbare watchers and refugees cluster along the muddy gate line.",
+      "Ash Compact census delays have tightened the eastern caravan choke point."
+    ],
+    "discoverable_clues": [
+      {
+        "id": "notice_patrol_route",
+        "text": "The missing patrol was last seen taking the northwest mud track past the crates."
+      }
+    ],
+    "log_bytes": 170638
+  },
+  "resolution_kind": "investigate",
+  "api_ok": true
+}

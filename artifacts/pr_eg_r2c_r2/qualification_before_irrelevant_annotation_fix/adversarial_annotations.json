@@ -1,0 +1,1971 @@
+[
+  {
+    "id": "A_false_subject",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "north gate"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "north gate",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": "npc.authored_subject"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": {
+      "id": "sergeant_mara",
+      "label": "Sergeant Mara",
+      "type": "question",
+      "prompt": "I ask Sergeant Mara whether guards watch the north gate at night.",
+      "target_id": "sergeant_mara",
+      "targetEntityId": "sergeant_mara",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "sergeant_mara",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "provider-supplied subject",
+          "evidence_refs": []
+        },
+        "public_conversation_evidence": {}
+      }
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    },
+    "expected_allowed": true,
+    "passed": true
+  },
+  {
+    "id": "B_false_addressee",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "Sergeant Mara"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "Sergeant Mara",
+          "role": "addressee",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "sergeant_mara"
+          ],
+          "source": "explicit_canonical"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": {
+      "id": "sergeant_mara",
+      "label": "Sergeant Mara",
+      "type": "question",
+      "prompt": "I ask Sergeant Mara whether guards watch the north gate at night.",
+      "target_id": "sergeant_mara",
+      "targetEntityId": "sergeant_mara",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "sergeant_mara",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "provider-supplied subject",
+          "evidence_refs": []
+        },
+        "public_conversation_evidence": {}
+      }
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    },
+    "expected_allowed": true,
+    "passed": true
+  },
+  {
+    "id": "C_correct_subject",
+    "player": "I ask Sergeant Mara about that place.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "that place"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "that place"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "that place",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": null,
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "unresolved_references",
+      "unresolved_references": [
+        "that place"
+      ],
+      "reference_reconciliation": {
+        "annotations": [
+          {
+            "annotation": "that place",
+            "role": "subject",
+            "status": "MISSING",
+            "explicit": true,
+            "candidates": [],
+            "source": null
+          }
+        ],
+        "addressee": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true
+        },
+        "operation": "ASK"
+      }
+    },
+    "expected_allowed": false,
+    "passed": true
+  },
+  {
+    "id": "D_correct_addressee",
+    "player": "I ask one of them about the north gate.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "one of them"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "one of them"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "one of them",
+          "role": "addressee",
+          "status": "AMBIGUOUS",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "ambiguous_unresolved",
+        "intent_purpose": "address_npc",
+        "target_resolution": "ambiguous",
+        "target_provenance": "provider_candidate_only",
+        "target_id": null,
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "conflict_status": "unresolved",
+        "conflict_details": {
+          "provider_target": "sergeant_mara"
+        },
+        "pending_intention_relationship": "requires_clarification",
+        "allowed_operation": null,
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": null,
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "unresolved_references",
+      "unresolved_references": [
+        "one of them"
+      ],
+      "reference_reconciliation": {
+        "annotations": [
+          {
+            "annotation": "one of them",
+            "role": "addressee",
+            "status": "AMBIGUOUS",
+            "explicit": true,
+            "candidates": [],
+            "source": null
+          }
+        ],
+        "addressee": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "provider_candidate_only",
+          "target_id": null,
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "conflict_status": "unresolved",
+          "conflict_details": {
+            "provider_target": "sergeant_mara"
+          },
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true
+        },
+        "operation": "ASK"
+      }
+    },
+    "expected_allowed": false,
+    "passed": true
+  },
+  {
+    "id": "E_multiple",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "Sergeant Mara",
+          "north gate"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "Sergeant Mara",
+          "role": "addressee",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [
+            "sergeant_mara"
+          ],
+          "source": "explicit_canonical"
+        },
+        {
+          "annotation": "north gate",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": "npc.authored_subject"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": {
+      "id": "sergeant_mara",
+      "label": "Sergeant Mara",
+      "type": "question",
+      "prompt": "I ask Sergeant Mara whether guards watch the north gate at night.",
+      "target_id": "sergeant_mara",
+      "targetEntityId": "sergeant_mara",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "sergeant_mara",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "provider-supplied subject",
+          "evidence_refs": []
+        },
+        "public_conversation_evidence": {}
+      }
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    },
+    "expected_allowed": true,
+    "passed": true
+  },
+  {
+    "id": "F_wrong_entity",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "obsidian palace"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "obsidian palace"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "obsidian palace",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": false,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": null,
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "unresolved_references",
+      "unresolved_references": [
+        "obsidian palace"
+      ],
+      "reference_reconciliation": {
+        "annotations": [
+          {
+            "annotation": "obsidian palace",
+            "role": "subject",
+            "status": "MISSING",
+            "explicit": false,
+            "candidates": [],
+            "source": null
+          }
+        ],
+        "addressee": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true
+        },
+        "operation": "ASK"
+      }
+    },
+    "expected_allowed": false,
+    "passed": true
+  },
+  {
+    "id": "G_irrelevant_noun",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "weather"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "weather"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "weather",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": false,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": null,
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "unresolved_references",
+      "unresolved_references": [
+        "weather"
+      ],
+      "reference_reconciliation": {
+        "annotations": [
+          {
+            "annotation": "weather",
+            "role": "subject",
+            "status": "MISSING",
+            "explicit": false,
+            "candidates": [],
+            "source": null
+          }
+        ],
+        "addressee": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true
+        },
+        "operation": "ASK"
+      }
+    },
+    "expected_allowed": false,
+    "passed": true
+  },
+  {
+    "id": "H_unknown_answer",
+    "player": "I ask Sergeant Mara who made the north gate.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "north gate"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "north gate",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": "npc.authored_subject"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": {
+      "id": "sergeant_mara",
+      "label": "Sergeant Mara",
+      "type": "question",
+      "prompt": "I ask Sergeant Mara who made the north gate.",
+      "target_id": "sergeant_mara",
+      "targetEntityId": "sergeant_mara",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "sergeant_mara",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "provider-supplied subject",
+          "evidence_refs": []
+        },
+        "public_conversation_evidence": {}
+      }
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    },
+    "expected_allowed": true,
+    "passed": true
+  },
+  {
+    "id": "I_hidden_answer",
+    "player": "I ask Sergeant Mara what the north gate password is.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "north gate"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "north gate",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": "npc.authored_subject"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": {
+      "id": "sergeant_mara",
+      "label": "Sergeant Mara",
+      "type": "question",
+      "prompt": "I ask Sergeant Mara what the north gate password is.",
+      "target_id": "sergeant_mara",
+      "targetEntityId": "sergeant_mara",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "sergeant_mara",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "provider-supplied subject",
+          "evidence_refs": []
+        },
+        "public_conversation_evidence": {}
+      }
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    },
+    "expected_allowed": true,
+    "passed": true
+  },
+  {
+    "id": "J_tempting_default",
+    "player": "I ask one of them about that place.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "one of them",
+          "that place"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "one of them",
+          "that place"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "one of them",
+          "role": "addressee",
+          "status": "AMBIGUOUS",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        },
+        {
+          "annotation": "that place",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": true,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "ambiguous_unresolved",
+        "intent_purpose": "address_npc",
+        "target_resolution": "ambiguous",
+        "target_provenance": "provider_candidate_only",
+        "target_id": null,
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "requires_clarification",
+        "mutation_eligibility": false,
+        "conflict_status": "unresolved",
+        "conflict_details": {
+          "provider_target": "sergeant_mara"
+        },
+        "pending_intention_relationship": "requires_clarification",
+        "allowed_operation": null,
+        "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": null,
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "unresolved_references",
+      "unresolved_references": [
+        "one of them",
+        "that place"
+      ],
+      "reference_reconciliation": {
+        "annotations": [
+          {
+            "annotation": "one of them",
+            "role": "addressee",
+            "status": "AMBIGUOUS",
+            "explicit": true,
+            "candidates": [],
+            "source": null
+          },
+          {
+            "annotation": "that place",
+            "role": "subject",
+            "status": "MISSING",
+            "explicit": true,
+            "candidates": [],
+            "source": null
+          }
+        ],
+        "addressee": {
+          "communication_ownership": "ambiguous_unresolved",
+          "intent_purpose": "address_npc",
+          "target_resolution": "ambiguous",
+          "target_provenance": "provider_candidate_only",
+          "target_id": null,
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "requires_clarification",
+          "mutation_eligibility": false,
+          "conflict_status": "unresolved",
+          "conflict_details": {
+            "provider_target": "sergeant_mara"
+          },
+          "pending_intention_relationship": "requires_clarification",
+          "allowed_operation": null,
+          "clarification": "Which person do you mean: Sergeant Mara or Corporal Bren? Nothing has been attempted.",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true
+        },
+        "operation": "ASK"
+      }
+    },
+    "expected_allowed": false,
+    "passed": true
+  },
+  {
+    "id": "K_subject_conflict",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "south tower"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "south tower",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "sergeant_mara"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "sergeant_mara"
+        ],
+        "unresolved_references": [
+          "south tower"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "south tower",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "south tower",
+          "role": "subject",
+          "status": "MISSING",
+          "explicit": false,
+          "candidates": [],
+          "source": null
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "sergeant_mara"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "none",
+        "conflict_details": {},
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": null,
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": false,
+      "reason": "unresolved_references",
+      "unresolved_references": [
+        "south tower"
+      ],
+      "reference_reconciliation": {
+        "annotations": [
+          {
+            "annotation": "south tower",
+            "role": "subject",
+            "status": "MISSING",
+            "explicit": false,
+            "candidates": [],
+            "source": null
+          }
+        ],
+        "addressee": {
+          "communication_ownership": "npc_directed",
+          "intent_purpose": "address_npc",
+          "target_resolution": "explicit",
+          "target_provenance": "explicit_canonical",
+          "target_id": "sergeant_mara",
+          "candidate_target_ids": [
+            "sergeant_mara"
+          ],
+          "operation_eligibility": "executable",
+          "mutation_eligibility": true,
+          "conflict_status": "none",
+          "conflict_details": {},
+          "pending_intention_relationship": "starts_new",
+          "allowed_operation": "ask",
+          "clarification": "",
+          "choices": [
+            {
+              "entity_id": "sergeant_mara",
+              "label": "Sergeant Mara"
+            },
+            {
+              "entity_id": "corporal_bren",
+              "label": "Corporal Bren"
+            }
+          ],
+          "direct_address": true
+        },
+        "operation": "ASK"
+      }
+    },
+    "expected_allowed": false,
+    "passed": true
+  },
+  {
+    "id": "L_unauthorized_npc",
+    "player": "I ask Sergeant Mara whether guards watch the north gate at night.",
+    "raw_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "corporal_bren"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "corporal_bren"
+        ],
+        "unresolved_references": [
+          "north gate"
+        ]
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "reconciled_record": {
+      "communication_mode": "IN_WORLD_ACTION",
+      "interpretation_status": "INTERPRETED",
+      "player_intent": {
+        "summary": "Player communication"
+      },
+      "asserted_premises": [],
+      "requested_outcomes": [],
+      "action_components": [
+        {
+          "order": 1,
+          "description": "ASK",
+          "operation_class": "ASK",
+          "target_ref": "corporal_bren"
+        }
+      ],
+      "references": {
+        "permitted_entity_ids": [
+          "corporal_bren"
+        ],
+        "unresolved_references": []
+      },
+      "clarification_question": "",
+      "correction": {
+        "subject": "NONE",
+        "note": ""
+      },
+      "communication": {
+        "recipient": "NPC",
+        "purpose": "QUESTION",
+        "subject": "provider-supplied subject",
+        "evidence_refs": []
+      }
+    },
+    "decisions": {
+      "annotations": [
+        {
+          "annotation": "north gate",
+          "role": "subject",
+          "status": "GROUNDED",
+          "explicit": true,
+          "candidates": [],
+          "source": "npc.authored_subject"
+        }
+      ],
+      "addressee": {
+        "communication_ownership": "npc_directed",
+        "intent_purpose": "address_npc",
+        "target_resolution": "explicit",
+        "target_provenance": "explicit_canonical",
+        "target_id": "sergeant_mara",
+        "candidate_target_ids": [
+          "corporal_bren"
+        ],
+        "operation_eligibility": "executable",
+        "mutation_eligibility": true,
+        "conflict_status": "resolved_by_explicit_wording",
+        "conflict_details": {
+          "provider_target": "corporal_bren",
+          "grounded_target": "sergeant_mara"
+        },
+        "pending_intention_relationship": "starts_new",
+        "allowed_operation": "ask",
+        "clarification": "",
+        "choices": [
+          {
+            "entity_id": "sergeant_mara",
+            "label": "Sergeant Mara"
+          },
+          {
+            "entity_id": "corporal_bren",
+            "label": "Corporal Bren"
+          }
+        ],
+        "direct_address": true
+      },
+      "operation": "ASK"
+    },
+    "normalized_action": {
+      "id": "sergeant_mara",
+      "label": "Sergeant Mara",
+      "type": "question",
+      "prompt": "I ask Sergeant Mara whether guards watch the north gate at night.",
+      "target_id": "sergeant_mara",
+      "targetEntityId": "sergeant_mara",
+      "metadata": {
+        "stored_interpretation": {
+          "operation": "ASK",
+          "target_ref": "sergeant_mara",
+          "visible_surface_inspection": false,
+          "reference_reconciliation": {
+            "annotations": [],
+            "addressee": null,
+            "operation": "ASK"
+          }
+        },
+        "communication": {
+          "recipient": "NPC",
+          "purpose": "QUESTION",
+          "subject": "provider-supplied subject",
+          "evidence_refs": []
+        },
+        "public_conversation_evidence": {}
+      }
+    },
+    "bridge": {
+      "source": "stored_interpretation",
+      "accepted": true,
+      "operation": "ASK",
+      "target_ref": "sergeant_mara",
+      "engine_type": "question",
+      "visible_surface_inspection": false
+    },
+    "expected_allowed": true,
+    "passed": true
+  }
+]

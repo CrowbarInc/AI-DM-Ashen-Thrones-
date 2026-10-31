@@ -1,0 +1,95 @@
+{
+  "source": "development\\tmp\\atgb03b_verified\\test_all_scenarios_reset_repro0\\run1\\result.json",
+  "stop_reason": "worker_failed",
+  "failures": [
+    {
+      "scenario_id": "S05",
+      "title": "Two accounts",
+      "partition": "development_visible",
+      "evidence_status": "development_visible",
+      "environment_id": "frontier_gate",
+      "expected_location_id": "frontier_gate",
+      "isolation": {
+        "accepted": true,
+        "reset_invoked": false,
+        "canonical_data_used_as_store": false
+      },
+      "context_establishment": "worker_failed",
+      "context_limitation": "ine 88, in _run_code\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tools\\atgb\\chat_worker.py\", line 413, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tools\\atgb\\chat_worker.py\", line 395, in main\n    payload = execute_job(job)\n              ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\tools\\atgb\\chat_worker.py\", line 207, in execute_job\n    reset_meta = apply_new_campaign_hard_reset()\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\campaign_reset.py\", line 54, in apply_new_campaign_hard_reset\n    save_combat(combat)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\storage.py\", line 305, in save_combat\n    _atomic_save_json(COMBAT_PATH, env)\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\storage.py\", line 165, in _atomic_save_json\n    _atomic_write_text(path, json.dumps(data, indent=2), encoding=\"utf-8\")\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\storage.py\", line 161, in _atomic_write_text\n    _atomic_write_bytes(path, text.encode(encoding))\n  File \"C:\\Users\\Master Mandalcio\\Documents\\Tabletop Gaming\\AI Dungeon Master\\ashen_thrones_ai_gm\\game\\storage.py\", line 139, in _atomic_write_bytes\n    os.replace(tmp, path)\nPermissionError: [WinError 5] Access is denied: 'C:\\\\Users\\\\Master Mandalcio\\\\Documents\\\\Tabletop Gaming\\\\AI Dungeon Master\\\\ashen_thrones_ai_gm\\\\development\\\\tmp\\\\atgb-S05-doyi3ii_\\\\combat.json.tmp.a480fca04d8a9457' -> 'C:\\\\Users\\\\Master Mandalcio\\\\Documents\\\\Tabletop Gaming\\\\AI Dungeon Master\\\\ashen_thrones_ai_gm\\\\development\\\\tmp\\\\atgb-S05-doyi3ii_\\\\combat.json'",
+      "preflight": null,
+      "model_configuration": null,
+      "authoritative_context": {
+        "environment_id": "frontier_gate",
+        "location_id": "frontier_gate",
+        "shared_facts": [
+          {
+            "id": "visible_notice_board",
+            "text": "The notice board lists taxes, curfew rules, and a missing-patrol warning."
+          },
+          {
+            "id": "visible_serjeant",
+            "text": "A gate serjeant manages the crowd and watches the roster board."
+          },
+          {
+            "id": "visible_runner_offer",
+            "text": "A tavern runner trades hot stew and rumors beside the rain barrel."
+          },
+          {
+            "id": "visible_crowd",
+            "text": "Threadbare watchers and refugees stand along the muddy line."
+          },
+          {
+            "id": "visible_census_choke",
+            "text": "Ash Compact census delays have tightened the eastern caravan choke."
+          },
+          {
+            "id": "visible_banners",
+            "text": "Frayed banners are in the opening description."
+          },
+          {
+            "id": "clue_notice_patrol_route",
+            "text": "Clue notice_patrol_route, only after the board is investigated: the missing patrol was last seen taking the northwest mud track past the crates."
+          },
+          {
+            "id": "topic_watch_command",
+            "text": "gate_guard topic watch_command: Captain Thoran commands the gate watch tonight."
+          },
+          {
+            "id": "topic_route_change",
+            "text": "gate_serjeant topic route_change: the patrol route changed after the Ash Compact census choke worsened."
+          },
+          {
+            "id": "topic_patrol_rumor",
+            "text": "tavern_runner topic patrol_rumor: the runner heard the patrol vanished near muddy footprints northwest of the crates. That is hearsay."
+          },
+          {
+            "id": "exits",
+            "text": "If travel is actually resolved: Enter Cinderwatch goes to market_quarter, and Follow the missing patrol rumor goes to old_milestone. None of the scored player lines is an instruction to take an exit."
+          },
+          {
+            "id": "hidden_facts",
+            "text": "Hidden facts must not be spoken as truth: noble-house agent, Ash Cowl contact, coordinated signal, paid face list."
+          },
+          {
+            "id": "unauthored",
+            "text": "Grounded uncertainty is success for curfew clock hours, stew price, coin or inventory changes, refugee origins, who ordered the route change, how long anyone has stood in the queue, Captain Thoran's personality, and any commander's name other than Thoran."
+          }
+        ],
+        "initial_context": "Fresh gate.",
+        "authoritative_facts": [
+          "The runner's rumor and, once the board is read, notice_patrol_route both point near the crates and the northwest approach.",
+          "They are different sentences and different sources."
+        ],
+        "npc_knowledge": [
+          "The runner knows the rumor as hearsay. The board holds the posted warning. Neither may absorb the other's wording."
+        ],
+        "unacceptable_behaviors": [
+          "The same paragraph presented as both the notice and the rumor.",
+          "A third story.",
+          "The guard answering S05.4."
+        ]
+      }
+    }
+  ],
+  "classification": "Windows os.replace PermissionError in isolated reset; no provider request involved"
+}

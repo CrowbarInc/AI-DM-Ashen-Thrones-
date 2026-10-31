@@ -1,0 +1,1162 @@
+{
+  "campaign_id": "pr_eg_r6_r2_r1_durable_referents_20261017",
+  "campaign_name": "PR-EG-R6-R2-R1 \u2014 Durable Conversational Referents and Correction Binding",
+  "campaign_date": "2026-10-17",
+  "purpose": "Repair and qualify durable host-owned question continuity without changing disclosure authority.",
+  "objective_status": "C \u2014 REFERENT CONTINUITY BELOW ACCEPTANCE",
+  "executive_summary": "C \u2014 REFERENT CONTINUITY BELOW ACCEPTANCE. Implemented bounded host-owned question IDs, correction deltas, lineage, active focus, persisted answer statuses and post-seal commits under the existing default-off gate. Final regressions: 431 passed, 5 inherited failed, no new failures. Primary fresh-provider qualification: 120 turns / 8 groups; corrections 7/13, follow-ups 18/28, false clarifications 22/120. Additional unchanged predecessor holdouts: 29 turns / 2 groups. Separate-process save/load correction passed. Observed integrity checks passed within their documented scope. Acceptance thresholds remain unmet.",
+  "changes": {
+    "production": [
+      "game/conversational_referents.py",
+      "game/unified_semantic_planning.py",
+      "game/conversational_continuity.py"
+    ],
+    "validation": [
+      "47 added controlled cases; final production HTTP and frozen holdouts; restart continuation."
+    ],
+    "tooling": [
+      "tools/qualify_pr_eg_r6_r2_r1.py",
+      "tools/compare_pr_eg_r6_r2_r1.py",
+      "tools/probe_pr_eg_r6_r2_r1_restart.py",
+      "tools/assess_pr_eg_r6_r2_r1.py",
+      "tools/write_pr_eg_r6_r2_r1_review.py"
+    ],
+    "documentation": [
+      "40 numbered review artifacts."
+    ],
+    "generated_artifacts": [
+      "Baseline/final transcripts, raw provider proposals, metrics, gates, JUnit and source diffs."
+    ]
+  },
+  "testing": {
+    "focused": "47 new controlled cases pass; earlier 68 predecessor-focused cases pass.",
+    "broader": "431 passed, 5 inherited failed, no new failures.",
+    "full_suite": "Not run.",
+    "runtime_validation": "120 turns / 8 primary groups + 29 frozen predecessor turns / 2 groups + 1 process-restart turn.",
+    "model_runtime_boundary": "Real configured provider; deterministic tests and development pilots excluded from final evidence.",
+    "new_regressions": "[]",
+    "pre_existing_failures": "['tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C01]', 'tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C02]', 'tests.test_pr_eg_r2c_r2_reference_eligibility::test_independent_clarification_holdout[C03]', 'tests.test_pr_eg_r3_r1_expression_semantics::test_t19_t23_answer_sufficiency_and_refusal', 'tests.test_social_question_relevance_answer_selection::test_immutable_preseal_preserves_selected_authored_answer_over_ignorance']"
+  },
+  "known_problems": {
+    "campaign_specific": [
+      "Correction 53.8%, follow-up 64.3%, semantic binding 61.0%, false clarification 18.3%.",
+      "Role reversals/relationship changes, wrong public-source correction, partial-status errors and generic clarifications remain.",
+      "P95 latency 5.107 seconds misses 5-second target; one 33,411 input-token outlier."
+    ],
+    "pre_existing": [
+      "Five selected test failures remain inherited; expanded baseline had six."
+    ]
+  },
+  "decisions_requiring_human_review": [
+    "External review of below-acceptance repair and failed holdout evidence."
+  ],
+  "missing_concepts": [
+    "Reliable multi-argument speech semantics, targeted clarification and historical/temporal focus retention."
+  ],
+  "does_not_prove": [
+    "A/B qualification, externally authored independent holdouts, unrestricted semantic correctness, full-state nonmutation, or full regression-suite health."
+  ],
+  "recommended_next_step": "Review PR-EG-R6-R2-R1 externally; keep feature default off. Stop; do not begin PR-EH.",
+  "primary_report": "artifacts/pr_eg_r6_r2_r1/01_EXECUTIVE_SUMMARY.md",
+  "supporting_files": [
+    {
+      "path": "artifacts/pr_eg_r6/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/01_EXECUTIVE_SUMMARY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/02_BASELINE_AND_REPOSITORY_STATE.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/03_FAILURE_REPRODUCTION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/04_CONVERSATIONAL_STATE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/05_DURABLE_REFERENT_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/06_REFERENT_IDENTITY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/07_REFERENT_LIFECYCLE.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/08_ACTIVE_QUESTION_TRACKING.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/09_CORRECTION_OPERATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/10_CORRECTION_LINEAGE.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/11_CORRECTION_EXAMPLES.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/12_FOLLOW_UP_BINDING.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/13_FOLLOW_UP_SEMANTICS.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/14_FOLLOW_UP_AFTER_UNCERTAINTY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/15_FOLLOW_UP_AFTER_PARTIAL_ANSWER.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/16_MULTIPLE_REFERENT_RESOLUTION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/17_SPEAKER_AND_ADDRESSEE_CONTINUITY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/18_CLARIFICATION_DISCIPLINE.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/19_PROVIDER_INPUT_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/20_PROVIDER_OUTPUT_CONTRACT.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/21_HOST_VALIDATION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/22_TRANSACTIONAL_REFERENT_UPDATES.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/23_SAVE_LOAD_INTEGRITY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/24_RETENTION_AND_COMPACTION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/25_RESPONSE_PLANNING.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/26_LEGACY_PATH_ISOLATION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/27_INTEGRITY_PRESERVATION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/28_CONTROLLED_TESTS.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/29_FROZEN_HOLDOUTS.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/30_MATCHED_BASELINE_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/31_FRESH_PROVIDER_CONVERSATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/32_TURN_LEVEL_QUALIFICATION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/33_DIALOGUE_QUALITY_AND_PLAYABILITY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/34_PERFORMANCE.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/35_REGRESSION_COMPARISON.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/36_ACCEPTANCE_GATES.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/37_REMAINING_LIMITATIONS.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/38_RECOMMENDED_NEXT_ACTION.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/39_FINAL_VERDICT.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/40_SOURCE_AND_EVIDENCE_INVENTORY.md",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/acceptance_gates.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_head.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_sources/game/conversational_continuity.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_sources/game/semantic_correspondence.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_sources/game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_tests_unrestricted.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/baseline_unsandboxed_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/controlled_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/controlled_matched_comparison.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/controlled_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/conversational_continuity_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/conversational_referents_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/failure_reproduction.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/final_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/focus_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/freeze.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/frozen_holdouts.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/holdout_results.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/integrity_results.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/performance.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_console_2.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_console_3.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_console_4.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_console_5.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_1/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_1/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_1/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_1/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_1/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_2/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_2/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_2/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_2/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_2/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_3/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_3/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_3/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_3/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_contract_3/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_schema_rejection/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_schema_rejection/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/pilot_schema_rejection/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts/live_status.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts/live_turns.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts/live_usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts/qualification_plan.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts/starting_source_hashes.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/predecessor_holdouts_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/quality_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/quality_metrics.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/raw_examples.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/regression_comparison.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/regression_junit.xml",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/regression_tests.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/repository_status.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/restart/result.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/restart/semantic_traces.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": true,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/restart/usage.jsonl",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/restart_console.txt",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/semantic_correspondence_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/state_inventory.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/turn_scores.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/unified_semantic_planning_changes.diff",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/verdict.json",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": false
+    },
+    {
+      "path": "game/conversational_continuity.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_orchestration.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/conversational_referents.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/dialogue_authority.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/discourse_state.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/expressive_dialogue.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/immutable_valid_response.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/semantic_correspondence.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/storage.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "game/unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_r2_reference_eligibility.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r2c_speech_adoption.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_expressive_dialogue.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r3_r1_expression_semantics.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r4_r1_delivery_integrity.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r1_disclosure_boundary.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r1_r1_provenance.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r2_grounding.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_r2_r1_referents.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_pr_eg_r6_unified_semantic_planning.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tests/test_social_question_relevance_answer_selection.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/assess_pr_eg_r6_r2_r1.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/compare_pr_eg_r6_r2_r1.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/probe_pr_eg_r6_r2_r1_restart.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r2.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/qualify_pr_eg_r6_r2_r1.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "tools/write_pr_eg_r6_r2_r1_review.py",
+      "role": "cycle_evidence",
+      "why": "Durable referent source, preserved predecessor or qualification evidence.",
+      "behavioral_evidence": false,
+      "human_review_required": true
+    },
+    {
+      "path": "artifacts/pr_eg_r6_r2_r1/evidence_inventory.json",
+      "role": "inventory",
+      "why": "Hashed complete evidence list."
+    }
+  ],
+  "max_file_bytes": 50000000,
+  "warn_bundle_bytes": 100000000
+}
